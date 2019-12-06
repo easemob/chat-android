@@ -1,0 +1,2 @@
+include ':app', ':hmspush'
+rootProject.name='chatuidemo'

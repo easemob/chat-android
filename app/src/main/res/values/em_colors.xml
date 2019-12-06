@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#008577</color>
+    <color name="colorPrimaryDark">#00574B</color>
+    <color name="colorAccent">#D81B60</color>
+
+    <color name="red">#ffff0000</color>
+    <color name="white">#ffffffff</color>
+    <color name="gray">#ffe9e9e9</color>
+    <color name="blue">#FF5A5DD0</color>
+    <color name="black">#ff000000</color>
+    <color name="transparent">@android:color/transparent</color>
+
+    <color name="em_base_color_primary">@color/white</color>
+    <color name="em_base_color_primary_dark">@color/white</color>
+    <color name="em_base_color_accent">@color/blue</color>
+    <color name="em_base_color_window_bg">@color/white</color>
+    <color name="em_base_color_text_hint">#ffcccccc</color>
+
+    <color name="em_login_color_btn_unable">#44000000</color>
+    <color name="em_login_color_btn_enable_left">#ff04aef0</color>
+    <color name="em_login_color_btn_enable_right">#ff5a5dd0</color>
+    <color name="em_login_color_btn_text_unable">#ffffffff</color>
+    <color name="em_login_color_btn_text_enable">#FFF4F4F4</color>
+    <color name="em_login_color_text">@color/white</color>
+</resources>

@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scaleType="centerCrop"
+        android:src="@drawable/em_splash_bg"/>
+
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbar_register"
+        android:layout_width="0dp"
+        android:layout_height="44dp"
+        android:layout_marginTop="44dp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent"/>
+
+    <TextView
+        android:id="@+id/tv_register_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/et_login_name"
+        android:layout_marginBottom="20dp"
+        android:text="@string/em_login_tv_register"
+        android:textSize="18sp"
+        android:textColor="@color/em_login_color_text"/>
+
+    <EditText
+        android:id="@+id/et_login_name"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintVertical_bias="0.25"
+        android:hint="@string/em_login_name_hint"
+        style="@style/em_login_et_input" />
+
+    <EditText
+        android:id="@+id/et_login_pwd"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/et_login_name"
+        app:layout_constraintBottom_toTopOf="@id/et_login_pwd_confirm"
+        android:layout_marginTop="20dp"
+        android:inputType="textPassword"
+        android:hint="@string/em_login_password_hint"
+        style="@style/em_login_et_input"/>
+
+    <EditText
+        android:id="@+id/et_login_pwd_confirm"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/et_login_pwd"
+        app:layout_constraintBottom_toTopOf="@id/btn_login"
+        android:layout_marginTop="20dp"
+        android:inputType="textPassword"
+        android:hint="@string/em_register_password_confirm_hint"
+        style="@style/em_login_et_input"/>
+
+    <Button
+        android:id="@+id/btn_login"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/et_login_pwd_confirm"
+        android:layout_marginTop="70dp"
+        android:layout_marginLeft="33dp"
+        android:layout_marginRight="33dp"
+        android:background="@drawable/em_login_btn_bg"
+        android:foreground="@drawable/em_ripple_click_gray"
+        android:textColor="@color/em_login_btn_text_color"
+        android:enabled="false"
+        android:textSize="16sp"
+        android:text="@string/em_register_btn"/>
+
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

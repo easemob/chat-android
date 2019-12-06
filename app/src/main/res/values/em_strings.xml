@@ -1,0 +1,20 @@
+<resources>
+    <string name="app_name">chatuidemo</string>
+    <string name="title_home">Home</string>
+    <string name="title_dashboard">Dashboard</string>
+    <string name="title_notifications">Notifications</string>
+
+    <string name="main_home">首页</string>
+    <string name="main_friend">联系人</string>
+    <string name="main_set">设置</string>
+
+    <string name="em_login_name_hint">用户名</string>
+    <string name="em_login_password_hint">密码</string>
+    <string name="em_login_btn">登\u0020录</string>
+    <string name="em_login_tv_register">账号注册</string>
+    <string name="em_login_tv_token">token登录</string>
+    <string name="em_login_tv_server_set">服务器配置</string>
+    <string name="em_register_btn">注\u0020册</string>
+    <string name="em_register_password_confirm_hint">确认密码</string>
+    <string name="em_register_failed">注册失败</string>
+</resources>
