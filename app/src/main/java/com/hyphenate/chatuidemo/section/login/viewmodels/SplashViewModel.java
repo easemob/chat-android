@@ -6,8 +6,7 @@ import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
 
-import com.hyphenate.chatuidemo.common.ApiResponse;
-import com.hyphenate.chatuidemo.common.Result;
+import com.hyphenate.chatuidemo.common.Resource;
 import com.hyphenate.chatuidemo.repositories.EMClientRepository;
 
 public class SplashViewModel extends AndroidViewModel {
@@ -18,7 +17,7 @@ public class SplashViewModel extends AndroidViewModel {
         mRepository = new EMClientRepository();
     }
 
-    public LiveData<ApiResponse<Result<Boolean>>> getLoginData() {
+    public LiveData<Resource<Boolean>> getLoginData() {
         return mRepository.loadAllInfoFromHX();
     }
 }

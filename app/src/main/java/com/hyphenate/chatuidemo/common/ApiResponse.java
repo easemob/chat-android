@@ -3,9 +3,6 @@ package com.hyphenate.chatuidemo.common;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
-import com.huawei.hms.support.api.entity.core.CommonCode;
-import com.hyphenate.EMError;
-
 
 /**
  * 资源结果包装类，此类反应资源获取的状态和结果
@@ -30,7 +27,7 @@ public class ApiResponse<T> {
     }
 
     public static <T> ApiResponse<T> success(@Nullable T data) {
-        return new ApiResponse<>(Status.SUCCESS, data, ErrorCode.EM_NO_ERROR);
+        return new ApiResponse<>(Status.SUCCESS, data, EmErrorCode.EM_NO_ERROR);
     }
 
     public static <T> ApiResponse<T> error(int code, @Nullable T data) {
@@ -38,7 +35,7 @@ public class ApiResponse<T> {
     }
 
     public static <T> ApiResponse<T> loading(@Nullable T data) {
-        return new ApiResponse<>(Status.LOADING, data, ErrorCode.EM_NO_ERROR);
+        return new ApiResponse<>(Status.LOADING, data, EmErrorCode.EM_NO_ERROR);
     }
 
     @Override

@@ -1,23 +1,25 @@
 package com.hyphenate.chatuidemo.common;
 
 
+import com.hyphenate.chat.EMBase;
+
 /**
- * 网络请求结果基础类
+ * 结果基础类
  * @param <T> 请求结果的实体类
  */
-public class Result<T> {
+public class EmResult<T> extends EMBase<T> {
     public int code;
     public T result;
 
-    public Result(){
+    public EmResult(){
     }
 
-    public Result(int code, T result) {
+    public EmResult(int code, T result) {
         this.code = code;
         this.result = result;
     }
 
-    public Result(int code){
+    public EmResult(int code){
         this.code = code;
     }
 
@@ -38,7 +40,7 @@ public class Result<T> {
     }
 
     public boolean isSuccess(){
-        return code == ErrorCode.EM_NO_ERROR;
+        return code == EmErrorCode.EM_NO_ERROR;
     }
 
 }

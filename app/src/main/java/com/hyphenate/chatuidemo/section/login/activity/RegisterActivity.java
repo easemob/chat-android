@@ -19,7 +19,7 @@ import androidx.lifecycle.ViewModelProviders;
 import com.hyphenate.chatuidemo.R;
 import com.hyphenate.chatuidemo.base.BaseInitActivity;
 import com.hyphenate.chatuidemo.common.ApiResponse;
-import com.hyphenate.chatuidemo.common.Result;
+import com.hyphenate.chatuidemo.common.EmResult;
 import com.hyphenate.chatuidemo.common.Status;
 import com.hyphenate.chatuidemo.section.RegisterViewModel;
 
@@ -74,18 +74,15 @@ public class RegisterActivity extends BaseInitActivity implements TextWatcher, V
     protected void initData() {
         super.initData();
         mViewModel = ViewModelProviders.of(this).get(RegisterViewModel.class);
-        mViewModel.getRegisterObservable().observe(this, new Observer<ApiResponse<Result<Boolean>>>() {
-            @Override
-            public void onChanged(ApiResponse<Result<Boolean>> response) {
-                Log.e("TAG", "register result = "+response);
-                if(response.status == Status.SUCCESS) {
-                    Log.e("TAG", "注册成功！");
-                } else if(response.status == Status.ERROR) {
-                    Log.e("TAG", "注册失败");
+        mViewModel.getRegisterObservable().observe(this, response -> {
+            Log.e("TAG", "register result = "+response);
+            if(response.status == Status.SUCCESS) {
+                Log.e("TAG", "注册成功！");
+            } else if(response.status == Status.ERROR) {
+                Log.e("TAG", "注册失败" + response.getMessage(mContext));
 
-                }else {
-                    Log.e("TAG", "正在注册");
-                }
+            }else {
+                Log.e("TAG", "正在注册");
             }
         });
     }

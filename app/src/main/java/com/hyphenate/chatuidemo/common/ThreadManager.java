@@ -12,7 +12,7 @@ import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
 /**
- * 作为线程的管理类
+ * 作为线程的管理类，可以实现工作线程和主线程的切换
  */
 public class ThreadManager {
     private static volatile ThreadManager instance;

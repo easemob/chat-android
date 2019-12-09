@@ -1,30 +1,63 @@
 package com.hyphenate.chatuidemo.common;
 
-import androidx.annotation.NonNull;
+import android.content.Context;
+import android.text.TextUtils;
+
 import androidx.annotation.Nullable;
+import androidx.core.content.ContextCompat;
 
 public class Resource<T> {
-    private Status mStatus;
-    private T mData;
-    private int mErrorCode;
-    private String mMessage;
+    public Status status;
+    public T data;
+    public int errorCode;
+    private String message;
+    private int messageId;
 
     public Resource(Status status, T data, int errorCode) {
-        mStatus = status;
-        mData = data;
-        mErrorCode = errorCode;
+        this.status = status;
+        this.data = data;
+        this.errorCode = errorCode;
+        this.messageId = EmErrorCode.Error.parseMessage(errorCode).getMessageId();
     }
 
-    public static <T> ApiResponse<T> success(@Nullable T data) {
-        return new ApiResponse<>(Status.SUCCESS, data, ErrorCode.EM_NO_ERROR);
+    public Resource(Status status, T data, int errorCode, String message) {
+        this.status = status;
+        this.data = data;
+        this.errorCode = errorCode;
+        this.message = message;
     }
 
-    public static <T> ApiResponse<T> error(int code, @Nullable T data) {
-        return new ApiResponse<>(Status.ERROR, data, code);
+    public static <T> Resource<T> success(@Nullable T data) {
+        return new Resource<>(Status.SUCCESS, data, EmErrorCode.EM_NO_ERROR);
     }
 
-    public static <T> ApiResponse<T> loading(@Nullable T data) {
-        return new ApiResponse<>(Status.LOADING, data, ErrorCode.EM_NO_ERROR);
+    public static <T> Resource<T> error(int code, @Nullable T data) {
+        return new Resource<>(Status.ERROR, data, code);
+    }
+
+    public static <T> Resource<T> error(int code, String message, @Nullable T data) {
+        return TextUtils.isEmpty(message) ?
+                new Resource<>(Status.ERROR, data, code) :
+                new Resource<>(Status.ERROR, data, code, message);
+    }
+
+    public static <T> Resource<T> loading(@Nullable T data) {
+        return new Resource<>(Status.LOADING, data, EmErrorCode.EM_NO_ERROR);
+    }
+
+    /**
+     * 获取错误信息
+     * @param context
+     * @return
+     */
+    public String getMessage(Context context) {
+        if(!TextUtils.isEmpty(message)) {
+            return message;
+        }
+        if(messageId > 0) {
+            return context.getString(messageId);
+        }
+        return "";
     }
 
     @Override
@@ -34,28 +67,28 @@ public class Resource<T> {
 
         Resource<?> resource = (Resource<?>) o;
 
-        if (mErrorCode != resource.mErrorCode) return false;
-        if (mStatus != resource.mStatus) return false;
-        if (mData != null ? !mData.equals(resource.mData) : resource.mData != null) return false;
-        return mMessage != null ? mMessage.equals(resource.mMessage) : resource.mMessage == null;
+        if (errorCode != resource.errorCode) return false;
+        if (status != resource.status) return false;
+        if (data != null ? !data.equals(resource.data) : resource.data != null) return false;
+        return message != null ? message.equals(resource.message) : resource.message == null;
     }
 
     @Override
     public int hashCode() {
-        int result = mStatus != null ? mStatus.hashCode() : 0;
-        result = 31 * result + (mData != null ? mData.hashCode() : 0);
-        result = 31 * result + mErrorCode;
-        result = 31 * result + (mMessage != null ? mMessage.hashCode() : 0);
+        int result = status != null ? status.hashCode() : 0;
+        result = 31 * result + (data != null ? data.hashCode() : 0);
+        result = 31 * result + errorCode;
+        result = 31 * result + (message != null ? message.hashCode() : 0);
         return result;
     }
 
     @Override
     public String toString() {
         return "Resource{" +
-                "mStatus=" + mStatus +
-                ", mData=" + mData +
-                ", mErrorCode=" + mErrorCode +
-                ", mMessage='" + mMessage + '\'' +
+                "mStatus=" + status +
+                ", data=" + data +
+                ", errorCode=" + errorCode +
+                ", message='" + message + '\'' +
                 '}';
     }
 }

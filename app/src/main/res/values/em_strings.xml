@@ -17,4 +17,9 @@
     <string name="em_register_btn">注\u0020册</string>
     <string name="em_register_password_confirm_hint">确认密码</string>
     <string name="em_register_failed">注册失败</string>
+
+    <string name="em_error_network_error">当前网络不可用</string>
+    <string name="em_error_not_login">未登录过环信</string>
+    <string name="em_error_parse_error">解析错误</string>
+    <string name="em_error_err_unknown">网络问题请稍后重试</string>
 </resources>

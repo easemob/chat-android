@@ -1,16 +1,14 @@
 package com.hyphenate.chatuidemo.repositories;
 
-import android.util.Log;
-
 import androidx.annotation.NonNull;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
 import com.hyphenate.chat.EMClient;
-import com.hyphenate.chatuidemo.common.ApiResponse;
-import com.hyphenate.chatuidemo.common.ErrorCode;
-import com.hyphenate.chatuidemo.common.NetworkOnlyResource;
-import com.hyphenate.chatuidemo.common.Result;
+import com.hyphenate.chatuidemo.common.EmErrorCode;
+import com.hyphenate.chatuidemo.common.Resource;
+import com.hyphenate.chatuidemo.common.ThreadManager;
+import com.hyphenate.chatuidemo.core.EmResultCallBack;
 import com.hyphenate.exceptions.HyphenateException;
 
 /**
@@ -26,46 +24,40 @@ public class EMClientRepository {
      * 登录过后需要加载的数据
      * @return
      */
-    public LiveData<ApiResponse<Result<Boolean>>> loadAllInfoFromHX() {
-        return new NetworkOnlyResource<Result<Boolean>>() {
-
-            @NonNull
-            @Override
-            protected LiveData<Result<Boolean>> createCall() {
-                MutableLiveData<Result<Boolean>> observable = new MutableLiveData<>();
-                if(isLoggedIn()) {
-                    EMClient.getInstance().chatManager().loadAllConversations();
-                    EMClient.getInstance().groupManager().loadAllGroups();
-                    observable.postValue(new Result<>(ErrorCode.EM_NO_ERROR, true));
-                }else {
-                    observable.postValue(new Result<>(ErrorCode.EM_NO_ERROR, false));
-                }
-                return observable;
-            }
+    public LiveData<Resource<Boolean>> loadAllInfoFromHX() {
+        return new NetworkOnlyResource<Boolean>() {
 
             @Override
-            protected boolean workOnUIThread() {
-                return false;
+            protected void createCall(EmResultCallBack<LiveData<Boolean>> callBack) {
+                ThreadManager.getInstance().runOnIOThread(() -> {
+                    if(isLoggedIn()) {
+                        EMClient.getInstance().chatManager().loadAllConversations();
+                        EMClient.getInstance().groupManager().loadAllGroups();
+                        MutableLiveData<Boolean> observable = new MutableLiveData<>(true);
+                        callBack.onSuccess(observable);
+                    }else {
+                        callBack.onError(EmErrorCode.EM_NOT_LOGIN);
+                    }
+                });
             }
         }.asLiveData();
     }
 
-    public LiveData<ApiResponse<Result<Boolean>>> registerToHx(String userName, String pwd) {
-        return new NetworkOnlyResource<Result<Boolean>>() {
+    public LiveData<Resource<Boolean>> registerToHx(String userName, String pwd) {
+        return new NetworkOnlyResource<Boolean>() {
 
-            @NonNull
             @Override
-            protected LiveData<Result<Boolean>> createCall() {
-                MutableLiveData<Result<Boolean>> observable = new MutableLiveData<>();
+            protected void createCall(@NonNull EmResultCallBack<LiveData<Boolean>> callBack) {
                 try {
                     EMClient.getInstance().createAccount(userName, pwd);
-                    observable.postValue(new Result<>(ErrorCode.EM_NO_ERROR, true));
+                    MutableLiveData<Boolean> observable = new MutableLiveData<>(true);
+                    callBack.onSuccess(observable);
                 } catch (HyphenateException e) {
-                    observable.postValue(new Result<>(e.getErrorCode(), false));
+                    callBack.onError(e.getErrorCode(), e.getMessage());
                 }
-                return observable;
             }
 
         }.asLiveData();
     }
+
 }

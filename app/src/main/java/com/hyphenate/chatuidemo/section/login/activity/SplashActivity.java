@@ -1,16 +1,15 @@
 package com.hyphenate.chatuidemo.section.login.activity;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.animation.AlphaAnimation;
 
-import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 
 import com.hyphenate.chatuidemo.MainActivity;
 import com.hyphenate.chatuidemo.R;
 import com.hyphenate.chatuidemo.base.BaseInitActivity;
-import com.hyphenate.chatuidemo.common.ApiResponse;
-import com.hyphenate.chatuidemo.common.Result;
+import com.hyphenate.chatuidemo.common.EmErrorCode;
 import com.hyphenate.chatuidemo.common.Status;
 import com.hyphenate.chatuidemo.section.login.viewmodels.SplashViewModel;
 
@@ -38,19 +37,14 @@ public class SplashActivity extends BaseInitActivity {
     protected void initData() {
         super.initData();
         SplashViewModel model = ViewModelProviders.of(this).get(SplashViewModel.class);
-        model.getLoginData().observe(this, new Observer<ApiResponse<Result<Boolean>>>() {
-            @Override
-            public void onChanged(ApiResponse<Result<Boolean>> response) {
-                if(response.status == Status.SUCCESS) {
-
-                    if(response.data != null && response.data.getResult()) {
-                        MainActivity.startAction(mContext);
-                    }else {
-                        LoginActivity.startAction(mContext);
-                    }
-                    finish();
-
-                }
+        model.getLoginData().observe(this, response -> {
+            if(response.status == Status.SUCCESS) {
+                MainActivity.startAction(mContext);
+                finish();
+            }else {
+                Log.e("TAG", "error message = "+response.getMessage(mContext));
+                LoginActivity.startAction(mContext);
+                finish();
             }
         });
     }
