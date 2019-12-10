@@ -22,4 +22,22 @@
         <item name="android:textSize">12sp</item>
         <item name="android:textColor">@color/em_login_tv_click_selector</item>
     </style>
+
+    <style name="em_login_btn">
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginTop">40dp</item>
+        <item name="android:layout_marginLeft">33dp</item>
+        <item name="android:layout_marginRight">33dp</item>
+        <item name="android:background">@drawable/em_login_btn_bg</item>
+        <item name="android:foreground">@drawable/em_ripple_click_gray</item>
+        <item name="android:textColor">@color/em_login_btn_text_color</item>
+        <item name="android:enabled">false</item>
+        <item name="android:textSize">16sp</item>
+        <item name="android:drawableRight">@drawable/em_login_btn_right_unable</item>
+        <item name="android:paddingRight">5dp</item>
+        <item name="android:paddingEnd">5dp</item>
+        <item name="android:paddingLeft">45dp</item>
+        <item name="android:paddingStart">45dp</item>
+    </style>
 </resources>

@@ -11,7 +11,7 @@ import com.hyphenate.chatuidemo.common.Resource;
 import com.hyphenate.chatuidemo.common.EmResult;
 import com.hyphenate.chatuidemo.common.ThreadManager;
 import com.hyphenate.chatuidemo.core.EmResultCallBack;
-import com.hyphenate.chatuidemo.utils.EmLog;
+import com.hyphenate.chatuidemo.core.utils.EmLog;
 
 /**
  * 作为服务器拉取数据和本地数据融合类

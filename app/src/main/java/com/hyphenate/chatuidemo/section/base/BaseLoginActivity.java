@@ -1,4 +1,4 @@
-package com.hyphenate.chatuidemo.base;
+package com.hyphenate.chatuidemo.section.base;
 
 public abstract class BaseLoginActivity extends BaseInitActivity {
 

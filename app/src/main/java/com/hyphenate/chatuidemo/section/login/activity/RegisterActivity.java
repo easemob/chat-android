@@ -2,6 +2,7 @@ package com.hyphenate.chatuidemo.section.login.activity;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextUtils;
@@ -10,18 +11,15 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.Toast;
 
 import androidx.appcompat.widget.Toolbar;
-import androidx.lifecycle.Observer;
+import androidx.core.content.ContextCompat;
 import androidx.lifecycle.ViewModelProviders;
 
 import com.hyphenate.chatuidemo.R;
-import com.hyphenate.chatuidemo.base.BaseInitActivity;
-import com.hyphenate.chatuidemo.common.ApiResponse;
-import com.hyphenate.chatuidemo.common.EmResult;
 import com.hyphenate.chatuidemo.common.Status;
-import com.hyphenate.chatuidemo.section.RegisterViewModel;
+import com.hyphenate.chatuidemo.section.login.viewmodels.RegisterViewModel;
+import com.hyphenate.chatuidemo.section.base.BaseInitActivity;
 
 public class RegisterActivity extends BaseInitActivity implements TextWatcher, View.OnClickListener {
     private Toolbar toolbarRegister;
@@ -103,14 +101,9 @@ public class RegisterActivity extends BaseInitActivity implements TextWatcher, V
     }
 
     private void checkEditContent() {
-        setButtonEnable(false);
         mUserName = et_login_name.getText().toString().trim();
         mPwd = et_login_pwd.getText().toString().trim();
         mPwdConfirm = et_login_pwd_confirm.getText().toString().trim();
-        if(!TextUtils.isEmpty(mPwd) && !TextUtils.isEmpty(mPwdConfirm) && !TextUtils.equals(mPwd, mPwdConfirm)) {
-            Toast.makeText(mContext, getResources().getString(R.string.em_register_failed), Toast.LENGTH_SHORT).show();
-            return;
-        }
         setButtonEnable(!TextUtils.isEmpty(mUserName) && !TextUtils.isEmpty(mPwd) && !TextUtils.isEmpty(mPwdConfirm));
     }
 
@@ -125,11 +118,22 @@ public class RegisterActivity extends BaseInitActivity implements TextWatcher, V
 
     private void registerToHx() {
         if(!TextUtils.isEmpty(mUserName) && !TextUtils.isEmpty(mPwd) && !TextUtils.isEmpty(mPwdConfirm)) {
+            if(!TextUtils.equals(mPwd, mPwdConfirm)) {
+
+            }
             mViewModel.register(mUserName, mPwd);
         }
     }
 
     private void setButtonEnable(boolean enable) {
         btn_login.setEnabled(enable);
+        //同时需要修改右侧drawalbeRight对应的资源
+        Drawable rightDrawable;
+        if(enable) {
+            rightDrawable = ContextCompat.getDrawable(mContext, R.drawable.em_login_btn_right_enable);
+        }else {
+            rightDrawable = ContextCompat.getDrawable(mContext, R.drawable.em_login_btn_right_unable);
+        }
+        btn_login.setCompoundDrawablesWithIntrinsicBounds(null, null, rightDrawable, null);
     }
 }

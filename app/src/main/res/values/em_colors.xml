@@ -17,10 +17,15 @@
     <color name="em_base_color_window_bg">@color/white</color>
     <color name="em_base_color_text_hint">#ffcccccc</color>
 
+    <color name="em_toast_color_bg">#99000000</color>
+    <color name="em_toast_color_text">@color/white</color>
+
     <color name="em_login_color_btn_unable">#44000000</color>
     <color name="em_login_color_btn_enable_left">#ff04aef0</color>
     <color name="em_login_color_btn_enable_right">#ff5a5dd0</color>
     <color name="em_login_color_btn_text_unable">#ffffffff</color>
     <color name="em_login_color_btn_text_enable">#FFF4F4F4</color>
     <color name="em_login_color_text">@color/white</color>
+    <color name="em_login_color_btn_right_unable">#44f2f2f2</color>
+    <color name="em_login_color_btn_right_enable">@color/white</color>
 </resources>

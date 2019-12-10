@@ -1,6 +1,5 @@
-package com.hyphenate.chatuidemo.base;
+package com.hyphenate.chatuidemo.section.base;
 
-import android.graphics.BlendModeColorFilter;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
@@ -20,7 +19,7 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.core.content.ContextCompat;
 
 import com.hyphenate.chatuidemo.R;
-import com.hyphenate.chatuidemo.utils.StatusBarCompat;
+import com.hyphenate.chatuidemo.core.utils.StatusBarCompat;
 
 /**
  * 作为基础activity,放置一些公共的方法

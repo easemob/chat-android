@@ -8,8 +8,7 @@ import androidx.lifecycle.ViewModelProviders;
 
 import com.hyphenate.chatuidemo.MainActivity;
 import com.hyphenate.chatuidemo.R;
-import com.hyphenate.chatuidemo.base.BaseInitActivity;
-import com.hyphenate.chatuidemo.common.EmErrorCode;
+import com.hyphenate.chatuidemo.section.base.BaseInitActivity;
 import com.hyphenate.chatuidemo.common.Status;
 import com.hyphenate.chatuidemo.section.login.viewmodels.SplashViewModel;
 

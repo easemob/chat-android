@@ -12,20 +12,22 @@ import com.hyphenate.push.PushListener;
 import com.hyphenate.util.EMLog;
 
 public class BasicApplication extends Application {
+    private static BasicApplication instance;
     private UserActivityLifecycleCallbacks mLifecycleCallbacks = new UserActivityLifecycleCallbacks();
 
     @Override
     public void onCreate() {
         super.onCreate();
+        instance = this;
         initHx();
         registerActivityLifecycleCallbacks();
     }
 
     private void initHx() {
         // init hx sdk
-        ChatHelper.getInstance().init(this);
+        DemoHelper.getInstance().init(this);
 
-        if(ChatHelper.getInstance().isMainProcess(this)) {
+        if(DemoHelper.getInstance().isMainProcess(this)) {
             HMSPushHelper.getInstance().initHMSAgent(this);
             EMPushHelper.getInstance().setPushListener(new PushListener() {
                 @Override
@@ -39,6 +41,10 @@ public class BasicApplication extends Application {
 
     private void registerActivityLifecycleCallbacks() {
         this.registerActivityLifecycleCallbacks(mLifecycleCallbacks);
+    }
+
+    public static BasicApplication getInstance() {
+        return instance;
     }
 
     @Override

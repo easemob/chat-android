@@ -65,19 +65,10 @@
 
     <Button
         android:id="@+id/btn_login"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toBottomOf="@id/et_login_pwd_confirm"
-        android:layout_marginTop="70dp"
-        android:layout_marginLeft="33dp"
-        android:layout_marginRight="33dp"
-        android:background="@drawable/em_login_btn_bg"
-        android:foreground="@drawable/em_ripple_click_gray"
-        android:textColor="@color/em_login_btn_text_color"
-        android:enabled="false"
-        android:textSize="16sp"
+        style="@style/em_login_btn"
         android:text="@string/em_register_btn"/>
 
 

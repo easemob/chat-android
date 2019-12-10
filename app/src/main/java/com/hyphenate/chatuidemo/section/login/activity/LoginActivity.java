@@ -7,7 +7,7 @@ import android.view.View;
 import android.widget.TextView;
 
 import com.hyphenate.chatuidemo.R;
-import com.hyphenate.chatuidemo.base.BaseInitActivity;
+import com.hyphenate.chatuidemo.section.base.BaseInitActivity;
 
 public class LoginActivity extends BaseInitActivity implements View.OnClickListener {
     private TextView tv_login_register;

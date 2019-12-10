@@ -5,15 +5,13 @@ import androidx.annotation.NonNull;
 import androidx.annotation.WorkerThread;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MediatorLiveData;
-import androidx.lifecycle.MutableLiveData;
-import androidx.lifecycle.Observer;
 
 import com.hyphenate.chatuidemo.common.EmErrorCode;
 import com.hyphenate.chatuidemo.common.EmResult;
 import com.hyphenate.chatuidemo.common.Resource;
 import com.hyphenate.chatuidemo.common.ThreadManager;
 import com.hyphenate.chatuidemo.core.EmResultCallBack;
-import com.hyphenate.chatuidemo.utils.EmLog;
+import com.hyphenate.chatuidemo.core.utils.EmLog;
 
 /**
  * 此类用于从环信SDK拉取异步数据或者其他耗时操作
@@ -133,7 +131,4 @@ public abstract class NetworkOnlyResource<ResultType> {
         return result;
     }
 
-    protected boolean runOnIOThread() {
-        return true;
-    }
 }

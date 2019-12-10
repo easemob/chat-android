@@ -1,4 +1,4 @@
-package com.hyphenate.chatuidemo.utils;
+package com.hyphenate.chatuidemo.core.utils;
 
 import android.os.Build;
 import android.os.Environment;

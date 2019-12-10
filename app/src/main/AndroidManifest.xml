@@ -263,7 +263,7 @@
             </intent-filter>
         </activity>
         <activity android:name=".section.login.activity.LoginActivity" />
-        <activity android:name=".section.login.activity.RegisterActivity" />
+        <activity android:name=".section.login.activity.RegisterActivity" android:windowSoftInputMode="stateHidden|adjustPan"/>
     </application>
 
 </manifest>

@@ -1,4 +1,4 @@
-package com.hyphenate.chatuidemo.utils;
+package com.hyphenate.chatuidemo.core.utils;
 
 import android.annotation.TargetApi;
 import android.app.Activity;

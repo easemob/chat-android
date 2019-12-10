@@ -1,4 +1,4 @@
-package com.hyphenate.chatuidemo.section;
+package com.hyphenate.chatuidemo.section.login.viewmodels;
 
 import android.app.Application;
 

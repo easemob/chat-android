@@ -48,13 +48,15 @@ public class EMClientRepository {
 
             @Override
             protected void createCall(@NonNull EmResultCallBack<LiveData<Boolean>> callBack) {
-                try {
-                    EMClient.getInstance().createAccount(userName, pwd);
-                    MutableLiveData<Boolean> observable = new MutableLiveData<>(true);
-                    callBack.onSuccess(observable);
-                } catch (HyphenateException e) {
-                    callBack.onError(e.getErrorCode(), e.getMessage());
-                }
+                ThreadManager.getInstance().runOnIOThread(() -> {
+                    try {
+                        EMClient.getInstance().createAccount(userName, pwd);
+                        MutableLiveData<Boolean> observable = new MutableLiveData<>(true);
+                        callBack.onSuccess(observable);
+                    } catch (HyphenateException e) {
+                        callBack.onError(e.getErrorCode(), e.getMessage());
+                    }
+                });
             }
 
         }.asLiveData();

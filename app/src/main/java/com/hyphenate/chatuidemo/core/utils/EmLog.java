@@ -1,4 +1,4 @@
-package com.hyphenate.chatuidemo.utils;
+package com.hyphenate.chatuidemo.core.utils;
 
 import com.hyphenate.util.EMLog;
 
