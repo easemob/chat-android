@@ -3,14 +3,19 @@ package com.hyphenate.chatuidemo.section.login.activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.View;
-import android.widget.TextView;
+import android.util.Log;
+
+import androidx.lifecycle.ViewModelProviders;
 
 import com.hyphenate.chatuidemo.R;
+import com.hyphenate.chatuidemo.section.base.BaseFragment;
 import com.hyphenate.chatuidemo.section.base.BaseInitActivity;
+import com.hyphenate.chatuidemo.section.login.fragment.LoginFragment;
+import com.hyphenate.chatuidemo.section.login.fragment.RegisterFragment;
+import com.hyphenate.chatuidemo.section.login.fragment.ServerSetFragment;
+import com.hyphenate.chatuidemo.section.login.viewmodels.LoginViewModel;
 
-public class LoginActivity extends BaseInitActivity implements View.OnClickListener {
-    private TextView tv_login_register;
+public class LoginActivity extends BaseInitActivity {
 
     public static void startAction(Context context) {
         Intent intent = new Intent(context, LoginActivity.class);
@@ -30,21 +35,40 @@ public class LoginActivity extends BaseInitActivity implements View.OnClickListe
     @Override
     protected void initView(Bundle savedInstanceState) {
         super.initView(savedInstanceState);
-        tv_login_register = findViewById(R.id.tv_login_register);
+        getSupportFragmentManager().
+                beginTransaction().
+                replace(R.id.fl_fragment, new LoginFragment()).
+                commit();
     }
 
     @Override
-    protected void initListener() {
-        super.initListener();
-        tv_login_register.setOnClickListener(this);
+    protected void initData() {
+        super.initData();
+        LoginViewModel viewModel = ViewModelProviders.of(this).get(LoginViewModel.class);
+        viewModel.getPageSelect().observe(this, page -> {
+            if(page == 0) {
+                return;
+            }
+            if(page == 1) {
+                replace(new RegisterFragment());
+            }else if(page == 2) {
+                replace(new ServerSetFragment());
+            }
+
+        });
     }
 
-    @Override
-    public void onClick(View v) {
-        switch (v.getId()) {
-            case R.id.tv_login_register :
-                RegisterActivity.startAction(mContext);
-                break;
-        }
+    private void replace(BaseFragment fragment) {
+        getSupportFragmentManager().
+                beginTransaction().
+                setCustomAnimations(
+                        R.anim.slide_in_from_right,
+                        R.anim.slide_out_to_left,
+                        R.anim.slide_in_from_left,
+                        R.anim.slide_out_to_right
+                ).
+                replace(R.id.fl_fragment, fragment).
+                addToBackStack(null).
+                commit();
     }
 }

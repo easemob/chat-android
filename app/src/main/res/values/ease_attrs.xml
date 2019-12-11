@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <declare-styleable name="EaseTitleBar">
+        <attr name="titleBarTitle" format="reference|string"/>
+        <attr name="titleBarLeftImage" format="reference"/>
+        <attr name="titleBarRightImage" format="reference"/>
+        <attr name="titleBarRightTitle" format="reference|string"/>
+        <attr name="titleBarBackground" format="reference|color"/>
+        <attr name="titleBarArrowColor" format="reference|color"/>
+        <attr name="titleBarMenuResource" format="reference"/>
+        <attr name="titleBarRightVisible" format="boolean"/>
+    </declare-styleable>
+
+</resources>

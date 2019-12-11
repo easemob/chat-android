@@ -6,11 +6,11 @@ import androidx.annotation.WorkerThread;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MediatorLiveData;
 
-import com.hyphenate.chatuidemo.common.EmErrorCode;
-import com.hyphenate.chatuidemo.common.EmResult;
-import com.hyphenate.chatuidemo.common.Resource;
-import com.hyphenate.chatuidemo.common.ThreadManager;
-import com.hyphenate.chatuidemo.core.EmResultCallBack;
+import com.hyphenate.chatuidemo.core.net.EmErrorCode;
+import com.hyphenate.chatuidemo.core.net.EmResult;
+import com.hyphenate.chatuidemo.core.net.Resource;
+import com.hyphenate.chatuidemo.core.utils.ThreadManager;
+import com.hyphenate.chatuidemo.core.interfaceOrImplement.EmResultCallBack;
 import com.hyphenate.chatuidemo.core.utils.EmLog;
 
 /**

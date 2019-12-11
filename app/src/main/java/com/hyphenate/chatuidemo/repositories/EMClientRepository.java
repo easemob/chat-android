@@ -5,10 +5,10 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
 import com.hyphenate.chat.EMClient;
-import com.hyphenate.chatuidemo.common.EmErrorCode;
-import com.hyphenate.chatuidemo.common.Resource;
-import com.hyphenate.chatuidemo.common.ThreadManager;
-import com.hyphenate.chatuidemo.core.EmResultCallBack;
+import com.hyphenate.chatuidemo.core.net.EmErrorCode;
+import com.hyphenate.chatuidemo.core.net.Resource;
+import com.hyphenate.chatuidemo.core.utils.ThreadManager;
+import com.hyphenate.chatuidemo.core.interfaceOrImplement.EmResultCallBack;
 import com.hyphenate.exceptions.HyphenateException;
 
 /**
@@ -43,15 +43,15 @@ public class EMClientRepository {
         }.asLiveData();
     }
 
-    public LiveData<Resource<Boolean>> registerToHx(String userName, String pwd) {
-        return new NetworkOnlyResource<Boolean>() {
+    public LiveData<Resource<String>> registerToHx(String userName, String pwd) {
+        return new NetworkOnlyResource<String>() {
 
             @Override
-            protected void createCall(@NonNull EmResultCallBack<LiveData<Boolean>> callBack) {
+            protected void createCall(@NonNull EmResultCallBack<LiveData<String>> callBack) {
                 ThreadManager.getInstance().runOnIOThread(() -> {
                     try {
                         EMClient.getInstance().createAccount(userName, pwd);
-                        MutableLiveData<Boolean> observable = new MutableLiveData<>(true);
+                        MutableLiveData<String> observable = new MutableLiveData<>(userName);
                         callBack.onSuccess(observable);
                     } catch (HyphenateException e) {
                         callBack.onError(e.getErrorCode(), e.getMessage());

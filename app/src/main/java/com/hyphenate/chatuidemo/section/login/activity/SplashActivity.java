@@ -1,15 +1,15 @@
 package com.hyphenate.chatuidemo.section.login.activity;
 
 import android.os.Bundle;
-import android.util.Log;
 import android.view.animation.AlphaAnimation;
 
 import androidx.lifecycle.ViewModelProviders;
 
 import com.hyphenate.chatuidemo.MainActivity;
 import com.hyphenate.chatuidemo.R;
+import com.hyphenate.chatuidemo.core.utils.EmLog;
 import com.hyphenate.chatuidemo.section.base.BaseInitActivity;
-import com.hyphenate.chatuidemo.common.Status;
+import com.hyphenate.chatuidemo.core.enums.Status;
 import com.hyphenate.chatuidemo.section.login.viewmodels.SplashViewModel;
 
 public class SplashActivity extends BaseInitActivity {
@@ -37,11 +37,14 @@ public class SplashActivity extends BaseInitActivity {
         super.initData();
         SplashViewModel model = ViewModelProviders.of(this).get(SplashViewModel.class);
         model.getLoginData().observe(this, response -> {
+            if(response == null) {
+                return;
+            }
             if(response.status == Status.SUCCESS) {
                 MainActivity.startAction(mContext);
                 finish();
-            }else {
-                Log.e("TAG", "error message = "+response.getMessage(mContext));
+            }else if(response.status == Status.ERROR) {
+                EmLog.i("TAG", "error message = "+response.getMessage());
                 LoginActivity.startAction(mContext);
                 finish();
             }

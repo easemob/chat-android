@@ -1,9 +1,11 @@
-package com.hyphenate.chatuidemo.common;
+package com.hyphenate.chatuidemo.core.utils;
 
 import android.os.Handler;
 import android.os.Looper;
 import android.os.Process;
 
+
+import com.hyphenate.chatuidemo.core.net.BackgroundThreadFactory;
 
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.Executor;

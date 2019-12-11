@@ -1,4 +1,4 @@
-package com.hyphenate.chatuidemo.common;
+package com.hyphenate.chatuidemo.core.interfaceOrImplement;
 
 import android.app.Activity;
 import android.app.Application;

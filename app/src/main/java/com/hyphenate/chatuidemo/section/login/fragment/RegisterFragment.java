@@ -1,7 +1,5 @@
-package com.hyphenate.chatuidemo.section.login.activity;
+package com.hyphenate.chatuidemo.section.login.fragment;
 
-import android.content.Context;
-import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.text.Editable;
@@ -12,73 +10,68 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 
-import androidx.appcompat.widget.Toolbar;
 import androidx.core.content.ContextCompat;
 import androidx.lifecycle.ViewModelProviders;
 
 import com.hyphenate.chatuidemo.R;
-import com.hyphenate.chatuidemo.common.Status;
-import com.hyphenate.chatuidemo.section.login.viewmodels.RegisterViewModel;
-import com.hyphenate.chatuidemo.section.base.BaseInitActivity;
+import com.hyphenate.chatuidemo.core.enums.Status;
+import com.hyphenate.chatuidemo.core.utils.ToastUtils;
+import com.hyphenate.chatuidemo.core.widget.EaseTitleBar;
+import com.hyphenate.chatuidemo.section.base.BaseInitFragment;
+import com.hyphenate.chatuidemo.section.login.viewmodels.LoginViewModel;
 
-public class RegisterActivity extends BaseInitActivity implements TextWatcher, View.OnClickListener {
-    private Toolbar toolbarRegister;
-    private EditText et_login_name;
-    private EditText et_login_pwd;
-    private EditText et_login_pwd_confirm;
-    private Button btn_login;
+public class RegisterFragment extends BaseInitFragment implements TextWatcher, View.OnClickListener, EaseTitleBar.OnBackPressListener {
+
+    private EaseTitleBar mToolbarRegister;
+    private EditText mEtLoginName;
+    private EditText mEtLoginPwd;
+    private EditText mEtLoginPwdConfirm;
+    private Button mBtnLogin;
     private String mUserName;
     private String mPwd;
     private String mPwdConfirm;
-    private RegisterViewModel mViewModel;
-
-    public static void startAction(Context context) {
-        Intent intent = new Intent(context, RegisterActivity.class);
-        context.startActivity(intent);
-    }
-
-    @Override
-    protected void initSystemFit() {
-        setFitSystemForTheme(false, R.color.transparent);
-    }
+    private LoginViewModel mViewModel;
 
     @Override
     protected int getLayoutId() {
-        return R.layout.em_activity_register;
+        return R.layout.em_fragment_register;
     }
 
     @Override
     protected void initView(Bundle savedInstanceState) {
         super.initView(savedInstanceState);
-        toolbarRegister = findViewById(R.id.toolbar_register);
-        et_login_name = findViewById(R.id.et_login_name);
-        et_login_pwd = findViewById(R.id.et_login_pwd);
-        et_login_pwd_confirm = findViewById(R.id.et_login_pwd_confirm);
-        btn_login = findViewById(R.id.btn_login);
-        initToolBar(toolbarRegister);
-        setToolbarCustomColor(mContext, R.color.white);
+        mToolbarRegister = findViewById(R.id.toolbar_register);
+        mEtLoginName = findViewById(R.id.et_login_name);
+        mEtLoginPwd = findViewById(R.id.et_login_pwd);
+        mEtLoginPwdConfirm = findViewById(R.id.et_login_pwd_confirm);
+        mBtnLogin = findViewById(R.id.btn_login);
     }
 
     @Override
     protected void initListener() {
         super.initListener();
-        et_login_name.addTextChangedListener(this);
-        et_login_pwd.addTextChangedListener(this);
-        et_login_pwd_confirm.addTextChangedListener(this);
-        btn_login.setOnClickListener(this);
+        mEtLoginName.addTextChangedListener(this);
+        mEtLoginPwd.addTextChangedListener(this);
+        mEtLoginPwdConfirm.addTextChangedListener(this);
+        mBtnLogin.setOnClickListener(this);
+        mToolbarRegister.setOnBackPressListener(this);
     }
 
     @Override
     protected void initData() {
         super.initData();
-        mViewModel = ViewModelProviders.of(this).get(RegisterViewModel.class);
+        mViewModel = ViewModelProviders.of(mContext).get(LoginViewModel.class);
         mViewModel.getRegisterObservable().observe(this, response -> {
+            if(response == null) {
+                return;
+            }
             Log.e("TAG", "register result = "+response);
             if(response.status == Status.SUCCESS) {
-                Log.e("TAG", "注册成功！");
+                ToastUtils.showSuccessToast(getResources().getString(R.string.em_register_success));
+                onBackPress();
             } else if(response.status == Status.ERROR) {
-                Log.e("TAG", "注册失败" + response.getMessage(mContext));
-
+                Log.e("TAG", "注册失败" + response.getMessage());
+                ToastUtils.showFailToast(getResources().getString(R.string.em_register_failed), response.getMessage());
             }else {
                 Log.e("TAG", "正在注册");
             }
@@ -101,9 +94,9 @@ public class RegisterActivity extends BaseInitActivity implements TextWatcher, V
     }
 
     private void checkEditContent() {
-        mUserName = et_login_name.getText().toString().trim();
-        mPwd = et_login_pwd.getText().toString().trim();
-        mPwdConfirm = et_login_pwd_confirm.getText().toString().trim();
+        mUserName = mEtLoginName.getText().toString().trim();
+        mPwd = mEtLoginPwd.getText().toString().trim();
+        mPwdConfirm = mEtLoginPwdConfirm.getText().toString().trim();
         setButtonEnable(!TextUtils.isEmpty(mUserName) && !TextUtils.isEmpty(mPwd) && !TextUtils.isEmpty(mPwdConfirm));
     }
 
@@ -119,14 +112,15 @@ public class RegisterActivity extends BaseInitActivity implements TextWatcher, V
     private void registerToHx() {
         if(!TextUtils.isEmpty(mUserName) && !TextUtils.isEmpty(mPwd) && !TextUtils.isEmpty(mPwdConfirm)) {
             if(!TextUtils.equals(mPwd, mPwdConfirm)) {
-
+                showToast(R.string.em_password_confirm_error);
+                return;
             }
             mViewModel.register(mUserName, mPwd);
         }
     }
 
     private void setButtonEnable(boolean enable) {
-        btn_login.setEnabled(enable);
+        mBtnLogin.setEnabled(enable);
         //同时需要修改右侧drawalbeRight对应的资源
         Drawable rightDrawable;
         if(enable) {
@@ -134,6 +128,11 @@ public class RegisterActivity extends BaseInitActivity implements TextWatcher, V
         }else {
             rightDrawable = ContextCompat.getDrawable(mContext, R.drawable.em_login_btn_right_unable);
         }
-        btn_login.setCompoundDrawablesWithIntrinsicBounds(null, null, rightDrawable, null);
+        mBtnLogin.setCompoundDrawablesWithIntrinsicBounds(null, null, rightDrawable, null);
+    }
+
+    @Override
+    public void onBackPress(View view) {
+        onBackPress();
     }
 }

@@ -1,4 +1,4 @@
-package com.hyphenate.chatuidemo.common;
+package com.hyphenate.chatuidemo.core.net;
 
 import android.os.Process;
 

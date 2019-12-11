@@ -1,10 +1,12 @@
-package com.hyphenate.chatuidemo.common;
+package com.hyphenate.chatuidemo.core.net;
 
 import android.content.Context;
 import android.text.TextUtils;
 
 import androidx.annotation.Nullable;
-import androidx.core.content.ContextCompat;
+
+import com.hyphenate.chatuidemo.BasicApplication;
+import com.hyphenate.chatuidemo.core.enums.Status;
 
 public class Resource<T> {
     public Status status;
@@ -47,15 +49,14 @@ public class Resource<T> {
 
     /**
      * 获取错误信息
-     * @param context
      * @return
      */
-    public String getMessage(Context context) {
+    public String getMessage() {
         if(!TextUtils.isEmpty(message)) {
             return message;
         }
         if(messageId > 0) {
-            return context.getString(messageId);
+            return BasicApplication.getInstance().getString(messageId);
         }
         return "";
     }

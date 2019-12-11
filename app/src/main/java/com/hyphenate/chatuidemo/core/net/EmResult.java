@@ -1,4 +1,4 @@
-package com.hyphenate.chatuidemo.common;
+package com.hyphenate.chatuidemo.core.net;
 
 
 import com.hyphenate.chat.EMBase;

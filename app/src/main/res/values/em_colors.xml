@@ -11,6 +11,9 @@
     <color name="black">#ff000000</color>
     <color name="transparent">@android:color/transparent</color>
 
+    <color name="em_toolbar_color_title">@color/black</color>
+    <color name="em_toolbar_color_title_right">@color/black</color>
+
     <color name="em_base_color_primary">@color/white</color>
     <color name="em_base_color_primary_dark">@color/white</color>
     <color name="em_base_color_accent">@color/blue</color>

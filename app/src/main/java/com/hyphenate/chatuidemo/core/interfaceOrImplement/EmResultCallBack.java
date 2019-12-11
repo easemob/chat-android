@@ -1,4 +1,4 @@
-package com.hyphenate.chatuidemo.core;
+package com.hyphenate.chatuidemo.core.interfaceOrImplement;
 
 import com.hyphenate.EMValueCallBack;
 

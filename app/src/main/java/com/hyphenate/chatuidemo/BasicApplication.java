@@ -5,7 +5,7 @@ import android.content.Context;
 
 import androidx.multidex.MultiDex;
 
-import com.hyphenate.chatuidemo.common.UserActivityLifecycleCallbacks;
+import com.hyphenate.chatuidemo.core.interfaceOrImplement.UserActivityLifecycleCallbacks;
 import com.hyphenate.push.EMPushHelper;
 import com.hyphenate.push.EMPushType;
 import com.hyphenate.push.PushListener;

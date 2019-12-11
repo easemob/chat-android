@@ -12,13 +12,15 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.StringRes;
+
 import com.hyphenate.chatuidemo.BasicApplication;
 import com.hyphenate.chatuidemo.R;
 
 import java.lang.reflect.Field;
 
 /**
- * Toast工具类，统一Toast样式，处理重复显示的问题
+ * Toast工具类，统一Toast样式，处理重复显示的问题，处理7.1.x版本crash的问题
  */
 public class ToastUtils {
     private static final int DEFAULT = 0;
@@ -36,6 +38,46 @@ public class ToastUtils {
     }
 
     /**
+     * 弹出成功的toast
+     * @param message
+     */
+    public static void showSuccessToast(@StringRes int message) {
+        showCenterToast(0, message, SUCCESS, TOAST_LAST_TIME);
+    }
+
+    /**
+     * 弹出失败的toast
+     * @param message
+     */
+    public static void showFailToast(String message) {
+        showCenterToast(null, message, FAIL, TOAST_LAST_TIME);
+    }
+
+    /**
+     * 弹出失败的toast
+     * @param message
+     */
+    public static void showFailToast(@StringRes int message) {
+        showCenterToast(0, message, FAIL, TOAST_LAST_TIME);
+    }
+
+    /**
+     * 弹出失败的toast
+     * @param message
+     */
+    public static void showToast(String message) {
+        showCenterToast(null, message, DEFAULT, TOAST_LAST_TIME);
+    }
+
+    /**
+     * 弹出失败的toast
+     * @param message
+     */
+    public static void showToast(@StringRes int message) {
+        showCenterToast(0, message, DEFAULT, TOAST_LAST_TIME);
+    }
+
+    /**
      * 弹出成功的toast，有标题
      * @param title
      * @param message
@@ -45,12 +87,49 @@ public class ToastUtils {
     }
 
     /**
+     * 弹出成功的toast，有标题
+     * @param title
+     * @param message
+     */
+    public static void showSuccessToast(@StringRes int title, @StringRes int message) {
+        showCenterToast(title, message, SUCCESS, TOAST_LAST_TIME);
+    }
+
+    /**
+     * 弹出失败的toast，有标题
+     * @param title
+     * @param message
+     */
+    public static void showFailToast(String title, String message) {
+        showCenterToast(title, message, FAIL, TOAST_LAST_TIME);
+    }
+
+    /**
+     * 弹出失败的toast，有标题
+     * @param title
+     * @param message
+     */
+    public static void showFailToast(@StringRes int title, @StringRes int message) {
+        showCenterToast(title, message, FAIL, TOAST_LAST_TIME);
+    }
+
+    /**
      * 弹出成功的toast，有标题，可以设置显示时长
      * @param title
      * @param message
      * @param duration
      */
     public static void showSuccessToast(String title, String message, int duration) {
+        showCenterToast(title, message, SUCCESS, duration);
+    }
+
+    /**
+     * 弹出成功的toast，有标题，可以设置显示时长
+     * @param title
+     * @param message
+     * @param duration
+     */
+    public static void showSuccessToast(@StringRes int title, @StringRes int message, int duration) {
         showCenterToast(title, message, SUCCESS, duration);
     }
 
@@ -65,6 +144,34 @@ public class ToastUtils {
     }
 
     /**
+     * 弹出失败的toast，有标题，可以设置显示时长
+     * @param title
+     * @param message
+     * @param duration
+     */
+    public static void showFailToast(@StringRes int title, @StringRes int message, int duration) {
+        showCenterToast(title, message, FAIL, duration);
+    }
+
+    /**
+     * 弹出toast，无图标，无标题，可以设置显示时长
+     * @param message
+     * @param duration
+     */
+    public static void showToast(String message, int duration) {
+        showCenterToast(null, message, DEFAULT, duration);
+    }
+
+    /**
+     * 弹出toast，无图标，无标题，可以设置显示时长
+     * @param message
+     * @param duration
+     */
+    public static void showToast(@StringRes int message, int duration) {
+        showCenterToast(0, message, DEFAULT, duration);
+    }
+
+    /**
      * 在屏幕中部显示，在此处传入application
      * @param title
      * @param message
@@ -72,6 +179,17 @@ public class ToastUtils {
      * @param duration
      */
     public static void showCenterToast(String title, String message, int type, int duration) {
+        showToast(BasicApplication.getInstance(), title, message, type, duration, Gravity.CENTER);
+    }
+
+    /**
+     * 在屏幕中部显示，在此处传入application
+     * @param title
+     * @param message
+     * @param type
+     * @param duration
+     */
+    public static void showCenterToast(@StringRes int title, @StringRes int message, int type, int duration) {
         showToast(BasicApplication.getInstance(), title, message, type, duration, Gravity.CENTER);
     }
 
@@ -84,12 +202,29 @@ public class ToastUtils {
      * @param duration
      * @param gravity
      */
+    public static void showToast(Context context, @StringRes int title, @StringRes int message, int type, int duration, int gravity) {
+        showToast(context, title == 0 ? null:context.getString(title), context.getString(message), type, duration, gravity);
+    }
+
+    /**
+     * 此处判断toast不为空，选择cancel，是因为toast因为类型不同（是否显示图片）或者是否有标题，会导致不同的toast展示
+     * @param context
+     * @param title
+     * @param message
+     * @param type
+     * @param duration
+     * @param gravity
+     */
     public static void showToast(Context context, String title, String message, int type, int duration, int gravity) {
-        if(toast != null) {
-            toast.cancel();
-        }
-        toast = getToast(context, title, message, type, duration, gravity);
-        toast.show();
+        //保证在主线程中展示toast
+        ThreadManager.getInstance().runOnMainThread(() -> {
+            if(toast != null) {
+                toast.cancel();
+            }
+            toast = getToast(context, title, message, type, duration, gravity);
+            toast.show();
+        });
+
     }
 
     private static Toast getToast(Context context, String title, String message, int type, int duration, int gravity) {
@@ -106,7 +241,7 @@ public class ToastUtils {
             tvToastTitle.setText(title);
         }
 
-        if(TextUtils.isEmpty(message)) {
+        if(!TextUtils.isEmpty(message)) {
             tvToastContent.setText(message);
         }
 

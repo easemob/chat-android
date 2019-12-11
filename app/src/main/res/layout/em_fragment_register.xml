@@ -1,14 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
-
-    <ImageView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:scaleType="centerCrop"
-        android:src="@drawable/em_splash_bg"/>
+    android:layout_height="match_parent">
 
     <com.hyphenate.chatuidemo.core.widget.EaseTitleBar
         android:id="@+id/toolbar_register"
@@ -17,7 +12,8 @@
         android:layout_marginTop="44dp"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent"/>
+        app:layout_constraintTop_toTopOf="parent"
+        app:titleBarArrowColor="@color/white"/>
 
     <TextView
         android:id="@+id/tv_register_title"
@@ -70,7 +66,5 @@
         app:layout_constraintTop_toBottomOf="@id/et_login_pwd_confirm"
         style="@style/em_login_btn"
         android:text="@string/em_register_btn"/>
-
-
 
 </androidx.constraintlayout.widget.ConstraintLayout>

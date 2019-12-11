@@ -1,7 +1,4 @@
-package com.hyphenate.chatuidemo.common;
-
-import android.app.Application;
-import android.content.Context;
+package com.hyphenate.chatuidemo.core.net;
 
 import com.hyphenate.EMError;
 import com.hyphenate.chatuidemo.R;

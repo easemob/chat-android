@@ -1,4 +1,4 @@
-package com.hyphenate.chatuidemo.common;
+package com.hyphenate.chatuidemo.core.enums;
 
 public enum Status {
     SUCCESS,

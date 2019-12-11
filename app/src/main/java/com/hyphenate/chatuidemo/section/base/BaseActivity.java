@@ -1,5 +1,6 @@
 package com.hyphenate.chatuidemo.section.base;
 
+import android.content.Context;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
@@ -14,12 +15,14 @@ import android.view.inputmethod.InputMethodManager;
 
 import androidx.annotation.ColorRes;
 import androidx.annotation.Nullable;
+import androidx.annotation.StringRes;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.content.ContextCompat;
 
 import com.hyphenate.chatuidemo.R;
 import com.hyphenate.chatuidemo.core.utils.StatusBarCompat;
+import com.hyphenate.chatuidemo.core.utils.ToastUtils;
 
 /**
  * 作为基础activity,放置一些公共的方法
@@ -66,6 +69,38 @@ public class BaseActivity extends AppCompatActivity {
                 mContext.getSupportActionBar().setHomeAsUpIndicator(leftArrow);
             }
         }
+    }
+
+    @Override
+    public void onBackPressed() {
+        InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
+        if (imm!=null&&getWindow().getAttributes().softInputMode != WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN) {
+            if (getCurrentFocus() != null){
+                imm.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
+                super.onBackPressed();
+            }else {
+                super.onBackPressed();
+            }
+        }else {
+            super.onBackPressed();
+        }
+
+    }
+
+    /**
+     * toast by string
+     * @param message
+     */
+    public void showToast(String message) {
+        ToastUtils.showToast(message);
+    }
+
+    /**
+     * toast by string res
+     * @param messageId
+     */
+    public void showToast(@StringRes int messageId) {
+        ToastUtils.showToast(messageId);
     }
 
 
