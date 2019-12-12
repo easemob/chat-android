@@ -67,6 +67,7 @@ public class PreferenceManager {
 	private static String SHARED_KEY_CALL_FIX_SAMPLE_RATE = "SHARED_KEY_CALL_FIX_SAMPLE_RATE";
 
 	private static String SHARED_KEY_PUSH_USE_FCM = "shared_key_push_use_fcm";
+	private static String SHARED_KEY_AUTO_LOGIN = "shared_key_auto_login";
 
 	@SuppressLint("CommitPrefEdits")
 	private PreferenceManager(Context cxt) {
@@ -445,4 +446,20 @@ public class PreferenceManager {
 		return mSharedPreferences.getBoolean(SHARED_KEY_PUSH_USE_FCM, true);
 	}
 
+	/**
+	 * 设置是否自动登录
+	 * @param autoLogin
+	 */
+	public void setAutoLogin(boolean autoLogin) {
+		editor.putBoolean(SHARED_KEY_AUTO_LOGIN, autoLogin);
+		editor.apply();
+	}
+
+	/**
+	 * 获取是否是自动登录
+	 * @return
+	 */
+	public boolean getAutoLogin() {
+		return mSharedPreferences.getBoolean(SHARED_KEY_AUTO_LOGIN, false);
+	}
 }

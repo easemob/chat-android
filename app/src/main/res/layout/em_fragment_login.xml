@@ -32,6 +32,7 @@
         app:layout_constraintBottom_toTopOf="@id/btn_login"
         android:layout_marginTop="20dp"
         android:hint="@string/em_login_password_hint"
+        android:inputType="textPassword"
         style="@style/em_login_et_input"/>
 
     <Button

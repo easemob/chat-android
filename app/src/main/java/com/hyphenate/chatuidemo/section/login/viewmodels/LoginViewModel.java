@@ -6,14 +6,18 @@ import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
 
+import com.hyphenate.chatuidemo.core.bean.EaseUser;
+import com.hyphenate.chatuidemo.core.livedatas.UserInstanceLiveData;
 import com.hyphenate.chatuidemo.core.net.Resource;
-import com.hyphenate.chatuidemo.common.SingleSourceLiveData;
+import com.hyphenate.chatuidemo.core.livedatas.SingleSourceLiveData;
 import com.hyphenate.chatuidemo.repositories.EMClientRepository;
+
+import java.util.List;
 
 
 public class LoginViewModel extends AndroidViewModel {
     private EMClientRepository mRepository;
-    private SingleSourceLiveData<Resource<Boolean>> loginObservable;
+    private UserInstanceLiveData loginObservable;
     private SingleSourceLiveData<Resource<String>> registerObservable;
     private SingleSourceLiveData<Integer> pageObservable;
 
@@ -21,7 +25,7 @@ public class LoginViewModel extends AndroidViewModel {
         super(application);
         mRepository = new EMClientRepository();
         registerObservable = new SingleSourceLiveData<>();
-        loginObservable = new SingleSourceLiveData<>();
+        loginObservable = UserInstanceLiveData.getInstance();
         pageObservable = new SingleSourceLiveData<>();
     }
 
@@ -55,7 +59,23 @@ public class LoginViewModel extends AndroidViewModel {
         return registerObservable;
     }
 
+    /**
+     * 清理注册信息
+     */
     public void clearRegisterInfo() {
         registerObservable.setValue(null);
+    }
+
+    /**
+     * 登录环信
+     * @param userName
+     * @param pwd
+     */
+    public void login(String userName, String pwd) {
+        loginObservable.setSource(mRepository.loginToServer(userName, pwd));
+    }
+
+    public LiveData<Resource<EaseUser>> getLoginObservable() {
+        return loginObservable;
     }
 }

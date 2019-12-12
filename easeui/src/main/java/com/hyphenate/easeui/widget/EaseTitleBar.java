@@ -1,4 +1,4 @@
-package com.hyphenate.chatuidemo.core.widget;
+package com.hyphenate.easeui.widget;
 
 import android.content.Context;
 import android.content.res.TypedArray;
@@ -8,6 +8,7 @@ import android.graphics.drawable.Drawable;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -18,7 +19,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.content.ContextCompat;
 
-import com.hyphenate.chatuidemo.R;
+import com.hyphenate.easeui.R;
 
 
 /**
@@ -39,6 +40,8 @@ public class EaseTitleBar extends RelativeLayout implements View.OnClickListener
     private OnRightClickListener mOnRightClickListener;
     private int mArrowColorId;
     private int mArrowColor;
+    private int mWidth;
+    private int mHeight;
 
     public EaseTitleBar(Context context) {
         this(context, null);
@@ -52,6 +55,21 @@ public class EaseTitleBar extends RelativeLayout implements View.OnClickListener
         super(context, attrs, defStyle);
         this.context = context;
         init(context, attrs);
+    }
+
+    @Override
+    protected void onSizeChanged(int w, int h, int oldw, int oldh) {
+        super.onSizeChanged(w, h, oldw, oldh);
+        mWidth = w;
+        mHeight = h;
+        initLayout();
+    }
+
+    private void initLayout() {
+        ViewGroup.LayoutParams params = titleLayout.getLayoutParams();
+        params.height = mHeight;
+        params.width = mWidth;
+        requestLayout();
     }
 
     private void init(Context context, AttributeSet attrs){
@@ -210,15 +228,14 @@ public class EaseTitleBar extends RelativeLayout implements View.OnClickListener
 
     @Override
     public void onClick(View v) {
-        switch (v.getId()) {
-            case R.id.left_layout :
-                if(mBackPressListener != null) {
-                    mBackPressListener.onBackPress(v);
-                }
-                break;
-            case R.id.right_layout:
-
-                break;
+        if(v.getId() == R.id.left_layout) {
+            if(mBackPressListener != null) {
+                mBackPressListener.onBackPress(v);
+            }
+        }else if(v.getId() == R.id.right_layout) {
+            if(mOnRightClickListener != null) {
+                mOnRightClickListener.onRightClick(v);
+            }
         }
     }
 

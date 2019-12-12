@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -13,6 +14,7 @@ import android.widget.TextView;
 import androidx.core.content.ContextCompat;
 import androidx.lifecycle.ViewModelProviders;
 
+import com.hyphenate.chatuidemo.MainActivity;
 import com.hyphenate.chatuidemo.R;
 import com.hyphenate.chatuidemo.core.enums.Status;
 import com.hyphenate.chatuidemo.core.utils.ToastUtils;
@@ -68,6 +70,24 @@ public class LoginFragment extends BaseInitFragment implements View.OnClickListe
             }
             if(response.status == Status.SUCCESS) {
                 mEtLoginName.setText(TextUtils.isEmpty(response.data)?"":response.data);
+                mEtLoginPwd.setText("");
+            }
+        });
+
+        mViewModel.getLoginObservable().observe(this, response -> {
+            if(response == null) {
+                return;
+            }
+            if(response.status == Status.SUCCESS) {
+                //跳转到主页
+                MainActivity.startAction(mContext);
+                mContext.finish();
+
+            }else if(response.status == Status.ERROR) {
+                ToastUtils.showFailToast(getResources().getString(R.string.em_login_failed), response.getMessage());
+
+            }else if(response.status == Status.LOADING) {
+                Log.e("TAG", "记载中");
             }
         });
     }
@@ -96,8 +116,7 @@ public class LoginFragment extends BaseInitFragment implements View.OnClickListe
             ToastUtils.showToast(R.string.em_login_btn_info_incomplete);
             return;
         }
-
-
+        mViewModel.login(mUserName, mPwd);
     }
 
     @Override

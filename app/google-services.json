@@ -10,7 +10,7 @@
       "client_info": {
         "mobilesdk_app_id": "1:921300338324:android:97309bf2bf5a5b61",
         "android_client_info": {
-          "package_name": "com.hyphenate.chatuidemo"
+          "package_name": "com.hyphenate.chatuidemo.debug"
         }
       },
       "oauth_client": [

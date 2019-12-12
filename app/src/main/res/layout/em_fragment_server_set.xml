@@ -1,6 +1,182 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="match_parent">
+<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
-</LinearLayout>
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <com.hyphenate.easeui.widget.EaseTitleBar
+            android:id="@+id/toolbar_server"
+            android:layout_width="0dp"
+            android:layout_height="44dp"
+            android:layout_marginTop="44dp"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:titleBarArrowColor="@color/white"/>
+
+        <TextView
+            android:id="@+id/tv_server_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="33dp"
+            android:layout_marginTop="20dp"
+            android:text="@string/em_server_set_title"
+            android:textColor="@color/em_server_set_color_title"
+            android:textSize="18sp"
+            app:layout_constraintHorizontal_chainStyle="spread_inside"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toLeftOf="@id/switch_server"
+            app:layout_constraintTop_toBottomOf="@id/toolbar_server"/>
+
+        <Switch
+            android:id="@+id/switch_server"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:layout_marginRight="33dp"
+            android:switchMinWidth="20dp"
+            android:thumb="@drawable/em_switch_thumb_selector"
+            android:track="@drawable/em_switch_track_selector"
+            app:layout_constraintLeft_toRightOf="@id/tv_server_title"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/toolbar_server" />
+
+        <TextView
+            android:id="@+id/et_server_hint"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tv_server_title"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintVertical_bias="0"
+            android:layout_marginTop="20dp"
+            android:gravity="center_vertical"
+            android:text="@string/em_server_set_server_hint"
+            android:textSize="@dimen/em_login_server_hint_text_size"
+            style="@style/em_login_et_input" />
+
+        <EditText
+            android:id="@+id/et_appkey"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/et_server_hint"
+            app:layout_constraintBottom_toTopOf="@id/et_apns_cert_name"
+            app:layout_constraintVertical_bias="0"
+            android:layout_marginTop="20dp"
+            android:hint="@string/em_server_set_appkey"
+            style="@style/em_login_et_input" />
+
+        <EditText
+            android:id="@+id/et_apns_cert_name"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/et_appkey"
+            app:layout_constraintBottom_toTopOf="@id/tv_server_specify"
+            android:layout_marginTop="20dp"
+            android:hint="@string/em_server_set_apns_cert_name"
+            style="@style/em_login_et_input" />
+
+        <TextView
+            android:id="@+id/tv_server_specify"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/et_apns_cert_name"
+            app:layout_constraintBottom_toTopOf="@id/et_server_address"
+            android:layout_marginTop="20dp"
+            android:text="@string/em_server_set_specify_server"
+            style="@style/em_login_et_input" />
+
+        <Switch
+            android:id="@+id/switch_specify_server"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:track="@drawable/em_switch_track_selector"
+            android:thumb="@drawable/em_switch_thumb_selector"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="@id/tv_server_specify"
+            app:layout_constraintHorizontal_bias="1"
+            android:layout_marginTop="12dp"
+            android:layout_marginRight="40dp"
+            android:layout_marginEnd="40dp"/>
+
+        <EditText
+            android:id="@+id/et_server_address"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tv_server_specify"
+            app:layout_constraintBottom_toTopOf="@id/et_server_port"
+            android:layout_marginTop="20dp"
+            android:hint="@string/em_server_set_server_address"
+            style="@style/em_login_et_input" />
+
+        <EditText
+            android:id="@+id/et_server_port"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/et_server_address"
+            app:layout_constraintBottom_toTopOf="@id/et_server_rest"
+            android:layout_marginTop="20dp"
+            android:inputType="textPassword"
+            android:hint="@string/em_server_set_server_port"
+            style="@style/em_login_et_input"/>
+
+        <EditText
+            android:id="@+id/et_server_rest"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/et_server_port"
+            app:layout_constraintBottom_toTopOf="@id/tv_https_set"
+            android:layout_marginTop="20dp"
+            android:inputType="textPassword"
+            android:hint="@string/em_server_set_rest_server_address"
+            style="@style/em_login_et_input"/>
+
+        <TextView
+            android:id="@+id/tv_https_set"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/et_server_rest"
+            app:layout_constraintBottom_toTopOf="@id/btn_server"
+            android:layout_marginTop="20dp"
+            android:text="@string/em_server_set_https_set"
+            style="@style/em_login_et_input" />
+
+        <Switch
+            android:id="@+id/switch_https_set"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:track="@drawable/em_switch_track_selector"
+            android:thumb="@drawable/em_switch_thumb_selector"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="@id/tv_https_set"
+            app:layout_constraintHorizontal_bias="1"
+            android:layout_marginTop="12dp"
+            android:layout_marginRight="40dp"
+            android:layout_marginEnd="40dp"/>
+
+        <Button
+            android:id="@+id/btn_server"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tv_https_set"
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:layout_marginBottom="20dp"
+            style="@style/em_login_btn"
+            android:text="@string/em_server_set_button_text"/>
+
+        <androidx.constraintlayout.widget.Group
+            android:id="@+id/group_server_set"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:visibility="gone"
+            app:constraint_referenced_ids="switch_https_set,tv_https_set,btn_server,et_server_rest,et_server_port,et_server_address,et_server_hint,et_appkey,et_apns_cert_name,tv_server_specify,switch_specify_server"/>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+</androidx.core.widget.NestedScrollView>

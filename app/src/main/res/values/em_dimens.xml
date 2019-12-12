@@ -3,9 +3,8 @@
     <dimen name="activity_horizontal_margin">16dp</dimen>
     <dimen name="activity_vertical_margin">16dp</dimen>
 
-    <dimen name="height_top_bar">46dp</dimen>
-    <dimen name="em_toolbar_title_size">18sp</dimen>
-    <dimen name="em_toolbar_title_right_size">16sp</dimen>
-
     <dimen name="em_login_bg_radius">57dp</dimen>
+
+    <dimen name="em_login_text_size">16sp</dimen>
+    <dimen name="em_login_server_hint_text_size">14sp</dimen>
 </resources>

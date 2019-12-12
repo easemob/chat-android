@@ -262,7 +262,10 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".section.login.activity.LoginActivity" />
+        <activity
+            android:name=".section.login.activity.LoginActivity"
+            android:windowSoftInputMode="adjustResize|stateHidden"
+            />
         <activity android:name=".section.login.activity.TestActivity" />
     </application>
 

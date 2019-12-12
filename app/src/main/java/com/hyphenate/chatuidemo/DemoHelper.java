@@ -12,6 +12,10 @@ import com.hyphenate.chat.EMOptions;
 import com.hyphenate.chatuidemo.receiver.HeadsetReceiver;
 import com.hyphenate.chatuidemo.core.utils.PreferenceManager;
 import com.hyphenate.push.EMPushConfig;
+import com.hyphenate.push.EMPushHelper;
+import com.hyphenate.push.EMPushType;
+import com.hyphenate.push.PushListener;
+import com.hyphenate.util.EMLog;
 
 /**
  * 作为hyphenate-sdk的入口控制类，获取sdk下的基础类均通过此类
@@ -53,6 +57,9 @@ public class DemoHelper {
         EMClient.getInstance().setDebugMode(true);
         // set Call options
         setCallOptions(context);
+        initPush(context);
+        // 记录本地标记，是否初始化过
+        setAutoLogin(true);
     }
 
     /**
@@ -178,6 +185,19 @@ public class DemoHelper {
         EMClient.getInstance().callManager().getCallOptions().setIsSendPushIfOffline(PreferenceManager.getInstance().isPushCall());
     }
 
+    public void initPush(Context context) {
+        if(DemoHelper.getInstance().isMainProcess(context)) {
+            HMSPushHelper.getInstance().initHMSAgent(BasicApplication.getInstance());
+            EMPushHelper.getInstance().setPushListener(new PushListener() {
+                @Override
+                public void onError(EMPushType pushType, long errorCode) {
+                    // TODO: 返回的errorCode仅9xx为环信内部错误，可从EMError中查询，其他错误请根据pushType去相应第三方推送网站查询。
+                    EMLog.e("PushClient", "Push client occur a error: " + pushType + " - " + errorCode);
+                }
+            });
+        }
+    }
+
     /**
      * 判断是否在主进程
      * @param context
@@ -208,6 +228,22 @@ public class DemoHelper {
      */
     public void setUseFCM(boolean useFCM) {
         PreferenceManager.getInstance().setUseFCM(useFCM);
+    }
+
+    /**
+     * 设置本地标记，是否自动登录
+     * @param autoLogin
+     */
+    public void setAutoLogin(boolean autoLogin) {
+        PreferenceManager.getInstance().setAutoLogin(autoLogin);
+    }
+
+    /**
+     * 获取本地标记，是否自动登录
+     * @return
+     */
+    public boolean getAutoLogin() {
+        return PreferenceManager.getInstance().getAutoLogin();
     }
 
     /**
@@ -368,6 +404,43 @@ public class DemoHelper {
      */
     public boolean isSetAutodownloadThumbnail() {
         return PreferenceManager.getInstance().isSetAutodownloadThumbnail();
+    }
+
+    /**
+     * save current username
+     * @param username
+     */
+    public void setCurrentUserName(String username){
+        PreferenceManager.getInstance().setCurrentUserName(username);
+    }
+
+    public String getCurrentUserName(){
+        return PreferenceManager.getInstance().getCurrentUsername();
+    }
+
+
+    /**
+     * 设置昵称
+     * @param nickname
+     */
+    public void setCurrentUserNick(String nickname) {
+        PreferenceManager.getInstance().setCurrentUserNick(nickname);
+    }
+
+    public String getCurrentUserNick() {
+        return PreferenceManager.getInstance().getCurrentUserNick();
+    }
+
+    /**
+     * 设置头像
+     * @param avatar
+     */
+    private void setCurrentUserAvatar(String avatar) {
+        PreferenceManager.getInstance().setCurrentUserAvatar(avatar);
+    }
+
+    private String getCurrentUserAvatar() {
+        return PreferenceManager.getInstance().getCurrentUserAvatar();
     }
 
 }

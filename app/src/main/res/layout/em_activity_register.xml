@@ -10,7 +10,7 @@
         android:scaleType="centerCrop"
         android:src="@drawable/em_splash_bg"/>
 
-    <com.hyphenate.chatuidemo.core.widget.EaseTitleBar
+    <com.hyphenate.easeui.widget.EaseTitleBar
         android:id="@+id/toolbar_register"
         android:layout_width="0dp"
         android:layout_height="44dp"

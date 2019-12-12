@@ -15,6 +15,7 @@
     <string name="em_login_tv_token">token登录</string>
     <string name="em_login_tv_server_set">服务器配置</string>
     <string name="em_login_btn_info_incomplete">用户名或者密码不能为空</string>
+    <string name="em_login_failed">登录失败</string>
     
     <string name="em_register_btn">注\u0020册</string>
     <string name="em_register_password_confirm_hint">确认密码</string>
@@ -27,4 +28,25 @@
     <string name="em_error_not_login">未登录过环信</string>
     <string name="em_error_parse_error">解析错误</string>
     <string name="em_error_err_unknown">网络问题请稍后重试</string>
+
+    <string name="location_recv">[%1$s的位置]</string>
+    <string name="location_prefix">[我的位置]</string>
+    <string name="picture">[图片]</string>
+    <string name="video">[视频]</string>
+    <string name="file">[文件]</string>
+    <string name="voice_prefix">[语音]</string>
+    <string name="voice_call">[语音通话]</string>
+    <string name="video_call">[视频通话]</string>
+    <string name="dynamic_expression">[动态表情]</string>
+
+    <string name="em_server_set_title">使用自定义服务器？</string>
+    <string name="em_server_set_server_hint">demo已经绑定以下环境设置，如果需要修改，请重启App进行设置</string>
+    <string name="em_server_set_appkey">Appkey</string>
+    <string name="em_server_set_apns_cert_name">apns证书名称</string>
+    <string name="em_server_set_specify_server">是否指定服务器:</string>
+    <string name="em_server_set_server_address">IM服务器地址</string>
+    <string name="em_server_set_server_port">端口号</string>
+    <string name="em_server_set_rest_server_address">REST服务器地址</string>
+    <string name="em_server_set_https_set">只使用Https:</string>
+    <string name="em_server_set_button_text">保\u0020存\u0020配\u0020置</string>
 </resources>

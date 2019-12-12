@@ -25,18 +25,10 @@ public class BasicApplication extends Application {
 
     private void initHx() {
         // init hx sdk
-        DemoHelper.getInstance().init(this);
-
-        if(DemoHelper.getInstance().isMainProcess(this)) {
-            HMSPushHelper.getInstance().initHMSAgent(this);
-            EMPushHelper.getInstance().setPushListener(new PushListener() {
-                @Override
-                public void onError(EMPushType pushType, long errorCode) {
-                    // TODO: 返回的errorCode仅9xx为环信内部错误，可从EMError中查询，其他错误请根据pushType去相应第三方推送网站查询。
-                    EMLog.e("PushClient", "Push client occur a error: " + pushType + " - " + errorCode);
-                }
-            });
+        if(DemoHelper.getInstance().getAutoLogin()) {
+            DemoHelper.getInstance().init(this);
         }
+
     }
 
     private void registerActivityLifecycleCallbacks() {

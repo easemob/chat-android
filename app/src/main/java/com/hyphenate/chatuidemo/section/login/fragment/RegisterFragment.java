@@ -16,7 +16,7 @@ import androidx.lifecycle.ViewModelProviders;
 import com.hyphenate.chatuidemo.R;
 import com.hyphenate.chatuidemo.core.enums.Status;
 import com.hyphenate.chatuidemo.core.utils.ToastUtils;
-import com.hyphenate.chatuidemo.core.widget.EaseTitleBar;
+import com.hyphenate.easeui.widget.EaseTitleBar;
 import com.hyphenate.chatuidemo.section.base.BaseInitFragment;
 import com.hyphenate.chatuidemo.section.login.viewmodels.LoginViewModel;
 

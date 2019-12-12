@@ -1,4 +1,4 @@
-package com.hyphenate.chatuidemo.common;
+package com.hyphenate.chatuidemo.core.livedatas;
 
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
