@@ -7,9 +7,9 @@ import androidx.lifecycle.ViewModelProviders;
 
 import com.hyphenate.chatuidemo.MainActivity;
 import com.hyphenate.chatuidemo.R;
-import com.hyphenate.chatuidemo.core.utils.EmLog;
+import com.hyphenate.chatuidemo.common.utils.DemoLog;
 import com.hyphenate.chatuidemo.section.base.BaseInitActivity;
-import com.hyphenate.chatuidemo.core.enums.Status;
+import com.hyphenate.chatuidemo.common.enums.Status;
 import com.hyphenate.chatuidemo.section.login.viewmodels.SplashViewModel;
 
 public class SplashActivity extends BaseInitActivity {
@@ -44,7 +44,7 @@ public class SplashActivity extends BaseInitActivity {
                 MainActivity.startAction(mContext);
                 finish();
             }else if(response.status == Status.ERROR) {
-                EmLog.i("TAG", "error message = "+response.getMessage());
+                DemoLog.i("TAG", "error message = "+response.getMessage());
                 LoginActivity.startAction(mContext);
                 finish();
             }

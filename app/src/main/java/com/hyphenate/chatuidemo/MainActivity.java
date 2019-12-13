@@ -8,7 +8,7 @@ import com.ashokvarma.bottomnavigation.BottomNavigationBar;
 import com.ashokvarma.bottomnavigation.BottomNavigationItem;
 import com.ashokvarma.bottomnavigation.TextBadgeItem;
 import com.hyphenate.chatuidemo.section.base.BaseInitActivity;
-import com.hyphenate.chatuidemo.ui.home.HomeFragment;
+import com.hyphenate.chatuidemo.section.ui.home.HomeFragment;
 
 
 public class MainActivity extends BaseInitActivity implements BottomNavigationBar.OnTabSelectedListener {

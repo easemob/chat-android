@@ -9,8 +9,10 @@ import android.util.Log;
 
 import com.hyphenate.chat.EMClient;
 import com.hyphenate.chat.EMOptions;
-import com.hyphenate.chatuidemo.receiver.HeadsetReceiver;
-import com.hyphenate.chatuidemo.core.utils.PreferenceManager;
+import com.hyphenate.chatuidemo.common.manager.HMSPushHelper;
+import com.hyphenate.chatuidemo.common.manager.OptionsHelper;
+import com.hyphenate.chatuidemo.common.receiver.HeadsetReceiver;
+import com.hyphenate.chatuidemo.common.utils.PreferenceManager;
 import com.hyphenate.push.EMPushConfig;
 import com.hyphenate.push.EMPushHelper;
 import com.hyphenate.push.EMPushType;
@@ -22,6 +24,8 @@ import com.hyphenate.util.EMLog;
  */
 public class DemoHelper {
     private static final String TAG = "chathelper";
+
+    public boolean isSDKInit;//SDK是否初始化
     private static DemoHelper mInstance;
 
     private DemoHelper() {}
@@ -47,19 +51,17 @@ public class DemoHelper {
 
 
     public void init(Context context) {
-        // 初始化PreferenceManager
-        PreferenceManager.init(context);
         // 根据项目需求对SDK进行配置
         EMOptions options = initChatOptions(context);
         // 初始化SDK
         EMClient.getInstance().init(context, options);
+        // 记录本地标记，是否初始化过
+        setSDKInit(true);
         // debug mode, you'd better set it to false, if you want release your App officially.
         EMClient.getInstance().setDebugMode(true);
         // set Call options
         setCallOptions(context);
         initPush(context);
-        // 记录本地标记，是否初始化过
-        setAutoLogin(true);
     }
 
     /**
@@ -187,7 +189,7 @@ public class DemoHelper {
 
     public void initPush(Context context) {
         if(DemoHelper.getInstance().isMainProcess(context)) {
-            HMSPushHelper.getInstance().initHMSAgent(BasicApplication.getInstance());
+            HMSPushHelper.getInstance().initHMSAgent(DemoApp.getInstance());
             EMPushHelper.getInstance().setPushListener(new PushListener() {
                 @Override
                 public void onError(EMPushType pushType, long errorCode) {
@@ -214,6 +216,10 @@ public class DemoHelper {
         return false;
     }
 
+    public void saveEmOptionSet(EMOptions options) {
+
+    }
+
     /**
      * 获取设置，是否设置google推送
      * @return
@@ -228,6 +234,18 @@ public class DemoHelper {
      */
     public void setUseFCM(boolean useFCM) {
         PreferenceManager.getInstance().setUseFCM(useFCM);
+    }
+
+    /**
+     * 设置SDK是否初始化
+     * @param init
+     */
+    public void setSDKInit(boolean init) {
+        isSDKInit = init;
+    }
+
+    public boolean isSDKInit() {
+        return isSDKInit;
     }
 
     /**
@@ -251,7 +269,7 @@ public class DemoHelper {
      * @return
      */
     public boolean isCustomServerEnable() {
-        return PreferenceManager.getInstance().isCustomServerEnable();
+        return OptionsHelper.getInstance().isCustomServerEnable();
     }
 
     /**
@@ -259,7 +277,7 @@ public class DemoHelper {
      * @param enable
      */
     public void enableCustomServer(boolean enable){
-        PreferenceManager.getInstance().enableCustomServer(enable);
+        OptionsHelper.getInstance().enableCustomServer(enable);
     }
 
     /**
@@ -267,7 +285,7 @@ public class DemoHelper {
      * @param restServer
      */
     public void setRestServer(String restServer){
-        PreferenceManager.getInstance().setRestServer(restServer);
+        OptionsHelper.getInstance().setRestServer(restServer);
     }
 
     /**
@@ -275,7 +293,7 @@ public class DemoHelper {
      * @return
      */
     public String getRestServer(){
-        return  PreferenceManager.getInstance().getRestServer();
+        return  OptionsHelper.getInstance().getRestServer();
     }
 
     /**
@@ -283,7 +301,7 @@ public class DemoHelper {
      * @param imServer
      */
     public void setIMServer(String imServer){
-        PreferenceManager.getInstance().setIMServer(imServer);
+        OptionsHelper.getInstance().setIMServer(imServer);
     }
 
     /**
@@ -291,7 +309,19 @@ public class DemoHelper {
      * @return
      */
     public String getIMServer(){
-        return PreferenceManager.getInstance().getIMServer();
+        return OptionsHelper.getInstance().getIMServer();
+    }
+
+    /**
+     * 设置端口号
+     * @param port
+     */
+    public void setIMServerPort(int port) {
+        OptionsHelper.getInstance().setIMServerPort(port);
+    }
+
+    public int getIMServerPort() {
+        return OptionsHelper.getInstance().getIMServerPort();
     }
 
     /**
@@ -299,7 +329,7 @@ public class DemoHelper {
      * @param enable
      */
     public void enableCustomAppkey(boolean enable) {
-        PreferenceManager.getInstance().enableCustomAppkey(enable);
+        OptionsHelper.getInstance().enableCustomAppkey(enable);
     }
 
     /**
@@ -307,7 +337,7 @@ public class DemoHelper {
      * @return
      */
     public boolean isCustomAppkeyEnabled() {
-        return PreferenceManager.getInstance().isCustomAppkeyEnabled();
+        return OptionsHelper.getInstance().isCustomAppkeyEnabled();
     }
 
     /**
@@ -315,7 +345,7 @@ public class DemoHelper {
      * @param appkey
      */
     public void setCustomAppkey(String appkey) {
-        PreferenceManager.getInstance().setCustomAppkey(appkey);
+        OptionsHelper.getInstance().setCustomAppkey(appkey);
     }
 
     /**
@@ -323,7 +353,7 @@ public class DemoHelper {
      * @return
      */
     public String getCutomAppkey() {
-        return PreferenceManager.getInstance().getCustomAppkey();
+        return OptionsHelper.getInstance().getCustomAppkey();
     }
 
     /**
@@ -331,7 +361,7 @@ public class DemoHelper {
      * @param value
      */
     public void allowChatroomOwnerLeave(boolean value){
-        PreferenceManager.getInstance().setSettingAllowChatroomOwnerLeave(value);
+        OptionsHelper.getInstance().allowChatroomOwnerLeave(value);
     }
 
     /**
@@ -339,7 +369,7 @@ public class DemoHelper {
      * @return
      */
     public boolean isChatroomOwnerLeaveAllowed(){
-        return PreferenceManager.getInstance().getSettingAllowChatroomOwnerLeave();
+        return OptionsHelper.getInstance().isChatroomOwnerLeaveAllowed();
     }
 
     /**
@@ -347,7 +377,7 @@ public class DemoHelper {
      * @param value
      */
     public void setDeleteMessagesAsExitGroup(boolean value) {
-        PreferenceManager.getInstance().setDeleteMessagesAsExitGroup(value);
+        OptionsHelper.getInstance().setDeleteMessagesAsExitGroup(value);
     }
 
     /**
@@ -355,7 +385,7 @@ public class DemoHelper {
      * @return
      */
     public boolean isDeleteMessagesAsExitGroup() {
-        return PreferenceManager.getInstance().isDeleteMessagesAsExitGroup();
+        return OptionsHelper.getInstance().isDeleteMessagesAsExitGroup();
     }
 
     /**
@@ -363,7 +393,7 @@ public class DemoHelper {
      * @param value
      */
     public void setAutoAcceptGroupInvitation(boolean value) {
-        PreferenceManager.getInstance().setAutoAcceptGroupInvitation(value);
+        OptionsHelper.getInstance().setAutoAcceptGroupInvitation(value);
     }
 
     /**
@@ -371,7 +401,7 @@ public class DemoHelper {
      * @return
      */
     public boolean isAutoAcceptGroupInvitation() {
-        return PreferenceManager.getInstance().isAutoAcceptGroupInvitation();
+        return OptionsHelper.getInstance().isAutoAcceptGroupInvitation();
     }
 
     /**
@@ -379,7 +409,7 @@ public class DemoHelper {
      * @param value
      */
     public void setTransfeFileByUser(boolean value) {
-        PreferenceManager.getInstance().setTransferFileByUser(value);
+        OptionsHelper.getInstance().setTransfeFileByUser(value);
     }
 
     /**
@@ -387,7 +417,7 @@ public class DemoHelper {
      * @return
      */
     public boolean isSetTransferFileByUser() {
-        return PreferenceManager.getInstance().isSetTransferFileByUser();
+        return OptionsHelper.getInstance().isSetTransferFileByUser();
     }
 
     /**
@@ -395,7 +425,7 @@ public class DemoHelper {
      * @param autodownload
      */
     public void setAutodownloadThumbnail(boolean autodownload) {
-        PreferenceManager.getInstance().setAudodownloadThumbnail(autodownload);
+        OptionsHelper.getInstance().setAutodownloadThumbnail(autodownload);
     }
 
     /**
@@ -403,7 +433,23 @@ public class DemoHelper {
      * @return
      */
     public boolean isSetAutodownloadThumbnail() {
-        return PreferenceManager.getInstance().isSetAutodownloadThumbnail();
+        return OptionsHelper.getInstance().isSetAutodownloadThumbnail();
+    }
+
+    /**
+     * 设置是否只使用Https
+     * @param usingHttpsOnly
+     */
+    public void setUsingHttpsOnly(boolean usingHttpsOnly) {
+        OptionsHelper.getInstance().setUsingHttpsOnly(usingHttpsOnly);
+    }
+
+    /**
+     * 获取是否只使用Https
+     * @return
+     */
+    public boolean getUsingHttpsOnly() {
+        return OptionsHelper.getInstance().getUsingHttpsOnly();
     }
 
     /**
@@ -417,7 +463,6 @@ public class DemoHelper {
     public String getCurrentUserName(){
         return PreferenceManager.getInstance().getCurrentUsername();
     }
-
 
     /**
      * 设置昵称

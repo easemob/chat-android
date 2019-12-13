@@ -40,10 +40,10 @@
     <string name="dynamic_expression">[动态表情]</string>
 
     <string name="em_server_set_title">使用自定义服务器？</string>
-    <string name="em_server_set_server_hint">demo已经绑定以下环境设置，如果需要修改，请重启App进行设置</string>
+    <string name="em_server_set_server_hint">demo已经绑定以下环境设置，如果需要修改，请重启App进行设置。</string>
     <string name="em_server_set_appkey">Appkey</string>
     <string name="em_server_set_apns_cert_name">apns证书名称</string>
-    <string name="em_server_set_specify_server">是否指定服务器:</string>
+    <string name="em_server_set_specify_server">使用私有服务器:</string>
     <string name="em_server_set_server_address">IM服务器地址</string>
     <string name="em_server_set_server_port">端口号</string>
     <string name="em_server_set_rest_server_address">REST服务器地址</string>

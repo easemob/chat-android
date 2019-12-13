@@ -8,8 +8,8 @@ import android.widget.Button;
 import android.widget.Toast;
 
 import com.hyphenate.chatuidemo.R;
-import com.hyphenate.chatuidemo.core.utils.ThreadManager;
-import com.hyphenate.chatuidemo.core.utils.ToastUtils;
+import com.hyphenate.chatuidemo.common.utils.ThreadManager;
+import com.hyphenate.chatuidemo.common.utils.ToastUtils;
 import com.hyphenate.chatuidemo.section.base.BaseInitActivity;
 
 public class TestActivity extends BaseInitActivity implements View.OnClickListener {

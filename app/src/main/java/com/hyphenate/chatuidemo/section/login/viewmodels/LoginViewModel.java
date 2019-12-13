@@ -6,13 +6,11 @@ import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
 
-import com.hyphenate.chatuidemo.core.bean.EaseUser;
-import com.hyphenate.chatuidemo.core.livedatas.UserInstanceLiveData;
-import com.hyphenate.chatuidemo.core.net.Resource;
-import com.hyphenate.chatuidemo.core.livedatas.SingleSourceLiveData;
-import com.hyphenate.chatuidemo.repositories.EMClientRepository;
-
-import java.util.List;
+import com.hyphenate.chatuidemo.common.model.EaseUser;
+import com.hyphenate.chatuidemo.common.livedatas.UserInstanceLiveData;
+import com.hyphenate.chatuidemo.common.net.Resource;
+import com.hyphenate.chatuidemo.common.livedatas.SingleSourceLiveData;
+import com.hyphenate.chatuidemo.common.repositories.EMClientRepository;
 
 
 public class LoginViewModel extends AndroidViewModel {
@@ -78,4 +76,8 @@ public class LoginViewModel extends AndroidViewModel {
     public LiveData<Resource<EaseUser>> getLoginObservable() {
         return loginObservable;
     }
+
+
+
+
 }

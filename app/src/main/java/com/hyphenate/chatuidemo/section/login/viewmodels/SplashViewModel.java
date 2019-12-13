@@ -6,8 +6,8 @@ import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
 
-import com.hyphenate.chatuidemo.core.net.Resource;
-import com.hyphenate.chatuidemo.repositories.EMClientRepository;
+import com.hyphenate.chatuidemo.common.net.Resource;
+import com.hyphenate.chatuidemo.common.repositories.EMClientRepository;
 
 public class SplashViewModel extends AndroidViewModel {
     private EMClientRepository mRepository;

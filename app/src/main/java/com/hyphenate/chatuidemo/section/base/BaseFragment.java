@@ -11,7 +11,7 @@ import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 
 import com.hyphenate.chatuidemo.R;
-import com.hyphenate.chatuidemo.core.utils.ToastUtils;
+import com.hyphenate.chatuidemo.common.utils.ToastUtils;
 
 public class BaseFragment extends Fragment {
     public BaseActivity mContext;

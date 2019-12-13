@@ -21,8 +21,8 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.core.content.ContextCompat;
 
 import com.hyphenate.chatuidemo.R;
-import com.hyphenate.chatuidemo.core.utils.StatusBarCompat;
-import com.hyphenate.chatuidemo.core.utils.ToastUtils;
+import com.hyphenate.chatuidemo.common.utils.StatusBarCompat;
+import com.hyphenate.chatuidemo.common.utils.ToastUtils;
 
 /**
  * 作为基础activity,放置一些公共的方法

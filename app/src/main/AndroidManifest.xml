@@ -64,7 +64,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:usesNonSdkApi="true"
-        android:name=".BasicApplication"
+        android:name=".DemoApp"
         android:theme="@style/AppTheme">
 
         <!--android 9.0要求-->
@@ -94,13 +94,13 @@
         </receiver>
 
         <!-- FCM required start -->
-        <service android:name=".fcm.EMFCMMSGService">
+        <service android:name=".common.fcm.EMFCMMSGService">
             <intent-filter>
                 <action android:name="com.google.firebase.MESSAGING_EVENT" />
             </intent-filter>
         </service>
 
-        <service android:name=".fcm.EMFCMTokenRefreshService">
+        <service android:name=".common.fcm.EMFCMTokenRefreshService">
             <intent-filter>
                 <action android:name="com.google.firebase.INSTANCE_ID_EVENT" />
             </intent-filter>
@@ -111,7 +111,7 @@
         <!--接入HMSSDK PUSH模块需要注册，第三方相关 :接收Push消息（注册、Push消息、Push连接状态）广播，
                 此receiver类需要开发者自己创建并继承com.huawei.hms.support.api.push.PushReceiver类，
                 参考示例代码中的类：com.huawei.hmsagent.HuaweiPushRevicer-->
-        <receiver android:name=".receiver.HMSPushReceiver">
+        <receiver android:name=".common.receiver.HMSPushReceiver">
             <intent-filter>
                 <!-- 必须,用于接收 TOKEN -->
                 <action android:name="com.huawei.android.push.intent.REGISTRATION"/>

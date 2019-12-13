@@ -14,10 +14,11 @@ import android.widget.TextView;
 import androidx.core.content.ContextCompat;
 import androidx.lifecycle.ViewModelProviders;
 
+import com.hyphenate.chatuidemo.DemoHelper;
 import com.hyphenate.chatuidemo.MainActivity;
 import com.hyphenate.chatuidemo.R;
-import com.hyphenate.chatuidemo.core.enums.Status;
-import com.hyphenate.chatuidemo.core.utils.ToastUtils;
+import com.hyphenate.chatuidemo.common.enums.Status;
+import com.hyphenate.chatuidemo.common.utils.ToastUtils;
 import com.hyphenate.chatuidemo.section.base.BaseInitFragment;
 import com.hyphenate.chatuidemo.section.login.activity.TestActivity;
 import com.hyphenate.chatuidemo.section.login.viewmodels.LoginViewModel;
@@ -79,6 +80,7 @@ public class LoginFragment extends BaseInitFragment implements View.OnClickListe
                 return;
             }
             if(response.status == Status.SUCCESS) {
+                DemoHelper.getInstance().setAutoLogin(true);
                 //跳转到主页
                 MainActivity.startAction(mContext);
                 mContext.finish();
