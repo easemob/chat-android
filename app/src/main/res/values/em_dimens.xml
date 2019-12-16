@@ -4,7 +4,14 @@
     <dimen name="activity_vertical_margin">16dp</dimen>
 
     <dimen name="em_login_bg_radius">57dp</dimen>
+    <dimen name="em_login_margin_left">33dp</dimen>
+    <dimen name="em_login_margin_right">33dp</dimen>
+    <dimen name="em_login_margin_top">20dp</dimen>
+    <dimen name="em_login_padding_left">18dp</dimen>
+    <dimen name="em_login_padding_right">18dp</dimen>
 
     <dimen name="em_login_text_size">16sp</dimen>
     <dimen name="em_login_server_hint_text_size">14sp</dimen>
+
+
 </resources>

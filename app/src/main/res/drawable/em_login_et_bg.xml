@@ -3,5 +3,6 @@
 
     <solid android:color="@color/white"/>
     <corners android:radius="@dimen/em_login_bg_radius"/>
+    <stroke android:color="@color/gray"/>
 
 </shape>

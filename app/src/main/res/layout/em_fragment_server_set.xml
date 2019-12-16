@@ -2,7 +2,8 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@color/em_login_color_bg">
 
     <com.hyphenate.easeui.widget.EaseTitleBar
         android:id="@+id/toolbar_server"
@@ -30,8 +31,9 @@
                 android:id="@+id/tv_server_title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="33dp"
-                android:layout_marginTop="20dp"
+                android:layout_marginLeft="@dimen/em_login_margin_left"
+                android:layout_marginStart="@dimen/em_login_margin_left"
+                android:layout_marginTop="@dimen/em_login_margin_top"
                 android:text="@string/em_server_set_title"
                 android:textColor="@color/em_server_set_color_title"
                 android:textSize="18sp"
@@ -44,8 +46,9 @@
                 android:id="@+id/switch_server"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="20dp"
-                android:layout_marginRight="33dp"
+                android:layout_marginTop="@dimen/em_login_margin_top"
+                android:layout_marginRight="@dimen/em_login_margin_right"
+                android:layout_marginEnd="@dimen/em_login_margin_right"
                 android:switchMinWidth="20dp"
                 android:thumb="@drawable/em_switch_thumb_selector"
                 android:track="@drawable/em_switch_track_selector"
@@ -60,11 +63,14 @@
                 app:layout_constraintTop_toBottomOf="@id/tv_server_title"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintVertical_bias="0"
-                android:layout_marginTop="20dp"
+                android:layout_marginTop="@dimen/em_login_margin_top"
                 android:gravity="center_vertical"
                 android:text="@string/em_server_set_server_hint"
                 android:textSize="@dimen/em_login_server_hint_text_size"
                 style="@style/em_login_et_input"
+                android:textColor="@color/white"
+                android:maxLines="3"
+                android:inputType="none"
                 android:background="@null"/>
 
             <EditText
@@ -74,7 +80,7 @@
                 app:layout_constraintTop_toBottomOf="@id/et_server_hint"
                 app:layout_constraintBottom_toTopOf="@id/tv_server_specify"
                 app:layout_constraintVertical_bias="0"
-                android:layout_marginTop="20dp"
+                android:layout_marginTop="@dimen/em_login_margin_top"
                 android:hint="@string/em_server_set_appkey"
                 style="@style/em_login_et_input" />
 
@@ -87,6 +93,7 @@
                 android:layout_marginTop="30dp"
                 android:text="@string/em_server_set_specify_server"
                 style="@style/em_login_et_input"
+                android:textColor="@color/white"
                 android:background="@null"/>
 
             <Switch
@@ -119,7 +126,7 @@
                 app:layout_constraintRight_toRightOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/et_server_address"
                 app:layout_constraintBottom_toTopOf="@id/et_server_rest"
-                android:layout_marginTop="20dp"
+                android:layout_marginTop="@dimen/em_login_margin_top"
                 android:inputType="number"
                 android:hint="@string/em_server_set_server_port"
                 style="@style/em_login_et_input"/>
@@ -130,7 +137,7 @@
                 app:layout_constraintRight_toRightOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/et_server_port"
                 app:layout_constraintBottom_toTopOf="@id/tv_https_set"
-                android:layout_marginTop="20dp"
+                android:layout_marginTop="@dimen/em_login_margin_top"
                 android:hint="@string/em_server_set_rest_server_address"
                 style="@style/em_login_et_input"/>
 
@@ -139,10 +146,11 @@
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toRightOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/et_server_rest"
-                app:layout_constraintBottom_toTopOf="@id/btn_server"
+                app:layout_constraintBottom_toTopOf="@id/btn_reset"
                 android:layout_marginTop="10dp"
                 android:text="@string/em_server_set_https_set"
                 style="@style/em_login_et_input"
+                android:textColor="@color/white"
                 android:background="@null"/>
 
             <Switch
@@ -160,20 +168,38 @@
                 android:layout_marginEnd="40dp"/>
 
             <Button
+                android:id="@+id/btn_reset"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tv_https_set"
+                app:layout_constraintBottom_toTopOf="@id/btn_server"
+                android:layout_marginRight="@dimen/em_login_margin_right"
+                android:layout_marginEnd="@dimen/em_login_margin_right"
+                android:layout_marginTop="10dp"
+                android:text="@string/em_server_set_button_reset_text"
+                android:textSize="16sp"
+                android:visibility="visible"
+                android:textColor="@color/white"/>
+
+            <Button
                 android:id="@+id/btn_server"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/tv_https_set"
+                app:layout_constraintTop_toBottomOf="@id/btn_reset"
                 app:layout_constraintBottom_toBottomOf="parent"
                 android:layout_marginBottom="20dp"
                 style="@style/em_login_btn"
+                android:enabled="false"
+                android:layout_marginTop="10dp"
+                app:layout_goneMarginTop="@dimen/em_login_margin_top"
                 android:text="@string/em_server_set_button_text"/>
 
             <androidx.constraintlayout.widget.Group
                 android:id="@+id/group_server_set"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:visibility="gone"
+                android:visibility="visible"
                 app:constraint_referenced_ids="switch_https_set,tv_https_set,btn_server,et_server_rest,et_server_port,et_server_address,et_server_hint,et_appkey,tv_server_specify,switch_specify_server"/>
 
         </androidx.constraintlayout.widget.ConstraintLayout>

@@ -217,15 +217,15 @@ public class OptionsHelper {
         return DEF_APPKEY;
     }
 
-    public static String getDefImServer() {
+    public String getDefImServer() {
         return DEF_IM_SERVER;
     }
 
-    public static int getDefImPort() {
+    public int getDefImPort() {
         return DEF_IM_PORT;
     }
 
-    public static String getDefRestServer() {
+    public String getDefRestServer() {
         return DEF_REST_SERVER;
     }
 

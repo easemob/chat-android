@@ -264,8 +264,7 @@
         </activity>
         <activity
             android:name=".section.login.activity.LoginActivity"
-            android:windowSoftInputMode="adjustResize|stateHidden"
-            />
+            android:windowSoftInputMode="adjustPan|stateHidden" />
         <activity android:name=".section.login.activity.TestActivity" />
     </application>
 

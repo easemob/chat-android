@@ -4,14 +4,16 @@
     <style name="em_login_et_input">
         <item name="android:layout_width">0dp</item>
         <item name="android:layout_height">52dp</item>
-        <item name="android:layout_marginLeft">33dp</item>
-        <item name="android:layout_marginRight">33dp</item>
+        <item name="android:layout_marginLeft">@dimen/em_login_margin_left</item>
+        <item name="android:layout_marginRight">@dimen/em_login_margin_right</item>
         <item name="android:maxWidth">400dp</item>
         <item name="android:background">@drawable/em_login_et_bg</item>
-        <item name="android:paddingLeft">18dp</item>
-        <item name="android:paddingRight">18dp</item>
+        <item name="android:paddingLeft">@dimen/em_login_padding_left</item>
+        <item name="android:paddingRight">@dimen/em_login_padding_right</item>
         <item name="android:textSize">@dimen/em_login_text_size</item>
         <item name="android:gravity">center_vertical</item>
+        <item name="android:maxLines">1</item>
+        <item name="android:inputType">text</item>
     </style>
 
     <style name="em_login_tv_other">
@@ -29,8 +31,8 @@
         <item name="android:layout_width">0dp</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:layout_marginTop">40dp</item>
-        <item name="android:layout_marginLeft">33dp</item>
-        <item name="android:layout_marginRight">33dp</item>
+        <item name="android:layout_marginLeft">@dimen/em_login_margin_left</item>
+        <item name="android:layout_marginRight">@dimen/em_login_margin_right</item>
         <item name="android:background">@drawable/em_login_btn_bg</item>
         <item name="android:foreground">@drawable/em_ripple_click_gray</item>
         <item name="android:textColor">@color/em_login_btn_text_color</item>

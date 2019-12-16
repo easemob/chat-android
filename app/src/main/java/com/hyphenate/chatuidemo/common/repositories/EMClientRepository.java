@@ -4,10 +4,10 @@ import androidx.annotation.NonNull;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
-import com.hyphenate.EMCallBack;
 import com.hyphenate.chat.EMClient;
 import com.hyphenate.chatuidemo.DemoApp;
 import com.hyphenate.chatuidemo.DemoHelper;
+import com.hyphenate.chatuidemo.common.interfaceOrImplement.DemoEmCallBack;
 import com.hyphenate.chatuidemo.common.model.EaseUser;
 import com.hyphenate.chatuidemo.common.net.ErrorCode;
 import com.hyphenate.chatuidemo.common.net.Resource;
@@ -52,11 +52,22 @@ public class EMClientRepository {
         }.asLiveData();
     }
 
+    /**
+     * 注册
+     * @param userName
+     * @param pwd
+     * @return
+     */
     public LiveData<Resource<String>> registerToHx(String userName, String pwd) {
         return new NetworkOnlyResource<String>() {
 
             @Override
             protected void createCall(@NonNull ResultCallBack<LiveData<String>> callBack) {
+                //注册之前先判断SDK是否已经初始化，如果没有先进行SDK的初始化
+                if(!DemoHelper.getInstance().isSDKInit) {
+                    DemoHelper.getInstance().init(DemoApp.getInstance());
+                    DemoHelper.getInstance().setCurrentUserName(userName);
+                }
                 ThreadManager.getInstance().runOnIOThread(() -> {
                     try {
                         EMClient.getInstance().createAccount(userName, pwd);
@@ -71,37 +82,58 @@ public class EMClientRepository {
         }.asLiveData();
     }
 
-    public LiveData<Resource<EaseUser>> loginToServer(String userName, String pwd) {
+    /**
+     * 登录到服务器，可选择密码登录或者token登录
+     * @param userName
+     * @param pwd
+     * @param isTokenFlag
+     * @return
+     */
+    public LiveData<Resource<EaseUser>> loginToServer(String userName, String pwd, boolean isTokenFlag) {
         return new NetworkOnlyResource<EaseUser>() {
 
             @Override
             protected void createCall(@NonNull ResultCallBack<LiveData<EaseUser>> callBack) {
                 DemoHelper.getInstance().init(DemoApp.getInstance());
                 DemoHelper.getInstance().setCurrentUserName(userName);
-                EMClient.getInstance().login(userName, pwd, new EMCallBack() {
-                    @Override
-                    public void onSuccess() {
-                        // ** manually load all local groups and conversation
-                        EMClient.getInstance().groupManager().loadAllGroups();
-                        EMClient.getInstance().chatManager().loadAllConversations();
-                        // get current user id
-                        String currentUser = EMClient.getInstance().getCurrentUser();
-                        EaseUser user = new EaseUser(currentUser);
-                        callBack.onSuccess(new MutableLiveData<>(user));
-                    }
+                if(isTokenFlag) {
+                    EMClient.getInstance().loginWithToken(userName, pwd, new DemoEmCallBack() {
+                        @Override
+                        public void onSuccess() {
+                            successForCallBack(callBack);
+                        }
 
-                    @Override
-                    public void onError(int code, String error) {
-                        callBack.onError(code, error);
-                    }
+                        @Override
+                        public void onError(int code, String error) {
+                            callBack.onError(code, error);
+                        }
+                    });
+                }else {
+                    EMClient.getInstance().login(userName, pwd, new DemoEmCallBack() {
+                        @Override
+                        public void onSuccess() {
+                            successForCallBack(callBack);
+                        }
 
-                    @Override
-                    public void onProgress(int progress, String status) {
+                        @Override
+                        public void onError(int code, String error) {
+                            callBack.onError(code, error);
+                        }
+                    });
+                }
 
-                    }
-                });
             }
 
         }.asLiveData();
+    }
+
+    private void successForCallBack(@NonNull ResultCallBack<LiveData<EaseUser>> callBack) {
+        // ** manually load all local groups and conversation
+        EMClient.getInstance().groupManager().loadAllGroups();
+        EMClient.getInstance().chatManager().loadAllConversations();
+        // get current user id
+        String currentUser = EMClient.getInstance().getCurrentUser();
+        EaseUser user = new EaseUser(currentUser);
+        callBack.onSuccess(new MutableLiveData<>(user));
     }
 }

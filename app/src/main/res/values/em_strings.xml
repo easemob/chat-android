@@ -4,15 +4,19 @@
     <string name="title_dashboard">Dashboard</string>
     <string name="title_notifications">Notifications</string>
 
+    <string name="em_dialog_default_title">提示</string>
+
     <string name="main_home">首页</string>
     <string name="main_friend">联系人</string>
     <string name="main_set">设置</string>
 
     <string name="em_login_name_hint">用户名</string>
     <string name="em_login_password_hint">密码</string>
+    <string name="em_login_token_hint">token</string>
     <string name="em_login_btn">登\u0020录</string>
     <string name="em_login_tv_register">账号注册</string>
     <string name="em_login_tv_token">token登录</string>
+    <string name="em_login_tv_pwd">密码登录</string>
     <string name="em_login_tv_server_set">服务器配置</string>
     <string name="em_login_btn_info_incomplete">用户名或者密码不能为空</string>
     <string name="em_login_failed">登录失败</string>
@@ -48,5 +52,7 @@
     <string name="em_server_set_server_port">端口号</string>
     <string name="em_server_set_rest_server_address">REST服务器地址</string>
     <string name="em_server_set_https_set">只使用Https:</string>
+    <string name="em_server_set_button_reset_text">重置服务器设置</string>
+    <string name="em_server_set_dialog_reset">是否默认服务器设置？</string>
     <string name="em_server_set_button_text">保\u0020存\u0020配\u0020置</string>
 </resources>

@@ -1,10 +1,12 @@
 package com.hyphenate.chatuidemo.section.login.fragment;
 
+import android.content.DialogInterface;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CompoundButton;
@@ -17,6 +19,8 @@ import androidx.core.content.ContextCompat;
 import com.hyphenate.chat.EMOptions;
 import com.hyphenate.chatuidemo.DemoHelper;
 import com.hyphenate.chatuidemo.R;
+import com.hyphenate.chatuidemo.common.interfaceOrImplement.DialogCallBack;
+import com.hyphenate.chatuidemo.common.model.DemoServerSetBean;
 import com.hyphenate.chatuidemo.section.base.BaseInitFragment;
 import com.hyphenate.easeui.widget.EaseTitleBar;
 
@@ -30,6 +34,7 @@ public class ServerSetFragment extends BaseInitFragment implements EaseTitleBar.
     private EditText mEtServerPort;
     private EditText mEtServerRest;
     private Switch mSwitchHttpsSet;
+    private Button mBtnReset;
     private Button mBtnServer;
     private Group mGroupServerSet;
 
@@ -57,10 +62,25 @@ public class ServerSetFragment extends BaseInitFragment implements EaseTitleBar.
         mEtServerPort = findViewById(R.id.et_server_port);
         mEtServerRest = findViewById(R.id.et_server_rest);
         mSwitchHttpsSet = findViewById(R.id.switch_https_set);
+        mBtnReset = findViewById(R.id.btn_reset);
         mBtnServer = findViewById(R.id.btn_server);
         mGroupServerSet = findViewById(R.id.group_server_set);
 
         checkServerSet();
+    }
+
+    @Override
+    protected void initListener() {
+        super.initListener();
+        mToolbarServer.setOnBackPressListener(this);
+        mSwitchServer.setOnCheckedChangeListener(this);
+        mSwitchSpecifyServer.setOnCheckedChangeListener(this);
+        mEtAppkey.addTextChangedListener(this);
+        mEtServerAddress.addTextChangedListener(this);
+        mEtServerPort.addTextChangedListener(this);
+        mEtServerRest.addTextChangedListener(this);
+        mBtnReset.setOnClickListener(this);
+        mBtnServer.setOnClickListener(this);
     }
 
     /**
@@ -79,6 +99,7 @@ public class ServerSetFragment extends BaseInitFragment implements EaseTitleBar.
             mEtServerPort.setText(options.getImPort());
             mEtServerRest.setText(options.getRestServer());
             mSwitchHttpsSet.setChecked(options.getUsingHttpsOnly());
+            mBtnServer.setEnabled(false);
         }else {
             //判断是否显示设置数据，及是否可以自定义设置
             mCustomServerEnable = DemoHelper.getInstance().isCustomServerEnable();
@@ -94,29 +115,13 @@ public class ServerSetFragment extends BaseInitFragment implements EaseTitleBar.
             String restServer = DemoHelper.getInstance().getRestServer();
             mEtServerRest.setText(TextUtils.isEmpty(restServer) ? "" : restServer);
         }
-        mEtServerHint.setVisibility(isInited ? View.GONE : View.VISIBLE);
+        mEtServerHint.setVisibility(isInited ? View.VISIBLE : View.GONE);
         mEtAppkey.setEnabled(!isInited);
         mSwitchSpecifyServer.setEnabled(!isInited);
         mEtServerAddress.setEnabled(!isInited && mCustomServerEnable);
         mEtServerPort.setEnabled(!isInited && mCustomServerEnable);
         mEtServerRest.setEnabled(!isInited && mCustomServerEnable);
         mSwitchHttpsSet.setEnabled(!isInited && mCustomServerEnable);
-        mBtnServer.setEnabled(!isInited);
-    }
-
-
-
-    @Override
-    protected void initListener() {
-        super.initListener();
-        mToolbarServer.setOnBackPressListener(this);
-        mSwitchServer.setOnCheckedChangeListener(this);
-        mSwitchSpecifyServer.setOnCheckedChangeListener(this);
-        mEtAppkey.addTextChangedListener(this);
-        mEtServerAddress.addTextChangedListener(this);
-        mEtServerPort.addTextChangedListener(this);
-        mEtServerRest.addTextChangedListener(this);
-        mBtnServer.setOnClickListener(this);
     }
 
     @Override
@@ -136,6 +141,7 @@ public class ServerSetFragment extends BaseInitFragment implements EaseTitleBar.
                 mEtServerPort.setEnabled(isChecked);
                 mEtServerRest.setEnabled(isChecked);
                 mSwitchHttpsSet.setEnabled(isChecked);
+                checkButtonEnable();
                 break;
         }
 
@@ -155,10 +161,16 @@ public class ServerSetFragment extends BaseInitFragment implements EaseTitleBar.
     public void afterTextChanged(Editable s) {
         mAppkey = mEtAppkey.getText().toString().trim();
         DemoHelper.getInstance().enableCustomAppkey(!TextUtils.isEmpty(mAppkey));
+        Log.e("TAG", "appkey= "+mAppkey+ " enable = "+mCustomServerEnable + " isEmpty = "+ !TextUtils.isEmpty(mAppkey));
+        mServerAddress = mEtServerAddress.getText().toString().trim();
+        mServerPort = mEtServerPort.getText().toString().trim();
+        mRestServerAddress = mEtServerRest.getText().toString().trim();
+        checkButtonEnable();
+
+    }
+
+    private void checkButtonEnable() {
         if(mCustomServerEnable) {
-            mServerAddress = mEtServerAddress.getText().toString().trim();
-            mServerPort = mEtServerPort.getText().toString().trim();
-            mRestServerAddress = mEtServerRest.getText().toString().trim();
             setButtonEnable(!TextUtils.isEmpty(mServerAddress)
                     && !TextUtils.isEmpty(mAppkey)
                     && !TextUtils.isEmpty(mServerPort)
@@ -166,13 +178,25 @@ public class ServerSetFragment extends BaseInitFragment implements EaseTitleBar.
         }else {
             setButtonEnable(!TextUtils.isEmpty(mAppkey));
         }
-
     }
 
     @Override
     public void onClick(View v) {
         if(v.getId() == R.id.btn_server) {
             saveServerSet();
+        }else if(v.getId() == R.id.btn_reset) {
+
+            showDialog(R.string.em_server_set_dialog_reset, new DialogCallBack() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    DemoServerSetBean set = DemoHelper.getInstance().getDefServerSet();
+                    mEtAppkey.setText(set.getAppkey());
+                    mEtServerAddress.setText(set.getImServer());
+                    mEtServerPort.setText(set.getImPort());
+                    mEtServerRest.setText(set.getRestServer());
+                }
+            });
+
         }
     }
 
@@ -198,6 +222,7 @@ public class ServerSetFragment extends BaseInitFragment implements EaseTitleBar.
     }
 
     private void setButtonEnable(boolean enable) {
+        Log.e("TAG", "setButtonEnable = "+enable);
         mBtnServer.setEnabled(enable);
         //同时需要修改右侧drawalbeRight对应的资源
         Drawable rightDrawable;

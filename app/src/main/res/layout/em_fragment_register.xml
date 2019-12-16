@@ -3,7 +3,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@color/em_login_color_bg">
 
     <com.hyphenate.easeui.widget.EaseTitleBar
         android:id="@+id/toolbar_register"

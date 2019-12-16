@@ -11,6 +11,7 @@ import com.hyphenate.chat.EMClient;
 import com.hyphenate.chat.EMOptions;
 import com.hyphenate.chatuidemo.common.manager.HMSPushHelper;
 import com.hyphenate.chatuidemo.common.manager.OptionsHelper;
+import com.hyphenate.chatuidemo.common.model.DemoServerSetBean;
 import com.hyphenate.chatuidemo.common.receiver.HeadsetReceiver;
 import com.hyphenate.chatuidemo.common.utils.PreferenceManager;
 import com.hyphenate.push.EMPushConfig;
@@ -216,8 +217,12 @@ public class DemoHelper {
         return false;
     }
 
-    public void saveEmOptionSet(EMOptions options) {
-
+    /**
+     * 获取默认的服务器设置
+     * @return
+     */
+    public DemoServerSetBean getDefServerSet() {
+        return OptionsHelper.getInstance().getDefServerSet();
     }
 
     /**

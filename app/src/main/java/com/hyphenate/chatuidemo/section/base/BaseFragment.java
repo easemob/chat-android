@@ -1,16 +1,19 @@
 package com.hyphenate.chatuidemo.section.base;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.StringRes;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 
 import com.hyphenate.chatuidemo.R;
+import com.hyphenate.chatuidemo.common.interfaceOrImplement.DialogCallBack;
 import com.hyphenate.chatuidemo.common.utils.ToastUtils;
 
 public class BaseFragment extends Fragment {
@@ -58,5 +61,33 @@ public class BaseFragment extends Fragment {
      */
     public void showToast(@StringRes int messageId) {
         ToastUtils.showToast(messageId);
+    }
+
+    public void showDialog(@StringRes int message, DialogCallBack callBack) {
+        showDialog(getResources().getString(R.string.em_dialog_default_title), getResources().getString(message), callBack);
+    }
+
+    public void showDialog(String message, DialogCallBack callBack) {
+        showDialog(getResources().getString(R.string.em_dialog_default_title), message, callBack);
+    }
+
+    public void showDialog(@StringRes int title, @StringRes int message, DialogCallBack callBack) {
+        showDialog(getResources().getString(title), getResources().getString(message), callBack);
+    }
+
+    public void showDialog(String title, String message, DialogCallBack callBack) {
+        new AlertDialog.Builder(mContext)
+                    .setTitle(title)
+                    .setMessage(message)
+                    .setPositiveButton("确定", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            if(callBack != null) {
+                                callBack.onClick(dialog, which);
+                            }
+                        }
+                    })
+                    .setNegativeButton("取消", null)
+                    .show();
     }
 }

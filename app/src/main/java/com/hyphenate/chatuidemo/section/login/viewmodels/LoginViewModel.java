@@ -68,9 +68,10 @@ public class LoginViewModel extends AndroidViewModel {
      * 登录环信
      * @param userName
      * @param pwd
+     * @param isTokenFlag
      */
-    public void login(String userName, String pwd) {
-        loginObservable.setSource(mRepository.loginToServer(userName, pwd));
+    public void login(String userName, String pwd, boolean isTokenFlag) {
+        loginObservable.setSource(mRepository.loginToServer(userName, pwd, isTokenFlag));
     }
 
     public LiveData<Resource<EaseUser>> getLoginObservable() {

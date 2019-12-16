@@ -3,6 +3,7 @@ package com.hyphenate.chatuidemo.section.login.fragment;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.text.Editable;
+import android.text.InputType;
 import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -33,6 +34,7 @@ public class LoginFragment extends BaseInitFragment implements View.OnClickListe
     private String mUserName;
     private String mPwd;
     private LoginViewModel mViewModel;
+    private boolean isTokenFlag;//是否是token登录
 
     @Override
     protected int getLayoutId() {
@@ -102,7 +104,9 @@ public class LoginFragment extends BaseInitFragment implements View.OnClickListe
                 mViewModel.setPageSelect(1);
                 break;
             case R.id.tv_login_token:
-                TestActivity.startAction(mContext);
+                isTokenFlag = !isTokenFlag;
+                switchLogin();
+//                TestActivity.startAction(mContext);
                 break;
             case R.id.tv_login_server_set:
                 mViewModel.setPageSelect(2);
@@ -113,12 +117,28 @@ public class LoginFragment extends BaseInitFragment implements View.OnClickListe
         }
     }
 
+    /**
+     * 切换登录方式
+     */
+    private void switchLogin() {
+        mEtLoginPwd.setText("");
+        if(isTokenFlag) {
+            mEtLoginPwd.setHint(R.string.em_login_token_hint);
+            mTvLoginToken.setText(R.string.em_login_tv_pwd);
+            mEtLoginPwd.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_NORMAL);
+        }else {
+            mEtLoginPwd.setHint(R.string.em_login_password_hint);
+            mTvLoginToken.setText(R.string.em_login_tv_token);
+            mEtLoginPwd.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
+        }
+    }
+
     private void loginToServer() {
         if(TextUtils.isEmpty(mUserName) || TextUtils.isEmpty(mPwd)) {
             ToastUtils.showToast(R.string.em_login_btn_info_incomplete);
             return;
         }
-        mViewModel.login(mUserName, mPwd);
+        mViewModel.login(mUserName, mPwd, isTokenFlag);
     }
 
     @Override
