@@ -23,6 +23,7 @@ public abstract class BaseInitFragment extends BaseFragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         initView(savedInstanceState);
+        initViewModel();
         initListener();
     }
 
@@ -49,6 +50,12 @@ public abstract class BaseInitFragment extends BaseFragment {
      */
     protected void initView(Bundle savedInstanceState) {}
 
+
+    /**
+     * 初始化ViewModel相关
+     */
+    protected void initViewModel() {}
+
     /**
      * 初始化监听等
      */
@@ -60,7 +67,7 @@ public abstract class BaseInitFragment extends BaseFragment {
     protected void initData() {}
 
     /**
-     * 通过id获取当前view控件
+     * 通过id获取当前view控件，需要在onViewCreated()之后的生命周期调用
      * @param id
      * @param <T>
      * @return

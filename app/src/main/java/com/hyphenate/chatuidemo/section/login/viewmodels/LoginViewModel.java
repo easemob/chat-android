@@ -5,6 +5,7 @@ import android.app.Application;
 import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
+import androidx.lifecycle.MutableLiveData;
 
 import com.hyphenate.chatuidemo.common.model.EaseUser;
 import com.hyphenate.chatuidemo.common.livedatas.UserInstanceLiveData;
@@ -15,7 +16,7 @@ import com.hyphenate.chatuidemo.common.repositories.EMClientRepository;
 
 public class LoginViewModel extends AndroidViewModel {
     private EMClientRepository mRepository;
-    private UserInstanceLiveData loginObservable;
+    private SingleSourceLiveData<Resource<EaseUser>> loginObservable;
     private SingleSourceLiveData<Resource<String>> registerObservable;
     private SingleSourceLiveData<Integer> pageObservable;
 
@@ -23,7 +24,7 @@ public class LoginViewModel extends AndroidViewModel {
         super(application);
         mRepository = new EMClientRepository();
         registerObservable = new SingleSourceLiveData<>();
-        loginObservable = UserInstanceLiveData.getInstance();
+        loginObservable = new SingleSourceLiveData<>();
         pageObservable = new SingleSourceLiveData<>();
     }
 
@@ -77,8 +78,5 @@ public class LoginViewModel extends AndroidViewModel {
     public LiveData<Resource<EaseUser>> getLoginObservable() {
         return loginObservable;
     }
-
-
-
 
 }

@@ -53,6 +53,6 @@
     <string name="em_server_set_rest_server_address">REST服务器地址</string>
     <string name="em_server_set_https_set">只使用Https:</string>
     <string name="em_server_set_button_reset_text">重置服务器设置</string>
-    <string name="em_server_set_dialog_reset">是否默认服务器设置？</string>
+    <string name="em_server_set_dialog_reset">是否恢复默认服务器设置？</string>
     <string name="em_server_set_button_text">保\u0020存\u0020配\u0020置</string>
 </resources>

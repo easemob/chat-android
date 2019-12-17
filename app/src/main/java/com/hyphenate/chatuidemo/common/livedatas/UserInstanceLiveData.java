@@ -12,13 +12,13 @@ import com.hyphenate.chatuidemo.common.net.Resource;
  * 方便于当需要切换数据源时自动取消掉前一个数据源的监听
  *
  */
-public class UserInstanceLiveData extends MutableLiveData<Resource<EaseUser>> {
+public class UserInstanceLiveData extends MutableLiveData<EaseUser> {
     private static UserInstanceLiveData instance;
-    private LiveData<Resource<EaseUser>> lastSource;
-    private Resource<EaseUser> lastData;
-    private final Observer<Resource<EaseUser>> observer = new Observer<Resource<EaseUser>>() {
+    private LiveData<EaseUser> lastSource;
+    private EaseUser lastData;
+    private final Observer<EaseUser> observer = new Observer<EaseUser>() {
         @Override
-        public void onChanged(Resource<EaseUser> t) {
+        public void onChanged(EaseUser t) {
             if (t != null && t == lastData) {
                 return;
             }
@@ -45,7 +45,7 @@ public class UserInstanceLiveData extends MutableLiveData<Resource<EaseUser>> {
      *
      * @param source
      */
-    public void setSource(LiveData<Resource<EaseUser>> source) {
+    public void setSource(LiveData<EaseUser> source) {
         if (lastSource == source) {
             return;
         }

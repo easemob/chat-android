@@ -21,7 +21,9 @@ import com.hyphenate.chatuidemo.DemoHelper;
 import com.hyphenate.chatuidemo.R;
 import com.hyphenate.chatuidemo.common.interfaceOrImplement.DialogCallBack;
 import com.hyphenate.chatuidemo.common.model.DemoServerSetBean;
+import com.hyphenate.chatuidemo.section.base.BaseDialogFragment;
 import com.hyphenate.chatuidemo.section.base.BaseInitFragment;
+import com.hyphenate.chatuidemo.section.dialog.SimpleDialogFragment;
 import com.hyphenate.easeui.widget.EaseTitleBar;
 
 public class ServerSetFragment extends BaseInitFragment implements EaseTitleBar.OnBackPressListener, CompoundButton.OnCheckedChangeListener, TextWatcher, View.OnClickListener {
@@ -100,6 +102,7 @@ public class ServerSetFragment extends BaseInitFragment implements EaseTitleBar.
             mEtServerRest.setText(options.getRestServer());
             mSwitchHttpsSet.setChecked(options.getUsingHttpsOnly());
             mBtnServer.setEnabled(false);
+
         }else {
             //判断是否显示设置数据，及是否可以自定义设置
             mCustomServerEnable = DemoHelper.getInstance().isCustomServerEnable();
@@ -115,6 +118,7 @@ public class ServerSetFragment extends BaseInitFragment implements EaseTitleBar.
             String restServer = DemoHelper.getInstance().getRestServer();
             mEtServerRest.setText(TextUtils.isEmpty(restServer) ? "" : restServer);
         }
+        mBtnReset.setVisibility(isInited ? View.GONE : View.VISIBLE);
         mEtServerHint.setVisibility(isInited ? View.VISIBLE : View.GONE);
         mEtAppkey.setEnabled(!isInited);
         mSwitchSpecifyServer.setEnabled(!isInited);
@@ -185,18 +189,16 @@ public class ServerSetFragment extends BaseInitFragment implements EaseTitleBar.
         if(v.getId() == R.id.btn_server) {
             saveServerSet();
         }else if(v.getId() == R.id.btn_reset) {
-
-            showDialog(R.string.em_server_set_dialog_reset, new DialogCallBack() {
+            SimpleDialogFragment.showDialog(mContext, R.string.em_server_set_dialog_reset, new BaseDialogFragment.OnConfirmClickListener() {
                 @Override
-                public void onClick(DialogInterface dialog, int which) {
+                public void onConfirmClick(View view) {
                     DemoServerSetBean set = DemoHelper.getInstance().getDefServerSet();
                     mEtAppkey.setText(set.getAppkey());
                     mEtServerAddress.setText(set.getImServer());
-                    mEtServerPort.setText(set.getImPort());
+                    mEtServerPort.setText(set.getImPort()+"");
                     mEtServerRest.setText(set.getRestServer());
                 }
             });
-
         }
     }
 

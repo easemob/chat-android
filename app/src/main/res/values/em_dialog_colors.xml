@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="em_dialog_color_btn_bg_normal">@color/white</color>
+    <color name="em_dialog_color_btn_bg_select">@color/gray</color>
+    <color name="em_dialog_color_btn_stroke">@color/gray</color>
+    <color name="em_dialog_color_title">#ff424242</color>
+    <color name="em_dialog_color_normal">#ff333333</color>
+    <color name="em_dialog_color_btn_brand">@color/em_color_brand</color>
+    <color name="em_dialog_color_btn_warning">@color/em_color_warning</color>
+</resources>

@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="em_dialog_title_size">20sp</dimen>
+    <dimen name="em_dialog_middle_size">18sp</dimen>
+    <dimen name="em_dialog_btn_size">16sp</dimen>
+
+    <dimen name="em_dialog_title_margin_top">34dp</dimen>
+    <dimen name="em_dialog_title_margin_bottom">24dp</dimen>
+    <dimen name="em_dialog_title_gone_margin_bottom">70dp</dimen>
+    <dimen name="em_dialog_title_gone_margin_top">70dp</dimen>
+    <dimen name="em_dialog_middle_margin_bottom">38dp</dimen>
+    <dimen name="em_dialog_middle_margin_left">31dp</dimen>
+    <dimen name="em_dialog_middle_margin_right">31dp</dimen>
+
+
+</resources>

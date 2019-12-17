@@ -170,17 +170,21 @@
             <Button
                 android:id="@+id/btn_reset"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_height="30dp"
                 app:layout_constraintRight_toRightOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/tv_https_set"
                 app:layout_constraintBottom_toTopOf="@id/btn_server"
                 android:layout_marginRight="@dimen/em_login_margin_right"
                 android:layout_marginEnd="@dimen/em_login_margin_right"
                 android:layout_marginTop="10dp"
+                android:paddingLeft="20dp"
+                android:paddingRight="20dp"
+                android:layout_marginBottom="10dp"
                 android:text="@string/em_server_set_button_reset_text"
-                android:textSize="16sp"
+                android:textSize="14sp"
                 android:visibility="visible"
-                android:textColor="@color/white"/>
+                android:background="@drawable/em_login_server_btn_shape"
+                android:textColor="@color/black"/>
 
             <Button
                 android:id="@+id/btn_server"
@@ -192,15 +196,15 @@
                 style="@style/em_login_btn"
                 android:enabled="false"
                 android:layout_marginTop="10dp"
-                app:layout_goneMarginTop="@dimen/em_login_margin_top"
+                app:layout_goneMarginTop="20dp"
                 android:text="@string/em_server_set_button_text"/>
 
             <androidx.constraintlayout.widget.Group
                 android:id="@+id/group_server_set"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:visibility="visible"
-                app:constraint_referenced_ids="switch_https_set,tv_https_set,btn_server,et_server_rest,et_server_port,et_server_address,et_server_hint,et_appkey,tv_server_specify,switch_specify_server"/>
+                android:visibility="gone"
+                app:constraint_referenced_ids="switch_https_set,tv_https_set,btn_server,et_server_rest,et_server_port,et_server_address,et_server_hint,et_appkey,tv_server_specify,switch_specify_server,btn_reset"/>
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

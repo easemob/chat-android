@@ -64,8 +64,8 @@ public class LoginFragment extends BaseInitFragment implements View.OnClickListe
     }
 
     @Override
-    protected void initData() {
-        super.initData();
+    protected void initViewModel() {
+        super.initViewModel();
         mViewModel = ViewModelProviders.of(mContext).get(LoginViewModel.class);
         mViewModel.getRegisterObservable().observe(this, response -> {
             if(response == null) {

@@ -11,6 +11,9 @@
     <color name="black">#ff000000</color>
     <color name="transparent">@android:color/transparent</color>
 
+    <color name="em_color_brand">#ff04aef0</color>
+    <color name="em_color_warning">#ffff2b2b</color>
+
     <color name="em_base_color_primary">@color/white</color>
     <color name="em_base_color_primary_dark">@color/white</color>
     <color name="em_base_color_accent">@color/blue</color>
