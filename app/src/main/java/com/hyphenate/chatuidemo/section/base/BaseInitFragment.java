@@ -1,6 +1,7 @@
 package com.hyphenate.chatuidemo.section.base;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -48,7 +49,9 @@ public abstract class BaseInitFragment extends BaseFragment {
      * 初始化布局相关
      * @param savedInstanceState
      */
-    protected void initView(Bundle savedInstanceState) {}
+    protected void initView(Bundle savedInstanceState) {
+        Log.e("TAG", "fragment = "+this.getClass().getSimpleName());
+    }
 
 
     /**

@@ -1,8 +1,10 @@
 <resources>
     <string name="app_name">chatuidemo</string>
-    <string name="title_home">Home</string>
-    <string name="title_dashboard">Dashboard</string>
-    <string name="title_notifications">Notifications</string>
+
+    <string name="em_main_title_home">会话</string>
+    <string name="em_main_title_friends">通讯录</string>
+    <string name="em_main_title_discover">发现</string>
+    <string name="em_main_title_me">我</string>
 
     <string name="em_dialog_default_title">提示</string>
 

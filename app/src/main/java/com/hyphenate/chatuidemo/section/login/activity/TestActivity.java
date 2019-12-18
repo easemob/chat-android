@@ -7,10 +7,16 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 
+import androidx.fragment.app.FragmentTransaction;
+
 import com.hyphenate.chatuidemo.R;
 import com.hyphenate.chatuidemo.common.utils.ThreadManager;
 import com.hyphenate.chatuidemo.common.utils.ToastUtils;
+import com.hyphenate.chatuidemo.section.base.BaseFragment;
 import com.hyphenate.chatuidemo.section.base.BaseInitActivity;
+import com.hyphenate.chatuidemo.section.login.fragment.LoginFragment;
+import com.hyphenate.chatuidemo.section.login.fragment.RegisterFragment;
+import com.hyphenate.chatuidemo.section.login.fragment.ServerSetFragment;
 
 public class TestActivity extends BaseInitActivity implements View.OnClickListener {
     private Button btn_success_1;
@@ -100,4 +106,46 @@ public class TestActivity extends BaseInitActivity implements View.OnClickListen
                 break;
         }
     }
+
+/*    private void switchToLogin() {
+        if(mLoginFragment == null) {
+            mLoginFragment = new LoginFragment();
+        }
+        replace(mLoginFragment);
+    }
+
+    private void switchToRegister() {
+        if(mRegisterFragment == null) {
+            mRegisterFragment = new RegisterFragment();
+        }
+        replace(mRegisterFragment);
+    }
+
+    private void switchToServer() {
+        if(mServerSetFragment == null) {
+            mServerSetFragment = new ServerSetFragment();
+        }
+        replace(mServerSetFragment);
+    }
+
+    private void replace(BaseFragment fragment) {
+        if(currentFragment != fragment) {
+            FragmentTransaction t = getSupportFragmentManager()
+                    .beginTransaction()
+                    .setCustomAnimations(R.anim.slide_in_from_right,
+                            R.anim.slide_out_to_left,
+                            R.anim.slide_in_from_left,
+                            R.anim.slide_out_to_right
+                    );
+            if(currentFragment != null) {
+                t.hide(currentFragment);
+            }
+            currentFragment = fragment;
+            if(!fragment.isAdded()) {
+                t.add(R.id.fl_fragment, fragment).show(fragment).commit();
+            }else {
+                t.show(fragment).commit();
+            }
+        }
+    }*/
 }

@@ -3,20 +3,22 @@ package com.hyphenate.chatuidemo;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
+import android.view.MenuItem;
+import android.view.View;
 
-import com.ashokvarma.bottomnavigation.BottomNavigationBar;
-import com.ashokvarma.bottomnavigation.BottomNavigationItem;
-import com.ashokvarma.bottomnavigation.TextBadgeItem;
+import androidx.annotation.NonNull;
+import androidx.navigation.NavController;
+import androidx.navigation.Navigation;
+import androidx.navigation.ui.AppBarConfiguration;
+import androidx.navigation.ui.NavigationUI;
+
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.hyphenate.chatuidemo.section.base.BaseInitActivity;
-import com.hyphenate.chatuidemo.section.ui.home.HomeFragment;
 
 
-public class MainActivity extends BaseInitActivity implements BottomNavigationBar.OnTabSelectedListener {
-    private BottomNavigationBar navBar;
-    private int lastSelectedPosition;
-    private TextBadgeItem homeBadgeItem;
-    private TextBadgeItem friendBadgeItem;
-    private TextBadgeItem setBadgeItem;
+public class MainActivity extends BaseInitActivity {
+    private BottomNavigationView navView;
 
     public static void startAction(Context context) {
         Intent starter = new Intent(context, MainActivity.class);
@@ -31,70 +33,26 @@ public class MainActivity extends BaseInitActivity implements BottomNavigationBa
     @Override
     protected void initView(Bundle savedInstanceState) {
         super.initView(savedInstanceState);
-        navBar = findViewById(R.id.nav_view);
+        navView = findViewById(R.id.nav_view);
+        navView.setItemIconTintList(null);
+        // Passing each menu ID as a set of Ids because each
+        // menu should be considered as top level destinations.
+        NavController navController = Navigation.findNavController(this, R.id.fl_main_fragment);
+        NavigationUI.setupWithNavController(navView, navController);
+
+        //动态设置tab是否展示
+//        MenuItem item = navView.getMenu().findItem(R.id.em_main_me);
+//        item.setVisible(false);
         initTab();
     }
 
     @Override
     protected void initListener() {
         super.initListener();
-        navBar.setTabSelectedListener(this);
-    }
-
-    @Override
-    public void onTabSelected(int position) {
-        lastSelectedPosition = position;
-    }
-
-    @Override
-    public void onTabUnselected(int position) {
-
-    }
-
-    @Override
-    public void onTabReselected(int position) {
-
     }
 
     private void initTab() {
-        navBar.clearAll();
-        setFragment();
-
-        initBadgeItem();
-
-        navBar.setMode(BottomNavigationBar.MODE_FIXED);
-        navBar.setBackgroundStyle(BottomNavigationBar.BACKGROUND_STYLE_STATIC);
-        navBar.addItem(new BottomNavigationItem(R.drawable.ic_home_black_24dp, R.string.main_home)
-                            .setActiveColorResource(R.color.red).setBadgeItem(homeBadgeItem))
-                .addItem(new BottomNavigationItem(R.drawable.ic_book_white_24dp, R.string.main_friend)
-                            .setActiveColorResource(R.color.red).setBadgeItem(friendBadgeItem))
-                .addItem(new BottomNavigationItem(R.drawable.ic_music_note_white_24dp, R.string.main_set)
-                            .setActiveColorResource(R.color.red).setBadgeItem(setBadgeItem))
-                .initialise();
 
     }
 
-    private void setFragment() {
-        getSupportFragmentManager().beginTransaction().replace(R.id.fl_fragment, new HomeFragment()).commit();
-    }
-
-    private void initBadgeItem() {
-        homeBadgeItem = new TextBadgeItem()
-                .setBorderWidth(4)
-                .setBackgroundColorResource(R.color.red)
-                .setText(6+"")
-                .setHideOnSelect(true);
-
-        friendBadgeItem = new TextBadgeItem()
-                .setBorderWidth(4)
-                .setBackgroundColorResource(R.color.red)
-                .setText(8+"")
-                .setHideOnSelect(true);
-
-        setBadgeItem = new TextBadgeItem()
-                .setBorderWidth(4)
-                .setBackgroundColorResource(R.color.red)
-                .setText(20+"")
-                .setHideOnSelect(true);
-    }
 }

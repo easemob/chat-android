@@ -35,5 +35,9 @@
 
     <color name="em_switch_color_checked">#ff48c890</color>
     <color name="em_switch_color_unchecked">#ffe9e9e9</color>
+
     <color name="em_server_set_color_title">@color/white</color>
+
+    <color name="em_main_tab_normal">#ff333333</color>
+    <color name="em_main_tab_selected">#ff04aef0</color>
 </resources>

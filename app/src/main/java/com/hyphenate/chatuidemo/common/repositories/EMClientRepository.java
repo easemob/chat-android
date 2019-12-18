@@ -135,7 +135,7 @@ public class EMClientRepository {
         // get current user id
         String currentUser = EMClient.getInstance().getCurrentUser();
         EaseUser user = new EaseUser(currentUser);
-        UserInstanceLiveData.getInstance().setValue(user);
+        UserInstanceLiveData.getInstance().postValue(user);
         callBack.onSuccess(new MutableLiveData<>(user));
     }
 }
