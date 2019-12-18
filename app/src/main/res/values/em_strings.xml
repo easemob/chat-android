@@ -55,4 +55,8 @@
     <string name="em_server_set_button_reset_text">重置服务器设置</string>
     <string name="em_server_set_dialog_reset">是否恢复默认服务器设置？</string>
     <string name="em_server_set_button_text">保\u0020存\u0020配\u0020置</string>
+    <string name="em_server_set_appkey_empty_hint">请设置Appkey</string>
+    <string name="em_server_set_im_server_empty_hint">请设置IM服务器地址</string>
+    <string name="em_server_set_im_port_empty_hint">请设置IM端口号</string>
+    <string name="em_server_set_rest_server_empty_hint">请设置REST服务器地址</string>
 </resources>

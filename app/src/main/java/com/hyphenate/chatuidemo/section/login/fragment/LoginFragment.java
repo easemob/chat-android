@@ -1,5 +1,6 @@
 package com.hyphenate.chatuidemo.section.login.fragment;
 
+import android.content.Context;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.text.Editable;
@@ -12,7 +13,11 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
+import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.lifecycle.ViewModelProviders;
 
 import com.hyphenate.chatuidemo.DemoHelper;
@@ -22,6 +27,7 @@ import com.hyphenate.chatuidemo.common.enums.Status;
 import com.hyphenate.chatuidemo.common.utils.ToastUtils;
 import com.hyphenate.chatuidemo.section.base.BaseInitFragment;
 import com.hyphenate.chatuidemo.section.login.activity.TestActivity;
+import com.hyphenate.chatuidemo.section.login.viewmodels.LoginFragmentViewModel;
 import com.hyphenate.chatuidemo.section.login.viewmodels.LoginViewModel;
 
 public class LoginFragment extends BaseInitFragment implements View.OnClickListener, TextWatcher {
@@ -35,6 +41,7 @@ public class LoginFragment extends BaseInitFragment implements View.OnClickListe
     private String mPwd;
     private LoginViewModel mViewModel;
     private boolean isTokenFlag;//是否是token登录
+    private LoginFragmentViewModel mFragmentViewModel;
 
     @Override
     protected int getLayoutId() {
@@ -50,6 +57,10 @@ public class LoginFragment extends BaseInitFragment implements View.OnClickListe
         mTvLoginToken = findViewById(R.id.tv_login_token);
         mTvLoginServerSet = findViewById(R.id.tv_login_server_set);
         mBtnLogin = findViewById(R.id.btn_login);
+        // 保证切换fragment后相关状态正确
+        if(isTokenFlag) {
+            switchLogin();
+        }
     }
 
     @Override
@@ -64,20 +75,11 @@ public class LoginFragment extends BaseInitFragment implements View.OnClickListe
     }
 
     @Override
-    protected void initViewModel() {
-        super.initViewModel();
-        mViewModel = ViewModelProviders.of(mContext).get(LoginViewModel.class);
-        mViewModel.getRegisterObservable().observe(this, response -> {
-            if(response == null) {
-                return;
-            }
-            if(response.status == Status.SUCCESS) {
-                mEtLoginName.setText(TextUtils.isEmpty(response.data)?"":response.data);
-                mEtLoginPwd.setText("");
-            }
-        });
-
-        mViewModel.getLoginObservable().observe(this, response -> {
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setRetainInstance(true);
+        mFragmentViewModel = new ViewModelProvider(this).get(LoginFragmentViewModel.class);
+        mFragmentViewModel.getLoginObservable().observe(this, response -> {
             if(response == null) {
                 return;
             }
@@ -94,6 +96,23 @@ public class LoginFragment extends BaseInitFragment implements View.OnClickListe
                 Log.e("TAG", "记载中");
             }
         });
+    }
+
+    @Override
+    protected void initViewModel() {
+        super.initViewModel();
+        mViewModel = new ViewModelProvider(mContext).get(LoginViewModel.class);
+        mViewModel.getRegisterObservable().observe(this, response -> {
+            if(response == null) {
+                return;
+            }
+            if(response.status == Status.SUCCESS) {
+                mEtLoginName.setText(TextUtils.isEmpty(response.data)?"":response.data);
+                mEtLoginPwd.setText("");
+            }
+        });
+
+
     }
 
     @Override
@@ -138,7 +157,7 @@ public class LoginFragment extends BaseInitFragment implements View.OnClickListe
             ToastUtils.showToast(R.string.em_login_btn_info_incomplete);
             return;
         }
-        mViewModel.login(mUserName, mPwd, isTokenFlag);
+        mFragmentViewModel.login(mUserName, mPwd, isTokenFlag);
     }
 
     @Override

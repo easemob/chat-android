@@ -204,7 +204,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:visibility="gone"
-                app:constraint_referenced_ids="switch_https_set,tv_https_set,btn_server,et_server_rest,et_server_port,et_server_address,et_server_hint,et_appkey,tv_server_specify,switch_specify_server,btn_reset"/>
+                app:constraint_referenced_ids="switch_https_set,tv_https_set,btn_server,et_server_rest,et_server_port,et_server_address,et_server_hint,et_appkey,tv_server_specify,switch_specify_server"/>
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

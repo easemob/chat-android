@@ -5,10 +5,6 @@ import android.app.Application;
 import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
-import androidx.lifecycle.MutableLiveData;
-
-import com.hyphenate.chatuidemo.common.model.EaseUser;
-import com.hyphenate.chatuidemo.common.livedatas.UserInstanceLiveData;
 import com.hyphenate.chatuidemo.common.net.Resource;
 import com.hyphenate.chatuidemo.common.livedatas.SingleSourceLiveData;
 import com.hyphenate.chatuidemo.common.repositories.EMClientRepository;
@@ -16,7 +12,6 @@ import com.hyphenate.chatuidemo.common.repositories.EMClientRepository;
 
 public class LoginViewModel extends AndroidViewModel {
     private EMClientRepository mRepository;
-    private SingleSourceLiveData<Resource<EaseUser>> loginObservable;
     private SingleSourceLiveData<Resource<String>> registerObservable;
     private SingleSourceLiveData<Integer> pageObservable;
 
@@ -24,7 +19,6 @@ public class LoginViewModel extends AndroidViewModel {
         super(application);
         mRepository = new EMClientRepository();
         registerObservable = new SingleSourceLiveData<>();
-        loginObservable = new SingleSourceLiveData<>();
         pageObservable = new SingleSourceLiveData<>();
     }
 
@@ -63,20 +57,6 @@ public class LoginViewModel extends AndroidViewModel {
      */
     public void clearRegisterInfo() {
         registerObservable.setValue(null);
-    }
-
-    /**
-     * 登录环信
-     * @param userName
-     * @param pwd
-     * @param isTokenFlag
-     */
-    public void login(String userName, String pwd, boolean isTokenFlag) {
-        loginObservable.setSource(mRepository.loginToServer(userName, pwd, isTokenFlag));
-    }
-
-    public LiveData<Resource<EaseUser>> getLoginObservable() {
-        return loginObservable;
     }
 
 }
