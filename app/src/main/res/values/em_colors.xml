@@ -38,6 +38,6 @@
 
     <color name="em_server_set_color_title">@color/white</color>
 
-    <color name="em_main_tab_normal">#ff333333</color>
-    <color name="em_main_tab_selected">#ff04aef0</color>
+    <color name="em_main_color_tab_normal">#ff333333</color>
+    <color name="em_main_color_tab_selected">#ff04aef0</color>
 </resources>

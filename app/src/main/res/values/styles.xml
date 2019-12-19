@@ -44,4 +44,14 @@
         <item name="android:paddingLeft">45dp</item>
         <item name="android:paddingStart">45dp</item>
     </style>
+
+    <style name="em_main_badge_tv">
+        <item name="android:layout_width">@dimen/em_main_badge_size</item>
+        <item name="android:layout_height">@dimen/em_main_badge_size</item>
+        <item name="android:layout_marginTop">@dimen/em_main_badge_margin_top</item>
+        <item name="android:layout_marginLeft">@dimen/em_main_badge_margin_left</item>
+        <item name="android:layout_marginStart">@dimen/em_main_badge_margin_left</item>
+        <item name="android:background">@drawable/em_main_tv_message_shape</item>
+        <item name="android:visibility">gone</item>
+    </style>
 </resources>

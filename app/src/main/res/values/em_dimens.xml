@@ -13,5 +13,8 @@
     <dimen name="em_login_text_size">16sp</dimen>
     <dimen name="em_login_server_hint_text_size">14sp</dimen>
 
+    <dimen name="em_main_badge_size">8dp</dimen>
+    <dimen name="em_main_badge_margin_left">20dp</dimen>
+    <dimen name="em_main_badge_margin_top">5dp</dimen>
 
 </resources>

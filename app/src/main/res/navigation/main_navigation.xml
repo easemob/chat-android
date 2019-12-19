@@ -28,4 +28,5 @@
         android:name="com.hyphenate.chatuidemo.section.me.AboutMeFragment"
         android:label="@string/em_main_title_me"
         tools:layout="@layout/em_fragment_about_me" />
+
 </navigation>
