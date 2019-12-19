@@ -1,8 +1,10 @@
 package com.hyphenate.chatuidemo;
 
+import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
@@ -15,6 +17,11 @@ import androidx.fragment.app.FragmentTransaction;
 import com.google.android.material.bottomnavigation.BottomNavigationItemView;
 import com.google.android.material.bottomnavigation.BottomNavigationMenuView;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.hyphenate.EMClientListener;
+import com.hyphenate.EMContactListener;
+import com.hyphenate.EMMultiDeviceListener;
+import com.hyphenate.chatuidemo.common.permission.PermissionsManager;
+import com.hyphenate.chatuidemo.common.permission.PermissionsResultAction;
 import com.hyphenate.chatuidemo.section.base.BaseFragment;
 import com.hyphenate.chatuidemo.section.base.BaseInitActivity;
 import com.hyphenate.chatuidemo.section.conversation.HomeFragment;
@@ -22,8 +29,12 @@ import com.hyphenate.chatuidemo.section.discover.DiscoverFragment;
 import com.hyphenate.chatuidemo.section.friends.FriendsFragment;
 import com.hyphenate.chatuidemo.section.me.AboutMeFragment;
 
+import java.security.Permission;
+import java.util.List;
 
-public class MainActivity extends BaseInitActivity implements BottomNavigationView.OnNavigationItemSelectedListener {
+
+public class MainActivity extends BaseInitActivity implements BottomNavigationView.OnNavigationItemSelectedListener
+                                                            , EMClientListener, EMMultiDeviceListener, EMContactListener {
     private BottomNavigationView navView;
     private BaseFragment mHomeFragment, mFriendsFragment, mDiscoverFragment, mAboutMeFragment;
     private BaseFragment mCurrentFragment;
@@ -46,18 +57,32 @@ public class MainActivity extends BaseInitActivity implements BottomNavigationVi
         super.initView(savedInstanceState);
         navView = findViewById(R.id.nav_view);
         navView.setItemIconTintList(null);
+        // 可以动态显示隐藏相应tab
         //navView.getMenu().findItem(R.id.em_main_nav_me).setVisible(false);
         switchToHome();
-        initTab();
+        addTabBadge();
     }
 
     @Override
     protected void initListener() {
         super.initListener();
         navView.setOnNavigationItemSelectedListener(this);
+        DemoHelper.getInstance().getEMClient().addClientListener(this);
+        DemoHelper.getInstance().getEMClient().addMultiDeviceListener(this);
+        DemoHelper.getInstance().getContactManager().setContactListener(this);
     }
 
-    private void initTab() {
+    @Override
+    protected void initData() {
+        super.initData();
+        requestPermissions();
+
+    }
+
+    /**
+     * 添加BottomNavigationView中每个item右上角的红点
+     */
+    private void addTabBadge() {
         BottomNavigationMenuView menuView = (BottomNavigationMenuView) navView.getChildAt(0);
         int childCount = menuView.getChildCount();
         Log.e("TAG", "bottom child count = "+childCount);
@@ -81,6 +106,25 @@ public class MainActivity extends BaseInitActivity implements BottomNavigationVi
             }
             itemTab.addView(badge);
         }
+    }
+
+    /**
+     * 申请权限
+     */
+    // TODO: 2019/12/19 0019 有必要修改一下
+    private void requestPermissions() {
+        PermissionsManager.getInstance()
+                .requestAllManifestPermissionsIfNecessary(mContext, new PermissionsResultAction() {
+                    @Override
+                    public void onGranted() {
+
+                    }
+
+                    @Override
+                    public void onDenied(String permission) {
+
+                    }
+                });
     }
 
     private void switchToHome() {
@@ -143,5 +187,70 @@ public class MainActivity extends BaseInitActivity implements BottomNavigationVi
                 return true;
         }
         return false;
+    }
+
+    /**
+     * 监听2.x到3.x数据库升级操作
+     * @param success
+     */
+    @Override
+    public void onMigrate2x(boolean success) {
+
+    }
+
+    @Override
+    public void onContactEvent(int event, String target, String ext) {
+
+    }
+
+    @Override
+    public void onGroupEvent(int event, String target, List<String> usernames) {
+
+    }
+
+    /**
+     * 增加联系人时回调此方法
+     * @param username
+     */
+    @Override
+    public void onContactAdded(String username) {
+
+    }
+
+    /**
+     * 被删除时回调此方法
+     * @param username
+     */
+    @Override
+    public void onContactDeleted(String username) {
+
+    }
+
+    /**
+     * 收到好友邀请
+     * @param username
+     * @param reason
+     */
+    @Override
+    public void onContactInvited(String username, String reason) {
+
+    }
+
+    /**
+     * 好友请求被同意
+     * @param username
+     */
+    @Override
+    public void onFriendRequestAccepted(String username) {
+
+    }
+
+    /**
+     * 好友请求被拒绝
+     * @param username
+     */
+    @Override
+    public void onFriendRequestDeclined(String username) {
+
     }
 }

@@ -40,4 +40,12 @@
 
     <color name="em_main_color_tab_normal">#ff333333</color>
     <color name="em_main_color_tab_selected">#ff04aef0</color>
+
+    <color name="em_empty_layout_color_text">#ffcccccc</color>
+
+    <color name="em_conversation_color_item_name">#ff333333</color>
+    <color name="em_conversation_color_item_mention">#ffff2b2b</color>
+    <color name="em_conversation_color_item_message">#ff999999</color>
+    <color name="em_conversation_color_item_time">#ff999999</color>
+
 </resources>

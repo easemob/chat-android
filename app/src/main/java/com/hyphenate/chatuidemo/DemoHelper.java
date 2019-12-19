@@ -8,6 +8,7 @@ import android.text.TextUtils;
 import android.util.Log;
 
 import com.hyphenate.chat.EMClient;
+import com.hyphenate.chat.EMContactManager;
 import com.hyphenate.chat.EMOptions;
 import com.hyphenate.chatuidemo.common.manager.HMSPushHelper;
 import com.hyphenate.chatuidemo.common.manager.OptionsHelper;
@@ -50,6 +51,13 @@ public class DemoHelper {
         return EMClient.getInstance();
     }
 
+    /**
+     * 获取contact manager
+     * @return
+     */
+    public EMContactManager getContactManager() {
+        return getEMClient().contactManager();
+    }
 
     public void init(Context context) {
         // 根据项目需求对SDK进行配置

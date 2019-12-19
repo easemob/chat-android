@@ -61,4 +61,8 @@
     <string name="em_server_set_im_server_empty_hint">请设置IM服务器地址</string>
     <string name="em_server_set_im_port_empty_hint">请设置IM端口号</string>
     <string name="em_server_set_rest_server_empty_hint">请设置REST服务器地址</string>
+
+    <string name="em_empty_layout_content">寻找自我 保持本色</string>
+
+    <string name="were_mentioned">[有人@我]</string>
 </resources>

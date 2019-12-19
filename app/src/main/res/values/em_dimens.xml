@@ -17,4 +17,6 @@
     <dimen name="em_main_badge_margin_left">20dp</dimen>
     <dimen name="em_main_badge_margin_top">5dp</dimen>
 
+    <dimen name="em_empty_layout_text_size">12sp</dimen>
+
 </resources>
