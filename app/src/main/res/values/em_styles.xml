@@ -8,6 +8,7 @@
         <item name="colorAccent">@color/em_base_color_accent</item>
         <item name="android:textColorHint">@color/em_base_color_text_hint</item>
         <item name="android:windowBackground">@color/em_base_color_window_bg</item>
+        <item name="android:divider">@drawable/em_default_divider_list</item>
     </style>
 
     <style name="NoActionBar.SplashTheme" parent="Theme.AppCompat.Light.NoActionBar">

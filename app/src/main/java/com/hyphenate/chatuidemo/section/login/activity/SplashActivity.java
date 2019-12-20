@@ -1,8 +1,10 @@
 package com.hyphenate.chatuidemo.section.login.activity;
 
 import android.os.Bundle;
+import android.os.SystemClock;
 import android.view.animation.AlphaAnimation;
 
+import androidx.lifecycle.ViewModelProvider;
 import androidx.lifecycle.ViewModelProviders;
 
 import com.hyphenate.chatuidemo.MainActivity;
@@ -25,17 +27,9 @@ public class SplashActivity extends BaseInitActivity {
     }
 
     @Override
-    protected void initView(Bundle savedInstanceState) {
-        super.initView(savedInstanceState);
-        AlphaAnimation animation = new AlphaAnimation(0.3f, 1.0f);
-        animation.setDuration(300);
-        findViewById(R.id.iv_splash).startAnimation(animation);
-    }
-
-    @Override
     protected void initData() {
         super.initData();
-        SplashViewModel model = ViewModelProviders.of(this).get(SplashViewModel.class);
+        SplashViewModel model = new ViewModelProvider(this).get(SplashViewModel.class);
         model.getLoginData().observe(this, response -> {
             if(response == null) {
                 return;

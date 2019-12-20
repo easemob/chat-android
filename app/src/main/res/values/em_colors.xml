@@ -19,6 +19,7 @@
     <color name="em_base_color_accent">@color/blue</color>
     <color name="em_base_color_window_bg">@color/white</color>
     <color name="em_base_color_text_hint">#ffcccccc</color>
+    <color name="em_base_color_divider">#fff2f2f2</color>
 
     <color name="em_toast_color_bg">#99000000</color>
     <color name="em_toast_color_text">@color/white</color>

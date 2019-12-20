@@ -6,10 +6,8 @@ import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MediatorLiveData;
-import androidx.lifecycle.MutableLiveData;
 
-import com.hyphenate.chatuidemo.common.livedatas.SingleSourceLiveData;
-import com.hyphenate.chatuidemo.common.model.EaseUser;
+import com.hyphenate.easeui.domain.EaseUser;
 import com.hyphenate.chatuidemo.common.net.Resource;
 import com.hyphenate.chatuidemo.common.repositories.EMClientRepository;
 

@@ -7,12 +7,16 @@ import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.FragmentTransaction;
+import androidx.lifecycle.ViewModelProvider;
 
 import com.google.android.material.bottomnavigation.BottomNavigationItemView;
 import com.google.android.material.bottomnavigation.BottomNavigationMenuView;
@@ -22,13 +26,16 @@ import com.hyphenate.EMContactListener;
 import com.hyphenate.EMMultiDeviceListener;
 import com.hyphenate.chatuidemo.common.permission.PermissionsManager;
 import com.hyphenate.chatuidemo.common.permission.PermissionsResultAction;
+import com.hyphenate.chatuidemo.section.MainViewModel;
 import com.hyphenate.chatuidemo.section.base.BaseFragment;
 import com.hyphenate.chatuidemo.section.base.BaseInitActivity;
 import com.hyphenate.chatuidemo.section.conversation.HomeFragment;
 import com.hyphenate.chatuidemo.section.discover.DiscoverFragment;
 import com.hyphenate.chatuidemo.section.friends.FriendsFragment;
 import com.hyphenate.chatuidemo.section.me.AboutMeFragment;
+import com.hyphenate.easeui.widget.EaseTitleBar;
 
+import java.lang.reflect.Method;
 import java.security.Permission;
 import java.util.List;
 
@@ -36,6 +43,7 @@ import java.util.List;
 public class MainActivity extends BaseInitActivity implements BottomNavigationView.OnNavigationItemSelectedListener
                                                             , EMClientListener, EMMultiDeviceListener, EMContactListener {
     private BottomNavigationView navView;
+    private EaseTitleBar mTitleBar;
     private BaseFragment mHomeFragment, mFriendsFragment, mDiscoverFragment, mAboutMeFragment;
     private BaseFragment mCurrentFragment;
     private TextView mTvMainHomeMsg, mTvMainFriendsMsg, mTvMainDiscoverMsg, mTvMainAboutMeMsg;
@@ -53,9 +61,52 @@ public class MainActivity extends BaseInitActivity implements BottomNavigationVi
     }
 
     @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.em_conversation_menu, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.action_video :
+                showToast("视频");
+                break;
+            case R.id.action_group :
+                showToast("群组");
+                break;
+            case R.id.action_friend :
+                showToast("朋友");
+                break;
+            case R.id.action_scan :
+                showToast("扫一扫");
+                break;
+        }
+        return true;
+    }
+
+    @Override
+    public boolean onMenuOpened(int featureId, Menu menu) {
+        if(menu != null) {
+            if(menu.getClass().getSimpleName().equalsIgnoreCase("MenuBuilder")) {
+                try {
+                    Method method = menu.getClass().getDeclaredMethod("setOptionalIconsVisible", Boolean.TYPE);
+                    method.setAccessible(true);
+                    method.invoke(menu, true);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+
+            }
+        }
+        return super.onMenuOpened(featureId, menu);
+    }
+
+    @Override
     protected void initView(Bundle savedInstanceState) {
         super.initView(savedInstanceState);
         navView = findViewById(R.id.nav_view);
+        mTitleBar = findViewById(R.id.title_bar_main);
         navView.setItemIconTintList(null);
         // 可以动态显示隐藏相应tab
         //navView.getMenu().findItem(R.id.em_main_nav_me).setVisible(false);
@@ -75,8 +126,24 @@ public class MainActivity extends BaseInitActivity implements BottomNavigationVi
     @Override
     protected void initData() {
         super.initData();
+        initViewModel();
         requestPermissions();
 
+    }
+
+    private void initViewModel() {
+        MainViewModel viewModel = new ViewModelProvider(mContext).get(MainViewModel.class);
+        viewModel.getSwitchObservable().observe(this, response -> {
+            if(response == null || response == 0) {
+                return;
+            }
+            if(response == R.string.em_main_title_me) {
+                mTitleBar.setVisibility(View.GONE);
+            }else {
+                mTitleBar.setVisibility(View.VISIBLE);
+                mTitleBar.setTitle(getResources().getString(response));
+            }
+        });
     }
 
     /**
@@ -172,18 +239,23 @@ public class MainActivity extends BaseInitActivity implements BottomNavigationVi
 
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
+        mTitleBar.setVisibility(View.VISIBLE);
         switch (menuItem.getItemId()) {
             case R.id.em_main_nav_home :
                 switchToHome();
+                mTitleBar.setTitle(getResources().getString(R.string.em_main_title_home));
                 return true;
             case R.id.em_main_nav_friends :
                 switchToFriends();
+                mTitleBar.setTitle(getResources().getString(R.string.em_main_title_friends));
                 return true;
             case R.id.em_main_nav_discover :
                 switchToDiscover();
+                mTitleBar.setTitle(getResources().getString(R.string.em_main_title_discover));
                 return true;
             case R.id.em_main_nav_me :
                 switchToAboutMe();
+                mTitleBar.setVisibility(View.GONE);
                 return true;
         }
         return false;

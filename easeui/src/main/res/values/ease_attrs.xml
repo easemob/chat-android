@@ -10,6 +10,7 @@
         <attr name="titleBarArrowColor" format="reference|color"/>
         <attr name="titleBarMenuResource" format="reference"/>
         <attr name="titleBarRightVisible" format="boolean"/>
+        <attr name="titleBarDisplayHomeAsUpEnabled" format="boolean"/>
     </declare-styleable>
 
     <declare-styleable name="EaseImageView">
@@ -23,6 +24,13 @@
             <enum name="round" value="1" />
             <enum name="rectangle" value="2" />
         </attr>
+    </declare-styleable>
+
+    <declare-styleable name="EaseSearchTextView">
+        <attr name="search_drawable_left_width" format="dimension"/>
+        <attr name="search_drawable_left_height" format="dimension"/>
+        <attr name="search_drawable_right_width" format="dimension"/>
+        <attr name="search_drawable_right_height" format="dimension"/>
     </declare-styleable>
 
 </resources>

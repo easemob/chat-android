@@ -11,10 +11,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.hyphenate.chatuidemo.common.model;
+package com.hyphenate.easeui.domain;
 
 import com.hyphenate.chat.EMContact;
-import com.hyphenate.chatuidemo.common.utils.EaseCommonUtils;
+import com.hyphenate.easeui.utils.EaseCommonUtils;
 
 public class EaseUser extends EMContact {
     

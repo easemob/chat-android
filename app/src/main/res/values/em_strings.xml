@@ -35,16 +35,6 @@
     <string name="em_error_parse_error">解析错误</string>
     <string name="em_error_err_unknown">网络问题请稍后重试</string>
 
-    <string name="location_recv">[%1$s的位置]</string>
-    <string name="location_prefix">[我的位置]</string>
-    <string name="picture">[图片]</string>
-    <string name="video">[视频]</string>
-    <string name="file">[文件]</string>
-    <string name="voice_prefix">[语音]</string>
-    <string name="voice_call">[语音通话]</string>
-    <string name="video_call">[视频通话]</string>
-    <string name="dynamic_expression">[动态表情]</string>
-
     <string name="em_server_set_title">使用自定义服务器？</string>
     <string name="em_server_set_server_hint">demo已经绑定以下环境设置，如果需要修改，请重启App进行设置。</string>
     <string name="em_server_set_appkey">Appkey</string>
@@ -65,4 +55,9 @@
     <string name="em_empty_layout_content">寻找自我 保持本色</string>
 
     <string name="were_mentioned">[有人@我]</string>
+
+    <string name="em_conversation_menu_video">音视频会议</string>
+    <string name="em_conversation_menu_group">创建群组</string>
+    <string name="em_conversation_menu_friend">添加好友</string>
+    <string name="em_conversation_menu_scan">扫一扫</string>
 </resources>

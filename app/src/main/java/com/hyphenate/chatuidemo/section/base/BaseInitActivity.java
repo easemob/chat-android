@@ -5,6 +5,8 @@ import android.os.Bundle;
 
 import androidx.annotation.Nullable;
 
+import com.hyphenate.chatuidemo.common.utils.StatusBarCompat;
+
 public abstract class BaseInitActivity extends BaseActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -37,7 +39,9 @@ public abstract class BaseInitActivity extends BaseActivity {
      * init view
      * @param savedInstanceState
      */
-    protected void initView(Bundle savedInstanceState) { }
+    protected void initView(Bundle savedInstanceState) {
+        StatusBarCompat.setLightStatusBar(mContext, true);
+    }
 
     /**
      * init listener

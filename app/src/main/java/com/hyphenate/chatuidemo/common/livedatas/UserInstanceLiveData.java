@@ -4,8 +4,7 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.Observer;
 
-import com.hyphenate.chatuidemo.common.model.EaseUser;
-import com.hyphenate.chatuidemo.common.net.Resource;
+import com.hyphenate.easeui.domain.EaseUser;
 
 /**
  * 设置并监听单一数据源时使用 LiveData

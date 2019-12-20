@@ -7,14 +7,17 @@ import android.content.IntentFilter;
 import android.text.TextUtils;
 import android.util.Log;
 
+import com.hyphenate.chat.EMChatRoomManager;
 import com.hyphenate.chat.EMClient;
 import com.hyphenate.chat.EMContactManager;
+import com.hyphenate.chat.EMGroupManager;
 import com.hyphenate.chat.EMOptions;
 import com.hyphenate.chatuidemo.common.manager.HMSPushHelper;
 import com.hyphenate.chatuidemo.common.manager.OptionsHelper;
 import com.hyphenate.chatuidemo.common.model.DemoServerSetBean;
 import com.hyphenate.chatuidemo.common.receiver.HeadsetReceiver;
 import com.hyphenate.chatuidemo.common.utils.PreferenceManager;
+import com.hyphenate.easeui.EaseUI;
 import com.hyphenate.push.EMPushConfig;
 import com.hyphenate.push.EMPushHelper;
 import com.hyphenate.push.EMPushType;
@@ -57,6 +60,22 @@ public class DemoHelper {
      */
     public EMContactManager getContactManager() {
         return getEMClient().contactManager();
+    }
+
+    /**
+     * 获取group manager
+     * @return
+     */
+    public EMGroupManager getGroupManager() {
+        return getEMClient().groupManager();
+    }
+
+    /**
+     * 获取chatroom manager
+     * @return
+     */
+    public EMChatRoomManager getChatroomManager() {
+        return getEMClient().chatroomManager();
     }
 
     public void init(Context context) {

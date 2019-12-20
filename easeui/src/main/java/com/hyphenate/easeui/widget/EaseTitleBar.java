@@ -42,6 +42,7 @@ public class EaseTitleBar extends RelativeLayout implements View.OnClickListener
     private int mArrowColor;
     private int mWidth;
     private int mHeight;
+    private boolean mDisplayHomeAsUpEnabled;
 
     public EaseTitleBar(Context context) {
         this(context, null);
@@ -135,6 +136,8 @@ public class EaseTitleBar extends RelativeLayout implements View.OnClickListener
             boolean rightVisible = ta.getBoolean(R.styleable.EaseTitleBar_titleBarRightVisible, false);
             rightLayout.setVisibility(rightVisible ? VISIBLE : GONE);
 
+            mDisplayHomeAsUpEnabled = ta.getBoolean(R.styleable.EaseTitleBar_titleBarDisplayHomeAsUpEnabled, true);
+
             ta.recycle();
         }
     }
@@ -142,6 +145,7 @@ public class EaseTitleBar extends RelativeLayout implements View.OnClickListener
     private void initToolbar() {
         rightLayout.setOnClickListener(this);
         if(leftImage.getDrawable() != null) {
+            leftImage.setVisibility(mDisplayHomeAsUpEnabled ? VISIBLE : GONE);
             leftLayout.setOnClickListener(this);
         }else {
             if(getContext() instanceof AppCompatActivity) {
@@ -149,7 +153,7 @@ public class EaseTitleBar extends RelativeLayout implements View.OnClickListener
                 activity.setSupportActionBar(toolbar);
                 if(activity.getSupportActionBar() != null) {
                     // 显示返回按钮
-                    activity.getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+                    activity.getSupportActionBar().setDisplayHomeAsUpEnabled(mDisplayHomeAsUpEnabled);
                     // 不显示标题
                     activity.getSupportActionBar().setDisplayShowTitleEnabled(false);
                 }
