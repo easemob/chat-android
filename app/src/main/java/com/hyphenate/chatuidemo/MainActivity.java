@@ -160,6 +160,7 @@ public class MainActivity extends BaseInitActivity implements BottomNavigationVi
             switch (i) {
                 case 0 :
                     mTvMainHomeMsg = badge.findViewById(msgIds[0]);
+                    mTvMainHomeMsg.setVisibility(View.VISIBLE);
                     break;
                 case 1 :
                     mTvMainFriendsMsg = badge.findViewById(msgIds[1]);

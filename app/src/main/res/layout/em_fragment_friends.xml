@@ -4,13 +4,46 @@
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+    <com.hyphenate.easeui.widget.EaseSearchTextView
+        android:id="@+id/tv_friend_search"
+        android:layout_width="0dp"
+        android:layout_height="36dp"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/srl_friend_refresh"
+        android:layout_marginLeft="16dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginRight="16dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginTop="8dp"
+        android:background="@drawable/em_search_tv_bg_shape"
+        android:drawableLeft="@drawable/em_search_icon"
+        android:drawableStart="@drawable/em_search_icon"
+        android:paddingLeft="16dp"
+        android:paddingRight="16dp"
+        android:hint="@string/em_main_search_text_hint"
+        android:gravity="center_vertical"
+        app:search_drawable_left_height="18dp"
+        app:search_drawable_left_width="18dp"
+        android:drawablePadding="6dp"/>
+
+    <com.scwang.smartrefresh.layout.SmartRefreshLayout
+        android:id="@+id/srl_friend_refresh"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:srlEnableLoadMore="false"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tv_friend_search"
         app:layout_constraintBottom_toBottomOf="parent"
-        android:text="friends"/>
+        android:layout_marginTop="8dp">
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rv_friends_list"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"/>
+
+    </com.scwang.smartrefresh.layout.SmartRefreshLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

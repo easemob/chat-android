@@ -56,6 +56,8 @@
 
     <string name="were_mentioned">[有人@我]</string>
 
+    <string name="em_main_search_text_hint">搜索</string>
+
     <string name="em_conversation_menu_video">音视频会议</string>
     <string name="em_conversation_menu_group">创建群组</string>
     <string name="em_conversation_menu_friend">添加好友</string>

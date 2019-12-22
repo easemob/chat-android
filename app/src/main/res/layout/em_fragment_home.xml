@@ -22,8 +22,10 @@
         android:drawableStart="@drawable/em_search_icon"
         android:paddingLeft="16dp"
         android:paddingRight="16dp"
-        android:hint="搜索"
+        android:hint="@string/em_main_search_text_hint"
         android:gravity="center_vertical"
+        app:search_drawable_left_height="18dp"
+        app:search_drawable_left_width="18dp"
         android:drawablePadding="6dp"/>
 
     <com.scwang.smartrefresh.layout.SmartRefreshLayout

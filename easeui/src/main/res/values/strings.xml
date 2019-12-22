@@ -10,4 +10,5 @@
     <string name="voice_call">[语音通话]</string>
     <string name="video_call">[视频通话]</string>
     <string name="dynamic_expression">[动态表情]</string>
+
 </resources>
