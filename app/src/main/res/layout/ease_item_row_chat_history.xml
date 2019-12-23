@@ -16,7 +16,7 @@
         android:layout_marginLeft="10dp"
         android:layout_marginStart="10dp"
         android:scaleType="fitXY"
-        app:ease_radius="23dp"
+        app:ease_shape_type="round"
         android:src="@drawable/ease_default_avatar" />
 
     <TextView
@@ -87,7 +87,7 @@
     
     <TextView
         android:id="@+id/message"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toRightOf="@id/mentioned"
@@ -101,6 +101,6 @@
         android:padding="7dp"
         android:textColor="@color/em_conversation_color_item_message"
         android:textSize="14sp"
-        android:text="sldfjsljsldf递四方速递地方水电"/>
+        tools:text="sldfjsljsldf递四方速递地方水电"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

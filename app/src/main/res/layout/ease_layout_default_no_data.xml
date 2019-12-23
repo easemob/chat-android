@@ -9,7 +9,7 @@
     <com.hyphenate.easeui.widget.EaseImageView
         android:layout_width="82dp"
         android:layout_height="82dp"
-        android:src="@drawable/em_login_logo"/>
+        android:src="@drawable/em_empty_logo"/>
 
     <TextView
         android:id="@+id/tv_empty_content"

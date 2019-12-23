@@ -32,6 +32,7 @@ import com.hyphenate.chatuidemo.section.base.BaseInitActivity;
 import com.hyphenate.chatuidemo.section.conversation.HomeFragment;
 import com.hyphenate.chatuidemo.section.discover.DiscoverFragment;
 import com.hyphenate.chatuidemo.section.friends.FriendsFragment;
+import com.hyphenate.chatuidemo.section.friends.activity.AddContactActivity;
 import com.hyphenate.chatuidemo.section.me.AboutMeFragment;
 import com.hyphenate.easeui.widget.EaseTitleBar;
 
@@ -76,7 +77,7 @@ public class MainActivity extends BaseInitActivity implements BottomNavigationVi
                 showToast("群组");
                 break;
             case R.id.action_friend :
-                showToast("朋友");
+                AddContactActivity.startAction(mContext);
                 break;
             case R.id.action_scan :
                 showToast("扫一扫");
@@ -85,6 +86,12 @@ public class MainActivity extends BaseInitActivity implements BottomNavigationVi
         return true;
     }
 
+    /**
+     * 显示menu的icon，通过反射，设置menu的icon显示
+     * @param featureId
+     * @param menu
+     * @return
+     */
     @Override
     public boolean onMenuOpened(int featureId, Menu menu) {
         if(menu != null) {

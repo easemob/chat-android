@@ -1,8 +1,8 @@
 package com.hyphenate.chatuidemo.section.conversation;
 
 import android.os.Bundle;
+import android.view.View;
 
-import androidx.appcompat.widget.SearchView;
 import androidx.core.content.ContextCompat;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.DividerItemDecoration;
@@ -15,11 +15,13 @@ import com.hyphenate.chatuidemo.common.utils.ThreadManager;
 import com.hyphenate.chatuidemo.section.base.BaseInitFragment;
 import com.hyphenate.chatuidemo.section.conversation.adapter.HomeAdpter;
 import com.hyphenate.chatuidemo.section.conversation.viewmodel.HomeViewModel;
+import com.hyphenate.easeui.widget.EaseSearchTextView;
 import com.scwang.smartrefresh.layout.SmartRefreshLayout;
 import com.scwang.smartrefresh.layout.api.RefreshLayout;
 import com.scwang.smartrefresh.layout.listener.OnRefreshListener;
 
-public class HomeFragment extends BaseInitFragment implements OnRefreshListener {
+public class HomeFragment extends BaseInitFragment implements OnRefreshListener, View.OnClickListener {
+    private EaseSearchTextView mTvSearch;
     private RecyclerView mRvHomeList;
     private SmartRefreshLayout mRefreshLayout;
     private HomeViewModel mViewModel;
@@ -33,6 +35,7 @@ public class HomeFragment extends BaseInitFragment implements OnRefreshListener 
     @Override
     protected void initView(Bundle savedInstanceState) {
         super.initView(savedInstanceState);
+        mTvSearch = findViewById(R.id.tv_search);
         mRvHomeList = findViewById(R.id.rv_home_list);
         mRefreshLayout = findViewById(R.id.srl_refresh);
 
@@ -69,6 +72,7 @@ public class HomeFragment extends BaseInitFragment implements OnRefreshListener 
     @Override
     protected void initListener() {
         super.initListener();
+        mTvSearch.setOnClickListener(this);
         mRefreshLayout.setOnRefreshListener(this);
     }
 
@@ -88,6 +92,15 @@ public class HomeFragment extends BaseInitFragment implements OnRefreshListener 
             ThreadManager.getInstance().runOnMainThread(()-> {
                 mRefreshLayout.finishRefresh();
             });
+        }
+    }
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.tv_search :
+                showToast("跳转到搜索页面");
+                break;
         }
     }
 }

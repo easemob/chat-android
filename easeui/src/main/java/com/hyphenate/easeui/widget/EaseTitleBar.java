@@ -83,7 +83,6 @@ public class EaseTitleBar extends RelativeLayout implements View.OnClickListener
         titleView = (TextView) findViewById(R.id.title);
         titleLayout = (RelativeLayout) findViewById(R.id.root);
         titleMenu = findViewById(R.id.right_menu);
-
         parseStyle(context, attrs);
 
         initToolbar();

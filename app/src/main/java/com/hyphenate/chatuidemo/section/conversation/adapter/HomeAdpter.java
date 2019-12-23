@@ -30,7 +30,7 @@ public class HomeAdpter extends EaseBaseRecyclerViewAdapter<EMConversation> {
 
     @Override
     public int getItemLayoutId() {
-        return R.layout.ease_row_chat_history;
+        return R.layout.ease_item_row_chat_history;
     }
 
     @Override

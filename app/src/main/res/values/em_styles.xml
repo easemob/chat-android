@@ -21,6 +21,25 @@
         <item name="android:windowActionBar">false</item>
     </style>
 
+    <style name="AppTheme.AddContactTheme" parent="AppTheme">
+        <item name="searchViewStyle">@style/SearchView.AddContact</item>
+    </style>
+
+    <style name="SearchView.AddContact" parent="Widget.AppCompat.SearchView">
+        <!--默认hint-->
+        <item name="defaultQueryHint">@string/em_search_text_hint</item>
+        <!--搜索框内的搜索图标-->
+        <item name="searchHintIcon">@drawable/ease_search_icon</item>
+        <!--清理按钮图标-->
+        <item name="closeIcon">@drawable/em_search_close</item>
+        <item name="android:background">@drawable/em_search_tv_bg_shape</item>
+    </style>
+
+    <style name="Toolbar.EaseBar" parent="Widget.AppCompat.Toolbar">
+        <item name="contentInsetStart">0dp</item>
+        <item name="contentInsetStartWithNavigation">0dp</item>
+    </style>
+
     <style name="main_bottom_view_normal">
         <item name="android:textColor">@color/em_main_color_tab_normal</item>
         <item name="android:textSize">12sp</item>

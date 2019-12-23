@@ -21,6 +21,9 @@ import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.text.TextUtils;
+import android.util.DisplayMetrics;
+import android.util.TypedValue;
+import android.view.WindowManager;
 
 import com.hyphenate.chat.EMConversation.EMConversationType;
 import com.hyphenate.chat.EMMessage;
@@ -220,6 +223,36 @@ public class EaseCommonUtils {
      */
     public static boolean isSilentMessage(EMMessage message){
         return message.getBooleanAttribute("em_ignore_notification", false);
+    }
+
+    /**
+     * 获取屏幕的基本信息
+     * @param context
+     * @return
+     */
+    public static float[] getScreenInfo(Context context) {
+        WindowManager manager = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
+        float[] info = new float[5];
+        if(manager != null) {
+            DisplayMetrics dm = new DisplayMetrics();
+            manager.getDefaultDisplay().getMetrics(dm);
+            info[0] = dm.widthPixels;
+            info[1] = dm.heightPixels;
+            info[2] = dm.densityDpi;
+            info[3] = dm.density;
+            info[4] = dm.scaledDensity;
+        }
+        return info;
+    }
+
+    /**
+     * dip to px
+     * @param context
+     * @param value
+     * @return
+     */
+    public static float dip2px(Context context, float value) {
+        return TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, value, context.getResources().getDisplayMetrics());
     }
 
 }

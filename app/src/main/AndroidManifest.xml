@@ -59,9 +59,9 @@
 
     <application
         android:allowBackup="true"
-        android:icon="@mipmap/ic_launcher"
+        android:icon="@mipmap/em_logo_uidemo"
         android:label="@string/app_name"
-        android:roundIcon="@mipmap/ic_launcher_round"
+        android:roundIcon="@mipmap/em_logo_uidemo"
         android:supportsRtl="true"
         android:usesNonSdkApi="true"
         android:name=".DemoApp"
@@ -266,6 +266,9 @@
             android:name=".section.login.activity.LoginActivity"
             android:windowSoftInputMode="adjustPan|stateHidden" />
         <activity android:name=".section.login.activity.TestActivity" />
+        <activity android:name=".section.friends.activity.AddContactActivity"
+            android:theme="@style/AppTheme.AddContactTheme"/>
+
     </application>
 
 </manifest>

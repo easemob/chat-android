@@ -56,10 +56,16 @@
 
     <string name="were_mentioned">[有人@我]</string>
 
-    <string name="em_main_search_text_hint">搜索</string>
+    <string name="em_search_text_hint">搜索</string>
 
     <string name="em_conversation_menu_video">音视频会议</string>
     <string name="em_conversation_menu_group">创建群组</string>
     <string name="em_conversation_menu_friend">添加好友</string>
     <string name="em_conversation_menu_scan">扫一扫</string>
+
+    <string name="em_add_contact_item_button_text">添加</string>
+    <string name="em_add_contact_not_add_myself">不能添加自己</string>
+    <string name="em_add_contact_user_already_in_contactlist">此用户已是你好友(被拉黑状态)，从黑名单列表中移出即可</string>
+    <string name="em_add_contact_this_user_is_already_your_friend">此用户已是你的好友</string>
+    <string name="em_add_contact_add_a_friend">加个好友呗</string>
 </resources>

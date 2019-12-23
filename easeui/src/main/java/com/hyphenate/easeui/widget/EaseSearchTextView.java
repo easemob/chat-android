@@ -11,11 +11,12 @@ import android.widget.TextView;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.AppCompatTextView;
+import androidx.core.content.ContextCompat;
 
 import com.hyphenate.easeui.R;
 
 public class EaseSearchTextView extends AppCompatTextView {
-
+    private Context mContext;
     private float mLeftHeight;
     private float mLeftWidth;
     private float mRightHeight;
@@ -31,6 +32,7 @@ public class EaseSearchTextView extends AppCompatTextView {
 
     public EaseSearchTextView(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
+        mContext = context;
         init(context, attrs);
     }
 
@@ -64,6 +66,9 @@ public class EaseSearchTextView extends AppCompatTextView {
         Drawable[] existingAbs = getCompoundDrawables();
         Drawable left = existingAbs[0];
         Drawable right = existingAbs[2];
+        if(left == null) {
+            left = ContextCompat.getDrawable(mContext, R.drawable.ease_search_icon);
+        }
         if(left != null && (mLeftWidth != 0 && mLeftHeight != 0)) {
             left.setBounds(0, 0, (int)mLeftWidth, (int)mLeftHeight);
         }

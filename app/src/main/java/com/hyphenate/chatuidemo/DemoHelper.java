@@ -7,6 +7,7 @@ import android.content.IntentFilter;
 import android.text.TextUtils;
 import android.util.Log;
 
+import com.hyphenate.EMCallBack;
 import com.hyphenate.chat.EMChatRoomManager;
 import com.hyphenate.chat.EMClient;
 import com.hyphenate.chat.EMContactManager;
@@ -225,6 +226,56 @@ public class DemoHelper {
                     EMLog.e("PushClient", "Push client occur a error: " + pushType + " - " + errorCode);
                 }
             });
+        }
+    }
+
+    /**
+     * logout
+     *
+     * @param unbindDeviceToken
+     *            whether you need unbind your device token
+     * @param callback
+     *            callback
+     */
+    public void logout(boolean unbindDeviceToken, final EMCallBack callback) {
+        endCall();
+        Log.d(TAG, "logout: " + unbindDeviceToken);
+        EMClient.getInstance().logout(unbindDeviceToken, new EMCallBack() {
+
+            @Override
+            public void onSuccess() {
+                Log.d(TAG, "logout: onSuccess");
+                DemoHelper.getInstance().setAutoLogin(false);
+                //reset();
+                if (callback != null) {
+                    callback.onSuccess();
+                }
+
+            }
+
+            @Override
+            public void onProgress(int progress, String status) {
+                if (callback != null) {
+                    callback.onProgress(progress, status);
+                }
+            }
+
+            @Override
+            public void onError(int code, String error) {
+                Log.d(TAG, "logout: onSuccess");
+                //reset();
+                if (callback != null) {
+                    callback.onError(code, error);
+                }
+            }
+        });
+    }
+
+    private void endCall() {
+        try {
+            EMClient.getInstance().callManager().endCall();
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 

@@ -20,7 +20,7 @@ public abstract class BaseInitActivity extends BaseActivity {
     }
 
     protected void initSystemFit() {
-        setFitSystemForTheme(false);
+        setFitSystemForTheme(true);
     }
 
     /**
