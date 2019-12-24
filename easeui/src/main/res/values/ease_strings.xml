@@ -11,4 +11,6 @@
     <string name="video_call">[视频通话]</string>
     <string name="dynamic_expression">[动态表情]</string>
 
+    <string name="ease_list_no_data_text">暂无数据</string>
+
 </resources>

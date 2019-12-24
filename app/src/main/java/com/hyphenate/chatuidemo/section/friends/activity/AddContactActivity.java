@@ -16,6 +16,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.hyphenate.chatuidemo.R;
+import com.hyphenate.chatuidemo.common.enums.SearchType;
 import com.hyphenate.chatuidemo.common.enums.Status;
 import com.hyphenate.chatuidemo.section.base.BaseInitActivity;
 import com.hyphenate.chatuidemo.section.friends.adapter.AddContactAdapter;
@@ -34,10 +35,18 @@ public class AddContactActivity extends BaseInitActivity implements EaseTitleBar
     private RecyclerView mRvSearchList;
     private AddContactAdapter mAdapter;
     private AddContactViewModel mViewModel;
+    private SearchType mType;
 
-    public static void startAction(Context context) {
+    public static void startAction(Context context, SearchType type) {
         Intent intent = new Intent(context, AddContactActivity.class);
+        intent.putExtra("type", type);
         context.startActivity(intent);
+    }
+
+    @Override
+    protected void initIntent(Intent intent) {
+        super.initIntent(intent);
+        mType = (SearchType) getIntent().getSerializableExtra("type");
     }
 
     @Override
@@ -91,7 +100,7 @@ public class AddContactActivity extends BaseInitActivity implements EaseTitleBar
                 return;
             }
             if(response.status == Status.SUCCESS) {
-                showToast("添加成功");
+                showToast(getResources().getString(R.string.em_add_contact_send_successful));
             }else if(response.status == Status.ERROR) {
                 showToast(response.getMessage());
             }else if(response.status == Status.LOADING) {
@@ -110,7 +119,12 @@ public class AddContactActivity extends BaseInitActivity implements EaseTitleBar
     public boolean onQueryTextSubmit(String query) {
         // you can search the user from your app server here.
         if(!TextUtils.isEmpty(query)) {
-            mAdapter.addData(query);
+            if(mAdapter.getData() == null || mAdapter.getData().isEmpty()) {
+                mAdapter.addData(query);
+            }else {
+                mAdapter.clearData();
+                mAdapter.addData(query);
+            }
         }
         return false;
     }
@@ -137,5 +151,6 @@ public class AddContactActivity extends BaseInitActivity implements EaseTitleBar
     @Override
     public void onItemClick(View view, int position) {
         // 跳转到好友页面
+        showToast("点击了条目");
     }
 }

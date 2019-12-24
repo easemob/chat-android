@@ -68,4 +68,12 @@
     <string name="em_add_contact_user_already_in_contactlist">此用户已是你好友(被拉黑状态)，从黑名单列表中移出即可</string>
     <string name="em_add_contact_this_user_is_already_your_friend">此用户已是你的好友</string>
     <string name="em_add_contact_add_a_friend">加个好友呗</string>
+    <string name="em_add_contact_send_successful">发送请求成功,等待对方验证</string>
+
+    <string name="em_friends_new_chat">新的好友</string>
+    <string name="em_friends_group_chat">群聊</string>
+    <string name="em_friends_label">标签</string>
+    <string name="em_friends_chat_room">聊天室</string>
+    <string name="em_friends_official_account">公众号</string>
+
 </resources>

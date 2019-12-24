@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:orientation="vertical"
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content"
+              android:minHeight="200dp"
+              android:gravity="center">
+
+
+    <com.hyphenate.easeui.widget.EaseImageView
+        android:layout_width="82dp"
+        android:layout_height="82dp"
+        android:src="@drawable/em_empty_logo"/>
+
+    <TextView
+        android:id="@+id/tv_empty_content"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="14dp"
+        android:textSize="@dimen/em_empty_layout_text_size"
+        android:textColor="@color/em_empty_layout_color_text"
+        android:text="@string/em_empty_layout_content"/>
+
+</LinearLayout>

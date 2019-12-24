@@ -24,6 +24,7 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.hyphenate.EMClientListener;
 import com.hyphenate.EMContactListener;
 import com.hyphenate.EMMultiDeviceListener;
+import com.hyphenate.chatuidemo.common.enums.SearchType;
 import com.hyphenate.chatuidemo.common.permission.PermissionsManager;
 import com.hyphenate.chatuidemo.common.permission.PermissionsResultAction;
 import com.hyphenate.chatuidemo.section.MainViewModel;
@@ -74,10 +75,10 @@ public class MainActivity extends BaseInitActivity implements BottomNavigationVi
                 showToast("视频");
                 break;
             case R.id.action_group :
-                showToast("群组");
+                AddContactActivity.startAction(mContext, SearchType.GROUP_CHAT);
                 break;
             case R.id.action_friend :
-                AddContactActivity.startAction(mContext);
+                AddContactActivity.startAction(mContext, SearchType.CHAT);
                 break;
             case R.id.action_scan :
                 showToast("扫一扫");

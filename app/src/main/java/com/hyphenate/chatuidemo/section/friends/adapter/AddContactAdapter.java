@@ -22,6 +22,11 @@ public class AddContactAdapter extends EaseBaseRecyclerViewAdapter<String> {
     }
 
     @Override
+    public int getEmptyLayoutId() {
+        return R.layout.em_layout_empty_list_invisible;
+    }
+
+    @Override
     public void initView(View itemView) {
         mIvSearchUserIcon = itemView.findViewById(R.id.iv_search_user_icon);
         mTvSearchName = itemView.findViewById(R.id.tv_search_name);

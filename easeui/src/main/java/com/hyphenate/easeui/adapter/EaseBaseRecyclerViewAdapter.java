@@ -91,6 +91,15 @@ public abstract class EaseBaseRecyclerViewAdapter<T> extends RecyclerView.Adapte
     }
 
     /**
+     * 根据position获取相应的data
+     * @param position
+     * @return
+     */
+    public T getItem(int position) {
+        return mData.get(position);
+    }
+
+    /**
      * 添加数据
      * @param data
      */

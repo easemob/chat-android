@@ -11,6 +11,6 @@
         android:gravity="center"
         android:textSize="16sp"
         android:textColor="@color/black"
-        android:text="暂无数据"/>
+        android:text="@string/ease_list_no_data_text"/>
 
 </RelativeLayout>
