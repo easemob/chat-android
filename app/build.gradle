@@ -62,6 +62,10 @@ dependencies {
     //fresh and load more
     api 'com.scwang.smartrefresh:SmartRefreshLayout:1.0.5.1'
     implementation project(path: ':easeui')
+    // room
+    implementation "androidx.room:room-runtime:2.2.3"
+    annotationProcessor "androidx.room:room-compiler:2.2.3"
+
 }
 
 // ADD THIS AT THE BOTTOM

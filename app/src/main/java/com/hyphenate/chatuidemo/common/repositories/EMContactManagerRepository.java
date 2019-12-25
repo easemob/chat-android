@@ -1,7 +1,5 @@
 package com.hyphenate.chatuidemo.common.repositories;
 
-import android.graphics.Color;
-
 import androidx.annotation.NonNull;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
@@ -11,6 +9,12 @@ import com.hyphenate.chatuidemo.DemoHelper;
 import com.hyphenate.chatuidemo.common.interfaceOrImplement.ResultCallBack;
 import com.hyphenate.chatuidemo.common.net.ErrorCode;
 import com.hyphenate.chatuidemo.common.net.Resource;
+import com.hyphenate.chatuidemo.common.utils.ThreadManager;
+import com.hyphenate.easeui.domain.EaseUser;
+import com.hyphenate.exceptions.HyphenateException;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class EMContactManagerRepository {
 
@@ -41,6 +45,45 @@ public class EMContactManagerRepository {
                 });
             }
 
+        }.asLiveData();
+    }
+
+    public LiveData<Resource<List<EaseUser>>> getContactList() {
+        return new NetworkBoundResource<List<EaseUser>, List<EaseUser>>() {
+
+            @Override
+            protected boolean shouldFetch(List<EaseUser> data) {
+                return true;
+            }
+
+            @Override
+            protected LiveData<List<EaseUser>> loadFromDb() {
+                return null;
+            }
+
+            @Override
+            protected void createCall(ResultCallBack<LiveData<List<EaseUser>>> callBack) {
+                ThreadManager.getInstance().runOnIOThread(()-> {
+                    try {
+                        List<String> usernames = DemoHelper.getInstance().getContactManager().getAllContactsFromServer();
+                        List<String> ids = DemoHelper.getInstance().getContactManager().getSelfIdsOnOtherPlatform();
+                        if(usernames == null) {
+                            usernames = new ArrayList<>();
+                        }
+                        if(ids != null && !ids.isEmpty()) {
+                            usernames.addAll(ids);
+                        }
+
+                    } catch (HyphenateException e) {
+                        e.printStackTrace();
+                    }
+                });
+            }
+
+            @Override
+            protected void saveCallResult(List<EaseUser> item) {
+
+            }
         }.asLiveData();
     }
 }

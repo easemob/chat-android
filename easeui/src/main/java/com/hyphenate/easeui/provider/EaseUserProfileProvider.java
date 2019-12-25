@@ -1,7 +1,5 @@
 package com.hyphenate.easeui.provider;
 
-import com.hyphenate.easeui.domain.EaseUser;
-
 /**
  * User profile provider
  * @author wei

@@ -24,6 +24,9 @@ public class HomeViewModel extends AndroidViewModel {
         conversationObservable = new SingleSourceLiveData<>();
     }
 
+    /**
+     * 获取聊天列表
+     */
     public void loadConversationList() {
         conversationObservable.setSource(mRepository.loadConversationList());
     }

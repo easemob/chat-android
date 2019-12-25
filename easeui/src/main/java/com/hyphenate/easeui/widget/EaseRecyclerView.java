@@ -41,6 +41,11 @@ public class EaseRecyclerView extends RecyclerView {
         super(context, attrs, defStyleAttr);
     }
 
+    /**
+     * 如果view的初始化中的parent用的是recyclerView, 该方法的调用应该放在setLayoutManager之后,
+     * 否则需要自己对view添加LayoutParams
+     * @param view
+     */
     public void addHeaderView(View view) {
         FixedViewInfo info = new FixedViewInfo();
         info.view = view;

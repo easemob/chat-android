@@ -4,8 +4,6 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.Observer;
 
-import com.hyphenate.easeui.domain.EaseUser;
-
 /**
  * 设置并监听单一数据源时使用 LiveData
  * 方便于当需要切换数据源时自动取消掉前一个数据源的监听

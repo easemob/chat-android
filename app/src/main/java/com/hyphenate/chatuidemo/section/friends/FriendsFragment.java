@@ -32,20 +32,10 @@ public class FriendsFragment extends BaseInitFragment implements View.OnClickLis
         super.initView(savedInstanceState);
         mRvFriendsList = findViewById(R.id.rv_friends_list);
 
-        View header = LayoutInflater.from(mContext).inflate(R.layout.em_header_friends_list, null);
-        ViewGroup.LayoutParams layoutParams = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-        header.setLayoutParams(layoutParams);
-        mRvFriendsList.addHeaderView(header);
-
-        mCivNewChat = header.findViewById(R.id.civ_new_chat);
-        mCivGroupChat = header.findViewById(R.id.civ_group_chat);
-        mCivLabel = header.findViewById(R.id.civ_label);
-        mCivChatRoom = header.findViewById(R.id.civ_chat_room);
-        mCivOfficialAccount = header.findViewById(R.id.civ_official_account);
-
         mRvFriendsList.setLayoutManager(new LinearLayoutManager(mContext));
         mAdapter = new FriendsAdapter();
         mRvFriendsList.setAdapter(mAdapter);
+        addHeader();
     }
 
     @Override
@@ -77,5 +67,20 @@ public class FriendsFragment extends BaseInitFragment implements View.OnClickLis
                 showToast("official account");
                 break;
         }
+    }
+
+    /**
+     * 添加头布局
+     */
+    private void addHeader() {
+        // 获取头布局，应该放在RecyclerView的setLayoutManager之后
+        View header = getLayoutInflater().inflate(R.layout.em_header_friends_list, mRvFriendsList, false);
+        mRvFriendsList.addHeaderView(header);
+
+        mCivNewChat = header.findViewById(R.id.civ_new_chat);
+        mCivGroupChat = header.findViewById(R.id.civ_group_chat);
+        mCivLabel = header.findViewById(R.id.civ_label);
+        mCivChatRoom = header.findViewById(R.id.civ_chat_room);
+        mCivOfficialAccount = header.findViewById(R.id.civ_official_account);
     }
 }

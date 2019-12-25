@@ -13,8 +13,6 @@
  */
 package com.hyphenate.easeui.utils;
 
-import android.annotation.SuppressLint;
-import android.annotation.TargetApi;
 import android.app.ActivityManager;
 import android.app.ActivityManager.RunningTaskInfo;
 import android.content.Context;

@@ -9,7 +9,6 @@ import com.hyphenate.chatuidemo.DemoApp;
 import com.hyphenate.chatuidemo.DemoHelper;
 import com.hyphenate.chatuidemo.common.interfaceOrImplement.DemoEmCallBack;
 import com.hyphenate.chatuidemo.common.livedatas.UserInstanceLiveData;
-import com.hyphenate.easeui.domain.EaseUser;
 import com.hyphenate.chatuidemo.common.net.ErrorCode;
 import com.hyphenate.chatuidemo.common.net.Resource;
 import com.hyphenate.chatuidemo.common.utils.ThreadManager;

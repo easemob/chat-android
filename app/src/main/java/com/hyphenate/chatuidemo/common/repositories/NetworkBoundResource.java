@@ -142,20 +142,13 @@ public abstract class NetworkBoundResource<ResultType, RequestType> {
     }
 
     /**
-     * Called to save the result of the API response into the database
-     * @param item
-     */
-    @WorkerThread
-    protected abstract void saveCallResult(RequestType item);
-
-    /**
      * Called with the data in the database to decide whether to fetch
      * potentially updated data from the network.
      * @param data
      * @return
      */
     @MainThread
-    protected abstract Boolean shouldFetch(ResultType data);
+    protected abstract boolean shouldFetch(ResultType data);
 
     /**
      * Called to get the cached data from the database.
@@ -170,6 +163,13 @@ public abstract class NetworkBoundResource<ResultType, RequestType> {
      */
     @MainThread
     protected abstract void createCall(ResultCallBack<LiveData<RequestType>> callBack);
+
+    /**
+     * Called to save the result of the API response into the database
+     * @param item
+     */
+    @WorkerThread
+    protected abstract void saveCallResult(RequestType item);
 
     /**
      * Called when the fetch fails. The child class may want to reset components like rate limiter.
