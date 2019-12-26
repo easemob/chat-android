@@ -9,6 +9,7 @@ import androidx.lifecycle.MediatorLiveData;
 
 import com.hyphenate.chatuidemo.common.net.Resource;
 import com.hyphenate.chatuidemo.common.repositories.EMClientRepository;
+import com.hyphenate.easeui.domain.EaseUser;
 
 public class LoginFragmentViewModel extends AndroidViewModel {
     private EMClientRepository mRepository;

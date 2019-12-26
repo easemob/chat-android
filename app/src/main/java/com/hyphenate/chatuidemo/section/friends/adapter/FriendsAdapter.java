@@ -42,6 +42,7 @@ public class FriendsAdapter extends EaseBaseRecyclerViewAdapter<EaseUser> {
         if(position == 0 || (header != null && header.equals(getItem(position -1).getInitialLetter()))) {
             if(!TextUtils.isEmpty(header)) {
                 mHeader.setVisibility(View.VISIBLE);
+                mHeader.setText(item.getInitialLetter());
             }
         }
         mName.setText(item.getUsername());

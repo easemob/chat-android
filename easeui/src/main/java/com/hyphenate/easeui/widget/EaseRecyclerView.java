@@ -2,6 +2,7 @@ package com.hyphenate.easeui.widget;
 
 import android.content.Context;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.ContextMenu;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,6 +12,8 @@ import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.StaggeredGridLayoutManager;
+
+import com.hyphenate.easeui.adapter.EaseBaseRecyclerViewAdapter;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -71,6 +74,9 @@ public class EaseRecyclerView extends RecyclerView {
     @Override
     public void setAdapter(@Nullable Adapter adapter) {
         if(!(adapter instanceof WrapperRecyclerViewAdapter)) {
+            if(adapter != null) {
+                adapter.registerAdapterDataObserver(mObserver);
+            }
             mAdapter = new WrapperRecyclerViewAdapter(adapter);
         }
         super.setAdapter(mAdapter);
@@ -138,57 +144,56 @@ public class EaseRecyclerView extends RecyclerView {
 
         @Override
         public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
-            int headersCount = getHeadersCount();
-            if(position < headersCount) {
+            if(isHeaderOrFooter(holder)) {
                 return;
             }
-            int adjPosition = position - headersCount;
-            int adapterCount = 0;
-            if(mAdapter != null) {
-                adapterCount = mAdapter.getItemCount();
-                if(adjPosition < adapterCount) {
-                    mAdapter.onBindViewHolder(holder, adjPosition);
-                }
-            }
+            position -= getHeadersCount();
+            mAdapter.onBindViewHolder(holder, position);
         }
 
         @Override
         public long getItemId(int position) {
-            int headersCount = getHeadersCount();
-            if(mAdapter != null && position >= headersCount) {
-                int adjPosition = position - headersCount;
-                int adapterCount = mAdapter.getItemCount();
-                if (adjPosition < adapterCount) {
-                    return mAdapter.getItemId(adjPosition);
-                }
+            if(isHeaderOrFooter(position)) {
+                return -1;
             }
-            return -1;
+            position -= getHeadersCount();
+            return mAdapter.getItemId(position);
         }
 
         @Override
         public int getItemCount() {
-            if(mAdapter != null) {
-                return getHeadersCount() + getFootersCount() + mAdapter.getItemCount();
-            }else {
-                return getHeadersCount() + getFootersCount();
-            }
+            return getHeadersCount() + getFootersCount() + getContentCount();
         }
 
         @Override
         public int getItemViewType(int position) {
-            int headersCount = getHeadersCount();
-            if(position < headersCount) {
+            if(isHeader(position)) {
                 return mHeaderViewInfos.get(position).viewType;
             }
-            int adjPosition = position - headersCount;
-            int adapterPosition = 0;
-            if(mAdapter != null) {
-                adapterPosition = mAdapter.getItemCount();
-                if(adjPosition < adapterPosition) {
-                    return mAdapter.getItemViewType(adjPosition);
-                }
+            if(isFooter(position)) {
+                return mFooterViewInfos.get(position - getHeadersCount() - getContentCount()).viewType;
             }
-            return mFooterViewInfos.get(position - adapterPosition - getHeadersCount()).viewType;
+            return mAdapter.getItemViewType(position - getHeadersCount());
+        }
+
+        public int getContentCount() {
+            return mAdapter == null ? 0 : mAdapter.getItemCount();
+        }
+
+        public boolean isHeader(int position) {
+            return position < getHeadersCount();
+        }
+
+        public boolean isFooter(int position) {
+            return position >= getHeadersCount() + getContentCount();
+        }
+
+        public boolean isHeaderOrFooter(RecyclerView.ViewHolder holder) {
+            return holder instanceof ViewHolder || isHeaderOrFooter(holder.getAdapterPosition());
+        }
+
+        public boolean isHeaderOrFooter(int position) {
+            return isHeader(position) || isFooter(position);
         }
 
         public void adjustSpanSize(RecyclerView recyclerView) {
@@ -220,8 +225,53 @@ public class EaseRecyclerView extends RecyclerView {
             params.setFullSpan(true);
             itemView.setLayoutParams(params);
         }
-        return new RecyclerView.ViewHolder(itemView){};
+        return new ViewHolder(itemView);
     }
+
+    static class ViewHolder extends RecyclerView.ViewHolder {
+
+        public ViewHolder(@NonNull View itemView) {
+            super(itemView);
+        }
+    }
+
+    private AdapterDataObserver mObserver = new AdapterDataObserver() {
+        @Override
+        public void onChanged() {
+            mAdapter.notifyDataSetChanged();
+        }
+
+        @Override
+        public void onItemRangeChanged(int positionStart, int itemCount) {
+            positionStart += getHeadersCount();
+            mAdapter.notifyItemRangeChanged(positionStart, itemCount);
+        }
+
+        @Override
+        public void onItemRangeChanged(int positionStart, int itemCount, @Nullable Object payload) {
+            positionStart += getHeadersCount();
+            mAdapter.notifyItemRangeChanged(positionStart, itemCount, payload);
+        }
+
+        @Override
+        public void onItemRangeInserted(int positionStart, int itemCount) {
+            positionStart += getHeadersCount();
+            mAdapter.notifyItemRangeInserted(positionStart, itemCount);
+        }
+
+        @Override
+        public void onItemRangeRemoved(int positionStart, int itemCount) {
+            positionStart += getHeadersCount();
+            mAdapter.notifyItemRangeRemoved(positionStart, itemCount);
+        }
+
+        @Override
+        public void onItemRangeMoved(int fromPosition, int toPosition, int itemCount) {
+            fromPosition += getHeadersCount();
+            toPosition += getHeadersCount();
+            mAdapter.notifyItemMoved(fromPosition, toPosition);
+        }
+    };
 
     public static class RecyclerViewContextMenuInfo implements ContextMenu.ContextMenuInfo {
         public int position;

@@ -1,6 +1,7 @@
 package com.hyphenate.easeui.adapter;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,13 +15,15 @@ import com.hyphenate.easeui.interfaces.OnItemClickListener;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.crypto.spec.PSource;
+
 /**
  * 作为RecyclerView Adapter的基类，有默认空白布局
  * @param <T>
  */
 public abstract class EaseBaseRecyclerViewAdapter<T> extends RecyclerView.Adapter<EaseBaseRecyclerViewAdapter.ViewHolder> {
-    private static final int VIEW_TYPE_EMPTY = 0;
-    private static final int VIEW_TYPE_ITEM = 1;
+    private static final int VIEW_TYPE_EMPTY = 1;
+    private static final int VIEW_TYPE_ITEM = 0;
     private OnItemClickListener mOnItemClickListener;
     public Context mContext;
     public List<T> mData;
@@ -59,6 +62,7 @@ public abstract class EaseBaseRecyclerViewAdapter<T> extends RecyclerView.Adapte
     public int getItemViewType(int position) {
         return (mData == null || mData.isEmpty()) ? VIEW_TYPE_EMPTY : VIEW_TYPE_ITEM;
     }
+
 
     /**
      * 点击事件

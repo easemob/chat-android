@@ -7,6 +7,7 @@ import androidx.room.OnConflictStrategy;
 import androidx.room.Query;
 
 import com.hyphenate.chatuidemo.common.db.entity.EmUserEntity;
+import com.hyphenate.easeui.domain.EaseUser;
 
 import java.util.List;
 
@@ -16,6 +17,12 @@ public interface EmUserDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     List<Long> insert(EmUserEntity... users);
 
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    List<Long> insert(List<EmUserEntity> users);
+
     @Query("select * from em_users where username = :username")
-    LiveData<EmUserEntity> loadUserById(String username);
+    LiveData<List<EaseUser>> loadUserById(String username);
+
+    @Query("select * from em_users")
+    LiveData<List<EaseUser>> loadUsers();
 }

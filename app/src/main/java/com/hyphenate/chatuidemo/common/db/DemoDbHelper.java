@@ -1,16 +1,12 @@
 package com.hyphenate.chatuidemo.common.db;
 
 import android.content.Context;
-import android.nfc.Tag;
 import android.text.TextUtils;
 
-import androidx.annotation.NonNull;
 import androidx.lifecycle.MutableLiveData;
 import androidx.room.Room;
-import androidx.room.RoomDatabase;
-import androidx.sqlite.db.SupportSQLiteDatabase;
 
-import com.hyphenate.chat.EMClient;
+import com.hyphenate.chatuidemo.common.db.dao.EmUserDao;
 import com.hyphenate.chatuidemo.common.utils.MD5;
 import com.hyphenate.util.EMLog;
 
@@ -37,6 +33,10 @@ public class DemoDbHelper {
         return instance;
     }
 
+    /**
+     * 初始化数据库
+     * @param user
+     */
     public void initDb(String user) {
         if(currentUser != null) {
             if(!TextUtils.equals(currentUser, user)) {
@@ -53,18 +53,23 @@ public class DemoDbHelper {
         String dbName = String.format("em_%1$s.db", userMd5);
         mDatabase = Room.databaseBuilder(mContext, AppDatabase.class, dbName)
                         .allowMainThreadQueries()
-                        .addCallback(new RoomDatabase.Callback() {
-                            @Override
-                            public void onCreate(@NonNull SupportSQLiteDatabase db) {
-                                super.onCreate(db);
-                            }
-                        })
                         .fallbackToDestructiveMigration()
                         .build();
-
+        mIsDatabaseCreated.postValue(true);
     }
 
     private void closeDb() {
+        if(mDatabase != null) {
+            mDatabase.close();
+        }
+        currentUser = null;
+    }
 
+    public EmUserDao getUserDao() {
+        if(mDatabase != null) {
+            return mDatabase.userDao();
+        }
+        EMLog.i(TAG, "get userDao failed, should init db first");
+        return null;
     }
 }

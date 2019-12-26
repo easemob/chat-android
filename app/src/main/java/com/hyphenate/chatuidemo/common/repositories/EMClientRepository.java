@@ -7,12 +7,14 @@ import androidx.lifecycle.MutableLiveData;
 import com.hyphenate.chat.EMClient;
 import com.hyphenate.chatuidemo.DemoApp;
 import com.hyphenate.chatuidemo.DemoHelper;
+import com.hyphenate.chatuidemo.common.db.DemoDbHelper;
 import com.hyphenate.chatuidemo.common.interfaceOrImplement.DemoEmCallBack;
 import com.hyphenate.chatuidemo.common.livedatas.UserInstanceLiveData;
 import com.hyphenate.chatuidemo.common.net.ErrorCode;
 import com.hyphenate.chatuidemo.common.net.Resource;
 import com.hyphenate.chatuidemo.common.utils.ThreadManager;
 import com.hyphenate.chatuidemo.common.interfaceOrImplement.ResultCallBack;
+import com.hyphenate.easeui.domain.EaseUser;
 import com.hyphenate.exceptions.HyphenateException;
 
 /**
@@ -36,8 +38,7 @@ public class EMClientRepository {
                 if(DemoHelper.getInstance().getAutoLogin()) {
                     ThreadManager.getInstance().runOnIOThread(() -> {
                         if(isLoggedIn()) {
-                            EMClient.getInstance().chatManager().loadAllConversations();
-                            EMClient.getInstance().groupManager().loadAllGroups();
+                            loadAllConversationsAndGroups();
                             MutableLiveData<Boolean> observable = new MutableLiveData<>(true);
                             callBack.onSuccess(observable);
                         }else {
@@ -51,6 +52,17 @@ public class EMClientRepository {
 
             }
         }.asLiveData();
+    }
+
+    /**
+     * 从本地数据库加载所有的对话及群组
+     */
+    private void loadAllConversationsAndGroups() {
+        // 初始化数据库
+        DemoDbHelper.getInstance(DemoApp.getInstance()).initDb(EMClient.getInstance().getCurrentUser());
+        // 从本地数据库加载所有的对话及群组
+        EMClient.getInstance().chatManager().loadAllConversations();
+        EMClient.getInstance().groupManager().loadAllGroups();
     }
 
     /**
@@ -130,8 +142,7 @@ public class EMClientRepository {
 
     private void successForCallBack(@NonNull ResultCallBack<LiveData<EaseUser>> callBack) {
         // ** manually load all local groups and conversation
-        EMClient.getInstance().groupManager().loadAllGroups();
-        EMClient.getInstance().chatManager().loadAllConversations();
+        loadAllConversationsAndGroups();
         // get current user id
         String currentUser = EMClient.getInstance().getCurrentUser();
         EaseUser user = new EaseUser(currentUser);

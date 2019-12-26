@@ -4,9 +4,12 @@ import android.os.Parcel;
 import android.os.Parcelable;
 import android.text.TextUtils;
 
+import androidx.annotation.NonNull;
+
 import com.hyphenate.util.HanziToPinyin;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class EaseUser implements Parcelable {
     /**
@@ -16,8 +19,9 @@ public class EaseUser implements Parcelable {
      * \~english
      * the user name assigned from app, which should be unique in the application
      */
+    @NonNull
     private String username;
-    private String nick;
+    private String nickname;
     /**
      * initial letter from nickname
      */
@@ -27,27 +31,27 @@ public class EaseUser implements Parcelable {
      */
     private String avatar;
 
+    @NonNull
     public String getUsername() {
         return username;
     }
 
-    public void setUsername(String username) {
+    public void setUsername(@NonNull String  username) {
         this.username = username;
     }
 
     public String getNickname() {
-        return nick == null ? username : nick;
+        return nickname == null ? username : nickname;
     }
 
-    public void setNickname(String nick) {
-        this.nick = nick;
-
+    public void setNickname(String nickname) {
+        this.nickname = nickname;
     }
 
     public String getInitialLetter() {
         if(initialLetter == null) {
-            if(!TextUtils.isEmpty(nick)) {
-                return getInitialLetter(nick);
+            if(!TextUtils.isEmpty(nickname)) {
+                return getInitialLetter(nickname);
             }
             return getInitialLetter(username);
         }
@@ -70,6 +74,13 @@ public class EaseUser implements Parcelable {
         return new GetInitialLetter().getLetter(name);
     }
 
+    public EaseUser() {
+    }
+
+    public EaseUser(@NonNull String username) {
+        this.username = username;
+    }
+
     @Override
     public int describeContents() {
         return 0;
@@ -78,9 +89,6 @@ public class EaseUser implements Parcelable {
     @Override
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeString(username);
-    }
-
-    public EaseUser() {
     }
 
     public static final Parcelable.Creator<EaseUser> CREATOR = new Parcelable.Creator<EaseUser>() {
@@ -98,6 +106,29 @@ public class EaseUser implements Parcelable {
 
     private EaseUser(Parcel in) {
         username = in.readString();
+    }
+
+    @Override
+    public String toString() {
+        return "EaseUser{" +
+                "username='" + username + '\'' +
+                ", nickname='" + nickname + '\'' +
+                ", initialLetter='" + initialLetter + '\'' +
+                ", avatar='" + avatar + '\'' +
+                '}';
+    }
+
+    public static List<EaseUser> parse(List<String> ids) {
+        List<EaseUser> users = new ArrayList<>();
+        if(ids == null || ids.isEmpty()) {
+            return users;
+        }
+        EaseUser user;
+        for (String id : ids) {
+            user = new EaseUser(id);
+            users.add(user);
+        }
+        return users;
     }
 
     public class GetInitialLetter {

@@ -81,7 +81,9 @@ public abstract class NetworkBoundResource<ResultType, RequestType> {
                                 }
                                 //为了获取最新的数据，需要从数据库重新取一次数据，保证页面与数据的一致性
                                 mThreadManager.runOnMainThread(() ->
-                                        result.addSource(safeLoadFromDb(), newData -> setValue(Resource.success(newData))));
+                                        result.addSource(safeLoadFromDb(), newData -> {
+                                            setValue(Resource.success(newData));
+                                        }));
                             });
 
                         }else {

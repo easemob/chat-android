@@ -1,26 +1,36 @@
 package com.hyphenate.chatuidemo.section.friends;
 
 import android.os.Bundle;
-import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
-import android.view.ViewGroup;
 
+import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.hyphenate.chatuidemo.R;
+import com.hyphenate.chatuidemo.common.enums.Status;
 import com.hyphenate.chatuidemo.common.widget.ContactItemView;
 import com.hyphenate.chatuidemo.section.base.BaseInitFragment;
 import com.hyphenate.chatuidemo.section.friends.adapter.FriendsAdapter;
+import com.hyphenate.chatuidemo.section.friends.viewmodels.FriendsViewModel;
 import com.hyphenate.easeui.widget.EaseRecyclerView;
+import com.hyphenate.easeui.widget.EaseSidebar;
+import com.scwang.smartrefresh.layout.SmartRefreshLayout;
+import com.scwang.smartrefresh.layout.api.RefreshLayout;
+import com.scwang.smartrefresh.layout.listener.OnRefreshListener;
 
-public class FriendsFragment extends BaseInitFragment implements View.OnClickListener {
+
+public class FriendsFragment extends BaseInitFragment implements View.OnClickListener, OnRefreshListener, EaseSidebar.OnTouchEventListener {
+    private SmartRefreshLayout mSrlFriendRefresh;
     private EaseRecyclerView mRvFriendsList;
+    private EaseSidebar mSideBarFriend;
     private FriendsAdapter mAdapter;
     private ContactItemView mCivNewChat;
     private ContactItemView mCivGroupChat;
     private ContactItemView mCivLabel;
     private ContactItemView mCivChatRoom;
     private ContactItemView mCivOfficialAccount;
+    private FriendsViewModel mViewModel;
 
     @Override
     protected int getLayoutId() {
@@ -31,7 +41,10 @@ public class FriendsFragment extends BaseInitFragment implements View.OnClickLis
     protected void initView(Bundle savedInstanceState) {
         super.initView(savedInstanceState);
         mRvFriendsList = findViewById(R.id.rv_friends_list);
+        mSrlFriendRefresh = findViewById(R.id.srl_friend_refresh);
+        mSideBarFriend = findViewById(R.id.side_bar_friend);
 
+        mRvFriendsList.setHasFixedSize(true);
         mRvFriendsList.setLayoutManager(new LinearLayoutManager(mContext));
         mAdapter = new FriendsAdapter();
         mRvFriendsList.setAdapter(mAdapter);
@@ -46,6 +59,8 @@ public class FriendsFragment extends BaseInitFragment implements View.OnClickLis
         mCivLabel.setOnClickListener(this);
         mCivChatRoom.setOnClickListener(this);
         mCivOfficialAccount.setOnClickListener(this);
+        mSrlFriendRefresh.setOnRefreshListener(this);
+        mSideBarFriend.setOnTouchEventListener(this);
     }
 
     @Override
@@ -69,6 +84,24 @@ public class FriendsFragment extends BaseInitFragment implements View.OnClickLis
         }
     }
 
+    @Override
+    protected void initData() {
+        super.initData();
+        mViewModel = new ViewModelProvider(this).get(FriendsViewModel.class);
+        mViewModel.getContactObservable().observe(this, response -> {
+            if(response.status == Status.SUCCESS) {
+                finishRefresh();
+                mAdapter.setData(response.data);
+            }else if(response.status == Status.ERROR) {
+                finishRefresh();
+                showToast(response.getMessage());
+            }else if(response.status == Status.LOADING) {
+
+            }
+        });
+        mViewModel.loadContactList();
+    }
+
     /**
      * 添加头布局
      */
@@ -82,5 +115,31 @@ public class FriendsFragment extends BaseInitFragment implements View.OnClickLis
         mCivLabel = header.findViewById(R.id.civ_label);
         mCivChatRoom = header.findViewById(R.id.civ_chat_room);
         mCivOfficialAccount = header.findViewById(R.id.civ_official_account);
+    }
+
+    @Override
+    public void onRefresh(RefreshLayout refreshLayout) {
+        mViewModel.loadContactList();
+    }
+
+    private void finishRefresh() {
+        if(mSrlFriendRefresh != null) {
+            mSrlFriendRefresh.finishRefresh();
+        }
+    }
+
+    @Override
+    public void onActionDown(MotionEvent event) {
+
+    }
+
+    @Override
+    public void onActionMove(MotionEvent event) {
+
+    }
+
+    @Override
+    public void onActionUp(MotionEvent event) {
+
     }
 }

@@ -3,9 +3,13 @@ package com.hyphenate.chatuidemo.common.repositories;
 import androidx.annotation.NonNull;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
+import androidx.lifecycle.Observer;
 
 import com.hyphenate.EMCallBack;
+import com.hyphenate.chatuidemo.DemoApp;
 import com.hyphenate.chatuidemo.DemoHelper;
+import com.hyphenate.chatuidemo.common.db.DemoDbHelper;
+import com.hyphenate.chatuidemo.common.db.entity.EmUserEntity;
 import com.hyphenate.chatuidemo.common.interfaceOrImplement.ResultCallBack;
 import com.hyphenate.chatuidemo.common.net.ErrorCode;
 import com.hyphenate.chatuidemo.common.net.Resource;
@@ -58,7 +62,7 @@ public class EMContactManagerRepository {
 
             @Override
             protected LiveData<List<EaseUser>> loadFromDb() {
-                return null;
+                return DemoDbHelper.getInstance(DemoApp.getInstance()).getUserDao().loadUsers();
             }
 
             @Override
@@ -73,17 +77,20 @@ public class EMContactManagerRepository {
                         if(ids != null && !ids.isEmpty()) {
                             usernames.addAll(ids);
                         }
+                        callBack.onSuccess(new MutableLiveData<>(EmUserEntity.parse(usernames)));
 
                     } catch (HyphenateException e) {
                         e.printStackTrace();
+                        callBack.onError(e.getErrorCode(), e.getDescription());
                     }
                 });
             }
 
             @Override
-            protected void saveCallResult(List<EaseUser> item) {
-
+            protected void saveCallResult(List<EaseUser> items) {
+                DemoDbHelper.getInstance(DemoApp.getInstance()).getUserDao().insert(EmUserEntity.parseList(items));
             }
+
         }.asLiveData();
     }
 }
