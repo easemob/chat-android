@@ -37,7 +37,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         android:layout_marginTop="8dp">
 
-        <androidx.recyclerview.widget.RecyclerView
+        <com.hyphenate.easeui.widget.EaseRecyclerView
             android:id="@+id/rv_home_list"
             android:layout_width="match_parent"
             android:layout_height="match_parent"/>

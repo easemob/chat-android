@@ -65,6 +65,8 @@
     <string name="em_conversation_menu_group">创建群组</string>
     <string name="em_conversation_menu_friend">添加好友</string>
     <string name="em_conversation_menu_scan">扫一扫</string>
+    <string name="em_conversation_menu_make_top">置顶</string>
+    <string name="em_conversation_menu_delete">删除会话</string>
 
     <string name="em_add_contact_item_button_text">添加</string>
     <string name="em_add_contact_not_add_myself">不能添加自己</string>

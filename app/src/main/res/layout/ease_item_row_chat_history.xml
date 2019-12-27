@@ -5,7 +5,8 @@
     android:layout_height="74dp"
     xmlns:tools="http://schemas.android.com/tools"
     android:background="?selectableItemBackground"
-    android:id="@+id/list_itease_layout">
+    android:id="@+id/list_itease_layout"
+    android:longClickable="true">
 
     <com.hyphenate.easeui.widget.EaseImageView
         android:id="@+id/avatar"
