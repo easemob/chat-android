@@ -29,8 +29,17 @@ public class EMContactManagerRepository {
             protected void createCall(@NonNull ResultCallBack<LiveData<Boolean>> callBack) {
                 if(DemoHelper.getInstance().getEMClient().getCurrentUser().equalsIgnoreCase(username)) {
                     callBack.onError(ErrorCode.EM_ADD_SELF_ERROR);
+                    return;
                 }
-                // TODO: 2019/12/23 0023 添加已经在好友列表中的逻辑
+                List<String> users = DemoDbHelper.getInstance(DemoApp.getInstance()).getUserDao().loadAllUsers();
+                if(users != null && users.contains(username)) {
+                    if(DemoHelper.getInstance().getContactManager().getBlackListUsernames().contains(username)) {
+                        callBack.onError(ErrorCode.EM_FRIEND_BLACK_ERROR);
+                        return;
+                    }
+                    callBack.onError(ErrorCode.EM_FRIEND_ERROR);
+                    return;
+                }
                 DemoHelper.getInstance().getContactManager().aysncAddContact(username, reason, new EMCallBack() {
                     @Override
                     public void onSuccess() {

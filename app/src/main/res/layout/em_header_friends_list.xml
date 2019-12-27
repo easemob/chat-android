@@ -8,35 +8,35 @@
     <com.hyphenate.chatuidemo.common.widget.ContactItemView
         android:id="@+id/civ_new_chat"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="@dimen/em_friends_header_item_height"
         app:contactItemImage="@drawable/em_friends_new_chat"
         app:contactItemName="@string/em_friends_new_chat"/>
 
     <com.hyphenate.chatuidemo.common.widget.ContactItemView
         android:id="@+id/civ_group_chat"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="@dimen/em_friends_header_item_height"
         app:contactItemImage="@drawable/em_friends_group_chat"
         app:contactItemName="@string/em_friends_group_chat"/>
 
     <com.hyphenate.chatuidemo.common.widget.ContactItemView
         android:id="@+id/civ_label"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="@dimen/em_friends_header_item_height"
         app:contactItemImage="@drawable/em_friends_label"
         app:contactItemName="@string/em_friends_label"/>
 
     <com.hyphenate.chatuidemo.common.widget.ContactItemView
         android:id="@+id/civ_chat_room"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="@dimen/em_friends_header_item_height"
         app:contactItemImage="@drawable/em_friends_chat_room"
         app:contactItemName="@string/em_friends_chat_room"/>
 
     <com.hyphenate.chatuidemo.common.widget.ContactItemView
         android:id="@+id/civ_official_account"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="@dimen/em_friends_header_item_height"
         app:contactItemImage="@drawable/em_friends_official_account"
         app:contactItemName="@string/em_friends_official_account"/>
 

@@ -54,4 +54,14 @@
         <item name="android:background">@drawable/em_main_tv_message_shape</item>
         <item name="android:visibility">gone</item>
     </style>
+
+    <style name="em_friends_contact_detail_tv">
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_height">50dp</item>
+        <item name="android:gravity">center</item>
+        <item name="android:textSize">@dimen/em_size_big_notify</item>
+        <item name="android:textColor">@color/em_friends_contact_detail_text_brand</item>
+        <item name="android:foreground">?selectableItemBackground</item>
+        <item name="android:background">@color/em_base_color_window_bg</item>
+    </style>
 </resources>

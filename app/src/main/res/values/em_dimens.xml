@@ -6,6 +6,11 @@
     <dimen name="activity_horizontal_margin">16dp</dimen>
     <dimen name="activity_vertical_margin">16dp</dimen>
 
+    <dimen name="em_size_small">12sp</dimen>
+    <dimen name="em_size_normal">14sp</dimen>
+    <dimen name="em_size_big">16sp</dimen>
+    <dimen name="em_size_big_notify">18sp</dimen>
+
     <dimen name="em_login_bg_radius">57dp</dimen>
     <dimen name="em_login_margin_left">33dp</dimen>
     <dimen name="em_login_margin_right">33dp</dimen>
@@ -13,15 +18,19 @@
     <dimen name="em_login_padding_left">18dp</dimen>
     <dimen name="em_login_padding_right">18dp</dimen>
 
-    <dimen name="em_login_text_size">16sp</dimen>
-    <dimen name="em_login_server_hint_text_size">14sp</dimen>
+    <dimen name="em_login_text_size">@dimen/em_size_big</dimen>
+    <dimen name="em_login_server_hint_text_size">@dimen/em_size_normal</dimen>
 
     <dimen name="em_main_badge_size">8dp</dimen>
     <dimen name="em_main_badge_margin_left">20dp</dimen>
     <dimen name="em_main_badge_margin_top">5dp</dimen>
 
-    <dimen name="em_empty_layout_text_size">12sp</dimen>
+    <dimen name="em_empty_layout_text_size">@dimen/em_size_small</dimen>
 
     <dimen name="em_add_contact_title_bar_height">36dp</dimen>
+
+    <dimen name="em_friends_header_item_height">58dp</dimen>
+
+    <dimen name="em_friends_contact_detail_note_size">@dimen/em_size_normal</dimen>
 
 </resources>

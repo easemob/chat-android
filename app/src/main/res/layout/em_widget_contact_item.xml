@@ -22,6 +22,7 @@
         android:visibility="gone" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/cl_user"
         android:layout_width="0dp"
         android:layout_height="58dp"
         app:layout_constraintLeft_toLeftOf="parent"
@@ -93,6 +94,7 @@
             android:textSize="12sp" />
 
         <View
+            android:id="@+id/bottom_line"
             android:layout_width="0dp"
             android:layout_height="1dp"
             app:layout_constraintRight_toRightOf="parent"

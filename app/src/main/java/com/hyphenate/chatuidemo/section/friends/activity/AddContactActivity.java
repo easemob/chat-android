@@ -21,6 +21,7 @@ import com.hyphenate.chatuidemo.common.enums.Status;
 import com.hyphenate.chatuidemo.section.base.BaseInitActivity;
 import com.hyphenate.chatuidemo.section.friends.adapter.AddContactAdapter;
 import com.hyphenate.chatuidemo.section.friends.viewmodels.AddContactViewModel;
+import com.hyphenate.easeui.domain.EaseUser;
 import com.hyphenate.easeui.interfaces.OnItemClickListener;
 import com.hyphenate.easeui.utils.EaseCommonUtils;
 import com.hyphenate.easeui.widget.EaseTitleBar;
@@ -145,12 +146,14 @@ public class AddContactActivity extends BaseInitActivity implements EaseTitleBar
     @Override
     public void onItemAddClick(View view, int position) {
         // 添加好友
-        mViewModel.addContact(mAdapter.getData().get(position), getResources().getString(R.string.em_add_contact_add_a_friend));
+        mViewModel.addContact(mAdapter.getItem(position), getResources().getString(R.string.em_add_contact_add_a_friend));
     }
 
     @Override
     public void onItemClick(View view, int position) {
         // 跳转到好友页面
-        showToast("点击了条目");
+        String item = mAdapter.getItem(position);
+        EaseUser user = new EaseUser(item);
+        ContactDetailActivity.actionStart(mContext, user, false);
     }
 }

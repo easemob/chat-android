@@ -8,7 +8,7 @@ import com.hyphenate.chatuidemo.common.db.converter.DateConverter;
 import com.hyphenate.chatuidemo.common.db.dao.EmUserDao;
 import com.hyphenate.chatuidemo.common.db.entity.EmUserEntity;
 
-@Database(entities = {EmUserEntity.class}, version = 6)
+@Database(entities = {EmUserEntity.class}, version = 7)
 @TypeConverters(DateConverter.class)
 public abstract class AppDatabase extends RoomDatabase {
 

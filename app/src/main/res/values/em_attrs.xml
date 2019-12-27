@@ -3,5 +3,7 @@
     <declare-styleable name="ContactItemView">
         <attr name="contactItemImage" format="reference"/>
         <attr name="contactItemName" format="string|reference"/>
+        <attr name="contactItemBottomLineMarginLeft" format="dimension"/>
+        <attr name="contactItemBottomLineMarginRight" format="dimension"/>
     </declare-styleable>
 </resources>

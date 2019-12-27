@@ -8,10 +8,11 @@ import androidx.annotation.NonNull;
 
 import com.hyphenate.util.HanziToPinyin;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class EaseUser implements Parcelable {
+public class EaseUser implements Serializable {
     /**
      * \~chinese
      * 此用户的唯一标示名, 即用户的环信id
@@ -79,33 +80,6 @@ public class EaseUser implements Parcelable {
 
     public EaseUser(@NonNull String username) {
         this.username = username;
-    }
-
-    @Override
-    public int describeContents() {
-        return 0;
-    }
-
-    @Override
-    public void writeToParcel(Parcel dest, int flags) {
-        dest.writeString(username);
-    }
-
-    public static final Parcelable.Creator<EaseUser> CREATOR = new Parcelable.Creator<EaseUser>() {
-
-        @Override
-        public EaseUser createFromParcel(Parcel source) {
-            return new EaseUser(source);
-        }
-
-        @Override
-        public EaseUser[] newArray(int size) {
-            return new EaseUser[size];
-        }
-    };
-
-    private EaseUser(Parcel in) {
-        username = in.readString();
     }
 
     @Override

@@ -25,4 +25,7 @@ public interface EmUserDao {
 
     @Query("select * from em_users")
     LiveData<List<EaseUser>> loadUsers();
+
+    @Query("select username from em_users")
+    List<String> loadAllUsers();
 }

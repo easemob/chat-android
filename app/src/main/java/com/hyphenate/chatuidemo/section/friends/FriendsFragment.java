@@ -13,12 +13,15 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.hyphenate.chatuidemo.R;
+import com.hyphenate.chatuidemo.common.db.DemoDbHelper;
 import com.hyphenate.chatuidemo.common.enums.Status;
 import com.hyphenate.chatuidemo.common.widget.ContactItemView;
 import com.hyphenate.chatuidemo.section.base.BaseInitFragment;
+import com.hyphenate.chatuidemo.section.friends.activity.ContactDetailActivity;
 import com.hyphenate.chatuidemo.section.friends.adapter.FriendsAdapter;
 import com.hyphenate.chatuidemo.section.friends.viewmodels.FriendsViewModel;
 import com.hyphenate.easeui.domain.EaseUser;
+import com.hyphenate.easeui.interfaces.OnItemClickListener;
 import com.hyphenate.easeui.widget.EaseRecyclerView;
 import com.hyphenate.easeui.widget.EaseSidebar;
 import com.scwang.smartrefresh.layout.SmartRefreshLayout;
@@ -31,7 +34,7 @@ import java.util.Comparator;
 import java.util.List;
 
 
-public class FriendsFragment extends BaseInitFragment implements View.OnClickListener, OnRefreshListener, EaseSidebar.OnTouchEventListener {
+public class FriendsFragment extends BaseInitFragment implements View.OnClickListener, OnRefreshListener, EaseSidebar.OnTouchEventListener, OnItemClickListener {
     private SmartRefreshLayout mSrlFriendRefresh;
     private EaseRecyclerView mRvFriendsList;
     private EaseSidebar mSideBarFriend;
@@ -75,6 +78,7 @@ public class FriendsFragment extends BaseInitFragment implements View.OnClickLis
         mCivOfficialAccount.setOnClickListener(this);
         mSrlFriendRefresh.setOnRefreshListener(this);
         mSideBarFriend.setOnTouchEventListener(this);
+        mAdapter.setOnItemClickListener(this);
     }
 
     @Override
@@ -105,8 +109,9 @@ public class FriendsFragment extends BaseInitFragment implements View.OnClickLis
         mViewModel.getContactObservable().observe(this, response -> {
             if(response.status == Status.SUCCESS) {
                 finishRefresh();
-//                addModeData(response.data);
-//                mAdapter.setData(response.data);
+                // 先进行排序
+                sortData(response.data);
+                mAdapter.setData(response.data);
             }else if(response.status == Status.ERROR) {
                 finishRefresh();
                 showToast(response.getMessage());
@@ -115,79 +120,9 @@ public class FriendsFragment extends BaseInitFragment implements View.OnClickLis
             }
         });
         mViewModel.loadContactList();
-
-        mAdapter.setData(addModeData(new ArrayList<EaseUser>()));
     }
 
-    private List<EaseUser> addModeData(List<EaseUser> data) {
-        EaseUser user = new EaseUser();
-        user.setUsername("aom");
-        data.add(user);
-
-        user = new EaseUser();
-        user.setUsername("aoy");
-        data.add(user);
-        user = new EaseUser();
-        user.setUsername("coy");
-        data.add(user);
-        user = new EaseUser();
-        user.setUsername("coy");
-        data.add(user);
-        user = new EaseUser();
-        user.setUsername("coy");
-        data.add(user);
-        user = new EaseUser();
-        user.setUsername("doy");
-        data.add(user);
-        user = new EaseUser();
-        user.setUsername("doy");
-        data.add(user);
-        user = new EaseUser();
-        user.setUsername("foy");
-        data.add(user);
-        user = new EaseUser();
-        user.setUsername("foy");
-        data.add(user);
-        user = new EaseUser();
-        user.setUsername("foy");
-        data.add(user);
-        user = new EaseUser();
-        user.setUsername("goy");
-        data.add(user);
-        user = new EaseUser();
-        user.setUsername("goy");
-        data.add(user);
-        user = new EaseUser();
-        user.setUsername("joy");
-        data.add(user);
-        user = new EaseUser();
-        user.setUsername("eoy");
-        data.add(user);
-        user = new EaseUser();
-        user.setUsername("toy");
-        data.add(user);
-        user = new EaseUser();
-        user.setUsername("toy");
-        data.add(user);
-        user = new EaseUser();
-        user.setUsername("yoy");
-        data.add(user);
-        user = new EaseUser();
-        user.setUsername("yoy");
-        data.add(user);
-        user = new EaseUser();
-        user.setUsername("joy");
-        data.add(user);
-        user = new EaseUser();
-        user.setUsername("joy");
-        data.add(user);
-        user = new EaseUser();
-        user.setUsername("zoy");
-        data.add(user);
-        user = new EaseUser();
-        user.setUsername("woy");
-        data.add(user);
-
+    private void sortData(List<EaseUser> data) {
         Collections.sort(data, new Comparator<EaseUser>() {
 
             @Override
@@ -205,8 +140,6 @@ public class FriendsFragment extends BaseInitFragment implements View.OnClickLis
 
             }
         });
-        Log.e("TAG", "data = "+data.toString());
-        return data;
     }
 
     /**
@@ -282,5 +215,11 @@ public class FriendsFragment extends BaseInitFragment implements View.OnClickLis
 
     private void hideFloatingHeader() {
         mFloatingHeader.setVisibility(View.GONE);
+    }
+
+    @Override
+    public void onItemClick(View view, int position) {
+        EaseUser item = mAdapter.getItem(position);
+        ContactDetailActivity.actionStart(mContext, item);
     }
 }
