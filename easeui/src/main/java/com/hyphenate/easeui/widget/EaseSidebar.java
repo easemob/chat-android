@@ -22,14 +22,8 @@ import android.graphics.Paint.Align;
 import android.graphics.drawable.Drawable;
 import android.text.TextUtils;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
-import android.widget.HeaderViewListAdapter;
-import android.widget.ListAdapter;
-import android.widget.ListView;
-import android.widget.SectionIndexer;
-import android.widget.TextView;
 
 import androidx.annotation.ColorRes;
 import androidx.annotation.DrawableRes;
@@ -37,14 +31,13 @@ import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
 
 import com.hyphenate.easeui.R;
-import com.hyphenate.util.DensityUtil;
 
 /**
  * side bar
  */
 public class EaseSidebar extends View{
 	private Paint paint;
-	private float height;
+	private float ItemHeight;
 	private Context context;
 	private OnTouchEventListener mListener;
 	private String[] sections;
@@ -54,6 +47,8 @@ public class EaseSidebar extends View{
 	private static final float DEFAULT_TEXT_SIZE = 10;
 	private float mTextSize;
 	private int mBgColor;
+	private int mWidth, mHeight;
+	private float mTextCoefficient = 1;
 
 	public EaseSidebar(Context context) {
 		this(context, null);
@@ -105,7 +100,30 @@ public class EaseSidebar extends View{
 		paint.setTextAlign(Align.CENTER);
 		paint.setTextSize(mTextSize);
 	}
-	
+
+	@Override
+	protected void onSizeChanged(int w, int h, int oldw, int oldh) {
+		super.onSizeChanged(w, h, oldw, oldh);
+		// 获取view的高度
+		mWidth = w;
+		mHeight = h;
+		checkTextSize();
+	}
+
+	/**
+	 * 校验文字大小是否合适
+	 */
+	private void checkTextSize() {
+		if(paint != null) {
+			Paint.FontMetrics metrics = paint.getFontMetrics();
+			float textItemHeight = metrics.bottom - metrics.top;
+			if(sections.length * textItemHeight > mHeight) {
+				mTextCoefficient = mHeight / (sections.length * textItemHeight);
+				paint.setTextSize(paint.getTextSize() * mTextCoefficient);
+			}
+		}
+	}
+
 	@Override
 	protected void onDraw(Canvas canvas) {
 		super.onDraw(canvas);
@@ -113,37 +131,53 @@ public class EaseSidebar extends View{
 			canvas.drawColor(mBgColor);
 		}
 		float center = getWidth() / 2;
-		height = getHeight() / sections.length;
+		ItemHeight = getHeight() / sections.length;
 		for (int i = sections.length - 1; i > -1; i--) {
-			canvas.drawText(sections[i], center, height * (i+1), paint);
+			canvas.drawText(sections[i], center, ItemHeight * (i+1), paint);
 		}
 	}
 
 	@Override
 	public boolean onTouchEvent(MotionEvent event) {
+		int pointer = sectionForPoint(event.getY());
+		String section = sections[pointer];
 		switch (event.getAction()) {
-		case MotionEvent.ACTION_DOWN:{
-			// 提供对外的接口，进行操作
-			if(mListener != null) {
-			    mListener.onActionDown(event);
-			}
-			return true;
-		}
-		case MotionEvent.ACTION_MOVE:{
-			// 提供对外的接口，便于开发者操作
-			if(mListener != null) {
-			    mListener.onActionMove(event);
-			}
-			return true;
-		}
-		case MotionEvent.ACTION_UP:
-		case MotionEvent.ACTION_CANCEL:
-			if(mListener != null) {
-			    mListener.onActionUp(event);
-			}
-			return true;
+			case MotionEvent.ACTION_DOWN:
+				// 提供对外的接口，进行操作
+				if(mListener != null) {
+					mListener.onActionDown(event, section);
+				}
+				return true;
+			case MotionEvent.ACTION_MOVE:
+				// 提供对外的接口，便于开发者操作
+				if(mListener != null) {
+					mListener.onActionMove(event, section);
+				}
+				return true;
+			case MotionEvent.ACTION_UP:
+			case MotionEvent.ACTION_CANCEL:
+				if(mListener != null) {
+					mListener.onActionUp(event);
+				}
+				return true;
 		}
 		return super.onTouchEvent(event);
+	}
+
+	/**
+	 * 获取移动时的字符
+	 * @param y
+	 * @return
+	 */
+	private int sectionForPoint(float y) {
+		int index = (int) (y / ItemHeight);
+		if(index < 0) {
+		    index = 0;
+		}
+		if(index > sections.length -1) {
+		    index = sections.length - 1;
+		}
+		return index;
 	}
 
 	/**
@@ -163,6 +197,10 @@ public class EaseSidebar extends View{
 		setBackground(drawable);
 	}
 
+	/**
+	 * set touch event listener
+	 * @param listener
+	 */
 	public void setOnTouchEventListener(OnTouchEventListener listener) {
 		this.mListener = listener;
 	}
@@ -171,14 +209,16 @@ public class EaseSidebar extends View{
 		/**
 		 * 按下的监听
 		 * @param event
+		 * @param pointer
 		 */
-		void onActionDown(MotionEvent event);
+		void onActionDown(MotionEvent event, String pointer);
 
 		/**
 		 * 移动的监听
 		 * @param event
+		 * @param pointer
 		 */
-		void onActionMove(MotionEvent event);
+		void onActionMove(MotionEvent event, String pointer);
 
 		/**
 		 * 抬起的监听

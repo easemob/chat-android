@@ -6,6 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import androidx.annotation.IdRes;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -44,7 +45,7 @@ public abstract class EaseBaseRecyclerViewAdapter<T> extends RecyclerView.Adapte
             return;
         }
         T item = mData.get(position);
-        holder.setHolderData(item, position);
+        holder.setData(item, position);
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -75,14 +76,25 @@ public abstract class EaseBaseRecyclerViewAdapter<T> extends RecyclerView.Adapte
         }
     }
 
-    public ViewHolder getViewHolder(ViewGroup parent) {
-        View view = LayoutInflater.from(mContext).inflate(getItemLayoutId(), parent, false);
-        return new ViewHolder(view);
-    }
-
+    /**
+     * 返回数据为空时的布局
+     * @param parent
+     * @return
+     */
     private ViewHolder getEmptyViewHolder(ViewGroup parent) {
         View emptyView = getEmptyView(parent);
-        return new ViewHolder(emptyView);
+        return new ViewHolder(emptyView) {
+
+            @Override
+            public void initView(View itemView) {
+
+            }
+
+            @Override
+            public void setData(T item, int position) {
+
+            }
+        };
     }
 
     /**
@@ -93,6 +105,13 @@ public abstract class EaseBaseRecyclerViewAdapter<T> extends RecyclerView.Adapte
     private View getEmptyView(ViewGroup parent) {
         return LayoutInflater.from(mContext).inflate(getEmptyLayoutId(), parent, false);
     }
+
+    /**
+     * 获取ViewHolder
+     * @param parent
+     * @return
+     */
+    public abstract ViewHolder getViewHolder(ViewGroup parent);
 
     /**
      * 根据position获取相应的data
@@ -166,14 +185,33 @@ public abstract class EaseBaseRecyclerViewAdapter<T> extends RecyclerView.Adapte
         mOnItemClickListener = listener;
     }
 
-    public class ViewHolder extends RecyclerView.ViewHolder {
+    public abstract class ViewHolder extends RecyclerView.ViewHolder {
+
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             initView(itemView);
         }
 
-        public void setHolderData(T item, int position) {
-            setData(item, position);
+        /**
+         * 初始化控件
+         * @param itemView
+         */
+        public abstract void initView(View itemView);
+
+        /**
+         * 设置数据
+         * @param item
+         * @param position
+         */
+        public abstract void setData(T item, int position);
+
+        /**
+         * @param id
+         * @param <E>
+         * @return
+         */
+        public  <E extends View> E findViewById(@IdRes int id) {
+            return this.itemView.findViewById(id);
         }
     }
 
@@ -185,22 +223,5 @@ public abstract class EaseBaseRecyclerViewAdapter<T> extends RecyclerView.Adapte
         return R.layout.ease_layout_default_no_data;
     }
 
-    /**
-     * 获取item布局
-     * @return
-     */
-    public abstract int getItemLayoutId();
 
-    /**
-     * 初始化控件
-     * @param itemView
-     */
-    public abstract void initView(View itemView);
-
-    /**
-     * 设置数据
-     * @param item
-     * @param position
-     */
-    public abstract void setData(T item, int position);
 }

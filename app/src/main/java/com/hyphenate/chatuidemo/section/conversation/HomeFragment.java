@@ -13,7 +13,7 @@ import com.hyphenate.chatuidemo.R;
 import com.hyphenate.chatuidemo.common.enums.Status;
 import com.hyphenate.chatuidemo.common.utils.ThreadManager;
 import com.hyphenate.chatuidemo.section.base.BaseInitFragment;
-import com.hyphenate.chatuidemo.section.conversation.adapter.HomeAdpter;
+import com.hyphenate.chatuidemo.section.conversation.adapter.HomeAdapter;
 import com.hyphenate.chatuidemo.section.conversation.viewmodel.HomeViewModel;
 import com.hyphenate.easeui.widget.EaseSearchTextView;
 import com.scwang.smartrefresh.layout.SmartRefreshLayout;
@@ -25,7 +25,7 @@ public class HomeFragment extends BaseInitFragment implements OnRefreshListener,
     private RecyclerView mRvHomeList;
     private SmartRefreshLayout mRefreshLayout;
     private HomeViewModel mViewModel;
-    private HomeAdpter mHomeAdapter;
+    private HomeAdapter mHomeAdapter;
 
     @Override
     protected int getLayoutId() {
@@ -40,7 +40,7 @@ public class HomeFragment extends BaseInitFragment implements OnRefreshListener,
         mRefreshLayout = findViewById(R.id.srl_refresh);
 
         mRvHomeList.setLayoutManager(new LinearLayoutManager(mContext));
-        mHomeAdapter = new HomeAdpter();
+        mHomeAdapter = new HomeAdapter();
         mRvHomeList.setAdapter(mHomeAdapter);
         DividerItemDecoration decoration = new DividerItemDecoration(mContext, DividerItemDecoration.VERTICAL);
         decoration.setDrawable(ContextCompat.getDrawable(mContext, R.drawable.em_home_divider_list));

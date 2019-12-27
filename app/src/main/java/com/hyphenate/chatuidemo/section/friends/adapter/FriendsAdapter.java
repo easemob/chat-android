@@ -1,8 +1,13 @@
 package com.hyphenate.chatuidemo.section.friends.adapter;
 
 import android.text.TextUtils;
+import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.TextView;
+
+import androidx.annotation.NonNull;
 
 import com.hyphenate.chatuidemo.R;
 import com.hyphenate.easeui.adapter.EaseBaseRecyclerViewAdapter;
@@ -10,15 +15,10 @@ import com.hyphenate.easeui.domain.EaseUser;
 import com.hyphenate.easeui.widget.EaseImageView;
 
 public class FriendsAdapter extends EaseBaseRecyclerViewAdapter<EaseUser> {
-    private TextView mHeader;
-    private EaseImageView mAvatar;
-    private TextView mName;
-    private TextView mSignature;
-    private TextView mUnreadMsgNumber;
 
     @Override
-    public int getItemLayoutId() {
-        return R.layout.em_widget_contact_item;
+    public ViewHolder getViewHolder(ViewGroup parent) {
+        return new MyViewHolder(LayoutInflater.from(mContext).inflate(R.layout.em_widget_contact_item, parent, false));
     }
 
     @Override
@@ -26,25 +26,39 @@ public class FriendsAdapter extends EaseBaseRecyclerViewAdapter<EaseUser> {
         return R.layout.em_layout_friends_empty_list;
     }
 
-    @Override
-    public void initView(View itemView) {
-        mHeader = itemView.findViewById(R.id.header);
-        mAvatar = itemView.findViewById(R.id.avatar);
-        mName = itemView.findViewById(R.id.name);
-        mSignature = itemView.findViewById(R.id.signature);
-        mUnreadMsgNumber = itemView.findViewById(R.id.unread_msg_number);
-    }
+    private class MyViewHolder extends ViewHolder {
+        private TextView mHeader;
+        private EaseImageView mAvatar;
+        private TextView mName;
+        private TextView mSignature;
+        private TextView mUnreadMsgNumber;
 
-    @Override
-    public void setData(EaseUser item, int position) {
-        String header = item.getInitialLetter();
-        mHeader.setVisibility(View.GONE);
-        if(position == 0 || (header != null && header.equals(getItem(position -1).getInitialLetter()))) {
-            if(!TextUtils.isEmpty(header)) {
-                mHeader.setVisibility(View.VISIBLE);
-                mHeader.setText(item.getInitialLetter());
-            }
+        public MyViewHolder(@NonNull View itemView) {
+            super(itemView);
         }
-        mName.setText(item.getUsername());
+
+        @Override
+        public void initView(View itemView) {
+            mHeader = findViewById(R.id.header);
+            mAvatar = findViewById(R.id.avatar);
+            mName = findViewById(R.id.name);
+            mSignature = findViewById(R.id.signature);
+            mUnreadMsgNumber = findViewById(R.id.unread_msg_number);
+        }
+
+        @Override
+        public void setData(EaseUser item, int position) {
+            Log.e("TAG", "item = "+item.toString());
+            String header = item.getInitialLetter();
+            Log.e("TAG", "position = "+position + " header = "+header);
+            mHeader.setVisibility(View.GONE);
+            if(position == 0 || (header != null && !header.equals(getItem(position -1).getInitialLetter()))) {
+                if(!TextUtils.isEmpty(header)) {
+                    mHeader.setVisibility(View.VISIBLE);
+                    mHeader.setText(header);
+                }
+            }
+            mName.setText(item.getUsername());
+        }
     }
 }
