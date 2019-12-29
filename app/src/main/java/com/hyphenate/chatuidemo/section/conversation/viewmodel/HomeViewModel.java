@@ -17,11 +17,13 @@ public class HomeViewModel extends AndroidViewModel {
     private EMChatManagerRepository mRepository;
 
     private SingleSourceLiveData<Resource<List<EMConversation>>> conversationObservable;
+    private SingleSourceLiveData<Resource<Boolean>> deleteConversationObservable;
 
     public HomeViewModel(@NonNull Application application) {
         super(application);
         mRepository = new EMChatManagerRepository();
         conversationObservable = new SingleSourceLiveData<>();
+        deleteConversationObservable = new SingleSourceLiveData<>();
     }
 
     /**
@@ -35,5 +37,15 @@ public class HomeViewModel extends AndroidViewModel {
         return conversationObservable;
     }
 
+    /**
+     * 删除对话
+     * @param conversationId
+     */
+    public void deleteConversationById(String conversationId) {
+        deleteConversationObservable.setSource(mRepository.deleteConversationById(conversationId));
+    }
 
+    public LiveData<Resource<Boolean>> getDeleteObservable() {
+        return deleteConversationObservable;
+    }
 }

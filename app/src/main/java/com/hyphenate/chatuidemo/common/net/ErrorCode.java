@@ -42,6 +42,11 @@ public class ErrorCode extends EMError {
      */
     public static final int EM_FRIEND_BLACK_ERROR = -102;
 
+    /**
+     * 删除对话失败
+     */
+    public static final int EM_DELETE_CONVERSATION_ERROR = -110;
+
     public enum Error {
         EM_NETWORK_ERROR(ErrorCode.EM_NETWORK_ERROR, R.string.em_error_network_error),
         EM_NOT_LOGIN(ErrorCode.EM_NOT_LOGIN, R.string.em_error_not_login),
@@ -50,6 +55,7 @@ public class ErrorCode extends EMError {
         EM_ADD_SELF_ERROR(ErrorCode.EM_ADD_SELF_ERROR, R.string.em_add_self_error),
         EM_FRIEND_ERROR(ErrorCode.EM_FRIEND_ERROR, R.string.em_friend_error),
         EM_FRIEND_BLACK_ERROR(ErrorCode.EM_FRIEND_BLACK_ERROR, R.string.em_friend_black_error),
+        EM_DELETE_CONVERSATION_ERROR(ErrorCode.EM_DELETE_CONVERSATION_ERROR, R.string.em_delete_conversation_error),
         UNKNOWN_ERROR(-9999, 0);
 
 

@@ -6,9 +6,12 @@ import androidx.annotation.NonNull;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
+import com.hyphenate.chat.EMChatManager;
 import com.hyphenate.chat.EMClient;
 import com.hyphenate.chat.EMConversation;
+import com.hyphenate.chatuidemo.DemoHelper;
 import com.hyphenate.chatuidemo.common.interfaceOrImplement.ResultCallBack;
+import com.hyphenate.chatuidemo.common.net.ErrorCode;
 import com.hyphenate.chatuidemo.common.net.Resource;
 
 import java.util.ArrayList;
@@ -21,6 +24,10 @@ import java.util.Map;
  * 处理与chat相关的逻辑
  */
 public class EMChatManagerRepository {
+
+    private EMChatManager getChatManager() {
+        return DemoHelper.getInstance().getEMClient().chatManager();
+    }
 
     /**
      * 获取会话列表
@@ -91,5 +98,21 @@ public class EMChatManagerRepository {
             }
 
         });
+    }
+
+    public LiveData<Resource<Boolean>> deleteConversationById(String conversationId) {
+        return new NetworkOnlyResource<Boolean>() {
+
+            @Override
+            protected void createCall(@NonNull ResultCallBack<LiveData<Boolean>> callBack) {
+                boolean isDelete = getChatManager().deleteConversation(conversationId, true);
+                if(isDelete) {
+                    callBack.onSuccess(new MutableLiveData<>(true));
+                }else {
+                    callBack.onError(ErrorCode.EM_DELETE_CONVERSATION_ERROR);
+                }
+            }
+
+        }.asLiveData();
     }
 }

@@ -37,6 +37,7 @@
     <string name="em_add_self_error">不能添加自己</string>
     <string name="em_friend_error">此用户已是你的好友</string>
     <string name="em_friend_black_error">此用户已是你好友(被拉黑状态)，从黑名单列表中移出即可</string>
+    <string name="em_delete_conversation_error">删除失败或不存在该对话</string>
 
     <string name="em_server_set_title">使用自定义服务器？</string>
     <string name="em_server_set_server_hint">demo已经绑定以下环境设置，如果需要修改，请重启App进行设置。</string>

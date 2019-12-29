@@ -39,18 +39,18 @@ public class DemoDbHelper {
      */
     public void initDb(String user) {
         if(currentUser != null) {
-            if(!TextUtils.equals(currentUser, user)) {
-                closeDb();
+            if(TextUtils.equals(currentUser, user)) {
+                EMLog.i(TAG, "you have opened the db");
                 return;
             }
-            EMLog.i(TAG, "you have opened the db");
-            return;
+            closeDb();
         }
         this.currentUser = user;
         String userMd5 = MD5.encrypt2MD5(user);
         // 以下数据库升级设置，为升级数据库将清掉之前的数据，如果要保留数据，慎重采用此种方式
         // 可以采用addMigrations()的方式，进行数据库的升级
         String dbName = String.format("em_%1$s.db", userMd5);
+        EMLog.i(TAG, "db name = "+dbName);
         mDatabase = Room.databaseBuilder(mContext, AppDatabase.class, dbName)
                         .allowMainThreadQueries()
                         .fallbackToDestructiveMigration()

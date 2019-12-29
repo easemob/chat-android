@@ -269,6 +269,7 @@
         <activity android:name=".section.friends.activity.AddContactActivity"
             android:theme="@style/AppTheme.AddContactTheme"/>
         <activity android:name=".section.friends.activity.ContactDetailActivity" />
+        <activity android:name=".section.chat.EmChatActivity" />
 
     </application>
 

@@ -17,6 +17,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.hyphenate.chat.EMConversation;
 import com.hyphenate.chatuidemo.R;
 import com.hyphenate.chatuidemo.common.enums.Status;
+import com.hyphenate.chatuidemo.common.net.ErrorCode;
 import com.hyphenate.chatuidemo.common.utils.ThreadManager;
 import com.hyphenate.chatuidemo.section.base.BaseInitFragment;
 import com.hyphenate.chatuidemo.section.conversation.adapter.HomeAdapter;
@@ -72,15 +73,18 @@ public class HomeFragment extends BaseInitFragment implements OnRefreshListener,
         if(position >= 0) {
             conversation = mHomeAdapter.getItem(position);
         }
-        switch (item.getItemId()) {
-            case R.id.action_make_top :
-                long msgTime = conversation.getLastMessage().getMsgTime();
-                Log.e("TAG", "msgTime = "+msgTime);
-                break;
-            case R.id.action_delete:
-
-                break;
+        if(conversation != null) {
+            switch (item.getItemId()) {
+                case R.id.action_make_top :
+                    long msgTime = conversation.getLastMessage().getMsgTime();
+                    Log.e("TAG", "msgTime = "+msgTime);
+                    break;
+                case R.id.action_delete:
+                    mViewModel.deleteConversationById(conversation.conversationId());
+                    break;
+            }
         }
+
         return super.onContextItemSelected(item);
     }
 
@@ -102,6 +106,19 @@ public class HomeFragment extends BaseInitFragment implements OnRefreshListener,
                 // do nothing
             }
 
+        });
+
+        mViewModel.getDeleteObservable().observe(this, response -> {
+            if(response == null) {
+                return;
+            }
+            if(response.status == Status.SUCCESS) {
+                mViewModel.loadConversationList();
+            }else if(response.status == Status.ERROR) {
+                showToast(response.getMessage());
+            }else if(response.status == Status.LOADING) {
+
+            }
         });
     }
 
