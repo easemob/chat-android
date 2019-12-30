@@ -64,4 +64,5 @@
         <item name="android:foreground">?selectableItemBackground</item>
         <item name="android:background">@color/em_base_color_window_bg</item>
     </style>
+
 </resources>

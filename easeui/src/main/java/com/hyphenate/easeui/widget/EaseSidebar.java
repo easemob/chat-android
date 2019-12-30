@@ -40,7 +40,7 @@ public class EaseSidebar extends View{
 	private float ItemHeight;
 	private Context context;
 	private OnTouchEventListener mListener;
-	private String[] sections;
+	private String[] sections = new String[]{"A","B","C","D","E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z","#"};
 	private String topText;
 	private int mTextColor;
 	private static final String DEFAULT_COLOR = "#8C8C8C";
@@ -87,14 +87,21 @@ public class EaseSidebar extends View{
 			}else {
 				mBgColor = a.getColor(R.styleable.EaseSidebar_ease_side_bar_background, Color.TRANSPARENT);
 			}
+			int headArrays = a.getResourceId(R.styleable.EaseSidebar_ease_side_bar_head_arrays, -1);
+			if(headArrays != -1) {
+			    sections = getResources().getStringArray(headArrays);
+			}else {
+				sections = new String[]{"A","B","C","D","E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z","#"};
+			}
 		}
 	}
 
 	private void init(){
-	    if(TextUtils.isEmpty(topText)) {
-	        topText = context.getString(R.string.search_new);
-	    }
-        sections= new String[]{topText,"A","B","C","D","E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z","#"};
+		if(sections.length > 27) {
+		    if(!TextUtils.isEmpty(topText)) {
+		        sections[0] = topText;
+		    }
+		}
 		paint = new Paint(Paint.ANTI_ALIAS_FLAG);
 		paint.setColor(mTextColor);
 		paint.setTextAlign(Align.CENTER);

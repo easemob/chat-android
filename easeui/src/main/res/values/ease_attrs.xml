@@ -45,6 +45,7 @@
         <attr name="ease_side_bar_text_color" format="reference|color"/>
         <attr name="ease_side_bar_text_size" format="dimension"/>
         <attr name="ease_side_bar_background" format="reference|color"/>
+        <attr name="ease_side_bar_head_arrays" format="reference"/>
     </declare-styleable>
 
 </resources>

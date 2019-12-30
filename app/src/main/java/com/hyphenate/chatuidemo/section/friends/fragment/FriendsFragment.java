@@ -1,4 +1,4 @@
-package com.hyphenate.chatuidemo.section.friends;
+package com.hyphenate.chatuidemo.section.friends.fragment;
 
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -17,7 +17,9 @@ import com.hyphenate.chatuidemo.common.db.DemoDbHelper;
 import com.hyphenate.chatuidemo.common.enums.Status;
 import com.hyphenate.chatuidemo.common.widget.ContactItemView;
 import com.hyphenate.chatuidemo.section.base.BaseInitFragment;
+import com.hyphenate.chatuidemo.section.friends.activity.ChatRoomContactManageActivity;
 import com.hyphenate.chatuidemo.section.friends.activity.ContactDetailActivity;
+import com.hyphenate.chatuidemo.section.friends.activity.GroupContactManageActivity;
 import com.hyphenate.chatuidemo.section.friends.adapter.FriendsAdapter;
 import com.hyphenate.chatuidemo.section.friends.viewmodels.FriendsViewModel;
 import com.hyphenate.easeui.domain.EaseUser;
@@ -88,13 +90,13 @@ public class FriendsFragment extends BaseInitFragment implements View.OnClickLis
                 showToast("new chat");
                 break;
             case R.id.civ_group_chat :
-                showToast("group chat");
+                GroupContactManageActivity.actionStart(mContext);
                 break;
             case R.id.civ_label :
                 showToast("lable");
                 break;
             case R.id.civ_chat_room :
-                showToast("chat room");
+                ChatRoomContactManageActivity.actionStart(mContext);
                 break;
             case R.id.civ_official_account :
                 showToast("official account");

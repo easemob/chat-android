@@ -1,20 +1,16 @@
 package com.hyphenate.chatuidemo;
 
-import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.ViewModelProvider;
 
@@ -32,13 +28,12 @@ import com.hyphenate.chatuidemo.section.base.BaseFragment;
 import com.hyphenate.chatuidemo.section.base.BaseInitActivity;
 import com.hyphenate.chatuidemo.section.conversation.HomeFragment;
 import com.hyphenate.chatuidemo.section.discover.DiscoverFragment;
-import com.hyphenate.chatuidemo.section.friends.FriendsFragment;
+import com.hyphenate.chatuidemo.section.friends.fragment.FriendsFragment;
 import com.hyphenate.chatuidemo.section.friends.activity.AddContactActivity;
 import com.hyphenate.chatuidemo.section.me.AboutMeFragment;
 import com.hyphenate.easeui.widget.EaseTitleBar;
 
 import java.lang.reflect.Method;
-import java.security.Permission;
 import java.util.List;
 
 

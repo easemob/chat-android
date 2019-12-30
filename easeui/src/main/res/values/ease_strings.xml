@@ -13,6 +13,8 @@
 
     <string name="search_new">搜</string>
 
+    <string name="ease_search_text_hint">搜索</string>
+
     <string name="ease_list_no_data_text">暂无数据</string>
 
 </resources>

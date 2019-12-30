@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context=".section.friends.activity.GroupContactManageActivity">
+
+    <com.hyphenate.easeui.widget.EaseTitleBar
+        android:id="@+id/title_bar_group_contact"
+        android:layout_width="0dp"
+        android:layout_height="@dimen/em_common_title_bar_height"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:titleBarTitle="群组列表"
+        app:titleBarDisplayHomeAsUpEnabled="true"
+        app:titleBarRightImage="@drawable/em_friends_group_manage"
+        app:titleBarRightVisible="true"/>
+
+    <com.hyphenate.easeui.widget.EaseSearchTextView
+        android:id="@+id/search_group"
+        android:layout_width="0dp"
+        android:layout_height="@dimen/em_common_search_height"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/title_bar_group_contact"
+        android:layout_marginLeft="16dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginRight="16dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginTop="8dp"/>
+
+    <com.google.android.material.tabs.TabLayout
+        android:id="@+id/tl_group_contact"
+        android:layout_width="0dp"
+        android:layout_height="40dp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/search_group"
+        android:layout_marginTop="8dp"
+        app:tabIndicatorColor="@color/em_color_brand"
+        app:tabIndicatorHeight="2dp"
+        app:tabSelectedTextColor="@color/em_color_brand"
+        app:tabTextColor="@color/em_color_common_black"
+        app:tabTextAppearance="@style/AppTheme.TabLayout" />
+
+    <androidx.viewpager.widget.ViewPager
+        android:id="@+id/vp_group_contact"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tl_group_contact"
+        app:layout_constraintBottom_toBottomOf="parent"/>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

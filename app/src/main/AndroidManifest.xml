@@ -270,6 +270,8 @@
             android:theme="@style/AppTheme.AddContactTheme"/>
         <activity android:name=".section.friends.activity.ContactDetailActivity" />
         <activity android:name=".section.chat.EmChatActivity" />
+        <activity android:name=".section.friends.activity.GroupContactManageActivity" />
+        <activity android:name=".section.friends.activity.ChatRoomContactManageActivity" />
 
     </application>
 

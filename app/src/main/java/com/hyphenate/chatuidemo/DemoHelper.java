@@ -79,6 +79,10 @@ public class DemoHelper {
         return getEMClient().chatroomManager();
     }
 
+    public String getCurrentUser() {
+        return getEMClient().getCurrentUser();
+    }
+
     public void init(Context context) {
         // 根据项目需求对SDK进行配置
         EMOptions options = initChatOptions(context);

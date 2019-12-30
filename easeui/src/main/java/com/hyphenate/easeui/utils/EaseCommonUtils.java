@@ -253,4 +253,43 @@ public class EaseCommonUtils {
         return TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, value, context.getResources().getDisplayMetrics());
     }
 
+    /**
+     * 获取首字母
+     * @param name
+     * @return
+     */
+    public static String getLetter(String name) {
+        return new GetInitialLetter().getLetter(name);
+    }
+
+    private static class GetInitialLetter {
+        private String defaultLetter = "#";
+
+        /**
+         * 获取首字母
+         * @param name
+         * @return
+         */
+        public String getLetter(String name) {
+            if(TextUtils.isEmpty(name)) {
+                return defaultLetter;
+            }
+            char char0 = name.toLowerCase().charAt(0);
+            if(Character.isDigit(char0)) {
+                return defaultLetter;
+            }
+            ArrayList<HanziToPinyin.Token> l = HanziToPinyin.getInstance().get(name.substring(0, 1));
+            if(l != null && !l.isEmpty() && l.get(0).target.length() > 0) {
+                HanziToPinyin.Token token = l.get(0);
+                String letter = token.target.substring(0, 1).toUpperCase();
+                char c = letter.charAt(0);
+                if(c < 'A' || c > 'Z') {
+                    return defaultLetter;
+                }
+                return letter;
+            }
+            return defaultLetter;
+        }
+    }
+
 }

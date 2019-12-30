@@ -88,5 +88,8 @@
     <string name="em_friends_detail_video">视频聊天</string>
     <string name="em_friends_detail_add_contact">添加到通讯录</string>
     <string name="em_friends_detail_add_black">加入黑名单</string>
+    
+    <string name="em_friends_group_contact_manage">我管理的</string>
+    <string name="em_friends_group_contact_participate">我参与的</string>
 
 </resources>
