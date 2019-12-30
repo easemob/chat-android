@@ -4,6 +4,8 @@
     <color name="white">#ffffffff</color>
     <color name="black">#ff000000</color>
 
+    <color name="btn_gray_normal">#c0c0c0</color>
+
     <color name="em_toolbar_color_title">@color/black</color>
     <color name="em_toolbar_color_title_right">@color/black</color>
 </resources>
