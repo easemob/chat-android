@@ -1,5 +1,6 @@
 package com.hyphenate.chatuidemo.common.repositories;
 
+import android.text.TextUtils;
 import android.util.Pair;
 
 import androidx.annotation.NonNull;
@@ -13,6 +14,7 @@ import com.hyphenate.chatuidemo.DemoHelper;
 import com.hyphenate.chatuidemo.common.interfaceOrImplement.ResultCallBack;
 import com.hyphenate.chatuidemo.common.net.ErrorCode;
 import com.hyphenate.chatuidemo.common.net.Resource;
+import com.hyphenate.easeui.utils.EaseCommonUtils;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -54,6 +56,7 @@ public class EMChatManagerRepository {
         // get all conversations
         Map<String, EMConversation> conversations = EMClient.getInstance().chatManager().getAllConversations();
         List<Pair<Long, EMConversation>> sortList = new ArrayList<Pair<Long, EMConversation>>();
+        List<Pair<Long, EMConversation>> topSortList = new ArrayList<Pair<Long, EMConversation>>();
         /**
          * lastMsgTime will change if there is new message during sorting
          * so use synchronized to make sure timestamp of last message won't change.
@@ -61,16 +64,25 @@ public class EMChatManagerRepository {
         synchronized (conversations) {
             for (EMConversation conversation : conversations.values()) {
                 if (conversation.getAllMessages().size() != 0) {
-                    sortList.add(new Pair<Long, EMConversation>(conversation.getLastMessage().getMsgTime(), conversation));
+                    String extField = conversation.getExtField();
+                    if(!TextUtils.isEmpty(extField) && EaseCommonUtils.isTimestamp(extField)) {
+                        topSortList.add(new Pair<>(Long.valueOf(extField), conversation));
+                    }else {
+                        sortList.add(new Pair<Long, EMConversation>(conversation.getLastMessage().getMsgTime(), conversation));
+                    }
                 }
             }
         }
         try {
             // Internal is TimSort algorithm, has bug
+            if(topSortList.size() > 0) {
+                sortConversationByLastChatTime(topSortList);
+            }
             sortConversationByLastChatTime(sortList);
         } catch (Exception e) {
             e.printStackTrace();
         }
+        sortList.addAll(0, topSortList);
         List<EMConversation> list = new ArrayList<EMConversation>();
         for (Pair<Long, EMConversation> sortItem : sortList) {
             list.add(sortItem.second);

@@ -1,6 +1,8 @@
 package com.hyphenate.chatuidemo.section.conversation;
 
 import android.os.Bundle;
+import android.os.SystemClock;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.ContextMenu;
 import android.view.MenuItem;
@@ -23,6 +25,7 @@ import com.hyphenate.chatuidemo.section.base.BaseInitFragment;
 import com.hyphenate.chatuidemo.section.conversation.adapter.HomeAdapter;
 import com.hyphenate.chatuidemo.section.conversation.viewmodel.HomeViewModel;
 import com.hyphenate.easeui.interfaces.OnItemClickListener;
+import com.hyphenate.easeui.utils.EaseCommonUtils;
 import com.hyphenate.easeui.widget.EaseRecyclerView;
 import com.hyphenate.easeui.widget.EaseSearchTextView;
 import com.scwang.smartrefresh.layout.SmartRefreshLayout;
@@ -63,6 +66,17 @@ public class HomeFragment extends BaseInitFragment implements OnRefreshListener,
     public void onCreateContextMenu(@NonNull ContextMenu menu, @NonNull View v, @Nullable ContextMenu.ContextMenuInfo menuInfo) {
         super.onCreateContextMenu(menu, v, menuInfo);
         requireActivity().getMenuInflater().inflate(R.menu.em_conversation_list_menu, menu);
+        if(menuInfo instanceof EaseRecyclerView.RecyclerViewContextMenuInfo) {
+            int position = ((EaseRecyclerView.RecyclerViewContextMenuInfo) menuInfo).position;
+            EMConversation item = mHomeAdapter.getItem(position);
+            String extField = item.getExtField();
+            if(!TextUtils.isEmpty(extField) && EaseCommonUtils.isTimestamp(extField)) {
+                // 含有时间戳
+                menu.findItem(R.id.action_cancel_top).setVisible(true);
+                menu.findItem(R.id.action_make_top).setVisible(false);
+            }
+        }
+
     }
 
     @Override
@@ -76,8 +90,12 @@ public class HomeFragment extends BaseInitFragment implements OnRefreshListener,
         if(conversation != null) {
             switch (item.getItemId()) {
                 case R.id.action_make_top :
-                    long msgTime = conversation.getLastMessage().getMsgTime();
-                    Log.e("TAG", "msgTime = "+msgTime);
+                    conversation.setExtField(System.currentTimeMillis()+"");
+                    mViewModel.loadConversationList();
+                    break;
+                case R.id.action_cancel_top:
+                    conversation.setExtField("");
+                    mViewModel.loadConversationList();
                     break;
                 case R.id.action_delete:
                     mViewModel.deleteConversationById(conversation.conversationId());
