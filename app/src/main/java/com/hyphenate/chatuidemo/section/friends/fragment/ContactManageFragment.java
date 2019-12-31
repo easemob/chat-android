@@ -23,7 +23,7 @@ import java.util.List;
 
 public class ContactManageFragment extends BaseInitFragment implements EaseSidebar.OnTouchEventListener {
     private EaseRecyclerView mRvGroupList;
-    private EaseSidebar mSideBarGroup;
+    protected EaseSidebar mSideBarGroup;
     private TextView mFloatingHeader;
     public GroupContactAdapter mAdapter;
 

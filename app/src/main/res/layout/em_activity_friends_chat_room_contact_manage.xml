@@ -11,10 +11,8 @@
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:titleBarTitle="群组列表"
-        app:titleBarDisplayHomeAsUpEnabled="true"
-        app:titleBarRightImage="@drawable/em_friends_group_manage"
-        app:titleBarRightVisible="true"/>
+        app:titleBarTitle="@string/em_friends_chat_room_contact_title"
+        app:titleBarDisplayHomeAsUpEnabled="true"/>
 
     <com.hyphenate.easeui.widget.EaseSearchTextView
         android:id="@+id/search_chat_room"
@@ -30,6 +28,7 @@
         android:layout_marginTop="8dp"/>
 
     <androidx.fragment.app.FragmentContainerView
+        android:id="@+id/container_fragment"
         android:layout_width="0dp"
         android:layout_height="0dp"
         app:layout_constraintLeft_toLeftOf="parent"

@@ -13,7 +13,7 @@
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:titleBarTitle="群组列表"
+        app:titleBarTitle="@string/em_friends_group_contact_title"
         app:titleBarDisplayHomeAsUpEnabled="true"
         app:titleBarRightImage="@drawable/em_friends_group_manage"
         app:titleBarRightVisible="true"/>
