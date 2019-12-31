@@ -254,6 +254,24 @@ public class EaseCommonUtils {
     }
 
     /**
+     * 判断是否是时间戳
+     * @param time
+     * @return
+     */
+    public static boolean isTimestamp(String time) {
+        if(TextUtils.isEmpty(time)) {
+            return false;
+        }
+        long timestamp = 0L;
+        try {
+            timestamp = Long.parseLong(time);
+        } catch (NumberFormatException e) {
+            e.printStackTrace();
+        }
+        return timestamp > 0;
+    }
+
+    /**
      * 获取首字母
      * @param name
      * @return
