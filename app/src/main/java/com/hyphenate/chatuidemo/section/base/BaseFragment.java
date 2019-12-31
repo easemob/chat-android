@@ -18,7 +18,10 @@ import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 
 import com.hyphenate.chatuidemo.R;
+import com.hyphenate.chatuidemo.common.enums.Status;
 import com.hyphenate.chatuidemo.common.interfaceOrImplement.DialogCallBack;
+import com.hyphenate.chatuidemo.common.interfaceOrImplement.OnResourceParseCallback;
+import com.hyphenate.chatuidemo.common.net.Resource;
 import com.hyphenate.chatuidemo.common.utils.ToastUtils;
 
 public class BaseFragment extends Fragment {
@@ -94,5 +97,17 @@ public class BaseFragment extends Fragment {
                     })
                     .setNegativeButton("取消", null)
                     .show();
+    }
+
+    /**
+     * 解析Resource<T>
+     * @param response
+     * @param callback
+     * @param <T>
+     */
+    public <T> void parseResource(Resource<T> response, @NonNull OnResourceParseCallback<T> callback) {
+        if(mContext != null) {
+            mContext.parseResource(response, callback);
+        }
     }
 }

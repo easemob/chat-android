@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 
+import androidx.lifecycle.ViewModelProvider;
 import androidx.lifecycle.ViewModelProviders;
 
 import com.hyphenate.chatuidemo.R;
@@ -44,7 +45,7 @@ public class LoginActivity extends BaseInitActivity {
     @Override
     protected void initData() {
         super.initData();
-        LoginViewModel viewModel = ViewModelProviders.of(this).get(LoginViewModel.class);
+        LoginViewModel viewModel = new ViewModelProvider(this).get(LoginViewModel.class);
         viewModel.getPageSelect().observe(this, page -> {
             if(page == 0) {
                 return;

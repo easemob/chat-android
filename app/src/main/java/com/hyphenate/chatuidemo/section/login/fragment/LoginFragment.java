@@ -24,11 +24,13 @@ import com.hyphenate.chatuidemo.DemoHelper;
 import com.hyphenate.chatuidemo.MainActivity;
 import com.hyphenate.chatuidemo.R;
 import com.hyphenate.chatuidemo.common.enums.Status;
+import com.hyphenate.chatuidemo.common.interfaceOrImplement.OnResourceParseCallback;
 import com.hyphenate.chatuidemo.common.utils.ToastUtils;
 import com.hyphenate.chatuidemo.section.base.BaseInitFragment;
 import com.hyphenate.chatuidemo.section.login.activity.TestActivity;
 import com.hyphenate.chatuidemo.section.login.viewmodels.LoginFragmentViewModel;
 import com.hyphenate.chatuidemo.section.login.viewmodels.LoginViewModel;
+import com.hyphenate.easeui.domain.EaseUser;
 
 public class LoginFragment extends BaseInitFragment implements View.OnClickListener, TextWatcher {
     private EditText mEtLoginName;
@@ -80,21 +82,22 @@ public class LoginFragment extends BaseInitFragment implements View.OnClickListe
         setRetainInstance(true);
         mFragmentViewModel = new ViewModelProvider(this).get(LoginFragmentViewModel.class);
         mFragmentViewModel.getLoginObservable().observe(this, response -> {
-            if(response == null) {
-                return;
-            }
-            if(response.status == Status.SUCCESS) {
-                DemoHelper.getInstance().setAutoLogin(true);
-                //跳转到主页
-                MainActivity.startAction(mContext);
-                mContext.finish();
+            parseResource(response, new OnResourceParseCallback<EaseUser>(true) {
+                @Override
+                public void onSuccess(EaseUser data) {
+                    DemoHelper.getInstance().setAutoLogin(true);
+                    //跳转到主页
+                    MainActivity.startAction(mContext);
+                    mContext.finish();
+                }
 
-            }else if(response.status == Status.ERROR) {
-                ToastUtils.showFailToast(getResources().getString(R.string.em_login_failed), response.getMessage());
+                @Override
+                public void onError(int code, String message) {
+                    super.onError(code, message);
+                    ToastUtils.showFailToast(getResources().getString(R.string.em_login_failed), message);
+                }
+            });
 
-            }else if(response.status == Status.LOADING) {
-                Log.e("TAG", "记载中");
-            }
         });
     }
 
@@ -103,13 +106,14 @@ public class LoginFragment extends BaseInitFragment implements View.OnClickListe
         super.initViewModel();
         mViewModel = new ViewModelProvider(mContext).get(LoginViewModel.class);
         mViewModel.getRegisterObservable().observe(this, response -> {
-            if(response == null) {
-                return;
-            }
-            if(response.status == Status.SUCCESS) {
-                mEtLoginName.setText(TextUtils.isEmpty(response.data)?"":response.data);
-                mEtLoginPwd.setText("");
-            }
+            parseResource(response, new OnResourceParseCallback<String>(true) {
+                @Override
+                public void onSuccess(String data) {
+                    mEtLoginName.setText(TextUtils.isEmpty(data)?"":data);
+                    mEtLoginPwd.setText("");
+                }
+            });
+
         });
 
 

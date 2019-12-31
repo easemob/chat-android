@@ -24,16 +24,7 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
-public class EMGroupManagerRepository {
-    private String currentUser;
-
-    public EMGroupManagerRepository() {
-        currentUser = DemoHelper.getInstance().getCurrentUser();
-    }
-
-    public EMGroupManager getGroupManager() {
-        return DemoHelper.getInstance().getEMClient().groupManager();
-    }
+public class EMGroupManagerRepository extends BaseEMRepository{
 
     /**
      * 获取所有的群组列表
@@ -79,7 +70,7 @@ public class EMGroupManagerRepository {
         if(allGroups != null && allGroups.size() > 0) {
             List<EMGroup> manageGroups = new ArrayList<>();
             for (EMGroup group : allGroups) {
-                if(TextUtils.equals(group.getOwner(), currentUser) || group.getAdminList().contains(currentUser)) {
+                if(TextUtils.equals(group.getOwner(), getCurrentUser()) || group.getAdminList().contains(getCurrentUser())) {
                     manageGroups.add(group);
                 }
             }
@@ -98,7 +89,7 @@ public class EMGroupManagerRepository {
         if(allGroups != null && allGroups.size() > 0) {
             List<EMGroup> joinGroups = new ArrayList<>();
             for (EMGroup group : allGroups) {
-                if(!TextUtils.equals(group.getOwner(), currentUser) && !group.getAdminList().contains(currentUser)) {
+                if(!TextUtils.equals(group.getOwner(), getCurrentUser()) && !group.getAdminList().contains(getCurrentUser())) {
                     joinGroups.add(group);
                 }
             }

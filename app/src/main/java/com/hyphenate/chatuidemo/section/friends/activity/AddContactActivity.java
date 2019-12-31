@@ -18,6 +18,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.hyphenate.chatuidemo.R;
 import com.hyphenate.chatuidemo.common.enums.SearchType;
 import com.hyphenate.chatuidemo.common.enums.Status;
+import com.hyphenate.chatuidemo.common.interfaceOrImplement.OnResourceParseCallback;
 import com.hyphenate.chatuidemo.section.base.BaseInitActivity;
 import com.hyphenate.chatuidemo.section.friends.adapter.AddContactAdapter;
 import com.hyphenate.chatuidemo.section.friends.viewmodels.AddContactViewModel;
@@ -97,16 +98,13 @@ public class AddContactActivity extends BaseInitActivity implements EaseTitleBar
         super.initData();
         mViewModel = new ViewModelProvider(mContext).get(AddContactViewModel.class);
         mViewModel.getAddContact().observe(this, response -> {
-            if(response == null) {
-                return;
-            }
-            if(response.status == Status.SUCCESS) {
-                showToast(getResources().getString(R.string.em_add_contact_send_successful));
-            }else if(response.status == Status.ERROR) {
-                showToast(response.getMessage());
-            }else if(response.status == Status.LOADING) {
-                //
-            }
+            parseResource(response, new OnResourceParseCallback<Boolean>() {
+                @Override
+                public void onSuccess(Boolean data) {
+                    showToast(getResources().getString(R.string.em_add_contact_send_successful));
+                }
+            });
+
         });
     }
 

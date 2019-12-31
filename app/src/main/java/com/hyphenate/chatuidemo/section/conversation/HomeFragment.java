@@ -19,6 +19,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.hyphenate.chat.EMConversation;
 import com.hyphenate.chatuidemo.R;
 import com.hyphenate.chatuidemo.common.enums.Status;
+import com.hyphenate.chatuidemo.common.interfaceOrImplement.OnResourceParseCallback;
 import com.hyphenate.chatuidemo.common.net.ErrorCode;
 import com.hyphenate.chatuidemo.common.utils.ThreadManager;
 import com.hyphenate.chatuidemo.section.base.BaseInitFragment;
@@ -31,6 +32,8 @@ import com.hyphenate.easeui.widget.EaseSearchTextView;
 import com.scwang.smartrefresh.layout.SmartRefreshLayout;
 import com.scwang.smartrefresh.layout.api.RefreshLayout;
 import com.scwang.smartrefresh.layout.listener.OnRefreshListener;
+
+import java.util.List;
 
 public class HomeFragment extends BaseInitFragment implements OnRefreshListener, View.OnClickListener, OnItemClickListener {
     private EaseSearchTextView mTvSearch;
@@ -111,32 +114,28 @@ public class HomeFragment extends BaseInitFragment implements OnRefreshListener,
         super.initViewModel();
         mViewModel = new ViewModelProvider(this).get(HomeViewModel.class);
         mViewModel.getConversationObservable().observe(this, response -> {
-            if(response == null) {
-                return;
-            }
-            if(response.status == Status.SUCCESS) {
-                finishRefresh();
-                mHomeAdapter.setData(response.data);
-            } else if(response.status == Status.ERROR) {
-                finishRefresh();
-                showToast(response.getMessage());
-            }else if(response.status == Status.LOADING) {
-                // do nothing
-            }
+            parseResource(response, new OnResourceParseCallback<List<EMConversation>>() {
+                @Override
+                public void onSuccess(List<EMConversation> data) {
+                    mHomeAdapter.setData(data);
+                }
+
+                @Override
+                public void hideLoading() {
+                    super.hideLoading();
+                    finishRefresh();
+                }
+            });
 
         });
 
         mViewModel.getDeleteObservable().observe(this, response -> {
-            if(response == null) {
-                return;
-            }
-            if(response.status == Status.SUCCESS) {
-                mViewModel.loadConversationList();
-            }else if(response.status == Status.ERROR) {
-                showToast(response.getMessage());
-            }else if(response.status == Status.LOADING) {
-
-            }
+            parseResource(response, new OnResourceParseCallback<Boolean>() {
+                @Override
+                public void onSuccess(Boolean data) {
+                    mViewModel.loadConversationList();
+                }
+            });
         });
     }
 

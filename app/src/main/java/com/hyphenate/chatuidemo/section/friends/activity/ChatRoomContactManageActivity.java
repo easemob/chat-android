@@ -5,9 +5,12 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 
+import androidx.lifecycle.ViewModelProvider;
+
 import com.hyphenate.chatuidemo.R;
 import com.hyphenate.chatuidemo.section.base.BaseInitActivity;
 import com.hyphenate.chatuidemo.section.friends.fragment.ChatRoomContactManageFragment;
+import com.hyphenate.chatuidemo.section.friends.viewmodels.ChatRoomContactViewModel;
 import com.hyphenate.easeui.widget.EaseSearchTextView;
 import com.hyphenate.easeui.widget.EaseTitleBar;
 

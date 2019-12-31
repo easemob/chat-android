@@ -20,27 +20,27 @@ import com.hyphenate.exceptions.HyphenateException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class EMContactManagerRepository {
+public class EMContactManagerRepository extends BaseEMRepository{
 
     public LiveData<Resource<Boolean>> addContact(String username, String reason) {
         return new NetworkOnlyResource<Boolean>() {
 
             @Override
             protected void createCall(@NonNull ResultCallBack<LiveData<Boolean>> callBack) {
-                if(DemoHelper.getInstance().getEMClient().getCurrentUser().equalsIgnoreCase(username)) {
+                if(getCurrentUser().equalsIgnoreCase(username)) {
                     callBack.onError(ErrorCode.EM_ADD_SELF_ERROR);
                     return;
                 }
-                List<String> users = DemoDbHelper.getInstance(DemoApp.getInstance()).getUserDao().loadAllUsers();
+                List<String> users = getUserDao().loadAllUsers();
                 if(users != null && users.contains(username)) {
-                    if(DemoHelper.getInstance().getContactManager().getBlackListUsernames().contains(username)) {
+                    if(getContactManager().getBlackListUsernames().contains(username)) {
                         callBack.onError(ErrorCode.EM_FRIEND_BLACK_ERROR);
                         return;
                     }
                     callBack.onError(ErrorCode.EM_FRIEND_ERROR);
                     return;
                 }
-                DemoHelper.getInstance().getContactManager().aysncAddContact(username, reason, new EMCallBack() {
+                getContactManager().aysncAddContact(username, reason, new EMCallBack() {
                     @Override
                     public void onSuccess() {
                         callBack.onSuccess(new MutableLiveData<>(true));
@@ -71,22 +71,22 @@ public class EMContactManagerRepository {
 
             @Override
             protected LiveData<List<EaseUser>> loadFromDb() {
-                return DemoDbHelper.getInstance(DemoApp.getInstance()).getUserDao().loadUsers();
+                return getUserDao().loadUsers();
             }
 
             @Override
             protected void createCall(ResultCallBack<LiveData<List<EaseUser>>> callBack) {
-                ThreadManager.getInstance().runOnIOThread(()-> {
+                runOnIOThread(()-> {
                     try {
-                        List<String> usernames = DemoHelper.getInstance().getContactManager().getAllContactsFromServer();
-                        List<String> ids = DemoHelper.getInstance().getContactManager().getSelfIdsOnOtherPlatform();
+                        List<String> usernames = getContactManager().getAllContactsFromServer();
+                        List<String> ids = getContactManager().getSelfIdsOnOtherPlatform();
                         if(usernames == null) {
                             usernames = new ArrayList<>();
                         }
                         if(ids != null && !ids.isEmpty()) {
                             usernames.addAll(ids);
                         }
-                        callBack.onSuccess(new MutableLiveData<>(EmUserEntity.parse(usernames)));
+                        callBack.onSuccess(createLiveData(EmUserEntity.parse(usernames)));
 
                     } catch (HyphenateException e) {
                         e.printStackTrace();
@@ -97,7 +97,7 @@ public class EMContactManagerRepository {
 
             @Override
             protected void saveCallResult(List<EaseUser> items) {
-                DemoDbHelper.getInstance(DemoApp.getInstance()).getUserDao().insert(EmUserEntity.parseList(items));
+                getUserDao().insert(EmUserEntity.parseList(items));
             }
 
         }.asLiveData();

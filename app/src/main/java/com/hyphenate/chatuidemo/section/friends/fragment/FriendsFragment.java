@@ -15,6 +15,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import com.hyphenate.chatuidemo.R;
 import com.hyphenate.chatuidemo.common.db.DemoDbHelper;
 import com.hyphenate.chatuidemo.common.enums.Status;
+import com.hyphenate.chatuidemo.common.interfaceOrImplement.OnResourceParseCallback;
 import com.hyphenate.chatuidemo.common.widget.ContactItemView;
 import com.hyphenate.chatuidemo.section.base.BaseInitFragment;
 import com.hyphenate.chatuidemo.section.friends.activity.ChatRoomContactManageActivity;
@@ -109,17 +110,21 @@ public class FriendsFragment extends BaseInitFragment implements View.OnClickLis
         super.initData();
         mViewModel = new ViewModelProvider(this).get(FriendsViewModel.class);
         mViewModel.getContactObservable().observe(this, response -> {
-            if(response.status == Status.SUCCESS) {
-                finishRefresh();
-                // 先进行排序
-                sortData(response.data);
-                mAdapter.setData(response.data);
-            }else if(response.status == Status.ERROR) {
-                finishRefresh();
-                showToast(response.getMessage());
-            }else if(response.status == Status.LOADING) {
+            parseResource(response, new OnResourceParseCallback<List<EaseUser>>() {
+                @Override
+                public void onSuccess(List<EaseUser> data) {
+                    // 先进行排序
+                    sortData(data);
+                    mAdapter.setData(data);
+                }
 
-            }
+                @Override
+                public void hideLoading() {
+                    super.hideLoading();
+                    finishRefresh();
+                }
+            });
+
         });
         mViewModel.loadContactList();
     }

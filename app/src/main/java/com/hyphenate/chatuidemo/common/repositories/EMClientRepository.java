@@ -20,11 +20,7 @@ import com.hyphenate.exceptions.HyphenateException;
 /**
  * 作为EMClient的repository,处理EMClient相关的逻辑
  */
-public class EMClientRepository {
-
-    public boolean isLoggedIn() {
-        return EMClient.getInstance().isLoggedInBefore();
-    }
+public class EMClientRepository extends BaseEMRepository{
 
     /**
      * 登录过后需要加载的数据
@@ -35,12 +31,11 @@ public class EMClientRepository {
 
             @Override
             protected void createCall(ResultCallBack<LiveData<Boolean>> callBack) {
-                if(DemoHelper.getInstance().getAutoLogin()) {
-                    ThreadManager.getInstance().runOnIOThread(() -> {
+                if(isAutoLogin()) {
+                    runOnIOThread(() -> {
                         if(isLoggedIn()) {
                             loadAllConversationsAndGroups();
-                            MutableLiveData<Boolean> observable = new MutableLiveData<>(true);
-                            callBack.onSuccess(observable);
+                            callBack.onSuccess(createLiveData(true));
                         }else {
                             callBack.onError(ErrorCode.EM_NOT_LOGIN);
                         }
@@ -59,10 +54,10 @@ public class EMClientRepository {
      */
     private void loadAllConversationsAndGroups() {
         // 初始化数据库
-        DemoDbHelper.getInstance(DemoApp.getInstance()).initDb(EMClient.getInstance().getCurrentUser());
+        initDb();
         // 从本地数据库加载所有的对话及群组
-        EMClient.getInstance().chatManager().loadAllConversations();
-        EMClient.getInstance().groupManager().loadAllGroups();
+        getChatManager().loadAllConversations();
+        getGroupManager().loadAllGroups();
     }
 
     /**
@@ -81,11 +76,10 @@ public class EMClientRepository {
                     DemoHelper.getInstance().init(DemoApp.getInstance());
                     DemoHelper.getInstance().setCurrentUserName(userName);
                 }
-                ThreadManager.getInstance().runOnIOThread(() -> {
+                runOnIOThread(() -> {
                     try {
                         EMClient.getInstance().createAccount(userName, pwd);
-                        MutableLiveData<String> observable = new MutableLiveData<>(userName);
-                        callBack.onSuccess(observable);
+                        callBack.onSuccess(createLiveData(userName));
                     } catch (HyphenateException e) {
                         callBack.onError(e.getErrorCode(), e.getMessage());
                     }

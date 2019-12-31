@@ -9,6 +9,7 @@ import androidx.lifecycle.ViewModelProviders;
 
 import com.hyphenate.chatuidemo.MainActivity;
 import com.hyphenate.chatuidemo.R;
+import com.hyphenate.chatuidemo.common.interfaceOrImplement.OnResourceParseCallback;
 import com.hyphenate.chatuidemo.common.utils.DemoLog;
 import com.hyphenate.chatuidemo.section.base.BaseInitActivity;
 import com.hyphenate.chatuidemo.common.enums.Status;
@@ -31,17 +32,22 @@ public class SplashActivity extends BaseInitActivity {
         super.initData();
         SplashViewModel model = new ViewModelProvider(this).get(SplashViewModel.class);
         model.getLoginData().observe(this, response -> {
-            if(response == null) {
-                return;
-            }
-            if(response.status == Status.SUCCESS) {
-                MainActivity.startAction(mContext);
-                finish();
-            }else if(response.status == Status.ERROR) {
-                DemoLog.i("TAG", "error message = "+response.getMessage());
-                LoginActivity.startAction(mContext);
-                finish();
-            }
+            parseResource(response, new OnResourceParseCallback<Boolean>(true) {
+                @Override
+                public void onSuccess(Boolean data) {
+                    MainActivity.startAction(mContext);
+                    finish();
+                }
+
+                @Override
+                public void onError(int code, String message) {
+                    super.onError(code, message);
+                    DemoLog.i("TAG", "error message = "+response.getMessage());
+                    LoginActivity.startAction(mContext);
+                    finish();
+                }
+            });
+
         });
     }
 }

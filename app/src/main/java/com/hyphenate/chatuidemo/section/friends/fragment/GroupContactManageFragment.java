@@ -12,12 +12,15 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import com.hyphenate.chat.EMGroup;
 import com.hyphenate.chatuidemo.R;
 import com.hyphenate.chatuidemo.common.enums.Status;
+import com.hyphenate.chatuidemo.common.interfaceOrImplement.OnResourceParseCallback;
 import com.hyphenate.chatuidemo.section.base.BaseInitFragment;
 import com.hyphenate.chatuidemo.section.friends.adapter.GroupContactAdapter;
 import com.hyphenate.chatuidemo.section.friends.viewmodels.GroupContactViewModel;
 import com.hyphenate.easeui.utils.EaseCommonUtils;
 import com.hyphenate.easeui.widget.EaseRecyclerView;
 import com.hyphenate.easeui.widget.EaseSidebar;
+
+import java.util.List;
 
 
 public class GroupContactManageFragment extends ContactManageFragment implements EaseSidebar.OnTouchEventListener {
@@ -46,16 +49,13 @@ public class GroupContactManageFragment extends ContactManageFragment implements
         super.initViewModel();
         mViewModel = new ViewModelProvider(mContext).get(GroupContactViewModel.class);
         mViewModel.getAllGroups().observe(this, response -> {
-            if(response == null) {
-                return;
-            }
-            if(response.status == Status.SUCCESS) {
-                mAdapter.setData(mType == 0 ? mViewModel.getManageGroups(response.data) : mViewModel.getJoinGroups(response.data));
-            }else if(response.status == Status.ERROR) {
-                showToast(response.getMessage());
-            }else if(response.status == Status.LOADING) {
+            parseResource(response, new OnResourceParseCallback<List<EMGroup>>() {
+                @Override
+                public void onSuccess(List<EMGroup> data) {
+                    mAdapter.setData(mType == 0 ? mViewModel.getManageGroups(data) : mViewModel.getJoinGroups(data));
+                }
+            });
 
-            }
         });
     }
 

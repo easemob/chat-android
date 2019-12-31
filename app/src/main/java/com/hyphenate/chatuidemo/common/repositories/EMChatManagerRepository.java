@@ -25,11 +25,7 @@ import java.util.Map;
 /**
  * 处理与chat相关的逻辑
  */
-public class EMChatManagerRepository {
-
-    private EMChatManager getChatManager() {
-        return DemoHelper.getInstance().getEMClient().chatManager();
-    }
+public class EMChatManagerRepository extends BaseEMRepository{
 
     /**
      * 获取会话列表
@@ -54,7 +50,7 @@ public class EMChatManagerRepository {
     +    */
     protected List<EMConversation> loadConversationListFromCache(){
         // get all conversations
-        Map<String, EMConversation> conversations = EMClient.getInstance().chatManager().getAllConversations();
+        Map<String, EMConversation> conversations = getChatManager().getAllConversations();
         List<Pair<Long, EMConversation>> sortList = new ArrayList<Pair<Long, EMConversation>>();
         List<Pair<Long, EMConversation>> topSortList = new ArrayList<Pair<Long, EMConversation>>();
         /**

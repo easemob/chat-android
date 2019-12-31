@@ -14,6 +14,7 @@ import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 
 import androidx.annotation.ColorRes;
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.StringRes;
 import androidx.appcompat.app.AppCompatActivity;
@@ -21,6 +22,9 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.core.content.ContextCompat;
 
 import com.hyphenate.chatuidemo.R;
+import com.hyphenate.chatuidemo.common.enums.Status;
+import com.hyphenate.chatuidemo.common.interfaceOrImplement.OnResourceParseCallback;
+import com.hyphenate.chatuidemo.common.net.Resource;
 import com.hyphenate.chatuidemo.common.utils.StatusBarCompat;
 import com.hyphenate.chatuidemo.common.utils.ToastUtils;
 
@@ -186,6 +190,30 @@ public class BaseActivity extends AppCompatActivity {
             window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
             window.getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN | View.SYSTEM_UI_FLAG_LAYOUT_STABLE);
             window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+        }
+    }
+
+    /**
+     * 解析Resource<T>
+     * @param response
+     * @param callback
+     * @param <T>
+     */
+    public <T> void parseResource(Resource<T> response, @NonNull OnResourceParseCallback<T> callback) {
+        if(response == null) {
+            return;
+        }
+        if(response.status == Status.SUCCESS) {
+            callback.hideLoading();
+            callback.onSuccess(response.data);
+        }else if(response.status == Status.ERROR) {
+            callback.hideLoading();
+            if(!callback.hideErrorMsg) {
+                showToast(response.getMessage());
+            }
+            callback.onError(response.errorCode, response.getMessage());
+        }else if(response.status == Status.LOADING) {
+            callback.onLoading();
         }
     }
 

@@ -11,10 +11,12 @@ import android.widget.Button;
 import android.widget.EditText;
 
 import androidx.core.content.ContextCompat;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.lifecycle.ViewModelProviders;
 
 import com.hyphenate.chatuidemo.R;
 import com.hyphenate.chatuidemo.common.enums.Status;
+import com.hyphenate.chatuidemo.common.interfaceOrImplement.OnResourceParseCallback;
 import com.hyphenate.chatuidemo.common.utils.ToastUtils;
 import com.hyphenate.easeui.widget.EaseTitleBar;
 import com.hyphenate.chatuidemo.section.base.BaseInitFragment;
@@ -60,21 +62,21 @@ public class RegisterFragment extends BaseInitFragment implements TextWatcher, V
     @Override
     protected void initData() {
         super.initData();
-        mViewModel = ViewModelProviders.of(mContext).get(LoginViewModel.class);
+        mViewModel = new ViewModelProvider(mContext).get(LoginViewModel.class);
         mViewModel.getRegisterObservable().observe(this, response -> {
-            if(response == null) {
-                return;
-            }
-            Log.e("TAG", "register result = "+response);
-            if(response.status == Status.SUCCESS) {
-                ToastUtils.showSuccessToast(getResources().getString(R.string.em_register_success));
-                onBackPress();
-            } else if(response.status == Status.ERROR) {
-                Log.e("TAG", "注册失败" + response.getMessage());
-                ToastUtils.showFailToast(getResources().getString(R.string.em_register_failed), response.getMessage());
-            }else {
-                Log.e("TAG", "正在注册");
-            }
+            parseResource(response, new OnResourceParseCallback<String>(true) {
+                @Override
+                public void onSuccess(String data) {
+                    ToastUtils.showSuccessToast(getResources().getString(R.string.em_register_success));
+                    onBackPress();
+                }
+
+                @Override
+                public void onError(int code, String message) {
+                    ToastUtils.showFailToast(getResources().getString(R.string.em_register_failed), message);
+                }
+            });
+
         });
     }
 
