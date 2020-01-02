@@ -29,8 +29,8 @@ public class EaseChatRowVideo extends EaseChatRowFile {
     private TextView timeLengthView;
     private ImageView playView;
 
-    public EaseChatRowVideo(Context context, EMMessage message) {
-        super(context, message);
+    public EaseChatRowVideo(Context context) {
+        super(context);
     }
 
     public EaseChatRowVideo(Context context, EMMessage message, int position, Object adapter) {

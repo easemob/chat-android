@@ -1,7 +1,6 @@
 package com.hyphenate.easeui.adapter;
 
 import android.content.Context;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,8 +14,6 @@ import com.hyphenate.easeui.interfaces.OnItemClickListener;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import javax.crypto.spec.PSource;
 
 /**
  * 作为RecyclerView Adapter的基类，有默认空白布局
@@ -36,7 +33,7 @@ public abstract class EaseBaseRecyclerViewAdapter<T> extends EaseBaseAdapter<Eas
         if(viewType == VIEW_TYPE_EMPTY) {
             return getEmptyViewHolder(parent);
         }
-        return getViewHolder(parent);
+        return getViewHolder(parent, viewType);
     }
 
     @Override
@@ -83,7 +80,7 @@ public abstract class EaseBaseRecyclerViewAdapter<T> extends EaseBaseAdapter<Eas
      */
     private ViewHolder getEmptyViewHolder(ViewGroup parent) {
         View emptyView = getEmptyView(parent);
-        return new ViewHolder(emptyView) {
+        return new ViewHolder<T>(emptyView) {
 
             @Override
             public void initView(View itemView) {
@@ -109,9 +106,10 @@ public abstract class EaseBaseRecyclerViewAdapter<T> extends EaseBaseAdapter<Eas
     /**
      * 获取ViewHolder
      * @param parent
+     * @param viewType
      * @return
      */
-    public abstract ViewHolder getViewHolder(ViewGroup parent);
+    public abstract ViewHolder getViewHolder(ViewGroup parent, int viewType);
 
     /**
      * 根据position获取相应的data
@@ -185,7 +183,7 @@ public abstract class EaseBaseRecyclerViewAdapter<T> extends EaseBaseAdapter<Eas
         mOnItemClickListener = listener;
     }
 
-    public abstract class ViewHolder extends RecyclerView.ViewHolder {
+    public abstract static class ViewHolder<T> extends RecyclerView.ViewHolder {
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);

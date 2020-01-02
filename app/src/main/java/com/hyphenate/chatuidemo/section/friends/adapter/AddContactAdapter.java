@@ -18,7 +18,7 @@ public class AddContactAdapter extends EaseBaseRecyclerViewAdapter<String> {
     private OnItemAddClickListener mListener;
 
     @Override
-    public ViewHolder getViewHolder(ViewGroup parent) {
+    public ViewHolder getViewHolder(ViewGroup parent, int viewType) {
         return new MyViewHolder(LayoutInflater.from(mContext).inflate(R.layout.em_item_search_list, parent, false));
     }
 
@@ -27,7 +27,7 @@ public class AddContactAdapter extends EaseBaseRecyclerViewAdapter<String> {
         return R.layout.em_layout_empty_list_invisible;
     }
 
-    private class MyViewHolder extends ViewHolder {
+    private class MyViewHolder extends ViewHolder<String> {
         private EaseImageView mIvSearchUserIcon;
         private TextView mTvSearchName;
         private TextView mTvSearchUserId;

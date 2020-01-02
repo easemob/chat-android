@@ -10,7 +10,6 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 
 import com.hyphenate.chat.EMChatRoom;
-import com.hyphenate.chat.EMGroup;
 import com.hyphenate.chatuidemo.R;
 import com.hyphenate.easeui.adapter.EaseBaseRecyclerViewAdapter;
 import com.hyphenate.easeui.utils.EaseCommonUtils;
@@ -18,11 +17,11 @@ import com.hyphenate.easeui.widget.EaseImageView;
 
 public class ChatRoomContactAdapter extends EaseBaseRecyclerViewAdapter<EMChatRoom> {
     @Override
-    public ViewHolder getViewHolder(ViewGroup parent) {
+    public ViewHolder getViewHolder(ViewGroup parent, int viewType) {
         return new GroupViewHolder(LayoutInflater.from(mContext).inflate(R.layout.em_widget_contact_item, parent, false));
     }
 
-    private class GroupViewHolder extends ViewHolder {
+    private class GroupViewHolder extends ViewHolder<EMChatRoom> {
         private TextView mHeader;
         private EaseImageView mAvatar;
         private TextView mName;

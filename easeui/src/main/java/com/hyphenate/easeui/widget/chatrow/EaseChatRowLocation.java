@@ -17,8 +17,8 @@ public class EaseChatRowLocation extends EaseChatRow {
     private TextView locationView;
     private EMLocationMessageBody locBody;
 
-    public EaseChatRowLocation(Context context, EMMessage message) {
-        super(context, message);
+    public EaseChatRowLocation(Context context) {
+        super(context);
     }
 
     public EaseChatRowLocation(Context context, EMMessage message, int position, Object adapter) {

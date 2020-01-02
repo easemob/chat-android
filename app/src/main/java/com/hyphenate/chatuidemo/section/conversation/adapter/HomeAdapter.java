@@ -26,11 +26,11 @@ import java.util.Date;
 public class HomeAdapter extends EaseBaseRecyclerViewAdapter<EMConversation> {
 
     @Override
-    public ViewHolder getViewHolder(ViewGroup parent) {
+    public ViewHolder getViewHolder(ViewGroup parent, int viewType) {
         return new MyViewHolder(LayoutInflater.from(mContext).inflate(R.layout.ease_item_row_chat_history, parent, false));
     }
 
-    private class MyViewHolder extends ViewHolder {
+    private class MyViewHolder extends ViewHolder<EMConversation> {
         private EaseImageView avatar;
         private TextView mUnreadMsgNumber;
         private TextView name;

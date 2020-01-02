@@ -18,8 +18,8 @@ import java.util.List;
 public class EaseChatRowText extends EaseChatRow {
 	private TextView contentView;
 
-    public EaseChatRowText(Context context, EMMessage message) {
-		super(context, message);
+    public EaseChatRowText(Context context) {
+		super(context);
 	}
 
     public EaseChatRowText(Context context, EMMessage message, int position, Object adapter) {

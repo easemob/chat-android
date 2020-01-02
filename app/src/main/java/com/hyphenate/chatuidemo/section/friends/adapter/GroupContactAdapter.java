@@ -17,11 +17,11 @@ import com.hyphenate.easeui.widget.EaseImageView;
 
 public class GroupContactAdapter extends EaseBaseRecyclerViewAdapter<EMGroup> {
     @Override
-    public ViewHolder getViewHolder(ViewGroup parent) {
+    public ViewHolder getViewHolder(ViewGroup parent, int viewType) {
         return new GroupViewHolder(LayoutInflater.from(mContext).inflate(R.layout.em_widget_contact_item, parent, false));
     }
 
-    private class GroupViewHolder extends ViewHolder {
+    private class GroupViewHolder extends ViewHolder<EMGroup> {
         private TextView mHeader;
         private EaseImageView mAvatar;
         private TextView mName;

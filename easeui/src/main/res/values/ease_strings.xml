@@ -16,6 +16,34 @@
     <string name="not_download">未下载:</string>
     <string name="have_downloaded">已下载</string>
     <string name="did_not_download">未下载</string>
+    <string name="downwaiting">正在下载文件请稍后</string>
+    <string name="Failed_to_download_file">下载文件失败:</string>
+    <string name="File_expired">文件已过期:</string>
+    <string name="Download_the_pictures">下载图片: 0%</string>
+    <string name="Image_expired">图片已过期!</string>
+    <string name="Video_expired">视频已过期!</string>
+    <string name="Download_the_pictures_new">下载图片:</string>
+    <string name="location_message">位置信息</string>
+    <string name="button_send">发送</string>
+    <string name="Network_error">网络出错</string>
+    <string name="please_check">key 验证出错! 请在 AndroidManifest.xml 文件中检查 key 设置</string>
+    <string name="Making_sure_your_location">正在确定你的位置……</string>
+    <string name="is_down_please_wait">正在下载视频请稍候</string>
+    <string name="Is_download_voice_click_later">正在下载语音，稍后点击</string>
+    <string name="alert_kicked_for_offline">您已由于断线被踢出聊天室,点击重新加入.</string>
+    <string name="button_pushtotalk">按住说话</string>
+    <string name="Recording_without_permission">无录音权限</string>
+    <string name="The_recording_time_is_too_short">录音时间太短</string>
+    <string name="send_failure_please">发送失败，请检测服务器是否连接</string>
+    <string name="Send_voice_need_sdcard_support">发送语音需要sdcard支持</string>
+    <string name="move_up_to_cancel">手指上滑，取消发送</string>
+    <string name="release_to_cancel">松开手指，取消发送</string>
+    <string name="send_fail">发送消息失败,</string>
+    <string name="recoding_fail">录音失败，请重试！</string>
+
+    <!-- For group ack start -->
+    <string name="title_group_notification">群通知</string>
+    <string name="title_ack_read_list">已读列表</string>
     <string name="group_ack_read_count">%1$d 已读</string>
 
     <string name="search_new">搜</string>

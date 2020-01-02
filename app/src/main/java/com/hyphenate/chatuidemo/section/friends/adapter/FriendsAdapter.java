@@ -17,7 +17,7 @@ import com.hyphenate.easeui.widget.EaseImageView;
 public class FriendsAdapter extends EaseBaseRecyclerViewAdapter<EaseUser> {
 
     @Override
-    public ViewHolder getViewHolder(ViewGroup parent) {
+    public ViewHolder getViewHolder(ViewGroup parent, int viewType) {
         return new MyViewHolder(LayoutInflater.from(mContext).inflate(R.layout.em_widget_contact_item, parent, false));
     }
 
@@ -26,7 +26,7 @@ public class FriendsAdapter extends EaseBaseRecyclerViewAdapter<EaseUser> {
         return R.layout.em_layout_friends_empty_list;
     }
 
-    private class MyViewHolder extends ViewHolder {
+    private class MyViewHolder extends ViewHolder<EaseUser> {
         private TextView mHeader;
         private EaseImageView mAvatar;
         private TextView mName;

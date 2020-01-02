@@ -87,10 +87,9 @@ public abstract class EaseChatRow extends LinearLayout {
     protected EaseMessageListItemStyle itemStyle;
     private EaseChatRowActionCallback itemActionCallback;
 
-    public EaseChatRow(Context context, EMMessage message) {
+    public EaseChatRow(Context context) {
         super(context);
         this.context = (Activity) context;
-        this.message = message;
         this.inflater = LayoutInflater.from(context);
 
         initView();

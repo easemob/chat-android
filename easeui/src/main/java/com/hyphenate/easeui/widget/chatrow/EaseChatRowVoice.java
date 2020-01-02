@@ -21,8 +21,8 @@ public class EaseChatRowVoice extends EaseChatRowFile {
     private ImageView readStatusView;
     private AnimationDrawable voiceAnimation;
 
-    public EaseChatRowVoice(Context context, EMMessage message) {
-        super(context, message);
+    public EaseChatRowVoice(Context context) {
+        super(context);
     }
 
     public EaseChatRowVoice(Context context, EMMessage message, int position, Object adapter) {

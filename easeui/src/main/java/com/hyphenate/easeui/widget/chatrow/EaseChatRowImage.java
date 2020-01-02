@@ -25,8 +25,8 @@ public class EaseChatRowImage extends EaseChatRowFile {
     protected ImageView imageView;
     private EMImageMessageBody imgBody;
 
-    public EaseChatRowImage(Context context, EMMessage message) {
-        super(context, message);
+    public EaseChatRowImage(Context context) {
+        super(context);
     }
 
     public EaseChatRowImage(Context context, EMMessage message, int position, Object adapter) {

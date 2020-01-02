@@ -48,4 +48,13 @@
         <attr name="ease_side_bar_head_arrays" format="reference"/>
     </declare-styleable>
 
+    <declare-styleable name="EaseChatExtendMenu">
+        <attr name="numColumns" format="integer"/>
+    </declare-styleable>
+
+    <declare-styleable name="EaseEmojiconMenu">
+        <attr name="bigEmojiconRows" format="integer"/>
+        <attr name="emojiconColumns" format="integer"/>
+    </declare-styleable>
+
 </resources>
