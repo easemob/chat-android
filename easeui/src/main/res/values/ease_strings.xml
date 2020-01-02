@@ -11,6 +11,13 @@
     <string name="video_call">[视频通话]</string>
     <string name="dynamic_expression">[动态表情]</string>
 
+    <string name="text_ack_msg">已读</string>
+    <string name="text_delivered_msg">送达</string>
+    <string name="not_download">未下载:</string>
+    <string name="have_downloaded">已下载</string>
+    <string name="did_not_download">未下载</string>
+    <string name="group_ack_read_count">%1$d 已读</string>
+
     <string name="search_new">搜</string>
 
     <string name="ease_search_text_hint">搜索</string>

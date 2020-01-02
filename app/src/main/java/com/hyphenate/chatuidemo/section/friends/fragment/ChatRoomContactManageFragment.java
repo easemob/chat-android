@@ -109,6 +109,7 @@ public class ChatRoomContactManageFragment extends BaseInitFragment implements O
 
     @Override
     public void onLoadMore(RefreshLayout refreshLayout) {
+        // TODO: 2020/1/2 0002 检查这样处理的逻辑是否正确
         pageNum++;
         mViewModel.setLoadMoreChatRooms(pageNum, PAGE_SIZE);
     }

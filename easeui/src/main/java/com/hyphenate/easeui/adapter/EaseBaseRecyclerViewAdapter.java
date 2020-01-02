@@ -22,7 +22,7 @@ import javax.crypto.spec.PSource;
  * 作为RecyclerView Adapter的基类，有默认空白布局
  * @param <T>
  */
-public abstract class EaseBaseRecyclerViewAdapter<T> extends RecyclerView.Adapter<EaseBaseRecyclerViewAdapter.ViewHolder> {
+public abstract class EaseBaseRecyclerViewAdapter<T> extends EaseBaseAdapter<EaseBaseRecyclerViewAdapter.ViewHolder> {
     private static final int VIEW_TYPE_EMPTY = 1;
     private static final int VIEW_TYPE_ITEM = 0;
     private OnItemClickListener mOnItemClickListener;

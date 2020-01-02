@@ -1,5 +1,6 @@
 package com.hyphenate.easeui;
 
+import com.hyphenate.easeui.domain.EaseAvatarOptions;
 import com.hyphenate.easeui.provider.EaseEmojiconInfoProvider;
 import com.hyphenate.easeui.provider.EaseSettingsProvider;
 import com.hyphenate.easeui.provider.EaseUserProfileProvider;
@@ -12,6 +13,10 @@ public class EaseUI {
     private EaseEmojiconInfoProvider mEmojiconInfoProvider;
 
     private EaseUserProfileProvider userProvider;
+    /**
+     * chat avatar options which we can easily control the style
+     */
+    private EaseAvatarOptions avatarOptions;
 
     private EaseUI() {}
 
@@ -77,6 +82,23 @@ public class EaseUI {
      */
     public EaseUI setUserProvider(EaseUserProfileProvider userProvider) {
         this.userProvider = userProvider;
+        return this;
+    }
+
+    /**
+     * get avatar options
+     * @return
+     */
+    public EaseAvatarOptions getAvatarOptions() {
+        return avatarOptions;
+    }
+
+    /**
+     * set avatar options
+     * @param avatarOptions
+     */
+    public EaseUI setAvatarOptions(EaseAvatarOptions avatarOptions) {
+        this.avatarOptions = avatarOptions;
         return this;
     }
 }

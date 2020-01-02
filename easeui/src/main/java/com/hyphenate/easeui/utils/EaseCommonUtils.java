@@ -134,7 +134,7 @@ public class EaseCommonUtils {
     }
 	
 	/**
-	 * get top activity
+	 * get top context
 	 * @param context
 	 * @return
 	 */
