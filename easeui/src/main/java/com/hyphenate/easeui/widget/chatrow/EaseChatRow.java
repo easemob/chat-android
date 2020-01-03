@@ -306,6 +306,20 @@ public abstract class EaseChatRow extends LinearLayout {
         }
     }
 
+    public void setTimestamp(EMMessage preMessage) {
+        if (position == 0) {
+            timeStampView.setText(DateUtils.getTimestampString(new Date(message.getMsgTime())));
+            timeStampView.setVisibility(View.VISIBLE);
+        } else {
+            if (preMessage != null && DateUtils.isCloseEnough(message.getMsgTime(), preMessage.getMsgTime())) {
+                timeStampView.setVisibility(View.GONE);
+            } else {
+                timeStampView.setText(DateUtils.getTimestampString(new Date(message.getMsgTime())));
+                timeStampView.setVisibility(View.VISIBLE);
+            }
+        }
+    }
+
     /**
      * set click listener
      */

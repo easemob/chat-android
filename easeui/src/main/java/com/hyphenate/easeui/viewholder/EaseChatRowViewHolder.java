@@ -8,11 +8,15 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 
 import com.hyphenate.chat.EMMessage;
+import com.hyphenate.easeui.adapter.EaseBaseAdapter;
 import com.hyphenate.easeui.adapter.EaseMessageAdapter;
 import com.hyphenate.easeui.interfaces.MessageListItemClickListener;
 import com.hyphenate.easeui.model.styles.EaseMessageListItemStyle;
 import com.hyphenate.easeui.widget.chatrow.EaseChatRow;
 import com.hyphenate.util.EMLog;
+
+import java.security.MessageDigest;
+import java.util.List;
 
 
 public class EaseChatRowViewHolder extends EaseMessageAdapter.ViewHolder<EMMessage> implements EaseChatRow.EaseChatRowActionCallback {
@@ -92,6 +96,12 @@ public class EaseChatRowViewHolder extends EaseMessageAdapter.ViewHolder<EMMessa
         message = item;
         chatRow.setUpView(item, position, mItemClickListener, this, mItemStyle);
         handleMessage();
+    }
+
+    @Override
+    public void setDataList(List<EMMessage> data, int position) {
+        super.setDataList(data, position);
+        chatRow.setTimestamp(position == 0 ? null : data.get(position - 1));
     }
 
     @Override

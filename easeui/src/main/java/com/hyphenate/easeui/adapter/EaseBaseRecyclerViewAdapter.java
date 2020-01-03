@@ -40,11 +40,13 @@ public abstract class EaseBaseRecyclerViewAdapter<T> extends EaseBaseAdapter<Eas
 
     @Override
     public void onBindViewHolder(@NonNull EaseBaseRecyclerViewAdapter.ViewHolder holder, final int position) {
+        holder.setAdapter(this);
         if(mData == null || mData.isEmpty()) {
             return;
         }
         T item = mData.get(position);
         holder.setData(item, position);
+        holder.setDataList(mData, position);
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -136,10 +138,12 @@ public abstract class EaseBaseRecyclerViewAdapter<T> extends EaseBaseAdapter<Eas
      * @param item
      */
     public void addData(T item) {
-        if(this.mData == null) {
-            this.mData = new ArrayList<>();
+        synchronized (EaseBaseRecyclerViewAdapter.class) {
+            if(this.mData == null) {
+                this.mData = new ArrayList<>();
+            }
+            this.mData.add(item);
         }
-        this.mData.add(item);
         notifyDataSetChanged();
     }
 
@@ -148,13 +152,15 @@ public abstract class EaseBaseRecyclerViewAdapter<T> extends EaseBaseAdapter<Eas
      * @param data
      */
     public void addData(List<T> data) {
-        if(data == null || data.isEmpty()) {
-            return;
-        }
-        if(this.mData == null) {
-            this.mData = data;
-        }else {
-            this.mData.addAll(data);
+        synchronized (EaseBaseRecyclerViewAdapter.class) {
+            if(data == null || data.isEmpty()) {
+                return;
+            }
+            if(this.mData == null) {
+                this.mData = data;
+            }else {
+                this.mData.addAll(data);
+            }
         }
         notifyDataSetChanged();
     }
@@ -186,6 +192,7 @@ public abstract class EaseBaseRecyclerViewAdapter<T> extends EaseBaseAdapter<Eas
     }
 
     public abstract static class ViewHolder<T> extends RecyclerView.ViewHolder {
+        private EaseBaseAdapter adapter;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -212,6 +219,29 @@ public abstract class EaseBaseRecyclerViewAdapter<T> extends EaseBaseAdapter<Eas
          */
         public  <E extends View> E findViewById(@IdRes int id) {
             return this.itemView.findViewById(id);
+        }
+
+        /**
+         * 设置数据，提供数据集合
+         * @param data
+         * @param position
+         */
+        public void setDataList(List<T> data, int position) { }
+
+        /**
+         * 设置 adapter
+         * @param adapter
+         */
+        private void setAdapter(EaseBaseRecyclerViewAdapter adapter) {
+            this.adapter = adapter;
+        }
+
+        /**
+         * get adapter
+         * @return
+         */
+        public EaseBaseAdapter getAdapter() {
+            return adapter;
         }
     }
 

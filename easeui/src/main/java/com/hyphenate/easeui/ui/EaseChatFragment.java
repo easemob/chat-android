@@ -27,7 +27,6 @@ import com.hyphenate.easeui.constants.EaseConstant;
 import com.hyphenate.easeui.domain.EaseEmojicon;
 import com.hyphenate.easeui.widget.EaseChatExtendMenu;
 import com.hyphenate.easeui.widget.EaseChatInputMenu;
-import com.hyphenate.easeui.widget.EaseRecyclerView;
 
 public class EaseChatFragment extends EaseBaseFragment implements View.OnClickListener, SwipeRefreshLayout.OnRefreshListener, EaseChatInputMenu.ChatInputMenuListener, EaseChatExtendMenu.EaseChatExtendMenuItemClickListener {
     private TextView tvErrorMsg;
