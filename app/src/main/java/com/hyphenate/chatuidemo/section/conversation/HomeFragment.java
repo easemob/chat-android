@@ -23,6 +23,7 @@ import com.hyphenate.chatuidemo.common.interfaceOrImplement.OnResourceParseCallb
 import com.hyphenate.chatuidemo.common.net.ErrorCode;
 import com.hyphenate.chatuidemo.common.utils.ThreadManager;
 import com.hyphenate.chatuidemo.section.base.BaseInitFragment;
+import com.hyphenate.chatuidemo.section.chat.EmChatActivity;
 import com.hyphenate.chatuidemo.section.conversation.adapter.HomeAdapter;
 import com.hyphenate.chatuidemo.section.conversation.viewmodel.HomeViewModel;
 import com.hyphenate.easeui.interfaces.OnItemClickListener;
@@ -178,5 +179,6 @@ public class HomeFragment extends BaseInitFragment implements OnRefreshListener,
     @Override
     public void onItemClick(View view, int position) {
         EMConversation item = mHomeAdapter.getItem(position);
+        EmChatActivity.actionStart(mContext, item.conversationId(), EaseCommonUtils.getChatType(item));
     }
 }

@@ -31,8 +31,8 @@ public class EaseChatRowFile extends EaseChatRow {
     protected TextView fileStateView;
     private EMNormalFileMessageBody fileMessageBody;
 
-    public EaseChatRowFile(Context context) {
-        super(context);
+    public EaseChatRowFile(Context context, boolean isSender) {
+        super(context, isSender);
     }
 
     public EaseChatRowFile(Context context, EMMessage message, int position, Object adapter) {
@@ -41,8 +41,8 @@ public class EaseChatRowFile extends EaseChatRow {
 
     @Override
 	protected void onInflateView() {
-	    inflater.inflate(message.direct() == EMMessage.Direct.RECEIVE ?
-	            R.layout.ease_row_received_file : R.layout.ease_row_sent_file, this);
+	    inflater.inflate(isSender ? R.layout.ease_row_received_file
+                : R.layout.ease_row_sent_file, this);
 	}
 
 	@Override

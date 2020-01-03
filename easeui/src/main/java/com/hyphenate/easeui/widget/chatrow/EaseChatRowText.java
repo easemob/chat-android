@@ -18,8 +18,8 @@ import java.util.List;
 public class EaseChatRowText extends EaseChatRow {
 	private TextView contentView;
 
-    public EaseChatRowText(Context context) {
-		super(context);
+    public EaseChatRowText(Context context, boolean isSender) {
+		super(context, isSender);
 	}
 
     public EaseChatRowText(Context context, EMMessage message, int position, Object adapter) {
@@ -28,8 +28,8 @@ public class EaseChatRowText extends EaseChatRow {
 
 	@Override
 	protected void onInflateView() {
-		inflater.inflate(message.direct() == EMMessage.Direct.RECEIVE ?
-				R.layout.ease_row_received_message : R.layout.ease_row_sent_message, this);
+		inflater.inflate(isSender ? R.layout.ease_row_received_message
+                : R.layout.ease_row_sent_message, this);
 	}
 
 	@Override
@@ -64,13 +64,11 @@ public class EaseChatRowText extends EaseChatRow {
     }
 
     private void onMessageCreate() {
-        progressBar.setVisibility(View.VISIBLE);
-        statusView.setVisibility(View.GONE);
+        setStatus(View.VISIBLE, View.GONE);
     }
 
     private void onMessageSuccess() {
-        progressBar.setVisibility(View.GONE);
-        statusView.setVisibility(View.GONE);
+        setStatus(View.GONE, View.GONE);
 
         // Show "1 Read" if this msg is a ding-type msg.
         if (EaseDingMessageHelper.get().isDingMessage(message) && ackedView != null) {
@@ -84,13 +82,25 @@ public class EaseChatRowText extends EaseChatRow {
     }
 
     private void onMessageError() {
-        progressBar.setVisibility(View.GONE);
-        statusView.setVisibility(View.VISIBLE);
+        setStatus(View.GONE, View.VISIBLE);
     }
 
     private void onMessageInProgress() {
-        progressBar.setVisibility(View.VISIBLE);
-        statusView.setVisibility(View.GONE);
+        setStatus(View.VISIBLE, View.GONE);
+    }
+
+    /**
+     * set progress and status view visible or gone
+     * @param progressVisible
+     * @param statusVisible
+     */
+    private void setStatus(int progressVisible, int statusVisible) {
+        if(progressBar != null) {
+            progressBar.setVisibility(progressVisible);
+        }
+        if(statusView != null) {
+            statusView.setVisibility(statusVisible);
+        }
     }
 
     private EaseDingMessageHelper.IAckUserUpdateListener userUpdateListener = list -> onAckUserUpdate(list.size());

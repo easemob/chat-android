@@ -23,6 +23,7 @@ import android.util.DisplayMetrics;
 import android.util.TypedValue;
 import android.view.WindowManager;
 
+import com.hyphenate.chat.EMConversation;
 import com.hyphenate.chat.EMConversation.EMConversationType;
 import com.hyphenate.chat.EMMessage;
 import com.hyphenate.chat.EMTextMessageBody;
@@ -204,6 +205,23 @@ public class EaseCommonUtils {
             return EMConversationType.GroupChat;
         } else {
             return EMConversationType.ChatRoom;
+        }
+    }
+
+    /**
+     * get chat type by conversation type
+     * @param conversation
+     * @return
+     */
+    public static int getChatType(EMConversation conversation) {
+        if(conversation.isGroup()) {
+            if(conversation.getType() == EMConversationType.ChatRoom) {
+                return EaseConstant.CHATTYPE_CHATROOM;
+            }else {
+                return EaseConstant.CHATTYPE_GROUP;
+            }
+        }else {
+            return EaseConstant.CHATTYPE_SINGLE;
         }
     }
 

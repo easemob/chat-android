@@ -24,9 +24,9 @@ public class EaseLocationViewHolder extends EaseChatRowViewHolder{
     }
 
     public static EaseChatRowViewHolder create(ViewGroup parent,
-                                                                MessageListItemClickListener itemClickListener,
-                                                                EaseMessageListItemStyle itemStyle) {
-        return new EaseLocationViewHolder(new EaseChatRowLocation(parent.getContext()), itemClickListener, itemStyle);
+                                               boolean isSender, MessageListItemClickListener itemClickListener,
+                                               EaseMessageListItemStyle itemStyle) {
+        return new EaseLocationViewHolder(new EaseChatRowLocation(parent.getContext(), isSender), itemClickListener, itemStyle);
     }
 
     @Override

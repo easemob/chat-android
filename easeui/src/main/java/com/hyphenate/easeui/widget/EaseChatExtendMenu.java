@@ -13,10 +13,13 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
+
 import com.hyphenate.easeui.R;
 import com.hyphenate.util.DensityUtil;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 /**
@@ -24,9 +27,9 @@ import java.util.List;
  *
  */
 public class EaseChatExtendMenu extends GridView{
-
     protected Context context;
     private List<ChatMenuItemModel> itemModels = new ArrayList<ChatMenuItemModel>();
+    private ItemAdapter adapter;
 
     public EaseChatExtendMenu(Context context, AttributeSet attrs, int defStyle) {
         this(context, attrs);
@@ -58,7 +61,8 @@ public class EaseChatExtendMenu extends GridView{
      * init
      */
     public void init(){
-        setAdapter(new ItemAdapter(context, itemModels));
+        adapter = new ItemAdapter(context, itemModels);
+        setAdapter(adapter);
     }
     
     /**
@@ -97,17 +101,15 @@ public class EaseChatExtendMenu extends GridView{
     public void registerMenuItem(int nameRes, int drawableRes, int itemId, EaseChatExtendMenuItemClickListener listener) {
         registerMenuItem(context.getString(nameRes), drawableRes, itemId, listener);
     }
-    
-    
-    private class ItemAdapter extends ArrayAdapter<ChatMenuItemModel>{
 
+    private class ItemAdapter extends ArrayAdapter<ChatMenuItemModel>{
         private Context context;
 
         public ItemAdapter(Context context, List<ChatMenuItemModel> objects) {
             super(context, 1, objects);
             this.context = context;
         }
-        
+
         @Override
         public View getView(final int position, View convertView, ViewGroup parent) {
             ChatMenuItem menuItem = null;
@@ -122,21 +124,25 @@ public class EaseChatExtendMenu extends GridView{
                 @Override
                 public void onClick(View v) {
                     if(getItem(position).clickListener != null){
-                        getItem(position).clickListener.onClick(getItem(position).id, v);
+                        getItem(position).clickListener.onChatExtendMenuItemClick(getItem(position).id, v);
                     }
                 }
             });
             return convertView;
         }
-        
-        
     }
-    
-    
+
+    /**
+     * extend menu item click listener
+     */
     public interface EaseChatExtendMenuItemClickListener{
-        void onClick(int itemId, View view);
+        /**
+         * item click
+         * @param itemId
+         * @param view
+         */
+        void onChatExtendMenuItemClick(int itemId, View view);
     }
-    
     
     class ChatMenuItemModel{
         String name;

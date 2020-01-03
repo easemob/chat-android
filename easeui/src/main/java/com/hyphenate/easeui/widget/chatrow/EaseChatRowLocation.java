@@ -17,8 +17,8 @@ public class EaseChatRowLocation extends EaseChatRow {
     private TextView locationView;
     private EMLocationMessageBody locBody;
 
-    public EaseChatRowLocation(Context context) {
-        super(context);
+    public EaseChatRowLocation(Context context, boolean isSender) {
+        super(context, isSender);
     }
 
     public EaseChatRowLocation(Context context, EMMessage message, int position, Object adapter) {
@@ -27,8 +27,8 @@ public class EaseChatRowLocation extends EaseChatRow {
 
     @Override
     protected void onInflateView() {
-        inflater.inflate(message.direct() == EMMessage.Direct.RECEIVE ?
-                R.layout.ease_row_received_location : R.layout.ease_row_sent_location, this);
+        inflater.inflate(isSender ? R.layout.ease_row_received_location
+                : R.layout.ease_row_sent_location, this);
     }
 
     @Override

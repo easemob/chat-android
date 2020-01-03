@@ -5,6 +5,7 @@ import android.view.ViewGroup;
 import com.hyphenate.chat.EMClient;
 import com.hyphenate.chat.EMConversation;
 import com.hyphenate.chat.EMMessage;
+import com.hyphenate.easeui.R;
 import com.hyphenate.easeui.constants.EaseConstant;
 import com.hyphenate.easeui.interfaces.MessageListItemClickListener;
 import com.hyphenate.easeui.model.styles.EaseMessageListItemStyle;
@@ -12,20 +13,20 @@ import com.hyphenate.easeui.utils.EaseCommonUtils;
 import com.hyphenate.easeui.viewholder.EaseChatRowViewHolder;
 
 public class EaseMessageAdapter extends EaseBaseRecyclerViewAdapter<EMMessage> {
-    public static final int MESSAGE_TYPE_RECV_TXT = 0;
-    public static final int MESSAGE_TYPE_SENT_TXT = 1;
-    public static final int MESSAGE_TYPE_SENT_IMAGE = 2;
-    public static final int MESSAGE_TYPE_SENT_LOCATION = 3;
-    public static final int MESSAGE_TYPE_RECV_LOCATION = 4;
-    public static final int MESSAGE_TYPE_RECV_IMAGE = 5;
-    public static final int MESSAGE_TYPE_SENT_VOICE = 6;
-    public static final int MESSAGE_TYPE_RECV_VOICE = 7;
-    public static final int MESSAGE_TYPE_SENT_VIDEO = 8;
-    public static final int MESSAGE_TYPE_RECV_VIDEO = 9;
-    public static final int MESSAGE_TYPE_SENT_FILE = 10;
-    public static final int MESSAGE_TYPE_RECV_FILE = 11;
-    public static final int MESSAGE_TYPE_SENT_EXPRESSION = 12;
-    public static final int MESSAGE_TYPE_RECV_EXPRESSION = 13;
+    public static final int MESSAGE_TYPE_RECV_TXT = 110;
+    public static final int MESSAGE_TYPE_SENT_TXT = 111;
+    public static final int MESSAGE_TYPE_SENT_IMAGE = 112;
+    public static final int MESSAGE_TYPE_SENT_LOCATION = 113;
+    public static final int MESSAGE_TYPE_RECV_LOCATION = 114;
+    public static final int MESSAGE_TYPE_RECV_IMAGE = 115;
+    public static final int MESSAGE_TYPE_SENT_VOICE = 116;
+    public static final int MESSAGE_TYPE_RECV_VOICE = 117;
+    public static final int MESSAGE_TYPE_SENT_VIDEO = 118;
+    public static final int MESSAGE_TYPE_RECV_VIDEO = 119;
+    public static final int MESSAGE_TYPE_SENT_FILE = 120;
+    public static final int MESSAGE_TYPE_RECV_FILE = 121;
+    public static final int MESSAGE_TYPE_SENT_EXPRESSION = 122;
+    public static final int MESSAGE_TYPE_RECV_EXPRESSION = 123;
 
     private String toChatUsername;
     private EMConversation conversation;
@@ -36,6 +37,11 @@ public class EaseMessageAdapter extends EaseBaseRecyclerViewAdapter<EMMessage> {
         this.toChatUsername = username;
         this.conversation = EMClient.getInstance().chatManager().getConversation(username
                 , EaseCommonUtils.getConversationType(chatType), true);
+    }
+
+    @Override
+    public int getEmptyLayoutId() {
+        return R.layout.ease_layout_empty_list_invisible;
     }
 
     @Override
@@ -90,9 +96,11 @@ public class EaseMessageAdapter extends EaseBaseRecyclerViewAdapter<EMMessage> {
     }
 
     public void setConversationMessages() {
-        mData = conversation.getAllMessages();
-        conversation.markAllMessagesAsRead();
-        setData(mData);
+        if(conversation != null) {
+            mData = conversation.getAllMessages();
+            conversation.markAllMessagesAsRead();
+            setData(mData);
+        }
     }
 
     /**

@@ -21,8 +21,8 @@ public class EaseChatRowVoice extends EaseChatRowFile {
     private ImageView readStatusView;
     private AnimationDrawable voiceAnimation;
 
-    public EaseChatRowVoice(Context context) {
-        super(context);
+    public EaseChatRowVoice(Context context, boolean isSender) {
+        super(context, isSender);
     }
 
     public EaseChatRowVoice(Context context, EMMessage message, int position, Object adapter) {
@@ -31,8 +31,8 @@ public class EaseChatRowVoice extends EaseChatRowFile {
 
     @Override
     protected void onInflateView() {
-        inflater.inflate(message.direct() == EMMessage.Direct.RECEIVE ?
-                R.layout.ease_row_received_voice : R.layout.ease_row_sent_voice, this);
+        inflater.inflate(isSender ? R.layout.ease_row_received_voice
+                : R.layout.ease_row_sent_voice, this);
     }
 
     @Override

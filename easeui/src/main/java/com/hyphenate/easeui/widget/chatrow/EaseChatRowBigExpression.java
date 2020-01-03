@@ -20,8 +20,8 @@ import com.hyphenate.easeui.domain.EaseEmojicon;
 public class EaseChatRowBigExpression extends EaseChatRowText {
     private ImageView imageView;
 
-    public EaseChatRowBigExpression(Context context) {
-        super(context);
+    public EaseChatRowBigExpression(Context context, boolean isSender) {
+        super(context, isSender);
     }
 
     public EaseChatRowBigExpression(Context context, EMMessage message, int position, BaseAdapter adapter) {
@@ -30,8 +30,8 @@ public class EaseChatRowBigExpression extends EaseChatRowText {
 
     @Override
     protected void onInflateView() {
-        inflater.inflate(message.direct() == EMMessage.Direct.RECEIVE ?
-                R.layout.ease_row_received_bigexpression : R.layout.ease_row_sent_bigexpression, this);
+        inflater.inflate(isSender ? R.layout.ease_row_received_bigexpression
+                : R.layout.ease_row_sent_bigexpression, this);
     }
 
     @Override

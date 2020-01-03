@@ -29,8 +29,8 @@ public class EaseChatRowVideo extends EaseChatRowFile {
     private TextView timeLengthView;
     private ImageView playView;
 
-    public EaseChatRowVideo(Context context) {
-        super(context);
+    public EaseChatRowVideo(Context context, boolean isSender) {
+        super(context, isSender);
     }
 
     public EaseChatRowVideo(Context context, EMMessage message, int position, Object adapter) {
@@ -39,8 +39,8 @@ public class EaseChatRowVideo extends EaseChatRowFile {
 
 	@Override
 	protected void onInflateView() {
-		inflater.inflate(message.direct() == EMMessage.Direct.RECEIVE ?
-				R.layout.ease_row_received_video : R.layout.ease_row_sent_video, this);
+		inflater.inflate(isSender ? R.layout.ease_row_received_video
+                : R.layout.ease_row_sent_video, this);
 	}
 
 	@Override

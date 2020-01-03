@@ -21,9 +21,9 @@ public class EaseExpressionViewHolder extends EaseChatRowViewHolder {
     }
 
     public static EaseChatRowViewHolder create(ViewGroup parent
-                                                                , MessageListItemClickListener itemClickListener
-                                                                , EaseMessageListItemStyle itemStyle) {
-        return new EaseExpressionViewHolder(new EaseChatRowBigExpression(parent.getContext()), itemClickListener, itemStyle);
+            , boolean isSender, MessageListItemClickListener itemClickListener
+            , EaseMessageListItemStyle itemStyle) {
+        return new EaseExpressionViewHolder(new EaseChatRowBigExpression(parent.getContext(), isSender), itemClickListener, itemStyle);
     }
 
 }

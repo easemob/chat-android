@@ -20,6 +20,7 @@ import com.hyphenate.easeui.widget.EaseChatPrimaryMenuBase.EaseChatPrimaryMenuLi
 import com.hyphenate.easeui.widget.emojicon.EaseEmojiconMenu;
 import com.hyphenate.easeui.widget.emojicon.EaseEmojiconMenuBase;
 import com.hyphenate.easeui.widget.emojicon.EaseEmojiconMenuBase.EaseEmojiconMenuListener;
+import com.hyphenate.util.EMLog;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -34,6 +35,11 @@ import java.util.List;
  *    EaseEmojiconMenu: emoji icons
  */
 public class EaseChatInputMenu extends LinearLayout {
+    private static final String TAG = EaseChatExtendMenu.class.getSimpleName();
+    public static final int ITEM_TAKE_PICTURE = 1;
+    public static final int ITEM_PICTURE = 2;
+    public static final int ITEM_LOCATION = 3;
+
     FrameLayout primaryMenuContainer, emojiconMenuContainer;
     protected EaseChatPrimaryMenuBase chatPrimaryMenu;
     protected EaseEmojiconMenuBase emojiconMenu;
@@ -46,18 +52,22 @@ public class EaseChatInputMenu extends LinearLayout {
     private Context context;
     private boolean inited;
 
-    public EaseChatInputMenu(Context context, AttributeSet attrs, int defStyle) {
-        this(context, attrs);
+    private int[] itemStrings = { R.string.attach_take_pic, R.string.attach_picture, R.string.attach_location };
+    private int[] itemdrawables = { R.drawable.ease_chat_takepic_selector, R.drawable.ease_chat_image_selector,
+            R.drawable.ease_chat_location_selector };
+    private int[] itemIds = { ITEM_TAKE_PICTURE, ITEM_PICTURE, ITEM_LOCATION };
+
+    public EaseChatInputMenu(Context context) {
+        this(context, null);
     }
 
     public EaseChatInputMenu(Context context, AttributeSet attrs) {
-        super(context, attrs);
-        init(context, attrs);
+        this(context, attrs, 0);
     }
 
-    public EaseChatInputMenu(Context context) {
-        super(context);
-        init(context, null);
+    public EaseChatInputMenu(Context context, AttributeSet attrs, int defStyle) {
+        super(context, attrs, defStyle);
+        init(context, attrs);
     }
 
     private void init(Context context, AttributeSet attrs) {
@@ -67,10 +77,8 @@ public class EaseChatInputMenu extends LinearLayout {
         primaryMenuContainer = (FrameLayout) findViewById(R.id.primary_menu_container);
         emojiconMenuContainer = (FrameLayout) findViewById(R.id.emojicon_menu_container);
         chatExtendMenuContainer = (FrameLayout) findViewById(R.id.extend_menu_container);
-
          // extend menu
-         chatExtendMenu = (EaseChatExtendMenu) findViewById(R.id.extend_menu);
-        
+        chatExtendMenu = (EaseChatExtendMenu) findViewById(R.id.extend_menu);
 
     }
 
@@ -161,7 +169,7 @@ public class EaseChatInputMenu extends LinearLayout {
     /**
      * register menu item
      * 
-     * @param name
+     * @param nameRes
      *            resource id of item name
      * @param drawableRes
      *            background of item
@@ -175,6 +183,51 @@ public class EaseChatInputMenu extends LinearLayout {
         chatExtendMenu.registerMenuItem(nameRes, drawableRes, itemId, listener);
     }
 
+    /**
+     * register menu items by array
+     * @param nameRes
+     * @param drawableRes
+     * @param itemIds
+     * @param listener
+     */
+    public void registerExtendMenuItem(int[] nameRes, int[] drawableRes, int[] itemIds,
+                                       EaseChatExtendMenuItemClickListener listener) {
+
+        if(nameRes.length <= 0 || nameRes.length != drawableRes.length || drawableRes.length != itemIds.length) {
+            EMLog.e(TAG, "Resources's length should be equal");
+            return;
+        }
+        for(int i = 0; i < nameRes.length; i++) {
+            chatExtendMenu.registerMenuItem(nameRes[i], drawableRes[i], itemIds[i], listener);
+        }
+    }
+
+    /**
+     * register menu items by list
+     * @param nameRes
+     * @param drawableRes
+     * @param itemIds
+     * @param listener
+     */
+    public void registerExtendMenuItem(List<Integer> nameRes, List<Integer> drawableRes, List<Integer> itemIds,
+                                       EaseChatExtendMenuItemClickListener listener) {
+
+        if(nameRes.size() <= 0 || nameRes.size() != drawableRes.size() || drawableRes.size() != itemIds.size()) {
+            EMLog.e(TAG, "Resources's size should be equal");
+            return;
+        }
+        for(int i = 0; i < nameRes.size(); i++) {
+            chatExtendMenu.registerMenuItem(nameRes.get(i), drawableRes.get(i), itemIds.get(i), listener);
+        }
+    }
+
+    /**
+     * register default menu items
+     * @param listener
+     */
+    public void registerDefaultMenuItems(EaseChatExtendMenuItemClickListener listener) {
+        registerExtendMenuItem(itemStrings, itemdrawables, itemIds, listener);
+    }
 
     protected void processChatMenu() {
         // send message button
@@ -247,7 +300,6 @@ public class EaseChatInputMenu extends LinearLayout {
 
     }
     
-   
     /**
      * insert text
      * @param text
@@ -337,7 +389,6 @@ public class EaseChatInputMenu extends LinearLayout {
         }
 
     }
-    
 
     public void setChatInputMenuListener(ChatInputMenuListener listener) {
         this.listener = listener;

@@ -82,14 +82,19 @@ public abstract class EaseChatRow extends LinearLayout {
      * if delivered
      */
     protected TextView deliveredView;
+    /**
+     * if is sender
+     */
+    protected boolean isSender;
 
     protected MessageListItemClickListener itemClickListener;
     protected EaseMessageListItemStyle itemStyle;
     private EaseChatRowActionCallback itemActionCallback;
 
-    public EaseChatRow(Context context) {
+    public EaseChatRow(Context context, boolean isSender) {
         super(context);
         this.context = (Activity) context;
+        this.isSender = isSender;
         this.inflater = LayoutInflater.from(context);
 
         initView();
@@ -99,6 +104,7 @@ public abstract class EaseChatRow extends LinearLayout {
         super(context);
         this.context = (Activity) context;
         this.message = message;
+        this.isSender = message.direct() == Direct.SEND;
         this.position = position;
         this.adapter = adapter;
         this.inflater = LayoutInflater.from(context);

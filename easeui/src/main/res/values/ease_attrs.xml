@@ -57,4 +57,9 @@
         <attr name="emojiconColumns" format="integer"/>
     </declare-styleable>
 
+    <declare-styleable name="EaseChatInputMenu">
+        <attr name="chat_extend_menu_num_columns" format="integer"/>
+        <attr name="chat_extend_menu_vertical_spacing" format="dimension"/>
+    </declare-styleable>
+
 </resources>

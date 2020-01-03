@@ -29,9 +29,9 @@ public class EaseImageViewHolder extends EaseChatRowViewHolder {
     }
 
     public static EaseChatRowViewHolder create(ViewGroup parent,
-                                                                MessageListItemClickListener itemClickListener,
-                                                                EaseMessageListItemStyle itemStyle) {
-        return new EaseImageViewHolder(new EaseChatRowImage(parent.getContext()), itemClickListener, itemStyle);
+                                               boolean isSender, MessageListItemClickListener itemClickListener,
+                                               EaseMessageListItemStyle itemStyle) {
+        return new EaseImageViewHolder(new EaseChatRowImage(parent.getContext(), isSender), itemClickListener, itemStyle);
     }
 
     @Override

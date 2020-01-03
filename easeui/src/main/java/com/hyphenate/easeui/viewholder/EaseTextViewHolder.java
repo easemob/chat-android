@@ -24,9 +24,9 @@ public class EaseTextViewHolder extends EaseChatRowViewHolder{
     }
 
     public static EaseChatRowViewHolder create(ViewGroup parent,
-                                                                MessageListItemClickListener itemClickListener,
-                                                                EaseMessageListItemStyle itemStyle) {
-        return new EaseTextViewHolder(new EaseChatRowText(parent.getContext()), itemClickListener, itemStyle);
+                                               boolean isSender, MessageListItemClickListener itemClickListener,
+                                               EaseMessageListItemStyle itemStyle) {
+        return new EaseTextViewHolder(new EaseChatRowText(parent.getContext(), isSender), itemClickListener, itemStyle);
     }
 
     @Override

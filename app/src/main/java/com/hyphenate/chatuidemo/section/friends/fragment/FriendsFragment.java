@@ -130,6 +130,9 @@ public class FriendsFragment extends BaseInitFragment implements View.OnClickLis
     }
 
     private void sortData(List<EaseUser> data) {
+        if(data == null || data.isEmpty()) {
+            return;
+        }
         Collections.sort(data, new Comparator<EaseUser>() {
 
             @Override

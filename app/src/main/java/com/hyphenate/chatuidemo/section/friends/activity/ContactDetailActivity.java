@@ -3,11 +3,9 @@ package com.hyphenate.chatuidemo.section.friends.activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.text.TextUtils;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Button;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -15,6 +13,8 @@ import androidx.constraintlayout.widget.Group;
 
 import com.hyphenate.chatuidemo.R;
 import com.hyphenate.chatuidemo.section.base.BaseInitActivity;
+import com.hyphenate.chatuidemo.section.chat.EmChatActivity;
+import com.hyphenate.easeui.constants.EaseConstant;
 import com.hyphenate.easeui.domain.EaseUser;
 import com.hyphenate.easeui.widget.EaseImageView;
 import com.hyphenate.easeui.widget.EaseTitleBar;
@@ -127,7 +127,7 @@ public class ContactDetailActivity extends BaseInitActivity implements EaseTitle
                 showToast("跳转到备注设置");
                 break;
             case R.id.btn_chat :
-                showToast("开始聊天");
+                EmChatActivity.actionStart(mContext, mUser.getUsername(), EaseConstant.CHATTYPE_SINGLE);
                 break;
             case R.id.btn_voice :
                 showToast("开始语音");

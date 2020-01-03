@@ -40,6 +40,14 @@
     <string name="release_to_cancel">松开手指，取消发送</string>
     <string name="send_fail">发送消息失败,</string>
     <string name="recoding_fail">录音失败，请重试！</string>
+    <string name="attach_smile">表情</string>
+    <string name="attach_picture">图片</string>
+    <string name="attach_take_pic">拍照</string>
+    <string name="attach_location">位置</string>
+    <string name="attach_video">视频</string>
+    <string name="attach_file">文件</string>
+    <string name="attach_voice_call">语音电话</string>
+    <string name="attach_video_call">视频通话</string>
 
     <!-- For group ack start -->
     <string name="title_group_notification">群通知</string>

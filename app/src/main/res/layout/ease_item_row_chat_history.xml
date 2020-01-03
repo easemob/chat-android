@@ -81,6 +81,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toRightOf="@id/msg_state"
         android:layout_marginBottom="5dp"
+        android:layout_marginLeft="4dp"
         android:padding="7dp"
         android:textSize="14sp"
         android:text="@string/were_mentioned"
@@ -98,11 +99,12 @@
         android:layout_marginRight="20dp"
         android:layout_marginEnd="20dp"
         android:layout_marginBottom="5dp"
+        android:layout_marginLeft="4dp"
         android:maxLines="1"
         android:ellipsize="end"
         android:padding="7dp"
         android:textColor="@color/em_conversation_color_item_message"
         android:textSize="14sp"
-        tools:text="sldfjsljsldf递四方速递地方水电"/>
+        tools:text="sldfjsljsldf递四方速递地方水电沙发斯蒂芬是否大是大非水电费"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

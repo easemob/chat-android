@@ -26,9 +26,9 @@ public class EaseVideoViewHolder extends EaseChatRowViewHolder{
     }
 
     public static EaseChatRowViewHolder create(ViewGroup parent,
-                                                                MessageListItemClickListener itemClickListener,
-                                                                EaseMessageListItemStyle itemStyle) {
-        return new EaseVideoViewHolder(new EaseChatRowVideo(parent.getContext()), itemClickListener, itemStyle);
+                                               boolean isSender, MessageListItemClickListener itemClickListener,
+                                               EaseMessageListItemStyle itemStyle) {
+        return new EaseVideoViewHolder(new EaseChatRowVideo(parent.getContext(), isSender), itemClickListener, itemStyle);
     }
 
     @Override
