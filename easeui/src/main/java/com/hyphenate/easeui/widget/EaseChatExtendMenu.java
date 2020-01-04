@@ -62,6 +62,7 @@ public class EaseChatExtendMenu extends GridView{
      */
     public void init(){
         adapter = new ItemAdapter(context, itemModels);
+        adapter.setNotifyOnChange(true);
         setAdapter(adapter);
     }
     
@@ -85,7 +86,7 @@ public class EaseChatExtendMenu extends GridView{
         item.clickListener = listener;
         itemModels.add(item);
     }
-    
+
     /**
      * register menu item
      * 

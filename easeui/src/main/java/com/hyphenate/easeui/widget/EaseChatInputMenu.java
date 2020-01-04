@@ -226,6 +226,7 @@ public class EaseChatInputMenu extends LinearLayout {
      * @param listener
      */
     public void registerDefaultMenuItems(EaseChatExtendMenuItemClickListener listener) {
+        init();
         registerExtendMenuItem(itemStrings, itemdrawables, itemIds, listener);
     }
 
