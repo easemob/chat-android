@@ -37,6 +37,7 @@ public class EaseMessageAdapter extends EaseBaseRecyclerViewAdapter<EMMessage> {
         this.toChatUsername = username;
         this.conversation = EMClient.getInstance().chatManager().getConversation(username
                 , EaseCommonUtils.getConversationType(chatType), true);
+        itemStyle = createDefaultItemStyle();
     }
 
     @Override
@@ -84,6 +85,18 @@ public class EaseMessageAdapter extends EaseBaseRecyclerViewAdapter<EMMessage> {
     }
 
     /**
+     * create default item style
+     * @return
+     */
+    protected EaseMessageListItemStyle createDefaultItemStyle() {
+        EaseMessageListItemStyle.Builder builder = new EaseMessageListItemStyle.Builder();
+        builder.showAvatar(true)
+                .showUserNick(false);
+        return builder.build();
+    }
+
+
+    /**
      * get item message
      * @param position
      * @return
@@ -118,4 +131,14 @@ public class EaseMessageAdapter extends EaseBaseRecyclerViewAdapter<EMMessage> {
     public void setItemStyle(EaseMessageListItemStyle itemStyle) {
         this.itemStyle = itemStyle;
     }
+
+    /**
+     * if show nick name
+     * @param showUserNick
+     */
+    public void showUserNick(boolean showUserNick) {
+        this.itemStyle.setShowUserNick(showUserNick);
+    }
+
+
 }

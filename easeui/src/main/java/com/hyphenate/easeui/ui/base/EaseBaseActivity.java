@@ -12,7 +12,7 @@
  * limitations under the License.
  */
 
-package com.hyphenate.easeui.ui;
+package com.hyphenate.easeui.ui.base;
 
 import android.annotation.SuppressLint;
 import android.content.Context;

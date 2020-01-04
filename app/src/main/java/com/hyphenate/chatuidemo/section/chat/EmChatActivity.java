@@ -5,13 +5,13 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 
-import com.hyphenate.chat.EMConversation;
-import com.hyphenate.chatuidemo.DemoHelper;
 import com.hyphenate.chatuidemo.R;
 import com.hyphenate.chatuidemo.section.base.BaseInitActivity;
 import com.hyphenate.easeui.constants.EaseConstant;
-import com.hyphenate.easeui.ui.EaseChatFragment;
-import com.hyphenate.easeui.utils.EaseCommonUtils;
+import com.hyphenate.easeui.ui.chat.EaseChatFragment;
+import com.hyphenate.easeui.ui.chat.EaseChatRoomChatFragment;
+import com.hyphenate.easeui.ui.chat.EaseGroupChatFragment;
+import com.hyphenate.easeui.ui.chat.EaseSingleChatFragment;
 import com.hyphenate.easeui.widget.EaseTitleBar;
 
 public class EmChatActivity extends BaseInitActivity implements EaseTitleBar.OnBackPressListener {
@@ -42,10 +42,24 @@ public class EmChatActivity extends BaseInitActivity implements EaseTitleBar.OnB
     protected void initView(Bundle savedInstanceState) {
         super.initView(savedInstanceState);
         titleBarMessage = findViewById(R.id.title_bar_message);
-        EaseChatFragment fragment = new EaseChatFragment();
+        EaseChatFragment fragment = null;
+        switch (chatType) {
+            case EaseConstant.CHATTYPE_SINGLE :
+                fragment = new EaseSingleChatFragment();
+                break;
+            case EaseConstant.CHATTYPE_GROUP :
+                fragment = new EaseGroupChatFragment();
+                break;
+            case EaseConstant.CHATTYPE_CHATROOM :
+                fragment = new EaseChatRoomChatFragment();
+                break;
+        }
+        if(fragment == null) {
+            finish();
+            return;
+        }
         Bundle bundle = new Bundle();
         bundle.putString(EaseConstant.EXTRA_USER_ID, toChatUsername);
-        bundle.putInt(EaseConstant.EXTRA_CHAT_TYPE, chatType);
         fragment.setArguments(bundle);
         getSupportFragmentManager().beginTransaction().replace(R.id.fl_fragment, fragment, "chat").commit();
     }

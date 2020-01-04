@@ -1,4 +1,4 @@
-package com.hyphenate.easeui.ui;
+package com.hyphenate.easeui.ui.chat;
 
 import android.app.Activity;
 import android.content.Context;
@@ -27,19 +27,20 @@ import com.hyphenate.easeui.adapter.EaseBaseAdapter;
 import com.hyphenate.easeui.adapter.EaseMessageAdapter;
 import com.hyphenate.easeui.constants.EaseConstant;
 import com.hyphenate.easeui.domain.EaseEmojicon;
+import com.hyphenate.easeui.ui.base.EaseBaseFragment;
 import com.hyphenate.easeui.widget.EaseChatExtendMenu;
 import com.hyphenate.easeui.widget.EaseChatInputMenu;
 
 public class EaseChatFragment extends EaseBaseFragment implements View.OnClickListener, SwipeRefreshLayout.OnRefreshListener, EaseChatInputMenu.ChatInputMenuListener, EaseChatExtendMenu.EaseChatExtendMenuItemClickListener {
-    private TextView tvErrorMsg;
-    private SwipeRefreshLayout srlRefresh;
-    private RecyclerView messageList;
-    private EaseChatInputMenu inputMenu;
-    private boolean isRoaming;
-    private int chatType = EaseConstant.CHATTYPE_SINGLE;
-    private String toChatUsername;
-    private Activity context;
-    private EaseBaseAdapter messageAdapter;
+    protected TextView tvErrorMsg;
+    protected SwipeRefreshLayout srlRefresh;
+    protected RecyclerView messageList;
+    protected EaseChatInputMenu inputMenu;
+    protected boolean isRoaming;
+    protected int chatType = EaseConstant.CHATTYPE_SINGLE;
+    protected String toChatUsername;
+    protected Activity context;
+    protected EaseBaseAdapter messageAdapter;
 
     @Override
     public void onAttach(@NonNull Context context) {
@@ -71,16 +72,16 @@ public class EaseChatFragment extends EaseBaseFragment implements View.OnClickLi
         Bundle bundle = getArguments();
         if(bundle != null) {
             isRoaming = bundle.getBoolean("isRoaming", false);
-            chatType = bundle.getInt(EaseConstant.EXTRA_CHAT_TYPE, EaseConstant.CHATTYPE_SINGLE);
             toChatUsername = bundle.getString(EaseConstant.EXTRA_USER_ID);
+            initChildArguments();
         }
     }
-
     private void initView() {
         tvErrorMsg = findViewById(R.id.tv_error_msg);
         srlRefresh = findViewById(R.id.srl_refresh);
         messageList = findViewById(R.id.message_list);
         inputMenu = findViewById(R.id.input_menu);
+        initChildView();
 
         initInputMenu();
         addExtendInputMenu();
@@ -90,19 +91,19 @@ public class EaseChatFragment extends EaseBaseFragment implements View.OnClickLi
         tvErrorMsg.setOnClickListener(this);
         srlRefresh.setOnRefreshListener(this);
         inputMenu.setChatInputMenuListener(this);
+        initChildListener();
     }
 
     private void initData() {
         messageList.setLayoutManager(provideLayoutManager());
         messageList.setAdapter(provideMessageAdapter());
         refreshMessages();
+        initChildData();
     }
 
     @Override
     public void onClick(View v) {
-        if(v.getId() == R.id.tv_error_msg) {
-            onChatRoomViewCreation();
-        }
+        // do nothing
     }
 
     @Override
@@ -190,13 +191,6 @@ public class EaseChatFragment extends EaseBaseFragment implements View.OnClickLi
     }
 
     /**
-     * developer can add extend menu item by override the method
-     */
-    protected void addExtendInputMenu() {
-        // inputMenu.registerExtendMenuItem(nameRes, drawableRes, itemId, listener);
-    }
-
-    /**
      * provide recyclerView LayoutManager
      * @return
      */
@@ -211,31 +205,6 @@ public class EaseChatFragment extends EaseBaseFragment implements View.OnClickLi
     protected RecyclerView.Adapter provideMessageAdapter() {
         messageAdapter = new EaseMessageAdapter(toChatUsername, chatType);
         return messageAdapter;
-    }
-
-    /**
-     * join chat room
-     */
-    private void onChatRoomViewCreation() {
-        EMClient.getInstance().chatroomManager().joinChatRoom(toChatUsername, new EMValueCallBack<EMChatRoom>() {
-            @Override
-            public void onSuccess(EMChatRoom value) {
-                if(context == null) {
-                    return;
-                }
-                context.runOnUiThread(()-> {
-                    if(context.isFinishing() || !TextUtils.equals(toChatUsername, value.getId())) {
-                        return;
-                    }
-
-                });
-            }
-
-            @Override
-            public void onError(int error, String errorMsg) {
-
-            }
-        });
     }
 
     /**
@@ -269,5 +238,34 @@ public class EaseChatFragment extends EaseBaseFragment implements View.OnClickLi
     public void onDestroy() {
         super.onDestroy();
 
+    }
+
+//============================ easy for developer to call ================================
+    /**
+     * init child arguments
+     */
+    protected void initChildArguments() {}
+
+
+    /**
+     * init child view
+     */
+    protected void initChildView() {}
+
+    /**
+     * init child listener
+     */
+    protected void initChildListener() {}
+
+    /**
+     * init child data
+     */
+    protected void initChildData() {}
+
+    /**
+     * developer can add extend menu item by override the method
+     */
+    protected void addExtendInputMenu() {
+        // inputMenu.registerExtendMenuItem(nameRes, drawableRes, itemId, listener);
     }
 }
