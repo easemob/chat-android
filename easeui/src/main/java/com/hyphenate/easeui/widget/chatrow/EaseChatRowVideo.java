@@ -39,7 +39,7 @@ public class EaseChatRowVideo extends EaseChatRowFile {
 
 	@Override
 	protected void onInflateView() {
-		inflater.inflate(isSender ? R.layout.ease_row_received_video
+		inflater.inflate(!isSender ? R.layout.ease_row_received_video
                 : R.layout.ease_row_sent_video, this);
 	}
 

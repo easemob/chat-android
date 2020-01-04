@@ -31,7 +31,7 @@ public class EaseChatRowVoice extends EaseChatRowFile {
 
     @Override
     protected void onInflateView() {
-        inflater.inflate(isSender ? R.layout.ease_row_received_voice
+        inflater.inflate(!isSender ? R.layout.ease_row_received_voice
                 : R.layout.ease_row_sent_voice, this);
     }
 

@@ -161,6 +161,7 @@ public class EaseChatFragment extends EaseBaseFragment implements View.OnClickLi
 
     protected void initInputMenu() {
         inputMenu.registerDefaultMenuItems(this);
+        inputMenu.init(null);
     }
 
     /**
