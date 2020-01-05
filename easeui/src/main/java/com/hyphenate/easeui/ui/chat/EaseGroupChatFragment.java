@@ -1,5 +1,6 @@
 package com.hyphenate.easeui.ui.chat;
 
+import com.hyphenate.chat.EMMessage;
 import com.hyphenate.easeui.constants.EaseConstant;
 
 public class EaseGroupChatFragment extends EaseChatFragment {
@@ -8,5 +9,6 @@ public class EaseGroupChatFragment extends EaseChatFragment {
     protected void initChildArguments() {
         super.initChildArguments();
         chatType = EaseConstant.CHATTYPE_GROUP;
+        emMsgChatType = EMMessage.ChatType.GroupChat;
     }
 }

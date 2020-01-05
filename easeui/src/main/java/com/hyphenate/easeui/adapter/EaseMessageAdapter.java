@@ -8,6 +8,7 @@ import com.hyphenate.chat.EMMessage;
 import com.hyphenate.easeui.R;
 import com.hyphenate.easeui.constants.EaseConstant;
 import com.hyphenate.easeui.interfaces.MessageListItemClickListener;
+import com.hyphenate.easeui.interfaces.OnItemClickListener;
 import com.hyphenate.easeui.model.styles.EaseMessageListItemStyle;
 import com.hyphenate.easeui.utils.EaseCommonUtils;
 import com.hyphenate.easeui.viewholder.EaseChatRowViewHolder;
@@ -120,7 +121,7 @@ public class EaseMessageAdapter extends EaseBaseRecyclerViewAdapter<EMMessage> {
      * set item click listener
      * @param itemClickListener
      */
-    public void setItemClickListener(MessageListItemClickListener itemClickListener) {
+    public void setListItemClickListener(MessageListItemClickListener itemClickListener) {
         this.itemClickListener = itemClickListener;
     }
 

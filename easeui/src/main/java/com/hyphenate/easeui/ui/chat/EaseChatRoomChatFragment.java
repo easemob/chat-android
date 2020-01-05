@@ -3,17 +3,14 @@ package com.hyphenate.easeui.ui.chat;
 import android.text.TextUtils;
 import android.view.View;
 
-import com.hyphenate.EMChatRoomChangeListener;
 import com.hyphenate.EMValueCallBack;
 import com.hyphenate.chat.EMChatRoom;
 import com.hyphenate.chat.EMClient;
-import com.hyphenate.chat.adapter.EMAChatManagerListener;
+import com.hyphenate.chat.EMMessage;
 import com.hyphenate.chat.adapter.EMAChatRoomManagerListener;
 import com.hyphenate.easeui.R;
 import com.hyphenate.easeui.constants.EaseConstant;
 import com.hyphenate.easeui.interfaces.EaseChatRoomListener;
-
-import java.util.List;
 
 public class EaseChatRoomChatFragment extends EaseChatFragment {
     private EaseChatRoomListener chatRoomListener;
@@ -22,6 +19,7 @@ public class EaseChatRoomChatFragment extends EaseChatFragment {
     protected void initChildArguments() {
         super.initChildArguments();
         chatType = EaseConstant.CHATTYPE_CHATROOM;
+        emMsgChatType = EMMessage.ChatType.ChatRoom;
     }
 
     @Override
