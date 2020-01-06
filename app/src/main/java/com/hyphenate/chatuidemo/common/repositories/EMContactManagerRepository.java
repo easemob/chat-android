@@ -97,6 +97,7 @@ public class EMContactManagerRepository extends BaseEMRepository{
 
             @Override
             protected void saveCallResult(List<EaseUser> items) {
+                getUserDao().clearUsers();
                 getUserDao().insert(EmUserEntity.parseList(items));
             }
 

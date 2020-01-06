@@ -2,6 +2,7 @@ package com.hyphenate.chatuidemo.common.db.dao;
 
 import androidx.lifecycle.LiveData;
 import androidx.room.Dao;
+import androidx.room.Delete;
 import androidx.room.Insert;
 import androidx.room.OnConflictStrategy;
 import androidx.room.Query;
@@ -28,4 +29,7 @@ public interface EmUserDao {
 
     @Query("select username from em_users")
     List<String> loadAllUsers();
+
+    @Query("delete from em_users")
+    int clearUsers();
 }
