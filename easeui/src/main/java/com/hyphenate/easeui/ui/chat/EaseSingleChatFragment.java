@@ -44,6 +44,12 @@ public class EaseSingleChatFragment extends EaseChatFragment {
     }
 
     @Override
+    protected void addExtendInputMenu() {
+        super.addExtendInputMenu();
+
+    }
+
+    @Override
     public void onTyping(CharSequence s, int start, int before, int count) {
         super.onTyping(s, start, before, count);
         // send action:TypingBegin cmd msg.

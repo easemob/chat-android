@@ -156,6 +156,7 @@ public abstract class EaseChatFragment extends EaseBaseFragment implements View.
         messageList.setOnTouchListener(this);
         inputMenu.getPrimaryMenu().getEditText().addTextChangedListener(this);
         setMessageClickListener();
+        addGroupListener();
         initChildListener();
     }
 
@@ -163,6 +164,11 @@ public abstract class EaseChatFragment extends EaseBaseFragment implements View.
         if(messageAdapter != null && messageAdapter instanceof EaseMessageAdapter) {
             ((EaseMessageAdapter)messageAdapter).setListItemClickListener(this);
         }
+    }
+
+    private void addGroupListener() {
+        GroupListener listener = new GroupListener();
+        EMClient.getInstance().groupManager().addGroupChangeListener(listener);
     }
 
     private void initData() {

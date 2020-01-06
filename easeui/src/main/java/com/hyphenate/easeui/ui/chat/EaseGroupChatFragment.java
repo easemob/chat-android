@@ -24,42 +24,6 @@ public class EaseGroupChatFragment extends EaseChatFragment implements TextWatch
         emMsgChatType = EMMessage.ChatType.GroupChat;
     }
 
-    @Override
-    protected void initChildListener() {
-        super.initChildListener();
-        addGroupListener();
-        inputMenu.getPrimaryMenu().getEditText().addTextChangedListener(this);
-    }
 
-    private void addGroupListener() {
-        listener = new GroupListener();
-        EMClient.getInstance().groupManager().addGroupChangeListener(listener);
-    }
-
-    @Override
-    public void onUserAvatarLongClick(String username) {
-        super.onUserAvatarLongClick(username);
-
-    }
-
-    @Override
-    protected void sendTextMessage(String content) {
-        super.sendTextMessage(content);
-    }
-
-    @Override
-    public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-    }
-
-    @Override
-    public void onTextChanged(CharSequence s, int start, int before, int count) {
-
-    }
-
-    @Override
-    public void afterTextChanged(Editable s) {
-
-    }
 
 }

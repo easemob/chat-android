@@ -53,5 +53,7 @@
     <color name="em_friends_contact_detail_text_normal">@color/em_color_common_black</color>
     <color name="em_friends_contact_detail_text_brand">@color/em_color_brand</color>
 
+    <color name="grid_state_pressed">#1Affffff</color>
+    <color name="grid_state_focused">#80000000</color>
 
 </resources>
