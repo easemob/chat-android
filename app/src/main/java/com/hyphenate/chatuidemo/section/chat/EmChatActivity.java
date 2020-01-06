@@ -5,6 +5,10 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 
+import com.hyphenate.chat.EMChatRoom;
+import com.hyphenate.chat.EMConversation;
+import com.hyphenate.chat.EMGroup;
+import com.hyphenate.chatuidemo.DemoHelper;
 import com.hyphenate.chatuidemo.R;
 import com.hyphenate.chatuidemo.section.base.BaseInitActivity;
 import com.hyphenate.easeui.constants.EaseConstant;
@@ -12,6 +16,7 @@ import com.hyphenate.easeui.ui.chat.EaseChatFragment;
 import com.hyphenate.easeui.ui.chat.EaseChatRoomChatFragment;
 import com.hyphenate.easeui.ui.chat.EaseGroupChatFragment;
 import com.hyphenate.easeui.ui.chat.EaseSingleChatFragment;
+import com.hyphenate.easeui.utils.EaseCommonUtils;
 import com.hyphenate.easeui.widget.EaseTitleBar;
 
 public class EmChatActivity extends BaseInitActivity implements EaseTitleBar.OnBackPressListener {
@@ -73,11 +78,23 @@ public class EmChatActivity extends BaseInitActivity implements EaseTitleBar.OnB
     @Override
     protected void initData() {
         super.initData();
-        titleBarMessage.setTitle(toChatUsername);
+        titleBarMessage.setTitle(getChatName());
     }
 
     @Override
     public void onBackPress(View view) {
         onBackPressed();
+    }
+
+    public String getChatName() {
+        EMConversation.EMConversationType type = EaseCommonUtils.getConversationType(chatType);
+        if(type == EMConversation.EMConversationType.ChatRoom) {
+            EMChatRoom chatRoom = DemoHelper.getInstance().getChatroomManager().getChatRoom(toChatUsername);
+            return chatRoom == null ? toChatUsername : chatRoom.getName();
+        }else if(type == EMConversation.EMConversationType.GroupChat) {
+            EMGroup group = DemoHelper.getInstance().getGroupManager().getGroup(toChatUsername);
+            return group == null ? toChatUsername : group.getGroupName();
+        }
+        return toChatUsername;
     }
 }

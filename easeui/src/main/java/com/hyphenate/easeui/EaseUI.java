@@ -1,5 +1,7 @@
 package com.hyphenate.easeui;
 
+import android.content.Context;
+
 import com.hyphenate.easeui.domain.EaseAvatarOptions;
 import com.hyphenate.easeui.provider.EaseEmojiconInfoProvider;
 import com.hyphenate.easeui.provider.EaseSettingsProvider;
@@ -17,6 +19,10 @@ public class EaseUI {
      * chat avatar options which we can easily control the style
      */
     private EaseAvatarOptions avatarOptions;
+    /**
+     * application context
+     */
+    private Context appContext = null;
 
     private EaseUI() {}
 
@@ -29,6 +35,10 @@ public class EaseUI {
             }
         }
         return instance;
+    }
+
+    public synchronized void init(Context context) {
+        appContext = context.getApplicationContext();
     }
 
     /**
@@ -100,5 +110,9 @@ public class EaseUI {
     public EaseUI setAvatarOptions(EaseAvatarOptions avatarOptions) {
         this.avatarOptions = avatarOptions;
         return this;
+    }
+
+    public Context getContext() {
+        return appContext;
     }
 }

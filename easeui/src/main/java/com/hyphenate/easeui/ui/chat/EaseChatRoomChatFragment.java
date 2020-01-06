@@ -1,5 +1,6 @@
 package com.hyphenate.easeui.ui.chat;
 
+import android.nfc.Tag;
 import android.text.TextUtils;
 import android.view.View;
 
@@ -11,8 +12,10 @@ import com.hyphenate.chat.adapter.EMAChatRoomManagerListener;
 import com.hyphenate.easeui.R;
 import com.hyphenate.easeui.constants.EaseConstant;
 import com.hyphenate.easeui.interfaces.EaseChatRoomListener;
+import com.hyphenate.util.EMLog;
 
 public class EaseChatRoomChatFragment extends EaseChatFragment {
+    private static final String TAG = EaseChatRoomChatFragment.class.getSimpleName();
     private EaseChatRoomListener chatRoomListener;
 
     @Override
@@ -56,7 +59,7 @@ public class EaseChatRoomChatFragment extends EaseChatFragment {
                 if(!TextUtils.equals(toChatUsername, value.getId())) {
                     return;
                 }
-                context.runOnUiThread(()-> {
+                mContext.runOnUiThread(()-> {
                     EMChatRoom room = EMClient.getInstance().chatroomManager().getChatRoom(toChatUsername);
                     String title = room != null ? room.getName() : toChatUsername;
                     setTitle(title);
@@ -66,7 +69,10 @@ public class EaseChatRoomChatFragment extends EaseChatFragment {
 
             @Override
             public void onError(int error, String errorMsg) {
-
+                EMLog.d(TAG, "join room failure : "+error);
+                if(!isActivityDisable()) {
+                    mContext.finish();
+                }
             }
         });
     }
@@ -79,45 +85,63 @@ public class EaseChatRoomChatFragment extends EaseChatFragment {
 
     }
 
+    protected void onRemovedFromChatRoom(int reason, String roomId, String roomName, String participant) {
+        if(isActivityDisable()) {
+            return;
+        }
+        mContext.runOnUiThread(() -> {
+            if(!TextUtils.equals(roomId, toChatUsername)) {
+                return;
+            }
+            if(reason == EMAChatRoomManagerListener.BE_KICKED) {
+                mContext.finish();
+            }else {
+                tvErrorMsg.setVisibility(View.VISIBLE);
+            }
+        });
+    }
+
+    protected void onMemberJoined(String roomId, String participant) {
+        if(isActivityDisable()) {
+            return;
+        }
+    }
+
+    protected void onMemberExited(String roomId, String roomName, String participant) {
+        if (isActivityDisable()) {
+            return;
+        }
+    }
+
+    protected void onChatRoomDestroyed(String roomId, String roomName) {
+        if(isActivityDisable()) {
+            return;
+        }
+        mContext.runOnUiThread(() -> mContext.finish());
+    }
+
     private class ChatRoomListener extends EaseChatRoomListener {
 
         @Override
         public void onChatRoomDestroyed(String roomId, String roomName) {
-            if(isActivityDisable()) {
-                return;
-            }
-            mContext.runOnUiThread(() -> mContext.finish());
+            EaseChatRoomChatFragment.this.onChatRoomDestroyed(roomId, roomName);
         }
 
         @Override
         public void onRemovedFromChatRoom(int reason, String roomId, String roomName, String participant) {
-            if(isActivityDisable()) {
-                return;
-            }
-            mContext.runOnUiThread(() -> {
-                if(!TextUtils.equals(roomId, toChatUsername)) {
-                    return;
-                }
-                if(reason == EMAChatRoomManagerListener.BE_KICKED) {
-                    mContext.finish();
-                }else {
-                    tvErrorMsg.setVisibility(View.VISIBLE);
-                }
-            });
+            EaseChatRoomChatFragment.this.onRemovedFromChatRoom(reason, roomId,  roomName, participant);
         }
 
         @Override
         public void onMemberJoined(String roomId, String participant) {
-            if(isActivityDisable()) {
-                return;
-            }
+            EaseChatRoomChatFragment.this.onMemberJoined(roomId, participant);
         }
 
         @Override
         public void onMemberExited(String roomId, String roomName, String participant) {
-            if(isActivityDisable()) {
-                return;
-            }
+            EaseChatRoomChatFragment.this.onMemberExited(roomId, roomName, participant);
         }
     }
+
+
 }

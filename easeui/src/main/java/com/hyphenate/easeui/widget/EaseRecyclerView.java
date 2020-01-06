@@ -4,6 +4,7 @@ import android.content.Context;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.ContextMenu;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -273,6 +274,7 @@ public class EaseRecyclerView extends RecyclerView {
         }
     };
 
+//=====================解决添加条目快捷菜单的问题======================================
     public static class RecyclerViewContextMenuInfo implements ContextMenu.ContextMenuInfo {
         public int position;
         public long id;
@@ -282,5 +284,4 @@ public class EaseRecyclerView extends RecyclerView {
             this.id = id;
         }
     }
-
 }

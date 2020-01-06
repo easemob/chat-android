@@ -53,6 +53,8 @@
     <string name="File_does_not_exist">文件不存在</string>
     <string name="unable_to_get_loaction">无法获取到您的位置信息!</string>
     <string name="alert_during_typing">正在输入 &#8230;</string>
+    <string name= "no_more_messages">没有更多的消息了</string>
+    <string name="all_members">所有成员</string>
 
     <!-- For group ack start -->
     <string name="title_group_notification">群通知</string>
