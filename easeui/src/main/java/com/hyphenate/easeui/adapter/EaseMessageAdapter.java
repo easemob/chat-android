@@ -6,28 +6,16 @@ import com.hyphenate.chat.EMClient;
 import com.hyphenate.chat.EMConversation;
 import com.hyphenate.chat.EMMessage;
 import com.hyphenate.easeui.R;
-import com.hyphenate.easeui.constants.EaseConstant;
 import com.hyphenate.easeui.interfaces.MessageListItemClickListener;
-import com.hyphenate.easeui.interfaces.OnItemClickListener;
 import com.hyphenate.easeui.model.styles.EaseMessageListItemStyle;
 import com.hyphenate.easeui.utils.EaseCommonUtils;
 import com.hyphenate.easeui.viewholder.EaseChatRowViewHolder;
+import com.hyphenate.easeui.viewholder.MESSAGE_TYPE;
 
+/**
+ * 在{@link com.hyphenate.easeui.viewholder.MESSAGE_TYPE}中进行添加及修改
+ */
 public class EaseMessageAdapter extends EaseBaseRecyclerViewAdapter<EMMessage> {
-    public static final int MESSAGE_TYPE_RECV_TXT = 110;
-    public static final int MESSAGE_TYPE_SENT_TXT = 111;
-    public static final int MESSAGE_TYPE_SENT_IMAGE = 112;
-    public static final int MESSAGE_TYPE_SENT_LOCATION = 113;
-    public static final int MESSAGE_TYPE_RECV_LOCATION = 114;
-    public static final int MESSAGE_TYPE_RECV_IMAGE = 115;
-    public static final int MESSAGE_TYPE_SENT_VOICE = 116;
-    public static final int MESSAGE_TYPE_RECV_VOICE = 117;
-    public static final int MESSAGE_TYPE_SENT_VIDEO = 118;
-    public static final int MESSAGE_TYPE_RECV_VIDEO = 119;
-    public static final int MESSAGE_TYPE_SENT_FILE = 120;
-    public static final int MESSAGE_TYPE_RECV_FILE = 121;
-    public static final int MESSAGE_TYPE_SENT_EXPRESSION = 122;
-    public static final int MESSAGE_TYPE_RECV_EXPRESSION = 123;
 
     private String toChatUsername;
     private EMConversation conversation;
@@ -61,28 +49,8 @@ public class EaseMessageAdapter extends EaseBaseRecyclerViewAdapter<EMMessage> {
         if(message == null) {
             return super.getItemViewType(position);
         }
-        if(message.getType() == EMMessage.Type.TXT) {
-            if(message.getBooleanAttribute(EaseConstant.MESSAGE_ATTR_IS_BIG_EXPRESSION, false)) {
-                return message.direct() == EMMessage.Direct.RECEIVE ? MESSAGE_TYPE_RECV_EXPRESSION : MESSAGE_TYPE_SENT_EXPRESSION;
-            }
-            return message.direct() == EMMessage.Direct.RECEIVE ? MESSAGE_TYPE_RECV_TXT : MESSAGE_TYPE_SENT_TXT;
-        }
-        if (message.getType() == EMMessage.Type.IMAGE) {
-            return message.direct() == EMMessage.Direct.RECEIVE ? MESSAGE_TYPE_RECV_IMAGE : MESSAGE_TYPE_SENT_IMAGE;
-        }
-        if (message.getType() == EMMessage.Type.LOCATION) {
-            return message.direct() == EMMessage.Direct.RECEIVE ? MESSAGE_TYPE_RECV_LOCATION : MESSAGE_TYPE_SENT_LOCATION;
-        }
-        if (message.getType() == EMMessage.Type.VOICE) {
-            return message.direct() == EMMessage.Direct.RECEIVE ? MESSAGE_TYPE_RECV_VOICE : MESSAGE_TYPE_SENT_VOICE;
-        }
-        if (message.getType() == EMMessage.Type.VIDEO) {
-            return message.direct() == EMMessage.Direct.RECEIVE ? MESSAGE_TYPE_RECV_VIDEO : MESSAGE_TYPE_SENT_VIDEO;
-        }
-        if (message.getType() == EMMessage.Type.FILE) {
-            return message.direct() == EMMessage.Direct.RECEIVE ? MESSAGE_TYPE_RECV_FILE : MESSAGE_TYPE_SENT_FILE;
-        }
-        return super.getItemViewType(position);
+        int viewType = MESSAGE_TYPE.getAdapterViewType(message);
+        return viewType == 0 ? super.getItemViewType(position) : viewType;
     }
 
     /**

@@ -6,6 +6,8 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.provider.MediaStore;
 import android.text.Editable;
 import android.text.TextUtils;
@@ -29,19 +31,23 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import com.hyphenate.EMCallBack;
 import com.hyphenate.EMMessageListener;
 import com.hyphenate.EMValueCallBack;
+import com.hyphenate.chat.EMChatRoom;
 import com.hyphenate.chat.EMClient;
+import com.hyphenate.chat.EMCmdMessageBody;
 import com.hyphenate.chat.EMConversation;
 import com.hyphenate.chat.EMCursorResult;
 import com.hyphenate.chat.EMGroup;
 import com.hyphenate.chat.EMImageMessageBody;
 import com.hyphenate.chat.EMMessage;
 import com.hyphenate.chat.EMTextMessageBody;
+import com.hyphenate.chat.adapter.EMAChatRoomManagerListener;
 import com.hyphenate.easeui.R;
 import com.hyphenate.easeui.adapter.EaseBaseRecyclerViewAdapter;
 import com.hyphenate.easeui.adapter.EaseMessageAdapter;
 import com.hyphenate.easeui.constants.EaseConstant;
 import com.hyphenate.easeui.domain.EaseEmojicon;
 import com.hyphenate.easeui.domain.EaseUser;
+import com.hyphenate.easeui.interfaces.EaseChatRoomListener;
 import com.hyphenate.easeui.interfaces.EaseGroupListener;
 import com.hyphenate.easeui.interfaces.MessageListItemClickListener;
 import com.hyphenate.easeui.model.EaseAtMessageHelper;
@@ -60,11 +66,20 @@ import com.hyphenate.util.PathUtil;
 import java.io.File;
 import java.util.List;
 
-public abstract class EaseChatFragment extends EaseBaseFragment implements View.OnClickListener,
+public class EaseChatFragment extends EaseBaseFragment implements View.OnClickListener,
         SwipeRefreshLayout.OnRefreshListener, EaseChatInputMenu.ChatInputMenuListener,
         EaseChatExtendMenu.EaseChatExtendMenuItemClickListener, MessageListItemClickListener,
         EMCallBack, EMMessageListener, View.OnTouchListener, TextWatcher {
+
     private static final String TAG = EaseChatFragment.class.getSimpleName();
+
+    protected static final int MSG_TYPING_BEGIN = 0;
+    protected static final int MSG_TYPING_END = 1;
+
+    protected static final String ACTION_TYPING_BEGIN = "TypingBegin";
+    protected static final String ACTION_TYPING_END = "TypingEnd";
+    protected static final int TYPING_SHOW_TIME = 5000;
+
     protected static final int REQUEST_CODE_MAP = 1;
     protected static final int REQUEST_CODE_CAMERA = 2;
     protected static final int REQUEST_CODE_LOCAL = 3;
@@ -82,9 +97,12 @@ public abstract class EaseChatFragment extends EaseBaseFragment implements View.
     protected int chatType = EaseConstant.CHATTYPE_SINGLE;
     private String forwardMsgId;
     /**
+     * "正在输入"功能的开关，打开后本设备发送消息将持续发送cmd类型消息通知对方"正在输入"
+     */
+    private boolean turnOnTyping;
+    /**
      * 消息类别，SDK定义
      */
-    protected EMMessage.ChatType emMsgChatType = EMMessage.ChatType.Chat;
     protected String toChatUsername;
     protected EaseBaseRecyclerViewAdapter messageAdapter;
     protected File cameraFile;
@@ -101,6 +119,9 @@ public abstract class EaseChatFragment extends EaseBaseFragment implements View.
      * load count from db or server
      */
     protected static int PAGE_SIZE = 20;
+    private ChatRoomListener chatRoomListener;
+    private GroupListener groupListener;
+    private Handler typingHandler;
 
     @Nullable
     @Override
@@ -126,8 +147,10 @@ public abstract class EaseChatFragment extends EaseBaseFragment implements View.
         Bundle bundle = getArguments();
         if(bundle != null) {
             isRoaming = bundle.getBoolean("isRoaming", false);
+            chatType = bundle.getInt(EaseConstant.EXTRA_CHAT_TYPE);
             toChatUsername = bundle.getString(EaseConstant.EXTRA_USER_ID);
             forwardMsgId = bundle.getString(EaseConstant.FORWARD_MSG_ID);
+            turnOnTyping = openTurnOnTyping();
             initChildArguments();
         }
     }
@@ -157,6 +180,7 @@ public abstract class EaseChatFragment extends EaseBaseFragment implements View.
         inputMenu.getPrimaryMenu().getEditText().addTextChangedListener(this);
         setMessageClickListener();
         addGroupListener();
+        addChatRoomListener();
         initChildListener();
     }
 
@@ -166,21 +190,19 @@ public abstract class EaseChatFragment extends EaseBaseFragment implements View.
         }
     }
 
-    private void addGroupListener() {
-        GroupListener listener = new GroupListener();
-        EMClient.getInstance().groupManager().addGroupChangeListener(listener);
-    }
-
     private void initData() {
         initConversation();
         sendForwardMsg();
         refreshMessages();
+        hideNickname();
         initChildData();
     }
 
     @Override
     public void onClick(View v) {
-        // do nothing
+       if(v.getId() == R.id.tv_error_msg) {
+           onChatRoomViewCreation();
+       }
     }
 
     @Override
@@ -213,7 +235,8 @@ public abstract class EaseChatFragment extends EaseBaseFragment implements View.
      */
     @Override
     public void onTyping(CharSequence s, int start, int before, int count) {
-        Log.e("TAG", "onTyping");
+        // send action:TypingBegin cmd msg.
+        typingHandler.sendEmptyMessage(MSG_TYPING_BEGIN);
     }
 
     /**
@@ -362,6 +385,20 @@ public abstract class EaseChatFragment extends EaseBaseFragment implements View.
     @Override
     public void onCmdMessageReceived(List<EMMessage> messages) {
         // 对方是否正在输入的消息回调
+        for (final EMMessage msg : messages) {
+            final EMCmdMessageBody body = (EMCmdMessageBody) msg.getBody();
+            EMLog.i(TAG, "Receive cmd message: " + body.action() + " - " + body.isDeliverOnlineOnly());
+            mContext.runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    if (ACTION_TYPING_BEGIN.equals(body.action()) && msg.getFrom().equals(toChatUsername)) {
+                        setTitleBarText(getString(R.string.alert_during_typing));
+                    } else if (ACTION_TYPING_END.equals(body.action()) && msg.getFrom().equals(toChatUsername)) {
+                        setTitleBarText(toChatUsername);
+                    }
+                }
+            });
+        }
     }
 
     /**
@@ -865,7 +902,11 @@ public abstract class EaseChatFragment extends EaseBaseFragment implements View.
      */
     protected void sendMessage(EMMessage message) {
         addMessageAttributes(message);
-        message.setChatType(emMsgChatType);
+        if (chatType == EaseConstant.CHATTYPE_GROUP){
+            message.setChatType(EMMessage.ChatType.GroupChat);
+        }else if(chatType == EaseConstant.CHATTYPE_CHATROOM){
+            message.setChatType(EMMessage.ChatType.ChatRoom);
+        }
         message.setMessageStatusCallback(this);
         // send message
         EMClient.getInstance().chatManager().sendMessage(message);
@@ -916,26 +957,6 @@ public abstract class EaseChatFragment extends EaseBaseFragment implements View.
     }
 
     /**
-     * only for group chat
-     * @param content
-     */
-    protected void sendAtMessage(String content) {
-        if(chatType != EaseConstant.CHATTYPE_GROUP){
-            EMLog.e(TAG, "only support group chat message");
-            return;
-        }
-        EMMessage message = EMMessage.createTxtSendMessage(content, toChatUsername);
-        EMGroup group = EMClient.getInstance().groupManager().getGroup(toChatUsername);
-        if(EMClient.getInstance().getCurrentUser().equals(group.getOwner()) && EaseAtMessageHelper.get().containsAtAll(content)){
-            message.setAttribute(EaseConstant.MESSAGE_ATTR_AT_MSG, EaseConstant.MESSAGE_ATTR_VALUE_AT_MSG_ALL);
-        }else {
-            message.setAttribute(EaseConstant.MESSAGE_ATTR_AT_MSG,
-                    EaseAtMessageHelper.get().atListToJsonArray(EaseAtMessageHelper.get().getAtMessageUsernames(content)));
-        }
-        sendMessage(message);
-    }
-
-    /**
      * add message extension
      * 添加扩展消息
      * @param message
@@ -962,6 +983,9 @@ public abstract class EaseChatFragment extends EaseBaseFragment implements View.
         // unregister this event listener when this activity enters the
         // background
         EMClient.getInstance().chatManager().removeMessageListener(this);
+        if(typingHandler != null) {
+            typingHandler.sendEmptyMessage(MSG_TYPING_END);
+        }
     }
 
     @Override
@@ -1006,7 +1030,126 @@ public abstract class EaseChatFragment extends EaseBaseFragment implements View.
 
 //================================ fragment life cycle end ============================================
 
+//================================= for single start ================================
+
+    /**
+     * 判断是否是single chat
+     * @return
+     */
+    protected boolean isSingleChat() {
+        return chatType == EaseConstant.CHATTYPE_SINGLE;
+    }
+
+    /**
+     * 用于控制，是否告诉对方，你正在输入中
+     * @return
+     */
+    protected boolean openTurnOnTyping() {
+        return false;
+    }
+
+    /**
+     * 不展示nickname
+     */
+    protected void hideNickname() {
+        if(isSingleChat()) {
+            ((EaseMessageAdapter)messageAdapter).showUserNick(false);
+        }
+    }
+
+    private void setTypingHandler() {
+        if(!isSingleChat()) {
+            return;
+        }
+        typingHandler = new Handler() {
+            @Override
+            public void handleMessage(@NonNull Message msg) {
+                super.handleMessage(msg);
+                switch (msg.what) {
+                    case MSG_TYPING_BEGIN :
+                        setTypingBeginMsg(this);
+                        break;
+                    case MSG_TYPING_END :
+                        setTypingEndMsg(this);
+                        break;
+                }
+
+            }
+        };
+    }
+
+    /**
+     * 处理“正在输入”开始
+     * @param handler
+     */
+    private void setTypingBeginMsg(Handler handler) {
+        if (!turnOnTyping) return;
+        // Only support single-chat type conversation.
+        if (chatType != EaseConstant.CHATTYPE_SINGLE)
+            return;
+        if (handler.hasMessages(MSG_TYPING_END)) {
+            // reset the MSG_TYPING_END handler msg.
+            handler.removeMessages(MSG_TYPING_END);
+        } else {
+            // Send TYPING-BEGIN cmd msg
+            EMMessage beginMsg = EMMessage.createSendMessage(EMMessage.Type.CMD);
+            EMCmdMessageBody body = new EMCmdMessageBody(ACTION_TYPING_BEGIN);
+            // Only deliver this cmd msg to online users
+            body.deliverOnlineOnly(true);
+            beginMsg.addBody(body);
+            beginMsg.setTo(toChatUsername);
+            EMClient.getInstance().chatManager().sendMessage(beginMsg);
+        }
+        handler.sendEmptyMessageDelayed(MSG_TYPING_END, TYPING_SHOW_TIME);
+    }
+
+    /**
+     * 处理“正在输入”结束
+     * @param handler
+     */
+    private void setTypingEndMsg(Handler handler) {
+        if (!turnOnTyping) return;
+
+        // Only support single-chat type conversation.
+        if (chatType != EaseConstant.CHATTYPE_SINGLE)
+            return;
+
+        // remove all pedding msgs to avoid memory leak.
+        handler.removeCallbacksAndMessages(null);
+        // Send TYPING-END cmd msg
+        EMMessage endMsg = EMMessage.createSendMessage(EMMessage.Type.CMD);
+        EMCmdMessageBody body = new EMCmdMessageBody(ACTION_TYPING_END);
+        // Only deliver this cmd msg to online users
+        body.deliverOnlineOnly(true);
+        endMsg.addBody(body);
+        endMsg.setTo(toChatUsername);
+        EMClient.getInstance().chatManager().sendMessage(endMsg);
+    }
+
+
+//================================= for single end ================================
+
 //================================== for group start ================================
+
+    /**
+     * only for group chat
+     * @param content
+     */
+    protected void sendAtMessage(String content) {
+        if(!isGroupChat()){
+            EMLog.e(TAG, "only support group chat message");
+            return;
+        }
+        EMMessage message = EMMessage.createTxtSendMessage(content, toChatUsername);
+        EMGroup group = EMClient.getInstance().groupManager().getGroup(toChatUsername);
+        if(EMClient.getInstance().getCurrentUser().equals(group.getOwner()) && EaseAtMessageHelper.get().containsAtAll(content)){
+            message.setAttribute(EaseConstant.MESSAGE_ATTR_AT_MSG, EaseConstant.MESSAGE_ATTR_VALUE_AT_MSG_ALL);
+        }else {
+            message.setAttribute(EaseConstant.MESSAGE_ATTR_AT_MSG,
+                    EaseAtMessageHelper.get().atListToJsonArray(EaseAtMessageHelper.get().getAtMessageUsernames(content)));
+        }
+        sendMessage(message);
+    }
 
     /**
      * user war been kicked from group
@@ -1032,6 +1175,22 @@ public abstract class EaseChatFragment extends EaseBaseFragment implements View.
         mContext.runOnUiThread(()-> mContext.finish());
     }
 
+    protected void addGroupListener() {
+        if(!isGroupChat()) {
+            return;
+        }
+        groupListener = new GroupListener();
+        EMClient.getInstance().groupManager().addGroupChangeListener(groupListener);
+    }
+
+    /**
+     * 判断是否是群组聊天
+     * @return
+     */
+    protected boolean isGroupChat() {
+        return chatType == EaseConstant.CHATTYPE_GROUP;
+    }
+
     /**
      * input @
      * only for group chat
@@ -1039,7 +1198,7 @@ public abstract class EaseChatFragment extends EaseBaseFragment implements View.
      */
     protected void inputAtUsername(String username, boolean autoAddAtSymbol){
         if(EMClient.getInstance().getCurrentUser().equals(username) ||
-                chatType != EaseConstant.CHATTYPE_GROUP){
+                !isGroupChat()){
             return;
         }
         EaseAtMessageHelper.get().addAtUser(username);
@@ -1070,5 +1229,116 @@ public abstract class EaseChatFragment extends EaseBaseFragment implements View.
     }
 
 //=============================== for group end =======================================
+
+//================================ for chat room start =====================================
+
+    /**
+     * join chat room
+     */
+    private void onChatRoomViewCreation() {
+        if(!isChatRoomChat()) {
+            return;
+        }
+        EMClient.getInstance().chatroomManager().joinChatRoom(toChatUsername, new EMValueCallBack<EMChatRoom>() {
+            @Override
+            public void onSuccess(EMChatRoom value) {
+                if(isActivityDisable()) {
+                    return;
+                }
+                if(!TextUtils.equals(toChatUsername, value.getId())) {
+                    return;
+                }
+                mContext.runOnUiThread(()-> {
+                    EMChatRoom room = EMClient.getInstance().chatroomManager().getChatRoom(toChatUsername);
+                    String title = room != null ? room.getName() : toChatUsername;
+                    setTitleBarText(title);
+                });
+            }
+
+            @Override
+            public void onError(int error, String errorMsg) {
+                EMLog.d(TAG, "join room failure : "+error);
+                if(!isActivityDisable()) {
+                    mContext.finish();
+                }
+            }
+        });
+    }
+
+    protected void addChatRoomListener() {
+        if(!isChatRoomChat()) {
+            return;
+        }
+        chatRoomListener = new ChatRoomListener();
+        EMClient.getInstance().chatroomManager().addChatRoomChangeListener(chatRoomListener);
+    }
+
+    /**
+     * 判断是否是chat room
+     * @return
+     */
+    protected boolean isChatRoomChat() {
+        return chatType == EaseConstant.CHATTYPE_CHATROOM;
+    }
+
+    protected void onRemovedFromChatRoom(int reason, String roomId, String roomName, String participant) {
+        if(isActivityDisable()) {
+            return;
+        }
+        mContext.runOnUiThread(() -> {
+            if(!TextUtils.equals(roomId, toChatUsername)) {
+                return;
+            }
+            if(reason == EMAChatRoomManagerListener.BE_KICKED) {
+                mContext.finish();
+            }else {
+                tvErrorMsg.setVisibility(View.VISIBLE);
+            }
+        });
+    }
+
+    protected void onMemberJoined(String roomId, String participant) {
+        if(isActivityDisable()) {
+            return;
+        }
+    }
+
+    protected void onMemberExited(String roomId, String roomName, String participant) {
+        if (isActivityDisable()) {
+            return;
+        }
+    }
+
+    protected void onChatRoomDestroyed(String roomId, String roomName) {
+        if(isActivityDisable()) {
+            return;
+        }
+        mContext.runOnUiThread(() -> mContext.finish());
+    }
+
+    private class ChatRoomListener extends EaseChatRoomListener {
+
+        @Override
+        public void onChatRoomDestroyed(String roomId, String roomName) {
+            EaseChatFragment.this.onChatRoomDestroyed(roomId, roomName);
+        }
+
+        @Override
+        public void onRemovedFromChatRoom(int reason, String roomId, String roomName, String participant) {
+            EaseChatFragment.this.onRemovedFromChatRoom(reason, roomId,  roomName, participant);
+        }
+
+        @Override
+        public void onMemberJoined(String roomId, String participant) {
+            EaseChatFragment.this.onMemberJoined(roomId, participant);
+        }
+
+        @Override
+        public void onMemberExited(String roomId, String roomName, String participant) {
+            EaseChatFragment.this.onMemberExited(roomId, roomName, participant);
+        }
+    }
+
+//================================ for chat room end =====================================
 
 }

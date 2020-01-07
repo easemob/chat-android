@@ -13,9 +13,6 @@ import com.hyphenate.chatuidemo.R;
 import com.hyphenate.chatuidemo.section.base.BaseInitActivity;
 import com.hyphenate.easeui.constants.EaseConstant;
 import com.hyphenate.easeui.ui.chat.EaseChatFragment;
-import com.hyphenate.easeui.ui.chat.EaseChatRoomChatFragment;
-import com.hyphenate.easeui.ui.chat.EaseGroupChatFragment;
-import com.hyphenate.easeui.ui.chat.EaseSingleChatFragment;
 import com.hyphenate.easeui.utils.EaseCommonUtils;
 import com.hyphenate.easeui.widget.EaseTitleBar;
 
@@ -47,22 +44,7 @@ public class EmChatActivity extends BaseInitActivity implements EaseTitleBar.OnB
     protected void initView(Bundle savedInstanceState) {
         super.initView(savedInstanceState);
         titleBarMessage = findViewById(R.id.title_bar_message);
-        EaseChatFragment fragment = null;
-        switch (chatType) {
-            case EaseConstant.CHATTYPE_SINGLE :
-                fragment = new EaseSingleChatFragment();
-                break;
-            case EaseConstant.CHATTYPE_GROUP :
-                fragment = new EaseGroupChatFragment();
-                break;
-            case EaseConstant.CHATTYPE_CHATROOM :
-                fragment = new EaseChatRoomChatFragment();
-                break;
-        }
-        if(fragment == null) {
-            finish();
-            return;
-        }
+        EaseChatFragment fragment = new EaseChatFragment();
         Bundle bundle = new Bundle();
         bundle.putString(EaseConstant.EXTRA_USER_ID, toChatUsername);
         fragment.setArguments(bundle);

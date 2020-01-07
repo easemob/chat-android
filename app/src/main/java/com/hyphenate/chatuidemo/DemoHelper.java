@@ -33,6 +33,8 @@ public class DemoHelper {
 
     public boolean isSDKInit;//SDK是否初始化
     private static DemoHelper mInstance;
+    public boolean isVoiceCalling;
+    public boolean isVideoCalling;
 
     private DemoHelper() {}
 

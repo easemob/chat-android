@@ -55,5 +55,10 @@
 
     <color name="grid_state_pressed">#1Affffff</color>
     <color name="grid_state_focused">#80000000</color>
+    <color name="holo_black">#ff111111</color>
+    <color name="bg_tools_panel">#2F2F2F</color>
+    <color name="em_indicator_select">#9E9E9E</color>
+    <color name="em_indicator_normal">#1AFFFFFF</color>
+    <color name="black_deep">#FF000000</color>
 
 </resources>

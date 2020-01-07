@@ -20,6 +20,7 @@ import java.util.List;
 
 
 public class EaseChatRowViewHolder extends EaseMessageAdapter.ViewHolder<EMMessage> implements EaseChatRow.EaseChatRowActionCallback {
+    private static final String TAG = EaseChatRowViewHolder.class.getSimpleName();
     private Context context;
     private EaseChatRow chatRow;
     private EMMessage message;
@@ -29,50 +30,7 @@ public class EaseChatRowViewHolder extends EaseMessageAdapter.ViewHolder<EMMessa
     public static EaseChatRowViewHolder create(ViewGroup parent, int viewType,
                                                MessageListItemClickListener itemClickListener,
                                                EaseMessageListItemStyle itemStyle) {
-        switch (viewType) {
-            case EaseMessageAdapter.MESSAGE_TYPE_RECV_EXPRESSION :
-            case EaseMessageAdapter.MESSAGE_TYPE_SENT_EXPRESSION :
-                // big expression
-                return EaseExpressionViewHolder.create(parent,
-                        viewType == EaseMessageAdapter.MESSAGE_TYPE_SENT_EXPRESSION,
-                        itemClickListener, itemStyle);
-            case EaseMessageAdapter.MESSAGE_TYPE_RECV_IMAGE :
-            case EaseMessageAdapter.MESSAGE_TYPE_SENT_IMAGE :
-                // image
-                return EaseImageViewHolder.create(parent,
-                        viewType == EaseMessageAdapter.MESSAGE_TYPE_SENT_IMAGE,
-                        itemClickListener, itemStyle);
-            case EaseMessageAdapter.MESSAGE_TYPE_RECV_LOCATION :
-            case EaseMessageAdapter.MESSAGE_TYPE_SENT_LOCATION :
-                // location
-                return EaseLocationViewHolder.create(parent,
-                        viewType == EaseMessageAdapter.MESSAGE_TYPE_SENT_LOCATION,
-                        itemClickListener, itemStyle);
-            case EaseMessageAdapter.MESSAGE_TYPE_RECV_VOICE :
-            case EaseMessageAdapter.MESSAGE_TYPE_SENT_VOICE :
-                // voice
-                return EaseVoiceViewHolder.create(parent,
-                        viewType == EaseMessageAdapter.MESSAGE_TYPE_SENT_VOICE,
-                        itemClickListener, itemStyle);
-            case EaseMessageAdapter.MESSAGE_TYPE_RECV_VIDEO :
-            case EaseMessageAdapter.MESSAGE_TYPE_SENT_VIDEO :
-                // video
-                return EaseVideoViewHolder.create(parent,
-                        viewType == EaseMessageAdapter.MESSAGE_TYPE_SENT_VIDEO,
-                        itemClickListener, itemStyle);
-            case EaseMessageAdapter.MESSAGE_TYPE_RECV_FILE :
-            case EaseMessageAdapter.MESSAGE_TYPE_SENT_FILE :
-                // file
-                return EaseFileViewHolder.create(parent,
-                        viewType == EaseMessageAdapter.MESSAGE_TYPE_SENT_FILE,
-                        itemClickListener, itemStyle);
-            default:
-                // text
-                return EaseTextViewHolder.create(parent,
-                        viewType == EaseMessageAdapter.MESSAGE_TYPE_SENT_TXT,
-                        itemClickListener, itemStyle);
-        }
-
+        return MESSAGE_TYPE.createChatViewHolder(parent, viewType, itemClickListener, itemStyle);
     }
 
     public EaseChatRowViewHolder(@NonNull View itemView, MessageListItemClickListener itemClickListener,

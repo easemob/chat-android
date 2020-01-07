@@ -276,6 +276,9 @@
         <activity android:name=".section.friends.activity.ChatRoomContactManageActivity" />
         <activity android:name="com.hyphenate.easeui.ui.EaseShowBigImageActivity"/>
         <activity android:name="com.hyphenate.easeui.ui.EaseBaiduMapActivity"/>
+        <activity android:name=".section.chat.ImageGridActivity" />
+        <activity android:name=".section.chat.VideoCallActivity" />
+        <activity android:name=".section.chat.VoiceCallActivity" />
 
     </application>
 
