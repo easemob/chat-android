@@ -14,7 +14,6 @@ import com.hyphenate.chatuidemo.section.friends.viewmodels.ChatRoomContactViewMo
 import com.hyphenate.easeui.widget.EaseRecyclerView;
 import com.scwang.smartrefresh.layout.SmartRefreshLayout;
 import com.scwang.smartrefresh.layout.api.RefreshLayout;
-import com.scwang.smartrefresh.layout.listener.OnLoadMoreListener;
 import com.scwang.smartrefresh.layout.listener.OnRefreshLoadMoreListener;
 
 import java.util.List;
@@ -29,7 +28,7 @@ public class ChatRoomContactManageFragment extends BaseInitFragment implements O
 
     @Override
     protected int getLayoutId() {
-        return R.layout.em_fragment_common_list;
+        return R.layout.em_common_list;
     }
 
     @Override

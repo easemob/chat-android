@@ -2,30 +2,18 @@ package com.hyphenate.easeui.adapter;
 
 import android.view.ViewGroup;
 
-import com.hyphenate.chat.EMClient;
-import com.hyphenate.chat.EMConversation;
 import com.hyphenate.chat.EMMessage;
 import com.hyphenate.easeui.R;
-import com.hyphenate.easeui.interfaces.MessageListItemClickListener;
-import com.hyphenate.easeui.model.styles.EaseMessageListItemStyle;
-import com.hyphenate.easeui.utils.EaseCommonUtils;
-import com.hyphenate.easeui.viewholder.EaseChatRowViewHolder;
-import com.hyphenate.easeui.viewholder.MESSAGE_TYPE;
+import com.hyphenate.easeui.interfaces.IViewHolderProvider;
+import com.hyphenate.easeui.viewholder.EaseViewHolderHelper;
 
 /**
- * 在{@link com.hyphenate.easeui.viewholder.MESSAGE_TYPE}中进行添加及修改
+ * 开发者可在实现{@link IViewHolderProvider}提供相应的ViewHolder及ViewType
+ * ViewHolder的提供主要通过{@link EaseViewHolderHelper}
  */
-public class EaseMessageAdapter extends EaseBaseRecyclerViewAdapter<EMMessage> {
+public class EaseMessageAdapter extends EaseBaseMessageAdapter<EMMessage> {
 
-    private String toChatUsername;
-    private EMConversation conversation;
-    private MessageListItemClickListener itemClickListener;
-    private EaseMessageListItemStyle itemStyle;
-
-    public EaseMessageAdapter(String username, int chatType) {
-        this.toChatUsername = username;
-        this.conversation = EMClient.getInstance().chatManager().getConversation(username
-                , EaseCommonUtils.getConversationType(chatType), true);
+    public EaseMessageAdapter() {
         itemStyle = createDefaultItemStyle();
     }
 
@@ -40,7 +28,10 @@ public class EaseMessageAdapter extends EaseBaseRecyclerViewAdapter<EMMessage> {
     }
 
     private ViewHolder createItemViewHolder(ViewGroup parent, int viewType) {
-        return EaseChatRowViewHolder.create(parent, viewType, itemClickListener, itemStyle);
+        if(viewHolderProvider != null) {
+            return viewHolderProvider.provideViewHolder(parent, itemClickListener, itemStyle).get(viewType);
+        }
+        return EaseViewHolderHelper.getInstance().getChatRowViewHolder(parent, viewType, itemClickListener, itemStyle);
     }
 
     @Override
@@ -49,19 +40,14 @@ public class EaseMessageAdapter extends EaseBaseRecyclerViewAdapter<EMMessage> {
         if(message == null) {
             return super.getItemViewType(position);
         }
-        int viewType = MESSAGE_TYPE.getAdapterViewType(message);
+        if(viewHolderProvider != null) {
+            int type = viewHolderProvider.provideViewType(message);
+            if(type != 0) {
+                return type;
+            }
+        }
+        int viewType = EaseViewHolderHelper.getInstance().getDefaultAdapterViewType(message);
         return viewType == 0 ? super.getItemViewType(position) : viewType;
-    }
-
-    /**
-     * create default item style
-     * @return
-     */
-    protected EaseMessageListItemStyle createDefaultItemStyle() {
-        EaseMessageListItemStyle.Builder builder = new EaseMessageListItemStyle.Builder();
-        builder.showAvatar(true)
-                .showUserNick(false);
-        return builder.build();
     }
 
 
@@ -76,38 +62,5 @@ public class EaseMessageAdapter extends EaseBaseRecyclerViewAdapter<EMMessage> {
         }
         return null;
     }
-
-    public void setConversationMessages() {
-        if(conversation != null) {
-            mData = conversation.getAllMessages();
-            conversation.markAllMessagesAsRead();
-            setData(mData);
-        }
-    }
-
-    /**
-     * set item click listener
-     * @param itemClickListener
-     */
-    public void setListItemClickListener(MessageListItemClickListener itemClickListener) {
-        this.itemClickListener = itemClickListener;
-    }
-
-    /**
-     * set item style
-     * @param itemStyle
-     */
-    public void setItemStyle(EaseMessageListItemStyle itemStyle) {
-        this.itemStyle = itemStyle;
-    }
-
-    /**
-     * if show nick name
-     * @param showUserNick
-     */
-    public void showUserNick(boolean showUserNick) {
-        this.itemStyle.setShowUserNick(showUserNick);
-    }
-
 
 }

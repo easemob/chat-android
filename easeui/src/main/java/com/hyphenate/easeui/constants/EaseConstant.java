@@ -33,4 +33,13 @@ public interface EaseConstant {
 
     String EXTRA_CHAT_TYPE = "chatType";
     String EXTRA_USER_ID = "userId";
+
+    String MESSAGE_TYPE_TXT = "txt";
+    String MESSAGE_TYPE_EXPRESSION = "expression";
+    String MESSAGE_TYPE_IMAGE = "image";
+    String MESSAGE_TYPE_VIDEO = "video";
+    String MESSAGE_TYPE_LOCATION = "location";
+    String MESSAGE_TYPE_VOICE = "voice";
+    String MESSAGE_TYPE_FILE = "file";
+    String MESSAGE_TYPE_CMD = "cmd";
 }

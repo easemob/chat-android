@@ -42,6 +42,7 @@ import com.hyphenate.chat.EMMessage;
 import com.hyphenate.chat.EMTextMessageBody;
 import com.hyphenate.chat.adapter.EMAChatRoomManagerListener;
 import com.hyphenate.easeui.R;
+import com.hyphenate.easeui.adapter.EaseBaseMessageAdapter;
 import com.hyphenate.easeui.adapter.EaseBaseRecyclerViewAdapter;
 import com.hyphenate.easeui.adapter.EaseMessageAdapter;
 import com.hyphenate.easeui.constants.EaseConstant;
@@ -49,6 +50,8 @@ import com.hyphenate.easeui.domain.EaseEmojicon;
 import com.hyphenate.easeui.domain.EaseUser;
 import com.hyphenate.easeui.interfaces.EaseChatRoomListener;
 import com.hyphenate.easeui.interfaces.EaseGroupListener;
+import com.hyphenate.easeui.interfaces.IChatAdapterProvider;
+import com.hyphenate.easeui.interfaces.IViewHolderProvider;
 import com.hyphenate.easeui.interfaces.MessageListItemClickListener;
 import com.hyphenate.easeui.model.EaseAtMessageHelper;
 import com.hyphenate.easeui.model.EaseCompat;
@@ -66,6 +69,11 @@ import com.hyphenate.util.PathUtil;
 import java.io.File;
 import java.util.List;
 
+/**
+ * 说明：
+ * 1、如果要提供自己的adapter，可以通过重写{@link #setViewHolderProvider()}，提供自己的adapter
+ * 2、如果需要增加自定义的消息类型，可以通过重写{@link #setChatAdapterProvider()} )}来提供自己的ViewHolder
+ */
 public class EaseChatFragment extends EaseBaseFragment implements View.OnClickListener,
         SwipeRefreshLayout.OnRefreshListener, EaseChatInputMenu.ChatInputMenuListener,
         EaseChatExtendMenu.EaseChatExtendMenuItemClickListener, MessageListItemClickListener,
@@ -104,7 +112,7 @@ public class EaseChatFragment extends EaseBaseFragment implements View.OnClickLi
      * 消息类别，SDK定义
      */
     protected String toChatUsername;
-    protected EaseBaseRecyclerViewAdapter messageAdapter;
+    protected EaseBaseMessageAdapter messageAdapter;
     protected File cameraFile;
     /**
      * chat conversation
@@ -165,7 +173,9 @@ public class EaseChatFragment extends EaseBaseFragment implements View.OnClickLi
         initChildView();
 
         messageList.setLayoutManager(provideLayoutManager());
-        messageList.setAdapter(provideMessageAdapter());
+        messageAdapter = provideMessageAdapter();
+        messageAdapter.setViewHolderProvider(setViewHolderProvider());
+        messageList.setAdapter(messageAdapter);
 
         initInputMenu();
         addExtendInputMenu();
@@ -185,8 +195,8 @@ public class EaseChatFragment extends EaseBaseFragment implements View.OnClickLi
     }
 
     private void setMessageClickListener() {
-        if(messageAdapter != null && messageAdapter instanceof EaseMessageAdapter) {
-            ((EaseMessageAdapter)messageAdapter).setListItemClickListener(this);
+        if(messageAdapter != null) {
+            messageAdapter.setListItemClickListener(this);
         }
     }
 
@@ -563,9 +573,12 @@ public class EaseChatFragment extends EaseBaseFragment implements View.OnClickLi
      * provide message adapter
      * @return
      */
-    protected RecyclerView.Adapter provideMessageAdapter() {
-        messageAdapter = new EaseMessageAdapter(toChatUsername, chatType);
-        return messageAdapter;
+    protected EaseBaseMessageAdapter<EMMessage> provideMessageAdapter() {
+        IChatAdapterProvider adapterProvider = setChatAdapterProvider();
+        if(adapterProvider != null) {
+            return adapterProvider.provideMessageAdaper();
+        }
+        return new EaseMessageAdapter();
     }
 
     /**
@@ -590,6 +603,17 @@ public class EaseChatFragment extends EaseBaseFragment implements View.OnClickLi
     protected void showLoadMsgToast(String errorMsg) {
         showMsgToast(TextUtils.isEmpty(errorMsg) ? getResources().getString(R.string.no_more_messages) : errorMsg);
     }
+
+    protected IChatAdapterProvider setChatAdapterProvider() {
+        return null;
+    }
+
+    /**
+     * set viewHolder provider
+     */
+    public IViewHolderProvider setViewHolderProvider() {
+        return null;
+    }
 //============================== view control end ===========================
 
 //============================ load and show messages start ==================================
@@ -601,9 +625,9 @@ public class EaseChatFragment extends EaseBaseFragment implements View.OnClickLi
             return;
         }
         mContext.runOnUiThread(() -> {
-            if(messageAdapter != null && messageAdapter instanceof EaseMessageAdapter) {
-                ((EaseMessageAdapter)messageAdapter).setConversationMessages();
-            }
+            List<EMMessage> messages = conversation.getAllMessages();
+            conversation.markAllMessagesAsRead();
+            messageAdapter.setData(messages);
             finishRefresh();
         });
 
@@ -1053,7 +1077,7 @@ public class EaseChatFragment extends EaseBaseFragment implements View.OnClickLi
      */
     protected void hideNickname() {
         if(isSingleChat()) {
-            ((EaseMessageAdapter)messageAdapter).showUserNick(false);
+            messageAdapter.showUserNick(false);
         }
     }
 

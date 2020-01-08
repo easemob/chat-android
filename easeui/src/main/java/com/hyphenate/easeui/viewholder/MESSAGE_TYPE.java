@@ -96,6 +96,13 @@ public enum MESSAGE_TYPE {
                                                              EaseMessageListItemStyle itemStyle) {
 
         MESSAGE_TYPE type = getMessageType(viewType);
+        return getEaseChatRowViewHolder(parent, viewType, itemClickListener, itemStyle, type);
+
+    }
+
+    public static EaseChatRowViewHolder getEaseChatRowViewHolder(ViewGroup parent, int viewType,
+                                                                  MessageListItemClickListener itemClickListener,
+                                                                  EaseMessageListItemStyle itemStyle, MESSAGE_TYPE type) {
         if(type == null) {
             return EaseTextViewHolder.create(parent, false, itemClickListener, itemStyle);
         }
@@ -117,6 +124,5 @@ public enum MESSAGE_TYPE {
             default:
                 return EaseTextViewHolder.create(parent, isSend, itemClickListener, itemStyle);
         }
-
     }
 }

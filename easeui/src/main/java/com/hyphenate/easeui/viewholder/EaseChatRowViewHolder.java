@@ -27,12 +27,6 @@ public class EaseChatRowViewHolder extends EaseMessageAdapter.ViewHolder<EMMessa
     private MessageListItemClickListener mItemClickListener;
     private EaseMessageListItemStyle mItemStyle;
 
-    public static EaseChatRowViewHolder create(ViewGroup parent, int viewType,
-                                               MessageListItemClickListener itemClickListener,
-                                               EaseMessageListItemStyle itemStyle) {
-        return MESSAGE_TYPE.createChatViewHolder(parent, viewType, itemClickListener, itemStyle);
-    }
-
     public EaseChatRowViewHolder(@NonNull View itemView, MessageListItemClickListener itemClickListener,
                                  EaseMessageListItemStyle itemStyle) {
         super(itemView);

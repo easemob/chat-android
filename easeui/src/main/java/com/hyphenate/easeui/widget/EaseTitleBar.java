@@ -5,6 +5,7 @@ import android.content.res.TypedArray;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
+import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,6 +16,7 @@ import android.widget.TextView;
 
 import androidx.annotation.ColorInt;
 import androidx.annotation.ColorRes;
+import androidx.annotation.StringRes;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.content.ContextCompat;
@@ -195,6 +197,19 @@ public class EaseTitleBar extends RelativeLayout implements View.OnClickListener
     
     public void setRightImageResource(int resId) {
         rightImage.setImageResource(resId);
+        rightLayout.setVisibility(VISIBLE);
+    }
+
+    public void setRightTitleResource(@StringRes int title) {
+        titleMenu.setText(getResources().getString(title));
+        rightLayout.setVisibility(VISIBLE);
+    }
+
+    public void setRightTitle(String title) {
+        if(!TextUtils.isEmpty(title)) {
+            titleMenu.setText(title);
+            rightLayout.setVisibility(VISIBLE);
+        }
     }
     
     public void setLeftLayoutClickListener(OnClickListener listener){
