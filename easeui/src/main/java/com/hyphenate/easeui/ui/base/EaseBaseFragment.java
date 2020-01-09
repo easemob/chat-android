@@ -10,6 +10,8 @@ import androidx.annotation.IdRes;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
+import com.hyphenate.easeui.ui.EaseBaiduMapFragment;
+
 
 public class EaseBaseFragment extends Fragment {
     public Activity mContext;

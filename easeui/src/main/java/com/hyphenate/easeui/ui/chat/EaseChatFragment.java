@@ -56,6 +56,7 @@ import com.hyphenate.easeui.interfaces.MessageListItemClickListener;
 import com.hyphenate.easeui.model.EaseAtMessageHelper;
 import com.hyphenate.easeui.model.EaseCompat;
 import com.hyphenate.easeui.ui.EaseBaiduMapActivity;
+import com.hyphenate.easeui.ui.base.EaseBaseActivity;
 import com.hyphenate.easeui.ui.base.EaseBaseFragment;
 import com.hyphenate.easeui.utils.EaseCommonUtils;
 import com.hyphenate.easeui.utils.EaseDingMessageHelper;
@@ -130,6 +131,7 @@ public class EaseChatFragment extends EaseBaseFragment implements View.OnClickLi
     private ChatRoomListener chatRoomListener;
     private GroupListener groupListener;
     private Handler typingHandler;
+    private OnMessageChangeListener messageChangeListener;
 
     @Nullable
     @Override
@@ -155,7 +157,7 @@ public class EaseChatFragment extends EaseBaseFragment implements View.OnClickLi
         Bundle bundle = getArguments();
         if(bundle != null) {
             isRoaming = bundle.getBoolean("isRoaming", false);
-            chatType = bundle.getInt(EaseConstant.EXTRA_CHAT_TYPE);
+            chatType = bundle.getInt(EaseConstant.EXTRA_CHAT_TYPE, EaseConstant.CHATTYPE_SINGLE);
             toChatUsername = bundle.getString(EaseConstant.EXTRA_USER_ID);
             forwardMsgId = bundle.getString(EaseConstant.FORWARD_MSG_ID);
             turnOnTyping = openTurnOnTyping();
@@ -174,7 +176,6 @@ public class EaseChatFragment extends EaseBaseFragment implements View.OnClickLi
 
         messageList.setLayoutManager(provideLayoutManager());
         messageAdapter = provideMessageAdapter();
-        messageAdapter.setViewHolderProvider(setViewHolderProvider());
         messageList.setAdapter(messageAdapter);
 
         initInputMenu();
@@ -205,6 +206,7 @@ public class EaseChatFragment extends EaseBaseFragment implements View.OnClickLi
         sendForwardMsg();
         refreshMessages();
         hideNickname();
+        setTypingHandler();
         initChildData();
     }
 
@@ -225,7 +227,7 @@ public class EaseChatFragment extends EaseBaseFragment implements View.OnClickLi
                 selectPicFromLocal();
                 break;
             case EaseChatInputMenu.ITEM_LOCATION :
-                startActivityForResult(new Intent(getActivity(), EaseBaiduMapActivity.class), REQUEST_CODE_MAP);
+                EaseBaiduMapActivity.actionStartForResult(this, REQUEST_CODE_MAP);
                 break;
         }
     }
@@ -344,6 +346,9 @@ public class EaseChatFragment extends EaseBaseFragment implements View.OnClickLi
      */
     @Override
     public void onSuccess() {
+        if(messageChangeListener != null) {
+            messageChangeListener.onMessageChange(EaseConstant.MESSAGE_CHANGE_SEND_SUCCESS);
+        }
         EMLog.i(TAG, "send message success");
         refreshMessages();
     }
@@ -353,6 +358,9 @@ public class EaseChatFragment extends EaseBaseFragment implements View.OnClickLi
      */
     @Override
     public void onError(int code, String error) {
+        if(messageChangeListener != null) {
+            messageChangeListener.onMessageChange(EaseConstant.MESSAGE_CHANGE_SEND_ERROR);
+        }
         EMLog.i(TAG, "send message error = "+error);
         refreshMessages();
     }
@@ -362,6 +370,9 @@ public class EaseChatFragment extends EaseBaseFragment implements View.OnClickLi
      */
     @Override
     public void onProgress(int progress, String status) {
+        if(messageChangeListener != null) {
+            messageChangeListener.onMessageChange(EaseConstant.MESSAGE_CHANGE_SEND_PROGRESS);
+        }
         EMLog.i(TAG, "send message on progress");
         refreshMessages();
     }
@@ -372,6 +383,9 @@ public class EaseChatFragment extends EaseBaseFragment implements View.OnClickLi
      */
     @Override
     public void onMessageReceived(List<EMMessage> messages) {
+        if(messageChangeListener != null) {
+            messageChangeListener.onMessageChange(EaseConstant.MESSAGE_CHANGE_RECEIVE);
+        }
         for (EMMessage message : messages) {
             String username = null;
             // group message
@@ -435,6 +449,9 @@ public class EaseChatFragment extends EaseBaseFragment implements View.OnClickLi
      */
     @Override
     public void onMessageRecalled(List<EMMessage> messages) {
+        if(messageChangeListener != null) {
+            messageChangeListener.onMessageChange(EaseConstant.MESSAGE_CHANGE_RECALL);
+        }
         refreshMessages();
     }
 
@@ -445,6 +462,9 @@ public class EaseChatFragment extends EaseBaseFragment implements View.OnClickLi
      */
     @Override
     public void onMessageChanged(EMMessage message, Object change) {
+        if(messageChangeListener != null) {
+            messageChangeListener.onMessageChange(EaseConstant.MESSAGE_CHANGE_CHANGE);
+        }
         refreshMessages();
     }
 
@@ -476,7 +496,10 @@ public class EaseChatFragment extends EaseBaseFragment implements View.OnClickLi
      */
     @Override
     public void onTextChanged(CharSequence s, int start, int before, int count) {
-
+        if(count == 1 && "@".equals(String.valueOf(s.charAt(start)))){
+//            startActivityForResult(new Intent(getActivity(), PickAtUserActivity.class).
+//                    putExtra("groupId", toChatUsername), REQUEST_CODE_SELECT_AT_USER);
+        }
     }
 
     /**
@@ -578,7 +601,7 @@ public class EaseChatFragment extends EaseBaseFragment implements View.OnClickLi
         if(adapterProvider != null) {
             return adapterProvider.provideMessageAdaper();
         }
-        return new EaseMessageAdapter();
+        return new EaseMessageAdapter(setViewHolderProvider());
     }
 
     /**
@@ -614,6 +637,19 @@ public class EaseChatFragment extends EaseBaseFragment implements View.OnClickLi
     public IViewHolderProvider setViewHolderProvider() {
         return null;
     }
+
+    public void setOnMessageChangeListener(OnMessageChangeListener listener) {
+        this.messageChangeListener = listener;
+    }
+
+    /**
+     * 用于监听消息的变化，发送消息及接收消息
+     */
+    public interface OnMessageChangeListener {
+        void onMessageChange(String change);
+    }
+
+
 //============================== view control end ===========================
 
 //============================ load and show messages start ==================================
@@ -999,6 +1035,9 @@ public class EaseChatFragment extends EaseBaseFragment implements View.OnClickLi
         super.onResume();
         // register the event listener when enter the foreground
         EMClient.getInstance().chatManager().addMessageListener(this);
+        if(isGroupChat()) {
+            EaseAtMessageHelper.get().removeAtMeGroup(toChatUsername);
+        }
     }
 
     @Override
@@ -1033,7 +1072,7 @@ public class EaseChatFragment extends EaseBaseFragment implements View.OnClickLi
                 if (locationAddress != null && !locationAddress.equals("")) {
                     sendLocationMessage(latitude, longitude, locationAddress);
                 } else {
-                    Toast.makeText(getActivity(), R.string.unable_to_get_loaction, Toast.LENGTH_SHORT).show();
+                    showMsgToast(getResources().getString(R.string.unable_to_get_loaction));
                 }
 
             } else if (requestCode == REQUEST_CODE_DING_MSG) { // To send the ding-type msg.
@@ -1049,7 +1088,15 @@ public class EaseChatFragment extends EaseBaseFragment implements View.OnClickLi
     @Override
     public void onDestroy() {
         super.onDestroy();
-
+        if(groupListener != null) {
+            EMClient.getInstance().groupManager().removeGroupChangeListener(groupListener);
+        }
+        if(chatRoomListener != null) {
+            EMClient.getInstance().chatroomManager().removeChatRoomListener(chatRoomListener);
+        }
+        if(isChatRoomChat()) {
+            EMClient.getInstance().chatroomManager().leaveChatRoom(toChatUsername);
+        }
     }
 
 //================================ fragment life cycle end ============================================
@@ -1082,9 +1129,6 @@ public class EaseChatFragment extends EaseBaseFragment implements View.OnClickLi
     }
 
     private void setTypingHandler() {
-        if(!isSingleChat()) {
-            return;
-        }
         typingHandler = new Handler() {
             @Override
             public void handleMessage(@NonNull Message msg) {

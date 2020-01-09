@@ -7,6 +7,7 @@ import androidx.multidex.MultiDex;
 
 import com.hyphenate.chatuidemo.common.interfaceOrImplement.UserActivityLifecycleCallbacks;
 import com.hyphenate.chatuidemo.common.utils.PreferenceManager;
+import com.hyphenate.easeui.EaseUI;
 import com.scwang.smartrefresh.layout.SmartRefreshLayout;
 import com.scwang.smartrefresh.layout.api.DefaultRefreshFooterCreator;
 import com.scwang.smartrefresh.layout.api.DefaultRefreshHeaderCreator;
@@ -32,6 +33,7 @@ public class DemoApp extends Application {
     private void initHx() {
         // 初始化PreferenceManager
         PreferenceManager.init(this);
+        EaseUI.getInstance().init(this);
         // init hx sdk
         if(DemoHelper.getInstance().getAutoLogin()) {
             DemoHelper.getInstance().init(this);

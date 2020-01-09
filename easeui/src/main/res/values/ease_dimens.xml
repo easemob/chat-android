@@ -3,6 +3,7 @@
     <dimen name="height_top_bar">46dp</dimen>
     <dimen name="em_toolbar_title_size">18sp</dimen>
     <dimen name="em_toolbar_title_right_size">16sp</dimen>
+    <dimen name="ease_common_title_bar_height">44dp</dimen>
 
     <dimen name="margin_chat_activity">5dp</dimen>
     <dimen name="size_avatar">48dp</dimen>

@@ -13,7 +13,8 @@ import com.hyphenate.easeui.viewholder.EaseViewHolderHelper;
  */
 public class EaseMessageAdapter extends EaseBaseMessageAdapter<EMMessage> {
 
-    public EaseMessageAdapter() {
+    public EaseMessageAdapter(IViewHolderProvider provider) {
+        this.viewHolderProvider = provider;
         itemStyle = createDefaultItemStyle();
     }
 
@@ -29,7 +30,7 @@ public class EaseMessageAdapter extends EaseBaseMessageAdapter<EMMessage> {
 
     private ViewHolder createItemViewHolder(ViewGroup parent, int viewType) {
         if(viewHolderProvider != null) {
-            return viewHolderProvider.provideViewHolder(parent, itemClickListener, itemStyle).get(viewType);
+            return viewHolderProvider.provideViewHolder(parent, viewType, itemClickListener, itemStyle);
         }
         return EaseViewHolderHelper.getInstance().getChatRowViewHolder(parent, viewType, itemClickListener, itemStyle);
     }

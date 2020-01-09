@@ -20,7 +20,7 @@ public interface IViewHolderProvider {
      * @param itemClickListener
      * @param itemStyle
      */
-    SparseArray<EaseChatRowViewHolder> provideViewHolder(ViewGroup parent, MessageListItemClickListener itemClickListener, EaseMessageListItemStyle itemStyle);
+    EaseChatRowViewHolder provideViewHolder(ViewGroup parent, int viewType, MessageListItemClickListener itemClickListener, EaseMessageListItemStyle itemStyle);
 
     /**
      * 根据消息类型提供相对应的view type

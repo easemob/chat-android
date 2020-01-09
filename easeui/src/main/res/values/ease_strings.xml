@@ -112,4 +112,6 @@
 
     <string name="ease_list_no_data_text">暂无数据</string>
 
+    <string name="ease_map_title">位置信息</string>
+
 </resources>

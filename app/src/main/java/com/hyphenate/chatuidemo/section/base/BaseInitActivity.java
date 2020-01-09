@@ -5,7 +5,7 @@ import android.os.Bundle;
 
 import androidx.annotation.Nullable;
 
-import com.hyphenate.chatuidemo.common.utils.StatusBarCompat;
+import com.hyphenate.easeui.utils.StatusBarCompat;
 
 public abstract class BaseInitActivity extends BaseActivity {
     @Override

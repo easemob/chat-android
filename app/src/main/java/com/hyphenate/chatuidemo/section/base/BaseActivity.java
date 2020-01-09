@@ -25,7 +25,7 @@ import com.hyphenate.chatuidemo.R;
 import com.hyphenate.chatuidemo.common.enums.Status;
 import com.hyphenate.chatuidemo.common.interfaceOrImplement.OnResourceParseCallback;
 import com.hyphenate.chatuidemo.common.net.Resource;
-import com.hyphenate.chatuidemo.common.utils.StatusBarCompat;
+import com.hyphenate.easeui.utils.StatusBarCompat;
 import com.hyphenate.chatuidemo.common.utils.ToastUtils;
 
 /**
@@ -154,7 +154,7 @@ public class BaseActivity extends AppCompatActivity {
     public void setFitSystemForTheme(boolean fitSystemForTheme, @ColorRes int colorId) {
         setFitSystem(fitSystemForTheme);
         //初始设置
-        StatusBarCompat.compat(this, ContextCompat.getColor(this, colorId));
+        StatusBarCompat.compat(this, ContextCompat.getColor(mContext, colorId));
     }
 
 

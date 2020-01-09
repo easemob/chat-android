@@ -21,6 +21,7 @@ public class EmChatActivity extends BaseInitActivity implements EaseTitleBar.OnB
     private EaseTitleBar titleBarMessage;
     private String toChatUsername;
     private int chatType;
+    private EaseChatFragment fragment;
 
     public static void actionStart(Context context, String userId, int chatType) {
         Intent intent = new Intent(context, EmChatActivity.class);
@@ -45,9 +46,10 @@ public class EmChatActivity extends BaseInitActivity implements EaseTitleBar.OnB
     protected void initView(Bundle savedInstanceState) {
         super.initView(savedInstanceState);
         titleBarMessage = findViewById(R.id.title_bar_message);
-        EaseChatFragment fragment = new ChatFragment();
+        fragment = new ChatFragment();
         Bundle bundle = new Bundle();
         bundle.putString(EaseConstant.EXTRA_USER_ID, toChatUsername);
+        bundle.putInt(EaseConstant.EXTRA_CHAT_TYPE, chatType);
         fragment.setArguments(bundle);
         getSupportFragmentManager().beginTransaction().replace(R.id.fl_fragment, fragment, "chat").commit();
     }

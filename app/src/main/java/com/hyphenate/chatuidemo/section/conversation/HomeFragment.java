@@ -24,6 +24,7 @@ import com.hyphenate.chatuidemo.common.net.ErrorCode;
 import com.hyphenate.chatuidemo.common.utils.ThreadManager;
 import com.hyphenate.chatuidemo.section.base.BaseInitFragment;
 import com.hyphenate.chatuidemo.section.chat.EmChatActivity;
+import com.hyphenate.chatuidemo.section.chat.viewmodel.MessageViewModel;
 import com.hyphenate.chatuidemo.section.conversation.adapter.HomeAdapter;
 import com.hyphenate.chatuidemo.section.conversation.viewmodel.HomeViewModel;
 import com.hyphenate.easeui.interfaces.OnItemClickListener;
@@ -137,6 +138,14 @@ public class HomeFragment extends BaseInitFragment implements OnRefreshListener,
                     mViewModel.loadConversationList();
                 }
             });
+        });
+
+        MessageViewModel messageViewModel = new ViewModelProvider(this).get(MessageViewModel.class);
+        messageViewModel.getMessageChange().observe(this, change -> {
+            if(change == null) {
+                return;
+            }
+            mViewModel.loadConversationList();
         });
     }
 

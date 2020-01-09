@@ -43,6 +43,7 @@ public class EaseBaiduMapFragment extends EaseBaseFragment {
     private LocationClient mLocClient;
     private BaiduSDKReceiver mBaiduReceiver;
     protected BDLocation lastLocation;
+    private OnBDLocationListener listener;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -172,6 +173,9 @@ public class EaseBaiduMapFragment extends EaseBaseFragment {
         if(bdLocation == null) {
             return;
         }
+        if(listener != null) {
+            listener.onReceiveBDLocation(bdLocation);
+        }
         lastLocation = bdLocation;
         baiduMap.clear();
         showMap(lastLocation.getLatitude(), lastLocation.getLongitude());
@@ -205,6 +209,18 @@ public class EaseBaiduMapFragment extends EaseBaseFragment {
                 showErrorToast(getResources().getString(R.string.Network_error));
             }
         }
+    }
+
+    public void setOnBDLocationListener(OnBDLocationListener listener) {
+        this.listener = listener;
+    }
+
+    public interface OnBDLocationListener {
+        /**
+         * 获取到定位信息
+         * @param bdLocation
+         */
+        void onReceiveBDLocation(BDLocation bdLocation);
     }
 
 }

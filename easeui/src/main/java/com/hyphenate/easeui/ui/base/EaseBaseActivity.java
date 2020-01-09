@@ -17,18 +17,24 @@ package com.hyphenate.easeui.ui.base;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
+import android.view.ViewGroup;
+import android.view.Window;
 import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 
+import androidx.annotation.ColorRes;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.FragmentActivity;
 
 import com.hyphenate.easeui.EaseUI;
+import com.hyphenate.easeui.R;
+import com.hyphenate.easeui.utils.StatusBarCompat;
 
-@SuppressLint({"NewApi", "Registered"})
-public class EaseBaseActivity extends FragmentActivity {
+public class EaseBaseActivity extends AppCompatActivity {
 
     protected InputMethodManager inputMethodManager;
 
@@ -71,5 +77,49 @@ public class EaseBaseActivity extends FragmentActivity {
      */
     public void back(View view) {
         finish();
+    }
+
+    /**
+     * 通用页面，需要设置沉浸式
+     * @param fitSystemForTheme
+     */
+    public void setFitSystemForTheme(boolean fitSystemForTheme) {
+        setFitSystemForTheme(fitSystemForTheme, R.color.white, true);
+    }
+
+    /**
+     * 设置是否是沉浸式，并可设置状态栏颜色
+     * @param fitSystemForTheme
+     * @param colorId 颜色资源路径
+     */
+    public void setFitSystemForTheme(boolean fitSystemForTheme, @ColorRes int colorId, boolean isDark) {
+        setFitSystem(fitSystemForTheme);
+        //初始设置
+        StatusBarCompat.compat(this, ContextCompat.getColor(this, colorId));
+        StatusBarCompat.setLightStatusBar(this, isDark);
+    }
+
+    /**
+     * 设置是否是沉浸式
+     * @param fitSystemForTheme
+     */
+    private void setFitSystem(boolean fitSystemForTheme) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT && Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
+            getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+        }
+        if(fitSystemForTheme) {
+            ViewGroup contentFrameLayout = (ViewGroup) findViewById(Window.ID_ANDROID_CONTENT);
+            View parentView = contentFrameLayout.getChildAt(0);
+            if (parentView != null && Build.VERSION.SDK_INT >= 14) {
+                parentView.setFitsSystemWindows(true);
+            }
+        }
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            Window window = getWindow();
+            window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+            window.getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN | View.SYSTEM_UI_FLAG_LAYOUT_STABLE);
+            window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+        }
     }
 }

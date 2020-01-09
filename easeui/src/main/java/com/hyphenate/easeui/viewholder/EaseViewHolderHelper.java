@@ -89,18 +89,6 @@ public class EaseViewHolderHelper {
         return viewType;
     }
 
-    public SparseArray<EaseChatRowViewHolder> getDefaultChatViewHolder(ViewGroup parent, MessageListItemClickListener listener, EaseMessageListItemStyle itemStyle) {
-        SparseArray<EaseChatRowViewHolder> sparseArray = new SparseArray<>();
-        Iterator<Map.Entry<String, int[]>> iterator = viewTypeMap.entrySet().iterator();
-        while (iterator.hasNext()) {
-            Map.Entry<String, int[]> next = iterator.next();
-            int[] viewType = next.getValue();
-            sparseArray.put(viewType[0], getItemChatViewHolder(next.getKey(), parent, true, listener, itemStyle));
-            sparseArray.put(viewType[1], getItemChatViewHolder(next.getKey(), parent, false, listener, itemStyle));
-        }
-        return sparseArray;
-    }
-
     public EaseChatRowViewHolder getChatRowViewHolder(ViewGroup parent, int viewType, MessageListItemClickListener listener, EaseMessageListItemStyle itemStyle) {
         Iterator<Map.Entry<String, int[]>> iterator = viewTypeMap.entrySet().iterator();
         while (iterator.hasNext()) {

@@ -42,4 +42,11 @@ public interface EaseConstant {
     String MESSAGE_TYPE_VOICE = "voice";
     String MESSAGE_TYPE_FILE = "file";
     String MESSAGE_TYPE_CMD = "cmd";
+
+    String MESSAGE_CHANGE_RECEIVE = "receive";
+    String MESSAGE_CHANGE_SEND_SUCCESS = "success";
+    String MESSAGE_CHANGE_SEND_ERROR = "error";
+    String MESSAGE_CHANGE_SEND_PROGRESS = "progress";
+    String MESSAGE_CHANGE_RECALL = "recall";
+    String MESSAGE_CHANGE_CHANGE = "change";
 }

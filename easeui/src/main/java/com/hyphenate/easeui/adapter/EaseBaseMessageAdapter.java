@@ -21,11 +21,6 @@ public abstract class EaseBaseMessageAdapter<T extends EMMessage> extends EaseBa
         return builder.build();
     }
 
-    public void setViewHolderProvider(IViewHolderProvider provider) {
-        this.viewHolderProvider = provider;
-        notifyDataSetChanged();
-    }
-
     /**
      * set item click listener
      * @param itemClickListener

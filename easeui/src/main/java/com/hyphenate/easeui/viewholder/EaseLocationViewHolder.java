@@ -33,11 +33,10 @@ public class EaseLocationViewHolder extends EaseChatRowViewHolder{
     public void onBubbleClick(EMMessage message) {
         super.onBubbleClick(message);
         EMLocationMessageBody locBody = (EMLocationMessageBody) message.getBody();
-        Intent intent = new Intent(getContext(), EaseBaiduMapActivity.class);
-        intent.putExtra("latitude", locBody.getLatitude());
-        intent.putExtra("longitude", locBody.getLongitude());
-        intent.putExtra("address", locBody.getAddress());
-        getContext().startActivity(intent);
+        EaseBaiduMapActivity.actionStart(getContext(),
+                                        locBody.getLatitude(),
+                                        locBody.getLongitude(),
+                                        locBody.getAddress());
     }
 
     @Override

@@ -1,6 +1,5 @@
 package com.hyphenate.easeui.ui;
 
-import android.util.SparseArray;
 import android.view.ViewGroup;
 
 import com.hyphenate.chat.EMMessage;
@@ -11,20 +10,12 @@ import com.hyphenate.easeui.viewholder.EaseChatRowViewHolder;
 import com.hyphenate.easeui.viewholder.EaseViewHolderHelper;
 
 public class EaseViewHolderProvider implements IViewHolderProvider {
-    private SparseArray<EaseChatRowViewHolder> viewHolderMap;
 
     @Override
-    public SparseArray<EaseChatRowViewHolder> provideViewHolder(ViewGroup parent,
+    public EaseChatRowViewHolder provideViewHolder(ViewGroup parent, int viewType,
                                                                  MessageListItemClickListener listener,
                                                                  EaseMessageListItemStyle itemStyle) {
-        if(viewHolderMap == null) {
-            viewHolderMap = setViewHolderMap(parent, listener, itemStyle);
-        }
-        return viewHolderMap;
-    }
-
-    private SparseArray<EaseChatRowViewHolder> setViewHolderMap(ViewGroup parent, MessageListItemClickListener listener, EaseMessageListItemStyle itemStyle) {
-        return EaseViewHolderHelper.getInstance().getDefaultChatViewHolder(parent, listener, itemStyle);
+        return EaseViewHolderHelper.getInstance().getChatRowViewHolder(parent, viewType, listener, itemStyle);
     }
 
     @Override
