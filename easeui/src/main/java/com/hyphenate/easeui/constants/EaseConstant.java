@@ -17,7 +17,6 @@ public interface EaseConstant {
     String MESSAGE_ATTR_IS_VOICE_CALL = "is_voice_call";
     String MESSAGE_ATTR_IS_VIDEO_CALL = "is_video_call";
 
-    String MESSAGE_TYPE_RECALL = "message_recall";
 
     String MESSAGE_ATTR_IS_BIG_EXPRESSION = "em_is_big_expression";
     String MESSAGE_ATTR_EXPRESSION_ID = "em_expression_id";
@@ -42,6 +41,11 @@ public interface EaseConstant {
     String MESSAGE_TYPE_VOICE = "voice";
     String MESSAGE_TYPE_FILE = "file";
     String MESSAGE_TYPE_CMD = "cmd";
+    String MESSAGE_TYPE_RECALL = "message_recall";
+    String MESSAGE_TYPE_VOICE_CALL = "voice_call";
+    String MESSAGE_TYPE_VIDEO_CALL = "video_call";
+    String MESSAGE_TYPE_CONFERENCE_INVITE = "conference_invite";
+    String MESSAGE_TYPE_LIVE_INVITE = "live_invite";
 
     String MESSAGE_CHANGE_RECEIVE = "receive";
     String MESSAGE_CHANGE_SEND_SUCCESS = "success";

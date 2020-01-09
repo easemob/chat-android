@@ -97,6 +97,10 @@
     <string name="em_friends_chat_room_contact_title">聊天室列表</string>
 
     <string name="Select_the_contact">选择联系人</string>
+    <string name="emojicon_test_name">示例</string>
+    <string name="msg_recall_by_self">您撤回了一条消息</string>
+    <string name="msg_recall_by_user">%1$s 撤回了一条消息</string>
+    <string name="msg_conference_invite">快来加入会议</string>
 
     <string name="em_map_title">位置信息</string>
 

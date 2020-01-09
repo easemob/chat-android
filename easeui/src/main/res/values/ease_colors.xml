@@ -16,4 +16,10 @@
     <color name="em_chat_bg">#fff2f2f2</color>
     <color name="em_toolbar_color_title">@color/black</color>
     <color name="em_toolbar_color_title_right">@color/black</color>
+
+    <color name="grid_state_pressed">#1Affffff</color>
+    <color name="grid_state_focused">#80000000</color>
+
+    <color name="ease_chat_voice_bg">#ff252C39</color>
+    <color name="ease_chat_video_bg">#ff000000</color>
 </resources>

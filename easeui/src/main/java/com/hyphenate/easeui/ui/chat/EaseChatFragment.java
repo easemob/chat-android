@@ -3,6 +3,8 @@ package com.hyphenate.easeui.ui.chat;
 import android.app.Activity;
 import android.content.Intent;
 import android.database.Cursor;
+import android.graphics.Bitmap;
+import android.media.ThumbnailUtils;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -68,6 +70,7 @@ import com.hyphenate.util.EMLog;
 import com.hyphenate.util.PathUtil;
 
 import java.io.File;
+import java.io.FileOutputStream;
 import java.util.List;
 
 /**
@@ -93,6 +96,8 @@ public class EaseChatFragment extends EaseBaseFragment implements View.OnClickLi
     protected static final int REQUEST_CODE_CAMERA = 2;
     protected static final int REQUEST_CODE_LOCAL = 3;
     protected static final int REQUEST_CODE_DING_MSG = 4;
+    protected static final int REQUEST_CODE_SELECT_VIDEO = 11;
+    protected static final int REQUEST_CODE_SELECT_FILE = 12;
 
     protected TextView tvErrorMsg;
     protected SwipeRefreshLayout srlRefresh;
@@ -228,6 +233,24 @@ public class EaseChatFragment extends EaseBaseFragment implements View.OnClickLi
                 break;
             case EaseChatInputMenu.ITEM_LOCATION :
                 EaseBaiduMapActivity.actionStartForResult(this, REQUEST_CODE_MAP);
+                break;
+            case EaseChatInputMenu.ITEM_VIDEO:
+                selectVideoFromLocal();
+                break;
+            case EaseChatInputMenu.ITEM_FILE:
+                selectFileFromLocal();
+                break;
+            case EaseChatInputMenu.ITEM_VIDEO_CALL:
+                startVideoCall();
+                break;
+            case EaseChatInputMenu.ITEM_VOICE_CALL:
+                startVoiceCall();
+                break;
+            case EaseChatInputMenu.ITEM_CONFERENCE_CALL:
+                //ConferenceActivity.startConferenceCall(getActivity(), toChatUsername);
+                break;
+            case EaseChatInputMenu.ITEM_LIVE:
+                //LiveActivity.startLive(getContext(), toChatUsername);
                 break;
         }
     }
@@ -545,6 +568,13 @@ public class EaseChatFragment extends EaseBaseFragment implements View.OnClickLi
      */
     protected void addExtendInputMenu() {
         // inputMenu.registerExtendMenuItem(nameRes, drawableRes, itemId, listener);
+        if(chatType == EaseConstant.CHATTYPE_SINGLE){
+            inputMenu.registerExtendMenuItem(R.string.attach_voice_call, R.drawable.em_chat_voice_call_selector, EaseChatInputMenu.ITEM_VOICE_CALL, this);
+            inputMenu.registerExtendMenuItem(R.string.attach_video_call, R.drawable.em_chat_video_call_selector, EaseChatInputMenu.ITEM_VIDEO_CALL, this);
+        } else if (chatType == EaseConstant.CHATTYPE_GROUP) { // 音视频会议
+            inputMenu.registerExtendMenuItem(R.string.voice_and_video_conference, R.drawable.em_chat_video_call_selector, EaseChatInputMenu.ITEM_CONFERENCE_CALL, this);
+            inputMenu.registerExtendMenuItem(R.string.title_live, R.drawable.em_chat_video_call_selector, EaseChatInputMenu.ITEM_LIVE, this);
+        }
     }
 
     /**
@@ -787,6 +817,24 @@ public class EaseChatFragment extends EaseBaseFragment implements View.OnClickLi
 //============================ load and show messages start ==================================
 
 //======================= choose resources start ============================
+
+    /**
+     * select local video
+     */
+    protected void selectVideoFromLocal() {
+        Intent intent = new Intent(getActivity(), ImageGridActivity.class);
+        startActivityForResult(intent, REQUEST_CODE_SELECT_VIDEO);
+    }
+
+    /**
+     * select local file
+     */
+    protected void selectFileFromLocal() {
+        Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
+        intent.addCategory(Intent.CATEGORY_OPENABLE);
+        intent.setType("*/*");
+        startActivityForResult(intent, REQUEST_CODE_SELECT_FILE);
+    }
 
     /**
      * select local image
@@ -1081,6 +1129,28 @@ public class EaseChatFragment extends EaseBaseFragment implements View.OnClickLi
                 // Send the ding-type msg.
                 EMMessage dingMsg = EaseDingMessageHelper.get().createDingMessage(toChatUsername, msgContent);
                 sendMessage(dingMsg);
+            }else if(requestCode == REQUEST_CODE_SELECT_VIDEO) {
+                if (data != null) {
+                    int duration = data.getIntExtra("dur", 0);
+                    String videoPath = data.getStringExtra("path");
+                    File file = new File(PathUtil.getInstance().getImagePath(), "thvideo" + System.currentTimeMillis());
+                    try {
+                        FileOutputStream fos = new FileOutputStream(file);
+                        Bitmap ThumbBitmap = ThumbnailUtils.createVideoThumbnail(videoPath, 3);
+                        ThumbBitmap.compress(Bitmap.CompressFormat.JPEG, 100, fos);
+                        fos.close();
+                        sendVideoMessage(videoPath, file.getAbsolutePath(), duration);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+            }else if(requestCode == REQUEST_CODE_SELECT_FILE) {
+                if (data != null) {
+                    Uri uri = data.getData();
+                    if (uri != null) {
+                        sendFileByUri(uri);
+                    }
+                }
             }
         }
     }
@@ -1408,5 +1478,39 @@ public class EaseChatFragment extends EaseBaseFragment implements View.OnClickLi
     }
 
 //================================ for chat room end =====================================
+
+//================================== for video and voice start ====================================
+
+    /**
+     * start video call
+     */
+    protected void startVideoCall() {
+        if (!EMClient.getInstance().isConnected()) {
+            showMsgToast(getResources().getString(R.string.not_connect_to_server));
+        }else {
+            startActivity(new Intent(getActivity(), VideoCallActivity.class).putExtra("username", toChatUsername)
+                    .putExtra("isComingCall", false));
+            // videoCallBtn.setEnabled(false);
+            inputMenu.hideExtendMenuContainer();
+        }
+    }
+
+    /**
+     * start voice call
+     */
+    protected void startVoiceCall() {
+        if (!EMClient.getInstance().isConnected()) {
+            showMsgToast(getResources().getString(R.string.not_connect_to_server));
+        } else {
+            startActivity(new Intent(getActivity(), VoiceCallActivity.class).putExtra("username", toChatUsername)
+                    .putExtra("isComingCall", false));
+            // voiceCallBtn.setEnabled(false);
+            inputMenu.hideExtendMenuContainer();
+        }
+    }
+
+
+//================================== for video and voice end ====================================
+
 
 }

@@ -33,6 +33,13 @@
 
     <dimen name="em_friends_contact_detail_note_size">@dimen/em_size_normal</dimen>
 
+    <dimen name="recall_dimen">8dp</dimen>
+    <dimen name="recall_dimen_bg">2dp</dimen>
+    <dimen name="recall_dimen_4">4dp</dimen>
+    <dimen name="recall_dimen_256">256dp</dimen>
+    <dimen name="recall_size_12">12sp</dimen>
+    <dimen name="recall_size_8">8sp</dimen>
+
 
     <dimen name="adaptive_1dp">1dp</dimen>
     <dimen name="adaptive_2dp">2dp</dimen>

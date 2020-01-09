@@ -12,18 +12,27 @@ import com.hyphenate.chat.EMChatRoomManager;
 import com.hyphenate.chat.EMClient;
 import com.hyphenate.chat.EMContactManager;
 import com.hyphenate.chat.EMGroupManager;
+import com.hyphenate.chat.EMMessage;
 import com.hyphenate.chat.EMOptions;
 import com.hyphenate.chatuidemo.common.manager.HMSPushHelper;
 import com.hyphenate.chatuidemo.common.manager.OptionsHelper;
 import com.hyphenate.chatuidemo.common.model.DemoServerSetBean;
+import com.hyphenate.chatuidemo.common.model.EmojiconExampleGroupData;
 import com.hyphenate.chatuidemo.common.receiver.HeadsetReceiver;
 import com.hyphenate.chatuidemo.common.utils.PreferenceManager;
 import com.hyphenate.easeui.EaseUI;
+import com.hyphenate.easeui.domain.EaseAvatarOptions;
+import com.hyphenate.easeui.domain.EaseEmojicon;
+import com.hyphenate.easeui.domain.EaseEmojiconGroupEntity;
+import com.hyphenate.easeui.provider.EaseEmojiconInfoProvider;
+import com.hyphenate.easeui.provider.EaseSettingsProvider;
 import com.hyphenate.push.EMPushConfig;
 import com.hyphenate.push.EMPushHelper;
 import com.hyphenate.push.EMPushType;
 import com.hyphenate.push.PushListener;
 import com.hyphenate.util.EMLog;
+
+import java.util.Map;
 
 /**
  * 作为hyphenate-sdk的入口控制类，获取sdk下的基础类均通过此类
@@ -33,8 +42,6 @@ public class DemoHelper {
 
     public boolean isSDKInit;//SDK是否初始化
     private static DemoHelper mInstance;
-    public boolean isVoiceCalling;
-    public boolean isVideoCalling;
 
     private DemoHelper() {}
 
@@ -97,6 +104,50 @@ public class DemoHelper {
         // set Call options
         setCallOptions(context);
         initPush(context);
+        initEaseUI(context);
+    }
+
+    private void initEaseUI(Context context) {
+        EaseUI.getInstance().init(context);
+        EaseUI.getInstance()
+                .setSettingsProvider(new EaseSettingsProvider() {
+                    @Override
+                    public boolean isMsgNotifyAllowed(EMMessage message) {
+                        return false;
+                    }
+
+                    @Override
+                    public boolean isMsgSoundAllowed(EMMessage message) {
+                        return false;
+                    }
+
+                    @Override
+                    public boolean isMsgVibrateAllowed(EMMessage message) {
+                        return false;
+                    }
+
+                    @Override
+                    public boolean isSpeakerOpened() {
+                        return false;
+                    }
+                })
+                .setEmojiconInfoProvider(new EaseEmojiconInfoProvider() {
+                    @Override
+                    public EaseEmojicon getEmojiconInfo(String emojiconIdentityCode) {
+                        EaseEmojiconGroupEntity data = EmojiconExampleGroupData.getData();
+                        for(EaseEmojicon emojicon : data.getEmojiconList()){
+                            if(emojicon.getIdentityCode().equals(emojiconIdentityCode)){
+                                return emojicon;
+                            }
+                        }
+                        return null;
+                    }
+
+                    @Override
+                    public Map<String, Object> getTextEmojiconMapping() {
+                        return null;
+                    }
+                });
     }
 
     /**

@@ -33,7 +33,6 @@ public class DemoApp extends Application {
     private void initHx() {
         // 初始化PreferenceManager
         PreferenceManager.init(this);
-        EaseUI.getInstance().init(this);
         // init hx sdk
         if(DemoHelper.getInstance().getAutoLogin()) {
             DemoHelper.getInstance().init(this);

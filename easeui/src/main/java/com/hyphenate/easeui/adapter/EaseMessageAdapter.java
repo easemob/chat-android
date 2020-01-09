@@ -5,6 +5,7 @@ import android.view.ViewGroup;
 import com.hyphenate.chat.EMMessage;
 import com.hyphenate.easeui.R;
 import com.hyphenate.easeui.interfaces.IViewHolderProvider;
+import com.hyphenate.easeui.viewholder.EaseChatRowViewHolder;
 import com.hyphenate.easeui.viewholder.EaseViewHolderHelper;
 
 /**
@@ -30,7 +31,10 @@ public class EaseMessageAdapter extends EaseBaseMessageAdapter<EMMessage> {
 
     private ViewHolder createItemViewHolder(ViewGroup parent, int viewType) {
         if(viewHolderProvider != null) {
-            return viewHolderProvider.provideViewHolder(parent, viewType, itemClickListener, itemStyle);
+            EaseChatRowViewHolder viewHolder = viewHolderProvider.provideViewHolder(parent, viewType, itemClickListener, itemStyle);
+            if(viewHolder != null) {
+                return viewHolder;
+            }
         }
         return EaseViewHolderHelper.getInstance().getChatRowViewHolder(parent, viewType, itemClickListener, itemStyle);
     }

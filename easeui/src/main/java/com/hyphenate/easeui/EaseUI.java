@@ -24,6 +24,9 @@ public class EaseUI {
      */
     private Context appContext = null;
 
+    public boolean isVoiceCalling;
+    public boolean isVideoCalling;
+
     private EaseUI() {}
 
     public static EaseUI getInstance() {

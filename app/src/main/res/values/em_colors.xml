@@ -53,12 +53,12 @@
     <color name="em_friends_contact_detail_text_normal">@color/em_color_common_black</color>
     <color name="em_friends_contact_detail_text_brand">@color/em_color_brand</color>
 
-    <color name="grid_state_pressed">#1Affffff</color>
-    <color name="grid_state_focused">#80000000</color>
     <color name="holo_black">#ff111111</color>
     <color name="bg_tools_panel">#2F2F2F</color>
     <color name="em_indicator_select">#9E9E9E</color>
     <color name="em_indicator_normal">#1AFFFFFF</color>
     <color name="black_deep">#FF000000</color>
+    <color name="recall_black_38">#89ffffff</color>
+    <color name="recall_black">#61212121</color>
 
 </resources>

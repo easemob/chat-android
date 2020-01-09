@@ -39,6 +39,12 @@ public class EaseChatInputMenu extends LinearLayout {
     public static final int ITEM_TAKE_PICTURE = 1;
     public static final int ITEM_PICTURE = 2;
     public static final int ITEM_LOCATION = 3;
+    public static final int ITEM_VIDEO = 4;
+    public static final int ITEM_FILE = 5;
+    public static final int ITEM_VOICE_CALL = 6;
+    public static final int ITEM_VIDEO_CALL = 7;
+    public static final int ITEM_CONFERENCE_CALL = 8;
+    public static final int ITEM_LIVE = 9;
 
     FrameLayout primaryMenuContainer, emojiconMenuContainer;
     protected EaseChatPrimaryMenuBase chatPrimaryMenu;
@@ -52,10 +58,11 @@ public class EaseChatInputMenu extends LinearLayout {
     private Context context;
     private boolean inited;
 
-    private int[] itemStrings = { R.string.attach_take_pic, R.string.attach_picture, R.string.attach_location };
+    private int[] itemStrings = { R.string.attach_take_pic, R.string.attach_picture,
+            R.string.attach_location, R.string.attach_video, R.string.attach_file};
     private int[] itemdrawables = { R.drawable.ease_chat_takepic_selector, R.drawable.ease_chat_image_selector,
-            R.drawable.ease_chat_location_selector };
-    private int[] itemIds = { ITEM_TAKE_PICTURE, ITEM_PICTURE, ITEM_LOCATION };
+            R.drawable.ease_chat_location_selector, R.drawable.em_chat_video_selector, R.drawable.em_chat_file_selector };
+    private int[] itemIds = { ITEM_TAKE_PICTURE, ITEM_PICTURE, ITEM_LOCATION, ITEM_VIDEO, ITEM_FILE};
 
     public EaseChatInputMenu(Context context) {
         this(context, null);
