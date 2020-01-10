@@ -8,6 +8,8 @@ import androidx.annotation.NonNull;
 import com.hyphenate.chat.EMMessage;
 import com.hyphenate.chatuidemo.DemoHelper;
 import com.hyphenate.chatuidemo.common.DemoConstant;
+import com.hyphenate.chatuidemo.common.manager.PushAndMessageHelper;
+import com.hyphenate.chatuidemo.section.chat.LiveActivity;
 import com.hyphenate.chatuidemo.section.chat.views.ChatRowConferenceInvite;
 import com.hyphenate.chatuidemo.section.chat.views.ChatRowLive;
 import com.hyphenate.easeui.interfaces.MessageListItemClickListener;
@@ -36,10 +38,6 @@ public class ChatLiveInviteViewHolder extends EaseChatRowViewHolder {
     }
 
     public void goLive(String confId, String password, String inviter) {
-//        if(isDuringMediaCommunication()) {
-//            return;
-//        }
-//
-//        LiveActivity.watch(appContext, confId, password, inviter);
+        PushAndMessageHelper.goLive(getContext(), confId, password, inviter);
     }
 }

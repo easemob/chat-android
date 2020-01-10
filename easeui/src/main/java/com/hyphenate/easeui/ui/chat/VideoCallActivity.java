@@ -328,6 +328,7 @@ public class VideoCallActivity extends CallActivity implements OnClickListener {
                     handler.removeCallbacks(timeoutHangup);
                     @SuppressWarnings("UnnecessaryLocalVariable")final CallError fError = error;
                     runOnUiThread(new Runnable() {
+
                         private void postDelayedCloseMsg() {
                             uiHandler.postDelayed(new Runnable() {
 

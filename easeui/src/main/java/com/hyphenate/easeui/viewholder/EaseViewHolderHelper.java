@@ -8,6 +8,7 @@ import com.hyphenate.chat.EMMessage;
 import com.hyphenate.easeui.constants.EaseConstant;
 import com.hyphenate.easeui.interfaces.MessageListItemClickListener;
 import com.hyphenate.easeui.model.styles.EaseMessageListItemStyle;
+import com.hyphenate.easeui.widget.chatrow.EaseChatRowImage;
 
 import java.util.ArrayList;
 import java.util.Arrays;

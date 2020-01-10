@@ -33,6 +33,8 @@
 
     <dimen name="em_friends_contact_detail_note_size">@dimen/em_size_normal</dimen>
 
+    <dimen name="padding_search_bar">5dp</dimen>
+
     <dimen name="recall_dimen">8dp</dimen>
     <dimen name="recall_dimen_bg">2dp</dimen>
     <dimen name="recall_dimen_4">4dp</dimen>

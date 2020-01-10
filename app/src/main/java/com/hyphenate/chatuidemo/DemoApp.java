@@ -48,6 +48,10 @@ public class DemoApp extends Application {
         return instance;
     }
 
+    public UserActivityLifecycleCallbacks getActivityLifecycle() {
+        return mLifecycleCallbacks;
+    }
+
     @Override
     protected void attachBaseContext(Context base) {
         super.attachBaseContext(base);

@@ -14,7 +14,6 @@ import android.provider.MediaStore;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -45,7 +44,6 @@ import com.hyphenate.chat.EMTextMessageBody;
 import com.hyphenate.chat.adapter.EMAChatRoomManagerListener;
 import com.hyphenate.easeui.R;
 import com.hyphenate.easeui.adapter.EaseBaseMessageAdapter;
-import com.hyphenate.easeui.adapter.EaseBaseRecyclerViewAdapter;
 import com.hyphenate.easeui.adapter.EaseMessageAdapter;
 import com.hyphenate.easeui.constants.EaseConstant;
 import com.hyphenate.easeui.domain.EaseEmojicon;
@@ -58,11 +56,11 @@ import com.hyphenate.easeui.interfaces.MessageListItemClickListener;
 import com.hyphenate.easeui.model.EaseAtMessageHelper;
 import com.hyphenate.easeui.model.EaseCompat;
 import com.hyphenate.easeui.ui.EaseBaiduMapActivity;
-import com.hyphenate.easeui.ui.base.EaseBaseActivity;
 import com.hyphenate.easeui.ui.base.EaseBaseFragment;
 import com.hyphenate.easeui.utils.EaseCommonUtils;
 import com.hyphenate.easeui.utils.EaseDingMessageHelper;
 import com.hyphenate.easeui.utils.EaseUserUtils;
+import com.hyphenate.easeui.widget.EaseAlertDialog;
 import com.hyphenate.easeui.widget.EaseChatExtendMenu;
 import com.hyphenate.easeui.widget.EaseChatInputMenu;
 import com.hyphenate.easeui.widget.EaseVoiceRecorderView;
@@ -137,6 +135,7 @@ public class EaseChatFragment extends EaseBaseFragment implements View.OnClickLi
     private GroupListener groupListener;
     private Handler typingHandler;
     private OnMessageChangeListener messageChangeListener;
+    private List<EMMessage> currentMessages;
 
     @Nullable
     @Override
@@ -240,18 +239,6 @@ public class EaseChatFragment extends EaseBaseFragment implements View.OnClickLi
             case EaseChatInputMenu.ITEM_FILE:
                 selectFileFromLocal();
                 break;
-            case EaseChatInputMenu.ITEM_VIDEO_CALL:
-                startVideoCall();
-                break;
-            case EaseChatInputMenu.ITEM_VOICE_CALL:
-                startVoiceCall();
-                break;
-            case EaseChatInputMenu.ITEM_CONFERENCE_CALL:
-                //ConferenceActivity.startConferenceCall(getActivity(), toChatUsername);
-                break;
-            case EaseChatInputMenu.ITEM_LIVE:
-                //LiveActivity.startLive(getContext(), toChatUsername);
-                break;
         }
     }
 
@@ -323,7 +310,18 @@ public class EaseChatFragment extends EaseBaseFragment implements View.OnClickLi
      */
     @Override
     public boolean onResendClick(EMMessage message) {
-        return false;
+        EMLog.i(TAG, "onResendClick");
+        new EaseAlertDialog(getContext(), R.string.resend, R.string.confirm_resend, null, new EaseAlertDialog.AlertDialogUser() {
+            @Override
+            public void onResult(boolean confirmed, Bundle bundle) {
+                if (!confirmed) {
+                    return;
+                }
+                message.setStatus(EMMessage.Status.CREATE);
+                sendMessage(message);
+            }
+        }, true).show();
+        return true;
     }
 
     /**
@@ -361,7 +359,7 @@ public class EaseChatFragment extends EaseBaseFragment implements View.OnClickLi
      */
     @Override
     public void onMessageInProgress(EMMessage message) {
-
+        message.setMessageStatusCallback(this);
     }
 
     /**
@@ -420,7 +418,7 @@ public class EaseChatFragment extends EaseBaseFragment implements View.OnClickLi
             }
             // if the message is for current conversation
             if (username.equals(toChatUsername) || message.getTo().equals(toChatUsername) || message.conversationId().equals(toChatUsername)) {
-                refreshMessages();
+                refreshToLatest();
             }
         }
     }
@@ -568,13 +566,6 @@ public class EaseChatFragment extends EaseBaseFragment implements View.OnClickLi
      */
     protected void addExtendInputMenu() {
         // inputMenu.registerExtendMenuItem(nameRes, drawableRes, itemId, listener);
-        if(chatType == EaseConstant.CHATTYPE_SINGLE){
-            inputMenu.registerExtendMenuItem(R.string.attach_voice_call, R.drawable.em_chat_voice_call_selector, EaseChatInputMenu.ITEM_VOICE_CALL, this);
-            inputMenu.registerExtendMenuItem(R.string.attach_video_call, R.drawable.em_chat_video_call_selector, EaseChatInputMenu.ITEM_VIDEO_CALL, this);
-        } else if (chatType == EaseConstant.CHATTYPE_GROUP) { // 音视频会议
-            inputMenu.registerExtendMenuItem(R.string.voice_and_video_conference, R.drawable.em_chat_video_call_selector, EaseChatInputMenu.ITEM_CONFERENCE_CALL, this);
-            inputMenu.registerExtendMenuItem(R.string.title_live, R.drawable.em_chat_video_call_selector, EaseChatInputMenu.ITEM_LIVE, this);
-        }
     }
 
     /**
@@ -683,6 +674,27 @@ public class EaseChatFragment extends EaseBaseFragment implements View.OnClickLi
 //============================== view control end ===========================
 
 //============================ load and show messages start ==================================
+
+    private void checkIfSeekToLatest() {
+        List<EMMessage> messages = conversation.getAllMessages();
+        if(currentMessages == null || messages.size() > currentMessages.size()) {
+            SeekToPosition(messages.size() - 1);
+        }
+        currentMessages = messages;
+    }
+
+    /**
+     * seek to latest position
+     */
+    public void refreshToLatest() {
+        List<EMMessage> messages = conversation.getAllMessages();
+        boolean refresh = currentMessages == null || messages.size() > currentMessages.size();
+        refreshMessages();
+        if(refresh) {
+            SeekToPosition(messages.size() - 1);
+        }
+    }
+
     /**
      * fresh messages
      */
@@ -693,7 +705,10 @@ public class EaseChatFragment extends EaseBaseFragment implements View.OnClickLi
         mContext.runOnUiThread(() -> {
             List<EMMessage> messages = conversation.getAllMessages();
             conversation.markAllMessagesAsRead();
-            messageAdapter.setData(messages);
+            if(messageAdapter != null) {
+                messageAdapter.setData(messages);
+            }
+            currentMessages = messages;
             finishRefresh();
         });
 
@@ -778,7 +793,13 @@ public class EaseChatFragment extends EaseBaseFragment implements View.OnClickLi
         }
         RecyclerView.LayoutManager manager = messageList.getLayoutManager();
         if(manager instanceof LinearLayoutManager) {
-            ((LinearLayoutManager)manager).scrollToPositionWithOffset(position, 0);
+            if(isActivityDisable()) {
+                return;
+            }
+            int finalPosition = position;
+            mContext.runOnUiThread(()-> {
+                ((LinearLayoutManager)manager).scrollToPositionWithOffset(finalPosition, 0);
+            });
         }
     }
 
@@ -822,8 +843,7 @@ public class EaseChatFragment extends EaseBaseFragment implements View.OnClickLi
      * select local video
      */
     protected void selectVideoFromLocal() {
-        Intent intent = new Intent(getActivity(), ImageGridActivity.class);
-        startActivityForResult(intent, REQUEST_CODE_SELECT_VIDEO);
+
     }
 
     /**
@@ -1081,6 +1101,7 @@ public class EaseChatFragment extends EaseBaseFragment implements View.OnClickLi
     @Override
     public void onResume() {
         super.onResume();
+        refreshToLatest();
         // register the event listener when enter the foreground
         EMClient.getInstance().chatManager().addMessageListener(this);
         if(isGroupChat()) {
@@ -1488,11 +1509,15 @@ public class EaseChatFragment extends EaseBaseFragment implements View.OnClickLi
         if (!EMClient.getInstance().isConnected()) {
             showMsgToast(getResources().getString(R.string.not_connect_to_server));
         }else {
-            startActivity(new Intent(getActivity(), VideoCallActivity.class).putExtra("username", toChatUsername)
-                    .putExtra("isComingCall", false));
+            startChatVideoCall();
             // videoCallBtn.setEnabled(false);
             inputMenu.hideExtendMenuContainer();
         }
+    }
+
+    protected void startChatVideoCall() {
+        startActivity(new Intent(getActivity(), VideoCallActivity.class).putExtra("username", toChatUsername)
+                .putExtra("isComingCall", false));
     }
 
     /**
@@ -1502,11 +1527,15 @@ public class EaseChatFragment extends EaseBaseFragment implements View.OnClickLi
         if (!EMClient.getInstance().isConnected()) {
             showMsgToast(getResources().getString(R.string.not_connect_to_server));
         } else {
-            startActivity(new Intent(getActivity(), VoiceCallActivity.class).putExtra("username", toChatUsername)
-                    .putExtra("isComingCall", false));
+            startChatVoiceCall();
             // voiceCallBtn.setEnabled(false);
             inputMenu.hideExtendMenuContainer();
         }
+    }
+
+    protected void startChatVoiceCall() {
+        startActivity(new Intent(getActivity(), VoiceCallActivity.class).putExtra("username", toChatUsername)
+                .putExtra("isComingCall", false));
     }
 
 

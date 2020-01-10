@@ -2,16 +2,19 @@ package com.hyphenate.easeui.viewholder;
 
 
 import android.content.Context;
+import android.os.Bundle;
 import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 
 import com.hyphenate.chat.EMMessage;
+import com.hyphenate.easeui.R;
 import com.hyphenate.easeui.adapter.EaseBaseAdapter;
 import com.hyphenate.easeui.adapter.EaseMessageAdapter;
 import com.hyphenate.easeui.interfaces.MessageListItemClickListener;
 import com.hyphenate.easeui.model.styles.EaseMessageListItemStyle;
+import com.hyphenate.easeui.widget.EaseAlertDialog;
 import com.hyphenate.easeui.widget.chatrow.EaseChatRow;
 import com.hyphenate.util.EMLog;
 

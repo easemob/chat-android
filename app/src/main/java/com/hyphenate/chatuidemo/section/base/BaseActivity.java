@@ -127,7 +127,7 @@ public class BaseActivity extends AppCompatActivity {
      * 通用页面设置
      */
     public void setFitSystemForTheme() {
-        setFitSystemForTheme(true, R.color.white);
+        setFitSystemForTheme(true, R.color.white, false);
     }
 
     /**
@@ -135,7 +135,7 @@ public class BaseActivity extends AppCompatActivity {
      * @param fitSystemForTheme
      */
     public void setFitSystemForTheme(boolean fitSystemForTheme) {
-        setFitSystemForTheme(fitSystemForTheme, R.color.white);
+        setFitSystemForTheme(fitSystemForTheme, R.color.white, false);
     }
 
     /**
@@ -143,7 +143,7 @@ public class BaseActivity extends AppCompatActivity {
      * @param fitSystemForTheme
      */
     public void setFitSystemForTheme2(boolean fitSystemForTheme) {
-        setFitSystemForTheme(fitSystemForTheme, "#ffffffff");
+        setFitSystemForTheme(fitSystemForTheme, "#ffffffff", false);
     }
 
     /**
@@ -151,10 +151,11 @@ public class BaseActivity extends AppCompatActivity {
      * @param fitSystemForTheme
      * @param colorId 颜色资源路径
      */
-    public void setFitSystemForTheme(boolean fitSystemForTheme, @ColorRes int colorId) {
+    public void setFitSystemForTheme(boolean fitSystemForTheme, @ColorRes int colorId, boolean isDark) {
         setFitSystem(fitSystemForTheme);
         //初始设置
         StatusBarCompat.compat(this, ContextCompat.getColor(mContext, colorId));
+        StatusBarCompat.setLightStatusBar(this, isDark);
     }
 
 
@@ -163,10 +164,11 @@ public class BaseActivity extends AppCompatActivity {
      * @param fitSystemForTheme true 不是沉浸式
      * @param color 状态栏颜色
      */
-    public void setFitSystemForTheme(boolean fitSystemForTheme, String color) {
+    public void setFitSystemForTheme(boolean fitSystemForTheme, String color, boolean isDark) {
         setFitSystem(fitSystemForTheme);
         //初始设置
         StatusBarCompat.compat(this, Color.parseColor(color));
+        StatusBarCompat.setLightStatusBar(this, isDark);
     }
 
     /**

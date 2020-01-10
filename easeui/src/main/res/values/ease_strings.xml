@@ -100,6 +100,8 @@
     <string name="have_connected_with">已经和对方建立连接</string>
     <string name="voice_and_video_conference">音视频会议</string>
     <string name="title_live">互动视频</string>
+    <string name="resend">重发</string>
+    <string name="confirm_resend">确认重发该信息？</string>
 
     <!-- For group ack start -->
     <string name="title_group_notification">群通知</string>

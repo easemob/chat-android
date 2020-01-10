@@ -4,10 +4,12 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.PagerSnapHelper;
 
 import com.hyphenate.chat.EMMessage;
 import com.hyphenate.chatuidemo.DemoHelper;
 import com.hyphenate.chatuidemo.common.DemoConstant;
+import com.hyphenate.chatuidemo.common.manager.PushAndMessageHelper;
 import com.hyphenate.chatuidemo.section.chat.views.ChatRowConferenceInvite;
 import com.hyphenate.easeui.interfaces.MessageListItemClickListener;
 import com.hyphenate.easeui.model.styles.EaseMessageListItemStyle;
@@ -30,6 +32,6 @@ public class ChatConferenceInviteViewHolder extends EaseChatRowViewHolder {
         String confId = message.getStringAttribute(DemoConstant.MSG_ATTR_CONF_ID, "");
         String confPassword = message.getStringAttribute(DemoConstant.MSG_ATTR_CONF_PASS,"");
         String extension = message.getStringAttribute(DemoConstant.MSG_ATTR_EXTENSION, "");
-        //DemoHelper.getInstance().goConference(confId, confPassword, extension);
+        PushAndMessageHelper.goConference(getContext(), confId, confPassword, extension);
     }
 }

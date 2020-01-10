@@ -6,6 +6,7 @@ import android.view.View;
 import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 
+import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.IdRes;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
@@ -35,7 +36,7 @@ public class EaseBaseFragment extends Fragment {
     /**
      * back
      */
-    protected void onBackPress() {
+    public void onBackPress() {
         mContext.onBackPressed();
     }
 

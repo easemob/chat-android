@@ -22,4 +22,9 @@
 
     <color name="ease_chat_voice_bg">#ff252C39</color>
     <color name="ease_chat_video_bg">#ff000000</color>
+
+    <color name="btn_gray_pressed_status">#b5b5b6</color>
+    <color name="btn_gray_pressed">#666667</color>
+    <color name="btn_blue_normal">#1e90ff</color>
+    <color name="btn_blue_pressed">#0066FF</color>
 </resources>
