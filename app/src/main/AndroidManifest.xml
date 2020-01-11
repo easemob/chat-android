@@ -303,6 +303,7 @@
         <activity android:name=".section.chat.LiveActivity" />
         <activity android:name=".section.chat.ConferenceActivity" />
         <activity android:name=".section.chat.ConferenceInviteActivity" />
+        <activity android:name=".section.chat.PickAtUserActivity" />
 
     </application>
 

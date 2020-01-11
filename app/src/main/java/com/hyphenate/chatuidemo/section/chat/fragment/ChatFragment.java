@@ -1,5 +1,6 @@
 package com.hyphenate.chatuidemo.section.chat.fragment;
 
+import android.app.Activity;
 import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
@@ -32,13 +33,16 @@ import com.hyphenate.chatuidemo.section.chat.ChatVoiceCallActivity;
 import com.hyphenate.chatuidemo.section.chat.ConferenceActivity;
 import com.hyphenate.chatuidemo.section.chat.ImageGridActivity;
 import com.hyphenate.chatuidemo.section.chat.LiveActivity;
+import com.hyphenate.chatuidemo.section.chat.PickAtUserActivity;
 import com.hyphenate.chatuidemo.section.chat.viewholder.ChatConferenceInviteViewHolder;
 import com.hyphenate.chatuidemo.section.chat.viewholder.ChatLiveInviteViewHolder;
 import com.hyphenate.chatuidemo.section.chat.viewholder.ChatRecallViewHolder;
 import com.hyphenate.chatuidemo.section.chat.viewholder.ChatVideoCallViewHolder;
 import com.hyphenate.chatuidemo.section.chat.viewholder.ChatVoiceCallViewHolder;
 import com.hyphenate.chatuidemo.section.chat.viewmodel.MessageViewModel;
+import com.hyphenate.chatuidemo.section.friends.activity.ContactDetailActivity;
 import com.hyphenate.easeui.constants.EaseConstant;
+import com.hyphenate.easeui.domain.EaseUser;
 import com.hyphenate.easeui.interfaces.IChatAdapterProvider;
 import com.hyphenate.easeui.interfaces.IViewHolderProvider;
 import com.hyphenate.easeui.interfaces.MessageListItemClickListener;
@@ -56,9 +60,10 @@ import java.util.Map;
 import static com.hyphenate.chat.EMMessage.Type.TXT;
 
 public class ChatFragment extends EaseChatFragment implements EaseChatFragment.OnMessageChangeListener {
-
     private MessageViewModel viewModel;
     protected ClipboardManager clipboard;
+
+    private static final int REQUEST_CODE_SELECT_AT_USER = 15;
 
     @Override
     protected void initChildView() {
@@ -108,6 +113,14 @@ public class ChatFragment extends EaseChatFragment implements EaseChatFragment.O
                 LiveActivity.startLive(getContext(), toChatUsername);
                 break;
         }
+    }
+
+    @Override
+    public void onUserAvatarClick(String username) {
+        super.onUserAvatarClick(username);
+        EaseUser user = new EaseUser();
+        user.setUsername(username);
+        ContactDetailActivity.actionStart(mContext, user);
     }
 
     @Override
@@ -219,6 +232,13 @@ public class ChatFragment extends EaseChatFragment implements EaseChatFragment.O
     }
 
     @Override
+    public void onTextChanged(CharSequence s, int start, int before, int count) {
+        if(count == 1 && "@".equals(String.valueOf(s.charAt(start)))){
+            PickAtUserActivity.actionStartForResult(ChatFragment.this, toChatUsername, REQUEST_CODE_SELECT_AT_USER);
+        }
+    }
+
+    @Override
     protected void selectVideoFromLocal() {
         super.selectVideoFromLocal();
         Intent intent = new Intent(getActivity(), ImageGridActivity.class);
@@ -263,6 +283,21 @@ public class ChatFragment extends EaseChatFragment implements EaseChatFragment.O
     @Override
     public void onMessageChange(String change) {
         viewModel.setMessageChange(change);
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if(resultCode == Activity.RESULT_OK) {
+            switch (requestCode) {
+                case REQUEST_CODE_SELECT_AT_USER :
+                    if(data != null){
+                        String username = data.getStringExtra("username");
+                        inputAtUsername(username, false);
+                    }
+                    break;
+            }
+        }
     }
 
     private class ViewHolderProvider extends EaseViewHolderProvider {

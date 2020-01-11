@@ -521,6 +521,7 @@ public class EaseChatFragment extends EaseBaseFragment implements View.OnClickLi
         if(count == 1 && "@".equals(String.valueOf(s.charAt(start)))){
 //            startActivityForResult(new Intent(getActivity(), PickAtUserActivity.class).
 //                    putExtra("groupId", toChatUsername), REQUEST_CODE_SELECT_AT_USER);
+
         }
     }
 

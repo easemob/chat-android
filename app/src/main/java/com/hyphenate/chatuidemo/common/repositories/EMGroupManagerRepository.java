@@ -3,6 +3,7 @@ package com.hyphenate.chatuidemo.common.repositories;
 import android.text.TextUtils;
 import android.util.Log;
 
+import androidx.annotation.NonNull;
 import androidx.arch.core.util.Function;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MediatorLiveData;
@@ -17,6 +18,7 @@ import com.hyphenate.chatuidemo.common.db.entity.EmUserEntity;
 import com.hyphenate.chatuidemo.common.enums.Status;
 import com.hyphenate.chatuidemo.common.interfaceOrImplement.ResultCallBack;
 import com.hyphenate.chatuidemo.common.net.Resource;
+import com.hyphenate.easeui.domain.EaseUser;
 import com.hyphenate.easeui.utils.EaseCommonUtils;
 
 import java.util.ArrayList;
@@ -64,6 +66,57 @@ public class EMGroupManagerRepository extends BaseEMRepository{
             }
 
         }.asLiveData();
+    }
+
+    /**
+     * 获取群组成员列表
+     * @param groupId
+     * @return
+     */
+    public LiveData<Resource<List<EaseUser>>> getGroupMembers(String groupId) {
+        return new NetworkOnlyResource<List<EaseUser>>() {
+
+            @Override
+            protected void createCall(@NonNull ResultCallBack<LiveData<List<EaseUser>>> callBack) {
+                DemoHelper.getInstance().getGroupManager().asyncGetGroupFromServer(groupId, new EMValueCallBack<EMGroup>() {
+                    @Override
+                    public void onSuccess(EMGroup value) {
+                        List<String> members = value.getMembers();
+                        if(members != null && !members.isEmpty()) {
+                            List<EaseUser> users = EmUserEntity.parse(members);
+                            sortUserData(users);
+                            callBack.onSuccess(createLiveData(users));
+                        }
+                    }
+
+                    @Override
+                    public void onError(int error, String errorMsg) {
+                        callBack.onError(error, errorMsg);
+                    }
+                });
+            }
+
+        }.asLiveData();
+    }
+
+    private void sortUserData(List<EaseUser> users) {
+        Collections.sort(users, new Comparator<EaseUser>() {
+
+            @Override
+            public int compare(EaseUser lhs, EaseUser rhs) {
+                if(lhs.getInitialLetter().equals(rhs.getInitialLetter())){
+                    return lhs.getNickname().compareTo(rhs.getNickname());
+                }else{
+                    if("#".equals(lhs.getInitialLetter())){
+                        return 1;
+                    }else if("#".equals(rhs.getInitialLetter())){
+                        return -1;
+                    }
+                    return lhs.getInitialLetter().compareTo(rhs.getInitialLetter());
+                }
+
+            }
+        });
     }
 
     public List<EMGroup> getAllManageGroups(List<EMGroup> allGroups) {

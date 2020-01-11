@@ -45,6 +45,7 @@ public class EaseRecyclerView extends RecyclerView {
         super(context, attrs, defStyleAttr);
     }
 
+    // TODO: 2020/1/11 添加移除头布局的方法
     /**
      * 如果view的初始化中的parent用的是recyclerView, 该方法的调用应该放在setLayoutManager之后,
      * 否则需要自己对view添加LayoutParams
