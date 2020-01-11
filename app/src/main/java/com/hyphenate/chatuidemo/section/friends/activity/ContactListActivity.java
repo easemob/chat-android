@@ -1,28 +1,25 @@
-package com.hyphenate.chatuidemo.section.chat;
+package com.hyphenate.chatuidemo.section.friends.activity;
 
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
-import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
-import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.hyphenate.chat.EMGroup;
-import com.hyphenate.chatuidemo.DemoHelper;
+import com.hyphenate.chatuidemo.DemoApp;
 import com.hyphenate.chatuidemo.R;
 import com.hyphenate.chatuidemo.common.interfaceOrImplement.OnResourceParseCallback;
-import com.hyphenate.chatuidemo.common.utils.ThreadManager;
 import com.hyphenate.chatuidemo.section.base.BaseInitActivity;
+import com.hyphenate.chatuidemo.section.chat.EmChatActivity;
 import com.hyphenate.chatuidemo.section.chat.adapter.PickUserAdapter;
-import com.hyphenate.chatuidemo.section.friends.viewmodels.GroupContactViewModel;
+import com.hyphenate.chatuidemo.section.friends.viewmodels.ContactListViewModel;
 import com.hyphenate.easeui.domain.EaseUser;
 import com.hyphenate.easeui.interfaces.OnItemClickListener;
 import com.hyphenate.easeui.utils.EaseCommonUtils;
-import com.hyphenate.easeui.widget.EaseRecyclerView;
+import com.hyphenate.easeui.widget.EaseAlertDialog;
 import com.hyphenate.easeui.widget.EaseSidebar;
 import com.hyphenate.easeui.widget.EaseTitleBar;
 import com.scwang.smartrefresh.layout.SmartRefreshLayout;
@@ -31,49 +28,48 @@ import com.scwang.smartrefresh.layout.listener.OnRefreshListener;
 
 import java.util.List;
 
-import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
-public class PickAtUserActivity extends BaseInitActivity implements OnRefreshListener, OnItemClickListener, EaseSidebar.OnTouchEventListener, EaseTitleBar.OnBackPressListener {
-    private EaseTitleBar mTitleBarPick;
+public class ContactListActivity extends BaseInitActivity implements OnRefreshListener, OnItemClickListener, EaseSidebar.OnTouchEventListener, EaseTitleBar.OnBackPressListener {
+    private EaseTitleBar mEaseTitleBar;
     private SmartRefreshLayout mSrlRefresh;
-    private EaseRecyclerView mRvPickUserList;
-    private EaseSidebar mSideBarPickUser;
+    private RecyclerView mRvContactList;
+    private EaseSidebar mEaseSidebar;
     private TextView mFloatingHeader;
-    private String mGroupId;
-    private GroupContactViewModel mViewModel;
     private PickUserAdapter mAdapter;
+    private ContactListViewModel mViewModel;
+    private String mForwardMsgId;
 
-    public static void actionStartForResult(Fragment fragment, String groupId, int requestCode) {
-        Intent starter = new Intent(fragment.getContext(), PickAtUserActivity.class);
-        starter.putExtra("groupId", groupId);
-        fragment.startActivityForResult(starter, requestCode);
+    public static void start(Context context, String forward_msg_id) {
+        Intent starter = new Intent(context, ContactListActivity.class);
+        starter.putExtra("forward_msg_id", forward_msg_id);
+        context.startActivity(starter);
     }
 
     @Override
     protected int getLayoutId() {
-        return R.layout.em_activity_chat_pick_at_user;
+        return R.layout.em_activity_contact_list;
     }
 
     @Override
     protected void initIntent(Intent intent) {
         super.initIntent(intent);
-        mGroupId = getIntent().getStringExtra("groupId");
+        mForwardMsgId = getIntent().getStringExtra("forward_msg_id");
     }
 
     @Override
     protected void initView(Bundle savedInstanceState) {
         super.initView(savedInstanceState);
-        mTitleBarPick = findViewById(R.id.title_bar_pick);
         mSrlRefresh = findViewById(R.id.srl_refresh);
-        mRvPickUserList = findViewById(R.id.rv_pick_user_list);
-        mSideBarPickUser = findViewById(R.id.side_bar_pick_user);
+        mRvContactList = findViewById(R.id.rv_contact_list);
+        mEaseSidebar = findViewById(R.id.side_bar_pick_user);
         mFloatingHeader = findViewById(R.id.floating_header);
 
-        mRvPickUserList.setLayoutManager(new LinearLayoutManager(mContext));
+        mRvContactList.setLayoutManager(new LinearLayoutManager(mContext));
         mAdapter = new PickUserAdapter();
-        mRvPickUserList.setAdapter(mAdapter);
+        mRvContactList.setAdapter(mAdapter);
     }
 
     @Override
@@ -81,16 +77,15 @@ public class PickAtUserActivity extends BaseInitActivity implements OnRefreshLis
         super.initListener();
         mSrlRefresh.setOnRefreshListener(this);
         mAdapter.setOnItemClickListener(this);
-        mSideBarPickUser.setOnTouchEventListener(this);
-        mTitleBarPick.setOnBackPressListener(this);
+        mEaseSidebar.setOnTouchEventListener(this);
+        mEaseTitleBar.setOnBackPressListener(this);
     }
 
     @Override
     protected void initData() {
         super.initData();
-        mViewModel = new ViewModelProvider(this).get(GroupContactViewModel.class);
-        mViewModel.getGroupMember().observe(this, response -> {
-            checkIfAddHeader();
+        mViewModel = new ViewModelProvider(this).get(ContactListViewModel.class);
+        mViewModel.getContactListObservable().observe(this, response -> {
             parseResource(response, new OnResourceParseCallback<List<EaseUser>>() {
                 @Override
                 public void onSuccess(List<EaseUser> data) {
@@ -104,57 +99,37 @@ public class PickAtUserActivity extends BaseInitActivity implements OnRefreshLis
                 }
             });
         });
-
-        mViewModel.getGroupMembers(mGroupId);
-    }
-
-    private void checkIfAddHeader() {
-        String owner = DemoHelper.getInstance().getGroupManager().getGroup(mGroupId).getOwner();
-        if(TextUtils.equals(owner, DemoHelper.getInstance().getCurrentUser())) {
-            AddHeader();
-        }
-    }
-
-    private void AddHeader() {
-        View view = LayoutInflater.from(this).inflate(R.layout.em_widget_contact_item, mRvPickUserList, false);
-        ImageView avatarView = (ImageView) view.findViewById(R.id.avatar);
-        TextView textView = (TextView) view.findViewById(R.id.name);
-        textView.setText(getString(R.string.all_members));
-        avatarView.setImageResource(R.drawable.ease_groups_icon);
-        mRvPickUserList.addHeaderView(view);
-
-        view.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                setResult(RESULT_OK, new Intent().putExtra("username", getString(R.string.all_members)));
-            }
-        });
-
+        mViewModel.getContactList();
     }
 
     @Override
     public void onRefresh(RefreshLayout refreshLayout) {
-        mViewModel.getGroupMembers(mGroupId);
-    }
-
-    private void finishRefresh() {
-        if(mSrlRefresh != null) {
-            ThreadManager.getInstance().runOnMainThread(() -> {
-                mSrlRefresh.finishRefresh();
-            });
-
-        }
+        mViewModel.getContactList();
     }
 
     @Override
     public void onItemClick(View view, int position) {
         EaseUser user = mAdapter.getData().get(position);
-        if(TextUtils.equals(user.getUsername(), DemoHelper.getInstance().getCurrentUser())) {
-            return;
-        }
-        Intent intent = getIntent();
-        intent.putExtra("username", user.getUsername());
-        setResult(RESULT_OK, intent);
+        new EaseAlertDialog(this, null, getString(R.string.confirm_forward_to, user.getNickname()), null, new EaseAlertDialog.AlertDialogUser() {
+            @Override
+            public void onResult(boolean confirmed, Bundle bundle) {
+                if (confirmed) {
+                    if (user == null)
+                        return;
+                    finishChatActivity();
+                    Intent intent = new Intent(mContext, EmChatActivity.class);
+                    // it is single chat
+                    intent.putExtra("userId", user.getUsername());
+                    intent.putExtra("forward_msg_id", mForwardMsgId);
+                    startActivity(intent);
+                    finish();
+                }
+            }
+        }, true).show();
+    }
+
+    private void finishChatActivity() {
+        DemoApp.getInstance().getActivityLifecycle().finishTarget(EmChatActivity.class);
     }
 
     @Override
@@ -174,6 +149,11 @@ public class PickAtUserActivity extends BaseInitActivity implements OnRefreshLis
         hideFloatingHeader();
     }
 
+    @Override
+    public void onBackPress(View view) {
+        onBackPressed();
+    }
+
     private void moveToRecyclerItem(String pointer) {
         List<EaseUser> data = mAdapter.getData();
         if(data == null || data.isEmpty()) {
@@ -181,7 +161,7 @@ public class PickAtUserActivity extends BaseInitActivity implements OnRefreshLis
         }
         for(int i = 0; i < data.size(); i++) {
             if(TextUtils.equals(EaseCommonUtils.getLetter(data.get(i).getNickname()), pointer)) {
-                LinearLayoutManager manager = (LinearLayoutManager) mRvPickUserList.getLayoutManager();
+                LinearLayoutManager manager = (LinearLayoutManager) mRvContactList.getLayoutManager();
                 if(manager != null) {
                     manager.scrollToPositionWithOffset(i, 0);
                 }
@@ -206,8 +186,11 @@ public class PickAtUserActivity extends BaseInitActivity implements OnRefreshLis
         mFloatingHeader.setVisibility(View.GONE);
     }
 
-    @Override
-    public void onBackPress(View view) {
-        onBackPressed();
+    private void finishRefresh() {
+        if(mSrlRefresh != null) {
+            mContext.runOnUiThread(() -> {
+                mSrlRefresh.finishRefresh();
+            });
+        }
     }
 }

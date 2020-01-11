@@ -5,27 +5,26 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <com.hyphenate.easeui.widget.EaseTitleBar
-        android:id="@+id/title_bar_pick"
+        android:id="@+id/title_bar_contact_list"
         android:layout_width="0dp"
         android:layout_height="@dimen/em_common_title_bar_height"
-        app:titleBarTitle="@string/em_chat_pick_user_title"
         app:titleBarDisplayHomeAsUpEnabled="true"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent"/>
+        app:layout_constraintTop_toTopOf="parent"
+        app:titleBarTitle="@string/em_chat_pick_user_title"/>
 
     <com.scwang.smartrefresh.layout.SmartRefreshLayout
         android:id="@+id/srl_refresh"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        app:srlEnableLoadMore="false"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/title_bar_pick"
+        app:layout_constraintTop_toBottomOf="@id/title_bar_contact_list"
         app:layout_constraintBottom_toBottomOf="parent">
 
-        <com.hyphenate.easeui.widget.EaseRecyclerView
-            android:id="@+id/rv_pick_user_list"
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rv_contact_list"
             android:layout_width="match_parent"
             android:layout_height="match_parent"/>
 
@@ -36,7 +35,7 @@
         android:layout_width="@dimen/em_common_side_bar_width"
         android:layout_height="0dp"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/title_bar_pick"
+        app:layout_constraintTop_toBottomOf="@id/title_bar_contact_list"
         app:layout_constraintBottom_toBottomOf="parent"
         android:layout_marginTop="10dp"
         android:layout_marginBottom="10dp"

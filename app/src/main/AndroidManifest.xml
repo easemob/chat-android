@@ -287,7 +287,8 @@
         <activity android:name=".section.friends.activity.ContactDetailActivity" />
         <activity
             android:name=".section.chat.EmChatActivity"
-            android:windowSoftInputMode="stateHidden|adjustPan"/>
+            android:windowSoftInputMode="stateHidden|adjustPan"
+            android:launchMode="singleTask"/>
         <activity android:name=".section.friends.activity.GroupContactManageActivity" />
         <activity android:name=".section.friends.activity.ChatRoomContactManageActivity" />
         <activity android:name="com.hyphenate.easeui.ui.EaseShowBigImageActivity"/>
@@ -304,6 +305,7 @@
         <activity android:name=".section.chat.ConferenceActivity" />
         <activity android:name=".section.chat.ConferenceInviteActivity" />
         <activity android:name=".section.chat.PickAtUserActivity" />
+        <activity android:name=".section.friends.activity.ContactListActivity" />
 
     </application>
 

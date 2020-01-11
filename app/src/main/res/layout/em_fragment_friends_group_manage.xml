@@ -26,16 +26,8 @@
 
     <TextView
         android:id="@+id/floating_header"
-        android:layout_width="wrap_content"
-        android:layout_height="60dp"
         android:layout_centerInParent="true"
-        android:background="@drawable/ease_show_head_toast_bg"
-        android:gravity="center"
-        android:paddingLeft="25dp"
-        android:paddingRight="25dp"
-        android:textColor="@android:color/white"
-        android:textSize="40sp"
-        android:visibility="gone"
+        style="@style/em_contact_sidebar_floating_header"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent"

@@ -39,8 +39,8 @@ public class EmChatActivity extends BaseInitActivity implements EaseTitleBar.OnB
     @Override
     protected void initIntent(Intent intent) {
         super.initIntent(intent);
-        toChatUsername = getIntent().getStringExtra(EaseConstant.EXTRA_USER_ID);
-        chatType = getIntent().getIntExtra(EaseConstant.EXTRA_CHAT_TYPE, EaseConstant.CHATTYPE_SINGLE);
+        toChatUsername = intent.getStringExtra(EaseConstant.EXTRA_USER_ID);
+        chatType = intent.getIntExtra(EaseConstant.EXTRA_CHAT_TYPE, EaseConstant.CHATTYPE_SINGLE);
     }
 
     @Override
@@ -65,6 +65,15 @@ public class EmChatActivity extends BaseInitActivity implements EaseTitleBar.OnB
     protected void initData() {
         super.initData();
         titleBarMessage.setTitle(getChatName());
+    }
+
+    @Override
+    protected void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
+        if(intent != null) {
+            initIntent(intent);
+
+        }
     }
 
     @Override

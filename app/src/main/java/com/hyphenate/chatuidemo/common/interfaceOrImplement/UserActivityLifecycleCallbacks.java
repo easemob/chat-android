@@ -98,4 +98,18 @@ public class UserActivityLifecycleCallbacks implements Application.ActivityLifec
         }
 
     }
+
+    /**
+     * finish target activity
+     * @param cls
+     */
+    public void finishTarget(Class<?> cls) {
+        if(activityList != null && !activityList.isEmpty()) {
+            for (Activity activity : activityList) {
+                if(activity.getClass() == cls) {
+                    activity.finish();
+                }
+            }
+        }
+    }
 }

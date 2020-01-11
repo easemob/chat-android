@@ -97,6 +97,7 @@
     <string name="em_friends_chat_room_contact_title">聊天室列表</string>
 
     <string name="em_chat_pick_user_title">选择联系人</string>
+    <string name="confirm_forward_to">确定转发到：%1$s ?</string>
 
     <string name="Select_the_contact">选择联系人</string>
     <string name="emojicon_test_name">示例</string>
