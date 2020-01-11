@@ -1,6 +1,7 @@
 package com.hyphenate.chatuidemo.section.chat.fragment;
 
 import android.content.Intent;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -142,6 +143,7 @@ public class ChatFragment extends EaseChatFragment implements EaseChatFragment.O
             helper.addViewType(DemoConstant.MESSAGE_TYPE_CONFERENCE_INVITE);
             helper.addViewType(DemoConstant.MESSAGE_TYPE_LIVE_INVITE);
             viewTypeMap = helper.getViewTypeMap();
+            Log.e("TAG", "viewTypeMap = "+viewTypeMap.toString());
         }
 
         @Override
@@ -178,46 +180,26 @@ public class ChatFragment extends EaseChatFragment implements EaseChatFragment.O
             return sendType == 0 ? 0 : isSender ? sendType : EaseViewHolderHelper.getInstance().getReceiveType(sendType);
         }
 
-        private boolean isViewType(int currentViewType, int viewType) {
-            if(currentViewType == viewType || currentViewType == EaseViewHolderHelper.getInstance().getReceiveType(viewType)) {
-                return true;
-            }
-            return false;
-        }
-
         @Override
         public EaseChatRowViewHolder provideViewHolder(ViewGroup parent, int viewType, MessageListItemClickListener listener, EaseMessageListItemStyle itemStyle) {
-            Iterator<String> iterator = viewTypeMap.keySet().iterator();
-            while (iterator.hasNext()) {
-                String key = iterator.next();
-                int viewTypes = viewTypeMap.get(key);
-                if(viewTypes == 0) {
-                    break;
+            return EaseViewHolderHelper.getInstance().getChatRowViewHolder(parent, viewType, listener, itemStyle, new EaseViewHolderHelper.AddMoreViewHolderProvider() {
+                @Override
+                public EaseChatRowViewHolder addMoreViewHolder(ViewGroup parent, String type, boolean isSender, MessageListItemClickListener listener, EaseMessageListItemStyle itemStyle) {
+                    switch (type) {
+                        case DemoConstant.MESSAGE_TYPE_RECALL :
+                            return ChatRecallViewHolder.create(parent, isSender, listener, itemStyle);
+                        case DemoConstant.MESSAGE_TYPE_VOICE_CALL :
+                            return ChatVoiceCallViewHolder.create(parent, isSender, listener, itemStyle);
+                        case DemoConstant.MESSAGE_TYPE_VIDEO_CALL :
+                            return ChatVideoCallViewHolder.create(parent, isSender, listener, itemStyle);
+                        case DemoConstant.MESSAGE_TYPE_CONFERENCE_INVITE :
+                            return ChatConferenceInviteViewHolder.create(parent, isSender, listener, itemStyle);
+                        case DemoConstant.MESSAGE_TYPE_LIVE_INVITE :
+                            return ChatLiveInviteViewHolder.create(parent, isSender, listener, itemStyle);
+                    }
+                    return null;
                 }
-                switch (key) {
-                    case DemoConstant.MESSAGE_TYPE_RECALL :
-                        if(isViewType(viewType, viewTypes)) {
-                            return ChatRecallViewHolder.create(parent, true, listener, itemStyle);
-                        }
-                    case DemoConstant.MESSAGE_TYPE_VOICE_CALL :
-                        if(isViewType(viewType, viewTypes)) {
-                            return ChatVoiceCallViewHolder.create(parent, viewType == viewTypes, listener, itemStyle);
-                        }
-                    case DemoConstant.MESSAGE_TYPE_VIDEO_CALL :
-                        if(isViewType(viewType, viewTypes)) {
-                            return ChatVideoCallViewHolder.create(parent, viewType == viewTypes, listener, itemStyle);
-                        }
-                    case DemoConstant.MESSAGE_TYPE_CONFERENCE_INVITE :
-                        if(isViewType(viewType, viewTypes)) {
-                            return ChatConferenceInviteViewHolder.create(parent, viewType == viewTypes, listener, itemStyle);
-                        }
-                    case DemoConstant.MESSAGE_TYPE_LIVE_INVITE :
-                        if(isViewType(viewType, viewTypes)) {
-                            return ChatLiveInviteViewHolder.create(parent, viewType == viewTypes, listener, itemStyle);
-                        }
-                }
-            }
-            return super.provideViewHolder(parent, viewType, listener, itemStyle);
+            });
         }
     }
 }

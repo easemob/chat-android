@@ -1,6 +1,7 @@
 package com.hyphenate.easeui.viewholder;
 
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.ViewGroup;
 
 import com.hyphenate.chat.EMMessage;
@@ -65,7 +66,7 @@ public class EaseViewHolderHelper {
         }
         messageTypes.add(type);
         viewTypeMap.put(type, getSendType(viewTypeMap.size()));
-        viewTypeMap2.put(getSendType(viewTypeMap.size()), type);
+        viewTypeMap2.put(getSendType(viewTypeMap2.size()), type);
         return viewTypeMap;
     }
 
@@ -124,6 +125,7 @@ public class EaseViewHolderHelper {
                                                       MessageListItemClickListener listener, EaseMessageListItemStyle itemStyle, AddMoreViewHolderProvider addMoreViewHolder) {
         String type = null;
         boolean isSender = false;
+        Log.e("TAG", "viewTypeMap2 = "+viewTypeMap2.toString());
         if(viewTypeMap2.keySet().contains(viewType)) {
             type = viewTypeMap2.get(viewType);
             isSender = true;
