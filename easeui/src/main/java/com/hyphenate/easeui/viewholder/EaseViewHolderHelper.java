@@ -1,26 +1,31 @@
 package com.hyphenate.easeui.viewholder;
 
 import android.text.TextUtils;
-import android.util.SparseArray;
 import android.view.ViewGroup;
 
 import com.hyphenate.chat.EMMessage;
 import com.hyphenate.easeui.constants.EaseConstant;
 import com.hyphenate.easeui.interfaces.MessageListItemClickListener;
 import com.hyphenate.easeui.model.styles.EaseMessageListItemStyle;
-import com.hyphenate.easeui.widget.chatrow.EaseChatRowImage;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 public class EaseViewHolderHelper {
+    private static final int BASE_SEND_TYPE = 100;
+    private static final int BASE_RECEIVE_TYPE = 10000;
     private static EaseViewHolderHelper instance;
-    private Map<String, int[]> viewTypeMap;
+    /**
+     * key为类型，value为sendViewType
+     */
+    private Map<String, Integer> viewTypeMap;
+    /**
+     * key为sendViewType，value为messageType
+     */
+    private Map<Integer, String> viewTypeMap2;
     private String[] defaultExtendMessageType = {EaseConstant.MESSAGE_TYPE_EXPRESSION};
     private List<String> messageTypes;
 
@@ -44,7 +49,7 @@ public class EaseViewHolderHelper {
      * get view type map
      * @return
      */
-    public Map<String, int[]> getViewTypeMap() {
+    public Map<String, Integer> getViewTypeMap() {
         return viewTypeMap;
     }
 
@@ -53,16 +58,14 @@ public class EaseViewHolderHelper {
      * @param type
      * @return
      */
-    public Map<String, int[]> addViewType(String type) {
+    public Map<String, Integer> addViewType(String type) {
         // 如果已经包含相应的类型，则不再进行类型添加
         if(messageTypes.contains(type)) {
             return viewTypeMap;
         }
         messageTypes.add(type);
-        int[] sparse = new int[2];
-        sparse[0] = getSendType(viewTypeMap.size());
-        sparse[1] = getReceiveType(viewTypeMap.size());
-        viewTypeMap.put(type, sparse);
+        viewTypeMap.put(type, getSendType(viewTypeMap.size()));
+        viewTypeMap2.put(getSendType(viewTypeMap.size()), type);
         return viewTypeMap;
     }
 
@@ -71,51 +74,82 @@ public class EaseViewHolderHelper {
      * @param message
      * @return
      */
-    public int getDefaultAdapterViewType(EMMessage message) {
+    public int getAdapterViewType(EMMessage message) {
+        return getAdapterViewType(message, null);
+    }
+
+    /**
+     * 获取消息类型
+     * @param message
+     * @return
+     */
+    public int getAdapterViewType(EMMessage message, addMoreMessageTypeProvider provider) {
         EMMessage.Direct direct = message.direct();
         boolean isSender = direct == EMMessage.Direct.SEND;
+        if(provider != null) {
+            int messageType = provider.addMoreMessageType(message, getViewTypeMap());
+            if(messageType != 0) {
+                return messageType;
+            }
+        }
         if(message.getType() == EMMessage.Type.TXT) {
             if(message.getBooleanAttribute(EaseConstant.MESSAGE_ATTR_IS_BIG_EXPRESSION, false)) {
-                int[] viewType = getViewTypeMap().get(EaseConstant.MESSAGE_TYPE_EXPRESSION);
-                if(viewType != null) {
-                    return isSender ? viewType[0] : viewType[1];
+                int viewType = 0;
+                try {
+                    viewType = getViewTypeMap().get(EaseConstant.MESSAGE_TYPE_EXPRESSION);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+                if(viewType != 0) {
+                    return isSender ? viewType : getReceiveType(viewType);
                 }
             }
         }
         int viewType = 0;
-        int[] messageViewTypes = getViewTypeMap().get(message.getType().name());
-        if(messageViewTypes != null) {
-            viewType = isSender ? messageViewTypes[0] : messageViewTypes[1];
+        try {
+            viewType = getViewTypeMap().get(message.getType().name());
+            return isSender ? viewType : getReceiveType(viewType);
+        } catch (Exception e) {
+            e.printStackTrace();
         }
         return viewType;
     }
 
-    public EaseChatRowViewHolder getChatRowViewHolder(ViewGroup parent, int viewType, MessageListItemClickListener listener, EaseMessageListItemStyle itemStyle) {
-        Iterator<Map.Entry<String, int[]>> iterator = viewTypeMap.entrySet().iterator();
-        while (iterator.hasNext()) {
-            Map.Entry<String, int[]> next = iterator.next();
-            int[] value = next.getValue();
-            if(value[0] == viewType) {
-                return getItemChatViewHolder(next.getKey(), parent, true, listener, itemStyle);
-            }else if(value[1] == viewType) {
-                return getItemChatViewHolder(next.getKey(), parent, false, listener, itemStyle);
-            }
-        }
-        return null;
+    public EaseChatRowViewHolder getChatRowViewHolder(ViewGroup parent, int viewType,
+                                                      MessageListItemClickListener listener, EaseMessageListItemStyle itemStyle) {
+        return getChatRowViewHolder(parent, viewType, listener, itemStyle, null);
     }
 
-    private EaseChatRowViewHolder getItemChatViewHolder(String key, ViewGroup parent, boolean isSender, MessageListItemClickListener listener, EaseMessageListItemStyle itemStyle) {
-        if(TextUtils.equals(key, EMMessage.Type.IMAGE.name())) {
+    public EaseChatRowViewHolder getChatRowViewHolder(ViewGroup parent, int viewType,
+                                                      MessageListItemClickListener listener, EaseMessageListItemStyle itemStyle, AddMoreViewHolderProvider addMoreViewHolder) {
+        String type = null;
+        boolean isSender = false;
+        if(viewTypeMap2.keySet().contains(viewType)) {
+            type = viewTypeMap2.get(viewType);
+            isSender = true;
+        }else if(viewTypeMap2.keySet().contains(getSendTypeByReceive(viewType))) {
+            type = viewTypeMap2.get(getSendTypeByReceive(viewType));
+        }
+        if(TextUtils.isEmpty(type)) {
+            return null;
+        }
+        if(addMoreViewHolder != null) {
+            EaseChatRowViewHolder viewHolder = addMoreViewHolder.addMoreViewHolder(parent, type, isSender, listener, itemStyle);
+            if(viewHolder != null) {
+                return viewHolder;
+            }
+        }
+        if(TextUtils.equals(type, EMMessage.Type.IMAGE.name())) {
             return EaseImageViewHolder.create(parent, isSender, listener, itemStyle);
-        }else if(TextUtils.equals(key, EMMessage.Type.VIDEO.name())) {
+        }else if(TextUtils.equals(type, EMMessage.Type.VIDEO.name())) {
             return EaseVideoViewHolder.create(parent, isSender, listener, itemStyle);
-        }else if(TextUtils.equals(key, EMMessage.Type.LOCATION.name())) {
+        }else if(TextUtils.equals(type, EMMessage.Type.LOCATION.name())) {
             return EaseLocationViewHolder.create(parent, isSender, listener, itemStyle);
-        }else if(TextUtils.equals(key, EMMessage.Type.VOICE.name())) {
+        }else if(TextUtils.equals(type, EMMessage.Type.VOICE.name())) {
             return EaseVoiceViewHolder.create(parent, isSender, listener, itemStyle);
-        }else if(TextUtils.equals(key, EMMessage.Type.FILE.name())) {
+        }else if(TextUtils.equals(type, EMMessage.Type.FILE.name())) {
             return EaseFileViewHolder.create(parent, isSender, listener, itemStyle);
-        }else if(TextUtils.equals(key, EaseConstant.MESSAGE_TYPE_EXPRESSION)) {
+        }else if(TextUtils.equals(type, EaseConstant.MESSAGE_TYPE_EXPRESSION)) {
             return EaseExpressionViewHolder.create(parent, isSender, listener, itemStyle);
         }else {
             return EaseTextViewHolder.create(parent, isSender, listener, itemStyle);
@@ -133,15 +167,12 @@ public class EaseViewHolderHelper {
 
     private void initViewTypeMap() {
         viewTypeMap = new HashMap<>();
-        int[] sparse;
+        viewTypeMap2 = new HashMap<>();
         for(int i = 0; i < messageTypes.size(); i++) {
             String type = messageTypes.get(i);
-            sparse = new int[2];
-            sparse[0] = getSendType(i);
-            sparse[1] = getReceiveType(i);
-            viewTypeMap.put(type, sparse);
+            viewTypeMap.put(type, getSendType(i));
+            viewTypeMap2.put(getSendType(i), type);
         }
-        addViewType(EaseConstant.MESSAGE_TYPE_EXPRESSION);
     }
 
     /**
@@ -150,16 +181,49 @@ public class EaseViewHolderHelper {
      * @return
      */
     private int getSendType(int position) {
-        return 100 + position;
+        return BASE_SEND_TYPE + position;
+    }
+
+    /**
+     * get send type by receive type
+     * @param receiveType
+     * @return
+     */
+    private int getSendTypeByReceive(int receiveType) {
+        return receiveType - BASE_RECEIVE_TYPE;
     }
 
     /**
      * set receive type by position
-     * @param position
+     * @param sendViewType
      * @return
      */
-    private int getReceiveType(int position) {
-        return 10000 + position;
+    public int getReceiveType(int sendViewType) {
+        return BASE_RECEIVE_TYPE + sendViewType;
+    }
+
+    /**
+     * 提供更多的ViewHolder
+     */
+    public interface AddMoreViewHolderProvider {
+        /**
+         * 返回自定义的ViewHolder
+         * @param parent
+         * @param type
+         * @param isSender
+         * @param listener
+         * @param itemStyle
+         * @return
+         */
+        EaseChatRowViewHolder addMoreViewHolder(ViewGroup parent, String type, boolean isSender,
+                                                MessageListItemClickListener listener, EaseMessageListItemStyle itemStyle);
+    }
+
+    /**
+     * 提供更多的消息类型
+     */
+    public interface addMoreMessageTypeProvider {
+        int addMoreMessageType(EMMessage message, Map<String, Integer> viewTypeMap);
     }
 
 }

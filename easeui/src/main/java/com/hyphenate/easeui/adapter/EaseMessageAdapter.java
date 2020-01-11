@@ -51,7 +51,7 @@ public class EaseMessageAdapter extends EaseBaseMessageAdapter<EMMessage> {
                 return type;
             }
         }
-        int viewType = EaseViewHolderHelper.getInstance().getDefaultAdapterViewType(message);
+        int viewType = EaseViewHolderHelper.getInstance().getAdapterViewType(message);
         return viewType == 0 ? super.getItemViewType(position) : viewType;
     }
 

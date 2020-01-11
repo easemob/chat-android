@@ -6,8 +6,6 @@ import com.hyphenate.chat.EMMessage;
 import com.hyphenate.easeui.interfaces.IViewHolderProvider;
 import com.hyphenate.easeui.interfaces.MessageListItemClickListener;
 import com.hyphenate.easeui.model.styles.EaseMessageListItemStyle;
-import com.hyphenate.easeui.viewholder.EaseChatRowViewHolder;
-import com.hyphenate.easeui.viewholder.EaseViewHolderHelper;
 
 public class EaseViewHolderProvider implements IViewHolderProvider {
 
@@ -20,6 +18,6 @@ public class EaseViewHolderProvider implements IViewHolderProvider {
 
     @Override
     public int provideViewType(EMMessage message) {
-        return EaseViewHolderHelper.getInstance().getDefaultAdapterViewType(message);
+        return EaseViewHolderHelper.getInstance().getAdapterViewType(message);
     }
 }

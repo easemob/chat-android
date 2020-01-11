@@ -131,8 +131,7 @@ public class ChatFragment extends EaseChatFragment implements EaseChatFragment.O
     }
 
     private class ViewHolderProvider extends EaseViewHolderProvider {
-
-        private final Map<String, int[]> viewTypeMap;
+        private Map<String, Integer> viewTypeMap;
 
         public ViewHolderProvider() {
             //添加相应的消息类型，并返回相应的map
@@ -147,26 +146,43 @@ public class ChatFragment extends EaseChatFragment implements EaseChatFragment.O
 
         @Override
         public int provideViewType(EMMessage message) {
-            if(message.getType() == EMMessage.Type.TXT) {
-                boolean isSender = message.direct() == EMMessage.Direct.SEND;
-                if(message.getBooleanAttribute(DemoConstant.MESSAGE_ATTR_IS_VOICE_CALL, false)) {
-                    return getViewType(isSender, DemoConstant.MESSAGE_TYPE_VOICE_CALL);
-                }else if(message.getBooleanAttribute(EaseConstant.MESSAGE_ATTR_IS_VIDEO_CALL, false)) {
-                    return getViewType(isSender, DemoConstant.MESSAGE_TYPE_VIDEO_CALL);
-                }else if(message.getBooleanAttribute(EaseConstant.MESSAGE_TYPE_RECALL, false)) {
-                    return getViewType(isSender, DemoConstant.MESSAGE_TYPE_RECALL);
-                }else if(!message.getStringAttribute(DemoConstant.MSG_ATTR_CONF_ID, "").equals("")) {
-                    return getViewType(isSender, EaseConstant.MESSAGE_TYPE_CONFERENCE_INVITE);
-                }else if(!message.getStringAttribute(DemoConstant.EM_CONFERENCE_OP, "").equals("")) {
-                    return getViewType(isSender, DemoConstant.MESSAGE_TYPE_LIVE_INVITE);
+            return EaseViewHolderHelper.getInstance().getAdapterViewType(message, new EaseViewHolderHelper.addMoreMessageTypeProvider() {
+                @Override
+                public int addMoreMessageType(EMMessage message, Map<String, Integer> viewTypeMap) {
+                    if(message.getType() == EMMessage.Type.TXT) {
+                        boolean isSender = message.direct() == EMMessage.Direct.SEND;
+                        if(message.getBooleanAttribute(DemoConstant.MESSAGE_ATTR_IS_VOICE_CALL, false)) {
+                            return getViewType(viewTypeMap, isSender, DemoConstant.MESSAGE_TYPE_VOICE_CALL);
+                        }else if(message.getBooleanAttribute(EaseConstant.MESSAGE_ATTR_IS_VIDEO_CALL, false)) {
+                            return getViewType(viewTypeMap, isSender, DemoConstant.MESSAGE_TYPE_VIDEO_CALL);
+                        }else if(message.getBooleanAttribute(EaseConstant.MESSAGE_TYPE_RECALL, false)) {
+                            return getViewType(viewTypeMap, isSender, DemoConstant.MESSAGE_TYPE_RECALL);
+                        }else if(!message.getStringAttribute(DemoConstant.MSG_ATTR_CONF_ID, "").equals("")) {
+                            return getViewType(viewTypeMap, isSender, EaseConstant.MESSAGE_TYPE_CONFERENCE_INVITE);
+                        }else if(!message.getStringAttribute(DemoConstant.EM_CONFERENCE_OP, "").equals("")) {
+                            return getViewType(viewTypeMap, isSender, DemoConstant.MESSAGE_TYPE_LIVE_INVITE);
+                        }
+                    }
+                    return 0;
                 }
-            }
-            return super.provideViewType(message);
+            });
         }
 
-        private int getViewType(boolean isSender, String type) {
-            int[] viewTypes = viewTypeMap.get(type);
-            return viewTypes == null ? 0 : isSender ? viewTypes[0] : viewTypes[1];
+        private int getViewType(Map<String, Integer> viewTypeMap, boolean isSender, String type) {
+            int sendType = 0;
+            try {
+                sendType = viewTypeMap.get(type);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            return sendType == 0 ? 0 : isSender ? sendType : EaseViewHolderHelper.getInstance().getReceiveType(sendType);
+        }
+
+        private boolean isViewType(int currentViewType, int viewType) {
+            if(currentViewType == viewType || currentViewType == EaseViewHolderHelper.getInstance().getReceiveType(viewType)) {
+                return true;
+            }
+            return false;
         }
 
         @Override
@@ -174,39 +190,30 @@ public class ChatFragment extends EaseChatFragment implements EaseChatFragment.O
             Iterator<String> iterator = viewTypeMap.keySet().iterator();
             while (iterator.hasNext()) {
                 String key = iterator.next();
-                int[] viewTypes = viewTypeMap.get(key);
-                if(viewTypes == null) {
+                int viewTypes = viewTypeMap.get(key);
+                if(viewTypes == 0) {
                     break;
                 }
                 switch (key) {
                     case DemoConstant.MESSAGE_TYPE_RECALL :
-                        if(viewTypes[0] == viewType || viewTypes[1] == viewType) {
+                        if(isViewType(viewType, viewTypes)) {
                             return ChatRecallViewHolder.create(parent, true, listener, itemStyle);
                         }
                     case DemoConstant.MESSAGE_TYPE_VOICE_CALL :
-                        if(viewTypes[0] == viewType) {
-                            return ChatVoiceCallViewHolder.create(parent, true, listener, itemStyle);
-                        }else if(viewTypes[1] == viewType) {
-                            return ChatVoiceCallViewHolder.create(parent, false, listener, itemStyle);
+                        if(isViewType(viewType, viewTypes)) {
+                            return ChatVoiceCallViewHolder.create(parent, viewType == viewTypes, listener, itemStyle);
                         }
-
                     case DemoConstant.MESSAGE_TYPE_VIDEO_CALL :
-                        if(viewTypes[0] == viewType) {
-                            return ChatVideoCallViewHolder.create(parent, true, listener, itemStyle);
-                        }else if(viewTypes[1] == viewType) {
-                            return ChatVideoCallViewHolder.create(parent, false, listener, itemStyle);
+                        if(isViewType(viewType, viewTypes)) {
+                            return ChatVideoCallViewHolder.create(parent, viewType == viewTypes, listener, itemStyle);
                         }
                     case DemoConstant.MESSAGE_TYPE_CONFERENCE_INVITE :
-                        if(viewTypes[0] == viewType) {
-                            return ChatConferenceInviteViewHolder.create(parent, true, listener, itemStyle);
-                        }else if(viewTypes[1] == viewType) {
-                            return ChatConferenceInviteViewHolder.create(parent, false, listener, itemStyle);
+                        if(isViewType(viewType, viewTypes)) {
+                            return ChatConferenceInviteViewHolder.create(parent, viewType == viewTypes, listener, itemStyle);
                         }
                     case DemoConstant.MESSAGE_TYPE_LIVE_INVITE :
-                        if(viewTypes[0] == viewType) {
-                            return ChatLiveInviteViewHolder.create(parent, true, listener, itemStyle);
-                        }else if(viewTypes[1] == viewType) {
-                            return ChatLiveInviteViewHolder.create(parent, false, listener, itemStyle);
+                        if(isViewType(viewType, viewTypes)) {
+                            return ChatLiveInviteViewHolder.create(parent, viewType == viewTypes, listener, itemStyle);
                         }
                 }
             }
