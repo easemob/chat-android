@@ -3,6 +3,7 @@ package com.hyphenate.chatuidemo.section.chat;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.MotionEvent;
 import android.view.View;
 
 import com.hyphenate.chat.EMChatRoom;

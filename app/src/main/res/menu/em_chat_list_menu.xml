@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item
+        android:id="@+id/action_chat_copy"
+        android:orderInCategory="100"
+        android:visible="false"
+        android:title="@string/copy"
+        app:showAsAction="ifRoom"/>
+
+    <item
+        android:id="@+id/action_chat_delete"
+        android:orderInCategory="100"
+        android:visible="true"
+        android:title="@string/delete"
+        app:showAsAction="ifRoom"/>
+
+    <item
+        android:id="@+id/action_chat_forward"
+        android:orderInCategory="100"
+        android:visible="false"
+        android:title="@string/forward"
+        app:showAsAction="ifRoom"/>
+
+    <item
+        android:id="@+id/action_chat_recall"
+        android:orderInCategory="100"
+        android:visible="false"
+        android:title="@string/recall"
+        app:showAsAction="ifRoom"/>
+
+</menu>

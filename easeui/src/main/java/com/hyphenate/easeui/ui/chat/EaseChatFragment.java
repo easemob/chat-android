@@ -134,7 +134,7 @@ public class EaseChatFragment extends EaseBaseFragment implements View.OnClickLi
     private ChatRoomListener chatRoomListener;
     private GroupListener groupListener;
     private Handler typingHandler;
-    private OnMessageChangeListener messageChangeListener;
+    protected OnMessageChangeListener messageChangeListener;
     private List<EMMessage> currentMessages;
 
     @Nullable
@@ -326,10 +326,11 @@ public class EaseChatFragment extends EaseBaseFragment implements View.OnClickLi
 
     /**
      * MessageListItemClickListener
+     * @param v
      * @param message
      */
     @Override
-    public void onBubbleLongClick(EMMessage message) {
+    public void onBubbleLongClick(View v, EMMessage message) {
 
     }
 

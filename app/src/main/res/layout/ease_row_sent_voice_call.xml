@@ -33,7 +33,7 @@
             android:layout_height="wrap_content"
             android:layout_marginRight="@dimen/margin_chat_activity"
             android:layout_toLeftOf="@id/iv_userhead"
-            android:background="@drawable/ease_chatto_bg" >
+            android:background="@drawable/ease_chatto_bg">
 
             <ImageView
                 android:layout_marginLeft="4dp"

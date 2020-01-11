@@ -1,5 +1,7 @@
 package com.hyphenate.easeui.interfaces;
 
+import android.view.View;
+
 import com.hyphenate.chat.EMMessage;
 
 /**
@@ -23,9 +25,10 @@ public interface MessageListItemClickListener{
 
 	/**
 	 * on long click for bubble
+	 * @param v
 	 * @param message
 	 */
-	void onBubbleLongClick(EMMessage message);
+	void onBubbleLongClick(View v, EMMessage message);
 
 	/**
 	 * click the user avatar
