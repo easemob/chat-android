@@ -1,0 +1,328 @@
+package com.hyphenate.chatuidemo.section.chat;
+
+import android.content.Context;
+import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextUtils;
+import android.text.TextWatcher;
+import android.view.LayoutInflater;
+import android.view.MotionEvent;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.BaseAdapter;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
+import android.widget.EditText;
+import android.widget.Filter;
+import android.widget.ImageView;
+import android.widget.ListView;
+import android.widget.TextView;
+
+import com.hyphenate.chatuidemo.R;
+import com.hyphenate.chatuidemo.section.base.BaseInitActivity;
+import com.hyphenate.easeui.utils.EaseUserUtils;
+
+import java.lang.reflect.Array;
+import java.util.ArrayList;
+import java.util.List;
+
+public class ConferenceInviteActivity extends BaseInitActivity {
+    private static final String TAG = "ConferenceInvite";
+    private static final int STATE_UNCHECKED = 0;
+    private static final int STATE_CHECKED = 1;
+    private static final int STATE_CHECKED_UNCHANGEABLE = 2;
+
+    private List<KV<String, Integer>> contacts = new ArrayList<>();
+    private ContactsAdapter contactsAdapter;
+    private TextView mBtnStart;
+    private ListView mListView;
+
+    @Override
+    protected int getLayoutId() {
+        return R.layout.activity_conference_invite;
+    }
+
+    @Override
+    protected void initView(Bundle savedInstanceState) {
+        super.initView(savedInstanceState);
+        mBtnStart = findViewById(R.id.btn_start);
+        mBtnStart.setText(String.format(getString(R.string.button_start_video_conference), 0));
+
+        contactsAdapter = new ContactsAdapter(mContext, contacts);
+        mListView = findViewById(R.id.listView);
+        mListView.setAdapter(contactsAdapter);
+
+        addHeader();
+    }
+
+    @Override
+    protected void initListener() {
+        super.initListener();
+        contactsAdapter.checkItemChangeCallback = new ICheckItemChangeCallback() {
+            @Override
+            public void onCheckedItemChanged(View v, String username, int state) {
+                int count = getSelectMembers().length;
+                mBtnStart.setText(String.format(getString(R.string.button_start_video_conference), count));
+            }
+        };
+    }
+
+    @Override
+    protected void initData() {
+        super.initData();
+
+    }
+
+    private String[] getSelectMembers() {
+        List<String> results = new ArrayList<>();
+        for(int i = 0; i < contacts.size(); i++) {
+            KV<String, Integer> item = contacts.get(i);
+            if(item.second == STATE_CHECKED) {
+                results.add(item.first);
+            }
+        }
+        return (String[]) results.toArray();
+    }
+
+    private void addHeader() {
+        View headerView = LayoutInflater.from(mContext).inflate(R.layout.ease_search_bar, null);
+        EditText query = headerView.findViewById(R.id.query);
+        ImageView queryClear = headerView.findViewById(R.id.search_clear);
+        query.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                contactsAdapter.filter(s);
+                if(!TextUtils.isEmpty(s)) {
+                    queryClear.setVisibility(View.VISIBLE);
+                }else {
+                    queryClear.setVisibility(View.GONE);
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
+        queryClear.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                query.getText().clear();
+            }
+        });
+        mListView.addHeaderView(headerView);
+    }
+
+    private class ContactsAdapter extends BaseAdapter {
+        private Context context;
+        private List<KV<String, Integer>> filteredContacts;
+        private ContactFilter mContactFilter;
+        public ICheckItemChangeCallback checkItemChangeCallback;
+
+
+        public ContactsAdapter(Context context, List<KV<String, Integer>> contacts) {
+            this.context = context;
+            this.filteredContacts = contacts;
+        }
+
+        @Override
+        public int getCount() {
+            return filteredContacts == null ? 0 : filteredContacts.size();
+        }
+
+        @Override
+        public Object getItem(int position) {
+            return filteredContacts.get(position);
+        }
+
+        @Override
+        public long getItemId(int position) {
+            return position;
+        }
+
+        @Override
+        public View getView(int position, View convertView, ViewGroup parent) {
+            View contentView = convertView;
+            ViewHolder viewHolder = null;
+            if(contentView == null) {
+                contentView = LayoutInflater.from(mContext).inflate(R.layout.em_contact_item, null);
+                viewHolder = new ViewHolder(contentView);
+                contentView.setTag(viewHolder);
+            }else {
+                viewHolder = (ViewHolder) contentView.getTag();
+            }
+            viewHolder.reset();
+
+            KV<String, Integer> contact = filteredContacts.get(position);
+            String userName = contact.first;
+            EaseUserUtils.setUserAvatar(mContext, userName, viewHolder.headerImage);
+            EaseUserUtils.setUserNick(userName, viewHolder.nameText);
+            switch (contact.second) {
+                case STATE_CHECKED_UNCHANGEABLE :
+                    viewHolder.checkBox.setButtonDrawable(R.drawable.em_checkbox_bg_gray_selector);
+                    viewHolder.checkBox.setChecked(true);
+                    viewHolder.checkBox.setClickable(false);
+                    break;
+                default:
+                    ViewHolder finalViewHolder = viewHolder;
+                    contentView.setOnClickListener(view -> {
+                        finalViewHolder.checkBox.toggle();
+                    });
+                    viewHolder.checkBox.setButtonDrawable(R.drawable.em_checkbox_bg_selector);
+                    viewHolder.checkBox.setChecked(contact.second == STATE_CHECKED);
+                    viewHolder.checkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                        @Override
+                        public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                            contact.second = isChecked ? STATE_CHECKED : STATE_UNCHECKED;
+                            if(checkItemChangeCallback != null) {
+                                checkItemChangeCallback.onCheckedItemChanged(buttonView, contact.first, contact.second);
+                            }
+                        }
+                    });
+
+                    break;
+            }
+
+            return contentView;
+        }
+
+        public void filter(CharSequence constraint) {
+            if(mContactFilter == null) {
+                mContactFilter = new ContactFilter(filteredContacts);
+            }
+
+            mContactFilter.filter(constraint, new IFilterCallback() {
+                @Override
+                public void onFilter(List<KV<String, Integer>> filtered) {
+                    filteredContacts.clear();
+                    filteredContacts.addAll(filtered);
+                    if(!filtered.isEmpty()) {
+                        notifyDataSetChanged();
+                    }else {
+                        notifyDataSetInvalidated();
+                    }
+                }
+            });
+        }
+
+        private class ViewHolder {
+            View view;
+            ImageView headerImage;
+            TextView nameText;
+            CheckBox checkBox;
+
+            public ViewHolder(View view) {
+                this.view = view;
+                headerImage = view.findViewById(R.id.head_icon);
+                nameText = view.findViewById(R.id.name);
+                checkBox = view.findViewById(R.id.checkbox);
+            }
+
+            public void reset() {
+                view.setOnClickListener(null);
+                nameText.setText(null);
+                checkBox.setOnCheckedChangeListener(null);
+                checkBox.setChecked(false);
+            }
+        }
+
+        private class ContactFilter extends Filter {
+            private IFilterCallback mFilterCallback;
+            private List<KV<String, Integer>> contacts;
+
+            public ContactFilter(List<KV<String, Integer>> contacts) {
+                this.contacts = contacts;
+            }
+
+            public void filter(CharSequence constraint, IFilterCallback callback) {
+                this.mFilterCallback = callback;
+                super.filter(constraint);
+            }
+
+            @Override
+            protected FilterResults performFiltering(CharSequence prefix) {
+                FilterResults results = new FilterResults();
+                if(prefix == null || prefix.length() == 0) {
+                    results.values = contacts;
+                    results.count = contacts.size();
+                }else {
+                    String prefixString = prefix.toString();
+                    int count = contacts.size();
+                    List<KV<String, Integer>> newValues = new ArrayList<>();
+                    for(int i = 0; i < count; i++) {
+                        KV<String, Integer> user = contacts.get(i);
+                        String username = user.first;
+                        if(username.startsWith(prefixString)) {
+                            newValues.add(user);
+                        }else {
+                            String[] splits = username.split(" ");
+                            if(splits.length == 0) {
+                                continue;
+                            }
+                            List<String> words = new ArrayList<>();
+                            for(int j = splits.length - 1; j >= 0 ; j--) {
+                                if(!splits[j].isEmpty()) {
+                                    words.add(splits[j]);
+                                }else {
+                                    break;
+                                }
+                            }
+                            for (String word : words) {
+                                if(word.startsWith(prefixString)) {
+                                    newValues.add(user);
+                                    break;
+                                }
+                            }
+                        }
+                    }
+                    results.values = newValues;
+                    results.count = newValues.size();
+                }
+                return results;
+            }
+
+            @Override
+            protected void publishResults(CharSequence constraint, FilterResults results) {
+                List<KV<String, Integer>> result = results.values != null ? (List<KV<String, Integer>>) results.values : new ArrayList<>();
+                if(mFilterCallback != null) {
+                    mFilterCallback.onFilter(result);
+                }
+            }
+        }
+
+    }
+
+    interface IFilterCallback {
+        void onFilter(List<KV<String, Integer>> filtered);
+    }
+
+    public interface ICheckItemChangeCallback {
+        void onCheckedItemChanged(View v, String username, int state);
+    }
+
+    private class KV<K, V>{
+        private K first;
+        private V second;
+
+        public K getFirst() {
+            return first;
+        }
+
+        public void setFirst(K first) {
+            this.first = first;
+        }
+
+        public V getSecond() {
+            return second;
+        }
+
+        public void setSecond(V second) {
+            this.second = second;
+        }
+    }
+}
