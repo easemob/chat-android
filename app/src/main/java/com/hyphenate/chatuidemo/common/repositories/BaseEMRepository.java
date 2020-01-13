@@ -6,6 +6,7 @@ import androidx.lifecycle.MutableLiveData;
 import com.hyphenate.chat.EMChatManager;
 import com.hyphenate.chat.EMChatRoomManager;
 import com.hyphenate.chat.EMClient;
+import com.hyphenate.chat.EMConferenceManager;
 import com.hyphenate.chat.EMContactManager;
 import com.hyphenate.chat.EMGroupManager;
 import com.hyphenate.chatuidemo.DemoApp;
@@ -80,6 +81,14 @@ public class BaseEMRepository {
      */
     public EMChatRoomManager getChatRoomManager() {
         return DemoHelper.getInstance().getChatroomManager();
+    }
+
+    /**
+     * EMConferenceManager
+     * @return
+     */
+    public EMConferenceManager getConferenceManager() {
+        return DemoHelper.getInstance().getConferenceManager();
     }
 
     /**

@@ -1,12 +1,13 @@
 package com.hyphenate.chatuidemo.section.chat;
 
+import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
@@ -18,15 +19,20 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import androidx.lifecycle.ViewModelProvider;
+
 import com.hyphenate.chatuidemo.R;
+import com.hyphenate.chatuidemo.common.DemoConstant;
+import com.hyphenate.chatuidemo.common.interfaceOrImplement.OnResourceParseCallback;
 import com.hyphenate.chatuidemo.section.base.BaseInitActivity;
+import com.hyphenate.chatuidemo.section.chat.model.KV;
+import com.hyphenate.chatuidemo.section.chat.viewmodel.ConferenceInviteViewModel;
 import com.hyphenate.easeui.utils.EaseUserUtils;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ConferenceInviteActivity extends BaseInitActivity {
+public class ConferenceInviteActivity extends BaseInitActivity implements View.OnClickListener {
     private static final String TAG = "ConferenceInvite";
     private static final int STATE_UNCHECKED = 0;
     private static final int STATE_CHECKED = 1;
@@ -34,8 +40,10 @@ public class ConferenceInviteActivity extends BaseInitActivity {
 
     private List<KV<String, Integer>> contacts = new ArrayList<>();
     private ContactsAdapter contactsAdapter;
+    private TextView btnCancel;
     private TextView mBtnStart;
     private ListView mListView;
+    private String groupId;
 
     @Override
     protected int getLayoutId() {
@@ -43,8 +51,15 @@ public class ConferenceInviteActivity extends BaseInitActivity {
     }
 
     @Override
+    protected void initIntent(Intent intent) {
+        super.initIntent(intent);
+        groupId = intent.getStringExtra(DemoConstant.EXTRA_CONFERENCE_GROUP_ID);
+    }
+
+    @Override
     protected void initView(Bundle savedInstanceState) {
         super.initView(savedInstanceState);
+        btnCancel = findViewById(R.id.btn_cancel);
         mBtnStart = findViewById(R.id.btn_start);
         mBtnStart.setText(String.format(getString(R.string.button_start_video_conference), 0));
 
@@ -65,20 +80,38 @@ public class ConferenceInviteActivity extends BaseInitActivity {
                 mBtnStart.setText(String.format(getString(R.string.button_start_video_conference), count));
             }
         };
+        btnCancel.setOnClickListener(this);
+        mBtnStart.setOnClickListener(this);
     }
 
     @Override
     protected void initData() {
         super.initData();
+        ConferenceInviteViewModel viewModel = new ViewModelProvider(this).get(ConferenceInviteViewModel.class);
+        viewModel.getConferenceInvite().observe(this, response -> {
+            parseResource(response, new OnResourceParseCallback<List<KV<String, Integer>>>() {
+                @Override
+                public void onSuccess(List<KV<String, Integer>> data) {
+                    contacts = data;
+                    contactsAdapter.notifyDataSetChanged();
+                }
+            });
+        });
+        viewModel.getConferenceMembers(groupId);
+    }
 
+    @Override
+    public void onBackPressed() {
+        setResult(Activity.RESULT_CANCELED);
+        super.onBackPressed();
     }
 
     private String[] getSelectMembers() {
         List<String> results = new ArrayList<>();
         for(int i = 0; i < contacts.size(); i++) {
             KV<String, Integer> item = contacts.get(i);
-            if(item.second == STATE_CHECKED) {
-                results.add(item.first);
+            if(item.getSecond() == STATE_CHECKED) {
+                results.add(item.getFirst());
             }
         }
         return (String[]) results.toArray();
@@ -116,6 +149,27 @@ public class ConferenceInviteActivity extends BaseInitActivity {
             }
         });
         mListView.addHeaderView(headerView);
+    }
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.btn_cancel :
+                setResult(Activity.RESULT_CANCELED);
+                finish();
+                break;
+            case R.id.btn_start :
+                String[] members = getSelectMembers();
+                if(members.length == 0) {
+                    showToast(R.string.tips_select_contacts_first);
+                    return;
+                }
+                Intent intent = getIntent();
+                intent.putExtra("members", members);
+                setResult(RESULT_OK, intent);
+                finish();
+                break;
+        }
     }
 
     private class ContactsAdapter extends BaseAdapter {
@@ -159,10 +213,10 @@ public class ConferenceInviteActivity extends BaseInitActivity {
             viewHolder.reset();
 
             KV<String, Integer> contact = filteredContacts.get(position);
-            String userName = contact.first;
+            String userName = contact.getFirst();
             EaseUserUtils.setUserAvatar(mContext, userName, viewHolder.headerImage);
             EaseUserUtils.setUserNick(userName, viewHolder.nameText);
-            switch (contact.second) {
+            switch (contact.getSecond()) {
                 case STATE_CHECKED_UNCHANGEABLE :
                     viewHolder.checkBox.setButtonDrawable(R.drawable.em_checkbox_bg_gray_selector);
                     viewHolder.checkBox.setChecked(true);
@@ -174,13 +228,13 @@ public class ConferenceInviteActivity extends BaseInitActivity {
                         finalViewHolder.checkBox.toggle();
                     });
                     viewHolder.checkBox.setButtonDrawable(R.drawable.em_checkbox_bg_selector);
-                    viewHolder.checkBox.setChecked(contact.second == STATE_CHECKED);
+                    viewHolder.checkBox.setChecked(contact.getSecond() == STATE_CHECKED);
                     viewHolder.checkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                         @Override
                         public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                            contact.second = isChecked ? STATE_CHECKED : STATE_UNCHECKED;
+                            contact.setSecond(isChecked ? STATE_CHECKED : STATE_UNCHECKED);
                             if(checkItemChangeCallback != null) {
-                                checkItemChangeCallback.onCheckedItemChanged(buttonView, contact.first, contact.second);
+                                checkItemChangeCallback.onCheckedItemChanged(buttonView, contact.getFirst(), contact.getSecond());
                             }
                         }
                     });
@@ -191,7 +245,12 @@ public class ConferenceInviteActivity extends BaseInitActivity {
             return contentView;
         }
 
-        public void filter(CharSequence constraint) {
+        public void setData(List<KV<String, Integer>> data) {
+            this.filteredContacts = data;
+            notifyDataSetChanged();
+        }
+
+        void filter(CharSequence constraint) {
             if(mContactFilter == null) {
                 mContactFilter = new ContactFilter(filteredContacts);
             }
@@ -256,7 +315,7 @@ public class ConferenceInviteActivity extends BaseInitActivity {
                     List<KV<String, Integer>> newValues = new ArrayList<>();
                     for(int i = 0; i < count; i++) {
                         KV<String, Integer> user = contacts.get(i);
-                        String username = user.first;
+                        String username = user.getFirst();
                         if(username.startsWith(prefixString)) {
                             newValues.add(user);
                         }else {
@@ -305,24 +364,4 @@ public class ConferenceInviteActivity extends BaseInitActivity {
         void onCheckedItemChanged(View v, String username, int state);
     }
 
-    private class KV<K, V>{
-        private K first;
-        private V second;
-
-        public K getFirst() {
-            return first;
-        }
-
-        public void setFirst(K first) {
-            this.first = first;
-        }
-
-        public V getSecond() {
-            return second;
-        }
-
-        public void setSecond(V second) {
-            this.second = second;
-        }
-    }
 }
