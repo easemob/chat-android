@@ -14,6 +14,7 @@ import android.provider.MediaStore;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -207,8 +208,8 @@ public class EaseChatFragment extends EaseBaseFragment implements View.OnClickLi
     }
 
     private void initData() {
-        initChatType();
         initConversation();
+        initChatType();
         sendForwardMsg();
         refreshMessages();
         hideNickname();
@@ -410,6 +411,7 @@ public class EaseChatFragment extends EaseBaseFragment implements View.OnClickLi
         if(messageChangeListener != null) {
             messageChangeListener.onMessageChange(EaseConstant.MESSAGE_CHANGE_RECEIVE);
         }
+        boolean refresh = false;
         for (EMMessage message : messages) {
             String username = null;
             // group message
@@ -421,9 +423,13 @@ public class EaseChatFragment extends EaseBaseFragment implements View.OnClickLi
             }
             // if the message is for current conversation
             if (username.equals(toChatUsername) || message.getTo().equals(toChatUsername) || message.conversationId().equals(toChatUsername)) {
-                refreshToLatest();
+                refresh = true;
             }
         }
+        if(refresh) {
+            refreshToLatest();
+        }
+
     }
 
     /**
@@ -724,7 +730,7 @@ public class EaseChatFragment extends EaseBaseFragment implements View.OnClickLi
      */
     public void refreshToLatest() {
         List<EMMessage> messages = conversation.getAllMessages();
-        boolean refresh = currentMessages == null || messages.size() > currentMessages.size();
+        boolean refresh = currentMessages != null && messages.size() > currentMessages.size();
         refreshMessages();
         if(refresh) {
             SeekToPosition(messages.size() - 1);
@@ -826,6 +832,9 @@ public class EaseChatFragment extends EaseBaseFragment implements View.OnClickLi
         if(isInitMsg) {
             position = conversation.getAllMessages().size() - 1;
             isInitMsg = false;
+        }
+        if(position < 0) {
+            position = 0;
         }
         RecyclerView.LayoutManager manager = messageList.getLayoutManager();
         if(manager instanceof LinearLayoutManager) {

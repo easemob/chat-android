@@ -130,6 +130,7 @@
     <string name="delete_video">删除视频</string>
     <string name="delete_conversation">删除会话</string>
     <string name="copy_message">复制消息</string>
+    <string name="em_send_forward_msg_success">已发送</string>
 
 
 </resources>

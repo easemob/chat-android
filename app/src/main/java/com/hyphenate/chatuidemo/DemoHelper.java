@@ -8,6 +8,7 @@ import android.text.TextUtils;
 import android.util.Log;
 
 import com.hyphenate.EMCallBack;
+import com.hyphenate.chat.EMChatManager;
 import com.hyphenate.chat.EMChatRoomManager;
 import com.hyphenate.chat.EMClient;
 import com.hyphenate.chat.EMConferenceManager;
@@ -95,6 +96,14 @@ public class DemoHelper {
      */
     public EMConferenceManager getConferenceManager() {
         return getEMClient().conferenceManager();
+    }
+
+    /**
+     * get EMChatManager
+     * @return
+     */
+    public EMChatManager getChatManager() {
+        return getEMClient().chatManager();
     }
 
     public String getCurrentUser() {

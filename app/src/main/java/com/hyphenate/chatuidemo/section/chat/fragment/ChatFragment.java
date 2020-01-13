@@ -5,16 +5,10 @@ import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.Intent;
-import android.util.Log;
-import android.view.ContextMenu;
-import android.view.Gravity;
 import android.view.MenuItem;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
-import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.view.menu.MenuBuilder;
 import androidx.appcompat.view.menu.MenuPopupHelper;
@@ -41,6 +35,7 @@ import com.hyphenate.chatuidemo.section.chat.viewholder.ChatVideoCallViewHolder;
 import com.hyphenate.chatuidemo.section.chat.viewholder.ChatVoiceCallViewHolder;
 import com.hyphenate.chatuidemo.section.chat.viewmodel.MessageViewModel;
 import com.hyphenate.chatuidemo.section.friends.activity.ContactDetailActivity;
+import com.hyphenate.chatuidemo.section.friends.activity.ForwardMessageActivity;
 import com.hyphenate.easeui.constants.EaseConstant;
 import com.hyphenate.easeui.domain.EaseUser;
 import com.hyphenate.easeui.interfaces.IChatAdapterProvider;
@@ -52,7 +47,6 @@ import com.hyphenate.easeui.ui.chat.EaseChatFragment;
 import com.hyphenate.easeui.viewholder.EaseChatRowViewHolder;
 import com.hyphenate.easeui.viewholder.EaseViewHolderHelper;
 import com.hyphenate.easeui.widget.EaseChatInputMenu;
-import com.hyphenate.easeui.widget.EaseRecyclerView;
 import com.hyphenate.exceptions.HyphenateException;
 
 import java.util.Map;
@@ -148,7 +142,7 @@ public class ChatFragment extends EaseChatFragment implements EaseChatFragment.O
                         refreshMessages();
                         break;
                     case R.id.action_chat_forward ://分享
-
+                        ForwardMessageActivity.actionStart(mContext, message.getMsgId());
                         break;
                     case R.id.action_chat_recall ://撤回
                         if(messageChangeListener != null) {

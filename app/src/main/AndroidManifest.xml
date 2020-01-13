@@ -305,7 +305,7 @@
         <activity android:name=".section.chat.ConferenceActivity" />
         <activity android:name=".section.chat.ConferenceInviteActivity" />
         <activity android:name=".section.chat.PickAtUserActivity" />
-        <activity android:name=".section.friends.activity.ContactListActivity" />
+        <activity android:name=".section.friends.activity.ForwardMessageActivity" />
 
     </application>
 

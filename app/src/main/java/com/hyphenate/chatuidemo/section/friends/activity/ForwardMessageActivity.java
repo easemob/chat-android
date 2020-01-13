@@ -1,6 +1,5 @@
 package com.hyphenate.chatuidemo.section.friends.activity;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -12,14 +11,16 @@ import android.widget.TextView;
 import com.hyphenate.chatuidemo.DemoApp;
 import com.hyphenate.chatuidemo.R;
 import com.hyphenate.chatuidemo.common.interfaceOrImplement.OnResourceParseCallback;
+import com.hyphenate.chatuidemo.common.manager.PushAndMessageHelper;
+import com.hyphenate.chatuidemo.section.base.BaseDialogFragment;
 import com.hyphenate.chatuidemo.section.base.BaseInitActivity;
 import com.hyphenate.chatuidemo.section.chat.EmChatActivity;
 import com.hyphenate.chatuidemo.section.chat.adapter.PickUserAdapter;
+import com.hyphenate.chatuidemo.section.dialog.SimpleDialogFragment;
 import com.hyphenate.chatuidemo.section.friends.viewmodels.ContactListViewModel;
 import com.hyphenate.easeui.domain.EaseUser;
 import com.hyphenate.easeui.interfaces.OnItemClickListener;
 import com.hyphenate.easeui.utils.EaseCommonUtils;
-import com.hyphenate.easeui.widget.EaseAlertDialog;
 import com.hyphenate.easeui.widget.EaseSidebar;
 import com.hyphenate.easeui.widget.EaseTitleBar;
 import com.scwang.smartrefresh.layout.SmartRefreshLayout;
@@ -32,7 +33,7 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-public class ContactListActivity extends BaseInitActivity implements OnRefreshListener, OnItemClickListener, EaseSidebar.OnTouchEventListener, EaseTitleBar.OnBackPressListener {
+public class ForwardMessageActivity extends BaseInitActivity implements OnRefreshListener, OnItemClickListener, EaseSidebar.OnTouchEventListener, EaseTitleBar.OnBackPressListener {
     private EaseTitleBar mEaseTitleBar;
     private SmartRefreshLayout mSrlRefresh;
     private RecyclerView mRvContactList;
@@ -42,8 +43,8 @@ public class ContactListActivity extends BaseInitActivity implements OnRefreshLi
     private ContactListViewModel mViewModel;
     private String mForwardMsgId;
 
-    public static void start(Context context, String forward_msg_id) {
-        Intent starter = new Intent(context, ContactListActivity.class);
+    public static void actionStart(Context context, String forward_msg_id) {
+        Intent starter = new Intent(context, ForwardMessageActivity.class);
         starter.putExtra("forward_msg_id", forward_msg_id);
         context.startActivity(starter);
     }
@@ -66,6 +67,7 @@ public class ContactListActivity extends BaseInitActivity implements OnRefreshLi
         mRvContactList = findViewById(R.id.rv_contact_list);
         mEaseSidebar = findViewById(R.id.side_bar_pick_user);
         mFloatingHeader = findViewById(R.id.floating_header);
+        mEaseTitleBar = findViewById(R.id.title_bar_contact_list);
 
         mRvContactList.setLayoutManager(new LinearLayoutManager(mContext));
         mAdapter = new PickUserAdapter();
@@ -110,22 +112,13 @@ public class ContactListActivity extends BaseInitActivity implements OnRefreshLi
     @Override
     public void onItemClick(View view, int position) {
         EaseUser user = mAdapter.getData().get(position);
-        new EaseAlertDialog(this, null, getString(R.string.confirm_forward_to, user.getNickname()), null, new EaseAlertDialog.AlertDialogUser() {
+        SimpleDialogFragment.showDialog(mContext, getString(R.string.confirm_forward_to, user.getNickname()), new BaseDialogFragment.OnConfirmClickListener() {
             @Override
-            public void onResult(boolean confirmed, Bundle bundle) {
-                if (confirmed) {
-                    if (user == null)
-                        return;
-                    finishChatActivity();
-                    Intent intent = new Intent(mContext, EmChatActivity.class);
-                    // it is single chat
-                    intent.putExtra("userId", user.getUsername());
-                    intent.putExtra("forward_msg_id", mForwardMsgId);
-                    startActivity(intent);
-                    finish();
-                }
+            public void onConfirmClick(View view) {
+                PushAndMessageHelper.sendForwardMessage(user.getUsername(), mForwardMsgId);
+                finish();
             }
-        }, true).show();
+        });
     }
 
     private void finishChatActivity() {

@@ -43,7 +43,7 @@ public class PickAtUserActivity extends BaseInitActivity implements OnRefreshLis
     private TextView mFloatingHeader;
     private String mGroupId;
     private GroupContactViewModel mViewModel;
-    private PickUserAdapter mAdapter;
+    protected PickUserAdapter mAdapter;
 
     public static void actionStartForResult(Fragment fragment, String groupId, int requestCode) {
         Intent starter = new Intent(fragment.getContext(), PickAtUserActivity.class);

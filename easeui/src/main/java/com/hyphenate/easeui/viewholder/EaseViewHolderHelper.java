@@ -125,7 +125,6 @@ public class EaseViewHolderHelper {
                                                       MessageListItemClickListener listener, EaseMessageListItemStyle itemStyle, AddMoreViewHolderProvider addMoreViewHolder) {
         String type = null;
         boolean isSender = false;
-        Log.e("TAG", "viewTypeMap2 = "+viewTypeMap2.toString());
         if(viewTypeMap2.keySet().contains(viewType)) {
             type = viewTypeMap2.get(viewType);
             isSender = true;

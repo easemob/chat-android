@@ -30,6 +30,7 @@ public class EmChatActivity extends BaseInitActivity implements EaseTitleBar.OnB
     private String toChatUsername;
     private int chatType;
     private EaseChatFragment fragment;
+    private String forwardMsgId;
 
     public static void actionStart(Context context, String userId, int chatType) {
         Intent intent = new Intent(context, EmChatActivity.class);
@@ -48,6 +49,7 @@ public class EmChatActivity extends BaseInitActivity implements EaseTitleBar.OnB
         super.initIntent(intent);
         toChatUsername = intent.getStringExtra(EaseConstant.EXTRA_USER_ID);
         chatType = intent.getIntExtra(EaseConstant.EXTRA_CHAT_TYPE, EaseConstant.CHATTYPE_SINGLE);
+        forwardMsgId = intent.getStringExtra(DemoConstant.FORWARD_MSG_ID);
     }
 
     @Override
@@ -58,6 +60,7 @@ public class EmChatActivity extends BaseInitActivity implements EaseTitleBar.OnB
         Bundle bundle = new Bundle();
         bundle.putString(EaseConstant.EXTRA_USER_ID, toChatUsername);
         bundle.putInt(EaseConstant.EXTRA_CHAT_TYPE, chatType);
+        bundle.putString(DemoConstant.FORWARD_MSG_ID, forwardMsgId);
         fragment.setArguments(bundle);
         getSupportFragmentManager().beginTransaction().replace(R.id.fl_fragment, fragment, "chat").commit();
     }
