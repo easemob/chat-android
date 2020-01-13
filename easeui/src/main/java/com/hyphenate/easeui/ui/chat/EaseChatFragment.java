@@ -136,6 +136,7 @@ public class EaseChatFragment extends EaseBaseFragment implements View.OnClickLi
     private Handler typingHandler;
     protected OnMessageChangeListener messageChangeListener;
     private List<EMMessage> currentMessages;
+    private IChatTitleProvider titleProvider;//provide title to activity's title bar
 
     @Nullable
     @Override
@@ -206,6 +207,7 @@ public class EaseChatFragment extends EaseBaseFragment implements View.OnClickLi
     }
 
     private void initData() {
+        initChatType();
         initConversation();
         sendForwardMsg();
         refreshMessages();
@@ -593,12 +595,28 @@ public class EaseChatFragment extends EaseBaseFragment implements View.OnClickLi
 
 //============================== view control start ===========================
 
+
+    private void initChatType() {
+        if(isSingleChat()) {
+            setTitleBarText(toChatUsername);
+        }else if(isGroupChat()) {
+            EMGroup group = EMClient.getInstance().groupManager().getGroup(toChatUsername);
+            if (group != null){
+                setTitleBarText(group.getGroupName());
+            }
+        }else if(isChatRoomChat()) {
+            onChatRoomViewCreation();
+        }
+    }
+
     /**
      * set titleBar title
      * @param title
      */
     protected void setTitleBarText(String title) {
-
+        if(titleProvider != null) {
+            titleProvider.provideTitle(chatType, title);
+        }
     }
 
     protected void finishRefresh() {
@@ -670,6 +688,22 @@ public class EaseChatFragment extends EaseBaseFragment implements View.OnClickLi
      */
     public interface OnMessageChangeListener {
         void onMessageChange(String change);
+    }
+
+    public void setIChatTitleProvider(IChatTitleProvider titleProvider) {
+        this.titleProvider = titleProvider;
+    }
+
+    /**
+     * 聊天标题
+     */
+    public interface IChatTitleProvider {
+        /**
+         * 标题
+         * @param chatType
+         * @param title
+         */
+        void provideTitle(int chatType, String title);
     }
 
 

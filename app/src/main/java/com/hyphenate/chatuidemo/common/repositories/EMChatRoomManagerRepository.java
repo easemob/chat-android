@@ -1,5 +1,7 @@
 package com.hyphenate.chatuidemo.common.repositories;
 
+import android.util.Log;
+
 import androidx.annotation.NonNull;
 import androidx.lifecycle.LiveData;
 
@@ -23,6 +25,7 @@ public class EMChatRoomManagerRepository extends BaseEMRepository{
                     @Override
                     public void onSuccess(EMPageResult<EMChatRoom> value) {
                         if(value != null && value.getData() != null) {
+                            Log.e("TAG", "chatRooms = "+value.getData().toString());
                             callBack.onSuccess(createLiveData(value.getData()));
                         }else {
                             callBack.onError(ErrorCode.EM_ERR_UNKNOWN);

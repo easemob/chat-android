@@ -6,17 +6,24 @@ import android.os.Bundle;
 import android.view.MotionEvent;
 import android.view.View;
 
+import androidx.lifecycle.LiveData;
+
 import com.hyphenate.chat.EMChatRoom;
 import com.hyphenate.chat.EMConversation;
 import com.hyphenate.chat.EMGroup;
 import com.hyphenate.chatuidemo.DemoHelper;
 import com.hyphenate.chatuidemo.R;
+import com.hyphenate.chatuidemo.common.DemoConstant;
+import com.hyphenate.chatuidemo.common.db.DemoDbHelper;
 import com.hyphenate.chatuidemo.section.base.BaseInitActivity;
 import com.hyphenate.chatuidemo.section.chat.fragment.ChatFragment;
 import com.hyphenate.easeui.constants.EaseConstant;
+import com.hyphenate.easeui.domain.EaseUser;
 import com.hyphenate.easeui.ui.chat.EaseChatFragment;
 import com.hyphenate.easeui.utils.EaseCommonUtils;
 import com.hyphenate.easeui.widget.EaseTitleBar;
+
+import java.util.List;
 
 public class EmChatActivity extends BaseInitActivity implements EaseTitleBar.OnBackPressListener {
     private EaseTitleBar titleBarMessage;
@@ -59,12 +66,23 @@ public class EmChatActivity extends BaseInitActivity implements EaseTitleBar.OnB
     protected void initListener() {
         super.initListener();
         titleBarMessage.setOnBackPressListener(this);
-    }
-
-    @Override
-    protected void initData() {
-        super.initData();
-        titleBarMessage.setTitle(getChatName());
+        fragment.setIChatTitleProvider(new EaseChatFragment.IChatTitleProvider() {
+            @Override
+            public void provideTitle(int chatType, String title) {
+                if(chatType == DemoConstant.CHATTYPE_SINGLE) {
+                    LiveData<List<EaseUser>> titleObservable = DemoDbHelper.getInstance(mContext).getUserDao().loadUserById(title);
+                    titleObservable.observe(mContext, users -> {
+                        if(users != null && !users.isEmpty()) {
+                            titleBarMessage.setTitle(users.get(0).getNickname());
+                        }else {
+                            titleBarMessage.setTitle(title);
+                        }
+                    });
+                }else {
+                    titleBarMessage.setTitle(title);
+                }
+            }
+        });
     }
 
     @Override
@@ -72,7 +90,6 @@ public class EmChatActivity extends BaseInitActivity implements EaseTitleBar.OnB
         super.onNewIntent(intent);
         if(intent != null) {
             initIntent(intent);
-
         }
     }
 
@@ -81,15 +98,4 @@ public class EmChatActivity extends BaseInitActivity implements EaseTitleBar.OnB
         onBackPressed();
     }
 
-    public String getChatName() {
-        EMConversation.EMConversationType type = EaseCommonUtils.getConversationType(chatType);
-        if(type == EMConversation.EMConversationType.ChatRoom) {
-            EMChatRoom chatRoom = DemoHelper.getInstance().getChatroomManager().getChatRoom(toChatUsername);
-            return chatRoom == null ? toChatUsername : chatRoom.getName();
-        }else if(type == EMConversation.EMConversationType.GroupChat) {
-            EMGroup group = DemoHelper.getInstance().getGroupManager().getGroup(toChatUsername);
-            return group == null ? toChatUsername : group.getGroupName();
-        }
-        return toChatUsername;
-    }
 }

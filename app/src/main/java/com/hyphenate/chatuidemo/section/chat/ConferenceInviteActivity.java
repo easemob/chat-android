@@ -28,11 +28,12 @@ import com.hyphenate.chatuidemo.section.base.BaseInitActivity;
 import com.hyphenate.chatuidemo.section.chat.model.KV;
 import com.hyphenate.chatuidemo.section.chat.viewmodel.ConferenceInviteViewModel;
 import com.hyphenate.easeui.utils.EaseUserUtils;
+import com.hyphenate.easeui.widget.EaseTitleBar;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class ConferenceInviteActivity extends BaseInitActivity implements View.OnClickListener {
+public class ConferenceInviteActivity extends BaseInitActivity implements View.OnClickListener, EaseTitleBar.OnBackPressListener {
     private static final String TAG = "ConferenceInvite";
     private static final int STATE_UNCHECKED = 0;
     private static final int STATE_CHECKED = 1;
@@ -40,7 +41,7 @@ public class ConferenceInviteActivity extends BaseInitActivity implements View.O
 
     private List<KV<String, Integer>> contacts = new ArrayList<>();
     private ContactsAdapter contactsAdapter;
-    private TextView btnCancel;
+    private EaseTitleBar mTitleBar;
     private TextView mBtnStart;
     private ListView mListView;
     private String groupId;
@@ -59,7 +60,7 @@ public class ConferenceInviteActivity extends BaseInitActivity implements View.O
     @Override
     protected void initView(Bundle savedInstanceState) {
         super.initView(savedInstanceState);
-        btnCancel = findViewById(R.id.btn_cancel);
+        mTitleBar = findViewById(R.id.title_bar);
         mBtnStart = findViewById(R.id.btn_start);
         mBtnStart.setText(String.format(getString(R.string.button_start_video_conference), 0));
 
@@ -80,8 +81,8 @@ public class ConferenceInviteActivity extends BaseInitActivity implements View.O
                 mBtnStart.setText(String.format(getString(R.string.button_start_video_conference), count));
             }
         };
-        btnCancel.setOnClickListener(this);
         mBtnStart.setOnClickListener(this);
+        mTitleBar.setOnBackPressListener(this);
     }
 
     @Override
@@ -93,7 +94,7 @@ public class ConferenceInviteActivity extends BaseInitActivity implements View.O
                 @Override
                 public void onSuccess(List<KV<String, Integer>> data) {
                     contacts = data;
-                    contactsAdapter.notifyDataSetChanged();
+                    contactsAdapter.setData(contacts);
                 }
             });
         });
@@ -114,7 +115,7 @@ public class ConferenceInviteActivity extends BaseInitActivity implements View.O
                 results.add(item.getFirst());
             }
         }
-        return (String[]) results.toArray();
+        return results.toArray(new String[0]);
     }
 
     private void addHeader() {
@@ -146,6 +147,7 @@ public class ConferenceInviteActivity extends BaseInitActivity implements View.O
             @Override
             public void onClick(View v) {
                 query.getText().clear();
+                hideKeyboard();
             }
         });
         mListView.addHeaderView(headerView);
@@ -154,10 +156,6 @@ public class ConferenceInviteActivity extends BaseInitActivity implements View.O
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
-            case R.id.btn_cancel :
-                setResult(Activity.RESULT_CANCELED);
-                finish();
-                break;
             case R.id.btn_start :
                 String[] members = getSelectMembers();
                 if(members.length == 0) {
@@ -172,16 +170,23 @@ public class ConferenceInviteActivity extends BaseInitActivity implements View.O
         }
     }
 
+    @Override
+    public void onBackPress(View view) {
+        onBackPressed();
+    }
+
     private class ContactsAdapter extends BaseAdapter {
         private Context context;
-        private List<KV<String, Integer>> filteredContacts;
+        private List<KV<String, Integer>> filteredContacts = new ArrayList<>();
+        private List<KV<String, Integer>> contacts = new ArrayList<>();
         private ContactFilter mContactFilter;
         public ICheckItemChangeCallback checkItemChangeCallback;
 
 
         public ContactsAdapter(Context context, List<KV<String, Integer>> contacts) {
             this.context = context;
-            this.filteredContacts = contacts;
+            this.contacts = contacts;
+            filteredContacts.addAll(contacts);
         }
 
         @Override
@@ -245,14 +250,28 @@ public class ConferenceInviteActivity extends BaseInitActivity implements View.O
             return contentView;
         }
 
+        @Override
+        public void notifyDataSetChanged() {
+            filteredContacts.clear();
+            filteredContacts.addAll(contacts);
+            notifyActual();
+        }
+
+        private void notifyActual() {
+            super.notifyDataSetChanged();
+        }
+
         public void setData(List<KV<String, Integer>> data) {
-            this.filteredContacts = data;
+            contacts = data;
+            if(data != null) {
+                this.filteredContacts.addAll(data);
+            }
             notifyDataSetChanged();
         }
 
         void filter(CharSequence constraint) {
             if(mContactFilter == null) {
-                mContactFilter = new ContactFilter(filteredContacts);
+                mContactFilter = new ContactFilter(contacts);
             }
 
             mContactFilter.filter(constraint, new IFilterCallback() {
@@ -261,7 +280,7 @@ public class ConferenceInviteActivity extends BaseInitActivity implements View.O
                     filteredContacts.clear();
                     filteredContacts.addAll(filtered);
                     if(!filtered.isEmpty()) {
-                        notifyDataSetChanged();
+                        notifyActual();
                     }else {
                         notifyDataSetInvalidated();
                     }

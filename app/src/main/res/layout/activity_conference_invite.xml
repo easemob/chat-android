@@ -1,41 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <RelativeLayout
+    <com.hyphenate.easeui.widget.EaseTitleBar
         android:id="@+id/title_bar"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/height_top_bar"
-        android:background="@android:color/white"
-        android:gravity="center_vertical">
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
-            android:text="@string/Select_the_contact"
-            android:textColor="#000"
-            android:textSize="@dimen/adaptive_18sp"
-            android:textStyle="bold" />
-
-        <TextView
-            android:id="@+id/btn_cancel"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_alignParentRight="true"
-            android:layout_marginBottom="4dip"
-            android:layout_marginRight="8dip"
-            android:layout_marginTop="4dip"
-            android:background="@drawable/ease_common_tab_bg"
-            android:clickable="true"
-            android:gravity="center_vertical"
-            android:onClick="onClick"
-            android:padding="8dip"
-            android:text="@string/cancel"
-            android:textColor="#1565C0"
-            android:textSize="@dimen/adaptive_18sp" />
-    </RelativeLayout>
+        android:layout_height="@dimen/em_common_title_bar_height"
+        app:titleBarDisplayHomeAsUpEnabled="true"
+        app:titleBarTitle="@string/Select_the_contact"/>
 
     <TextView
         android:id="@+id/btn_start"

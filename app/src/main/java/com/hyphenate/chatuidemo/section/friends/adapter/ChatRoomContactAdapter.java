@@ -43,9 +43,8 @@ public class ChatRoomContactAdapter extends EaseBaseRecyclerViewAdapter<EMChatRo
 
         @Override
         public void setData(EMChatRoom item, int position) {
-            String header = EaseCommonUtils.getLetter(item.getName());
-            Log.e("TAG", "chat room's name = "+header);
-            mName.setText(TextUtils.isEmpty(header) ? "" : header);
+            mName.setText(item.getName());
+            mAvatar.setImageResource(R.drawable.em_group_icon);
         }
     }
 }

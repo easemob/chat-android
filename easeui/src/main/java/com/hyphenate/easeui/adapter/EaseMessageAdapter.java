@@ -62,7 +62,7 @@ public class EaseMessageAdapter extends EaseBaseMessageAdapter<EMMessage> {
      * @return
      */
     private EMMessage getItemMessage(int position) {
-        if(mData != null) {
+        if(mData != null && !mData.isEmpty()) {
             return mData.get(position);
         }
         return null;

@@ -82,7 +82,8 @@
     <string name="em_friends_label">标签</string>
     <string name="em_friends_chat_room">聊天室</string>
     <string name="em_friends_official_account">公众号</string>
-    
+    <string name="em_friends_av_conference">音视频会议</string>
+
     <string name="em_friends_detail_note">设置备注</string>
     <string name="em_friends_detail_chat">发起聊天</string>
     <string name="em_friends_detail_voice">语音通话</string>
@@ -95,6 +96,7 @@
     <string name="em_friends_group_contact_title">群组列表</string>
 
     <string name="em_friends_chat_room_contact_title">聊天室列表</string>
+    <string name="em_friends_chat_room_create">创建聊天室</string>
 
     <string name="em_chat_pick_user_title">选择联系人</string>
     <string name="confirm_forward_to">确定转发到：%1$s ?</string>

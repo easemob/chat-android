@@ -92,6 +92,18 @@ public class BaseActivity extends AppCompatActivity {
     }
 
     /**
+     * hide keyboard
+     */
+    public void hideKeyboard() {
+        InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
+        if (imm!=null&&getWindow().getAttributes().softInputMode != WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN) {
+            if (getCurrentFocus() != null){
+                imm.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
+            }
+        }
+    }
+
+    /**
      * toast by string
      * @param message
      */

@@ -2,22 +2,18 @@ package com.hyphenate.chatuidemo.section.friends.fragment;
 
 import android.os.Bundle;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
-import android.view.ViewGroup;
-import android.widget.ListView;
 import android.widget.TextView;
 
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.hyphenate.chatuidemo.R;
-import com.hyphenate.chatuidemo.common.db.DemoDbHelper;
-import com.hyphenate.chatuidemo.common.enums.Status;
 import com.hyphenate.chatuidemo.common.interfaceOrImplement.OnResourceParseCallback;
 import com.hyphenate.chatuidemo.common.widget.ContactItemView;
 import com.hyphenate.chatuidemo.section.base.BaseInitFragment;
+import com.hyphenate.chatuidemo.section.chat.ConferenceActivity;
 import com.hyphenate.chatuidemo.section.friends.activity.ChatRoomContactManageActivity;
 import com.hyphenate.chatuidemo.section.friends.activity.ContactDetailActivity;
 import com.hyphenate.chatuidemo.section.friends.activity.GroupContactManageActivity;
@@ -31,7 +27,6 @@ import com.scwang.smartrefresh.layout.SmartRefreshLayout;
 import com.scwang.smartrefresh.layout.api.RefreshLayout;
 import com.scwang.smartrefresh.layout.listener.OnRefreshListener;
 
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
@@ -49,6 +44,7 @@ public class FriendsFragment extends BaseInitFragment implements View.OnClickLis
     private ContactItemView mCivLabel;
     private ContactItemView mCivChatRoom;
     private ContactItemView mCivOfficialAccount;
+    private ContactItemView mCivAvConference;
     private FriendsViewModel mViewModel;
 
     @Override
@@ -79,6 +75,7 @@ public class FriendsFragment extends BaseInitFragment implements View.OnClickLis
         mCivLabel.setOnClickListener(this);
         mCivChatRoom.setOnClickListener(this);
         mCivOfficialAccount.setOnClickListener(this);
+        mCivAvConference.setOnClickListener(this);
         mSrlFriendRefresh.setOnRefreshListener(this);
         mSideBarFriend.setOnTouchEventListener(this);
         mAdapter.setOnItemClickListener(this);
@@ -101,6 +98,9 @@ public class FriendsFragment extends BaseInitFragment implements View.OnClickLis
                 break;
             case R.id.civ_official_account :
                 showToast("official account");
+                break;
+            case R.id.civ_av_conference:
+                ConferenceActivity.startConferenceCall(getActivity(), null);
                 break;
         }
     }
@@ -165,6 +165,7 @@ public class FriendsFragment extends BaseInitFragment implements View.OnClickLis
         mCivLabel = header.findViewById(R.id.civ_label);
         mCivChatRoom = header.findViewById(R.id.civ_chat_room);
         mCivOfficialAccount = header.findViewById(R.id.civ_official_account);
+        mCivAvConference = header.findViewById(R.id.civ_av_conference);
     }
 
     @Override

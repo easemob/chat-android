@@ -1,16 +1,25 @@
 package com.hyphenate.chatuidemo.section.friends.fragment;
 
 import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.widget.ImageView;
+import android.widget.TextView;
 
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.hyphenate.chat.EMChatRoom;
+import com.hyphenate.chatuidemo.DemoHelper;
 import com.hyphenate.chatuidemo.R;
+import com.hyphenate.chatuidemo.common.DemoConstant;
 import com.hyphenate.chatuidemo.common.interfaceOrImplement.OnResourceParseCallback;
 import com.hyphenate.chatuidemo.section.base.BaseInitFragment;
+import com.hyphenate.chatuidemo.section.chat.EmChatActivity;
 import com.hyphenate.chatuidemo.section.friends.adapter.ChatRoomContactAdapter;
 import com.hyphenate.chatuidemo.section.friends.viewmodels.ChatRoomContactViewModel;
+import com.hyphenate.easeui.interfaces.EaseChatRoomListener;
+import com.hyphenate.easeui.interfaces.OnItemClickListener;
 import com.hyphenate.easeui.widget.EaseRecyclerView;
 import com.scwang.smartrefresh.layout.SmartRefreshLayout;
 import com.scwang.smartrefresh.layout.api.RefreshLayout;
@@ -18,7 +27,7 @@ import com.scwang.smartrefresh.layout.listener.OnRefreshLoadMoreListener;
 
 import java.util.List;
 
-public class ChatRoomContactManageFragment extends BaseInitFragment implements OnRefreshLoadMoreListener {
+public class ChatRoomContactManageFragment extends BaseInitFragment implements OnRefreshLoadMoreListener, OnItemClickListener {
     private int pageNum = 1;
     private static final int PAGE_SIZE = 50;
     private SmartRefreshLayout mSrlCommonRefresh;
@@ -40,6 +49,8 @@ public class ChatRoomContactManageFragment extends BaseInitFragment implements O
         mRvCommonList.setLayoutManager(new LinearLayoutManager(mContext));
         mAdapter = new ChatRoomContactAdapter();
         mRvCommonList.setAdapter(mAdapter);
+
+        addHeaderView();
     }
 
     @Override
@@ -98,6 +109,8 @@ public class ChatRoomContactManageFragment extends BaseInitFragment implements O
     protected void initListener() {
         super.initListener();
         mSrlCommonRefresh.setOnRefreshLoadMoreListener(this);
+        mAdapter.setOnItemClickListener(this);
+        DemoHelper.getInstance().getChatroomManager().addChatRoomChangeListener(new ChatRoomChangeListener());
     }
 
     @Override
@@ -108,8 +121,52 @@ public class ChatRoomContactManageFragment extends BaseInitFragment implements O
 
     @Override
     public void onLoadMore(RefreshLayout refreshLayout) {
-        // TODO: 2020/1/2 0002 检查这样处理的逻辑是否正确
-        pageNum++;
+        pageNum += 1;
         mViewModel.setLoadMoreChatRooms(pageNum, PAGE_SIZE);
+    }
+
+    @Override
+    public void onItemClick(View view, int position) {
+        EMChatRoom item = mAdapter.getItem(position);
+        EmChatActivity.actionStart(mContext, item.getId(), DemoConstant.CHATTYPE_CHATROOM);
+    }
+
+    private void addHeaderView() {
+        View headerView = LayoutInflater.from(mContext).inflate(R.layout.em_widget_contact_item, mRvCommonList, false);
+        ImageView avatar = headerView.findViewById(R.id.avatar);
+        TextView name = headerView.findViewById(R.id.name);
+        avatar.setImageResource(R.drawable.em_create_group);
+        name.setText(R.string.em_friends_chat_room_create);
+        headerView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showToast("跳转到新建页面");
+            }
+        });
+        mRvCommonList.addHeaderView(headerView);
+    }
+
+    private class ChatRoomChangeListener extends EaseChatRoomListener {
+
+        @Override
+        public void onChatRoomDestroyed(String roomId, String roomName) {
+            pageNum = 1;
+            mViewModel.loadChatRooms(pageNum, PAGE_SIZE);
+        }
+
+        @Override
+        public void onRemovedFromChatRoom(int reason, String roomId, String roomName, String participant) {
+
+        }
+
+        @Override
+        public void onMemberJoined(String roomId, String participant) {
+
+        }
+
+        @Override
+        public void onMemberExited(String roomId, String roomName, String participant) {
+
+        }
     }
 }
