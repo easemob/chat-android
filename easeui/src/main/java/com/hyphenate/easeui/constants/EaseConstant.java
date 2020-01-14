@@ -54,4 +54,5 @@ public interface EaseConstant {
     String MESSAGE_CHANGE_RECALL = "recall";
     String MESSAGE_CHANGE_CHANGE = "change";
     String MESSAGE_CHANGE_DELETE = "delete";
+    String CONVERSATION_DELETE = "conversation_delete";
 }

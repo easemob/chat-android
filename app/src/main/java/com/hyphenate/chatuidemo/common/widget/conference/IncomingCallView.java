@@ -7,12 +7,14 @@ import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.hyphenate.chatuidemo.R;
+import com.hyphenate.easeui.utils.EaseCommonUtils;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -45,6 +47,12 @@ public class IncomingCallView extends FrameLayout {
         mBtnPickup = findViewById(R.id.btn_pickup);
         mInviterName = findViewById(R.id.tv_inviter_name);
         mIvCallAnim = findViewById(R.id.iv_call_anim);
+
+        float[] screenInfo = EaseCommonUtils.getScreenInfo(getContext());
+        float min = Math.min(screenInfo[0], screenInfo[1]);
+        ViewGroup.LayoutParams params = mIvCallAnim.getLayoutParams();
+        params.width = (int) min;
+        params.height = (int) min;
 
         mBtnReject.setOnClickListener(new OnClickListener() {
             @Override

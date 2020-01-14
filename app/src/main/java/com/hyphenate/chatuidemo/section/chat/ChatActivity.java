@@ -3,20 +3,25 @@ package com.hyphenate.chatuidemo.section.chat;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.MotionEvent;
 import android.view.View;
 
 import androidx.lifecycle.LiveData;
+import androidx.lifecycle.ViewModelProvider;
+import androidx.lifecycle.ViewModelStoreOwner;
 
-import com.hyphenate.chat.EMChatRoom;
+import com.hyphenate.chat.EMClient;
 import com.hyphenate.chat.EMConversation;
-import com.hyphenate.chat.EMGroup;
 import com.hyphenate.chatuidemo.DemoHelper;
 import com.hyphenate.chatuidemo.R;
 import com.hyphenate.chatuidemo.common.DemoConstant;
 import com.hyphenate.chatuidemo.common.db.DemoDbHelper;
+import com.hyphenate.chatuidemo.common.interfaceOrImplement.OnResourceParseCallback;
+import com.hyphenate.chatuidemo.section.base.BaseDialogFragment;
 import com.hyphenate.chatuidemo.section.base.BaseInitActivity;
 import com.hyphenate.chatuidemo.section.chat.fragment.ChatFragment;
+import com.hyphenate.chatuidemo.section.chat.viewmodel.ChatViewModel;
+import com.hyphenate.chatuidemo.section.chat.viewmodel.MessageViewModel;
+import com.hyphenate.chatuidemo.section.dialog.SimpleDialogFragment;
 import com.hyphenate.easeui.constants.EaseConstant;
 import com.hyphenate.easeui.domain.EaseUser;
 import com.hyphenate.easeui.ui.chat.EaseChatFragment;
@@ -25,15 +30,16 @@ import com.hyphenate.easeui.widget.EaseTitleBar;
 
 import java.util.List;
 
-public class EmChatActivity extends BaseInitActivity implements EaseTitleBar.OnBackPressListener {
+public class ChatActivity extends BaseInitActivity implements EaseTitleBar.OnBackPressListener, EaseTitleBar.OnRightClickListener {
     private EaseTitleBar titleBarMessage;
     private String toChatUsername;
     private int chatType;
     private EaseChatFragment fragment;
     private String forwardMsgId;
+    private ChatViewModel viewModel;
 
     public static void actionStart(Context context, String userId, int chatType) {
-        Intent intent = new Intent(context, EmChatActivity.class);
+        Intent intent = new Intent(context, ChatActivity.class);
         intent.putExtra(EaseConstant.EXTRA_USER_ID, userId);
         intent.putExtra(EaseConstant.EXTRA_CHAT_TYPE, chatType);
         context.startActivity(intent);
@@ -79,6 +85,7 @@ public class EmChatActivity extends BaseInitActivity implements EaseTitleBar.OnB
     protected void initListener() {
         super.initListener();
         titleBarMessage.setOnBackPressListener(this);
+        titleBarMessage.setOnRightClickListener(this);
         fragment.setIChatTitleProvider(new EaseChatFragment.IChatTitleProvider() {
             @Override
             public void provideTitle(int chatType, String title) {
@@ -107,8 +114,41 @@ public class EmChatActivity extends BaseInitActivity implements EaseTitleBar.OnB
     }
 
     @Override
+    protected void initData() {
+        super.initData();
+        MessageViewModel messageViewModel = new ViewModelProvider(this).get(MessageViewModel.class);
+        viewModel = new ViewModelProvider(this).get(ChatViewModel.class);
+        viewModel.getDeleteObservable().observe(this, response -> {
+            parseResource(response, new OnResourceParseCallback<Boolean>() {
+                @Override
+                public void onSuccess(Boolean data) {
+                    finish();
+                    messageViewModel.setMessageChange(DemoConstant.CONVERSATION_DELETE);
+                }
+            });
+        });
+    }
+
+    @Override
     public void onBackPress(View view) {
         onBackPressed();
     }
 
+    @Override
+    public void onRightClick(View view) {
+        if(chatType == DemoConstant.CHATTYPE_SINGLE) {
+            // 是否删除会话
+            SimpleDialogFragment.showDialog(mContext, "是否删除会话？", new BaseDialogFragment.OnConfirmClickListener() {
+                @Override
+                public void onConfirmClick(View view) {
+                    EMConversation conversation = DemoHelper.getInstance().getConversation(toChatUsername,
+                            EaseCommonUtils.getConversationType(chatType), true);
+                    viewModel.deleteConversationById(conversation.conversationId());
+                }
+            });
+        }else {
+            // 跳转到群组设置
+            showToast("跳转到群组设置");
+        }
+    }
 }

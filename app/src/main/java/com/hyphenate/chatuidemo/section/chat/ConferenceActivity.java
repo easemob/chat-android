@@ -1299,7 +1299,7 @@ public class ConferenceActivity extends BaseActivity implements EMConferenceList
             CallFloatWindow.getInstance(getApplicationContext()).update(windowStream);
         }
 
-        ConferenceActivity.this.moveTaskToBack(false);
+        this.moveTaskToBack(false);
     }
 
     private void addSelfToList() {

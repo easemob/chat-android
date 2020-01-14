@@ -1,7 +1,6 @@
 package com.hyphenate.easeui.viewholder;
 
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.ViewGroup;
 
 import com.hyphenate.chat.EMMessage;
@@ -122,7 +121,9 @@ public class EaseViewHolderHelper {
     }
 
     public EaseChatRowViewHolder getChatRowViewHolder(ViewGroup parent, int viewType,
-                                                      MessageListItemClickListener listener, EaseMessageListItemStyle itemStyle, AddMoreViewHolderProvider addMoreViewHolder) {
+                                                      MessageListItemClickListener listener,
+                                                      EaseMessageListItemStyle itemStyle,
+                                                      ExtendViewHolderProvider addMoreViewHolder) {
         String type = null;
         boolean isSender = false;
         if(viewTypeMap2.keySet().contains(viewType)) {
@@ -206,7 +207,7 @@ public class EaseViewHolderHelper {
     /**
      * 提供更多的ViewHolder
      */
-    public interface AddMoreViewHolderProvider {
+    public interface ExtendViewHolderProvider {
         /**
          * 返回自定义的ViewHolder
          * @param parent
@@ -218,6 +219,7 @@ public class EaseViewHolderHelper {
          */
         EaseChatRowViewHolder addMoreViewHolder(ViewGroup parent, String type, boolean isSender,
                                                 MessageListItemClickListener listener, EaseMessageListItemStyle itemStyle);
+
     }
 
     /**

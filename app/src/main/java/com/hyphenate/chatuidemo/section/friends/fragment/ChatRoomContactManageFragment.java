@@ -15,7 +15,7 @@ import com.hyphenate.chatuidemo.R;
 import com.hyphenate.chatuidemo.common.DemoConstant;
 import com.hyphenate.chatuidemo.common.interfaceOrImplement.OnResourceParseCallback;
 import com.hyphenate.chatuidemo.section.base.BaseInitFragment;
-import com.hyphenate.chatuidemo.section.chat.EmChatActivity;
+import com.hyphenate.chatuidemo.section.chat.ChatActivity;
 import com.hyphenate.chatuidemo.section.friends.adapter.ChatRoomContactAdapter;
 import com.hyphenate.chatuidemo.section.friends.viewmodels.ChatRoomContactViewModel;
 import com.hyphenate.easeui.interfaces.EaseChatRoomListener;
@@ -128,7 +128,7 @@ public class ChatRoomContactManageFragment extends BaseInitFragment implements O
     @Override
     public void onItemClick(View view, int position) {
         EMChatRoom item = mAdapter.getItem(position);
-        EmChatActivity.actionStart(mContext, item.getId(), DemoConstant.CHATTYPE_CHATROOM);
+        ChatActivity.actionStart(mContext, item.getId(), DemoConstant.CHATTYPE_CHATROOM);
     }
 
     private void addHeaderView() {

@@ -11,8 +11,10 @@ import com.hyphenate.EMCallBack;
 import com.hyphenate.chat.EMChatManager;
 import com.hyphenate.chat.EMChatRoomManager;
 import com.hyphenate.chat.EMClient;
+import com.hyphenate.chat.EMConference;
 import com.hyphenate.chat.EMConferenceManager;
 import com.hyphenate.chat.EMContactManager;
+import com.hyphenate.chat.EMConversation;
 import com.hyphenate.chat.EMGroupManager;
 import com.hyphenate.chat.EMMessage;
 import com.hyphenate.chat.EMOptions;
@@ -56,6 +58,21 @@ public class DemoHelper {
             }
         }
         return mInstance;
+    }
+
+    public void init(Context context) {
+        // 根据项目需求对SDK进行配置
+        EMOptions options = initChatOptions(context);
+        // 初始化SDK
+        EMClient.getInstance().init(context, options);
+        // 记录本地标记，是否初始化过
+        setSDKInit(true);
+        // debug mode, you'd better set it to false, if you want release your App officially.
+        EMClient.getInstance().setDebugMode(true);
+        // set Call options
+        setCallOptions(context);
+        initPush(context);
+        initEaseUI(context);
     }
 
     /**
@@ -106,23 +123,19 @@ public class DemoHelper {
         return getEMClient().chatManager();
     }
 
-    public String getCurrentUser() {
-        return getEMClient().getCurrentUser();
+    /**
+     * get conversation
+     * @param username
+     * @param type
+     * @param createIfNotExists
+     * @return
+     */
+    public EMConversation getConversation(String username, EMConversation.EMConversationType type, boolean createIfNotExists) {
+        return getChatManager().getConversation(username, type, createIfNotExists);
     }
 
-    public void init(Context context) {
-        // 根据项目需求对SDK进行配置
-        EMOptions options = initChatOptions(context);
-        // 初始化SDK
-        EMClient.getInstance().init(context, options);
-        // 记录本地标记，是否初始化过
-        setSDKInit(true);
-        // debug mode, you'd better set it to false, if you want release your App officially.
-        EMClient.getInstance().setDebugMode(true);
-        // set Call options
-        setCallOptions(context);
-        initPush(context);
-        initEaseUI(context);
+    public String getCurrentUser() {
+        return getEMClient().getCurrentUser();
     }
 
     private void initEaseUI(Context context) {

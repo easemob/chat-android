@@ -1,9 +1,7 @@
 package com.hyphenate.chatuidemo.section.conversation;
 
 import android.os.Bundle;
-import android.os.SystemClock;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.ContextMenu;
 import android.view.MenuItem;
 import android.view.View;
@@ -14,16 +12,13 @@ import androidx.core.content.ContextCompat;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 
 import com.hyphenate.chat.EMConversation;
 import com.hyphenate.chatuidemo.R;
-import com.hyphenate.chatuidemo.common.enums.Status;
 import com.hyphenate.chatuidemo.common.interfaceOrImplement.OnResourceParseCallback;
-import com.hyphenate.chatuidemo.common.net.ErrorCode;
 import com.hyphenate.chatuidemo.common.utils.ThreadManager;
 import com.hyphenate.chatuidemo.section.base.BaseInitFragment;
-import com.hyphenate.chatuidemo.section.chat.EmChatActivity;
+import com.hyphenate.chatuidemo.section.chat.ChatActivity;
 import com.hyphenate.chatuidemo.section.chat.viewmodel.MessageViewModel;
 import com.hyphenate.chatuidemo.section.conversation.adapter.HomeAdapter;
 import com.hyphenate.chatuidemo.section.conversation.viewmodel.HomeViewModel;
@@ -188,6 +183,6 @@ public class HomeFragment extends BaseInitFragment implements OnRefreshListener,
     @Override
     public void onItemClick(View view, int position) {
         EMConversation item = mHomeAdapter.getItem(position);
-        EmChatActivity.actionStart(mContext, item.conversationId(), EaseCommonUtils.getChatType(item));
+        ChatActivity.actionStart(mContext, item.conversationId(), EaseCommonUtils.getChatType(item));
     }
 }

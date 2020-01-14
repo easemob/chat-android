@@ -286,7 +286,7 @@
             android:theme="@style/AppTheme.AddContactTheme"/>
         <activity android:name=".section.friends.activity.ContactDetailActivity" />
         <activity
-            android:name=".section.chat.EmChatActivity"
+            android:name=".section.chat.ChatActivity"
             android:windowSoftInputMode="stateHidden|adjustPan"
             android:launchMode="singleTask"/>
         <activity android:name=".section.friends.activity.GroupContactManageActivity" />
@@ -299,13 +299,40 @@
         <activity android:name=".section.chat.BaiduMapActivity" />
         <activity android:name=".section.chat.RecorderVideoActivity"/>
         <activity android:name="com.hyphenate.easeui.ui.EaseShowVideoActivity"/>
-        <activity android:name=".section.chat.ChatVideoCallActivity" android:theme="@style/NoActionBar.Dark"/>
-        <activity android:name=".section.chat.ChatVoiceCallActivity" />
-        <activity android:name=".section.chat.LiveActivity" />
-        <activity android:name=".section.chat.ConferenceActivity" />
-        <activity android:name=".section.chat.ConferenceInviteActivity" />
+        <!--语音通话-->
+        <activity
+            android:name=".section.chat.ChatVideoCallActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:excludeFromRecents="true"
+            android:launchMode="singleTask"
+            android:screenOrientation="portrait"/>
+        <!--视频通话-->
+        <activity
+            android:name=".section.chat.ChatVoiceCallActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:excludeFromRecents="true"
+            android:launchMode="singleTask"
+            android:screenOrientation="portrait"/>
+        <!--直播模式-->
+        <activity
+            android:name=".section.chat.LiveActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:excludeFromRecents="true"
+            android:launchMode="singleTask"/>
+        <!--多人会议-->
+        <activity
+            android:name=".section.chat.ConferenceActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:excludeFromRecents="true"
+            android:launchMode="singleInstance"/>
+        <!--会议成员邀请-->
+        <activity
+            android:name=".section.chat.ConferenceInviteActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:windowSoftInputMode="adjustPan"/>
         <activity android:name=".section.chat.PickAtUserActivity" />
         <activity android:name=".section.friends.activity.ForwardMessageActivity" />
+        <activity android:name=".section.group.GroupDetailActivity" />
 
     </application>
 

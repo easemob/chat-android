@@ -14,7 +14,7 @@ import com.hyphenate.chatuidemo.common.interfaceOrImplement.OnResourceParseCallb
 import com.hyphenate.chatuidemo.common.manager.PushAndMessageHelper;
 import com.hyphenate.chatuidemo.section.base.BaseDialogFragment;
 import com.hyphenate.chatuidemo.section.base.BaseInitActivity;
-import com.hyphenate.chatuidemo.section.chat.EmChatActivity;
+import com.hyphenate.chatuidemo.section.chat.ChatActivity;
 import com.hyphenate.chatuidemo.section.chat.adapter.PickUserAdapter;
 import com.hyphenate.chatuidemo.section.dialog.SimpleDialogFragment;
 import com.hyphenate.chatuidemo.section.friends.viewmodels.ContactListViewModel;
@@ -122,7 +122,7 @@ public class ForwardMessageActivity extends BaseInitActivity implements OnRefres
     }
 
     private void finishChatActivity() {
-        DemoApp.getInstance().getActivityLifecycle().finishTarget(EmChatActivity.class);
+        DemoApp.getInstance().getActivityLifecycle().finishTarget(ChatActivity.class);
     }
 
     @Override

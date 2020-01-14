@@ -347,7 +347,7 @@ public class ChatFragment extends EaseChatFragment implements EaseChatFragment.O
 
         @Override
         public EaseChatRowViewHolder provideViewHolder(ViewGroup parent, int viewType, MessageListItemClickListener listener, EaseMessageListItemStyle itemStyle) {
-            return EaseViewHolderHelper.getInstance().getChatRowViewHolder(parent, viewType, listener, itemStyle, new EaseViewHolderHelper.AddMoreViewHolderProvider() {
+            return EaseViewHolderHelper.getInstance().getChatRowViewHolder(parent, viewType, listener, itemStyle, new EaseViewHolderHelper.ExtendViewHolderProvider() {
                 @Override
                 public EaseChatRowViewHolder addMoreViewHolder(ViewGroup parent, String type, boolean isSender, MessageListItemClickListener listener, EaseMessageListItemStyle itemStyle) {
                     switch (type) {

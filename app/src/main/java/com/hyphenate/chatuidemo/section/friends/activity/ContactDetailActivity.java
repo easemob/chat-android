@@ -13,7 +13,7 @@ import androidx.constraintlayout.widget.Group;
 
 import com.hyphenate.chatuidemo.R;
 import com.hyphenate.chatuidemo.section.base.BaseInitActivity;
-import com.hyphenate.chatuidemo.section.chat.EmChatActivity;
+import com.hyphenate.chatuidemo.section.chat.ChatActivity;
 import com.hyphenate.easeui.constants.EaseConstant;
 import com.hyphenate.easeui.domain.EaseUser;
 import com.hyphenate.easeui.widget.EaseImageView;
@@ -127,7 +127,7 @@ public class ContactDetailActivity extends BaseInitActivity implements EaseTitle
                 showToast("跳转到备注设置");
                 break;
             case R.id.btn_chat :
-                EmChatActivity.actionStart(mContext, mUser.getUsername(), EaseConstant.CHATTYPE_SINGLE);
+                ChatActivity.actionStart(mContext, mUser.getUsername(), EaseConstant.CHATTYPE_SINGLE);
                 break;
             case R.id.btn_voice :
                 showToast("开始语音");
