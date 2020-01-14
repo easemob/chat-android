@@ -24,7 +24,8 @@
         android:layout_width="match_parent"
         android:layout_height="@dimen/em_friends_header_item_height"
         app:contactItemImage="@drawable/em_friends_label"
-        app:contactItemName="@string/em_friends_label"/>
+        app:contactItemName="@string/em_friends_label"
+        android:visibility="gone"/>
 
     <com.hyphenate.chatuidemo.common.widget.ContactItemView
         android:id="@+id/civ_chat_room"

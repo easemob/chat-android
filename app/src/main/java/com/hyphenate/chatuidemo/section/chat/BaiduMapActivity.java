@@ -7,6 +7,8 @@ import android.os.Bundle;
 import android.view.View;
 
 
+import androidx.core.content.ContextCompat;
+
 import com.baidu.location.BDLocation;
 import com.hyphenate.chatuidemo.R;
 import com.hyphenate.chatuidemo.section.base.BaseInitActivity;
@@ -36,10 +38,16 @@ public class BaiduMapActivity extends BaseInitActivity implements BaiduMapFragme
     }
 
     @Override
+    protected void initSystemFit() {
+        setFitSystemForTheme(false, R.color.transparent);
+    }
+
+    @Override
     protected void initView(Bundle savedInstanceState) {
         super.initView(savedInstanceState);
         titleBar = findViewById(R.id.title_bar);
 
+        titleBar.setBackgroundColor(ContextCompat.getColor(mContext, R.color.transparent));
         titleBar.setTitle(getResources().getString(R.string.em_map_title));
         titleBar.setRightTitleResource(R.string.em_map_title);
 

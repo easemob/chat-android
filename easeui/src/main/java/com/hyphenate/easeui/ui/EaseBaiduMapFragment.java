@@ -75,7 +75,7 @@ public class EaseBaiduMapFragment extends EaseBaseFragment {
         Bundle bundle = getArguments();
         if(bundle != null) {
             latitude = bundle.getDouble("latitude", 0);
-            longtitude = bundle.getDouble("longitude", 0);
+            longtitude = bundle.getDouble("longtitude", 0);
             address = bundle.getString("address");
         }
     }

@@ -11,17 +11,20 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.hyphenate.chat.EMGroup;
 import com.hyphenate.chatuidemo.R;
+import com.hyphenate.chatuidemo.common.DemoConstant;
 import com.hyphenate.chatuidemo.common.enums.Status;
 import com.hyphenate.chatuidemo.section.base.BaseInitFragment;
+import com.hyphenate.chatuidemo.section.chat.EmChatActivity;
 import com.hyphenate.chatuidemo.section.friends.adapter.GroupContactAdapter;
 import com.hyphenate.chatuidemo.section.friends.viewmodels.GroupContactViewModel;
+import com.hyphenate.easeui.interfaces.OnItemClickListener;
 import com.hyphenate.easeui.utils.EaseCommonUtils;
 import com.hyphenate.easeui.widget.EaseRecyclerView;
 import com.hyphenate.easeui.widget.EaseSidebar;
 
 import java.util.List;
 
-public class ContactManageFragment extends BaseInitFragment implements EaseSidebar.OnTouchEventListener {
+public class ContactManageFragment extends BaseInitFragment implements EaseSidebar.OnTouchEventListener, OnItemClickListener {
     private EaseRecyclerView mRvGroupList;
     protected EaseSidebar mSideBarGroup;
     private TextView mFloatingHeader;
@@ -48,6 +51,7 @@ public class ContactManageFragment extends BaseInitFragment implements EaseSideb
     protected void initListener() {
         super.initListener();
         mSideBarGroup.setOnTouchEventListener(this);
+        mAdapter.setOnItemClickListener(this);
     }
 
     @Override
@@ -97,5 +101,12 @@ public class ContactManageFragment extends BaseInitFragment implements EaseSideb
 
     private void hideFloatingHeader() {
         mFloatingHeader.setVisibility(View.GONE);
+    }
+
+    @Override
+    public void onItemClick(View view, int position) {
+        //跳转到群聊页面
+        EMGroup group = mAdapter.getItem(position);
+        EmChatActivity.actionStart(mContext, group.getGroupId(), DemoConstant.CHATTYPE_GROUP);
     }
 }

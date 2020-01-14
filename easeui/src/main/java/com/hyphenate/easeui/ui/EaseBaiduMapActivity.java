@@ -19,12 +19,17 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.view.ViewGroup;
+import android.widget.RelativeLayout;
 
+import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 
 import com.baidu.location.BDLocation;
 import com.hyphenate.easeui.R;
 import com.hyphenate.easeui.ui.base.EaseBaseActivity;
+import com.hyphenate.easeui.utils.EaseCommonUtils;
 import com.hyphenate.easeui.widget.EaseTitleBar;
 
 public class EaseBaiduMapActivity extends EaseBaseActivity implements EaseTitleBar.OnBackPressListener,
@@ -55,7 +60,7 @@ public class EaseBaiduMapActivity extends EaseBaseActivity implements EaseTitleB
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.ease_activity_baidumap);
-		setFitSystemForTheme(true);
+		setFitSystemForTheme(false, R.color.transparent, true);
 		initView();
 		initListener();
 		initData();
@@ -63,7 +68,6 @@ public class EaseBaiduMapActivity extends EaseBaseActivity implements EaseTitleB
 
 	private void initView() {
 		titleBarMap = findViewById(R.id.title_bar_map);
-		titleBarMap.setTitle(getResources().getString(R.string.ease_map_title));
 		titleBarMap.setRightTitleResource(R.string.button_send);
 		double latitude = getIntent().getDoubleExtra("latitude", 0);
 		if(latitude != 0) {
@@ -71,6 +75,18 @@ public class EaseBaiduMapActivity extends EaseBaseActivity implements EaseTitleB
 		}else {
 			titleBarMap.getRightLayout().setVisibility(View.VISIBLE);
 			titleBarMap.getRightLayout().setClickable(false);
+		}
+		ConstraintLayout.LayoutParams params = (ConstraintLayout.LayoutParams) titleBarMap.getLayoutParams();
+		params.topMargin = (int) EaseCommonUtils.dip2px(this, 24);
+		titleBarMap.setBackgroundColor(ContextCompat.getColor(this, R.color.transparent));
+		titleBarMap.getRightText().setTextColor(ContextCompat.getColor(this, R.color.white));
+		titleBarMap.getRightText().setBackgroundResource(R.drawable.ease_title_bar_right_selector);
+		int left = (int) EaseCommonUtils.dip2px(this, 10);
+		int top = (int) EaseCommonUtils.dip2px(this, 5);
+		titleBarMap.getRightText().setPadding(left, top, left, top);
+		ViewGroup.LayoutParams layoutParams = titleBarMap.getRightLayout().getLayoutParams();
+		if(layoutParams instanceof ViewGroup.MarginLayoutParams) {
+		    ((ViewGroup.MarginLayoutParams) layoutParams).setMargins(0, 0, left, 0);
 		}
 	}
 

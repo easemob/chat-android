@@ -244,6 +244,14 @@ public class EaseTitleBar extends RelativeLayout implements View.OnClickListener
         return rightLayout;
     }
 
+    public ImageView getRightImage() {
+        return rightImage;
+    }
+
+    public TextView getRightText() {
+        return titleMenu;
+    }
+
     @Override
     public void onClick(View v) {
         if(v.getId() == R.id.left_layout) {

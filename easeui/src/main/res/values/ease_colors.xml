@@ -3,6 +3,7 @@
     <color name="red">#ffff0000</color>
     <color name="white">#feffffff</color>
     <color name="black">#ff000000</color>
+    <color name="transparent">@android:color/transparent</color>
     <color name="common_bg">#fcfcfc</color>
     <color name="btn_gray_normal">#c0c0c0</color>
     <color name="top_bar_normal_bg">#00acff</color>
@@ -27,4 +28,7 @@
     <color name="btn_gray_pressed">#666667</color>
     <color name="btn_blue_normal">#1e90ff</color>
     <color name="btn_blue_pressed">#0066FF</color>
+
+    <color name="ease_color_map_right_normal">#ff48c890</color>
+    <color name="ease_color_map_right_press">#ffe9e9e9</color>
 </resources>

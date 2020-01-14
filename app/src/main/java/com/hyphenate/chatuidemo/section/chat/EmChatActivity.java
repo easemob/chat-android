@@ -63,6 +63,16 @@ public class EmChatActivity extends BaseInitActivity implements EaseTitleBar.OnB
         bundle.putString(DemoConstant.FORWARD_MSG_ID, forwardMsgId);
         fragment.setArguments(bundle);
         getSupportFragmentManager().beginTransaction().replace(R.id.fl_fragment, fragment, "chat").commit();
+
+        setTitleBarRight();
+    }
+
+    private void setTitleBarRight() {
+        if(chatType == DemoConstant.CHATTYPE_SINGLE) {
+            titleBarMessage.setRightImageResource(R.drawable.chat_user_info);
+        }else {
+            titleBarMessage.setRightImageResource(R.drawable.chat_group_info);
+        }
     }
 
     @Override

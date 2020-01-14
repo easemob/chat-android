@@ -5,8 +5,7 @@
     android:layout_height="match_parent"
     android:animateLayoutChanges="true"
     android:clipToPadding="false"
-    android:background="@color/holo_black"
-    android:fitsSystemWindows="false">
+    android:background="@color/holo_black">
 
     <!--多人会议时显示成员画面控件容器-->
     <com.hyphenate.chatuidemo.common.widget.conference.MemberViewGroup
