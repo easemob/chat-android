@@ -20,6 +20,7 @@ import com.hyphenate.chat.EMMessage;
 import com.hyphenate.chat.EMTextMessageBody;
 import com.hyphenate.chatuidemo.R;
 import com.hyphenate.chatuidemo.common.DemoConstant;
+import com.hyphenate.chatuidemo.common.model.EmojiconExampleGroupData;
 import com.hyphenate.chatuidemo.common.utils.ThreadManager;
 import com.hyphenate.chatuidemo.common.utils.ToastUtils;
 import com.hyphenate.chatuidemo.section.chat.ChatVideoCallActivity;
@@ -47,6 +48,7 @@ import com.hyphenate.easeui.ui.chat.EaseChatFragment;
 import com.hyphenate.easeui.viewholder.EaseChatRowViewHolder;
 import com.hyphenate.easeui.viewholder.EaseViewHolderHelper;
 import com.hyphenate.easeui.widget.EaseChatInputMenu;
+import com.hyphenate.easeui.widget.emojicon.EaseEmojiconMenu;
 import com.hyphenate.exceptions.HyphenateException;
 
 import java.util.Map;
@@ -74,6 +76,7 @@ public class ChatFragment extends EaseChatFragment implements EaseChatFragment.O
     @Override
     protected void addExtendInputMenu() {
         super.addExtendInputMenu();
+        //添加扩展槽
         if(chatType == EaseConstant.CHATTYPE_SINGLE){
             inputMenu.registerExtendMenuItem(R.string.attach_voice_call, R.drawable.em_chat_voice_call_selector, EaseChatInputMenu.ITEM_VOICE_CALL, this);
             inputMenu.registerExtendMenuItem(R.string.attach_video_call, R.drawable.em_chat_video_call_selector, EaseChatInputMenu.ITEM_VIDEO_CALL, this);
@@ -82,6 +85,8 @@ public class ChatFragment extends EaseChatFragment implements EaseChatFragment.O
             inputMenu.registerExtendMenuItem(R.string.voice_and_video_conference, R.drawable.em_chat_video_call_selector, EaseChatInputMenu.ITEM_CONFERENCE_CALL, this);
             inputMenu.registerExtendMenuItem(R.string.title_live, R.drawable.em_chat_video_call_selector, EaseChatInputMenu.ITEM_LIVE, this);
         }
+        //添加扩展表情
+        ((EaseEmojiconMenu)(inputMenu.getEmojiconMenu())).addEmojiconGroup(EmojiconExampleGroupData.getData());
     }
 
     @Override
