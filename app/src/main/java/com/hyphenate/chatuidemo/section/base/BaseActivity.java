@@ -25,8 +25,8 @@ import com.hyphenate.chatuidemo.R;
 import com.hyphenate.chatuidemo.common.enums.Status;
 import com.hyphenate.chatuidemo.common.interfaceOrImplement.OnResourceParseCallback;
 import com.hyphenate.chatuidemo.common.net.Resource;
-import com.hyphenate.easeui.utils.StatusBarCompat;
 import com.hyphenate.chatuidemo.common.utils.ToastUtils;
+import com.hyphenate.easeui.utils.StatusBarCompat;
 
 /**
  * 作为基础activity,放置一些公共的方法
@@ -139,7 +139,8 @@ public class BaseActivity extends AppCompatActivity {
      * 通用页面设置
      */
     public void setFitSystemForTheme() {
-        setFitSystemForTheme(true, R.color.white, false);
+        setFitSystemForTheme(true, R.color.white);
+        setStatusBarTextColor(true);
     }
 
     /**
@@ -147,7 +148,8 @@ public class BaseActivity extends AppCompatActivity {
      * @param fitSystemForTheme
      */
     public void setFitSystemForTheme(boolean fitSystemForTheme) {
-        setFitSystemForTheme(fitSystemForTheme, R.color.white, false);
+        setFitSystemForTheme(fitSystemForTheme, R.color.white);
+        setStatusBarTextColor(false);
     }
 
     /**
@@ -155,7 +157,8 @@ public class BaseActivity extends AppCompatActivity {
      * @param fitSystemForTheme
      */
     public void setFitSystemForTheme2(boolean fitSystemForTheme) {
-        setFitSystemForTheme(fitSystemForTheme, "#ffffffff", false);
+        setFitSystemForTheme(fitSystemForTheme, "#ffffffff");
+        setStatusBarTextColor(true);
     }
 
     /**
@@ -163,11 +166,18 @@ public class BaseActivity extends AppCompatActivity {
      * @param fitSystemForTheme
      * @param colorId 颜色资源路径
      */
-    public void setFitSystemForTheme(boolean fitSystemForTheme, @ColorRes int colorId, boolean isDark) {
+    public void setFitSystemForTheme(boolean fitSystemForTheme, @ColorRes int colorId) {
         setFitSystem(fitSystemForTheme);
         //初始设置
         StatusBarCompat.compat(this, ContextCompat.getColor(mContext, colorId));
-        StatusBarCompat.setLightStatusBar(this, isDark);
+    }
+
+    /**
+     * 修改状态栏文字颜色
+     * @param isLight 是否是浅色字体
+     */
+    public void setStatusBarTextColor(boolean isLight) {
+        StatusBarCompat.setLightStatusBar(mContext, !isLight);
     }
 
 
@@ -176,11 +186,10 @@ public class BaseActivity extends AppCompatActivity {
      * @param fitSystemForTheme true 不是沉浸式
      * @param color 状态栏颜色
      */
-    public void setFitSystemForTheme(boolean fitSystemForTheme, String color, boolean isDark) {
+    public void setFitSystemForTheme(boolean fitSystemForTheme, String color) {
         setFitSystem(fitSystemForTheme);
         //初始设置
-        StatusBarCompat.compat(this, Color.parseColor(color));
-        StatusBarCompat.setLightStatusBar(this, isDark);
+        StatusBarCompat.compat(mContext, Color.parseColor(color));
     }
 
     /**

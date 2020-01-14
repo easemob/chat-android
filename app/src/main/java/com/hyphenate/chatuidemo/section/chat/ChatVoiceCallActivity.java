@@ -29,7 +29,8 @@ public class ChatVoiceCallActivity extends BaseInitActivity {
 
     @Override
     protected void initSystemFit() {
-        setFitSystemForTheme(true, R.color.ease_chat_voice_bg, false);
+        setFitSystemForTheme(true, R.color.ease_chat_voice_bg);
+        setStatusBarTextColor(true);
     }
 
     @Override

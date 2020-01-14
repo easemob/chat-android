@@ -30,7 +30,8 @@ public class ChatVideoCallActivity extends BaseInitActivity {
 
     @Override
     protected void initSystemFit() {
-        setFitSystemForTheme(true, R.color.ease_chat_video_bg, false);
+        setFitSystemForTheme(true, R.color.ease_chat_video_bg);
+        setStatusBarTextColor(true);
     }
 
     @Override

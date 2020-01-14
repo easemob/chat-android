@@ -11,6 +11,10 @@
         <item name="android:divider">@drawable/em_default_divider_list</item>
     </style>
 
+    <style name="NoActionBar.Dark" parent="Theme.AppCompat.NoActionBar">
+
+    </style>
+
     <style name="NoActionBar.SplashTheme" parent="Theme.AppCompat.Light.NoActionBar">
         <!--<item name="android:windowBackground">@android:color/transparent</item>-->
         <item name="android:windowBackground">@color/blue</item>

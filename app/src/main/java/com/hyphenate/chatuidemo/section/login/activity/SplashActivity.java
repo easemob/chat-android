@@ -24,7 +24,7 @@ public class SplashActivity extends BaseInitActivity {
 
     @Override
     protected void initSystemFit() {
-        setFitSystemForTheme(false, R.color.transparent, false);
+        setFitSystemForTheme(false, R.color.transparent);
     }
 
     @Override

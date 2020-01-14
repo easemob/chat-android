@@ -40,7 +40,7 @@ public abstract class BaseInitActivity extends BaseActivity {
      * @param savedInstanceState
      */
     protected void initView(Bundle savedInstanceState) {
-        StatusBarCompat.setLightStatusBar(mContext, true);
+
     }
 
     /**
