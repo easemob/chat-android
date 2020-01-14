@@ -26,6 +26,7 @@ import com.hyphenate.chatuidemo.common.permission.PermissionsResultAction;
 import com.hyphenate.chatuidemo.section.MainViewModel;
 import com.hyphenate.chatuidemo.section.base.BaseFragment;
 import com.hyphenate.chatuidemo.section.base.BaseInitActivity;
+import com.hyphenate.chatuidemo.section.chat.ConferenceActivity;
 import com.hyphenate.chatuidemo.section.conversation.HomeFragment;
 import com.hyphenate.chatuidemo.section.discover.DiscoverFragment;
 import com.hyphenate.chatuidemo.section.friends.fragment.FriendsFragment;
@@ -67,7 +68,7 @@ public class MainActivity extends BaseInitActivity implements BottomNavigationVi
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         switch (item.getItemId()) {
             case R.id.action_video :
-                showToast("视频");
+                ConferenceActivity.startConferenceCall(mContext, null);
                 break;
             case R.id.action_group :
                 AddContactActivity.startAction(mContext, SearchType.GROUP_CHAT);

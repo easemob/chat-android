@@ -333,6 +333,7 @@
         <activity android:name=".section.chat.PickAtUserActivity" />
         <activity android:name=".section.friends.activity.ForwardMessageActivity" />
         <activity android:name=".section.group.GroupDetailActivity" />
+        <activity android:name=".section.group.ChatRoomDetailActivity" />
 
     </application>
 

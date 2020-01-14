@@ -14,6 +14,8 @@ import androidx.constraintlayout.widget.Group;
 import com.hyphenate.chatuidemo.R;
 import com.hyphenate.chatuidemo.section.base.BaseInitActivity;
 import com.hyphenate.chatuidemo.section.chat.ChatActivity;
+import com.hyphenate.chatuidemo.section.chat.ChatVideoCallActivity;
+import com.hyphenate.chatuidemo.section.chat.ChatVoiceCallActivity;
 import com.hyphenate.easeui.constants.EaseConstant;
 import com.hyphenate.easeui.domain.EaseUser;
 import com.hyphenate.easeui.widget.EaseImageView;
@@ -130,10 +132,10 @@ public class ContactDetailActivity extends BaseInitActivity implements EaseTitle
                 ChatActivity.actionStart(mContext, mUser.getUsername(), EaseConstant.CHATTYPE_SINGLE);
                 break;
             case R.id.btn_voice :
-                showToast("开始语音");
+                ChatVoiceCallActivity.actionStart(mContext, mUser.getUsername());
                 break;
             case R.id.btn_video :
-                showToast("开始视频");
+                ChatVideoCallActivity.actionStart(mContext, mUser.getUsername());
                 break;
             case R.id.btn_add_contact :
                 showToast("添加为好友");

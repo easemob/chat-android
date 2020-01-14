@@ -99,6 +99,10 @@
     <string name="em_friends_chat_room_create">创建聊天室</string>
 
     <string name="em_chat_pick_user_title">选择联系人</string>
+
+    <string name="em_chat_delete_conversation">是否删除会话？</string>
+    <string name="em_chat_group_detail_title">群组信息</string>
+
     <string name="confirm_forward_to">确定转发到：%1$s ?</string>
 
     <string name="Select_the_contact">选择联系人</string>
@@ -131,6 +135,7 @@
     <string name="delete_conversation">删除会话</string>
     <string name="copy_message">复制消息</string>
     <string name="em_send_forward_msg_success">已发送</string>
+
 
 
 </resources>

@@ -22,6 +22,8 @@ import com.hyphenate.chatuidemo.section.chat.fragment.ChatFragment;
 import com.hyphenate.chatuidemo.section.chat.viewmodel.ChatViewModel;
 import com.hyphenate.chatuidemo.section.chat.viewmodel.MessageViewModel;
 import com.hyphenate.chatuidemo.section.dialog.SimpleDialogFragment;
+import com.hyphenate.chatuidemo.section.group.ChatRoomDetailActivity;
+import com.hyphenate.chatuidemo.section.group.GroupDetailActivity;
 import com.hyphenate.easeui.constants.EaseConstant;
 import com.hyphenate.easeui.domain.EaseUser;
 import com.hyphenate.easeui.ui.chat.EaseChatFragment;
@@ -138,7 +140,7 @@ public class ChatActivity extends BaseInitActivity implements EaseTitleBar.OnBac
     public void onRightClick(View view) {
         if(chatType == DemoConstant.CHATTYPE_SINGLE) {
             // 是否删除会话
-            SimpleDialogFragment.showDialog(mContext, "是否删除会话？", new BaseDialogFragment.OnConfirmClickListener() {
+            SimpleDialogFragment.showDialog(mContext, R.string.em_chat_delete_conversation, new BaseDialogFragment.OnConfirmClickListener() {
                 @Override
                 public void onConfirmClick(View view) {
                     EMConversation conversation = DemoHelper.getInstance().getConversation(toChatUsername,
@@ -148,7 +150,11 @@ public class ChatActivity extends BaseInitActivity implements EaseTitleBar.OnBac
             });
         }else {
             // 跳转到群组设置
-            showToast("跳转到群组设置");
+            if(chatType == DemoConstant.CHATTYPE_GROUP) {
+                GroupDetailActivity.actionStart(mContext, toChatUsername);
+            }else if(chatType == DemoConstant.CHATTYPE_CHATROOM) {
+                ChatRoomDetailActivity.actionStart(mContext, toChatUsername);
+            }
         }
     }
 }
