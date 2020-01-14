@@ -35,8 +35,7 @@
             android:layout_toRightOf="@id/iv_userhead"
             android:layout_marginLeft="@dimen/margin_chat_activity"
             android:layout_below="@+id/tv_userid"
-            android:background="@drawable/ease_chatfrom_bg"
-            >
+            android:background="@drawable/ease_chatfrom_bg">
 
             <ImageView
                 android:id="@+id/iv_voice"
@@ -44,8 +43,9 @@
                 android:layout_height="wrap_content"
                 android:paddingLeft="10dp"
 	            android:paddingRight="12dp"
-	            android:layout_centerInParent="true"
+                android:layout_centerInParent="true"
                 android:src="@drawable/ease_chatfrom_voice_playing" />
+
         </RelativeLayout>
 
         <TextView
@@ -57,7 +57,7 @@
             android:layout_toRightOf="@id/bubble"
             android:layout_alignTop="@id/bubble"
             android:gravity="center"
-            android:text="3&apos;&apos;"
+            tools:text="3&apos;&apos;"
             tools:ignore="HardcodedText" />
 
         <ImageView

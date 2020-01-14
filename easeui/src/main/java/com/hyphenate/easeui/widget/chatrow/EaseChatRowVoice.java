@@ -3,7 +3,6 @@ package com.hyphenate.easeui.widget.chatrow;
 import android.content.Context;
 import android.graphics.drawable.AnimationDrawable;
 import android.view.View;
-import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -12,6 +11,8 @@ import com.hyphenate.chat.EMFileMessageBody;
 import com.hyphenate.chat.EMMessage;
 import com.hyphenate.chat.EMVoiceMessageBody;
 import com.hyphenate.easeui.R;
+import com.hyphenate.easeui.utils.EaseCommonUtils;
+import com.hyphenate.easeui.utils.EaseVoiceLengthUtils;
 import com.hyphenate.util.EMLog;
 
 public class EaseChatRowVoice extends EaseChatRowFile {
@@ -46,7 +47,9 @@ public class EaseChatRowVoice extends EaseChatRowFile {
     protected void onSetUpView() {
         EMVoiceMessageBody voiceBody = (EMVoiceMessageBody) message.getBody();
         int len = voiceBody.getLength();
+        int padding = 0;
         if (len > 0) {
+            padding = EaseVoiceLengthUtils.getVoiceLength(getContext(), len);
             voiceLengthView.setText(voiceBody.getLength() + "\"");
             voiceLengthView.setVisibility(View.VISIBLE);
         } else {
@@ -54,8 +57,10 @@ public class EaseChatRowVoice extends EaseChatRowFile {
         }
         if (message.direct() == EMMessage.Direct.RECEIVE) {
             voiceImageView.setImageResource(R.drawable.ease_chatfrom_voice_playing);
+            voiceImageView.setPadding((int)(EaseCommonUtils.dip2px(getContext(), 10)), 0, padding, 0);
         } else {
             voiceImageView.setImageResource(R.drawable.ease_chatto_voice_playing);
+            voiceImageView.setPadding(padding, 0, (int)(EaseCommonUtils.dip2px(getContext(), 10)), 0);
         }
 
         if (message.direct() == EMMessage.Direct.RECEIVE) {
