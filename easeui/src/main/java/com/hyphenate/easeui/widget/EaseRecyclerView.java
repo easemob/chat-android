@@ -62,6 +62,18 @@ public class EaseRecyclerView extends RecyclerView {
         }
     }
 
+    /**
+     * 移除所有的头布局
+     */
+    public void removeHeaderViews() {
+        if(mHeaderViewInfos != null) {
+            mHeaderViewInfos.clear();
+        }
+        if(mAdapter != null) {
+            mAdapter.notifyDataSetChanged();
+        }
+    }
+
     public void addFooterView(View view) {
         FixedViewInfo info = new FixedViewInfo();
         info.view = view;

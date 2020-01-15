@@ -81,7 +81,7 @@ public class HomeAdapter extends EaseBaseRecyclerViewAdapter<EMConversation> {
 
             if(item.getAllMsgCount() != 0) {
                 EMMessage lastMessage = item.getLastMessage();
-                message.setText(EaseSmileUtils.getSmiledText(mContext, EaseCommonUtils.getMessageDigest(lastMessage, mContext)));
+                message.setText(EaseSmileUtils.getSmiledText(mContext, EaseCommonUtils.getMessageDigest(lastMessage, mContext)), TextView.BufferType.SPANNABLE);
                 time.setText(DateUtils.getTimestampString(new Date(lastMessage.getMsgTime())));
                 if (lastMessage.direct() == EMMessage.Direct.SEND && lastMessage.status() == EMMessage.Status.FAIL) {
                     mMsgState.setVisibility(View.VISIBLE);

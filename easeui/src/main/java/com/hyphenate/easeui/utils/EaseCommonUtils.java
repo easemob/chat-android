@@ -20,6 +20,7 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.text.TextUtils;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.util.TypedValue;
 import android.view.WindowManager;
 
@@ -126,7 +127,7 @@ public class EaseCommonUtils {
             EMLog.e(TAG, "error, unknow type");
             return "";
         }
-
+        Log.e("TAG", "message text = "+digest);
         return digest;
     }
     

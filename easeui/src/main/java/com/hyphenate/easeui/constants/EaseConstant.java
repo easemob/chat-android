@@ -48,6 +48,7 @@ public interface EaseConstant {
     String MESSAGE_TYPE_LIVE_INVITE = "live_invite";
 
     String MESSAGE_CHANGE_RECEIVE = "receive";
+    String MESSAGE_CHANGE_CMD_RECEIVE = "cmd_receive";
     String MESSAGE_CHANGE_SEND_SUCCESS = "success";
     String MESSAGE_CHANGE_SEND_ERROR = "error";
     String MESSAGE_CHANGE_SEND_PROGRESS = "progress";

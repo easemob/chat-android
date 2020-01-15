@@ -90,7 +90,9 @@ public class PickAtUserActivity extends BaseInitActivity implements OnRefreshLis
         super.initData();
         mViewModel = new ViewModelProvider(this).get(GroupContactViewModel.class);
         mViewModel.getGroupMember().observe(this, response -> {
-            checkIfAddHeader();
+            if(response != null) {
+                checkIfAddHeader();
+            }
             parseResource(response, new OnResourceParseCallback<List<EaseUser>>() {
                 @Override
                 public void onSuccess(List<EaseUser> data) {
@@ -109,10 +111,14 @@ public class PickAtUserActivity extends BaseInitActivity implements OnRefreshLis
     }
 
     private void checkIfAddHeader() {
-        String owner = DemoHelper.getInstance().getGroupManager().getGroup(mGroupId).getOwner();
-        if(TextUtils.equals(owner, DemoHelper.getInstance().getCurrentUser())) {
-            AddHeader();
+        EMGroup group = DemoHelper.getInstance().getGroupManager().getGroup(mGroupId);
+        if(group != null) {
+            String owner = group.getOwner();
+            if(TextUtils.equals(owner, DemoHelper.getInstance().getCurrentUser())) {
+                AddHeader();
+            }
         }
+
     }
 
     private void AddHeader() {
@@ -121,12 +127,14 @@ public class PickAtUserActivity extends BaseInitActivity implements OnRefreshLis
         TextView textView = (TextView) view.findViewById(R.id.name);
         textView.setText(getString(R.string.all_members));
         avatarView.setImageResource(R.drawable.ease_groups_icon);
+        mRvPickUserList.removeHeaderViews();
         mRvPickUserList.addHeaderView(view);
 
         view.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 setResult(RESULT_OK, new Intent().putExtra("username", getString(R.string.all_members)));
+                finish();
             }
         });
 
@@ -155,6 +163,7 @@ public class PickAtUserActivity extends BaseInitActivity implements OnRefreshLis
         Intent intent = getIntent();
         intent.putExtra("username", user.getUsername());
         setResult(RESULT_OK, intent);
+        finish();
     }
 
     @Override

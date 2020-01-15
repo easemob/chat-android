@@ -82,7 +82,9 @@ public class EMGroupManagerRepository extends BaseEMRepository{
                     @Override
                     public void onSuccess(EMGroup value) {
                         List<String> members = value.getMembers();
-                        if(members != null && !members.isEmpty()) {
+                        members.addAll(value.getAdminList());
+                        members.add(value.getOwner());
+                        if(!members.isEmpty()) {
                             List<EaseUser> users = EmUserEntity.parse(members);
                             sortUserData(users);
                             callBack.onSuccess(createLiveData(users));
