@@ -16,6 +16,7 @@ import com.hyphenate.chat.EMMessage;
 import com.hyphenate.chatuidemo.DemoHelper;
 import com.hyphenate.chatuidemo.R;
 import com.hyphenate.easeui.adapter.EaseBaseRecyclerViewAdapter;
+import com.hyphenate.easeui.model.EaseAtMessageHelper;
 import com.hyphenate.easeui.utils.EaseCommonUtils;
 import com.hyphenate.easeui.utils.EaseSmileUtils;
 import com.hyphenate.easeui.widget.EaseImageView;
@@ -59,6 +60,9 @@ public class HomeAdapter extends EaseBaseRecyclerViewAdapter<EMConversation> {
             String username = item.conversationId();
             mentioned.setVisibility(View.GONE);
             if(item.getType() == EMConversation.EMConversationType.GroupChat) {
+                if(EaseAtMessageHelper.get().hasAtMeMsg(username)) {
+                    mentioned.setVisibility(View.VISIBLE);
+                }
                 // TODO: 2019/12/20 0020 添加关于是否需要消息提醒的逻辑 这块逻辑需要理一理
                 avatar.setImageResource(R.drawable.ease_group_icon);
                 EMGroup group = DemoHelper.getInstance().getGroupManager().getGroup(username);
@@ -81,7 +85,7 @@ public class HomeAdapter extends EaseBaseRecyclerViewAdapter<EMConversation> {
 
             if(item.getAllMsgCount() != 0) {
                 EMMessage lastMessage = item.getLastMessage();
-                message.setText(EaseSmileUtils.getSmiledText(mContext, EaseCommonUtils.getMessageDigest(lastMessage, mContext)), TextView.BufferType.SPANNABLE);
+                message.setText(EaseSmileUtils.getSmiledText(mContext, EaseCommonUtils.getMessageDigest(lastMessage, mContext)));
                 time.setText(DateUtils.getTimestampString(new Date(lastMessage.getMsgTime())));
                 if (lastMessage.direct() == EMMessage.Direct.SEND && lastMessage.status() == EMMessage.Status.FAIL) {
                     mMsgState.setVisibility(View.VISIBLE);
