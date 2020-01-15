@@ -42,7 +42,7 @@
         app:tabIndicatorColor="@color/em_color_brand"
         app:tabIndicatorHeight="2dp"
         app:tabSelectedTextColor="@color/em_color_brand"
-        app:tabTextColor="@color/em_color_common_black"
+        app:tabTextColor="@color/em_color_common_text_black"
         app:tabTextAppearance="@style/AppTheme.TabLayout" />
 
     <androidx.viewpager.widget.ViewPager

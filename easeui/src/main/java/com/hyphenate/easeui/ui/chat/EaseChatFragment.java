@@ -585,6 +585,13 @@ public class EaseChatFragment extends EaseBaseFragment implements View.OnClickLi
         conversation = EMClient.getInstance().chatManager().getConversation(toChatUsername
                 , EaseCommonUtils.getConversationType(chatType), true);
         // make all message as read
+        if(messageChangeListener != null) {
+            int count = conversation.getUnreadMsgCount();
+            if(count > 0) {
+                messageChangeListener.onMessageChange(EaseConstant.CONVERSATION_READ);
+            }
+        }
+
         conversation.markAllMessagesAsRead();
 
         isInitMsg = true;

@@ -102,6 +102,8 @@
 
     <string name="em_chat_delete_conversation">是否删除会话？</string>
     <string name="em_chat_group_detail_title">群组信息</string>
+    <string name="em_chat_group_detail_group_member">群成员</string>
+    <string name="em_chat_group_detail_member_num">%1$d人</string>
 
     <string name="confirm_forward_to">确定转发到：%1$s ?</string>
 

@@ -52,6 +52,7 @@ public class ChatVideoCallActivity extends BaseInitActivity {
         fragment = new EaseVideoCallFragment();
         Bundle bundle = new Bundle();
         bundle.putString("username", getIntent().getStringExtra("username"));
+        bundle.putBoolean("isComingCall", getIntent().getBooleanExtra("isComingCall", false));
         fragment.setArguments(bundle);
         getSupportFragmentManager().beginTransaction().replace(R.id.fl_fragment, fragment).commit();
     }

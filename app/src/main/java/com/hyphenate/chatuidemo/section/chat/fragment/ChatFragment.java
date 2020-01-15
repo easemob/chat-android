@@ -65,6 +65,7 @@ public class ChatFragment extends EaseChatFragment implements EaseChatFragment.O
     protected void initChildView() {
         super.initChildView();
         clipboard = (ClipboardManager) getActivity().getSystemService(Context.CLIPBOARD_SERVICE);
+        viewModel = new ViewModelProvider(this).get(MessageViewModel.class);
     }
 
     @Override
@@ -87,12 +88,6 @@ public class ChatFragment extends EaseChatFragment implements EaseChatFragment.O
         }
         //添加扩展表情
         ((EaseEmojiconMenu)(inputMenu.getEmojiconMenu())).addEmojiconGroup(EmojiconExampleGroupData.getData());
-    }
-
-    @Override
-    protected void initChildData() {
-        super.initChildData();
-        viewModel = new ViewModelProvider(this).get(MessageViewModel.class);
     }
 
     @Override

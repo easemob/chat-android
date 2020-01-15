@@ -24,6 +24,7 @@ import com.hyphenate.chatuidemo.common.model.DemoServerSetBean;
 import com.hyphenate.chatuidemo.common.model.EmojiconExampleGroupData;
 import com.hyphenate.chatuidemo.common.receiver.HeadsetReceiver;
 import com.hyphenate.chatuidemo.common.utils.PreferenceManager;
+import com.hyphenate.chatuidemo.section.chat.receiver.CallReceiver;
 import com.hyphenate.easeui.EaseUI;
 import com.hyphenate.easeui.domain.EaseAvatarOptions;
 import com.hyphenate.easeui.domain.EaseEmojicon;
@@ -46,6 +47,7 @@ public class DemoHelper {
 
     public boolean isSDKInit;//SDK是否初始化
     private static DemoHelper mInstance;
+    private CallReceiver callReceiver;
 
     private DemoHelper() {}
 
@@ -72,7 +74,16 @@ public class DemoHelper {
         // set Call options
         setCallOptions(context);
         initPush(context);
+        initReceiver(context);
         initEaseUI(context);
+    }
+
+    private void initReceiver(Context context) {
+        IntentFilter callFilter = new IntentFilter(getEMClient().callManager().getIncomingCallBroadcastAction());
+        if(callReceiver == null) {
+            callReceiver = new CallReceiver();
+        }
+        context.registerReceiver(callReceiver, callFilter);
     }
 
     /**

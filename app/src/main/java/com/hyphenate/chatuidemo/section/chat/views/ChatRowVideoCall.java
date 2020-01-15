@@ -1,6 +1,7 @@
 package com.hyphenate.chatuidemo.section.chat.views;
 
 import android.content.Context;
+import android.util.Log;
 import android.widget.TextView;
 
 import com.hyphenate.chat.EMMessage;
@@ -27,12 +28,12 @@ public class ChatRowVideoCall extends EaseChatRow {
 
     @Override
     protected void onViewUpdate(EMMessage msg) {
-        EMTextMessageBody txtBody = (EMTextMessageBody) message.getBody();
-        contentView.setText(txtBody.getMessage());
+
     }
 
     @Override
     protected void onSetUpView() {
-
+        EMTextMessageBody txtBody = (EMTextMessageBody) message.getBody();
+        contentView.setText(txtBody.getMessage());
     }
 }
