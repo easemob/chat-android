@@ -6,6 +6,7 @@ import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.Observer;
 
 import com.hyphenate.EMCallBack;
+import com.hyphenate.EMValueCallBack;
 import com.hyphenate.chatuidemo.DemoApp;
 import com.hyphenate.chatuidemo.DemoHelper;
 import com.hyphenate.chatuidemo.common.db.DemoDbHelper;
@@ -76,6 +77,10 @@ public class EMContactManagerRepository extends BaseEMRepository{
 
             @Override
             protected void createCall(ResultCallBack<LiveData<List<EaseUser>>> callBack) {
+                if(!isLoggedIn()) {
+                    callBack.onError(ErrorCode.EM_NOT_LOGIN);
+                    return;
+                }
                 runOnIOThread(()-> {
                     try {
                         List<String> usernames = getContactManager().getAllContactsFromServer();
@@ -99,6 +104,35 @@ public class EMContactManagerRepository extends BaseEMRepository{
             protected void saveCallResult(List<EaseUser> items) {
                 getUserDao().clearUsers();
                 getUserDao().insert(EmUserEntity.parseList(items));
+            }
+
+        }.asLiveData();
+    }
+
+    /**
+     * 获取黑名单
+     * @return
+     */
+    public LiveData<Resource<List<EaseUser>>> getBlackContactList() {
+        return new NetworkOnlyResource<List<EaseUser>>() {
+
+            @Override
+            protected void createCall(@NonNull ResultCallBack<LiveData<List<EaseUser>>> callBack) {
+                if(!isLoggedIn()) {
+                    callBack.onError(ErrorCode.EM_NOT_LOGIN);
+                    return;
+                }
+                getContactManager().aysncGetBlackListFromServer(new EMValueCallBack<List<String>>() {
+                    @Override
+                    public void onSuccess(List<String> value) {
+                        callBack.onSuccess(createLiveData(EmUserEntity.parse(value)));
+                    }
+
+                    @Override
+                    public void onError(int error, String errorMsg) {
+                        callBack.onError(error, errorMsg);
+                    }
+                });
             }
 
         }.asLiveData();

@@ -87,6 +87,14 @@ public class DemoHelper {
     }
 
     /**
+     * 判断是否之前登录过
+     * @return
+     */
+    public boolean isLoggedIn() {
+        return getEMClient().isLoggedInBefore();
+    }
+
+    /**
      * 获取IM SDK的入口类
      * @return
      */

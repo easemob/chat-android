@@ -2,6 +2,9 @@ package com.hyphenate.chatuidemo.common.livedatas;
 
 import androidx.lifecycle.MutableLiveData;
 
+/**
+ * 检测会话变化
+ */
 public class MessageChangeLiveData extends MutableLiveData<String> {
 
     private static MessageChangeLiveData instance;

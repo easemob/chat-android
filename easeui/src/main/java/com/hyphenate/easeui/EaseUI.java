@@ -26,6 +26,7 @@ public class EaseUI {
 
     public boolean isVoiceCalling;
     public boolean isVideoCalling;
+    private EaseChatPresenter presenter;
 
     private EaseUI() {}
 
@@ -42,6 +43,17 @@ public class EaseUI {
 
     public synchronized void init(Context context) {
         appContext = context.getApplicationContext();
+        presenter = new EaseChatPresenter();
+        presenter.attachApp(appContext);
+    }
+
+    public void addChatPresenter(EaseChatPresenter presenter) {
+        this.presenter = presenter;
+        this.presenter.attachApp(appContext);
+    }
+
+    public EaseChatPresenter getChatPresenter() {
+        return presenter;
     }
 
     /**

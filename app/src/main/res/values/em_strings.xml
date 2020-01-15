@@ -138,6 +138,7 @@
     <string name="copy_message">复制消息</string>
     <string name="em_send_forward_msg_success">已发送</string>
 
-
+    <string name="Agreed_to_your_group_chat_application">同意了你的群聊申请</string>
+    <string name="Invite_you_to_join_a_group_chat">邀请你加入了群聊</string>
 
 </resources>

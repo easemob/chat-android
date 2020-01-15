@@ -17,6 +17,7 @@ import com.hyphenate.chatuidemo.DemoHelper;
 import com.hyphenate.chatuidemo.common.db.entity.EmUserEntity;
 import com.hyphenate.chatuidemo.common.enums.Status;
 import com.hyphenate.chatuidemo.common.interfaceOrImplement.ResultCallBack;
+import com.hyphenate.chatuidemo.common.net.ErrorCode;
 import com.hyphenate.chatuidemo.common.net.Resource;
 import com.hyphenate.easeui.domain.EaseUser;
 import com.hyphenate.easeui.utils.EaseCommonUtils;
@@ -47,6 +48,10 @@ public class EMGroupManagerRepository extends BaseEMRepository{
 
             @Override
             protected void createCall(ResultCallBack<LiveData<List<EMGroup>>> callBack) {
+                if(!isLoggedIn()) {
+                    callBack.onError(ErrorCode.EM_NOT_LOGIN);
+                    return;
+                }
                 getGroupManager().asyncGetJoinedGroupsFromServer(new EMValueCallBack<List<EMGroup>>() {
                     @Override
                     public void onSuccess(List<EMGroup> value) {
