@@ -32,4 +32,7 @@ public interface EmUserDao {
 
     @Query("delete from em_users")
     int clearUsers();
+
+    @Query("delete from em_users where username = :username")
+    void deleteUser(String username);
 }

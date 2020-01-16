@@ -47,14 +47,14 @@ public interface EaseConstant {
     String MESSAGE_TYPE_CONFERENCE_INVITE = "conference_invite";
     String MESSAGE_TYPE_LIVE_INVITE = "live_invite";
 
-    String MESSAGE_CHANGE_RECEIVE = "receive";
-    String MESSAGE_CHANGE_CMD_RECEIVE = "cmd_receive";
-    String MESSAGE_CHANGE_SEND_SUCCESS = "success";
-    String MESSAGE_CHANGE_SEND_ERROR = "error";
-    String MESSAGE_CHANGE_SEND_PROGRESS = "progress";
-    String MESSAGE_CHANGE_RECALL = "recall";
-    String MESSAGE_CHANGE_CHANGE = "change";
-    String MESSAGE_CHANGE_DELETE = "delete";
+    String MESSAGE_CHANGE_RECEIVE = "message_receive";
+    String MESSAGE_CHANGE_CMD_RECEIVE = "message_cmd_receive";
+    String MESSAGE_CHANGE_SEND_SUCCESS = "message_success";
+    String MESSAGE_CHANGE_SEND_ERROR = "message_error";
+    String MESSAGE_CHANGE_SEND_PROGRESS = "message_progress";
+    String MESSAGE_CHANGE_RECALL = "message_recall";
+    String MESSAGE_CHANGE_CHANGE = "message_change";
+    String MESSAGE_CHANGE_DELETE = "message_delete";
     String CONVERSATION_DELETE = "conversation_delete";
     String CONVERSATION_READ = "conversation_read";
 }

@@ -14,6 +14,7 @@ import com.hyphenate.chatuidemo.DemoApp;
 import com.hyphenate.chatuidemo.DemoHelper;
 import com.hyphenate.chatuidemo.R;
 import com.hyphenate.chatuidemo.common.DemoConstant;
+import com.hyphenate.chatuidemo.common.db.entity.InviteMessage;
 import com.hyphenate.chatuidemo.common.interfaceOrImplement.UserActivityLifecycleCallbacks;
 import com.hyphenate.chatuidemo.common.utils.ThreadManager;
 import com.hyphenate.chatuidemo.common.utils.ToastUtils;
@@ -22,6 +23,7 @@ import com.hyphenate.chatuidemo.section.chat.LiveActivity;
 import com.hyphenate.easeui.constants.EaseConstant;
 import com.hyphenate.easeui.model.EaseAtMessageHelper;
 import com.hyphenate.easeui.utils.EaseCommonUtils;
+import com.hyphenate.chatuidemo.common.db.entity.InviteMessage.InviteMessageStatus;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -115,6 +117,55 @@ public class PushAndMessageHelper {
                 }
                 break;
         }
+    }
+
+    /**
+     * 获取系统消息内容
+     * @param msg
+     * @return
+     */
+    public static String getSystemMessage(InviteMessage msg) {
+        InviteMessageStatus status = msg.getStatusEnum();
+        if(status == null) {
+            return "";
+        }
+        String messge;
+        Context context = DemoApp.getInstance();
+        StringBuilder builder = new StringBuilder(context.getString(status.getMsgContent()));
+        switch (status) {
+            case BEAPPLYED:
+            case GROUPINVITATION:
+                messge = builder.append(msg.getGroupName()).toString();
+                break;
+            case GROUPINVITATION_ACCEPTED:
+            case GROUPINVITATION_DECLINED:
+            case MULTI_DEVICE_GROUP_APPLY_ACCEPT:
+            case MULTI_DEVICE_GROUP_APPLY_DECLINE:
+            case MULTI_DEVICE_GROUP_INVITE:
+            case MULTI_DEVICE_GROUP_INVITE_ACCEPT:
+            case MULTI_DEVICE_GROUP_INVITE_DECLINE:
+            case MULTI_DEVICE_GROUP_KICK:
+            case MULTI_DEVICE_GROUP_BAN:
+            case MULTI_DEVICE_GROUP_ALLOW:
+            case MULTI_DEVICE_GROUP_ASSIGN_OWNER:
+            case MULTI_DEVICE_GROUP_ADD_ADMIN:
+            case MULTI_DEVICE_GROUP_REMOVE_ADMIN:
+            case MULTI_DEVICE_GROUP_ADD_MUTE:
+            case MULTI_DEVICE_GROUP_REMOVE_MUTE:
+                messge = String.format(builder.toString(), msg.getGroupInviter());
+                break;
+            case MULTI_DEVICE_CONTACT_ADD:
+            case MULTI_DEVICE_CONTACT_BAN:
+            case MULTI_DEVICE_CONTACT_ALLOW:
+            case MULTI_DEVICE_CONTACT_ACCEPT:
+            case MULTI_DEVICE_CONTACT_DECLINE:
+                messge = String.format(builder.toString(), msg.getFrom());
+                break;
+            default:
+                messge = "";
+                break;
+        }
+        return messge;
     }
 
     /**

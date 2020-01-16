@@ -6,6 +6,7 @@ import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
@@ -238,6 +239,46 @@ public class BaseActivity extends AppCompatActivity {
         }else if(response.status == Status.LOADING) {
             callback.onLoading();
         }
+    }
+
+    public boolean isMessageChange(String message) {
+        if(TextUtils.isEmpty(message)) {
+            return false;
+        }
+        if(message.contains("message")) {
+            return true;
+        }
+        return false;
+    }
+
+    public boolean isContactChange(String message) {
+        if(TextUtils.isEmpty(message)) {
+            return false;
+        }
+        if(message.contains("contact")) {
+            return true;
+        }
+        return false;
+    }
+
+    public boolean isGroupInviteChange(String message) {
+        if(TextUtils.isEmpty(message)) {
+            return false;
+        }
+        if(message.contains("invite")) {
+            return true;
+        }
+        return false;
+    }
+
+    public boolean isNotify(String message) {
+        if(TextUtils.isEmpty(message)) {
+            return false;
+        }
+        if(message.contains("invite")) {
+            return true;
+        }
+        return false;
     }
 
 }

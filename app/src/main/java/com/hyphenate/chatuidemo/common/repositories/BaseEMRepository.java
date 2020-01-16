@@ -13,6 +13,8 @@ import com.hyphenate.chatuidemo.DemoApp;
 import com.hyphenate.chatuidemo.DemoHelper;
 import com.hyphenate.chatuidemo.common.db.DemoDbHelper;
 import com.hyphenate.chatuidemo.common.db.dao.EmUserDao;
+import com.hyphenate.chatuidemo.common.db.dao.MsgTypeManageDao;
+import com.hyphenate.chatuidemo.common.db.entity.MsgTypeManageEntity;
 import com.hyphenate.chatuidemo.common.utils.ThreadManager;
 
 public class BaseEMRepository {
@@ -104,6 +106,14 @@ public class BaseEMRepository {
      */
     public EmUserDao getUserDao() {
         return DemoDbHelper.getInstance(DemoApp.getInstance()).getUserDao();
+    }
+
+    /**
+     * get MsgTypeManageDao
+     * @return
+     */
+    public MsgTypeManageDao getMsgTypeManageDao() {
+        return DemoDbHelper.getInstance(DemoApp.getInstance()).getMsgTypeManageDao();
     }
 
     /**

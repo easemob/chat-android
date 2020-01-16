@@ -15,23 +15,28 @@ import com.hyphenate.chat.EMGroup;
 import com.hyphenate.chat.EMMessage;
 import com.hyphenate.chatuidemo.DemoHelper;
 import com.hyphenate.chatuidemo.R;
+import com.hyphenate.chatuidemo.common.db.entity.InviteMessage;
+import com.hyphenate.chatuidemo.common.db.entity.MsgTypeManageEntity;
+import com.hyphenate.chatuidemo.common.manager.PushAndMessageHelper;
 import com.hyphenate.easeui.adapter.EaseBaseRecyclerViewAdapter;
 import com.hyphenate.easeui.model.EaseAtMessageHelper;
 import com.hyphenate.easeui.utils.EaseCommonUtils;
 import com.hyphenate.easeui.utils.EaseSmileUtils;
 import com.hyphenate.easeui.widget.EaseImageView;
 import com.hyphenate.util.DateUtils;
+import com.hyphenate.chatuidemo.common.db.entity.InviteMessage.InviteMessageStatus;
 
 import java.util.Date;
+import java.util.concurrent.locks.LockSupport;
 
-public class HomeAdapter extends EaseBaseRecyclerViewAdapter<EMConversation> {
+public class HomeAdapter extends EaseBaseRecyclerViewAdapter<Object> {
 
     @Override
     public ViewHolder getViewHolder(ViewGroup parent, int viewType) {
         return new MyViewHolder(LayoutInflater.from(mContext).inflate(R.layout.ease_item_row_chat_history, parent, false));
     }
 
-    private class MyViewHolder extends ViewHolder<EMConversation> {
+    private class MyViewHolder extends ViewHolder<Object> {
         private EaseImageView avatar;
         private TextView mUnreadMsgNumber;
         private TextView name;
@@ -56,43 +61,79 @@ public class HomeAdapter extends EaseBaseRecyclerViewAdapter<EMConversation> {
         }
 
         @Override
-        public void setData(EMConversation item, int position) {
-            String username = item.conversationId();
-            mentioned.setVisibility(View.GONE);
-            if(item.getType() == EMConversation.EMConversationType.GroupChat) {
-                if(EaseAtMessageHelper.get().hasAtMeMsg(username)) {
-                    mentioned.setVisibility(View.VISIBLE);
+        public void setData(Object object, int position) {
+            if(object instanceof EMConversation) {
+                EMConversation item = (EMConversation)object;
+                String username = item.conversationId();
+                mentioned.setVisibility(View.GONE);
+                if(item.getType() == EMConversation.EMConversationType.GroupChat) {
+                    if(EaseAtMessageHelper.get().hasAtMeMsg(username)) {
+                        mentioned.setVisibility(View.VISIBLE);
+                    }
+                    avatar.setImageResource(R.drawable.ease_group_icon);
+                    EMGroup group = DemoHelper.getInstance().getGroupManager().getGroup(username);
+                    name.setText(group != null ? group.getGroupName() : username);
+                }else if(item.getType() == EMConversation.EMConversationType.ChatRoom) {
+                    avatar.setImageResource(R.drawable.ease_group_icon);
+                    EMChatRoom chatRoom = DemoHelper.getInstance().getChatroomManager().getChatRoom(username);
+                    name.setText(chatRoom != null && !TextUtils.isEmpty(chatRoom.getName()) ? chatRoom.getName() : username);
+                }else {
+                    avatar.setImageResource(R.drawable.ease_default_avatar);
+                    name.setText(username);
                 }
-                // TODO: 2019/12/20 0020 添加关于是否需要消息提醒的逻辑 这块逻辑需要理一理
-                avatar.setImageResource(R.drawable.ease_group_icon);
-                EMGroup group = DemoHelper.getInstance().getGroupManager().getGroup(username);
-                name.setText(group != null ? group.getGroupName() : username);
-            }else if(item.getType() == EMConversation.EMConversationType.ChatRoom) {
-                avatar.setImageResource(R.drawable.ease_group_icon);
-                EMChatRoom chatRoom = DemoHelper.getInstance().getChatroomManager().getChatRoom(username);
-                name.setText(chatRoom != null && !TextUtils.isEmpty(chatRoom.getName()) ? chatRoom.getName() : username);
-            }else {
-                avatar.setImageResource(R.drawable.ease_default_avatar);
-                name.setText(username);
+
+                if(item.getUnreadMsgCount() > 0) {
+                    mUnreadMsgNumber.setText(String.valueOf(item.getUnreadMsgCount()));
+                    mUnreadMsgNumber.setVisibility(View.VISIBLE);
+                }else {
+                    mUnreadMsgNumber.setVisibility(View.GONE);
+                }
+
+                if(item.getAllMsgCount() != 0) {
+                    EMMessage lastMessage = item.getLastMessage();
+                    message.setText(EaseSmileUtils.getSmiledText(mContext, EaseCommonUtils.getMessageDigest(lastMessage, mContext)));
+                    time.setText(DateUtils.getTimestampString(new Date(lastMessage.getMsgTime())));
+                    if (lastMessage.direct() == EMMessage.Direct.SEND && lastMessage.status() == EMMessage.Status.FAIL) {
+                        mMsgState.setVisibility(View.VISIBLE);
+                    } else {
+                        mMsgState.setVisibility(View.GONE);
+                    }
+                }
+            }else if(object instanceof MsgTypeManageEntity) {
+                String type = ((MsgTypeManageEntity) object).getType();
+                Object lastMsg = ((MsgTypeManageEntity) object).getLastMsg();
+                if(lastMsg == null || TextUtils.isEmpty(type)) {
+                    return;
+                }
+                if(TextUtils.equals(type, MsgTypeManageEntity.msgType.NOTIFICATION.name())) {
+                    avatar.setImageResource(R.drawable.em_system_nofinication);
+                    name.setText(mContext.getString(R.string.em_conversation_system_notification));
+                }
+                int unReadCount = ((MsgTypeManageEntity) object).getUnReadCount();
+                if(unReadCount > 0) {
+                    mUnreadMsgNumber.setText(String.valueOf(unReadCount));
+                    mUnreadMsgNumber.setVisibility(View.VISIBLE);
+                }else {
+                    mUnreadMsgNumber.setVisibility(View.GONE);
+                }
+                if(lastMsg instanceof InviteMessage) {
+                    time.setText(DateUtils.getTimestampString(new Date(((InviteMessage) lastMsg).getTime())));
+                    InviteMessage.InviteMessageStatus status = ((InviteMessage) lastMsg).getStatusEnum();
+                    if(status == null) {
+                        return;
+                    }
+                    String reason = ((InviteMessage) lastMsg).getReason();
+                    if(status == InviteMessageStatus.BEINVITEED ||
+                        status == InviteMessageStatus.BEAPPLYED ||
+                        status == InviteMessageStatus.GROUPINVITATION) {
+                        message.setText(TextUtils.isEmpty(reason) ? PushAndMessageHelper.getSystemMessage((InviteMessage) lastMsg) : reason);
+                    }else {
+                        message.setText(PushAndMessageHelper.getSystemMessage((InviteMessage) lastMsg));
+                    }
+                }
+
             }
 
-            if(item.getUnreadMsgCount() > 0) {
-                mUnreadMsgNumber.setText(String.valueOf(item.getUnreadMsgCount()));
-                mUnreadMsgNumber.setVisibility(View.VISIBLE);
-            }else {
-                mUnreadMsgNumber.setVisibility(View.GONE);
-            }
-
-            if(item.getAllMsgCount() != 0) {
-                EMMessage lastMessage = item.getLastMessage();
-                message.setText(EaseSmileUtils.getSmiledText(mContext, EaseCommonUtils.getMessageDigest(lastMessage, mContext)));
-                time.setText(DateUtils.getTimestampString(new Date(lastMessage.getMsgTime())));
-                if (lastMessage.direct() == EMMessage.Direct.SEND && lastMessage.status() == EMMessage.Status.FAIL) {
-                    mMsgState.setVisibility(View.VISIBLE);
-                } else {
-                    mMsgState.setVisibility(View.GONE);
-                }
-            }
         }
     }
 }

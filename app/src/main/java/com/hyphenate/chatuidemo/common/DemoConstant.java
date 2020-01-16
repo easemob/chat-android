@@ -28,4 +28,22 @@ public interface DemoConstant extends EaseConstant {
     String CHAT_ROOM = "item_chatroom";
     String CHAT_ROBOT = "item_robots";
 
+    String NOTIFY_GROUP_INVITE_RECEIVE = "invite_receive";
+    String NOTIFY_GROUP_INVITE_ACCEPTED = "invite_accepted";
+    String NOTIFY_GROUP_INVITE_DECLINED = "invite_declined";
+    String NOTIFY_GROUP_JOIN_RECEIVE = "invite_join_receive";
+
+    String MESSAGE_GROUP_JOIN_ACCEPTED = "message_join_accepted";
+    String MESSAGE_GROUP_AUTO_ACCEPT = "message_auto_accept";
+
+    String CONTACT_REMOVE = "contact_remove";
+    String CONTACT_ACCEPT = "contact_accept";
+    String CONTACT_DECLINE = "contact_decline";
+    String CONTACT_BAN = "contact_ban";
+    String CONTACT_ALLOW = "contact_allow";
+
+    String CONTACT_CHANGE = "contact_change";
+
+    String GROUP_CHANGE = "group_change";
+
 }

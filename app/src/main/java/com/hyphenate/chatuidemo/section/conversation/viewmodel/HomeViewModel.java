@@ -7,7 +7,11 @@ import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
 
 import com.hyphenate.chat.EMConversation;
+import com.hyphenate.chatuidemo.DemoApp;
+import com.hyphenate.chatuidemo.common.db.DemoDbHelper;
+import com.hyphenate.chatuidemo.common.db.entity.MsgTypeManageEntity;
 import com.hyphenate.chatuidemo.common.livedatas.SingleSourceLiveData;
+import com.hyphenate.chatuidemo.common.net.ErrorCode;
 import com.hyphenate.chatuidemo.common.net.Resource;
 import com.hyphenate.chatuidemo.common.repositories.EMChatManagerRepository;
 
@@ -16,7 +20,7 @@ import java.util.List;
 public class HomeViewModel extends AndroidViewModel {
     private EMChatManagerRepository mRepository;
 
-    private SingleSourceLiveData<Resource<List<EMConversation>>> conversationObservable;
+    private SingleSourceLiveData<Resource<List<Object>>> conversationObservable;
     private SingleSourceLiveData<Resource<Boolean>> deleteConversationObservable;
 
     public HomeViewModel(@NonNull Application application) {
@@ -33,7 +37,7 @@ public class HomeViewModel extends AndroidViewModel {
         conversationObservable.setSource(mRepository.loadConversationList());
     }
 
-    public LiveData<Resource<List<EMConversation>>> getConversationObservable() {
+    public LiveData<Resource<List<Object>>> getConversationObservable() {
         return conversationObservable;
     }
 
@@ -47,5 +51,21 @@ public class HomeViewModel extends AndroidViewModel {
 
     public LiveData<Resource<Boolean>> getDeleteObservable() {
         return deleteConversationObservable;
+    }
+
+    /**
+     * 删除系统消息
+     * @param msg
+     */
+    public void deleteSystemMsg(MsgTypeManageEntity msg) {
+        try {
+            DemoDbHelper dbHelper = DemoDbHelper.getInstance(DemoApp.getInstance());
+            dbHelper.getInviteMessageDao().delete("type", msg.getType());
+            dbHelper.getMsgTypeManageDao().delete(msg);
+            deleteConversationObservable.postValue(Resource.success(true));
+        } catch (Exception e) {
+            e.printStackTrace();
+            deleteConversationObservable.postValue(Resource.error(ErrorCode.EM_DELETE_SYS_MSG_ERROR, e.getMessage(), null));
+        }
     }
 }

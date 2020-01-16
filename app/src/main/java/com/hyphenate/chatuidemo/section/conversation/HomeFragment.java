@@ -2,6 +2,7 @@ package com.hyphenate.chatuidemo.section.conversation;
 
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.ContextMenu;
 import android.view.MenuItem;
 import android.view.View;
@@ -14,7 +15,12 @@ import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.hyphenate.chat.EMConversation;
+import com.hyphenate.chatuidemo.DemoHelper;
 import com.hyphenate.chatuidemo.R;
+import com.hyphenate.chatuidemo.common.DemoConstant;
+import com.hyphenate.chatuidemo.common.db.DemoDbHelper;
+import com.hyphenate.chatuidemo.common.db.entity.InviteMessage;
+import com.hyphenate.chatuidemo.common.db.entity.MsgTypeManageEntity;
 import com.hyphenate.chatuidemo.common.interfaceOrImplement.OnResourceParseCallback;
 import com.hyphenate.chatuidemo.common.utils.ThreadManager;
 import com.hyphenate.chatuidemo.section.base.BaseInitFragment;
@@ -26,6 +32,7 @@ import com.hyphenate.easeui.interfaces.OnItemClickListener;
 import com.hyphenate.easeui.utils.EaseCommonUtils;
 import com.hyphenate.easeui.widget.EaseRecyclerView;
 import com.hyphenate.easeui.widget.EaseSearchTextView;
+import com.hyphenate.util.EMLog;
 import com.scwang.smartrefresh.layout.SmartRefreshLayout;
 import com.scwang.smartrefresh.layout.api.RefreshLayout;
 import com.scwang.smartrefresh.layout.listener.OnRefreshListener;
@@ -68,13 +75,23 @@ public class HomeFragment extends BaseInitFragment implements OnRefreshListener,
         requireActivity().getMenuInflater().inflate(R.menu.em_conversation_list_menu, menu);
         if(menuInfo instanceof EaseRecyclerView.RecyclerViewContextMenuInfo) {
             int position = ((EaseRecyclerView.RecyclerViewContextMenuInfo) menuInfo).position;
-            EMConversation item = mHomeAdapter.getItem(position);
-            String extField = item.getExtField();
-            if(!TextUtils.isEmpty(extField) && EaseCommonUtils.isTimestamp(extField)) {
-                // 含有时间戳
-                menu.findItem(R.id.action_cancel_top).setVisible(true);
-                menu.findItem(R.id.action_make_top).setVisible(false);
+            Object item = mHomeAdapter.getItem(position);
+            if(item instanceof EMConversation) {
+                String extField = ((EMConversation)item).getExtField();
+                if(!TextUtils.isEmpty(extField) && EaseCommonUtils.isTimestamp(extField)) {
+                    // 含有时间戳
+                    menu.findItem(R.id.action_cancel_top).setVisible(true);
+                    menu.findItem(R.id.action_make_top).setVisible(false);
+                }
+            }else if(item instanceof MsgTypeManageEntity) {
+                String ext = ((MsgTypeManageEntity) item).getExtField();
+                if(!TextUtils.isEmpty(ext) && EaseCommonUtils.isTimestamp(ext)) {
+                    // 含有时间戳
+                    menu.findItem(R.id.action_cancel_top).setVisible(true);
+                    menu.findItem(R.id.action_make_top).setVisible(false);
+                }
             }
+
         }
 
     }
@@ -83,24 +100,45 @@ public class HomeFragment extends BaseInitFragment implements OnRefreshListener,
     public boolean onContextItemSelected(@NonNull MenuItem item) {
         EaseRecyclerView.RecyclerViewContextMenuInfo info = (EaseRecyclerView.RecyclerViewContextMenuInfo) item.getMenuInfo();
         int position = info.position;
-        EMConversation conversation = null;
+        Object object = null;
         if(position >= 0) {
-            conversation = mHomeAdapter.getItem(position);
+            object = mHomeAdapter.getItem(position);
         }
-        if(conversation != null) {
-            switch (item.getItemId()) {
-                case R.id.action_make_top :
-                    conversation.setExtField(System.currentTimeMillis()+"");
-                    mViewModel.loadConversationList();
-                    break;
-                case R.id.action_cancel_top:
-                    conversation.setExtField("");
-                    mViewModel.loadConversationList();
-                    break;
-                case R.id.action_delete:
-                    mViewModel.deleteConversationById(conversation.conversationId());
-                    break;
+        if(object != null) {
+            if(object instanceof EMConversation) {
+                EMConversation conversation = (EMConversation) object;
+                switch (item.getItemId()) {
+                    case R.id.action_make_top :
+                        conversation.setExtField(System.currentTimeMillis()+"");
+                        mViewModel.loadConversationList();
+                        break;
+                    case R.id.action_cancel_top:
+                        conversation.setExtField("");
+                        mViewModel.loadConversationList();
+                        break;
+                    case R.id.action_delete:
+                        mViewModel.deleteConversationById(conversation.conversationId());
+                        break;
+                }
+            }else if(object instanceof MsgTypeManageEntity) {
+                MsgTypeManageEntity msg = (MsgTypeManageEntity) object;
+                switch (item.getItemId()) {
+                    case R.id.action_make_top :
+                        msg.setExtField(System.currentTimeMillis()+"");
+                        DemoHelper.getInstance().update(msg);
+                        mViewModel.loadConversationList();
+                        break;
+                    case R.id.action_cancel_top:
+                        msg.setExtField("");
+                        DemoHelper.getInstance().update(msg);
+                        mViewModel.loadConversationList();
+                        break;
+                    case R.id.action_delete:
+                        mViewModel.deleteSystemMsg(msg);
+                        break;
+                }
             }
+
         }
 
         return super.onContextItemSelected(item);
@@ -111,9 +149,9 @@ public class HomeFragment extends BaseInitFragment implements OnRefreshListener,
         super.initViewModel();
         mViewModel = new ViewModelProvider(this).get(HomeViewModel.class);
         mViewModel.getConversationObservable().observe(this, response -> {
-            parseResource(response, new OnResourceParseCallback<List<EMConversation>>() {
+            parseResource(response, new OnResourceParseCallback<List<Object>>() {
                 @Override
-                public void onSuccess(List<EMConversation> data) {
+                public void onSuccess(List<Object> data) {
                     mHomeAdapter.setData(data);
                 }
 
@@ -140,7 +178,9 @@ public class HomeFragment extends BaseInitFragment implements OnRefreshListener,
             if(change == null) {
                 return;
             }
-            mViewModel.loadConversationList();
+            if(mContext.isMessageChange(change) || mContext.isNotify(change)) {
+                mViewModel.loadConversationList();
+            }
         });
     }
 
@@ -182,7 +222,11 @@ public class HomeFragment extends BaseInitFragment implements OnRefreshListener,
 
     @Override
     public void onItemClick(View view, int position) {
-        EMConversation item = mHomeAdapter.getItem(position);
-        ChatActivity.actionStart(mContext, item.conversationId(), EaseCommonUtils.getChatType(item));
+        Object item = mHomeAdapter.getItem(position);
+        if(item instanceof EMConversation) {
+            ChatActivity.actionStart(mContext, ((EMConversation)item).conversationId(), EaseCommonUtils.getChatType((EMConversation) item));
+        }else if(item instanceof MsgTypeManageEntity) {
+            showToast("跳转到系统消息页面");
+        }
     }
 }

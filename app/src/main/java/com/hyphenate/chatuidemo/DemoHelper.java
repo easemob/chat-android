@@ -11,22 +11,25 @@ import com.hyphenate.EMCallBack;
 import com.hyphenate.chat.EMChatManager;
 import com.hyphenate.chat.EMChatRoomManager;
 import com.hyphenate.chat.EMClient;
-import com.hyphenate.chat.EMConference;
 import com.hyphenate.chat.EMConferenceManager;
 import com.hyphenate.chat.EMContactManager;
 import com.hyphenate.chat.EMConversation;
 import com.hyphenate.chat.EMGroupManager;
 import com.hyphenate.chat.EMMessage;
 import com.hyphenate.chat.EMOptions;
+import com.hyphenate.chatuidemo.common.db.DemoDbHelper;
+import com.hyphenate.chatuidemo.common.db.entity.EmUserEntity;
+import com.hyphenate.chatuidemo.common.db.entity.InviteMessage;
+import com.hyphenate.chatuidemo.common.db.entity.MsgTypeManageEntity;
 import com.hyphenate.chatuidemo.common.manager.HMSPushHelper;
 import com.hyphenate.chatuidemo.common.manager.OptionsHelper;
 import com.hyphenate.chatuidemo.common.model.DemoServerSetBean;
 import com.hyphenate.chatuidemo.common.model.EmojiconExampleGroupData;
 import com.hyphenate.chatuidemo.common.receiver.HeadsetReceiver;
 import com.hyphenate.chatuidemo.common.utils.PreferenceManager;
+import com.hyphenate.chatuidemo.section.chat.ChatPresenter;
 import com.hyphenate.chatuidemo.section.chat.receiver.CallReceiver;
 import com.hyphenate.easeui.EaseUI;
-import com.hyphenate.easeui.domain.EaseAvatarOptions;
 import com.hyphenate.easeui.domain.EaseEmojicon;
 import com.hyphenate.easeui.domain.EaseEmojiconGroupEntity;
 import com.hyphenate.easeui.provider.EaseEmojiconInfoProvider;
@@ -159,6 +162,7 @@ public class DemoHelper {
 
     private void initEaseUI(Context context) {
         EaseUI.getInstance().init(context);
+        EaseUI.getInstance().addChatPresenter(ChatPresenter.getInstance());
         EaseUI.getInstance()
                 .setSettingsProvider(new EaseSettingsProvider() {
                     @Override
@@ -678,4 +682,41 @@ public class DemoHelper {
         return PreferenceManager.getInstance().getCurrentUserAvatar();
     }
 
+    /**
+     * get DemoDbHelper
+     * @return
+     */
+    public DemoDbHelper getDbHelper() {
+        return DemoDbHelper.getInstance(DemoApp.getInstance());
+    }
+
+    /**
+     * 向数据库中插入数据
+     * @param object
+     */
+    public void insert(Object object) {
+        DemoDbHelper dbHelper = getDbHelper();
+        if(object instanceof InviteMessage) {
+            dbHelper.getInviteMessageDao().insert((InviteMessage) object);
+        }else if(object instanceof MsgTypeManageEntity) {
+            dbHelper.getMsgTypeManageDao().insert((MsgTypeManageEntity) object);
+        }else if(object instanceof EmUserEntity) {
+            dbHelper.getUserDao().insert((EmUserEntity) object);
+        }
+    }
+
+    /**
+     * update
+     * @param object
+     */
+    public void update(Object object) {
+        DemoDbHelper dbHelper = getDbHelper();
+        if(object instanceof InviteMessage) {
+            dbHelper.getInviteMessageDao().update((InviteMessage) object);
+        }else if(object instanceof MsgTypeManageEntity) {
+            dbHelper.getMsgTypeManageDao().update((MsgTypeManageEntity) object);
+        }else if(object instanceof EmUserEntity) {
+            dbHelper.getUserDao().insert((EmUserEntity) object);
+        }
+    }
 }

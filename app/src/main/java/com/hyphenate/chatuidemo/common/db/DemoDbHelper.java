@@ -7,6 +7,8 @@ import androidx.lifecycle.MutableLiveData;
 import androidx.room.Room;
 
 import com.hyphenate.chatuidemo.common.db.dao.EmUserDao;
+import com.hyphenate.chatuidemo.common.db.dao.InviteMessageDao;
+import com.hyphenate.chatuidemo.common.db.dao.MsgTypeManageDao;
 import com.hyphenate.chatuidemo.common.utils.MD5;
 import com.hyphenate.util.EMLog;
 
@@ -70,6 +72,22 @@ public class DemoDbHelper {
             return mDatabase.userDao();
         }
         EMLog.i(TAG, "get userDao failed, should init db first");
+        return null;
+    }
+
+    public InviteMessageDao getInviteMessageDao() {
+        if(mDatabase != null) {
+            return mDatabase.inviteMessageDao();
+        }
+        EMLog.i(TAG, "get inviteMessageDao failed, should init db first");
+        return null;
+    }
+
+    public MsgTypeManageDao getMsgTypeManageDao() {
+        if(mDatabase != null) {
+            return mDatabase.msgTypeManageDao();
+        }
+        EMLog.i(TAG, "get msgTypeManageDao failed, should init db first");
         return null;
     }
 }

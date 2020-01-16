@@ -7,10 +7,9 @@ import androidx.annotation.NonNull;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
-import com.hyphenate.chat.EMChatManager;
-import com.hyphenate.chat.EMClient;
 import com.hyphenate.chat.EMConversation;
-import com.hyphenate.chatuidemo.DemoHelper;
+import com.hyphenate.chatuidemo.common.db.entity.InviteMessage;
+import com.hyphenate.chatuidemo.common.db.entity.MsgTypeManageEntity;
 import com.hyphenate.chatuidemo.common.interfaceOrImplement.ResultCallBack;
 import com.hyphenate.chatuidemo.common.net.ErrorCode;
 import com.hyphenate.chatuidemo.common.net.Resource;
@@ -31,12 +30,12 @@ public class EMChatManagerRepository extends BaseEMRepository{
      * 获取会话列表
      * @return
      */
-    public LiveData<Resource<List<EMConversation>>> loadConversationList() {
-        return new NetworkOnlyResource<List<EMConversation>>() {
+    public LiveData<Resource<List<Object>>> loadConversationList() {
+        return new NetworkOnlyResource<List<Object>>() {
 
             @Override
-            protected void createCall(@NonNull ResultCallBack<LiveData<List<EMConversation>>> callBack) {
-                List<EMConversation> emConversations = loadConversationListFromCache();
+            protected void createCall(@NonNull ResultCallBack<LiveData<List<Object>>> callBack) {
+                List<Object> emConversations = loadConversationListFromCache();
                 callBack.onSuccess(new MutableLiveData<>(emConversations));
             }
 
@@ -48,11 +47,11 @@ public class EMChatManagerRepository extends BaseEMRepository{
      *
      * @return
     +    */
-    protected List<EMConversation> loadConversationListFromCache(){
+    protected List<Object> loadConversationListFromCache(){
         // get all conversations
         Map<String, EMConversation> conversations = getChatManager().getAllConversations();
-        List<Pair<Long, EMConversation>> sortList = new ArrayList<Pair<Long, EMConversation>>();
-        List<Pair<Long, EMConversation>> topSortList = new ArrayList<Pair<Long, EMConversation>>();
+        List<Pair<Long, Object>> sortList = new ArrayList<Pair<Long, Object>>();
+        List<Pair<Long, Object>> topSortList = new ArrayList<Pair<Long, Object>>();
         /**
          * lastMsgTime will change if there is new message during sorting
          * so use synchronized to make sure timestamp of last message won't change.
@@ -64,7 +63,22 @@ public class EMChatManagerRepository extends BaseEMRepository{
                     if(!TextUtils.isEmpty(extField) && EaseCommonUtils.isTimestamp(extField)) {
                         topSortList.add(new Pair<>(Long.valueOf(extField), conversation));
                     }else {
-                        sortList.add(new Pair<Long, EMConversation>(conversation.getLastMessage().getMsgTime(), conversation));
+                        sortList.add(new Pair<Long, Object>(conversation.getLastMessage().getMsgTime(), conversation));
+                    }
+                }
+            }
+        }
+        List<MsgTypeManageEntity> manageEntities = getMsgTypeManageDao().loadAllMsgTypeManage();
+        synchronized (EMChatManagerRepository.class) {
+            for (MsgTypeManageEntity manage : manageEntities) {
+                String extField = manage.getExtField();
+                if(!TextUtils.isEmpty(extField) && EaseCommonUtils.isTimestamp(extField)) {
+                    topSortList.add(new Pair<>(Long.valueOf(extField), manage));
+                }else {
+                    Object lastMsg = manage.getLastMsg();
+                    if(lastMsg instanceof InviteMessage) {
+                        long time = ((InviteMessage) lastMsg).getTime();
+                        sortList.add(new Pair<>(time, manage));
                     }
                 }
             }
@@ -79,8 +93,8 @@ public class EMChatManagerRepository extends BaseEMRepository{
             e.printStackTrace();
         }
         sortList.addAll(0, topSortList);
-        List<EMConversation> list = new ArrayList<EMConversation>();
-        for (Pair<Long, EMConversation> sortItem : sortList) {
+        List<Object> list = new ArrayList<Object>();
+        for (Pair<Long, Object> sortItem : sortList) {
             list.add(sortItem.second);
         }
         return list;
@@ -91,10 +105,10 @@ public class EMChatManagerRepository extends BaseEMRepository{
      *
      * @param conversationList
      */
-    private void sortConversationByLastChatTime(List<Pair<Long, EMConversation>> conversationList) {
-        Collections.sort(conversationList, new Comparator<Pair<Long, EMConversation>>() {
+    private void sortConversationByLastChatTime(List<Pair<Long, Object>> conversationList) {
+        Collections.sort(conversationList, new Comparator<Pair<Long, Object>>() {
             @Override
-            public int compare(final Pair<Long, EMConversation> con1, final Pair<Long, EMConversation> con2) {
+            public int compare(final Pair<Long, Object> con1, final Pair<Long, Object> con2) {
 
                 if (con1.first.equals(con2.first)) {
                     return 0;
