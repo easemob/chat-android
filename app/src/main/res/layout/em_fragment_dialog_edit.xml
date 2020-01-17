@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<EditText
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/et_input"
+    android:layout_width="match_parent"
+    android:layout_height="44dp"
+    android:layout_marginLeft="@dimen/em_margin_30"
+    android:layout_marginStart="@dimen/em_margin_30"
+    android:layout_marginRight="@dimen/em_margin_30"
+    android:layout_marginEnd="@dimen/em_margin_30"
+    android:paddingLeft="@dimen/em_padding_15"
+    android:paddingStart="@dimen/em_padding_15"
+    android:paddingRight="@dimen/em_padding_15"
+    android:paddingEnd="@dimen/em_padding_15"
+    android:background="@drawable/em_dialog_edit_bg_shape"/>

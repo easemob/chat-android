@@ -1,31 +1,29 @@
 package com.hyphenate.chatuidemo.common.repositories;
 
 import android.text.TextUtils;
-import android.util.Log;
 
 import androidx.annotation.NonNull;
-import androidx.arch.core.util.Function;
 import androidx.lifecycle.LiveData;
-import androidx.lifecycle.MediatorLiveData;
 import androidx.lifecycle.MutableLiveData;
-import androidx.lifecycle.Transformations;
 
 import com.hyphenate.EMValueCallBack;
+import com.hyphenate.chat.EMCursorResult;
 import com.hyphenate.chat.EMGroup;
-import com.hyphenate.chat.EMGroupManager;
 import com.hyphenate.chatuidemo.DemoHelper;
 import com.hyphenate.chatuidemo.common.db.entity.EmUserEntity;
-import com.hyphenate.chatuidemo.common.enums.Status;
 import com.hyphenate.chatuidemo.common.interfaceOrImplement.ResultCallBack;
 import com.hyphenate.chatuidemo.common.net.ErrorCode;
 import com.hyphenate.chatuidemo.common.net.Resource;
 import com.hyphenate.easeui.domain.EaseUser;
 import com.hyphenate.easeui.utils.EaseCommonUtils;
+import com.hyphenate.exceptions.HyphenateException;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class EMGroupManagerRepository extends BaseEMRepository{
 
@@ -74,6 +72,36 @@ public class EMGroupManagerRepository extends BaseEMRepository{
     }
 
     /**
+     * 获取群组信息
+     * @param groupId
+     * @return
+     */
+    public LiveData<Resource<EMGroup>> getGroupFromServer(String groupId) {
+        return new NetworkOnlyResource<EMGroup>() {
+
+            @Override
+            protected void createCall(@NonNull ResultCallBack<LiveData<EMGroup>> callBack) {
+                if(!isLoggedIn()) {
+                    callBack.onError(ErrorCode.EM_NOT_LOGIN);
+                    return;
+                }
+                DemoHelper.getInstance().getGroupManager().asyncGetGroupFromServer(groupId, new EMValueCallBack<EMGroup>() {
+                    @Override
+                    public void onSuccess(EMGroup value) {
+                        callBack.onSuccess(createLiveData(value));
+                    }
+
+                    @Override
+                    public void onError(int error, String errorMsg) {
+                        callBack.onError(error, errorMsg);
+                    }
+                });
+            }
+
+        }.asLiveData();
+    }
+
+    /**
      * 获取群组成员列表
      * @param groupId
      * @return
@@ -83,10 +111,17 @@ public class EMGroupManagerRepository extends BaseEMRepository{
 
             @Override
             protected void createCall(@NonNull ResultCallBack<LiveData<List<EaseUser>>> callBack) {
+                if(!isLoggedIn()) {
+                    callBack.onError(ErrorCode.EM_NOT_LOGIN);
+                    return;
+                }
                 DemoHelper.getInstance().getGroupManager().asyncGetGroupFromServer(groupId, new EMValueCallBack<EMGroup>() {
                     @Override
                     public void onSuccess(EMGroup value) {
                         List<String> members = value.getMembers();
+                        if(members.size() < value.getMemberCount()) {
+                            members = getAllGroupMemberByServer(groupId);
+                        }
                         members.addAll(value.getAdminList());
                         members.add(value.getOwner());
                         if(!members.isEmpty()) {
@@ -104,6 +139,112 @@ public class EMGroupManagerRepository extends BaseEMRepository{
             }
 
         }.asLiveData();
+    }
+
+    /**
+     * 获取禁言列表
+     * @param groupId
+     * @return
+     */
+    public LiveData<Resource<Map<String, Long>>> getGroupMuteMap(String groupId) {
+        return new NetworkOnlyResource<Map<String, Long>>() {
+
+            @Override
+            protected void createCall(@NonNull ResultCallBack<LiveData<Map<String, Long>>> callBack) {
+                Map<String, Long> map = null;
+                Map<String, Long> result = new HashMap<>();
+                int pageSize = 200;
+                do{
+                    try {
+                        map = getGroupManager().fetchGroupMuteList(groupId, 0, pageSize);
+                    } catch (HyphenateException e) {
+                        e.printStackTrace();
+                    }
+                    if(map != null) {
+                        result.putAll(map);
+                    }
+                }while (map == null || map.isEmpty() || map.size() < 200);
+                callBack.onSuccess(createLiveData(result));
+            }
+
+        }.asLiveData();
+    }
+
+    /**
+     * 获取群组黑名单列表
+     * @param groupId
+     * @return
+     */
+    public LiveData<Resource<List<String>>> getGroupBlackList(String groupId) {
+        return new NetworkOnlyResource<List<String>>() {
+
+            @Override
+            protected void createCall(@NonNull ResultCallBack<LiveData<List<String>>> callBack) {
+                List<String> list = null;
+                List<String> result = new ArrayList<>();
+                int pageSize = 200;
+                do{
+                    try {
+                        list = getGroupManager().fetchGroupBlackList(groupId, 0, pageSize);
+                    } catch (HyphenateException e) {
+                        e.printStackTrace();
+                    }
+                    if(list != null) {
+                        result.addAll(list);
+                    }
+                }while (list == null || list.isEmpty() || list.size() < 200);
+                callBack.onSuccess(createLiveData(result));
+            }
+
+        }.asLiveData();
+    }
+
+    /**
+     * 获取群公告
+     * @param groupId
+     * @return
+     */
+    public LiveData<Resource<String>> getGroupAnnouncement(String groupId) {
+        return new NetworkOnlyResource<String>() {
+
+            @Override
+            protected void createCall(@NonNull ResultCallBack<LiveData<String>> callBack) {
+                getGroupManager().asyncFetchGroupAnnouncement(groupId, new EMValueCallBack<String>() {
+                    @Override
+                    public void onSuccess(String value) {
+                        callBack.onSuccess(createLiveData(value));
+                    }
+
+                    @Override
+                    public void onError(int error, String errorMsg) {
+                        callBack.onError(error, errorMsg);
+                    }
+                });
+            }
+
+        }.asLiveData();
+    }
+
+    /**
+     * 获取所有成员
+     * @param groupId
+     * @return
+     */
+    public List<String> getAllGroupMemberByServer(String groupId) {
+        // 根据groupId获取群组中所有成员
+        List<String> contactList = new ArrayList<>();
+        EMCursorResult<String> result = null;
+        do {
+            try {
+                result = getGroupManager().fetchGroupMembers(groupId, result != null ? result.getCursor() : "", 20);
+            } catch (HyphenateException e) {
+                e.printStackTrace();
+            }
+            if(result != null) {
+                contactList.addAll(result.getData());
+            }
+        } while (result != null && !TextUtils.isEmpty(result.getCursor()));
+        return contactList;
     }
 
     private void sortUserData(List<EaseUser> users) {

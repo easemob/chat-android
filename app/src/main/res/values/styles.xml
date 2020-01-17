@@ -87,4 +87,10 @@
         <item name="android:textColor">@color/em_color_common_text_black</item>
     </style>
 
+    <style name="em_group_arrow_item">
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_height">66dp</item>
+        <item name="android:foreground">@drawable/em_ripple_click_gray</item>
+    </style>
+
 </resources>

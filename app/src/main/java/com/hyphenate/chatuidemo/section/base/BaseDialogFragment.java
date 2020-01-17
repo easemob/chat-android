@@ -14,6 +14,7 @@ import android.widget.TextView;
 import androidx.annotation.IdRes;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.constraintlayout.widget.Group;
 import androidx.fragment.app.DialogFragment;
 
 import com.hyphenate.chatuidemo.R;
@@ -27,6 +28,7 @@ public abstract class BaseDialogFragment extends DialogFragment implements View.
     public Button mBtnDialogCancel;
     public Button mBtnDialogConfirm;
     public OnConfirmClickListener mOnConfirmClickListener;
+    public Group mGroupMiddle;
 
     @Override
     public void onAttach(@NonNull Context context) {
@@ -41,10 +43,8 @@ public abstract class BaseDialogFragment extends DialogFragment implements View.
         View view = inflater.inflate(R.layout.em_fragment_dialog_base, container, false);
         int layoutId = getMiddleLayoutId();
         if(layoutId > 0) {
-            View middle = LayoutInflater.from(mContext).inflate(layoutId, null);
             RelativeLayout middleParent = view.findViewById(R.id.rl_dialog_middle);
-            middleParent.removeAllViews();
-            middleParent.addView(middle, 0);
+            LayoutInflater.from(mContext).inflate(layoutId, middleParent);
             //同时使middleParent可见
             view.findViewById(R.id.group_middle).setVisibility(View.VISIBLE);
         }
@@ -87,6 +87,7 @@ public abstract class BaseDialogFragment extends DialogFragment implements View.
         mTvDialogTitle = findViewById(R.id.tv_dialog_title);
         mBtnDialogCancel = findViewById(R.id.btn_dialog_cancel);
         mBtnDialogConfirm = findViewById(R.id.btn_dialog_confirm);
+        mGroupMiddle = findViewById(R.id.group_middle);
     }
 
     public void initListener() {

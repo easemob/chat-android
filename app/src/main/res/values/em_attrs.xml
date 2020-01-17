@@ -6,4 +6,23 @@
         <attr name="contactItemBottomLineMarginLeft" format="dimension"/>
         <attr name="contactItemBottomLineMarginRight" format="dimension"/>
     </declare-styleable>
+
+    <declare-styleable name="ArrowItemView">
+        <attr name="arrowItemTitle" format="string|reference"/>
+        <attr name="arrowItemTitleColor" format="color|reference"/>
+        <attr name="arrowItemTitleSize" format="dimension|reference"/>
+        <attr name="arrowItemContent" format="string|reference"/>
+        <attr name="arrowItemContentColor" format="color|reference"/>
+        <attr name="arrowItemContentSize" format="dimension|reference"/>
+        <attr name="arrowItemShowDivider" format="boolean"/>
+        <attr name="arrowItemShowArrow" format="boolean"/>
+    </declare-styleable>
+
+    <declare-styleable name="SwitchItemView">
+        <attr name="switchItemTitle" format="string|reference"/>
+        <attr name="switchItemTitleColor" format="color|reference"/>
+        <attr name="switchItemTitleSize" format="dimension|reference"/>
+        <attr name="switchItemShowDivider" format="boolean"/>
+    </declare-styleable>
+
 </resources>

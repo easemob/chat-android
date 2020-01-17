@@ -34,9 +34,11 @@
 
     <dimen name="em_friends_contact_detail_note_size">@dimen/em_size_normal</dimen>
 
-    <dimen name="em_margin_20">20dp</dimen>
     <dimen name="em_margin_15">15dp</dimen>
     <dimen name="em_margin_10">10dp</dimen>
+    <dimen name="em_margin_20">20dp</dimen>
+    <dimen name="em_margin_30">30dp</dimen>
+    <dimen name="em_margin_40">40dp</dimen>
 
     <dimen name="em_padding_20">20dp</dimen>
     <dimen name="em_padding_15">15dp</dimen>

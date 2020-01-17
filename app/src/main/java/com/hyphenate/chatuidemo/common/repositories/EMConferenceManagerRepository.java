@@ -39,17 +39,7 @@ public class EMConferenceManagerRepository extends BaseEMRepository {
                         contactList.addAll(DemoDbHelper.getInstance(DemoApp.getInstance()).getUserDao().loadAllUsers());
                     }else {
                         // 根据groupId获取群组中所有成员
-                        EMCursorResult<String> result = null;
-                        do {
-                            try {
-                                result = getGroupManager().fetchGroupMembers(groupId, result != null ? result.getCursor() : "", 20);
-                            } catch (HyphenateException e) {
-                                e.printStackTrace();
-                            }
-                            if(result != null) {
-                                contactList.addAll(result.getData());
-                            }
-                        } while (result != null && !TextUtils.isEmpty(result.getCursor()));
+                        contactList = new EMGroupManagerRepository().getAllGroupMemberByServer(groupId);
                     }
                     List<KV<String, Integer>> contacts = new ArrayList<>();
                     for (String it : contactList) {
