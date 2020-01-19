@@ -334,6 +334,8 @@
         <activity android:name=".section.friends.activity.ForwardMessageActivity" />
         <activity android:name=".section.group.GroupDetailActivity" />
         <activity android:name=".section.group.ChatRoomDetailActivity" />
+        <!--群分享文件-->
+        <activity android:name=".section.group.GroupSharedFilesActivity" />
 
     </application>
 

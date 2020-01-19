@@ -11,6 +11,7 @@ import com.hyphenate.EMCallBack;
 import com.hyphenate.EMValueCallBack;
 import com.hyphenate.chat.EMCursorResult;
 import com.hyphenate.chat.EMGroup;
+import com.hyphenate.chat.EMMucSharedFile;
 import com.hyphenate.chatuidemo.DemoHelper;
 import com.hyphenate.chatuidemo.common.db.entity.EmUserEntity;
 import com.hyphenate.chatuidemo.common.interfaceOrImplement.ResultCallBack;
@@ -400,6 +401,32 @@ public class EMGroupManagerRepository extends BaseEMRepository{
                     @Override
                     public void onProgress(int progress, String status) {
 
+                    }
+                });
+            }
+        }.asLiveData();
+    }
+
+    /**
+     * 获取共享文件
+     * @param groupId
+     * @param pageNum
+     * @param pageSize
+     * @return
+     */
+    public LiveData<Resource<List<EMMucSharedFile>>> getSharedFiles(String groupId, int pageNum, int pageSize) {
+        return new NetworkOnlyResource<List<EMMucSharedFile>>() {
+            @Override
+            protected void createCall(@NonNull ResultCallBack<LiveData<List<EMMucSharedFile>>> callBack) {
+                getGroupManager().asyncFetchGroupSharedFileList(groupId, pageNum, pageSize, new EMValueCallBack<List<EMMucSharedFile>>() {
+                    @Override
+                    public void onSuccess(List<EMMucSharedFile> value) {
+                        callBack.onSuccess(createLiveData(value));
+                    }
+
+                    @Override
+                    public void onError(int error, String errorMsg) {
+                        callBack.onError(error, errorMsg);
                     }
                 });
             }
