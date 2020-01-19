@@ -12,6 +12,7 @@ import com.hyphenate.chatuidemo.common.interfaceOrImplement.DialogCallBack;
 import com.hyphenate.chatuidemo.common.utils.ThreadManager;
 import com.hyphenate.chatuidemo.section.base.BaseDialogFragment;
 import com.hyphenate.chatuidemo.section.base.BaseInitFragment;
+import com.hyphenate.chatuidemo.section.dialog.DemoDialogFragment;
 import com.hyphenate.chatuidemo.section.dialog.SimpleDialogFragment;
 import com.hyphenate.chatuidemo.section.login.activity.LoginActivity;
 
@@ -44,7 +45,7 @@ public class AboutMeFragment extends BaseInitFragment implements View.OnClickLis
     }
 
     private void logout() {
-        SimpleDialogFragment.showDialog(mContext, "是否退出？", new BaseDialogFragment.OnConfirmClickListener() {
+        SimpleDialogFragment.showDialog(mContext, "是否退出？", new DemoDialogFragment.OnConfirmClickListener() {
             @Override
             public void onConfirmClick(View view) {
                 DemoHelper.getInstance().logout(true, new EMCallBack() {

@@ -108,13 +108,17 @@
     <string name="em_chat_group_detail_member_num">%1$d人</string>
     <string name="em_chat_group_detail_name">群名称</string>
     <string name="em_chat_group_detail_share_file">共享文件</string>
-    <string name="em_chat_group_detail_notice">群公告</string>
+    <string name="em_chat_group_detail_announcement">群公告</string>
+    <string name="em_chat_group_detail_announcement_hint">请输入群公告</string>
     <string name="em_chat_group_detail_history">查找聊天记录</string>
     <string name="em_chat_group_detail_introduction">群介绍</string>
+    <string name="em_chat_group_detail_introduction_hint">请输入群介绍</string>
     <string name="em_chat_group_detail_not_disturb">消息免打扰</string>
     <string name="em_chat_group_detail_top">会话置顶</string>
     <string name="em_chat_group_detail_refund">退出群组</string>
     <string name="em_chat_group_detail_dissolve">解散群组</string>
+    <string name="em_chat_group_save">保存</string>
+
 
     <string name="confirm_forward_to">确定转发到：%1$s ?</string>
 

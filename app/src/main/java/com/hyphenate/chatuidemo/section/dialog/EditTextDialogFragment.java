@@ -1,7 +1,6 @@
 package com.hyphenate.chatuidemo.section.dialog;
 
 import android.os.Bundle;
-import android.text.TextUtils;
 import android.view.View;
 import android.widget.EditText;
 
@@ -10,9 +9,8 @@ import androidx.fragment.app.FragmentTransaction;
 
 import com.hyphenate.chatuidemo.R;
 import com.hyphenate.chatuidemo.section.base.BaseActivity;
-import com.hyphenate.chatuidemo.section.base.BaseDialogFragment;
 
-public class EditTextDialogFragment extends BaseDialogFragment {
+public class EditTextDialogFragment extends DemoDialogFragment {
 
     private EditText etInput;
     private String title;

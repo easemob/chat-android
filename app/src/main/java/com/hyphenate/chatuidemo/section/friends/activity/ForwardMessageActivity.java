@@ -16,6 +16,7 @@ import com.hyphenate.chatuidemo.section.base.BaseDialogFragment;
 import com.hyphenate.chatuidemo.section.base.BaseInitActivity;
 import com.hyphenate.chatuidemo.section.chat.ChatActivity;
 import com.hyphenate.chatuidemo.section.chat.adapter.PickUserAdapter;
+import com.hyphenate.chatuidemo.section.dialog.DemoDialogFragment;
 import com.hyphenate.chatuidemo.section.dialog.SimpleDialogFragment;
 import com.hyphenate.chatuidemo.section.friends.viewmodels.ContactListViewModel;
 import com.hyphenate.easeui.domain.EaseUser;
@@ -112,7 +113,7 @@ public class ForwardMessageActivity extends BaseInitActivity implements OnRefres
     @Override
     public void onItemClick(View view, int position) {
         EaseUser user = mAdapter.getData().get(position);
-        SimpleDialogFragment.showDialog(mContext, getString(R.string.confirm_forward_to, user.getNickname()), new BaseDialogFragment.OnConfirmClickListener() {
+        SimpleDialogFragment.showDialog(mContext, getString(R.string.confirm_forward_to, user.getNickname()), new DemoDialogFragment.OnConfirmClickListener() {
             @Override
             public void onConfirmClick(View view) {
                 PushAndMessageHelper.sendForwardMessage(user.getUsername(), mForwardMsgId);

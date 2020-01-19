@@ -5,6 +5,7 @@ import android.content.res.TypedArray;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.CompoundButton;
 import android.widget.Switch;
 import android.widget.TextView;
 
@@ -24,6 +25,7 @@ public class SwitchItemView extends ConstraintLayout {
     private float contentSize;
     private View root;
     private Switch switchItem;
+    private OnCheckedChangeListener listener;
 
     public SwitchItemView(Context context) {
         this(context, null);
@@ -70,6 +72,19 @@ public class SwitchItemView extends ConstraintLayout {
         viewDivider.setVisibility(showDivider ? VISIBLE : GONE);
 
         a.recycle();
+
+        setListener();
+    }
+
+    private void setListener() {
+        switchItem.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if(listener != null) {
+                    listener.onCheckedChanged(buttonView, isChecked);
+                }
+            }
+        });
     }
 
     public TextView getTvTitle() {
@@ -78,5 +93,23 @@ public class SwitchItemView extends ConstraintLayout {
 
     public Switch getSwitch() {
         return switchItem;
+    }
+
+    public void setOnCheckedChangeListener(OnCheckedChangeListener listener) {
+        this.listener = listener;
+    }
+
+    /**
+     * Interface definition for a callback to be invoked when the checked state
+     * of a compound button changed.
+     */
+    public interface OnCheckedChangeListener {
+        /**
+         * Called when the checked state of a compound button has changed.
+         *
+         * @param buttonView The compound button view whose state has changed.
+         * @param isChecked  The new checked state of buttonView.
+         */
+        void onCheckedChanged(CompoundButton buttonView, boolean isChecked);
     }
 }

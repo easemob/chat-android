@@ -22,13 +22,8 @@ import com.hyphenate.chatuidemo.R;
 /**
  * 作为dialog fragment的基类
  */
-public abstract class BaseDialogFragment extends DialogFragment implements View.OnClickListener {
+public abstract class BaseDialogFragment extends DialogFragment {
     public BaseActivity mContext;
-    public TextView mTvDialogTitle;
-    public Button mBtnDialogCancel;
-    public Button mBtnDialogConfirm;
-    public OnConfirmClickListener mOnConfirmClickListener;
-    public Group mGroupMiddle;
 
     @Override
     public void onAttach(@NonNull Context context) {
@@ -36,21 +31,19 @@ public abstract class BaseDialogFragment extends DialogFragment implements View.
         mContext = (BaseActivity) context;
     }
 
-        @Nullable
+    @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         initArgument();
-        View view = inflater.inflate(R.layout.em_fragment_dialog_base, container, false);
-        int layoutId = getMiddleLayoutId();
-        if(layoutId > 0) {
-            RelativeLayout middleParent = view.findViewById(R.id.rl_dialog_middle);
-            LayoutInflater.from(mContext).inflate(layoutId, middleParent);
-            //同时使middleParent可见
-            view.findViewById(R.id.group_middle).setVisibility(View.VISIBLE);
-        }
+        View view = inflater.inflate(getLayoutId(), container, false);;
+        setChildView(view);
         setDialogAttrs();
         return view;
     }
+
+    public void setChildView(View view) {}
+
+    public abstract int getLayoutId();
 
     private void setDialogAttrs() {
         try {
@@ -75,25 +68,9 @@ public abstract class BaseDialogFragment extends DialogFragment implements View.
 
     public void initArgument() {}
 
-    /**
-     * 获取中间布局的id
-     * @return
-     */
-    public int getMiddleLayoutId() {
-        return 0;
-    }
+    public void initView(Bundle savedInstanceState) {}
 
-    public void initView(Bundle savedInstanceState) {
-        mTvDialogTitle = findViewById(R.id.tv_dialog_title);
-        mBtnDialogCancel = findViewById(R.id.btn_dialog_cancel);
-        mBtnDialogConfirm = findViewById(R.id.btn_dialog_confirm);
-        mGroupMiddle = findViewById(R.id.group_middle);
-    }
-
-    public void initListener() {
-        mBtnDialogCancel.setOnClickListener(this);
-        mBtnDialogConfirm.setOnClickListener(this);
-    }
+    public void initListener() {}
 
     public void initData() {}
 
@@ -105,41 +82,6 @@ public abstract class BaseDialogFragment extends DialogFragment implements View.
      */
     protected <T extends View> T findViewById(@IdRes int id) {
         return getView().findViewById(id);
-    }
-
-    @Override
-    public void onClick(View v) {
-        switch (v.getId()) {
-            case R.id.btn_dialog_cancel :
-                onCancelClick(v);
-                break;
-            case R.id.btn_dialog_confirm:
-                onConfirmClick(v);
-                break;
-        }
-    }
-
-    /**
-     * 点击了取消按钮
-     * @param v
-     */
-    public void onCancelClick(View v) {
-        dismiss();
-    }
-
-    /**
-     * 点击了确认按钮
-     * @param v
-     */
-    public void onConfirmClick(View v) {
-
-    }
-
-    /**
-     * 确定事件的点击事件
-     */
-    public interface OnConfirmClickListener {
-        void onConfirmClick(View view);
     }
 
 }

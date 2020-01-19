@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white">
+
+    <com.hyphenate.easeui.widget.EaseTitleBar
+        android:id="@+id/title_bar"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/em_common_title_bar_height"
+        app:titleBarRightTitle="@string/em_chat_group_save"
+        app:titleBarRightVisible="true"
+        app:titleBarLeftImage="@drawable/em_back"/>
+
+    <EditText
+        android:id="@+id/et_content"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:minHeight="300dp"
+        android:layout_marginLeft="@dimen/em_margin_30"
+        android:layout_marginRight="@dimen/em_margin_30"
+        android:layout_marginStart="@dimen/em_margin_30"
+        android:layout_marginEnd="@dimen/em_margin_30"
+        android:paddingTop="10dp"
+        tools:hint="请输入群公告"
+        android:gravity="left|top"
+        android:background="@color/white"/>
+
+</LinearLayout>

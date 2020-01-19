@@ -7,20 +7,18 @@ import android.view.View;
 
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.ViewModelProvider;
-import androidx.lifecycle.ViewModelStoreOwner;
 
-import com.hyphenate.chat.EMClient;
 import com.hyphenate.chat.EMConversation;
 import com.hyphenate.chatuidemo.DemoHelper;
 import com.hyphenate.chatuidemo.R;
 import com.hyphenate.chatuidemo.common.DemoConstant;
 import com.hyphenate.chatuidemo.common.db.DemoDbHelper;
 import com.hyphenate.chatuidemo.common.interfaceOrImplement.OnResourceParseCallback;
-import com.hyphenate.chatuidemo.section.base.BaseDialogFragment;
 import com.hyphenate.chatuidemo.section.base.BaseInitActivity;
 import com.hyphenate.chatuidemo.section.chat.fragment.ChatFragment;
 import com.hyphenate.chatuidemo.section.chat.viewmodel.ChatViewModel;
 import com.hyphenate.chatuidemo.section.chat.viewmodel.MessageViewModel;
+import com.hyphenate.chatuidemo.section.dialog.DemoDialogFragment;
 import com.hyphenate.chatuidemo.section.dialog.SimpleDialogFragment;
 import com.hyphenate.chatuidemo.section.group.ChatRoomDetailActivity;
 import com.hyphenate.chatuidemo.section.group.GroupDetailActivity;
@@ -140,7 +138,7 @@ public class ChatActivity extends BaseInitActivity implements EaseTitleBar.OnBac
     public void onRightClick(View view) {
         if(chatType == DemoConstant.CHATTYPE_SINGLE) {
             // 是否删除会话
-            SimpleDialogFragment.showDialog(mContext, R.string.em_chat_delete_conversation, new BaseDialogFragment.OnConfirmClickListener() {
+            SimpleDialogFragment.showDialog(mContext, R.string.em_chat_delete_conversation, new DemoDialogFragment.OnConfirmClickListener() {
                 @Override
                 public void onConfirmClick(View view) {
                     EMConversation conversation = DemoHelper.getInstance().getConversation(toChatUsername,

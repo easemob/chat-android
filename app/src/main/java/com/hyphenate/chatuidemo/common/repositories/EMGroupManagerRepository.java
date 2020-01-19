@@ -1,11 +1,13 @@
 package com.hyphenate.chatuidemo.common.repositories;
 
 import android.text.TextUtils;
+import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
+import com.hyphenate.EMCallBack;
 import com.hyphenate.EMValueCallBack;
 import com.hyphenate.chat.EMCursorResult;
 import com.hyphenate.chat.EMGroup;
@@ -323,5 +325,84 @@ public class EMGroupManagerRepository extends BaseEMRepository{
                 }
             }
         });
+    }
+
+    /**
+     * 设置群组名称
+     * @param groupId
+     * @param groupName
+     * @return
+     */
+    public LiveData<Resource<String>> setGroupName(String groupId, String groupName) {
+        return new NetworkOnlyResource<String>() {
+            @Override
+            protected void createCall(@NonNull ResultCallBack<LiveData<String>> callBack) {
+                getGroupManager().asyncChangeGroupName(groupId, groupName, new EMCallBack() {
+                    @Override
+                    public void onSuccess() {
+                        callBack.onSuccess(createLiveData(groupName));
+                    }
+
+                    @Override
+                    public void onError(int code, String error) {
+                        callBack.onError(code,  error);
+                    }
+
+                    @Override
+                    public void onProgress(int progress, String status) {
+
+                    }
+                });
+            }
+        }.asLiveData();
+    }
+
+    public LiveData<Resource<String>> setGroupAnnouncement(String groupId, String announcement) {
+        return new NetworkOnlyResource<String>() {
+            @Override
+            protected void createCall(@NonNull ResultCallBack<LiveData<String>> callBack) {
+                getGroupManager().asyncUpdateGroupAnnouncement(groupId, announcement, new EMCallBack() {
+                    @Override
+                    public void onSuccess() {
+                        Log.e("TAG", "setGroupAnnouncement success");
+                        callBack.onSuccess(createLiveData(announcement));
+                    }
+
+                    @Override
+                    public void onError(int code, String error) {
+                        callBack.onError(code, error);
+                    }
+
+                    @Override
+                    public void onProgress(int progress, String status) {
+
+                    }
+                });
+            }
+        }.asLiveData();
+    }
+
+    public LiveData<Resource<String>> setGroupDescription(String groupId, String description) {
+        return new NetworkOnlyResource<String>() {
+            @Override
+            protected void createCall(@NonNull ResultCallBack<LiveData<String>> callBack) {
+                getGroupManager().asyncChangeGroupDescription(groupId, description, new EMCallBack() {
+                    @Override
+                    public void onSuccess() {
+                        callBack.onSuccess(createLiveData(description));
+                    }
+
+                    @Override
+                    public void onError(int code, String error) {
+                        callBack.onError(code, error);
+                    }
+
+                    @Override
+                    public void onProgress(int progress, String status) {
+
+                    }
+                });
+            }
+        }.asLiveData();
     }
 }

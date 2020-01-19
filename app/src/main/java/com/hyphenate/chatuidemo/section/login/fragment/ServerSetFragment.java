@@ -23,6 +23,7 @@ import com.hyphenate.chatuidemo.R;
 import com.hyphenate.chatuidemo.common.model.DemoServerSetBean;
 import com.hyphenate.chatuidemo.section.base.BaseDialogFragment;
 import com.hyphenate.chatuidemo.section.base.BaseInitFragment;
+import com.hyphenate.chatuidemo.section.dialog.DemoDialogFragment;
 import com.hyphenate.chatuidemo.section.dialog.SimpleDialogFragment;
 import com.hyphenate.chatuidemo.section.login.viewmodels.LoginViewModel;
 import com.hyphenate.easeui.widget.EaseTitleBar;
@@ -196,7 +197,7 @@ public class ServerSetFragment extends BaseInitFragment implements EaseTitleBar.
         if(v.getId() == R.id.btn_server) {
             saveServerSet();
         }else if(v.getId() == R.id.btn_reset) {
-            SimpleDialogFragment.showDialog(mContext, R.string.em_server_set_dialog_reset, new BaseDialogFragment.OnConfirmClickListener() {
+            SimpleDialogFragment.showDialog(mContext, R.string.em_server_set_dialog_reset, new DemoDialogFragment.OnConfirmClickListener() {
                 @Override
                 public void onConfirmClick(View view) {
                     DemoServerSetBean set = DemoHelper.getInstance().getDefServerSet();

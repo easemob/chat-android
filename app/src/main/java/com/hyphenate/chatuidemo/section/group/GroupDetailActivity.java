@@ -20,12 +20,13 @@ import com.hyphenate.chatuidemo.common.widget.ArrowItemView;
 import com.hyphenate.chatuidemo.common.widget.SwitchItemView;
 import com.hyphenate.chatuidemo.section.base.BaseInitActivity;
 import com.hyphenate.chatuidemo.section.dialog.EditTextDialogFragment;
+import com.hyphenate.chatuidemo.section.group.fragment.GroupEditFragment;
 import com.hyphenate.chatuidemo.section.group.viewmodels.GroupDetailViewModel;
 import com.hyphenate.easeui.utils.EaseCommonUtils;
 import com.hyphenate.easeui.widget.EaseImageView;
 import com.hyphenate.easeui.widget.EaseTitleBar;
 
-public class GroupDetailActivity extends BaseInitActivity implements EaseTitleBar.OnBackPressListener, View.OnClickListener, CompoundButton.OnCheckedChangeListener {
+public class GroupDetailActivity extends BaseInitActivity implements EaseTitleBar.OnBackPressListener, View.OnClickListener, SwitchItemView.OnCheckedChangeListener {
     private EaseTitleBar titleBar;
     private EaseImageView ivGroupAvatar;
     private TextView tvGroupName;
@@ -97,8 +98,8 @@ public class GroupDetailActivity extends BaseInitActivity implements EaseTitleBa
         itemGroupNotice.setOnClickListener(this);
         itemGroupIntroduction.setOnClickListener(this);
         itemGroupHistory.setOnClickListener(this);
-        itemGroupNotDisturb.getSwitch().setOnCheckedChangeListener(this);
-        itemGroupTop.getSwitch().setOnCheckedChangeListener(this);
+        itemGroupNotDisturb.setOnCheckedChangeListener(this);
+        itemGroupTop.setOnCheckedChangeListener(this);
         tvGroupRefund.setOnClickListener(this);
     }
 
@@ -132,6 +133,18 @@ public class GroupDetailActivity extends BaseInitActivity implements EaseTitleBa
                 }
             });
         });
+        viewModel.getRefreshObservable().observe(this, response -> {
+            parseResource(response, new OnResourceParseCallback<String>() {
+                @Override
+                public void onSuccess(String data) {
+                    loadGroup();
+                }
+            });
+        });
+        loadGroup();
+    }
+
+    private void loadGroup() {
         viewModel.getGroup(groupId);
     }
 
@@ -145,29 +158,34 @@ public class GroupDetailActivity extends BaseInitActivity implements EaseTitleBa
                 showToast("邀请群成员");
                 break;
             case R.id.item_group_name ://群名称
-                showToast("群名称");
                 showGroupNameDialog();
                 break;
             case R.id.item_group_share_file ://共享文件
                 showToast("共享文件");
                 break;
             case R.id.item_group_notice ://群公告
-                showToast("群公告");
+                showAnnouncementDialog();
                 break;
             case R.id.item_group_introduction ://群介绍
-                showToast("群介绍");
+                showIntroductionDialog();
                 break;
             case R.id.item_group_history ://查找聊天记录
                 showToast("查找聊天记录");
                 break;
+            case R.id.tv_group_refund ://退出群组
+                showToast("退出群组");
+                break;
+        }
+    }
+
+    @Override
+    public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+        switch (buttonView.getId()) {
             case R.id.item_group_not_disturb ://消息免打扰
                 showToast("消息免打扰");
                 break;
             case R.id.item_group_top ://消息置顶
                 showToast("消息置顶");
-                break;
-            case R.id.tv_group_refund ://退出群组
-                showToast("退出群组");
                 break;
         }
     }
@@ -180,15 +198,38 @@ public class GroupDetailActivity extends BaseInitActivity implements EaseTitleBa
                     @Override
                     public void onConfirmClick(View view, String content) {
                         if(!TextUtils.isEmpty(content)) {
-                            viewModel.setGroupName(content);
+                            viewModel.setGroupName(groupId, content);
                         }
                     }
                 });
     }
 
-    @Override
-    public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+    private void showAnnouncementDialog() {
+        GroupEditFragment.showDialog(mContext,
+                getString(R.string.em_chat_group_detail_announcement),
+                group.getAnnouncement(),
+                getString(R.string.em_chat_group_detail_announcement_hint),
+                new GroupEditFragment.OnSaveClickListener() {
+                    @Override
+                    public void onSaveClick(View view, String content) {
+                        //修改群公告
+                        viewModel.setGroupAnnouncement(groupId, content);
+                    }
+                });
+    }
 
+    private void showIntroductionDialog() {
+        GroupEditFragment.showDialog(mContext,
+                getString(R.string.em_chat_group_detail_introduction),
+                group.getDescription(),
+                getString(R.string.em_chat_group_detail_introduction_hint),
+                new GroupEditFragment.OnSaveClickListener() {
+                    @Override
+                    public void onSaveClick(View view, String content) {
+                        //修改群介绍
+                        viewModel.setGroupDescription(groupId, content);
+                    }
+                });
     }
 
     @Override

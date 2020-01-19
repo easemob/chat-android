@@ -8,9 +8,8 @@ import androidx.annotation.StringRes;
 import androidx.fragment.app.FragmentTransaction;
 
 import com.hyphenate.chatuidemo.section.base.BaseActivity;
-import com.hyphenate.chatuidemo.section.base.BaseDialogFragment;
 
-public class SimpleDialogFragment extends BaseDialogFragment {
+public class SimpleDialogFragment extends DemoDialogFragment {
     public static final String MESSAGE_KEY = "message";
     private String message;
 
