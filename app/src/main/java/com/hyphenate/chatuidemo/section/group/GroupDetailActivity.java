@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.CompoundButton;
 import android.widget.TextView;
 
@@ -26,12 +25,14 @@ import com.hyphenate.easeui.utils.EaseCommonUtils;
 import com.hyphenate.easeui.widget.EaseImageView;
 import com.hyphenate.easeui.widget.EaseTitleBar;
 
+import java.util.List;
+
 public class GroupDetailActivity extends BaseInitActivity implements EaseTitleBar.OnBackPressListener, View.OnClickListener, SwitchItemView.OnCheckedChangeListener {
     private EaseTitleBar titleBar;
     private EaseImageView ivGroupAvatar;
     private TextView tvGroupName;
     private TextView tvGroupIntroduction;
-    private ViewGroup clMember;
+    private TextView tvGroupMemberTitle;
     private TextView tvGroupMemberNum;
     private TextView tvGroupInvite;
     private ArrowItemView itemGroupName;
@@ -70,7 +71,7 @@ public class GroupDetailActivity extends BaseInitActivity implements EaseTitleBa
         ivGroupAvatar = findViewById(R.id.iv_group_avatar);
         tvGroupName = findViewById(R.id.tv_group_name);
         tvGroupIntroduction = findViewById(R.id.tv_group_introduction);
-        clMember = findViewById(R.id.cl_member);
+        tvGroupMemberTitle = findViewById(R.id.tv_group_member_title);
         tvGroupMemberNum = findViewById(R.id.tv_group_member_num);
         tvGroupInvite = findViewById(R.id.tv_group_invite);
         itemGroupName = findViewById(R.id.item_group_name);
@@ -90,7 +91,7 @@ public class GroupDetailActivity extends BaseInitActivity implements EaseTitleBa
     protected void initListener() {
         super.initListener();
         titleBar.setOnBackPressListener(this);
-        clMember.setOnClickListener(this);
+        tvGroupMemberTitle.setOnClickListener(this);
         tvGroupMemberNum.setOnClickListener(this);
         tvGroupInvite.setOnClickListener(this);
         itemGroupName.setOnClickListener(this);
@@ -118,6 +119,7 @@ public class GroupDetailActivity extends BaseInitActivity implements EaseTitleBa
         String extField = conversation.getExtField();
         itemGroupTop.getSwitch().setChecked(!TextUtils.isEmpty(extField) && EaseCommonUtils.isTimestamp(extField));
         tvGroupInvite.setVisibility(group.getMemberCount() <= 0 ? View.VISIBLE : View.GONE);
+        tvGroupInvite.setVisibility(isCanInvite() ? View.VISIBLE : View.GONE);
     }
 
     @Override
@@ -151,7 +153,7 @@ public class GroupDetailActivity extends BaseInitActivity implements EaseTitleBa
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
-            case R.id.cl_member :// 群成员
+            case R.id.tv_group_member_title :// 群成员
                 showToast("跳转到群成员");
                 break;
             case R.id.tv_group_invite ://邀请群成员
@@ -235,6 +237,28 @@ public class GroupDetailActivity extends BaseInitActivity implements EaseTitleBa
     @Override
     public void onBackPress(View view) {
         onBackPressed();
+    }
+
+    /**
+     * 是否有邀请权限
+     * @return
+     */
+    private boolean isCanInvite() {
+        return group.isMemberAllowToInvite() || isOwner() || isAdmin();
+    }
+
+    /**
+     * 是否是管理员
+     * @return
+     */
+    private boolean isAdmin() {
+        synchronized (GroupDetailActivity.this) {
+            List<String> adminList = group.getAdminList();
+            if(adminList != null && !adminList.isEmpty()) {
+                return adminList.contains(DemoHelper.getInstance().getCurrentUser());
+            }
+        }
+        return false;
     }
 
     /**

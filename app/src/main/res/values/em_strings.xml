@@ -121,6 +121,7 @@
     <string name="em_chat_group_detail_dissolve">解散群组</string>
     <string name="em_chat_group_save">保存</string>
     <string name="em_chat_group_shared_files_upload">上传</string>
+    <string name="em_chat_group_invite_group_member">邀请成员</string>
 
 
     <string name="confirm_forward_to">确定转发到：%1$s ?</string>
@@ -197,5 +198,6 @@
     <string name="multi_device_group_remove_mute">将%s在群组中解除禁言[remote]</string>
 
     <string name="multi_device_logged_in_device_kick_item">将设备移除</string>
+
 
 </resources>

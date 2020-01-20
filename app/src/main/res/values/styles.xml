@@ -81,8 +81,8 @@
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:layout_marginTop">@dimen/em_margin_15</item>
-        <item name="android:layout_marginLeft">@dimen/em_margin_20</item>
-        <item name="android:layout_marginStart">@dimen/em_margin_20</item>
+        <item name="android:paddingLeft">@dimen/em_margin_20</item>
+        <item name="android:paddingStart">@dimen/em_margin_20</item>
         <item name="android:textSize">@dimen/em_size_big</item>
         <item name="android:textColor">@color/em_color_common_text_black</item>
     </style>

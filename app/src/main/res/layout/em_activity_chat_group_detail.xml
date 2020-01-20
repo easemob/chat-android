@@ -92,15 +92,19 @@
                 android:layout_height="wrap_content"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/view_group_divider"
-                android:foreground="@drawable/em_ripple_click_gray">
+                app:layout_constraintTop_toBottomOf="@id/view_group_divider">
 
                 <TextView
                     android:id="@+id/tv_group_member_title"
+                    android:minHeight="50dp"
                     app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintRight_toRightOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
                     android:text="@string/em_chat_group_detail_group_member"
-                    style="@style/em_group_text_item_title" />
+                    style="@style/em_group_text_item_title"
+                    android:layout_width="0dp"
+                    android:gravity="center_vertical"
+                    android:foreground="@drawable/em_ripple_click_gray"/>
 
                 <ImageView
                     android:id="@+id/iv_group_member_right"
@@ -130,17 +134,21 @@
                     android:id="@+id/tv_group_invite"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:paddingBottom="@dimen/em_padding_15"
+                    android:minHeight="40dp"
                     app:layout_constraintTop_toBottomOf="@id/tv_group_member_title"
                     app:layout_constraintLeft_toLeftOf="parent"
                     app:layout_constraintRight_toRightOf="parent"
                     android:layout_marginTop="@dimen/em_margin_10"
-                    android:layout_marginLeft="@dimen/em_margin_20"
-                    android:layout_marginStart="@dimen/em_margin_20"
-                    tools:text="邀请成员"
+                    android:paddingLeft="@dimen/em_margin_20"
+                    android:paddingStart="@dimen/em_margin_20"
+                    android:text="@string/em_chat_group_invite_group_member"
                     android:textSize="@dimen/em_size_small"
-                    android:visibility="gone"
-                    android:textColor="@color/em_color_common_text_gray"/>
+                    android:visibility="visible"
+                    android:gravity="center_vertical"
+                    android:drawableLeft="@drawable/em_contact_menu_add"
+                    android:drawableTint="@color/em_color_brand"
+                    android:textColor="@color/em_color_brand"
+                    android:foreground="@drawable/em_ripple_click_gray"/>
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
