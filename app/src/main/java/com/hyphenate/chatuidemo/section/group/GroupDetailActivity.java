@@ -161,7 +161,7 @@ public class GroupDetailActivity extends BaseInitActivity implements EaseTitleBa
                 showGroupNameDialog();
                 break;
             case R.id.item_group_share_file ://共享文件
-                showToast("共享文件");
+                GroupSharedFilesActivity.actionStart(mContext, groupId);
                 break;
             case R.id.item_group_notice ://群公告
                 showAnnouncementDialog();

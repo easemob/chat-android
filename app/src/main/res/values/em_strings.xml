@@ -34,6 +34,8 @@
     <string name="em_error_not_login">未登录过环信</string>
     <string name="em_error_parse_error">解析错误</string>
     <string name="em_error_err_unknown">网络问题请稍后重试</string>
+    <string name="em_err_image_android_min_version">上传图片只支持4.4版本以上</string>
+    <string name="em_err_file_not_exist">文件不存在</string>
     <string name="em_add_self_error">不能添加自己</string>
     <string name="em_friend_error">此用户已是你的好友</string>
     <string name="em_friend_black_error">此用户已是你好友(被拉黑状态)，从黑名单列表中移出即可</string>
@@ -118,6 +120,7 @@
     <string name="em_chat_group_detail_refund">退出群组</string>
     <string name="em_chat_group_detail_dissolve">解散群组</string>
     <string name="em_chat_group_save">保存</string>
+    <string name="em_chat_group_shared_files_upload">上传</string>
 
 
     <string name="confirm_forward_to">确定转发到：%1$s ?</string>

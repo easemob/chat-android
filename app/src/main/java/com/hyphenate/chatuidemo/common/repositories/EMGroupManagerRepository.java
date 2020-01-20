@@ -21,6 +21,7 @@ import com.hyphenate.easeui.domain.EaseUser;
 import com.hyphenate.easeui.utils.EaseCommonUtils;
 import com.hyphenate.exceptions.HyphenateException;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -427,6 +428,97 @@ public class EMGroupManagerRepository extends BaseEMRepository{
                     @Override
                     public void onError(int error, String errorMsg) {
                         callBack.onError(error, errorMsg);
+                    }
+                });
+            }
+        }.asLiveData();
+    }
+
+    /**
+     * 下载共享文件
+     * @param groupId
+     * @param fileId
+     * @param localFile
+     * @return
+     */
+    public LiveData<Resource<File>> downloadFile(String groupId, String fileId, File localFile) {
+        return new NetworkOnlyResource<File>() {
+            @Override
+            protected void createCall(@NonNull ResultCallBack<LiveData<File>> callBack) {
+                getGroupManager().asyncDownloadGroupSharedFile(groupId, fileId, localFile.getAbsolutePath(), new EMCallBack() {
+                    @Override
+                    public void onSuccess() {
+                        callBack.onSuccess(createLiveData(localFile));
+                    }
+
+                    @Override
+                    public void onError(int code, String error) {
+                        callBack.onError(code, error);
+                    }
+
+                    @Override
+                    public void onProgress(int progress, String status) {
+
+                    }
+                });
+            }
+        }.asLiveData();
+    }
+
+    /**
+     * 删除服务器端的文件
+     * @param groupId
+     * @param fileId
+     * @return
+     */
+    public LiveData<Resource<Boolean>> deleteFile(String groupId, String fileId) {
+        return new NetworkOnlyResource<Boolean>() {
+            @Override
+            protected void createCall(@NonNull ResultCallBack<LiveData<Boolean>> callBack) {
+                getGroupManager().asyncDeleteGroupSharedFile(groupId, fileId, new EMCallBack() {
+                    @Override
+                    public void onSuccess() {
+                        callBack.onSuccess(createLiveData(true));
+                    }
+
+                    @Override
+                    public void onError(int code, String error) {
+                        callBack.onError(code, error);
+                    }
+
+                    @Override
+                    public void onProgress(int progress, String status) {
+
+                    }
+                });
+            }
+        }.asLiveData();
+    }
+
+    /**
+     * 上传文件
+     * @param groupId
+     * @param filePath
+     * @return
+     */
+    public LiveData<Resource<Boolean>> uploadFile(String groupId, String filePath) {
+        return new NetworkOnlyResource<Boolean>() {
+            @Override
+            protected void createCall(@NonNull ResultCallBack<LiveData<Boolean>> callBack) {
+                getGroupManager().asyncUploadGroupSharedFile(groupId, filePath, new EMCallBack() {
+                    @Override
+                    public void onSuccess() {
+                        callBack.onSuccess(createLiveData(true));
+                    }
+
+                    @Override
+                    public void onError(int code, String error) {
+                        callBack.onError(code, error);
+                    }
+
+                    @Override
+                    public void onProgress(int progress, String status) {
+
                     }
                 });
             }

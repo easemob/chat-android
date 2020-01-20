@@ -28,6 +28,16 @@ public class ErrorCode extends EMError {
     public static final int EM_ERR_UNKNOWN = -20;
 
     /**
+     * 安卓版本问题,只支持4.4以上
+     */
+    public static final int EM_ERR_IMAGE_ANDROID_MIN_VERSION = -50;
+
+    /**
+     * 文件不存在
+     */
+    public static final int EM_ERR_FILE_NOT_EXIST = -55;
+
+    /**
      * 添加自己为好友
      */
     public static final int EM_ADD_SELF_ERROR = -100;
@@ -54,6 +64,8 @@ public class ErrorCode extends EMError {
         EM_NOT_LOGIN(ErrorCode.EM_NOT_LOGIN, R.string.em_error_not_login),
         EM_PARSE_ERROR(ErrorCode.EM_PARSE_ERROR, R.string.em_error_parse_error),
         EM_ERR_UNKNOWN(ErrorCode.EM_ERR_UNKNOWN, R.string.em_error_err_unknown),
+        EM_ERR_IMAGE_ANDROID_MIN_VERSION(ErrorCode.EM_ERR_IMAGE_ANDROID_MIN_VERSION, R.string.em_err_image_android_min_version),
+        EM_ERR_FILE_NOT_EXIST(ErrorCode.EM_ERR_FILE_NOT_EXIST, R.string.em_err_file_not_exist),
         EM_ADD_SELF_ERROR(ErrorCode.EM_ADD_SELF_ERROR, R.string.em_add_self_error),
         EM_FRIEND_ERROR(ErrorCode.EM_FRIEND_ERROR, R.string.em_friend_error),
         EM_FRIEND_BLACK_ERROR(ErrorCode.EM_FRIEND_BLACK_ERROR, R.string.em_friend_black_error),

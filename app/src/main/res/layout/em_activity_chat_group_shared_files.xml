@@ -10,7 +10,11 @@
         android:layout_height="@dimen/em_common_title_bar_height"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent"/>
+        app:layout_constraintTop_toTopOf="parent"
+        app:titleBarTitle="@string/em_chat_group_detail_share_file"
+        app:titleBarRightTitle="@string/em_chat_group_shared_files_upload"
+        app:titleBarRightVisible="true"
+        app:titleBarDisplayHomeAsUpEnabled="true"/>
 
     <com.scwang.smartrefresh.layout.SmartRefreshLayout
         android:id="@+id/srl_refresh"
