@@ -5,9 +5,9 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
-import android.widget.CompoundButton;
 import android.widget.TextView;
 
+import androidx.annotation.Nullable;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.hyphenate.chat.EMConversation;
@@ -28,6 +28,7 @@ import com.hyphenate.easeui.widget.EaseTitleBar;
 import java.util.List;
 
 public class GroupDetailActivity extends BaseInitActivity implements EaseTitleBar.OnBackPressListener, View.OnClickListener, SwitchItemView.OnCheckedChangeListener {
+    private static final int REQUEST_CODE_ADD_USER = 0;
     private EaseTitleBar titleBar;
     private EaseImageView ivGroupAvatar;
     private TextView tvGroupName;
@@ -111,7 +112,7 @@ public class GroupDetailActivity extends BaseInitActivity implements EaseTitleBa
         }
         tvGroupName.setText(group.getGroupName());
         itemGroupName.getTvContent().setText(group.getGroupName());
-        tvGroupMemberNum.setText(getString(R.string.em_chat_group_detail_member_num, group.getMemberCount()));
+        tvGroupMemberNum.setText(getString(R.string.em_chat_group_detail_member_num, (group.getMemberCount()+group.getAdminList().size())));
         tvGroupRefund.setText(getResources().getString(isOwner() ? R.string.em_chat_group_detail_dissolve : R.string.em_chat_group_detail_refund));
         tvGroupIntroduction.setText(group.getDescription());
         itemGroupNotDisturb.getSwitch().setChecked(group.isMsgBlocked());
@@ -154,10 +155,10 @@ public class GroupDetailActivity extends BaseInitActivity implements EaseTitleBa
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.tv_group_member_title :// 群成员
-                showToast("跳转到群成员");
+                GroupMemberTypeActivity.actionStart(mContext, groupId, isOwner());
                 break;
             case R.id.tv_group_invite ://邀请群成员
-                showToast("邀请群成员");
+                GroupPickContactsActivity.actionStartForResult(mContext, groupId, isOwner(), REQUEST_CODE_ADD_USER);
                 break;
             case R.id.item_group_name ://群名称
                 showGroupNameDialog();
@@ -181,7 +182,7 @@ public class GroupDetailActivity extends BaseInitActivity implements EaseTitleBa
     }
 
     @Override
-    public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+    public void onCheckedChanged(SwitchItemView buttonView, boolean isChecked) {
         switch (buttonView.getId()) {
             case R.id.item_group_not_disturb ://消息免打扰
                 showToast("消息免打扰");
@@ -232,6 +233,18 @@ public class GroupDetailActivity extends BaseInitActivity implements EaseTitleBa
                         viewModel.setGroupDescription(groupId, content);
                     }
                 });
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if(resultCode == RESULT_OK) {
+            switch (resultCode) {
+                case REQUEST_CODE_ADD_USER :
+                    loadGroup();
+                    break;
+            }
+        }
     }
 
     @Override

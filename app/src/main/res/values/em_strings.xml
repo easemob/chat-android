@@ -41,6 +41,7 @@
     <string name="em_friend_black_error">此用户已是你好友(被拉黑状态)，从黑名单列表中移出即可</string>
     <string name="em_delete_conversation_error">删除失败或不存在该对话</string>
     <string name="em_delete_sys_msg_error">删除失败或不存在该消息</string>
+    <string name="em_error_group_no_members">没有群组成员</string>
 
     <string name="em_server_set_title">使用自定义服务器？</string>
     <string name="em_server_set_server_hint">demo已经绑定以下环境设置，如果需要修改，请重启App进行设置。</string>
@@ -122,6 +123,22 @@
     <string name="em_chat_group_save">保存</string>
     <string name="em_chat_group_shared_files_upload">上传</string>
     <string name="em_chat_group_invite_group_member">邀请成员</string>
+    <string name="em_chat_group_select_contact">选择联系人</string>
+    <string name="em_chat_group_select_contact_save">保存</string>
+
+    <string name="em_group_member_type_title">群成员</string>
+    <string name="em_group_member_type_admin">群管理员</string>
+    <string name="em_group_member_type_member">群成员</string>
+    <string name="em_group_member_type_member_num">共%1$d人</string>
+
+    <string name="em_authority_menu_add_admin">设为管理员</string>
+    <string name="em_authority_menu_remove_admin">移除管理员权限</string>
+    <string name="em_authority_menu_transfer_owner">移交群主权限</string>
+    <string name="em_authority_menu_remove_member">删除成员</string>
+    <string name="em_authority_menu_add_black">添加到黑名单</string>
+    <string name="em_authority_menu_remove_black">从黑名单移除</string>
+    <string name="em_authority_menu_mute">禁言</string>
+    <string name="em_authority_menu_unmute">移除禁言</string>
 
 
     <string name="confirm_forward_to">确定转发到：%1$s ?</string>

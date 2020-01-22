@@ -105,12 +105,47 @@ public class EMGroupManagerRepository extends BaseEMRepository{
         }.asLiveData();
     }
 
+    public LiveData<Resource<List<String>>> getGroupMembersByName(String groupId) {
+        return new NetworkOnlyResource<List<String>>() {
+
+            @Override
+            protected void createCall(@NonNull ResultCallBack<LiveData<List<String>>> callBack) {
+                if(!isLoggedIn()) {
+                    callBack.onError(ErrorCode.EM_NOT_LOGIN);
+                    return;
+                }
+                DemoHelper.getInstance().getGroupManager().asyncGetGroupFromServer(groupId, new EMValueCallBack<EMGroup>() {
+                    @Override
+                    public void onSuccess(EMGroup value) {
+                        List<String> members = value.getMembers();
+                        if(members.size() < value.getMemberCount()) {
+                            members = getAllGroupMemberByServer(groupId);
+                        }
+                        members.addAll(value.getAdminList());
+                        members.add(value.getOwner());
+                        if(!members.isEmpty()) {
+                            callBack.onSuccess(createLiveData(members));
+                        }else {
+                            callBack.onError(ErrorCode.EM_ERR_GROUP_NO_MEMBERS);
+                        }
+                    }
+
+                    @Override
+                    public void onError(int error, String errorMsg) {
+                        callBack.onError(error, errorMsg);
+                    }
+                });
+            }
+
+        }.asLiveData();
+    }
+
     /**
-     * 获取群组成员列表
+     * 获取群组成员列表(包含管理员和群主)
      * @param groupId
      * @return
      */
-    public LiveData<Resource<List<EaseUser>>> getGroupMembers(String groupId) {
+    public LiveData<Resource<List<EaseUser>>> getGroupAllMembers(String groupId) {
         return new NetworkOnlyResource<List<EaseUser>>() {
 
             @Override
@@ -132,6 +167,48 @@ public class EMGroupManagerRepository extends BaseEMRepository{
                             List<EaseUser> users = EmUserEntity.parse(members);
                             sortUserData(users);
                             callBack.onSuccess(createLiveData(users));
+                        }else {
+                            callBack.onError(ErrorCode.EM_ERR_GROUP_NO_MEMBERS);
+                        }
+                    }
+
+                    @Override
+                    public void onError(int error, String errorMsg) {
+                        callBack.onError(error, errorMsg);
+                    }
+                });
+            }
+
+        }.asLiveData();
+    }
+
+    /**
+     * 获取群组成员列表(包含管理员和群主)
+     * @param groupId
+     * @return
+     */
+    public LiveData<Resource<List<EaseUser>>> getGroupMembers(String groupId) {
+        return new NetworkOnlyResource<List<EaseUser>>() {
+
+            @Override
+            protected void createCall(@NonNull ResultCallBack<LiveData<List<EaseUser>>> callBack) {
+                if(!isLoggedIn()) {
+                    callBack.onError(ErrorCode.EM_NOT_LOGIN);
+                    return;
+                }
+                DemoHelper.getInstance().getGroupManager().asyncGetGroupFromServer(groupId, new EMValueCallBack<EMGroup>() {
+                    @Override
+                    public void onSuccess(EMGroup value) {
+                        List<String> members = value.getMembers();
+                        if(members.size() < value.getMemberCount()) {
+                            members = getAllGroupMemberByServer(groupId);
+                        }
+                        if(!members.isEmpty()) {
+                            List<EaseUser> users = EmUserEntity.parse(members);
+                            sortUserData(users);
+                            callBack.onSuccess(createLiveData(users));
+                        }else {
+                            callBack.onError(ErrorCode.EM_ERR_GROUP_NO_MEMBERS);
                         }
                     }
 
@@ -521,6 +598,56 @@ public class EMGroupManagerRepository extends BaseEMRepository{
 
                     }
                 });
+            }
+        }.asLiveData();
+    }
+
+    /**
+     * 邀请群成员
+     * @param isOwner
+     * @param groupId
+     * @param members
+     * @return
+     */
+    public LiveData<Resource<Boolean>> addMembers(boolean isOwner, String groupId, String[] members) {
+        return new NetworkOnlyResource<Boolean>() {
+            @Override
+            protected void createCall(@NonNull ResultCallBack<LiveData<Boolean>> callBack) {
+                if(isOwner) {
+                    getGroupManager().asyncAddUsersToGroup(groupId, members, new EMCallBack() {
+                        @Override
+                        public void onSuccess() {
+                            callBack.onSuccess(createLiveData(true));
+                        }
+
+                        @Override
+                        public void onError(int code, String error) {
+                            callBack.onError(code, error);
+                        }
+
+                        @Override
+                        public void onProgress(int progress, String status) {
+
+                        }
+                    });
+                }else {
+                    getGroupManager().asyncInviteUser(groupId, members, null, new EMCallBack() {
+                        @Override
+                        public void onSuccess() {
+                            callBack.onSuccess(createLiveData(true));
+                        }
+
+                        @Override
+                        public void onError(int code, String error) {
+                            callBack.onError(code, error);
+                        }
+
+                        @Override
+                        public void onProgress(int progress, String status) {
+
+                        }
+                    });
+                }
             }
         }.asLiveData();
     }

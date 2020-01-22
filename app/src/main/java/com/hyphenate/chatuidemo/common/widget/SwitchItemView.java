@@ -81,7 +81,7 @@ public class SwitchItemView extends ConstraintLayout {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if(listener != null) {
-                    listener.onCheckedChanged(buttonView, isChecked);
+                    listener.onCheckedChanged(SwitchItemView.this, isChecked);
                 }
             }
         });
@@ -110,6 +110,6 @@ public class SwitchItemView extends ConstraintLayout {
          * @param buttonView The compound button view whose state has changed.
          * @param isChecked  The new checked state of buttonView.
          */
-        void onCheckedChanged(CompoundButton buttonView, boolean isChecked);
+        void onCheckedChanged(SwitchItemView buttonView, boolean isChecked);
     }
 }

@@ -11,6 +11,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.hyphenate.chatuidemo.R;
 import com.hyphenate.chatuidemo.common.interfaceOrImplement.OnResourceParseCallback;
+import com.hyphenate.chatuidemo.common.manager.SidebarPresenter;
 import com.hyphenate.chatuidemo.common.widget.ContactItemView;
 import com.hyphenate.chatuidemo.section.base.BaseInitFragment;
 import com.hyphenate.chatuidemo.section.chat.ConferenceActivity;
@@ -32,7 +33,7 @@ import java.util.Comparator;
 import java.util.List;
 
 
-public class FriendsFragment extends BaseInitFragment implements View.OnClickListener, OnRefreshListener, EaseSidebar.OnTouchEventListener, OnItemClickListener {
+public class FriendsFragment extends BaseInitFragment implements View.OnClickListener, OnRefreshListener, OnItemClickListener {
     private SmartRefreshLayout mSrlFriendRefresh;
     private EaseRecyclerView mRvFriendsList;
     private EaseSidebar mSideBarFriend;
@@ -46,6 +47,7 @@ public class FriendsFragment extends BaseInitFragment implements View.OnClickLis
     private ContactItemView mCivOfficialAccount;
     private ContactItemView mCivAvConference;
     private FriendsViewModel mViewModel;
+    private SidebarPresenter mPresenter;
 
     @Override
     protected int getLayoutId() {
@@ -65,6 +67,9 @@ public class FriendsFragment extends BaseInitFragment implements View.OnClickLis
         mAdapter = new FriendsAdapter();
         mRvFriendsList.setAdapter(mAdapter);
         addHeader();
+
+        mPresenter = new SidebarPresenter();
+        mPresenter.setupWithRecyclerView(mRvFriendsList, mFloatingHeader);
     }
 
     @Override
@@ -77,7 +82,7 @@ public class FriendsFragment extends BaseInitFragment implements View.OnClickLis
         mCivOfficialAccount.setOnClickListener(this);
         mCivAvConference.setOnClickListener(this);
         mSrlFriendRefresh.setOnRefreshListener(this);
-        mSideBarFriend.setOnTouchEventListener(this);
+        mSideBarFriend.setOnTouchEventListener(mPresenter);
         mAdapter.setOnItemClickListener(this);
     }
 
@@ -114,7 +119,6 @@ public class FriendsFragment extends BaseInitFragment implements View.OnClickLis
                 @Override
                 public void onSuccess(List<EaseUser> data) {
                     // 先进行排序
-                    sortData(data);
                     mAdapter.setData(data);
                 }
 
@@ -127,29 +131,6 @@ public class FriendsFragment extends BaseInitFragment implements View.OnClickLis
 
         });
         mViewModel.loadContactList();
-    }
-
-    private void sortData(List<EaseUser> data) {
-        if(data == null || data.isEmpty()) {
-            return;
-        }
-        Collections.sort(data, new Comparator<EaseUser>() {
-
-            @Override
-            public int compare(EaseUser lhs, EaseUser rhs) {
-                if(lhs.getInitialLetter().equals(rhs.getInitialLetter())){
-                    return lhs.getNickname().compareTo(rhs.getNickname());
-                }else{
-                    if("#".equals(lhs.getInitialLetter())){
-                        return 1;
-                    }else if("#".equals(rhs.getInitialLetter())){
-                        return -1;
-                    }
-                    return lhs.getInitialLetter().compareTo(rhs.getInitialLetter());
-                }
-
-            }
-        });
     }
 
     /**
@@ -177,55 +158,6 @@ public class FriendsFragment extends BaseInitFragment implements View.OnClickLis
         if(mSrlFriendRefresh != null) {
             mSrlFriendRefresh.finishRefresh();
         }
-    }
-
-    @Override
-    public void onActionDown(MotionEvent event, String pointer) {
-        showFloatingHeader(pointer);
-        moveToRecyclerItem(pointer);
-    }
-
-    @Override
-    public void onActionMove(MotionEvent event, String pointer) {
-        showFloatingHeader(pointer);
-        moveToRecyclerItem(pointer);
-    }
-
-    @Override
-    public void onActionUp(MotionEvent event) {
-        hideFloatingHeader();
-    }
-
-    private void moveToRecyclerItem(String pointer) {
-        List<EaseUser> data = mAdapter.getData();
-        if(data == null || data.isEmpty()) {
-            return;
-        }
-        for(int i = 0; i < data.size(); i++) {
-            if(TextUtils.equals(data.get(i).getInitialLetter(), pointer)) {
-                LinearLayoutManager manager = (LinearLayoutManager) mRvFriendsList.getLayoutManager();
-                if(manager != null) {
-                    manager.scrollToPositionWithOffset(i, 0);
-                }
-            }
-        }
-    }
-
-    /**
-     * 展示滑动的字符
-     * @param pointer
-     */
-    private void showFloatingHeader(String pointer) {
-        if(TextUtils.isEmpty(pointer)) {
-            hideFloatingHeader();
-            return;
-        }
-        mFloatingHeader.setText(pointer);
-        mFloatingHeader.setVisibility(View.VISIBLE);
-    }
-
-    private void hideFloatingHeader() {
-        mFloatingHeader.setVisibility(View.GONE);
     }
 
     @Override

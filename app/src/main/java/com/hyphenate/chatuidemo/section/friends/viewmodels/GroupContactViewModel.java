@@ -1,24 +1,18 @@
 package com.hyphenate.chatuidemo.section.friends.viewmodels;
 
 import android.app.Application;
-import android.text.TextUtils;
 
 import androidx.annotation.NonNull;
-import androidx.arch.core.util.Function;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
-import androidx.lifecycle.MediatorLiveData;
-import androidx.lifecycle.Transformations;
 
 import com.hyphenate.chat.EMGroup;
 import com.hyphenate.chatuidemo.DemoHelper;
-import com.hyphenate.chatuidemo.common.enums.Status;
 import com.hyphenate.chatuidemo.common.livedatas.SingleSourceLiveData;
 import com.hyphenate.chatuidemo.common.net.Resource;
 import com.hyphenate.chatuidemo.common.repositories.EMGroupManagerRepository;
 import com.hyphenate.easeui.domain.EaseUser;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class GroupContactViewModel extends AndroidViewModel {
@@ -52,7 +46,7 @@ public class GroupContactViewModel extends AndroidViewModel {
     }
 
     public void getGroupMembers(String groupId) {
-        groupMemberObservable.setSource(mRepository.getGroupMembers(groupId));
+        groupMemberObservable.setSource(mRepository.getGroupAllMembers(groupId));
     }
 
     public LiveData<Resource<List<EaseUser>>> getGroupMember() {

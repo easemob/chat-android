@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <com.hyphenate.easeui.widget.EaseTitleBar
+        android:id="@+id/title_bar"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/em_common_title_bar_height"
+        app:titleBarTitle="@string/em_group_member_type_title"/>
+
+    <com.hyphenate.chatuidemo.common.widget.ArrowItemView
+        android:id="@+id/item_admin"
+        android:layout_width="match_parent"
+        android:layout_height="66dp"
+        app:arrowItemTitle="@string/em_group_member_type_admin"/>
+
+    <com.hyphenate.chatuidemo.common.widget.ArrowItemView
+        android:id="@+id/item_member"
+        android:layout_width="match_parent"
+        android:layout_height="66dp"
+        app:arrowItemTitle="@string/em_group_member_type_member"/>
+
+</LinearLayout>

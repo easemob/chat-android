@@ -336,6 +336,14 @@
         <activity android:name=".section.group.ChatRoomDetailActivity" />
         <!--群分享文件-->
         <activity android:name=".section.group.GroupSharedFilesActivity" />
+        <!--邀请群成员-->
+        <activity android:name=".section.group.GroupPickContactsActivity" />
+        <!--群成员身份统计-->
+        <activity android:name=".section.group.GroupMemberTypeActivity" />
+        <!--群成员权限管理-->
+        <activity android:name=".section.group.GroupMemberAuthorityActivity" />
+        <!--群管理员管理-->
+        <activity android:name=".section.group.GroupAdminAuthorityActivity" />
 
     </application>
 
