@@ -179,7 +179,7 @@ public class HomeFragment extends BaseInitFragment implements OnRefreshListener,
             if(change == null) {
                 return;
             }
-            if(change.isMessgeChange() || change.isNotifyChange()) {
+            if(change.isMessgeChange() || change.isNotifyChange() || change.isGroupLeave()) {
                 mViewModel.loadConversationList();
             }
         });

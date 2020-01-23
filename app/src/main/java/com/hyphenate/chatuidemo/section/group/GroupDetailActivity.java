@@ -14,18 +14,19 @@ import com.hyphenate.chat.EMConversation;
 import com.hyphenate.chat.EMGroup;
 import com.hyphenate.chatuidemo.DemoHelper;
 import com.hyphenate.chatuidemo.R;
+import com.hyphenate.chatuidemo.common.DemoConstant;
 import com.hyphenate.chatuidemo.common.interfaceOrImplement.OnResourceParseCallback;
+import com.hyphenate.chatuidemo.common.livedatas.MessageChangeLiveData;
 import com.hyphenate.chatuidemo.common.widget.ArrowItemView;
 import com.hyphenate.chatuidemo.common.widget.SwitchItemView;
 import com.hyphenate.chatuidemo.section.base.BaseInitActivity;
 import com.hyphenate.chatuidemo.section.dialog.EditTextDialogFragment;
 import com.hyphenate.chatuidemo.section.group.fragment.GroupEditFragment;
 import com.hyphenate.chatuidemo.section.group.viewmodels.GroupDetailViewModel;
+import com.hyphenate.easeui.model.EaseEvent;
 import com.hyphenate.easeui.utils.EaseCommonUtils;
 import com.hyphenate.easeui.widget.EaseImageView;
 import com.hyphenate.easeui.widget.EaseTitleBar;
-
-import java.util.List;
 
 public class GroupDetailActivity extends BaseInitActivity implements EaseTitleBar.OnBackPressListener, View.OnClickListener, SwitchItemView.OnCheckedChangeListener {
     private static final int REQUEST_CODE_ADD_USER = 0;
@@ -144,11 +145,19 @@ public class GroupDetailActivity extends BaseInitActivity implements EaseTitleBa
                 }
             });
         });
-        viewModel.getMessageChangeObervable().observe(this, event -> {
+        viewModel.getMessageChangeObservable().observe(this, event -> {
             if(event.isGroupChange()) {
                 loadGroup();
             }
-
+        });
+        viewModel.getLeaveGroupObservable().observe(this, response -> {
+            parseResource(response, new OnResourceParseCallback<Boolean>() {
+                @Override
+                public void onSuccess(Boolean data) {
+                    finish();
+                    MessageChangeLiveData.getInstance().postValue(EaseEvent.create(DemoConstant.GROUP_CHANGE, EaseEvent.TYPE.GROUP_LEAVE));
+                }
+            });
         });
         loadGroup();
     }
@@ -182,7 +191,11 @@ public class GroupDetailActivity extends BaseInitActivity implements EaseTitleBa
                 showToast("查找聊天记录");
                 break;
             case R.id.tv_group_refund ://退出群组
-                showToast("退出群组");
+                if(isOwner()) {
+                    viewModel.destroyGroup(groupId);
+                }else {
+                    viewModel.leaveGroup(groupId);
+                }
                 break;
         }
     }

@@ -129,6 +129,14 @@ public class ChatActivity extends BaseInitActivity implements EaseTitleBar.OnBac
                 }
             });
         });
+        messageViewModel.getMessageChange().observe(this, event -> {
+            if(event == null) {
+                return;
+            }
+            if(event.isGroupLeave()) {
+                finish();
+            }
+        });
     }
 
     @Override

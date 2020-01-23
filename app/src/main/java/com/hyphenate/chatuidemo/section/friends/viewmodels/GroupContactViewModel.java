@@ -8,10 +8,12 @@ import androidx.lifecycle.LiveData;
 
 import com.hyphenate.chat.EMGroup;
 import com.hyphenate.chatuidemo.DemoHelper;
+import com.hyphenate.chatuidemo.common.livedatas.MessageChangeLiveData;
 import com.hyphenate.chatuidemo.common.livedatas.SingleSourceLiveData;
 import com.hyphenate.chatuidemo.common.net.Resource;
 import com.hyphenate.chatuidemo.common.repositories.EMGroupManagerRepository;
 import com.hyphenate.easeui.domain.EaseUser;
+import com.hyphenate.easeui.model.EaseEvent;
 
 import java.util.List;
 
@@ -27,6 +29,10 @@ public class GroupContactViewModel extends AndroidViewModel {
         mRepository = new EMGroupManagerRepository();
         allGroupObservable = new SingleSourceLiveData<>();
         groupMemberObservable = new SingleSourceLiveData<>();
+    }
+
+    public LiveData<EaseEvent> getMessageObservable() {
+        return MessageChangeLiveData.getInstance();
     }
 
     public LiveData<Resource<List<EMGroup>>> getAllGroups() {

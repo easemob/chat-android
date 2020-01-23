@@ -12,6 +12,7 @@ import com.hyphenate.chatuidemo.DemoHelper;
 import com.hyphenate.chatuidemo.R;
 import com.hyphenate.chatuidemo.common.db.entity.EmUserEntity;
 import com.hyphenate.chatuidemo.common.interfaceOrImplement.OnResourceParseCallback;
+import com.scwang.smartrefresh.layout.api.RefreshLayout;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -48,6 +49,12 @@ public class GroupAdminAuthorityActivity extends GroupMemberAuthorityActivity {
                     adminList.add(group.getOwner());
                     adapter.setData(EmUserEntity.parse(adminList));
                 }
+
+                @Override
+                public void hideLoading() {
+                    super.hideLoading();
+                    finishRefresh();
+                }
             });
         });
         viewModel.getMessageChangeObservable().observe(this, event -> {
@@ -58,10 +65,16 @@ public class GroupAdminAuthorityActivity extends GroupMemberAuthorityActivity {
                 refreshData();
             }
         });
+        refreshData();
     }
 
     private void refreshData() {
         viewModel.getGroup(groupId);
+    }
+
+    @Override
+    public void onRefresh(RefreshLayout refreshLayout) {
+        refreshData();
     }
 
     @Override

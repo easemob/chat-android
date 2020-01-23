@@ -24,4 +24,5 @@ public class MessageViewModel extends AndroidViewModel {
     public LiveData<EaseEvent> getMessageChange() {
         return messageObservable;
     }
+
 }

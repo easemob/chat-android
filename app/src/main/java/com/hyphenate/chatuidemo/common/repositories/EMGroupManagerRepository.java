@@ -886,4 +886,62 @@ public class EMGroupManagerRepository extends BaseEMRepository{
             }
         }.asLiveData();
     }
+
+    /**
+     * 退群
+     * @param groupId
+     * @return
+     */
+    public LiveData<Resource<Boolean>> leaveGroup(String groupId) {
+        return new NetworkOnlyResource<Boolean>() {
+            @Override
+            protected void createCall(@NonNull ResultCallBack<LiveData<Boolean>> callBack) {
+                getGroupManager().asyncLeaveGroup(groupId, new EMCallBack() {
+                    @Override
+                    public void onSuccess() {
+                        callBack.onSuccess(createLiveData(true));
+                    }
+
+                    @Override
+                    public void onError(int code, String error) {
+                        callBack.onError(code, error);
+                    }
+
+                    @Override
+                    public void onProgress(int progress, String status) {
+
+                    }
+                });
+            }
+        }.asLiveData();
+    }
+
+    /**
+     * 解散群
+     * @param groupId
+     * @return
+     */
+    public LiveData<Resource<Boolean>> destroyGroup(String groupId) {
+        return new NetworkOnlyResource<Boolean>() {
+            @Override
+            protected void createCall(@NonNull ResultCallBack<LiveData<Boolean>> callBack) {
+                getGroupManager().asyncDestroyGroup(groupId, new EMCallBack() {
+                    @Override
+                    public void onSuccess() {
+                        callBack.onSuccess(createLiveData(true));
+                    }
+
+                    @Override
+                    public void onError(int code, String error) {
+                        callBack.onError(code, error);
+                    }
+
+                    @Override
+                    public void onProgress(int progress, String status) {
+
+                    }
+                });
+            }
+        }.asLiveData();
+    }
 }

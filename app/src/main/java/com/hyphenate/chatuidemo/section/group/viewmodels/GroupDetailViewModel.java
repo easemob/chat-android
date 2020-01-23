@@ -18,6 +18,7 @@ public class GroupDetailViewModel extends AndroidViewModel {
     private SingleSourceLiveData<Resource<EMGroup>> groupObservable;
     private SingleSourceLiveData<Resource<String>> announcementObservable;
     private SingleSourceLiveData<Resource<String>> refreshObservable;
+    private SingleSourceLiveData<Resource<Boolean>> leaveGroupObservable;
     private MessageChangeLiveData messageChangeLiveData;
 
     public GroupDetailViewModel(@NonNull Application application) {
@@ -26,10 +27,11 @@ public class GroupDetailViewModel extends AndroidViewModel {
         groupObservable = new SingleSourceLiveData<>();
         announcementObservable = new SingleSourceLiveData<>();
         refreshObservable = new SingleSourceLiveData<>();
+        leaveGroupObservable = new SingleSourceLiveData<>();
         messageChangeLiveData = MessageChangeLiveData.getInstance();
     }
 
-    public LiveData<EaseEvent> getMessageChangeObervable() {
+    public LiveData<EaseEvent> getMessageChangeObservable() {
         return messageChangeLiveData;
     }
 
@@ -63,5 +65,17 @@ public class GroupDetailViewModel extends AndroidViewModel {
 
     public void setGroupDescription(String groupId, String description) {
         refreshObservable.setSource(repository.setGroupDescription(groupId, description));
+    }
+
+    public LiveData<Resource<Boolean>> getLeaveGroupObservable() {
+        return leaveGroupObservable;
+    }
+
+    public void leaveGroup(String groupId) {
+        leaveGroupObservable.setSource(repository.leaveGroup(groupId));
+    }
+
+    public void destroyGroup(String groupId) {
+        leaveGroupObservable.setSource(repository.destroyGroup(groupId));
     }
 }

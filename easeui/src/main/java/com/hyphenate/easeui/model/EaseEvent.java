@@ -40,6 +40,10 @@ public class EaseEvent implements Serializable {
         return type == TYPE.GROUP;
     }
 
+    public boolean isGroupLeave() {
+        return type == TYPE.GROUP_LEAVE;
+    }
+
     public boolean isContactChange() {
         return type == TYPE.CONTACT;
     }
@@ -49,6 +53,6 @@ public class EaseEvent implements Serializable {
     }
 
     public enum TYPE {
-        GROUP, CONTACT, MESSAGE, NOTIFY
+        GROUP, GROUP_LEAVE, CONTACT, MESSAGE, NOTIFY
     }
 }
