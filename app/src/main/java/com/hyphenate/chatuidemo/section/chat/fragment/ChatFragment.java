@@ -42,6 +42,7 @@ import com.hyphenate.easeui.domain.EaseUser;
 import com.hyphenate.easeui.interfaces.IChatAdapterProvider;
 import com.hyphenate.easeui.interfaces.IViewHolderProvider;
 import com.hyphenate.easeui.interfaces.MessageListItemClickListener;
+import com.hyphenate.easeui.model.EaseEvent;
 import com.hyphenate.easeui.model.styles.EaseMessageListItemStyle;
 import com.hyphenate.easeui.viewholder.EaseViewHolderProvider;
 import com.hyphenate.easeui.ui.chat.EaseChatFragment;
@@ -136,7 +137,8 @@ public class ChatFragment extends EaseChatFragment implements EaseChatFragment.O
                         break;
                     case R.id.action_chat_delete ://删除
                         if(messageChangeListener != null) {
-                            messageChangeListener.onMessageChange(DemoConstant.MESSAGE_CHANGE_DELETE);
+                            EaseEvent event = EaseEvent.create(DemoConstant.MESSAGE_CHANGE_DELETE, EaseEvent.TYPE.MESSAGE);
+                            messageChangeListener.onMessageChange(event);
                         }
                         conversation.removeMessage(message.getMsgId());
                         refreshMessages();
@@ -146,7 +148,8 @@ public class ChatFragment extends EaseChatFragment implements EaseChatFragment.O
                         break;
                     case R.id.action_chat_recall ://撤回
                         if(messageChangeListener != null) {
-                            messageChangeListener.onMessageChange(DemoConstant.MESSAGE_CHANGE_RECALL);
+                            EaseEvent event = EaseEvent.create(DemoConstant.MESSAGE_CHANGE_RECALL, EaseEvent.TYPE.MESSAGE);
+                            messageChangeListener.onMessageChange(event);
                         }
                         recallMessage(message);
                         break;
@@ -278,7 +281,7 @@ public class ChatFragment extends EaseChatFragment implements EaseChatFragment.O
     }
 
     @Override
-    public void onMessageChange(String change) {
+    public void onMessageChange(EaseEvent change) {
         viewModel.setMessageChange(change);
     }
 

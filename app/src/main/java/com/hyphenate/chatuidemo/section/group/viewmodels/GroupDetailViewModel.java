@@ -7,15 +7,18 @@ import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
 
 import com.hyphenate.chat.EMGroup;
+import com.hyphenate.chatuidemo.common.livedatas.MessageChangeLiveData;
 import com.hyphenate.chatuidemo.common.livedatas.SingleSourceLiveData;
 import com.hyphenate.chatuidemo.common.net.Resource;
 import com.hyphenate.chatuidemo.common.repositories.EMGroupManagerRepository;
+import com.hyphenate.easeui.model.EaseEvent;
 
 public class GroupDetailViewModel extends AndroidViewModel {
     private EMGroupManagerRepository repository;
     private SingleSourceLiveData<Resource<EMGroup>> groupObservable;
     private SingleSourceLiveData<Resource<String>> announcementObservable;
     private SingleSourceLiveData<Resource<String>> refreshObservable;
+    private MessageChangeLiveData messageChangeLiveData;
 
     public GroupDetailViewModel(@NonNull Application application) {
         super(application);
@@ -23,6 +26,11 @@ public class GroupDetailViewModel extends AndroidViewModel {
         groupObservable = new SingleSourceLiveData<>();
         announcementObservable = new SingleSourceLiveData<>();
         refreshObservable = new SingleSourceLiveData<>();
+        messageChangeLiveData = MessageChangeLiveData.getInstance();
+    }
+
+    public LiveData<EaseEvent> getMessageChangeObervable() {
+        return messageChangeLiveData;
     }
 
     public LiveData<Resource<EMGroup>> getGroupObservable() {

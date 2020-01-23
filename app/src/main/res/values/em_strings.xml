@@ -140,6 +140,14 @@
     <string name="em_authority_menu_mute">禁言</string>
     <string name="em_authority_menu_unmute">移除禁言</string>
 
+    <string name="em_authority_menu_admin_list">管理员列表</string>
+    <string name="em_authority_menu_member_list">成员列表</string>
+    <string name="em_authority_menu_mute_list">禁言列表</string>
+    <string name="em_authority_menu_black_list">黑名单列表</string>
+    <string name="em_authority_menu_add_contact">邀请群成员</string>
+
+    <string name="em_authority_remove_group">是否将该成员移除群组？</string>
+
 
     <string name="confirm_forward_to">确定转发到：%1$s ?</string>
 

@@ -112,7 +112,7 @@ public class GroupDetailActivity extends BaseInitActivity implements EaseTitleBa
         }
         tvGroupName.setText(group.getGroupName());
         itemGroupName.getTvContent().setText(group.getGroupName());
-        tvGroupMemberNum.setText(getString(R.string.em_chat_group_detail_member_num, (group.getMemberCount()+group.getAdminList().size())));
+        tvGroupMemberNum.setText(getString(R.string.em_chat_group_detail_member_num, group.getMemberCount()));
         tvGroupRefund.setText(getResources().getString(isOwner() ? R.string.em_chat_group_detail_dissolve : R.string.em_chat_group_detail_refund));
         tvGroupIntroduction.setText(group.getDescription());
         itemGroupNotDisturb.getSwitch().setChecked(group.isMsgBlocked());
@@ -143,6 +143,12 @@ public class GroupDetailActivity extends BaseInitActivity implements EaseTitleBa
                     loadGroup();
                 }
             });
+        });
+        viewModel.getMessageChangeObervable().observe(this, event -> {
+            if(event.isGroupChange()) {
+                loadGroup();
+            }
+
         });
         loadGroup();
     }
@@ -257,7 +263,7 @@ public class GroupDetailActivity extends BaseInitActivity implements EaseTitleBa
      * @return
      */
     private boolean isCanInvite() {
-        return group.isMemberAllowToInvite() || isOwner() || isAdmin();
+        return GroupHelper.isCanInvite(group);
     }
 
     /**
@@ -265,13 +271,7 @@ public class GroupDetailActivity extends BaseInitActivity implements EaseTitleBa
      * @return
      */
     private boolean isAdmin() {
-        synchronized (GroupDetailActivity.this) {
-            List<String> adminList = group.getAdminList();
-            if(adminList != null && !adminList.isEmpty()) {
-                return adminList.contains(DemoHelper.getInstance().getCurrentUser());
-            }
-        }
-        return false;
+        return GroupHelper.isAdmin(group);
     }
 
     /**
@@ -279,10 +279,6 @@ public class GroupDetailActivity extends BaseInitActivity implements EaseTitleBa
      * @return
      */
     private boolean isOwner() {
-        if(group == null ||
-                TextUtils.isEmpty(group.getOwner())) {
-            return false;
-        }
-        return TextUtils.equals(group.getOwner(), DemoHelper.getInstance().getCurrentUser());
+        return GroupHelper.isOwner(group);
     }
 }

@@ -3,59 +3,31 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item
-        android:id="@+id/action_add_admin"
+        android:id="@+id/action_group_member"
         android:orderInCategory="100"
-        android:visible="true"
-        android:title="@string/em_authority_menu_add_admin"
-        app:showAsAction="ifRoom"/>
+        android:visible="false"
+        android:title="@string/em_authority_menu_member_list"
+        app:showAsAction="never"/>
 
     <item
-        android:id="@+id/action_remove_admin"
+        android:id="@+id/action_group_black"
         android:orderInCategory="100"
-        android:visible="true"
-        android:title="@string/em_authority_menu_remove_admin"
-        app:showAsAction="ifRoom"/>
+        android:visible="false"
+        android:title="@string/em_authority_menu_black_list"
+        app:showAsAction="never"/>
 
     <item
-        android:id="@+id/action_transfer_owner"
+        android:id="@+id/action_group_mute"
         android:orderInCategory="100"
-        android:visible="true"
-        android:title="@string/em_authority_menu_transfer_owner"
-        app:showAsAction="ifRoom"/>
+        android:visible="false"
+        android:title="@string/em_authority_menu_mute_list"
+        app:showAsAction="never"/>
 
     <item
-        android:id="@+id/action_remove_member"
+        android:id="@+id/action_group_add"
         android:orderInCategory="100"
-        android:visible="true"
-        android:title="@string/em_authority_menu_remove_member"
-        app:showAsAction="ifRoom"/>
-
-    <item
-        android:id="@+id/action_add_black"
-        android:orderInCategory="100"
-        android:visible="true"
-        android:title="@string/em_authority_menu_add_black"
-        app:showAsAction="ifRoom"/>
-
-    <item
-        android:id="@+id/action_remove_black"
-        android:orderInCategory="100"
-        android:visible="true"
-        android:title="@string/em_authority_menu_remove_black"
-        app:showAsAction="ifRoom"/>
-
-    <item
-        android:id="@+id/action_mute"
-        android:orderInCategory="100"
-        android:visible="true"
-        android:title="@string/em_authority_menu_mute"
-        app:showAsAction="ifRoom"/>
-
-    <item
-        android:id="@+id/action_unmute"
-        android:orderInCategory="100"
-        android:visible="true"
-        android:title="@string/em_authority_menu_unmute"
-        app:showAsAction="ifRoom"/>
+        android:visible="false"
+        android:title="@string/em_authority_menu_add_contact"
+        app:showAsAction="never"/>
 
 </menu>

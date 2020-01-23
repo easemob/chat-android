@@ -11,6 +11,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.hyphenate.easeui.R;
 import com.hyphenate.easeui.interfaces.OnItemClickListener;
+import com.hyphenate.easeui.interfaces.OnItemLongClickListener;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -25,6 +26,7 @@ public abstract class EaseBaseRecyclerViewAdapter<T> extends EaseBaseAdapter<Eas
     private static final int VIEW_TYPE_EMPTY = 1;
     private static final int VIEW_TYPE_ITEM = 0;
     private OnItemClickListener mOnItemClickListener;
+    private OnItemLongClickListener mOnItemLongClickListener;
     public Context mContext;
     public List<T> mData;
 
@@ -53,6 +55,19 @@ public abstract class EaseBaseRecyclerViewAdapter<T> extends EaseBaseAdapter<Eas
                 itemClickAction(v, position);
             }
         });
+        holder.itemView.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                return itemLongClickAction(v, position);
+            }
+        });
+    }
+
+    public boolean itemLongClickAction(View v, int position) {
+        if(mOnItemLongClickListener != null) {
+            return mOnItemLongClickListener.onItemLongClick(v, position);
+        }
+        return false;
     }
 
     @Override
@@ -189,6 +204,14 @@ public abstract class EaseBaseRecyclerViewAdapter<T> extends EaseBaseAdapter<Eas
      */
     public void setOnItemClickListener(OnItemClickListener listener) {
         mOnItemClickListener = listener;
+    }
+
+    /**
+     * set item long click
+     * @param longClickListener
+     */
+    public void setOnItemLongClickListener(OnItemLongClickListener longClickListener) {
+        mOnItemLongClickListener = longClickListener;
     }
 
     public abstract static class ViewHolder<T> extends RecyclerView.ViewHolder {

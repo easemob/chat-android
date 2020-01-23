@@ -8,9 +8,16 @@ import android.view.View;
 import com.hyphenate.chat.EMGroup;
 import com.hyphenate.chatuidemo.DemoHelper;
 import com.hyphenate.chatuidemo.R;
+import com.hyphenate.chatuidemo.common.interfaceOrImplement.OnResourceParseCallback;
 import com.hyphenate.chatuidemo.common.widget.ArrowItemView;
 import com.hyphenate.chatuidemo.section.base.BaseInitActivity;
+import com.hyphenate.chatuidemo.section.group.viewmodels.GroupMemberAuthorityViewModel;
+import com.hyphenate.easeui.domain.EaseUser;
 import com.hyphenate.easeui.widget.EaseTitleBar;
+
+import java.util.List;
+
+import androidx.lifecycle.ViewModelProvider;
 
 public class GroupMemberTypeActivity extends BaseInitActivity implements EaseTitleBar.OnBackPressListener, View.OnClickListener {
     private EaseTitleBar titleBar;
@@ -48,7 +55,7 @@ public class GroupMemberTypeActivity extends BaseInitActivity implements EaseTit
 
         group = DemoHelper.getInstance().getGroupManager().getGroup(groupId);
 
-        initGroupData();
+        initGroupData(group);
     }
 
     @Override
@@ -59,9 +66,46 @@ public class GroupMemberTypeActivity extends BaseInitActivity implements EaseTit
         itemMember.setOnClickListener(this);
     }
 
-    private void initGroupData() {
-        itemAdmin.getTvContent().setText(getString(R.string.em_group_member_type_member_num, group.getAdminList().size()));
-        itemMember.getTvContent().setText(getString(R.string.em_group_member_type_member_num, group.getMemberCount()));
+    @Override
+    protected void initData() {
+        super.initData();
+        GroupMemberAuthorityViewModel viewModel = new ViewModelProvider(this).get(GroupMemberAuthorityViewModel.class);
+        viewModel.getGroupObservable().observe(this, response -> {
+            parseResource(response, new OnResourceParseCallback<EMGroup>() {
+                @Override
+                public void onSuccess(EMGroup data) {
+                    initGroupData(data);
+                }
+            });
+        });
+        viewModel.getMemberObservable().observe(this, response -> {
+            parseResource(response, new OnResourceParseCallback<List<EaseUser>>() {
+                @Override
+                public void onSuccess(List<EaseUser> data) {
+                    setMemberCount(data.size());
+                }
+            });
+        });
+        viewModel.getMessageChangeObservable().observe(this, event -> {
+            if(event.isGroupChange()) {
+                viewModel.getGroup(groupId);
+                viewModel.getMembers(groupId);
+            }
+        });
+        viewModel.getMembers(groupId);
+    }
+
+    private void initGroupData(EMGroup group) {
+        setAdminCount(group.getAdminList().size() + 1);
+        setMemberCount(group.getMembers().size());
+    }
+
+    private void setAdminCount(int count) {
+        itemAdmin.getTvContent().setText(getString(R.string.em_group_member_type_member_num, count));
+    }
+
+    private void setMemberCount(int count) {
+        itemMember.getTvContent().setText(getString(R.string.em_group_member_type_member_num, count));
     }
 
     @Override
@@ -73,10 +117,10 @@ public class GroupMemberTypeActivity extends BaseInitActivity implements EaseTit
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.item_admin ://管理员
-                showToast("跳转到管理员页面");
+                GroupAdminAuthorityActivity.actionStart(mContext, groupId);
                 break;
             case R.id.item_member ://成员
-                showToast("跳转到成员页面");
+                GroupMemberAuthorityActivity.actionStart(mContext, groupId);
                 break;
         }
     }

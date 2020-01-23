@@ -20,7 +20,8 @@
         app:srlEnableLoadMore="false"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/title_bar">
+        app:layout_constraintTop_toBottomOf="@id/title_bar"
+        app:layout_constraintBottom_toBottomOf="parent">
 
         <com.hyphenate.easeui.widget.EaseRecyclerView
             android:id="@+id/rv_list"
