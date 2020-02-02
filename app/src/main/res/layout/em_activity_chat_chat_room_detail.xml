@@ -1,7 +1,146 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <com.hyphenate.easeui.widget.EaseTitleBar
+        android:id="@+id/title_bar"
+        android:layout_width="0dp"
+        android:layout_height="@dimen/em_common_title_bar_height"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:titleBarTitle="@string/em_chat_room_detail_title"
+        app:titleBarDisplayHomeAsUpEnabled="true"/>
+
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/title_bar"
+        app:layout_constraintBottom_toBottomOf="parent">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <com.hyphenate.chatuidemo.common.widget.ArrowItemView
+                android:id="@+id/item_chat_room_id"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toTopOf="@id/item_chat_room_name"
+                app:arrowItemTitle="@string/em_chat_room_detail_id"
+                app:arrowItemShowArrow="false"
+                style="@style/em_group_arrow_item" />
+
+            <com.hyphenate.chatuidemo.common.widget.ArrowItemView
+                android:id="@+id/item_chat_room_name"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/item_chat_room_id"
+                app:layout_constraintBottom_toTopOf="@id/item_chat_room_description"
+                app:arrowItemTitle="@string/em_chat_room_detail_room_name"
+                app:arrowItemShowArrow="false"
+                style="@style/em_group_arrow_item" />
+
+            <com.hyphenate.chatuidemo.common.widget.ArrowItemView
+                android:id="@+id/item_chat_room_description"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/item_chat_room_name"
+                app:layout_constraintBottom_toTopOf="@id/item_chat_room_owner"
+                app:arrowItemTitle="@string/em_chat_room_detail_description"
+                app:arrowItemShowArrow="false"
+                style="@style/em_group_arrow_item" />
+
+            <com.hyphenate.chatuidemo.common.widget.ArrowItemView
+                android:id="@+id/item_chat_room_owner"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/item_chat_room_description"
+                app:layout_constraintBottom_toTopOf="@id/view_group_divider_1"
+                app:arrowItemTitle="@string/em_chat_room_detail_owner"
+                app:arrowItemShowArrow="false"
+                style="@style/em_group_arrow_item" />
+
+            <View
+                android:id="@+id/view_group_divider_1"
+                android:layout_width="0dp"
+                android:layout_height="24dp"
+                app:layout_constraintTop_toBottomOf="@id/item_chat_room_owner"
+                app:layout_constraintBottom_toTopOf="@id/item_chat_room_members"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                android:background="@drawable/em_default_divider_list"/>
+
+            <com.hyphenate.chatuidemo.common.widget.ArrowItemView
+                android:id="@+id/item_chat_room_members"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/view_group_divider_1"
+                app:layout_constraintBottom_toTopOf="@id/view_group_divider_2"
+                app:arrowItemTitle="@string/em_chat_room_detail_members"
+                style="@style/em_group_arrow_item" />
+
+            <View
+                android:id="@+id/view_group_divider_2"
+                android:layout_width="0dp"
+                android:layout_height="24dp"
+                app:layout_constraintTop_toBottomOf="@id/item_chat_room_members"
+                app:layout_constraintBottom_toTopOf="@id/item_chat_room_admins"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                android:background="@drawable/em_default_divider_list"/>
+
+            <com.hyphenate.chatuidemo.common.widget.ArrowItemView
+                android:id="@+id/item_chat_room_admins"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/view_group_divider_2"
+                app:layout_constraintBottom_toTopOf="@id/view_group_divider_3"
+                app:arrowItemTitle="@string/em_chat_room_detail_admins"
+                style="@style/em_group_arrow_item" />
+
+            <View
+                android:id="@+id/view_group_divider_3"
+                android:layout_width="0dp"
+                android:layout_height="24dp"
+                app:layout_constraintTop_toBottomOf="@id/item_chat_room_admins"
+                app:layout_constraintBottom_toTopOf="@id/tv_chat_room_refund"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                android:background="@drawable/em_default_divider_list"/>
+
+            <TextView
+                android:id="@+id/tv_chat_room_refund"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/view_group_divider_3"
+                app:layout_constraintBottom_toTopOf="@id/view_group_divider_4"
+                android:text="@string/em_chat_room_detail_out"
+                android:gravity="center"
+                android:textColor="@color/em_dialog_color_btn_warning"
+                android:textSize="@dimen/em_size_big"
+                android:foreground="@drawable/em_ripple_click_gray"
+                style="@style/em_group_arrow_item"/>
+
+            <View
+                android:id="@+id/view_group_divider_4"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:minHeight="30dp"
+                app:layout_constraintTop_toBottomOf="@id/tv_chat_room_refund"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintVertical_weight="1"
+                android:background="@drawable/em_default_divider_list"/>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </androidx.core.widget.NestedScrollView>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
