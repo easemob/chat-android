@@ -5,6 +5,9 @@ import android.view.ViewGroup;
 import com.hyphenate.chat.EMMessage;
 import com.hyphenate.easeui.R;
 import com.hyphenate.easeui.interfaces.IViewHolderProvider;
+import com.hyphenate.easeui.interfaces.MessageListItemClickListener;
+import com.hyphenate.easeui.model.styles.EaseMessageListItemStyle;
+import com.hyphenate.easeui.ui.chat.delegates.EaseMessageAdapterDelegate;
 import com.hyphenate.easeui.viewholder.EaseChatRowViewHolder;
 import com.hyphenate.easeui.viewholder.EaseViewHolderHelper;
 
@@ -12,10 +15,11 @@ import com.hyphenate.easeui.viewholder.EaseViewHolderHelper;
  * 开发者可在实现{@link IViewHolderProvider}提供相应的ViewHolder及ViewType
  * ViewHolder的提供主要通过{@link EaseViewHolderHelper}
  */
-public class EaseMessageAdapter extends EaseBaseMessageAdapter<EMMessage> {
+public class EaseMessageAdapter extends EaseBaseDelegateAdapter<EMMessage> {
+    public MessageListItemClickListener itemClickListener;
+    public EaseMessageListItemStyle itemStyle;
 
-    public EaseMessageAdapter(IViewHolderProvider provider) {
-        this.viewHolderProvider = provider;
+    public EaseMessageAdapter() {
         itemStyle = createDefaultItemStyle();
     }
 
@@ -24,37 +28,26 @@ public class EaseMessageAdapter extends EaseBaseMessageAdapter<EMMessage> {
         return R.layout.ease_layout_empty_list_invisible;
     }
 
-    @Override
-    public ViewHolder getViewHolder(ViewGroup parent, int viewType) {
-        return createItemViewHolder(parent, viewType);
+    public EaseBaseDelegateAdapter addDelegate(EaseAdapterDelegate<?, ?> delegate, String tag) {
+        if(delegate instanceof EaseMessageAdapterDelegate) {
+            ((EaseMessageAdapterDelegate)delegate).setListItemClickListener(itemClickListener);
+        }
+        return super.addDelegate(delegate, tag);
     }
 
-    private ViewHolder createItemViewHolder(ViewGroup parent, int viewType) {
-        if(viewHolderProvider != null) {
-            EaseChatRowViewHolder viewHolder = viewHolderProvider.provideViewHolder(parent, viewType, itemClickListener, itemStyle);
-            if(viewHolder != null) {
-                return viewHolder;
-            }
+    public EaseBaseDelegateAdapter addDelegate(EaseAdapterDelegate<?, ?> delegate) {
+        if(delegate instanceof EaseMessageAdapterDelegate) {
+            ((EaseMessageAdapterDelegate)delegate).setListItemClickListener(itemClickListener);
         }
-        return EaseViewHolderHelper.getInstance().getChatRowViewHolder(parent, viewType, itemClickListener, itemStyle);
+        return super.addDelegate(delegate);
     }
 
-    @Override
-    public int getItemViewType(int position) {
-        EMMessage message = getItemMessage(position);
-        if(message == null) {
-            return super.getItemViewType(position);
+    public EaseBaseDelegateAdapter setFallbackDelegate(EaseAdapterDelegate delegate) {
+        if(delegate instanceof EaseMessageAdapterDelegate) {
+            ((EaseMessageAdapterDelegate)delegate).setListItemClickListener(itemClickListener);
         }
-        if(viewHolderProvider != null) {
-            int type = viewHolderProvider.provideViewType(message);
-            if(type != 0) {
-                return type;
-            }
-        }
-        int viewType = EaseViewHolderHelper.getInstance().getAdapterViewType(message);
-        return viewType == 0 ? super.getItemViewType(position) : viewType;
+        return super.setFallbackDelegate(delegate);
     }
-
 
     /**
      * get item message
@@ -66,6 +59,41 @@ public class EaseMessageAdapter extends EaseBaseMessageAdapter<EMMessage> {
             return mData.get(position);
         }
         return null;
+    }
+
+    /**
+     * create default item style
+     * @return
+     */
+    public EaseMessageListItemStyle createDefaultItemStyle() {
+        EaseMessageListItemStyle.Builder builder = new EaseMessageListItemStyle.Builder();
+        builder.showAvatar(true)
+                .showUserNick(false);
+        return builder.build();
+    }
+
+    /**
+     * set item click listener
+     * @param itemClickListener
+     */
+    public void setListItemClickListener(MessageListItemClickListener itemClickListener) {
+        this.itemClickListener = itemClickListener;
+    }
+
+    /**
+     * set item style
+     * @param itemStyle
+     */
+    public void setItemStyle(EaseMessageListItemStyle itemStyle) {
+        this.itemStyle = itemStyle;
+    }
+
+    /**
+     * if show nick name
+     * @param showUserNick
+     */
+    public void showUserNick(boolean showUserNick) {
+        this.itemStyle.setShowUserNick(showUserNick);
     }
 
 }

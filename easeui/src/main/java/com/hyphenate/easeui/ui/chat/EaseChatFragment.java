@@ -44,6 +44,7 @@ import com.hyphenate.chat.EMMessage;
 import com.hyphenate.chat.EMTextMessageBody;
 import com.hyphenate.chat.adapter.EMAChatRoomManagerListener;
 import com.hyphenate.easeui.R;
+import com.hyphenate.easeui.adapter.EaseAdapterDelegate;
 import com.hyphenate.easeui.adapter.EaseBaseMessageAdapter;
 import com.hyphenate.easeui.adapter.EaseMessageAdapter;
 import com.hyphenate.easeui.constants.EaseConstant;
@@ -59,6 +60,14 @@ import com.hyphenate.easeui.model.EaseCompat;
 import com.hyphenate.easeui.model.EaseEvent;
 import com.hyphenate.easeui.ui.EaseBaiduMapActivity;
 import com.hyphenate.easeui.ui.base.EaseBaseFragment;
+import com.hyphenate.easeui.ui.chat.delegates.EaseExpressionAdapterDelegate;
+import com.hyphenate.easeui.ui.chat.delegates.EaseFileAdapterDelegate;
+import com.hyphenate.easeui.ui.chat.delegates.EaseImageAdapterDelegate;
+import com.hyphenate.easeui.ui.chat.delegates.EaseLocationAdapterDelegate;
+import com.hyphenate.easeui.ui.chat.delegates.EaseMessageAdapterDelegate;
+import com.hyphenate.easeui.ui.chat.delegates.EaseTextAdapterDelegate;
+import com.hyphenate.easeui.ui.chat.delegates.EaseVideoAdapterDelegate;
+import com.hyphenate.easeui.ui.chat.delegates.EaseVoiceAdapterDelegate;
 import com.hyphenate.easeui.utils.EaseCommonUtils;
 import com.hyphenate.easeui.utils.EaseDingMessageHelper;
 import com.hyphenate.easeui.utils.EaseUserUtils;
@@ -118,7 +127,7 @@ public class EaseChatFragment extends EaseBaseFragment implements View.OnClickLi
      * 消息类别，SDK定义
      */
     protected String toChatUsername;
-    protected EaseBaseMessageAdapter messageAdapter;
+    protected EaseMessageAdapter messageAdapter;
     protected File cameraFile;
     /**
      * chat conversation
@@ -182,12 +191,27 @@ public class EaseChatFragment extends EaseBaseFragment implements View.OnClickLi
         initChildView();
 
         messageList.setLayoutManager(provideLayoutManager());
-        messageAdapter = provideMessageAdapter();
+        messageAdapter = new EaseMessageAdapter();
+        addMessageDelegates(messageAdapter);
+        messageAdapter.setFallbackDelegate(new EaseTextAdapterDelegate());
         messageList.setAdapter(messageAdapter);
 
         initInputMenu();
         addExtendInputMenu();
         mContext.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
+    }
+
+    /**
+     * 增加消息类型
+     * @param messageAdapter
+     */
+    protected void addMessageDelegates(EaseMessageAdapter messageAdapter) {
+        messageAdapter.addDelegate(new EaseExpressionAdapterDelegate())
+                .addDelegate(new EaseFileAdapterDelegate())
+                .addDelegate(new EaseImageAdapterDelegate())
+                .addDelegate(new EaseLocationAdapterDelegate())
+                .addDelegate(new EaseVideoAdapterDelegate())
+                .addDelegate(new EaseVoiceAdapterDelegate());
     }
 
     private void initListener() {
@@ -650,18 +674,6 @@ public class EaseChatFragment extends EaseBaseFragment implements View.OnClickLi
      */
     protected RecyclerView.LayoutManager provideLayoutManager() {
         return new LinearLayoutManager(mContext);
-    }
-
-    /**
-     * provide message adapter
-     * @return
-     */
-    protected EaseBaseMessageAdapter<EMMessage> provideMessageAdapter() {
-        IChatAdapterProvider adapterProvider = setChatAdapterProvider();
-        if(adapterProvider != null) {
-            return adapterProvider.provideMessageAdaper();
-        }
-        return new EaseMessageAdapter(setViewHolderProvider());
     }
 
     /**
