@@ -24,13 +24,11 @@ public class EaseTextAdapterDelegate extends EaseMessageAdapterDelegate<EMMessag
     @Override
     public boolean isForViewType(EMMessage item, int position) {
         mIsSender = isMessageSender(item);
-        Log.e("TAG", "isForViewType isSender = "+ mIsSender);
         return item.getType() == EMMessage.Type.TXT;
     }
 
     @Override
     protected EaseChatRow getEaseChatRow(ViewGroup parent, boolean isSender) {
-        Log.e("TAG", "getEaseChatRow isSender = "+isSender);
         return new EaseChatRowText(parent.getContext(), isSender);
     }
 

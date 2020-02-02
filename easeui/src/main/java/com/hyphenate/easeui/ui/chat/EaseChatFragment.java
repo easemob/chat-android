@@ -82,11 +82,6 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.util.List;
 
-/**
- * 说明：
- * 1、如果要提供自己的adapter，可以通过重写{@link #setViewHolderProvider()}，提供自己的adapter
- * 2、如果需要增加自定义的消息类型，可以通过重写{@link #setChatAdapterProvider()} )}来提供自己的ViewHolder
- */
 public class EaseChatFragment extends EaseBaseFragment implements View.OnClickListener,
         SwipeRefreshLayout.OnRefreshListener, EaseChatInputMenu.ChatInputMenuListener,
         EaseChatExtendMenu.EaseChatExtendMenuItemClickListener, MessageListItemClickListener,
@@ -193,25 +188,13 @@ public class EaseChatFragment extends EaseBaseFragment implements View.OnClickLi
         messageList.setLayoutManager(provideLayoutManager());
         messageAdapter = new EaseMessageAdapter();
         addMessageDelegates(messageAdapter);
+        addMoreMessageDelegates(messageAdapter);
         messageAdapter.setFallbackDelegate(new EaseTextAdapterDelegate());
         messageList.setAdapter(messageAdapter);
 
         initInputMenu();
         addExtendInputMenu();
         mContext.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
-    }
-
-    /**
-     * 增加消息类型
-     * @param messageAdapter
-     */
-    protected void addMessageDelegates(EaseMessageAdapter messageAdapter) {
-        messageAdapter.addDelegate(new EaseExpressionAdapterDelegate())
-                .addDelegate(new EaseFileAdapterDelegate())
-                .addDelegate(new EaseImageAdapterDelegate())
-                .addDelegate(new EaseLocationAdapterDelegate())
-                .addDelegate(new EaseVideoAdapterDelegate())
-                .addDelegate(new EaseVoiceAdapterDelegate());
     }
 
     private void initListener() {
@@ -226,12 +209,6 @@ public class EaseChatFragment extends EaseBaseFragment implements View.OnClickLi
         initChildListener();
     }
 
-    private void setMessageClickListener() {
-        if(messageAdapter != null) {
-            messageAdapter.setListItemClickListener(this);
-        }
-    }
-
     private void initData() {
         initConversation();
         initChatType();
@@ -240,6 +217,12 @@ public class EaseChatFragment extends EaseBaseFragment implements View.OnClickLi
         hideNickname();
         setTypingHandler();
         initChildData();
+    }
+
+    private void setMessageClickListener() {
+        if(messageAdapter != null) {
+            messageAdapter.setListItemClickListener(this);
+        }
     }
 
     @Override
@@ -634,6 +617,25 @@ public class EaseChatFragment extends EaseBaseFragment implements View.OnClickLi
         loadMessagesFromLocal();
     }
 
+    /**
+     * add more other adapter delegations
+     * @param messageAdapter
+     */
+    protected void addMoreMessageDelegates(EaseMessageAdapter messageAdapter) {}
+
+    /**
+     * 增加消息类型
+     * @param messageAdapter
+     */
+    protected void addMessageDelegates(EaseMessageAdapter messageAdapter) {
+        messageAdapter.addDelegate(new EaseExpressionAdapterDelegate())
+                .addDelegate(new EaseFileAdapterDelegate())
+                .addDelegate(new EaseImageAdapterDelegate())
+                .addDelegate(new EaseLocationAdapterDelegate())
+                .addDelegate(new EaseVideoAdapterDelegate())
+                .addDelegate(new EaseVoiceAdapterDelegate());
+    }
+
 //============================ child init end ================================
 
 //============================== view control start ===========================
@@ -697,17 +699,6 @@ public class EaseChatFragment extends EaseBaseFragment implements View.OnClickLi
      */
     protected void showLoadMsgToast(String errorMsg) {
         showMsgToast(TextUtils.isEmpty(errorMsg) ? getResources().getString(R.string.no_more_messages) : errorMsg);
-    }
-
-    protected IChatAdapterProvider setChatAdapterProvider() {
-        return null;
-    }
-
-    /**
-     * set viewHolder provider
-     */
-    public IViewHolderProvider setViewHolderProvider() {
-        return null;
     }
 
     public void setOnMessageChangeListener(OnMessageChangeListener listener) {

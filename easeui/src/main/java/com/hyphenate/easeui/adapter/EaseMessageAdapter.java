@@ -1,5 +1,6 @@
 package com.hyphenate.easeui.adapter;
 
+import android.util.Log;
 import android.view.ViewGroup;
 
 import com.hyphenate.chat.EMMessage;
@@ -10,6 +11,8 @@ import com.hyphenate.easeui.model.styles.EaseMessageListItemStyle;
 import com.hyphenate.easeui.ui.chat.delegates.EaseMessageAdapterDelegate;
 import com.hyphenate.easeui.viewholder.EaseChatRowViewHolder;
 import com.hyphenate.easeui.viewholder.EaseViewHolderHelper;
+
+import androidx.annotation.Nullable;
 
 /**
  * 开发者可在实现{@link IViewHolderProvider}提供相应的ViewHolder及ViewType
@@ -28,25 +31,13 @@ public class EaseMessageAdapter extends EaseBaseDelegateAdapter<EMMessage> {
         return R.layout.ease_layout_empty_list_invisible;
     }
 
-    public EaseBaseDelegateAdapter addDelegate(EaseAdapterDelegate<?, ?> delegate, String tag) {
+    @Override
+    public ViewHolder getViewHolder(ViewGroup parent, int viewType) {
+        EaseAdapterDelegate delegate = getAdapterDelegate(viewType);
         if(delegate instanceof EaseMessageAdapterDelegate) {
-            ((EaseMessageAdapterDelegate)delegate).setListItemClickListener(itemClickListener);
+            ((EaseMessageAdapterDelegate) delegate).setListItemClickListener(itemClickListener);
         }
-        return super.addDelegate(delegate, tag);
-    }
-
-    public EaseBaseDelegateAdapter addDelegate(EaseAdapterDelegate<?, ?> delegate) {
-        if(delegate instanceof EaseMessageAdapterDelegate) {
-            ((EaseMessageAdapterDelegate)delegate).setListItemClickListener(itemClickListener);
-        }
-        return super.addDelegate(delegate);
-    }
-
-    public EaseBaseDelegateAdapter setFallbackDelegate(EaseAdapterDelegate delegate) {
-        if(delegate instanceof EaseMessageAdapterDelegate) {
-            ((EaseMessageAdapterDelegate)delegate).setListItemClickListener(itemClickListener);
-        }
-        return super.setFallbackDelegate(delegate);
+        return super.getViewHolder(parent, viewType);
     }
 
     /**

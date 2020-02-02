@@ -19,13 +19,13 @@ public abstract class EaseBaseDelegateAdapter<T> extends EaseBaseRecyclerViewAda
         this.delegatesManager = delegatesManager;
     }
 
-    public EaseBaseDelegateAdapter addDelegate(EaseAdapterDelegate<?, ?> delegate) {
+    public EaseBaseDelegateAdapter addDelegate(EaseAdapterDelegate delegate) {
         delegatesManager.addDelegate(delegate, delegate.tag);
         notifyDataSetChanged();
         return this;
     }
 
-    public EaseBaseDelegateAdapter addDelegate(EaseAdapterDelegate<?, ?> delegate, String tag) {
+    public EaseBaseDelegateAdapter addDelegate(EaseAdapterDelegate delegate, String tag) {
         delegate.tag = tag;
         delegatesManager.addDelegate(delegate, tag);
         notifyDataSetChanged();
@@ -39,6 +39,10 @@ public abstract class EaseBaseDelegateAdapter<T> extends EaseBaseRecyclerViewAda
     public EaseBaseDelegateAdapter setFallbackDelegate(EaseAdapterDelegate delegate) {
         delegatesManager.fallbackDelegate = delegate;
         return this;
+    }
+
+    public EaseAdapterDelegate getAdapterDelegate(int viewType) {
+        return delegatesManager.getDelegate(viewType);
     }
 
     @Override
