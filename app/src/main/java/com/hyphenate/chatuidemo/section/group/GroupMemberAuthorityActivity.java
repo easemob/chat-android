@@ -51,9 +51,9 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 
 public class GroupMemberAuthorityActivity extends BaseInitActivity implements EaseTitleBar.OnBackPressListener, OnItemClickListener, OnRefreshListener, OnItemLongClickListener {
     private static final int REQUEST_CODE_ADD_USER = 0;
-    private static final int TYPE_MEMBER = 0;
-    private static final int TYPE_BLACK = 1;
-    private static final int TYPE_MUTE = 2;
+    protected static final int TYPE_MEMBER = 0;
+    protected static final int TYPE_BLACK = 1;
+    protected static final int TYPE_MUTE = 2;
     protected EaseTitleBar titleBar;
     private SmartRefreshLayout srlRefresh;
     private EaseRecyclerView rvList;
@@ -64,9 +64,9 @@ public class GroupMemberAuthorityActivity extends BaseInitActivity implements Ea
     protected GroupMemberAuthorityAdapter adapter;
     protected GroupMemberAuthorityViewModel viewModel;
     protected String groupId;
-    private List<String> muteMembers = new ArrayList<>();
-    private List<String> blackMembers = new ArrayList<>();
-    private int flag;//作为切换的flag
+    protected List<String> muteMembers = new ArrayList<>();
+    protected List<String> blackMembers = new ArrayList<>();
+    protected int flag;//作为切换的flag
     public EMGroup group;
 
     public static void actionStart(Context context, String groupId) {
@@ -118,7 +118,12 @@ public class GroupMemberAuthorityActivity extends BaseInitActivity implements Ea
             menu.findItem(R.id.action_group_member).setVisible(true);
             menu.findItem(R.id.action_group_black).setVisible(true);
         }
+        onSubPrepareOptionsMenu(menu);
         return super.onPrepareOptionsMenu(menu);
+    }
+
+    protected void onSubPrepareOptionsMenu(Menu menu) {
+
     }
 
     @Override
@@ -178,7 +183,7 @@ public class GroupMemberAuthorityActivity extends BaseInitActivity implements Ea
         group = DemoHelper.getInstance().getGroupManager().getGroup(groupId);
     }
 
-    private void refreshData() {
+    protected void refreshData() {
         if(flag == TYPE_MEMBER) {
             viewModel.getMembers(groupId);
         }
@@ -262,6 +267,8 @@ public class GroupMemberAuthorityActivity extends BaseInitActivity implements Ea
         viewModel.getMessageChangeObservable().observe(this, event -> {
             if(event.isGroupChange()) {
                 refreshData();
+            }else if(event.isGroupLeave() && TextUtils.equals(groupId, event.message)) {
+                finish();
             }
         });
         refreshData();
@@ -291,7 +298,7 @@ public class GroupMemberAuthorityActivity extends BaseInitActivity implements Ea
 
     @Override
     public boolean onItemLongClick(View view, int position) {
-        if(!GroupHelper.isAdmin(group) && !GroupHelper.isOwner(group)) {
+        if(isMember()) {
             return false;
         }
         PopupMenu menu = new PopupMenu(mContext, view);
@@ -305,18 +312,19 @@ public class GroupMemberAuthorityActivity extends BaseInitActivity implements Ea
             return false;
         }
         String username = item.getUsername();
-        if(GroupHelper.isInBlackList(username, blackMembers)) {
+        setMenuInfo(menu.getMenu());
+        if(isInBlackList(username)) {
             setMenuItemVisible(menu.getMenu(), R.id.action_group_remove_black);
-        }else if(GroupHelper.isInMuteList(username, muteMembers)) {
-            menu.getMenu().findItem(R.id.action_group_add_admin).setVisible(GroupHelper.isOwner(group));
+        }else if(isInMuteList(username)) {
+            menu.getMenu().findItem(R.id.action_group_add_admin).setVisible(isOwner());
             setMenuItemVisible(menu.getMenu(), R.id.action_group_remove_member);
             setMenuItemVisible(menu.getMenu(), R.id.action_group_add_black);
             setMenuItemVisible(menu.getMenu(), R.id.action_group_unmute);
-        }else if(GroupHelper.isInAdminList(group, username)) {
+        }else if(isInAdminList(username)) {
             setMenuItemVisible(menu.getMenu(), R.id.action_group_remove_admin);
             setMenuItemVisible(menu.getMenu(), R.id.action_group_transfer_owner);
         }else {
-            menu.getMenu().findItem(R.id.action_group_add_admin).setVisible(GroupHelper.isOwner(group));
+            menu.getMenu().findItem(R.id.action_group_add_admin).setVisible(isOwner());
             setMenuItemVisible(menu.getMenu(), R.id.action_group_transfer_owner);
             setMenuItemVisible(menu.getMenu(), R.id.action_group_remove_member);
             setMenuItemVisible(menu.getMenu(), R.id.action_group_add_black);
@@ -328,50 +336,110 @@ public class GroupMemberAuthorityActivity extends BaseInitActivity implements Ea
             public boolean onMenuItemClick(MenuItem item) {
                 switch (item.getItemId()) {
                     case R.id.action_group_add_admin ://设为管理员
-                        viewModel.addGroupAdmin(groupId, username);
-                        MessageChangeLiveData.getInstance().postValue(EaseEvent.create(DemoConstant.GROUP_CHANGE, EaseEvent.TYPE.GROUP));
+                        addToAdmins(username);
                         break;
                     case R.id.action_group_remove_admin ://移除管理员
-                        viewModel.removeGroupAdmin(groupId, username);
-                        MessageChangeLiveData.getInstance().postValue(EaseEvent.create(DemoConstant.GROUP_CHANGE, EaseEvent.TYPE.GROUP));
+                        removeFromAdmins(username);
                         break;
                     case R.id.action_group_transfer_owner ://移交群主
-                        viewModel.changeOwner(groupId, username);
-                        MessageChangeLiveData.getInstance().postValue(EaseEvent.create(DemoConstant.GROUP_CHANGE, EaseEvent.TYPE.GROUP));
+                        transferOwner(username);
                         break;
                     case R.id.action_group_remove_member ://踢出群
                         SimpleDialogFragment.showDialog(mContext, R.string.em_authority_remove_group, new DemoDialogFragment.OnConfirmClickListener() {
                             @Override
                             public void onConfirmClick(View view) {
-                                MessageChangeLiveData.getInstance().postValue(EaseEvent.create(DemoConstant.GROUP_CHANGE, EaseEvent.TYPE.GROUP));
-                                viewModel.removeUserFromGroup(groupId, username);
+                                removeFromGroup(username);
                             }
                         });
 
                         break;
                     case R.id.action_group_add_black ://加入黑名单
-                        viewModel.blockUser(groupId, username);
-                        MessageChangeLiveData.getInstance().postValue(EaseEvent.create(DemoConstant.GROUP_CHANGE, EaseEvent.TYPE.GROUP));
+                        addToBlack(username);
                         break;
                     case R.id.action_group_remove_black ://移出黑名单
-                        viewModel.unblockUser(groupId, username);
-                        MessageChangeLiveData.getInstance().postValue(EaseEvent.create(DemoConstant.GROUP_CHANGE, EaseEvent.TYPE.GROUP));
+                        removeFromBlacks(username);
                         break;
                     case R.id.action_group_mute ://禁言
-                        List<String> mutes = new ArrayList<>();
-                        mutes.add(username);
-                        viewModel.muteGroupMembers(groupId, mutes, 20 * 60 * 1000);
+                        AddToMuteMembers(username);
                         break;
                     case R.id.action_group_unmute ://解除禁言
-                        List<String> unMutes = new ArrayList<>();
-                        unMutes.add(username);
-                        viewModel.unMuteGroupMembers(groupId, unMutes);
+                        removeFromMuteMembers(username);
                         break;
                 }
                 return false;
             }
         });
         return true;
+    }
+
+    protected void addToAdmins(String username) {
+        viewModel.addGroupAdmin(groupId, username);
+        MessageChangeLiveData.getInstance().postValue(EaseEvent.create(DemoConstant.GROUP_CHANGE, EaseEvent.TYPE.GROUP));
+    }
+
+    protected void removeFromAdmins(String username) {
+        viewModel.removeGroupAdmin(groupId, username);
+        MessageChangeLiveData.getInstance().postValue(EaseEvent.create(DemoConstant.GROUP_CHANGE, EaseEvent.TYPE.GROUP));
+    }
+
+    protected void transferOwner(String username) {
+        viewModel.changeOwner(groupId, username);
+        MessageChangeLiveData.getInstance().postValue(EaseEvent.create(DemoConstant.GROUP_CHANGE, EaseEvent.TYPE.GROUP));
+    }
+
+    protected void removeFromGroup(String username) {
+        MessageChangeLiveData.getInstance().postValue(EaseEvent.create(DemoConstant.GROUP_CHANGE, EaseEvent.TYPE.GROUP));
+        viewModel.removeUserFromGroup(groupId, username);
+    }
+
+    protected void addToBlack(String username) {
+        viewModel.blockUser(groupId, username);
+        MessageChangeLiveData.getInstance().postValue(EaseEvent.create(DemoConstant.GROUP_CHANGE, EaseEvent.TYPE.GROUP));
+    }
+
+    protected void removeFromBlacks(String username) {
+        viewModel.unblockUser(groupId, username);
+        MessageChangeLiveData.getInstance().postValue(EaseEvent.create(DemoConstant.GROUP_CHANGE, EaseEvent.TYPE.GROUP));
+    }
+
+    protected void AddToMuteMembers(String username) {
+        List<String> mutes = new ArrayList<>();
+        mutes.add(username);
+        viewModel.muteGroupMembers(groupId, mutes, 20 * 60 * 1000);
+    }
+
+    protected void removeFromMuteMembers(String username) {
+        List<String> unMutes = new ArrayList<>();
+        unMutes.add(username);
+        viewModel.unMuteGroupMembers(groupId, unMutes);
+    }
+
+    /**
+     * 修改菜单项
+     * @param menu
+     */
+    protected void setMenuInfo(Menu menu) {
+
+    }
+
+    public boolean isOwner() {
+        return GroupHelper.isOwner(group);
+    }
+
+    public boolean isInAdminList(String username) {
+        return GroupHelper.isInAdminList(username, group.getAdminList());
+    }
+
+    public boolean isInMuteList(String username) {
+        return GroupHelper.isInMuteList(username, muteMembers);
+    }
+
+    public boolean isInBlackList(String username) {
+        return GroupHelper.isInBlackList(username, blackMembers);
+    }
+
+    public boolean isMember() {
+        return !GroupHelper.isAdmin(group) && !isOwner();
     }
 
     /**

@@ -179,7 +179,9 @@ public class HomeFragment extends BaseInitFragment implements OnRefreshListener,
             if(change == null) {
                 return;
             }
-            if(change.isMessgeChange() || change.isNotifyChange() || change.isGroupLeave()) {
+            if(change.isMessgeChange() || change.isNotifyChange()
+                    || change.isGroupLeave() || change.isChatRoomLeave()
+                    || change.type == EaseEvent.TYPE.CHAT_ROOM) {
                 mViewModel.loadConversationList();
             }
         });

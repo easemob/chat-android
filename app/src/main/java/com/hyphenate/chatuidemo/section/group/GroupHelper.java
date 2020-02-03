@@ -2,6 +2,7 @@ package com.hyphenate.chatuidemo.section.group;
 
 import android.text.TextUtils;
 
+import com.hyphenate.chat.EMChatRoom;
 import com.hyphenate.chat.EMGroup;
 import com.hyphenate.chatuidemo.DemoHelper;
 
@@ -22,10 +23,34 @@ public class GroupHelper {
     }
 
     /**
+     * 是否是聊天室创建者
+     * @return
+     */
+    public static boolean isOwner(EMChatRoom room) {
+        if(room == null ||
+                TextUtils.isEmpty(room.getOwner())) {
+            return false;
+        }
+        return TextUtils.equals(room.getOwner(), DemoHelper.getInstance().getCurrentUser());
+    }
+
+    /**
      * 是否是管理员
      * @return
      */
     public synchronized static boolean isAdmin(EMGroup group) {
+        List<String> adminList = group.getAdminList();
+        if(adminList != null && !adminList.isEmpty()) {
+            return adminList.contains(DemoHelper.getInstance().getCurrentUser());
+        }
+        return false;
+    }
+
+    /**
+     * 是否是管理员
+     * @return
+     */
+    public synchronized static boolean isAdmin(EMChatRoom group) {
         List<String> adminList = group.getAdminList();
         if(adminList != null && !adminList.isEmpty()) {
             return adminList.contains(DemoHelper.getInstance().getCurrentUser());
@@ -46,16 +71,8 @@ public class GroupHelper {
      * @param username
      * @return
      */
-    public static boolean isInAdminList(EMGroup group, String username) {
-        synchronized (GroupMemberAuthorityActivity.class) {
-            List<String> adminList = group.getAdminList();
-            for (String item : adminList) {
-                if (TextUtils.equals(username, item)) {
-                    return true;
-                }
-            }
-        }
-        return false;
+    public static boolean isInAdminList(String username, List<String> adminList) {
+        return isInList(username, adminList);
     }
 
     /**
@@ -64,14 +81,7 @@ public class GroupHelper {
      * @return
      */
     public static boolean isInBlackList(String username, List<String> blackMembers) {
-        synchronized (GroupMemberAuthorityActivity.class) {
-            for (String item : blackMembers) {
-                if (TextUtils.equals(username, item)) {
-                    return true;
-                }
-            }
-        }
-        return false;
+        return isInList(username, blackMembers);
     }
 
     /**
@@ -80,9 +90,21 @@ public class GroupHelper {
      * @return
      */
     public static boolean isInMuteList(String username, List<String> muteMembers) {
-        synchronized (GroupMemberAuthorityActivity.class) {
-            for (String item : muteMembers) {
-                if (TextUtils.equals(username, item)) {
+        return isInList(username, muteMembers);
+    }
+
+    /**
+     * 是否在列表中
+     * @param name
+     * @return
+     */
+    public static boolean isInList(String name, List<String> list) {
+        if(list == null) {
+            return false;
+        }
+        synchronized (GroupHelper.class) {
+            for (String item : list) {
+                if (TextUtils.equals(name, item)) {
                     return true;
                 }
             }

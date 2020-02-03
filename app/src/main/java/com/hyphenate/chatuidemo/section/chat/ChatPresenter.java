@@ -5,6 +5,7 @@ import android.text.TextUtils;
 import android.util.Log;
 
 import com.google.firebase.analytics.FirebaseAnalytics;
+import com.hyphenate.EMChatRoomChangeListener;
 import com.hyphenate.EMConferenceListener;
 import com.hyphenate.EMConnectionListener;
 import com.hyphenate.EMContactListener;
@@ -63,6 +64,8 @@ public class ChatPresenter extends EaseChatPresenter {
         DemoHelper.getInstance().getContactManager().setContactListener(new ChatContactListener());
         //添加会议监听
         DemoHelper.getInstance().getConferenceManager().addConferenceListener(new ChatConferenceListener());
+        //添加聊天室监听
+        DemoHelper.getInstance().getChatroomManager().addChatRoomChangeListener(new ChatRoomListener());
 
     }
 
@@ -315,12 +318,16 @@ public class ChatPresenter extends EaseChatPresenter {
 
         @Override
         public void onUserRemoved(String groupId, String groupName) {
-
+            EaseEvent easeEvent = new EaseEvent(DemoConstant.GROUP_CHANGE, EaseEvent.TYPE.GROUP_LEAVE);
+            easeEvent.message = groupId;
+            messageChangeLiveData.postValue(easeEvent);
         }
 
         @Override
         public void onGroupDestroyed(String groupId, String groupName) {
-
+            EaseEvent easeEvent = new EaseEvent(DemoConstant.GROUP_CHANGE, EaseEvent.TYPE.GROUP_LEAVE);
+            easeEvent.message = groupId;
+            messageChangeLiveData.postValue(easeEvent);
         }
 
         @Override
@@ -662,5 +669,66 @@ public class ChatPresenter extends EaseChatPresenter {
         msg.setStatus(status);
         msg.setType(MsgTypeManageEntity.msgType.NOTIFICATION);
         notifyNewInviteMessage(msg);
+    }
+
+    private class ChatRoomListener implements EMChatRoomChangeListener {
+
+        @Override
+        public void onChatRoomDestroyed(String roomId, String roomName) {
+            setChatRoomEvent(roomId, EaseEvent.TYPE.CHAT_ROOM_LEAVE);
+        }
+
+        @Override
+        public void onMemberJoined(String roomId, String participant) {
+            setChatRoomEvent(roomId, EaseEvent.TYPE.CHAT_ROOM);
+        }
+
+        @Override
+        public void onMemberExited(String roomId, String roomName, String participant) {
+            setChatRoomEvent(roomId, EaseEvent.TYPE.CHAT_ROOM);
+        }
+
+        @Override
+        public void onRemovedFromChatRoom(int reason, String roomId, String roomName, String participant) {
+            if(TextUtils.equals(DemoHelper.getInstance().getCurrentUser(), participant)) {
+                setChatRoomEvent(roomId, EaseEvent.TYPE.CHAT_ROOM);
+            }
+        }
+
+        @Override
+        public void onMuteListAdded(String chatRoomId, List<String> mutes, long expireTime) {
+            setChatRoomEvent(chatRoomId, EaseEvent.TYPE.CHAT_ROOM);
+        }
+
+        @Override
+        public void onMuteListRemoved(String chatRoomId, List<String> mutes) {
+            setChatRoomEvent(chatRoomId, EaseEvent.TYPE.CHAT_ROOM);
+        }
+
+        @Override
+        public void onAdminAdded(String chatRoomId, String admin) {
+            setChatRoomEvent(chatRoomId, EaseEvent.TYPE.CHAT_ROOM);
+        }
+
+        @Override
+        public void onAdminRemoved(String chatRoomId, String admin) {
+            setChatRoomEvent(chatRoomId, EaseEvent.TYPE.CHAT_ROOM);
+        }
+
+        @Override
+        public void onOwnerChanged(String chatRoomId, String newOwner, String oldOwner) {
+            setChatRoomEvent(chatRoomId, EaseEvent.TYPE.CHAT_ROOM);
+        }
+
+        @Override
+        public void onAnnouncementChanged(String chatRoomId, String announcement) {
+            setChatRoomEvent(chatRoomId, EaseEvent.TYPE.CHAT_ROOM);
+        }
+    }
+
+    private void setChatRoomEvent(String roomId, EaseEvent.TYPE type) {
+        EaseEvent easeEvent = new EaseEvent(DemoConstant.CHAT_ROOM_CHANGE, type);
+        easeEvent.message = roomId;
+        messageChangeLiveData.postValue(easeEvent);
     }
 }

@@ -157,6 +157,7 @@
     <string name="em_chat_room_detail_admins">管理员</string>
     <string name="em_chat_room_detail_out">退出聊天室</string>
     <string name="em_chat_room_detail_destroy">解散聊天室</string>
+    <string name="em_chat_room_detail_destroy_info">是否解散聊天室？</string>
 
 
     <string name="confirm_forward_to">确定转发到：%1$s ?</string>

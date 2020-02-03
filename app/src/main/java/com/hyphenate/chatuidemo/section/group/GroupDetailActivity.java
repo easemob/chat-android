@@ -148,6 +148,8 @@ public class GroupDetailActivity extends BaseInitActivity implements EaseTitleBa
         viewModel.getMessageChangeObservable().observe(this, event -> {
             if(event.isGroupChange()) {
                 loadGroup();
+            }else if(event.isGroupLeave() && TextUtils.equals(groupId, event.message)) {
+                finish();
             }
         });
         viewModel.getLeaveGroupObservable().observe(this, response -> {

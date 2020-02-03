@@ -9,6 +9,7 @@ public class EaseEvent implements Serializable {
     public boolean refresh;
     public String event;
     public TYPE type;
+    public String message;
 
     public EaseEvent() {}
 
@@ -44,6 +45,10 @@ public class EaseEvent implements Serializable {
         return type == TYPE.GROUP_LEAVE;
     }
 
+    public boolean isChatRoomLeave() {
+        return type == TYPE.CHAT_ROOM_LEAVE;
+    }
+
     public boolean isContactChange() {
         return type == TYPE.CONTACT;
     }
@@ -53,6 +58,6 @@ public class EaseEvent implements Serializable {
     }
 
     public enum TYPE {
-        GROUP, GROUP_LEAVE, CONTACT, MESSAGE, NOTIFY
+        GROUP, GROUP_LEAVE, CONTACT, MESSAGE, NOTIFY, CHAT_ROOM, CHAT_ROOM_LEAVE
     }
 }

@@ -344,6 +344,10 @@
         <activity android:name=".section.group.GroupMemberAuthorityActivity" />
         <!--群管理员管理-->
         <activity android:name=".section.group.GroupAdminAuthorityActivity" />
+        <!--聊天室成员权限管理-->
+        <activity android:name=".section.group.ChatRoomMemberAuthorityActivity" />
+        <!--聊天室管理员管理-->
+        <activity android:name=".section.group.ChatRoomAdminAuthorityActivity" />
 
     </application>
 

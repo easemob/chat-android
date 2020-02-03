@@ -139,6 +139,12 @@
                 app:layout_constraintVertical_weight="1"
                 android:background="@drawable/em_default_divider_list"/>
 
+            <androidx.constraintlayout.widget.Group
+                android:id="@+id/group_owner"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:constraint_referenced_ids="tv_chat_room_refund,view_group_divider_4"/>
+
         </androidx.constraintlayout.widget.ConstraintLayout>
 
     </androidx.core.widget.NestedScrollView>

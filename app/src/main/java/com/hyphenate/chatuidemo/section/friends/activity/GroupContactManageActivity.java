@@ -60,7 +60,12 @@ public class GroupContactManageActivity extends BaseInitActivity implements Ease
 
         GroupContactViewModel viewModel = new ViewModelProvider(mContext).get(GroupContactViewModel.class);
         viewModel.getMessageObservable().observe(this, event -> {
-            viewModel.loadAllGroups();
+            if(event == null) {
+                return;
+            }
+            if(event.isGroupChange() || event.isGroupLeave()) {
+                viewModel.loadAllGroups();
+            }
         });
         viewModel.loadAllGroups();
     }

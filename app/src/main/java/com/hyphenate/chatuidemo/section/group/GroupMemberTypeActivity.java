@@ -3,6 +3,7 @@ package com.hyphenate.chatuidemo.section.group;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.View;
 
 import com.hyphenate.chat.EMGroup;
@@ -90,6 +91,8 @@ public class GroupMemberTypeActivity extends BaseInitActivity implements EaseTit
             if(event.isGroupChange()) {
                 viewModel.getGroup(groupId);
                 viewModel.getMembers(groupId);
+            }else if(event.isGroupLeave() && TextUtils.equals(groupId, event.message)) {
+                finish();
             }
         });
         viewModel.getMembers(groupId);

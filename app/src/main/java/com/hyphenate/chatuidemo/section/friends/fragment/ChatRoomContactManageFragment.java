@@ -20,6 +20,7 @@ import com.hyphenate.chatuidemo.section.friends.adapter.ChatRoomContactAdapter;
 import com.hyphenate.chatuidemo.section.friends.viewmodels.ChatRoomContactViewModel;
 import com.hyphenate.easeui.interfaces.EaseChatRoomListener;
 import com.hyphenate.easeui.interfaces.OnItemClickListener;
+import com.hyphenate.easeui.model.EaseEvent;
 import com.hyphenate.easeui.widget.EaseRecyclerView;
 import com.scwang.smartrefresh.layout.SmartRefreshLayout;
 import com.scwang.smartrefresh.layout.api.RefreshLayout;
@@ -84,6 +85,15 @@ public class ChatRoomContactManageFragment extends BaseInitFragment implements O
                     finishLoadMore();
                 }
             });
+        });
+        mViewModel.getMessageChangeObservable().observe(this, event -> {
+            if(event == null) {
+                return;
+            }
+            if(event.isChatRoomLeave() || event.type == EaseEvent.TYPE.CHAT_ROOM) {
+                pageNum = 1;
+                mViewModel.loadChatRooms(pageNum, PAGE_SIZE);
+            }
         });
     }
 

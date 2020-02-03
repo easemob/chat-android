@@ -3,6 +3,7 @@ package com.hyphenate.chatuidemo.section.chat;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.View;
 
 import androidx.lifecycle.LiveData;
@@ -133,7 +134,8 @@ public class ChatActivity extends BaseInitActivity implements EaseTitleBar.OnBac
             if(event == null) {
                 return;
             }
-            if(event.isGroupLeave()) {
+            if((event.isGroupLeave() && TextUtils.equals(toChatUsername, event.message))
+                    || (event.isChatRoomLeave() && TextUtils.equals(toChatUsername,  event.message))) {
                 finish();
             }
         });
