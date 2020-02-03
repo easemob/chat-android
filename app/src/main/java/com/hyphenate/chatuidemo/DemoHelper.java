@@ -17,6 +17,7 @@ import com.hyphenate.chat.EMConversation;
 import com.hyphenate.chat.EMGroupManager;
 import com.hyphenate.chat.EMMessage;
 import com.hyphenate.chat.EMOptions;
+import com.hyphenate.chat.EMPushManager;
 import com.hyphenate.chatuidemo.common.db.DemoDbHelper;
 import com.hyphenate.chatuidemo.common.db.entity.EmUserEntity;
 import com.hyphenate.chatuidemo.common.db.entity.InviteMessage;
@@ -143,6 +144,14 @@ public class DemoHelper {
      */
     public EMChatManager getChatManager() {
         return getEMClient().chatManager();
+    }
+
+    /**
+     * get push manager
+     * @return
+     */
+    public EMPushManager getPushManager() {
+        return getEMClient().pushManager();
     }
 
     /**

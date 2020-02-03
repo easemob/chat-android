@@ -973,4 +973,62 @@ public class EMGroupManagerRepository extends BaseEMRepository{
             }
         }.asLiveData();
     }
+
+    /**
+     * 屏蔽群消息
+     * @param groupId
+     * @return
+     */
+    public LiveData<Resource<Boolean>> blockGroupMessage(String groupId) {
+        return new NetworkOnlyResource<Boolean>() {
+            @Override
+            protected void createCall(@NonNull ResultCallBack<LiveData<Boolean>> callBack) {
+                getGroupManager().asyncBlockGroupMessage(groupId, new EMCallBack() {
+                    @Override
+                    public void onSuccess() {
+                        callBack.onSuccess(createLiveData(true));
+                    }
+
+                    @Override
+                    public void onError(int code, String error) {
+                        callBack.onError(code, error);
+                    }
+
+                    @Override
+                    public void onProgress(int progress, String status) {
+
+                    }
+                });
+            }
+        }.asLiveData();
+    }
+
+    /**
+     * 取消屏蔽群消息
+     * @param groupId
+     * @return
+     */
+    public LiveData<Resource<Boolean>> unblockGroupMessage(String groupId) {
+        return new NetworkOnlyResource<Boolean>() {
+            @Override
+            protected void createCall(@NonNull ResultCallBack<LiveData<Boolean>> callBack) {
+                getGroupManager().asyncUnblockGroupMessage(groupId, new EMCallBack() {
+                    @Override
+                    public void onSuccess() {
+                        callBack.onSuccess(createLiveData(true));
+                    }
+
+                    @Override
+                    public void onError(int code, String error) {
+                        callBack.onError(code, error);
+                    }
+
+                    @Override
+                    public void onProgress(int progress, String status) {
+
+                    }
+                });
+            }
+        }.asLiveData();
+    }
 }

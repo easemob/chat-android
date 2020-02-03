@@ -9,6 +9,7 @@ import com.hyphenate.chat.EMClient;
 import com.hyphenate.chat.EMConferenceManager;
 import com.hyphenate.chat.EMContactManager;
 import com.hyphenate.chat.EMGroupManager;
+import com.hyphenate.chat.EMPushManager;
 import com.hyphenate.chatuidemo.DemoApp;
 import com.hyphenate.chatuidemo.DemoHelper;
 import com.hyphenate.chatuidemo.common.db.DemoDbHelper;
@@ -91,6 +92,14 @@ public class BaseEMRepository {
      */
     public EMConferenceManager getConferenceManager() {
         return DemoHelper.getInstance().getConferenceManager();
+    }
+
+    /**
+     * EMPushManager
+     * @return
+     */
+    public EMPushManager getPushManager() {
+        return DemoHelper.getInstance().getPushManager();
     }
 
     /**

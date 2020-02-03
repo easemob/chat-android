@@ -117,6 +117,7 @@
     <string name="em_chat_group_detail_introduction">群介绍</string>
     <string name="em_chat_group_detail_introduction_hint">请输入群介绍</string>
     <string name="em_chat_group_detail_not_disturb">消息免打扰</string>
+    <string name="em_chat_group_detail_off_push">屏蔽离线消息推送</string>
     <string name="em_chat_group_detail_top">会话置顶</string>
     <string name="em_chat_group_detail_refund">退出群组</string>
     <string name="em_chat_group_detail_dissolve">解散群组</string>

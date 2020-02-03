@@ -10,6 +10,7 @@ import android.widget.TextView;
 import androidx.annotation.Nullable;
 import androidx.lifecycle.ViewModelProvider;
 
+import com.hyphenate.chat.EMClient;
 import com.hyphenate.chat.EMConversation;
 import com.hyphenate.chat.EMGroup;
 import com.hyphenate.chatuidemo.DemoHelper;
@@ -28,6 +29,8 @@ import com.hyphenate.easeui.utils.EaseCommonUtils;
 import com.hyphenate.easeui.widget.EaseImageView;
 import com.hyphenate.easeui.widget.EaseTitleBar;
 
+import java.util.List;
+
 public class GroupDetailActivity extends BaseInitActivity implements EaseTitleBar.OnBackPressListener, View.OnClickListener, SwitchItemView.OnCheckedChangeListener {
     private static final int REQUEST_CODE_ADD_USER = 0;
     private EaseTitleBar titleBar;
@@ -43,11 +46,13 @@ public class GroupDetailActivity extends BaseInitActivity implements EaseTitleBa
     private ArrowItemView itemGroupIntroduction;
     private ArrowItemView itemGroupHistory;
     private SwitchItemView itemGroupNotDisturb;
+    private SwitchItemView itemGroupOffPush;
     private SwitchItemView itemGroupTop;
     private TextView tvGroupRefund;
     private String groupId;
     private EMGroup group;
     private GroupDetailViewModel viewModel;
+    private EMConversation conversation;
 
     public static void actionStart(Context context, String groupId) {
         Intent intent = new Intent(context, GroupDetailActivity.class);
@@ -82,6 +87,7 @@ public class GroupDetailActivity extends BaseInitActivity implements EaseTitleBa
         itemGroupIntroduction = findViewById(R.id.item_group_introduction);
         itemGroupHistory = findViewById(R.id.item_group_history);
         itemGroupNotDisturb = findViewById(R.id.item_group_not_disturb);
+        itemGroupOffPush = findViewById(R.id.item_group_off_push);
         itemGroupTop = findViewById(R.id.item_group_top);
         tvGroupRefund = findViewById(R.id.tv_group_refund);
 
@@ -102,6 +108,7 @@ public class GroupDetailActivity extends BaseInitActivity implements EaseTitleBa
         itemGroupIntroduction.setOnClickListener(this);
         itemGroupHistory.setOnClickListener(this);
         itemGroupNotDisturb.setOnCheckedChangeListener(this);
+        itemGroupOffPush.setOnCheckedChangeListener(this);
         itemGroupTop.setOnCheckedChangeListener(this);
         tvGroupRefund.setOnClickListener(this);
     }
@@ -117,11 +124,15 @@ public class GroupDetailActivity extends BaseInitActivity implements EaseTitleBa
         tvGroupRefund.setText(getResources().getString(isOwner() ? R.string.em_chat_group_detail_dissolve : R.string.em_chat_group_detail_refund));
         tvGroupIntroduction.setText(group.getDescription());
         itemGroupNotDisturb.getSwitch().setChecked(group.isMsgBlocked());
-        EMConversation conversation = DemoHelper.getInstance().getConversation(groupId, EMConversation.EMConversationType.GroupChat, true);
+        conversation = DemoHelper.getInstance().getConversation(groupId, EMConversation.EMConversationType.GroupChat, true);
         String extField = conversation.getExtField();
         itemGroupTop.getSwitch().setChecked(!TextUtils.isEmpty(extField) && EaseCommonUtils.isTimestamp(extField));
         tvGroupInvite.setVisibility(group.getMemberCount() <= 0 ? View.VISIBLE : View.GONE);
         tvGroupInvite.setVisibility(isCanInvite() ? View.VISIBLE : View.GONE);
+        itemGroupNotDisturb.getSwitch().setChecked(group.isMsgBlocked());
+
+        List<String> disabledIds = DemoHelper.getInstance().getPushManager().getNoPushGroups();
+        itemGroupOffPush.getSwitch().setChecked(disabledIds != null && disabledIds.contains(groupId));
     }
 
     @Override
@@ -160,6 +171,27 @@ public class GroupDetailActivity extends BaseInitActivity implements EaseTitleBa
                     MessageChangeLiveData.getInstance().postValue(EaseEvent.create(DemoConstant.GROUP_CHANGE, EaseEvent.TYPE.GROUP_LEAVE));
                 }
             });
+        });
+        viewModel.blockGroupMessageObservable().observe(this, response -> {
+            parseResource(response, new OnResourceParseCallback<Boolean>() {
+                @Override
+                public void onSuccess(Boolean data) {
+                    itemGroupNotDisturb.getSwitch().setChecked(true);
+                }
+            });
+        });
+        viewModel.unblockGroupMessage().observe(this, response -> {
+            parseResource(response, new OnResourceParseCallback<Boolean>() {
+                @Override
+                public void onSuccess(Boolean data) {
+                    itemGroupNotDisturb.getSwitch().setChecked(false);
+                }
+            });
+        });
+        viewModel.offPushObservable().observe(this, response -> {
+            if(response) {
+                loadGroup();
+            }
         });
         loadGroup();
     }
@@ -206,10 +238,22 @@ public class GroupDetailActivity extends BaseInitActivity implements EaseTitleBa
     public void onCheckedChanged(SwitchItemView buttonView, boolean isChecked) {
         switch (buttonView.getId()) {
             case R.id.item_group_not_disturb ://消息免打扰
-                showToast("消息免打扰");
+                if(isChecked) {
+                    viewModel.blockGroupMessage(groupId);
+                }else {
+                    viewModel.unblockGroupMessage(groupId);
+                }
+                break;
+            case R.id.item_group_off_push://屏蔽离线消息推送
+                viewModel.updatePushServiceForGroup(groupId, isChecked);
                 break;
             case R.id.item_group_top ://消息置顶
-                showToast("消息置顶");
+                if(isChecked) {
+                    conversation.setExtField(System.currentTimeMillis()+"");
+                }else {
+                    conversation.setExtField("");
+                }
+                MessageChangeLiveData.getInstance().postValue(EaseEvent.create(DemoConstant.GROUP_CHANGE, EaseEvent.TYPE.GROUP));
                 break;
         }
     }

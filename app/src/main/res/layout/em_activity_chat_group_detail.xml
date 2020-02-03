@@ -229,10 +229,18 @@
                 style="@style/em_group_arrow_item"/>
 
             <com.hyphenate.chatuidemo.common.widget.SwitchItemView
-                android:id="@+id/item_group_top"
+                android:id="@+id/item_group_off_push"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toRightOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/item_group_not_disturb"
+                app:switchItemTitle="@string/em_chat_group_detail_off_push"
+                style="@style/em_group_arrow_item"/>
+
+            <com.hyphenate.chatuidemo.common.widget.SwitchItemView
+                android:id="@+id/item_group_top"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/item_group_off_push"
                 app:switchItemShowDivider="false"
                 app:switchItemTitle="@string/em_chat_group_detail_top"
                 style="@style/em_group_arrow_item"/>
