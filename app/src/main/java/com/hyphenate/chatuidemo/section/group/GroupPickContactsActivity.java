@@ -4,9 +4,11 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.TextView;
 
+import com.baidu.mapapi.map.Text;
 import com.google.android.gms.common.SignInButton;
 import com.hyphenate.chatuidemo.R;
 import com.hyphenate.chatuidemo.common.interfaceOrImplement.OnResourceParseCallback;
@@ -39,6 +41,11 @@ public class GroupPickContactsActivity extends BaseInitActivity implements EaseT
     private GroupPickContactsViewModel viewModel;
     private String groupId;
     private boolean isOwner;
+
+    public static void actionStartForResult(Activity context, int requestCode) {
+        Intent starter = new Intent(context, GroupPickContactsActivity.class);
+        context.startActivityForResult(starter, requestCode);
+    }
 
     public static void actionStartForResult(Activity context, String groupId, boolean owner, int requestCode) {
         Intent starter = new Intent(context, GroupPickContactsActivity.class);
@@ -94,7 +101,9 @@ public class GroupPickContactsActivity extends BaseInitActivity implements EaseT
                 @Override
                 public void onSuccess(List<EaseUser> data) {
                     adapter.setData(data);
-                    viewModel.getGroupMembers(groupId);
+                    if(!TextUtils.isEmpty(groupId)) {
+                        viewModel.getGroupMembers(groupId);
+                    }
                 }
 
                 @Override
@@ -144,6 +153,12 @@ public class GroupPickContactsActivity extends BaseInitActivity implements EaseT
             return;
         }
         String[] newMembers = selectedMembers.toArray(new String[0]);
+        if(TextUtils.isEmpty(groupId)) {
+            Intent intent = getIntent().putExtra("newmembers", newMembers);
+            setResult(RESULT_OK, intent);
+            finish();
+            return;
+        }
         viewModel.addGroupMembers(isOwner, groupId, newMembers);
     }
 

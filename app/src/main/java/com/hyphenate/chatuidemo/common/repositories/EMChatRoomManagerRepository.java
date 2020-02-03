@@ -559,4 +559,33 @@ public class EMChatRoomManagerRepository extends BaseEMRepository{
         }.asLiveData();
     }
 
+    /**
+     * create new chat room
+     * @param subject
+     * @param description
+     * @param welcomeMessage
+     * @param maxUserCount
+     * @param members
+     * @return
+     */
+    public LiveData<Resource<EMChatRoom>> createChatRoom(String subject, String description, String welcomeMessage,
+                                                         int maxUserCount, List<String> members) {
+        return new NetworkOnlyResource<EMChatRoom>() {
+            @Override
+            protected void createCall(@NonNull ResultCallBack<LiveData<EMChatRoom>> callBack) {
+                getChatRoomManager().asyncCreateChatRoom(subject, description, welcomeMessage, maxUserCount, members, new EMValueCallBack<EMChatRoom>() {
+                    @Override
+                    public void onSuccess(EMChatRoom value) {
+                        callBack.onSuccess(createLiveData(value));
+                    }
+
+                    @Override
+                    public void onError(int error, String errorMsg) {
+                        callBack.onError(error, errorMsg);
+                    }
+                });
+            }
+        }.asLiveData();
+    }
+
 }

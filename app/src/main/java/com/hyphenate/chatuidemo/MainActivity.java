@@ -29,6 +29,7 @@ import com.hyphenate.chatuidemo.section.base.BaseInitActivity;
 import com.hyphenate.chatuidemo.section.chat.ConferenceActivity;
 import com.hyphenate.chatuidemo.section.conversation.HomeFragment;
 import com.hyphenate.chatuidemo.section.discover.DiscoverFragment;
+import com.hyphenate.chatuidemo.section.friends.activity.NewGroupActivity;
 import com.hyphenate.chatuidemo.section.friends.fragment.FriendsFragment;
 import com.hyphenate.chatuidemo.section.friends.activity.AddContactActivity;
 import com.hyphenate.chatuidemo.section.me.AboutMeFragment;
@@ -71,7 +72,7 @@ public class MainActivity extends BaseInitActivity implements BottomNavigationVi
                 ConferenceActivity.startConferenceCall(mContext, null);
                 break;
             case R.id.action_group :
-                AddContactActivity.startAction(mContext, SearchType.GROUP_CHAT);
+                NewGroupActivity.actionStart(mContext);
                 break;
             case R.id.action_friend :
                 AddContactActivity.startAction(mContext, SearchType.CHAT);

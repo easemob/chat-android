@@ -348,6 +348,10 @@
         <activity android:name=".section.group.ChatRoomMemberAuthorityActivity" />
         <!--聊天室管理员管理-->
         <activity android:name=".section.group.ChatRoomAdminAuthorityActivity" />
+        <!--新建群组-->
+        <activity android:name=".section.friends.activity.NewGroupActivity" />
+        <!--新建聊天室-->
+        <activity android:name=".section.friends.activity.NewChatRoomActivity" />
 
     </application>
 

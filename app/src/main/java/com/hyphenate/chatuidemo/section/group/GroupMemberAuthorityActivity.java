@@ -123,7 +123,14 @@ public class GroupMemberAuthorityActivity extends BaseInitActivity implements Ea
     }
 
     protected void onSubPrepareOptionsMenu(Menu menu) {
-
+        //对角色进行判断
+        if(!isOwner() && !isInAdminList(DemoHelper.getInstance().getCurrentUser())) {
+            menu.findItem(R.id.action_group_black).setVisible(false);
+            menu.findItem(R.id.action_group_mute).setVisible(false);
+        }
+        if(!GroupHelper.isCanInvite(group)) {
+            menu.findItem(R.id.action_group_add).setVisible(false);
+        }
     }
 
     @Override

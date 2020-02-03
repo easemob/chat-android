@@ -54,6 +54,10 @@ public class ChatRoomMemberAuthorityActivity extends GroupMemberAuthorityActivit
     protected void onSubPrepareOptionsMenu(Menu menu) {
         super.onSubPrepareOptionsMenu(menu);
         menu.findItem(R.id.action_group_add).setVisible(false);
+        if(!isOwner() && !isInAdminList(DemoHelper.getInstance().getCurrentUser())) {
+            menu.findItem(R.id.action_group_black).setVisible(false);
+            menu.findItem(R.id.action_group_mute).setVisible(false);
+        }
     }
 
     @Override

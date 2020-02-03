@@ -89,7 +89,7 @@ public class GroupPickContactsAdapter extends EaseBaseRecyclerViewAdapter<EaseUs
             checkbox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                 @Override
                 public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                    if(existMembers != null && !existMembers.contains(username)) {
+                    if(existMembers == null || !existMembers.contains(username)) {
                         if(isChecked) {
                             if(!selectedMembers.contains(username)) {
                                 selectedMembers.add(username);

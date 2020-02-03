@@ -11,6 +11,7 @@ import com.hyphenate.EMCallBack;
 import com.hyphenate.EMValueCallBack;
 import com.hyphenate.chat.EMCursorResult;
 import com.hyphenate.chat.EMGroup;
+import com.hyphenate.chat.EMGroupOptions;
 import com.hyphenate.chat.EMMucSharedFile;
 import com.hyphenate.chatuidemo.DemoHelper;
 import com.hyphenate.chatuidemo.common.db.entity.EmUserEntity;
@@ -939,6 +940,34 @@ public class EMGroupManagerRepository extends BaseEMRepository{
                     @Override
                     public void onProgress(int progress, String status) {
 
+                    }
+                });
+            }
+        }.asLiveData();
+    }
+
+    /**
+     * create a new group
+     * @param groupName
+     * @param desc
+     * @param allMembers
+     * @param reason
+     * @param option
+     * @return
+     */
+    public LiveData<Resource<EMGroup>> createGroup(String groupName, String desc, String[] allMembers, String reason, EMGroupOptions option) {
+        return new NetworkOnlyResource<EMGroup>() {
+            @Override
+            protected void createCall(@NonNull ResultCallBack<LiveData<EMGroup>> callBack) {
+                getGroupManager().asyncCreateGroup(groupName, desc, allMembers, reason, option, new EMValueCallBack<EMGroup>() {
+                    @Override
+                    public void onSuccess(EMGroup value) {
+                        callBack.onSuccess(createLiveData(value));
+                    }
+
+                    @Override
+                    public void onError(int error, String errorMsg) {
+                        callBack.onError(error, errorMsg);
                     }
                 });
             }

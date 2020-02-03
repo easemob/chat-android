@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <com.hyphenate.easeui.widget.EaseTitleBar
+        android:id="@+id/title_bar"
+        android:layout_width="0dp"
+        android:layout_height="@dimen/em_common_title_bar_height"
+        app:titleBarTitle="@string/em_group_new_title"
+        app:titleBarDisplayHomeAsUpEnabled="true"
+        app:titleBarRightTitle="@string/em_group_new_save"
+        app:titleBarRightVisible="true"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"/>
+
+    <EditText
+        android:id="@+id/et_group_name"
+        android:layout_width="match_parent"
+        android:layout_height="39dp"
+        android:layout_margin="10dp"
+        android:background="@drawable/em_button_normal_shape"
+        android:hint="@string/em_group_new_name_hint"
+        android:paddingLeft="5dp"
+        android:singleLine="true"
+        android:textSize="18sp"
+        app:layout_constraintTop_toBottomOf="@id/title_bar"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"/>
+
+    <EditText
+        android:id="@+id/et_group_introduction"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="10dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginTop="10dp"
+        android:background="@drawable/em_button_normal_shape"
+        android:gravity="top"
+        android:hint="@string/em_group_new_profile_hint"
+        android:lines="5"
+        android:paddingLeft="5dp"
+        android:paddingTop="5dp"
+        android:textSize="18sp"
+        app:layout_constraintTop_toBottomOf="@id/et_group_name"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"/>
+
+    <LinearLayout
+        android:id="@+id/ll_if_public"
+        android:layout_width="match_parent"
+        android:layout_height="39dp"
+        android:layout_marginBottom="10dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginTop="10dp"
+        android:background="@drawable/em_button_normal_shape"
+        app:layout_constraintTop_toBottomOf="@id/et_group_introduction"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent">
+
+        <TextView
+            android:layout_marginLeft="5dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/em_group_new_if_public"
+            android:textColor="#333"
+            android:layout_gravity="center_vertical"
+            android:textSize="18sp"
+            android:layout_weight="1" />
+
+        <CheckBox
+            android:id="@+id/cb_public"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="0"
+            android:layout_gravity="center_vertical"
+            android:button="@drawable/em_checkbox_bg_selector" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/ll_open_invite"
+        android:layout_width="match_parent"
+        android:layout_height="39dp"
+        android:layout_marginBottom="10dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginTop="10dp"
+        android:background="@drawable/em_button_normal_shape"
+        app:layout_constraintTop_toBottomOf="@id/ll_if_public"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent">
+
+        <TextView
+            android:id="@+id/second_desc"
+            android:layout_marginLeft="5dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/em_group_new_need_owner_approval"
+            android:textColor="#333"
+            android:layout_gravity="center_vertical"
+            android:textSize="18sp"
+            android:layout_weight="1" />
+
+        <CheckBox
+            android:id="@+id/cb_member_inviter"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="0"
+            android:layout_gravity="center_vertical"
+            android:button="@drawable/em_checkbox_bg_selector" />
+
+    </LinearLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

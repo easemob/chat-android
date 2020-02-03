@@ -16,6 +16,7 @@ import com.hyphenate.chatuidemo.common.DemoConstant;
 import com.hyphenate.chatuidemo.common.interfaceOrImplement.OnResourceParseCallback;
 import com.hyphenate.chatuidemo.section.base.BaseInitFragment;
 import com.hyphenate.chatuidemo.section.chat.ChatActivity;
+import com.hyphenate.chatuidemo.section.friends.activity.NewChatRoomActivity;
 import com.hyphenate.chatuidemo.section.friends.adapter.ChatRoomContactAdapter;
 import com.hyphenate.chatuidemo.section.friends.viewmodels.ChatRoomContactViewModel;
 import com.hyphenate.easeui.interfaces.EaseChatRoomListener;
@@ -150,7 +151,7 @@ public class ChatRoomContactManageFragment extends BaseInitFragment implements O
         headerView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                showToast("跳转到新建页面");
+                NewChatRoomActivity.actionStart(mContext);
             }
         });
         mRvCommonList.addHeaderView(headerView);

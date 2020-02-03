@@ -131,6 +131,16 @@
     <string name="em_group_member_type_member">群成员</string>
     <string name="em_group_member_type_member_num">共%1$d人</string>
 
+    <string name="em_group_new_title">新建群组</string>
+    <string name="em_group_new_save">保存</string>
+    <string name="em_group_new_name_hint">群聊名称</string>
+    <string name="em_group_new_profile_hint">群聊简介</string>
+    <string name="em_group_new_if_public">是否公开</string>
+    <string name="em_group_new_open_invite">开放群成员邀请</string>
+    <string name="em_group_new_need_owner_approval">加入公开群需要群主同意</string>
+    <string name="em_group_new_name_cannot_be_empty">群组名称不能为空</string>
+    <string name="em_group_new_invite_join_group">%1$s邀请加入群：%2$s</string>
+
     <string name="em_authority_menu_add_admin">设为管理员</string>
     <string name="em_authority_menu_remove_admin">移除管理员权限</string>
     <string name="em_authority_menu_transfer_owner">移交群主权限</string>
@@ -159,6 +169,11 @@
     <string name="em_chat_room_detail_destroy">解散聊天室</string>
     <string name="em_chat_room_detail_destroy_info">是否解散聊天室？</string>
 
+    <string name="em_chat_room_new_title">创建聊天室</string>
+    <string name="em_chat_room_new_save">保存</string>
+    <string name="em_chat_room_new_name_hint">聊天室名称</string>
+    <string name="em_chat_room_new_profile_hint">聊天室简介</string>
+    <string name="em_chat_room_new_name_cannot_be_empty">聊天室名称不能为空</string>
 
     <string name="confirm_forward_to">确定转发到：%1$s ?</string>
 
