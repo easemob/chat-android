@@ -1,17 +1,208 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:background="#fff9f9f9">
 
-    <Button
-        android:id="@+id/btn_logout"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"
-        android:layout_marginBottom="20dp"
-        android:text="退出"/>
+    <com.google.android.material.appbar.AppBarLayout
+        android:layout_width="match_parent"
+        android:layout_height="250dp">
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+        <com.google.android.material.appbar.CollapsingToolbarLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+            app:contentScrim="?attr/colorPrimary"
+            app:layout_scrollFlags="scroll|exitUntilCollapsed">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                app:layout_collapseMode="parallax"
+                app:layout_scrollFlags="scroll|enterAlways">
+
+                <View
+                    android:id="@+id/top"
+                    android:layout_width="match_parent"
+                    android:layout_height="200dp"
+                    android:background="@drawable/em_about_me_top_bg"/>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:layout_below="@id/top"
+                    android:background="@color/white"/>
+
+                <androidx.cardview.widget.CardView
+                    android:layout_width="match_parent"
+                    android:layout_height="70dp"
+                    android:layout_alignParentBottom="true"
+                    android:layout_marginLeft="16dp"
+                    android:layout_marginRight="16dp"
+                    app:cardCornerRadius="6dp"
+                    android:layout_marginBottom="30dp"
+                    app:elevation="5dp">
+
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:id="@+id/cl_user"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent">
+
+                        <com.hyphenate.easeui.widget.EaseImageView
+                            android:id="@+id/avatar"
+                            android:layout_width="50dp"
+                            android:layout_height="50dp"
+                            app:layout_constraintTop_toTopOf="parent"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintLeft_toLeftOf="parent"
+                            android:layout_marginLeft="10dp"
+                            android:layout_marginStart="10dp"
+                            android:scaleType="fitXY"
+                            app:ease_shape_type="round"
+                            android:src="@drawable/ease_default_avatar" />
+
+                        <TextView
+                            android:id="@+id/name"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            app:layout_constraintTop_toTopOf="parent"
+                            app:layout_constraintLeft_toRightOf="@id/avatar"
+                            android:layout_marginLeft="11dp"
+                            android:layout_marginStart="11dp"
+                            android:layout_marginTop="12dp"
+                            android:textSize="16sp"
+                            android:textColor="@color/em_conversation_color_item_name"
+                            tools:text="ss"/>
+
+                        <TextView
+                            android:id="@+id/message"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintLeft_toRightOf="@id/avatar"
+                            app:layout_constraintRight_toRightOf="parent"
+                            app:layout_constraintHorizontal_bias="0"
+                            android:layout_marginRight="20dp"
+                            android:layout_marginEnd="20dp"
+                            android:layout_marginBottom="5dp"
+                            android:layout_marginLeft="4dp"
+                            android:maxLines="1"
+                            android:ellipsize="end"
+                            android:padding="7dp"
+                            android:textColor="@color/em_conversation_color_item_message"
+                            android:textSize="14sp"
+                            tools:text="ssdd"/>
+
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+
+                </androidx.cardview.widget.CardView>
+
+            </RelativeLayout>
+<!--
+            <androidx.appcompat.widget.Toolbar
+                android:id="@+id/toolbar"
+                android:layout_width="match_parent"
+                android:layout_height="75dp"
+                app:layout_collapseMode="pin"
+                app:layout_scrollFlags="scroll|enterAlways"
+                app:popupTheme="@style/ThemeOverlay.AppCompat.Light"/>-->
+
+        </com.google.android.material.appbar.CollapsingToolbarLayout>
+
+    </com.google.android.material.appbar.AppBarLayout>
+
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <com.hyphenate.chatuidemo.common.widget.ArrowItemView
+                android:id="@+id/item_common_set"
+                android:layout_width="0dp"
+                android:layout_height="66dp"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:arrowItemAvatarSrc="@drawable/ease_default_avatar"
+                app:arrowItemShowAvatar="true"
+                app:arrowItemAvatarHeight="@dimen/em_about_me_avatar_size"
+                app:arrowItemAvatarWidth="@dimen/em_about_me_avatar_size"
+                app:arrowItemTitle="@string/em_about_me_common"
+                android:foreground="@drawable/em_ripple_click_gray"
+                android:background="@color/white"/>
+
+            <com.hyphenate.chatuidemo.common.widget.ArrowItemView
+                android:id="@+id/item_privacy_set"
+                android:layout_width="0dp"
+                android:layout_height="66dp"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/item_common_set"
+                app:arrowItemAvatarSrc="@drawable/ease_default_avatar"
+                app:arrowItemAvatarHeight="@dimen/em_about_me_avatar_size"
+                app:arrowItemAvatarWidth="@dimen/em_about_me_avatar_size"
+                app:arrowItemShowAvatar="true"
+                app:arrowItemTitle="@string/em_about_me_privacy"
+                android:background="@color/white"
+                android:foreground="@drawable/em_ripple_click_gray"/>
+
+            <com.hyphenate.chatuidemo.common.widget.ArrowItemView
+                android:id="@+id/item_message_set"
+                android:layout_width="0dp"
+                android:layout_height="66dp"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/item_privacy_set"
+                app:arrowItemAvatarSrc="@drawable/ease_default_avatar"
+                app:arrowItemAvatarHeight="@dimen/em_about_me_avatar_size"
+                app:arrowItemAvatarWidth="@dimen/em_about_me_avatar_size"
+                app:arrowItemShowAvatar="true"
+                app:arrowItemTitle="@string/em_about_me_message_set"
+                android:background="@color/white"
+                android:foreground="@drawable/em_ripple_click_gray"
+                android:layout_marginTop="@dimen/em_margin_20"/>
+
+            <com.hyphenate.chatuidemo.common.widget.ArrowItemView
+                android:id="@+id/item_service_set"
+                android:layout_width="0dp"
+                android:layout_height="66dp"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/item_message_set"
+                app:arrowItemAvatarSrc="@drawable/ease_default_avatar"
+                app:arrowItemAvatarHeight="@dimen/em_about_me_avatar_size"
+                app:arrowItemAvatarWidth="@dimen/em_about_me_avatar_size"
+                app:arrowItemShowAvatar="true"
+                app:arrowItemTitle="@string/em_about_me_service_set"
+                android:background="@color/white"
+                android:foreground="@drawable/em_ripple_click_gray"
+                android:layout_marginTop="@dimen/em_margin_20"/>
+
+            <Button
+                android:id="@+id/btn_logout"
+                android:layout_width="0dp"
+                android:layout_height="66dp"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/item_service_set"
+                app:layout_constraintBottom_toBottomOf="parent"
+                android:layout_marginBottom="20dp"
+                android:layout_marginTop="@dimen/em_margin_30"
+                android:text="退出"
+                android:textSize="@dimen/em_size_big"
+                android:textColor="@color/em_color_warning"
+                android:background="@color/white"
+                android:foreground="@drawable/em_ripple_click_gray"/>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </androidx.core.widget.NestedScrollView>
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

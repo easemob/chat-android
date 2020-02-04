@@ -16,6 +16,10 @@
         <attr name="arrowItemContentSize" format="dimension|reference"/>
         <attr name="arrowItemShowDivider" format="boolean"/>
         <attr name="arrowItemShowArrow" format="boolean"/>
+        <attr name="arrowItemShowAvatar" format="boolean"/>
+        <attr name="arrowItemAvatarSrc" format="reference"/>
+        <attr name="arrowItemAvatarHeight" format="dimension|reference"/>
+        <attr name="arrowItemAvatarWidth" format="dimension|reference"/>
     </declare-styleable>
 
     <declare-styleable name="SwitchItemView">

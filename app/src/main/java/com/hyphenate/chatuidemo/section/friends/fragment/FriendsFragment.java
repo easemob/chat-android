@@ -2,6 +2,7 @@ package com.hyphenate.chatuidemo.section.friends.fragment;
 
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.ContextMenu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
@@ -10,10 +11,13 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.hyphenate.chatuidemo.R;
+import com.hyphenate.chatuidemo.common.db.DemoDbHelper;
+import com.hyphenate.chatuidemo.common.db.dao.EmUserDao;
 import com.hyphenate.chatuidemo.common.interfaceOrImplement.OnResourceParseCallback;
 import com.hyphenate.chatuidemo.common.manager.SidebarPresenter;
 import com.hyphenate.chatuidemo.common.widget.ContactItemView;
@@ -88,7 +92,7 @@ public class FriendsFragment extends BaseInitFragment implements View.OnClickLis
 
     @Override
     public boolean onContextItemSelected(@NonNull MenuItem item) {
-        int position = ((EaseRecyclerView.RecyclerViewContextMenuInfo) item).position;
+        int position = ((EaseRecyclerView.RecyclerViewContextMenuInfo) item.getMenuInfo()).position - 1;
         EaseUser user = mAdapter.getItem(position);
         switch (item.getItemId()) {
             case R.id.action_friend_delete ://删除好友
@@ -177,6 +181,25 @@ public class FriendsFragment extends BaseInitFragment implements View.OnClickLis
                 }
             });
         });
+
+        mViewModel.deleteObservable().observe(this, response -> {
+            parseResource(response, new OnResourceParseCallback<Boolean>() {
+                @Override
+                public void onSuccess(Boolean data) {
+                    mViewModel.loadContactList();
+                }
+            });
+        });
+
+        mViewModel.messageChangeObservable().observe(this, event -> {
+            if(event == null) {
+                return;
+            }
+            if(event.isContactChange()) {
+                mViewModel.loadContactList();
+            }
+        });
+
         mViewModel.loadContactList();
     }
 

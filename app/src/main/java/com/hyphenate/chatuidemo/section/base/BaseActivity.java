@@ -197,7 +197,7 @@ public class BaseActivity extends AppCompatActivity {
      * 设置是否是沉浸式
      * @param fitSystemForTheme
      */
-    private void setFitSystem(boolean fitSystemForTheme) {
+    public void setFitSystem(boolean fitSystemForTheme) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT && Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
             getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
         }

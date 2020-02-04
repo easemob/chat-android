@@ -12,7 +12,7 @@ import com.hyphenate.chatuidemo.common.db.entity.EmUserEntity;
 import com.hyphenate.chatuidemo.common.db.entity.InviteMessage;
 import com.hyphenate.chatuidemo.common.db.entity.MsgTypeManageEntity;
 
-@Database(entities = {EmUserEntity.class, InviteMessage.class, MsgTypeManageEntity.class}, version = 8)
+@Database(entities = {EmUserEntity.class, InviteMessage.class, MsgTypeManageEntity.class}, version = 10)
 @TypeConverters(DateConverter.class)
 public abstract class AppDatabase extends RoomDatabase {
 

@@ -94,6 +94,16 @@ public class EMContactManagerRepository extends BaseEMRepository{
                             usernames.addAll(ids);
                         }
                         List<EaseUser> easeUsers = EmUserEntity.parse(usernames);
+                        if(easeUsers != null && !easeUsers.isEmpty()) {
+                            List<String> blackListFromServer = getContactManager().getBlackListFromServer();
+                            for (EaseUser user : easeUsers) {
+                                if(blackListFromServer != null && !blackListFromServer.isEmpty()) {
+                                    if(blackListFromServer.contains(user.getUsername())) {
+                                        user.setContact(1);
+                                    }
+                                }
+                            }
+                        }
                         sortData(easeUsers);
                         callBack.onSuccess(createLiveData(easeUsers));
 
@@ -106,7 +116,6 @@ public class EMContactManagerRepository extends BaseEMRepository{
 
             @Override
             protected void saveCallResult(List<EaseUser> items) {
-                getUserDao().clearUsers();
                 getUserDao().insert(EmUserEntity.parseList(items));
             }
 
@@ -141,10 +150,19 @@ public class EMContactManagerRepository extends BaseEMRepository{
      * @return
      */
     public LiveData<Resource<List<EaseUser>>> getBlackContactList() {
-        return new NetworkOnlyResource<List<EaseUser>>() {
+        return new NetworkBoundResource<List<EaseUser>, List<EaseUser>>() {
+            @Override
+            protected boolean shouldFetch(List<EaseUser> data) {
+                return true;
+            }
 
             @Override
-            protected void createCall(@NonNull ResultCallBack<LiveData<List<EaseUser>>> callBack) {
+            protected LiveData<List<EaseUser>> loadFromDb() {
+                return getUserDao().loadBlackUsers();
+            }
+
+            @Override
+            protected void createCall(ResultCallBack<LiveData<List<EaseUser>>> callBack) {
                 if(!isLoggedIn()) {
                     callBack.onError(ErrorCode.EM_NOT_LOGIN);
                     return;
@@ -152,7 +170,13 @@ public class EMContactManagerRepository extends BaseEMRepository{
                 getContactManager().aysncGetBlackListFromServer(new EMValueCallBack<List<String>>() {
                     @Override
                     public void onSuccess(List<String> value) {
-                        callBack.onSuccess(createLiveData(EmUserEntity.parse(value)));
+                        List<EaseUser> users = EmUserEntity.parse(value);
+                        if(users != null && !users.isEmpty()) {
+                            for (EaseUser user : users) {
+                                user.setContact(1);
+                            }
+                        }
+                        callBack.onSuccess(createLiveData(users));
                     }
 
                     @Override
@@ -160,6 +184,12 @@ public class EMContactManagerRepository extends BaseEMRepository{
                         callBack.onError(error, errorMsg);
                     }
                 });
+            }
+
+            @Override
+            protected void saveCallResult(List<EaseUser> items) {
+                getUserDao().clearBlackUsers();
+                getUserDao().insert(EmUserEntity.parseList(items));
             }
 
         }.asLiveData();
@@ -206,6 +236,35 @@ public class EMContactManagerRepository extends BaseEMRepository{
             @Override
             protected void createCall(@NonNull ResultCallBack<LiveData<Boolean>> callBack) {
                 getContactManager().aysncAddUserToBlackList(username, both, new EMCallBack() {
+                    @Override
+                    public void onSuccess() {
+                        callBack.onSuccess(createLiveData(true));
+                    }
+
+                    @Override
+                    public void onError(int code, String error) {
+                        callBack.onError(code, error);
+                    }
+
+                    @Override
+                    public void onProgress(int progress, String status) {
+
+                    }
+                });
+            }
+        }.asLiveData();
+    }
+
+    /**
+     * 移出黑名单
+     * @param username
+     * @return
+     */
+    public LiveData<Resource<Boolean>> removeUserFromBlackList(String username) {
+        return new NetworkOnlyResource<Boolean>() {
+            @Override
+            protected void createCall(@NonNull ResultCallBack<LiveData<Boolean>> callBack) {
+                getContactManager().aysncRemoveUserFromBlackList(username, new EMCallBack() {
                     @Override
                     public void onSuccess() {
                         callBack.onSuccess(createLiveData(true));

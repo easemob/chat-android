@@ -354,6 +354,10 @@
         <activity android:name=".section.friends.activity.NewChatRoomActivity" />
         <!--系统通知-->
         <activity android:name=".section.message.NewFriendsMsgActivity" />
+        <!--安全与隐私首页-->
+        <activity android:name=".section.me.PrivacyIndexActivity" />
+        <!--联系人黑名单-->
+        <activity android:name=".section.friends.activity.ContactBlackListActivity" />
 
     </application>
 

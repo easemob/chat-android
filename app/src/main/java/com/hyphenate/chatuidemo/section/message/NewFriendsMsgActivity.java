@@ -84,7 +84,7 @@ public class NewFriendsMsgActivity extends BaseInitActivity implements OnRefresh
 
     @Override
     public boolean onContextItemSelected(@NonNull MenuItem item) {
-        int position = ((EaseRecyclerView.RecyclerViewContextMenuInfo) item).position;
+        int position = ((EaseRecyclerView.RecyclerViewContextMenuInfo) item.getMenuInfo()).position;
         InviteMessage message = adapter.getItem(position);
         switch (item.getItemId()) {
             case R.id.action_invite_agree :

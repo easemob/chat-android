@@ -104,6 +104,11 @@ public class MainActivity extends BaseInitActivity implements BottomNavigationVi
     }
 
     @Override
+    protected void initSystemFit() {
+        setFitSystemForTheme(false);
+    }
+
+    @Override
     protected void initView(Bundle savedInstanceState) {
         super.initView(savedInstanceState);
         navView = findViewById(R.id.nav_view);

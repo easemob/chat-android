@@ -90,6 +90,7 @@
     <string name="em_friends_av_conference">音视频会议</string>
     <string name="em_friends_delete_the_contact">删除联系人</string>
     <string name="em_friends_move_into_the_blacklist_new">移入到黑名单</string>
+    <string name="em_friends_move_out_the_blacklist_new">移出黑名单</string>
     <string name="em_friends_delete_contact_hint">是否删除联系人？</string>
 
     <string name="em_friends_detail_note">设置备注</string>
@@ -183,6 +184,13 @@
     <string name="em_notify_agree">同意</string>
     <string name="em_notify_refuse">拒绝</string>
     <string name="em_notify_delete">删除</string>
+
+    <string name="em_about_me_common">通用</string>
+    <string name="em_about_me_privacy">安全与隐私</string>
+    <string name="em_about_me_message_set">消息设置</string>
+    <string name="em_about_me_service_set">服务诊断</string>
+    <string name="em_privacy_black">黑名单</string>
+    <string name="em_privacy_equipments">多端多设备管理</string>
 
     <string name="confirm_forward_to">确定转发到：%1$s ?</string>
 

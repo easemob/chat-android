@@ -15,8 +15,10 @@ import androidx.core.content.ContextCompat;
 
 import com.hyphenate.chatuidemo.R;
 import com.hyphenate.easeui.utils.EaseCommonUtils;
+import com.hyphenate.easeui.widget.EaseImageView;
 
 public class ArrowItemView extends ConstraintLayout {
+    private EaseImageView avatar;
     private TextView tvTitle;
     private TextView tvContent;
     private ImageView ivArrow;
@@ -44,6 +46,7 @@ public class ArrowItemView extends ConstraintLayout {
 
     public void init(Context context, AttributeSet attrs) {
         root = LayoutInflater.from(context).inflate(R.layout.em_layout_item_arrow, this);
+        avatar = findViewById(R.id.avatar);
         tvTitle = findViewById(R.id.tv_title);
         tvContent = findViewById(R.id.tv_content);
         ivArrow = findViewById(R.id.iv_arrow);
@@ -97,6 +100,32 @@ public class ArrowItemView extends ConstraintLayout {
 
         boolean showArrow = a.getBoolean(R.styleable.ArrowItemView_arrowItemShowArrow, true);
         ivArrow.setVisibility(showArrow ? VISIBLE : GONE);
+
+        boolean showAvatar = a.getBoolean(R.styleable.ArrowItemView_arrowItemShowAvatar, false);
+        avatar.setVisibility(showAvatar ? VISIBLE : GONE);
+
+        int avatarSrcResourceId = a.getResourceId(R.styleable.ArrowItemView_arrowItemAvatarSrc, -1);
+        if(avatarSrcResourceId != -1) {
+            avatar.setImageResource(avatarSrcResourceId);
+        }
+
+        int avatarHeightId = a.getResourceId(R.styleable.ArrowItemView_arrowItemAvatarHeight, -1);
+        float height = a.getDimension(R.styleable.ArrowItemView_arrowItemAvatarHeight, 0);
+        if(avatarHeightId != -1) {
+            height = getResources().getDimension(avatarHeightId);
+        }
+
+        int avatarWidthId = a.getResourceId(R.styleable.ArrowItemView_arrowItemAvatarWidth, -1);
+        float width = a.getDimension(R.styleable.ArrowItemView_arrowItemAvatarWidth, 0);
+        if(avatarWidthId != -1) {
+            width = getResources().getDimension(avatarWidthId);
+        }
+
+        a.recycle();
+
+        ViewGroup.LayoutParams params = avatar.getLayoutParams();
+        params.height = height == 0 ? ViewGroup.LayoutParams.WRAP_CONTENT : (int)height;
+        params.width = width == 0 ? ViewGroup.LayoutParams.WRAP_CONTENT : (int)width;
     }
 
     public TextView getTvContent() {
@@ -106,4 +135,6 @@ public class ArrowItemView extends ConstraintLayout {
     public TextView getTvTitle() {
         return tvTitle;
     }
+
+    public EaseImageView getAvatar() { return avatar; }
 }

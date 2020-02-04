@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <com.hyphenate.easeui.widget.EaseTitleBar
+        android:id="@+id/title_bar"
+        android:layout_width="0dp"
+        android:layout_height="@dimen/em_common_title_bar_height"
+        app:titleBarTitle="@string/em_about_me_privacy"
+        app:titleBarDisplayHomeAsUpEnabled="true"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent"/>
+    
+    <com.hyphenate.chatuidemo.common.widget.ArrowItemView
+        android:id="@+id/item_black_manager"
+        android:layout_width="0dp"
+        android:layout_height="66dp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/title_bar"
+        app:arrowItemTitle="@string/em_privacy_black"
+        android:foreground="@drawable/em_ripple_click_gray"/>
+
+    <com.hyphenate.chatuidemo.common.widget.ArrowItemView
+        android:id="@+id/item_equipment_manager"
+        android:layout_width="0dp"
+        android:layout_height="66dp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/item_black_manager"
+        app:arrowItemTitle="@string/em_privacy_equipments"
+        android:foreground="@drawable/em_ripple_click_gray"/>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

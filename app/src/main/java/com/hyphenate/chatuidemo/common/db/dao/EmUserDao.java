@@ -24,14 +24,20 @@ public interface EmUserDao {
     @Query("select * from em_users where username = :username")
     LiveData<List<EaseUser>> loadUserById(String username);
 
-    @Query("select * from em_users")
+    @Query("select * from em_users where contact = 0")
     LiveData<List<EaseUser>> loadUsers();
+
+    @Query("select * from em_users where contact = 1")
+    LiveData<List<EaseUser>> loadBlackUsers();
 
     @Query("select username from em_users")
     List<String> loadAllUsers();
 
     @Query("delete from em_users")
     int clearUsers();
+
+    @Query("delete from em_users where contact = 1")
+    int clearBlackUsers();
 
     @Query("delete from em_users where username = :username")
     void deleteUser(String username);

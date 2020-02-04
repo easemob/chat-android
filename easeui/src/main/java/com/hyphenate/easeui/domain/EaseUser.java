@@ -32,6 +32,11 @@ public class EaseUser implements Serializable {
      */
     private String avatar;
 
+    /**
+     * contact 0: normal, 1: black
+     */
+    private int contact;
+
     @NonNull
     public String getUsername() {
         return username;
@@ -71,6 +76,14 @@ public class EaseUser implements Serializable {
         this.avatar = avatar;
     }
 
+    public int getContact() {
+        return contact;
+    }
+
+    public void setContact(int contact) {
+        this.contact = contact;
+    }
+
     public String getInitialLetter(String name) {
         return new GetInitialLetter().getLetter(name);
     }
@@ -89,6 +102,7 @@ public class EaseUser implements Serializable {
                 ", nickname='" + nickname + '\'' +
                 ", initialLetter='" + initialLetter + '\'' +
                 ", avatar='" + avatar + '\'' +
+                ", contact=" + contact +
                 '}';
     }
 

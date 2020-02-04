@@ -34,6 +34,8 @@
 
     <dimen name="em_friends_contact_detail_note_size">@dimen/em_size_normal</dimen>
 
+    <dimen name="em_about_me_avatar_size">25dp</dimen>
+
     <dimen name="em_margin_15">15dp</dimen>
     <dimen name="em_margin_10">10dp</dimen>
     <dimen name="em_margin_20">20dp</dimen>
