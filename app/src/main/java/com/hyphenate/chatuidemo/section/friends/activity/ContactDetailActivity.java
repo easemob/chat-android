@@ -10,16 +10,29 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.constraintlayout.widget.Group;
+import androidx.lifecycle.ViewModelProvider;
 
 import com.hyphenate.chatuidemo.R;
+import com.hyphenate.chatuidemo.common.DemoConstant;
+import com.hyphenate.chatuidemo.common.db.DemoDbHelper;
+import com.hyphenate.chatuidemo.common.interfaceOrImplement.OnResourceParseCallback;
+import com.hyphenate.chatuidemo.common.livedatas.MessageChangeLiveData;
 import com.hyphenate.chatuidemo.section.base.BaseInitActivity;
 import com.hyphenate.chatuidemo.section.chat.ChatActivity;
 import com.hyphenate.chatuidemo.section.chat.ChatVideoCallActivity;
 import com.hyphenate.chatuidemo.section.chat.ChatVoiceCallActivity;
+import com.hyphenate.chatuidemo.section.dialog.DemoDialogFragment;
+import com.hyphenate.chatuidemo.section.dialog.SimpleDialogFragment;
+import com.hyphenate.chatuidemo.section.friends.viewmodels.ContactDetailViewModel;
+import com.hyphenate.chatuidemo.section.friends.viewmodels.FriendsViewModel;
 import com.hyphenate.easeui.constants.EaseConstant;
 import com.hyphenate.easeui.domain.EaseUser;
+import com.hyphenate.easeui.model.EaseEvent;
 import com.hyphenate.easeui.widget.EaseImageView;
+import com.hyphenate.easeui.widget.EaseRecyclerView;
 import com.hyphenate.easeui.widget.EaseTitleBar;
+
+import java.util.List;
 
 public class ContactDetailActivity extends BaseInitActivity implements EaseTitleBar.OnBackPressListener, View.OnClickListener {
     private EaseTitleBar mEaseTitleBar;
@@ -34,6 +47,7 @@ public class ContactDetailActivity extends BaseInitActivity implements EaseTitle
 
     private EaseUser mUser;
     private boolean mIsFriend;
+    private ContactDetailViewModel viewModel;
 
     public static void actionStart(Context context, EaseUser user) {
         Intent intent = new Intent(context, ContactDetailActivity.class);
@@ -54,6 +68,11 @@ public class ContactDetailActivity extends BaseInitActivity implements EaseTitle
     }
 
     @Override
+    public boolean onPrepareOptionsMenu(Menu menu) {
+        return mIsFriend;
+    }
+
+    @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.em_friends_contact_detail_menu, menu);
         return super.onCreateOptionsMenu(menu);
@@ -62,8 +81,11 @@ public class ContactDetailActivity extends BaseInitActivity implements EaseTitle
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         switch (item.getItemId()) {
+            case R.id.action_detail_delete:
+                showDeleteDialog(mUser);
+                break;
             case R.id.action_add_black :
-                showToast("添加到黑名单");
+                viewModel.addUserToBlackList(mUser.getUsername(), false);
                 break;
         }
         return super.onOptionsItemSelected(item);
@@ -74,6 +96,10 @@ public class ContactDetailActivity extends BaseInitActivity implements EaseTitle
         super.initIntent(intent);
         mUser = (EaseUser) getIntent().getSerializableExtra("user");
         mIsFriend = getIntent().getBooleanExtra("isFriend", true);
+        if(!mIsFriend) {
+            List<String> users = DemoDbHelper.getInstance(mContext).getUserDao().loadAllUsers();
+            mIsFriend = users != null && users.contains(mUser.getUsername());
+        }
     }
 
     @Override
@@ -115,6 +141,35 @@ public class ContactDetailActivity extends BaseInitActivity implements EaseTitle
         if(mUser != null) {
             mTvName.setText(mUser.getNickname());
         }
+
+        viewModel = new ViewModelProvider(this).get(ContactDetailViewModel.class);
+        viewModel.blackObservable().observe(this, response -> {
+            parseResource(response, new OnResourceParseCallback<Boolean>() {
+                @Override
+                public void onSuccess(Boolean data) {
+                    MessageChangeLiveData.getInstance().postValue(EaseEvent.create(DemoConstant.CONTACT_CHANGE, EaseEvent.TYPE.CONTACT));
+                    finish();
+                }
+            });
+        });
+        viewModel.deleteObservable().observe(this, response -> {
+            parseResource(response, new OnResourceParseCallback<Boolean>() {
+                @Override
+                public void onSuccess(Boolean data) {
+                    MessageChangeLiveData.getInstance().postValue(EaseEvent.create(DemoConstant.CONTACT_CHANGE, EaseEvent.TYPE.CONTACT));
+                    finish();
+                }
+            });
+        });
+    }
+
+    private void showDeleteDialog(EaseUser user) {
+        SimpleDialogFragment.showDialog(mContext, R.string.em_friends_delete_contact_hint, new DemoDialogFragment.OnConfirmClickListener() {
+            @Override
+            public void onConfirmClick(View view) {
+                viewModel.deleteContact(user.getUsername());
+            }
+        });
     }
 
     @Override

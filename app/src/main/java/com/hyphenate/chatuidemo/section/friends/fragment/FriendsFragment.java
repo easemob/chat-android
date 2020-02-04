@@ -19,6 +19,8 @@ import com.hyphenate.chatuidemo.common.manager.SidebarPresenter;
 import com.hyphenate.chatuidemo.common.widget.ContactItemView;
 import com.hyphenate.chatuidemo.section.base.BaseInitFragment;
 import com.hyphenate.chatuidemo.section.chat.ConferenceActivity;
+import com.hyphenate.chatuidemo.section.dialog.DemoDialogFragment;
+import com.hyphenate.chatuidemo.section.dialog.SimpleDialogFragment;
 import com.hyphenate.chatuidemo.section.friends.activity.ChatRoomContactManageActivity;
 import com.hyphenate.chatuidemo.section.friends.activity.ContactDetailActivity;
 import com.hyphenate.chatuidemo.section.friends.activity.GroupContactManageActivity;
@@ -90,13 +92,22 @@ public class FriendsFragment extends BaseInitFragment implements View.OnClickLis
         EaseUser user = mAdapter.getItem(position);
         switch (item.getItemId()) {
             case R.id.action_friend_delete ://删除好友
-                mViewModel.deleteContact(user.getUsername());
+                showDeleteDialog(user);
                 break;
             case R.id.action_friend_block ://加入黑名单
                 mViewModel.addUserToBlackList(user.getUsername(), false);
                 break;
         }
         return super.onContextItemSelected(item);
+    }
+
+    private void showDeleteDialog(EaseUser user) {
+        SimpleDialogFragment.showDialog(mContext, R.string.em_friends_delete_contact_hint, new DemoDialogFragment.OnConfirmClickListener() {
+            @Override
+            public void onConfirmClick(View view) {
+                mViewModel.deleteContact(user.getUsername());
+            }
+        });
     }
 
     @Override

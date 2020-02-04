@@ -2,6 +2,14 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
+
+    <item
+        android:id="@+id/action_detail_delete"
+        android:orderInCategory="100"
+        android:visible="true"
+        android:title="@string/em_friends_delete_the_contact"
+        app:showAsAction="never"/>
+
     <item
         android:id="@+id/action_add_black"
         android:orderInCategory="100"
