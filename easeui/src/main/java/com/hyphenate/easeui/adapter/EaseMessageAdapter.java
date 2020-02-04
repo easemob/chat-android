@@ -14,10 +14,6 @@ import com.hyphenate.easeui.viewholder.EaseViewHolderHelper;
 
 import androidx.annotation.Nullable;
 
-/**
- * 开发者可在实现{@link IViewHolderProvider}提供相应的ViewHolder及ViewType
- * ViewHolder的提供主要通过{@link EaseViewHolderHelper}
- */
 public class EaseMessageAdapter extends EaseBaseDelegateAdapter<EMMessage> {
     public MessageListItemClickListener itemClickListener;
     public EaseMessageListItemStyle itemStyle;

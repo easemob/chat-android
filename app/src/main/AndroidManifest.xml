@@ -352,6 +352,8 @@
         <activity android:name=".section.friends.activity.NewGroupActivity" />
         <!--新建聊天室-->
         <activity android:name=".section.friends.activity.NewChatRoomActivity" />
+        <!--系统通知-->
+        <activity android:name=".section.message.NewFriendsMsgActivity" />
 
     </application>
 

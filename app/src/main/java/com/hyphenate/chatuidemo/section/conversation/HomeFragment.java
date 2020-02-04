@@ -28,6 +28,7 @@ import com.hyphenate.chatuidemo.section.chat.ChatActivity;
 import com.hyphenate.chatuidemo.section.chat.viewmodel.MessageViewModel;
 import com.hyphenate.chatuidemo.section.conversation.adapter.HomeAdapter;
 import com.hyphenate.chatuidemo.section.conversation.viewmodel.HomeViewModel;
+import com.hyphenate.chatuidemo.section.message.NewFriendsMsgActivity;
 import com.hyphenate.easeui.interfaces.OnItemClickListener;
 import com.hyphenate.easeui.model.EaseEvent;
 import com.hyphenate.easeui.utils.EaseCommonUtils;
@@ -229,7 +230,7 @@ public class HomeFragment extends BaseInitFragment implements OnRefreshListener,
         if(item instanceof EMConversation) {
             ChatActivity.actionStart(mContext, ((EMConversation)item).conversationId(), EaseCommonUtils.getChatType((EMConversation) item));
         }else if(item instanceof MsgTypeManageEntity) {
-            showToast("跳转到系统消息页面");
+            NewFriendsMsgActivity.actionStart(mContext);
         }
     }
 }

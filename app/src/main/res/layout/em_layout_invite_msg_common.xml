@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<merge xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:showIn="@layout/em_layout_item_invite_msg_agree">
+
+    <com.hyphenate.easeui.widget.EaseImageView
+        android:id="@+id/avatar"
+        android:layout_width="65dp"
+        android:layout_height="65dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="10dp"
+        android:padding="5dp"
+        android:src="@drawable/em_default_avatar"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent" />
+
+    <TextView
+        android:id="@+id/name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="8dp"
+        android:layout_marginTop="6dp"
+        android:textColor="#000"
+        android:textSize="16sp"
+        tools:text="name"
+        app:layout_constraintTop_toTopOf="@id/avatar"
+        app:layout_constraintLeft_toRightOf="@id/avatar" />
+
+    <TextView
+        android:id="@+id/message"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:ellipsize="end"
+        android:maxLines="2"
+        android:padding="8dp"
+        android:textColor="#888888"
+        android:textSize="14sp"
+        tools:text="content"
+        app:layout_constraintBottom_toBottomOf="@id/avatar"
+        app:layout_constraintLeft_toRightOf="@id/avatar" />
+</merge>

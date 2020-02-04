@@ -2,6 +2,7 @@ package com.hyphenate.chatuidemo.common.db.dao;
 
 import androidx.lifecycle.LiveData;
 import androidx.room.Dao;
+import androidx.room.Delete;
 import androidx.room.Insert;
 import androidx.room.OnConflictStrategy;
 import androidx.room.Query;
@@ -22,8 +23,14 @@ public interface InviteMessageDao {
     @Update(onConflict = OnConflictStrategy.REPLACE)
     int update(InviteMessage... entities);
 
+    @Query("update em_invite_message set isUnread = 0")
+    void makeAllReaded();
+
     @Query("select * from em_invite_message")
     LiveData<List<InviteMessage>> loadAllInviteMessages();
+
+    @Query("select * from em_invite_message order by isUnread desc, time desc limit:limit offset:offset")
+    LiveData<List<InviteMessage>> loadMessages(int limit, int offset);
 
     @Query("select * from em_invite_message")
     List<InviteMessage> loadAll();
@@ -48,5 +55,8 @@ public interface InviteMessageDao {
 
     @Query("delete from em_invite_message where :key =:from")
     void delete(String key, String from);
+
+    @Delete
+    void delete(InviteMessage... msg);
 
 }
