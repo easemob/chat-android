@@ -17,9 +17,6 @@ import androidx.lifecycle.ViewModelProvider;
 import com.google.android.material.bottomnavigation.BottomNavigationItemView;
 import com.google.android.material.bottomnavigation.BottomNavigationMenuView;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
-import com.hyphenate.EMClientListener;
-import com.hyphenate.EMContactListener;
-import com.hyphenate.EMMultiDeviceListener;
 import com.hyphenate.chatuidemo.common.enums.SearchType;
 import com.hyphenate.chatuidemo.common.permission.PermissionsManager;
 import com.hyphenate.chatuidemo.common.permission.PermissionsResultAction;
@@ -36,11 +33,9 @@ import com.hyphenate.chatuidemo.section.me.AboutMeFragment;
 import com.hyphenate.easeui.widget.EaseTitleBar;
 
 import java.lang.reflect.Method;
-import java.util.List;
 
 
-public class MainActivity extends BaseInitActivity implements BottomNavigationView.OnNavigationItemSelectedListener
-                                                            , EMClientListener, EMMultiDeviceListener, EMContactListener {
+public class MainActivity extends BaseInitActivity implements BottomNavigationView.OnNavigationItemSelectedListener {
     private BottomNavigationView navView;
     private EaseTitleBar mTitleBar;
     private BaseFragment mHomeFragment, mFriendsFragment, mDiscoverFragment, mAboutMeFragment;
@@ -48,6 +43,7 @@ public class MainActivity extends BaseInitActivity implements BottomNavigationVi
     private TextView mTvMainHomeMsg, mTvMainFriendsMsg, mTvMainDiscoverMsg, mTvMainAboutMeMsg;
     private int[] badgeIds = {R.layout.em_badge_home, R.layout.em_badge_friends, R.layout.em_badge_discover, R.layout.em_badge_about_me};
     private int[] msgIds = {R.id.tv_main_home_msg, R.id.tv_main_friends_msg, R.id.tv_main_discover_msg, R.id.tv_main_about_me_msg};
+    private MainViewModel viewModel;
 
     public static void startAction(Context context) {
         Intent starter = new Intent(context, MainActivity.class);
@@ -123,9 +119,6 @@ public class MainActivity extends BaseInitActivity implements BottomNavigationVi
     protected void initListener() {
         super.initListener();
         navView.setOnNavigationItemSelectedListener(this);
-        DemoHelper.getInstance().getEMClient().addClientListener(this);
-        DemoHelper.getInstance().getEMClient().addMultiDeviceListener(this);
-        DemoHelper.getInstance().getContactManager().setContactListener(this);
     }
 
     @Override
@@ -133,11 +126,11 @@ public class MainActivity extends BaseInitActivity implements BottomNavigationVi
         super.initData();
         initViewModel();
         requestPermissions();
-
+        checkUnreadMsg();
     }
 
     private void initViewModel() {
-        MainViewModel viewModel = new ViewModelProvider(mContext).get(MainViewModel.class);
+        viewModel = new ViewModelProvider(mContext).get(MainViewModel.class);
         viewModel.getSwitchObservable().observe(this, response -> {
             if(response == null || response == 0) {
                 return;
@@ -149,6 +142,23 @@ public class MainActivity extends BaseInitActivity implements BottomNavigationVi
                 mTitleBar.setTitle(getResources().getString(response));
             }
         });
+
+        viewModel.homeUnReadObservable().observe(this, showRedIcon -> {
+            if(showRedIcon == null) {
+                return;
+            }
+            mTvMainHomeMsg.setVisibility(showRedIcon ? View.VISIBLE : View.GONE);
+        });
+
+        viewModel.messageChangeObservable().observe(this, event -> {
+            if(event == null) {
+                return;
+            }
+            if(event.isGroupChange() || event.isNotifyChange() || event.isMessageChange()) {
+                viewModel.checkUnreadMsg();
+            }
+        });
+
     }
 
     /**
@@ -165,7 +175,6 @@ public class MainActivity extends BaseInitActivity implements BottomNavigationVi
             switch (i) {
                 case 0 :
                     mTvMainHomeMsg = badge.findViewById(msgIds[0]);
-                    mTvMainHomeMsg.setVisibility(View.VISIBLE);
                     break;
                 case 1 :
                     mTvMainFriendsMsg = badge.findViewById(msgIds[1]);
@@ -267,68 +276,7 @@ public class MainActivity extends BaseInitActivity implements BottomNavigationVi
         return false;
     }
 
-    /**
-     * 监听2.x到3.x数据库升级操作
-     * @param success
-     */
-    @Override
-    public void onMigrate2x(boolean success) {
-
-    }
-
-    @Override
-    public void onContactEvent(int event, String target, String ext) {
-
-    }
-
-    @Override
-    public void onGroupEvent(int event, String target, List<String> usernames) {
-
-    }
-
-    /**
-     * 增加联系人时回调此方法
-     * @param username
-     */
-    @Override
-    public void onContactAdded(String username) {
-
-    }
-
-    /**
-     * 被删除时回调此方法
-     * @param username
-     */
-    @Override
-    public void onContactDeleted(String username) {
-
-    }
-
-    /**
-     * 收到好友邀请
-     * @param username
-     * @param reason
-     */
-    @Override
-    public void onContactInvited(String username, String reason) {
-
-    }
-
-    /**
-     * 好友请求被同意
-     * @param username
-     */
-    @Override
-    public void onFriendRequestAccepted(String username) {
-
-    }
-
-    /**
-     * 好友请求被拒绝
-     * @param username
-     */
-    @Override
-    public void onFriendRequestDeclined(String username) {
-
+    private void checkUnreadMsg() {
+        viewModel.checkUnreadMsg();
     }
 }

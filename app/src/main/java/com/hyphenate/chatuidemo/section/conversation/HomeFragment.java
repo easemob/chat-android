@@ -2,7 +2,6 @@ package com.hyphenate.chatuidemo.section.conversation;
 
 import android.os.Bundle;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.ContextMenu;
 import android.view.MenuItem;
 import android.view.View;
@@ -17,9 +16,6 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import com.hyphenate.chat.EMConversation;
 import com.hyphenate.chatuidemo.DemoHelper;
 import com.hyphenate.chatuidemo.R;
-import com.hyphenate.chatuidemo.common.DemoConstant;
-import com.hyphenate.chatuidemo.common.db.DemoDbHelper;
-import com.hyphenate.chatuidemo.common.db.entity.InviteMessage;
 import com.hyphenate.chatuidemo.common.db.entity.MsgTypeManageEntity;
 import com.hyphenate.chatuidemo.common.interfaceOrImplement.OnResourceParseCallback;
 import com.hyphenate.chatuidemo.common.utils.ThreadManager;
@@ -34,7 +30,6 @@ import com.hyphenate.easeui.model.EaseEvent;
 import com.hyphenate.easeui.utils.EaseCommonUtils;
 import com.hyphenate.easeui.widget.EaseRecyclerView;
 import com.hyphenate.easeui.widget.EaseSearchTextView;
-import com.hyphenate.util.EMLog;
 import com.scwang.smartrefresh.layout.SmartRefreshLayout;
 import com.scwang.smartrefresh.layout.api.RefreshLayout;
 import com.scwang.smartrefresh.layout.listener.OnRefreshListener;
@@ -180,7 +175,7 @@ public class HomeFragment extends BaseInitFragment implements OnRefreshListener,
             if(change == null) {
                 return;
             }
-            if(change.isMessgeChange() || change.isNotifyChange()
+            if(change.isMessageChange() || change.isNotifyChange()
                     || change.isGroupLeave() || change.isChatRoomLeave()
                     || change.type == EaseEvent.TYPE.CHAT_ROOM || change.isGroupChange()) {
                 mViewModel.loadConversationList();

@@ -33,7 +33,7 @@ public class EaseEvent implements Serializable {
         return new EaseEvent(event, type, refresh);
     }
 
-    public boolean isMessgeChange() {
+    public boolean isMessageChange() {
         return type == TYPE.MESSAGE;
     }
 
