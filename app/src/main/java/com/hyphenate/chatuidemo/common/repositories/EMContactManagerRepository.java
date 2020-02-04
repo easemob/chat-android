@@ -164,4 +164,64 @@ public class EMContactManagerRepository extends BaseEMRepository{
 
         }.asLiveData();
     }
+
+    /**
+     * 删除联系人
+     * @param username
+     * @return
+     */
+    public LiveData<Resource<Boolean>> deleteContact(String username) {
+        return new NetworkOnlyResource<Boolean>() {
+            @Override
+            protected void createCall(@NonNull ResultCallBack<LiveData<Boolean>> callBack) {
+                getContactManager().asyncDeclineInvitation(username, new EMCallBack() {
+                    @Override
+                    public void onSuccess() {
+                        callBack.onSuccess(createLiveData(true));
+                    }
+
+                    @Override
+                    public void onError(int code, String error) {
+                        callBack.onError(code, error);
+                    }
+
+                    @Override
+                    public void onProgress(int progress, String status) {
+
+                    }
+                });
+            }
+        }.asLiveData();
+    }
+
+    /**
+     * 添加到黑名单
+     * @param username
+     * @param both 把用户加入黑民单时，如果是both双方发消息时对方都收不到；如果不是，
+     *             则我能给黑名单的中用户发消息，但是对方发给我时我是收不到的
+     * @return
+     */
+    public LiveData<Resource<Boolean>> addUserToBlackList(String username, boolean both) {
+        return new NetworkOnlyResource<Boolean>() {
+            @Override
+            protected void createCall(@NonNull ResultCallBack<LiveData<Boolean>> callBack) {
+                getContactManager().aysncAddUserToBlackList(username, both, new EMCallBack() {
+                    @Override
+                    public void onSuccess() {
+                        callBack.onSuccess(createLiveData(true));
+                    }
+
+                    @Override
+                    public void onError(int code, String error) {
+                        callBack.onError(code, error);
+                    }
+
+                    @Override
+                    public void onProgress(int progress, String status) {
+
+                    }
+                });
+            }
+        }.asLiveData();
+    }
 }

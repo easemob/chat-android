@@ -2,10 +2,14 @@ package com.hyphenate.chatuidemo.section.friends.fragment;
 
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.view.ContextMenu;
+import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
@@ -70,6 +74,29 @@ public class FriendsFragment extends BaseInitFragment implements View.OnClickLis
 
         mPresenter = new SidebarPresenter();
         mPresenter.setupWithRecyclerView(mRvFriendsList, mFloatingHeader);
+
+        registerForContextMenu(mRvFriendsList);
+    }
+
+    @Override
+    public void onCreateContextMenu(@NonNull ContextMenu menu, @NonNull View v, @Nullable ContextMenu.ContextMenuInfo menuInfo) {
+        super.onCreateContextMenu(menu, v, menuInfo);
+        requireActivity().getMenuInflater().inflate(R.menu.em_friends_list_menu, menu);
+    }
+
+    @Override
+    public boolean onContextItemSelected(@NonNull MenuItem item) {
+        int position = ((EaseRecyclerView.RecyclerViewContextMenuInfo) item).position;
+        EaseUser user = mAdapter.getItem(position);
+        switch (item.getItemId()) {
+            case R.id.action_friend_delete ://删除好友
+                mViewModel.deleteContact(user.getUsername());
+                break;
+            case R.id.action_friend_block ://加入黑名单
+                mViewModel.addUserToBlackList(user.getUsername(), false);
+                break;
+        }
+        return super.onContextItemSelected(item);
     }
 
     @Override
@@ -129,6 +156,15 @@ public class FriendsFragment extends BaseInitFragment implements View.OnClickLis
                 }
             });
 
+        });
+
+        mViewModel.resultObservable().observe(this, response -> {
+            parseResource(response, new OnResourceParseCallback<Boolean>() {
+                @Override
+                public void onSuccess(Boolean data) {
+                    mViewModel.loadContactList();
+                }
+            });
         });
         mViewModel.loadContactList();
     }
