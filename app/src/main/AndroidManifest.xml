@@ -72,6 +72,7 @@
         android:supportsRtl="true"
         android:usesNonSdkApi="true"
         android:name=".DemoApp"
+        android:requestLegacyExternalStorage="false"
         android:theme="@style/AppTheme">
 
         <!--android 9.0要求-->
