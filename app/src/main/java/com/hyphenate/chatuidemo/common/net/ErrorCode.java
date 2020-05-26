@@ -53,6 +53,12 @@ public class ErrorCode extends EMError {
     public static final int EM_FRIEND_BLACK_ERROR = -102;
 
     /**
+     * 没有群组成员
+     */
+    public static final int EM_ERR_GROUP_NO_MEMBERS = -105;
+
+
+    /**
      * 删除对话失败
      */
     public static final int EM_DELETE_CONVERSATION_ERROR = -110;
@@ -69,6 +75,7 @@ public class ErrorCode extends EMError {
         EM_ADD_SELF_ERROR(ErrorCode.EM_ADD_SELF_ERROR, R.string.em_add_self_error),
         EM_FRIEND_ERROR(ErrorCode.EM_FRIEND_ERROR, R.string.em_friend_error),
         EM_FRIEND_BLACK_ERROR(ErrorCode.EM_FRIEND_BLACK_ERROR, R.string.em_friend_black_error),
+        EM_ERR_GROUP_NO_MEMBERS(ErrorCode.EM_ERR_GROUP_NO_MEMBERS, R.string.em_error_group_no_members),
         EM_DELETE_CONVERSATION_ERROR(ErrorCode.EM_DELETE_CONVERSATION_ERROR, R.string.em_delete_conversation_error),
         EM_DELETE_SYS_MSG_ERROR(ErrorCode.EM_DELETE_SYS_MSG_ERROR, R.string.em_delete_sys_msg_error),
         UNKNOWN_ERROR(-9999, 0);

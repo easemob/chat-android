@@ -5,29 +5,31 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
-import android.widget.CompoundButton;
 import android.widget.TextView;
 
+import androidx.annotation.Nullable;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.hyphenate.chat.EMConversation;
 import com.hyphenate.chat.EMGroup;
 import com.hyphenate.chatuidemo.DemoHelper;
 import com.hyphenate.chatuidemo.R;
+import com.hyphenate.chatuidemo.common.DemoConstant;
 import com.hyphenate.chatuidemo.common.interfaceOrImplement.OnResourceParseCallback;
+import com.hyphenate.chatuidemo.common.livedatas.MessageChangeLiveData;
 import com.hyphenate.chatuidemo.common.widget.ArrowItemView;
 import com.hyphenate.chatuidemo.common.widget.SwitchItemView;
 import com.hyphenate.chatuidemo.section.base.BaseInitActivity;
 import com.hyphenate.chatuidemo.section.dialog.EditTextDialogFragment;
 import com.hyphenate.chatuidemo.section.group.fragment.GroupEditFragment;
 import com.hyphenate.chatuidemo.section.group.viewmodels.GroupDetailViewModel;
+import com.hyphenate.easeui.model.EaseEvent;
 import com.hyphenate.easeui.utils.EaseCommonUtils;
 import com.hyphenate.easeui.widget.EaseImageView;
 import com.hyphenate.easeui.widget.EaseTitleBar;
 
-import java.util.List;
-
 public class GroupDetailActivity extends BaseInitActivity implements EaseTitleBar.OnBackPressListener, View.OnClickListener, SwitchItemView.OnCheckedChangeListener {
+    private static final int REQUEST_CODE_ADD_USER = 0;
     private EaseTitleBar titleBar;
     private EaseImageView ivGroupAvatar;
     private TextView tvGroupName;
@@ -143,6 +145,20 @@ public class GroupDetailActivity extends BaseInitActivity implements EaseTitleBa
                 }
             });
         });
+        viewModel.getMessageChangeObservable().observe(this, event -> {
+            if(event.isGroupChange()) {
+                loadGroup();
+            }
+        });
+        viewModel.getLeaveGroupObservable().observe(this, response -> {
+            parseResource(response, new OnResourceParseCallback<Boolean>() {
+                @Override
+                public void onSuccess(Boolean data) {
+                    finish();
+                    MessageChangeLiveData.getInstance().postValue(EaseEvent.create(DemoConstant.GROUP_CHANGE, EaseEvent.TYPE.GROUP_LEAVE));
+                }
+            });
+        });
         loadGroup();
     }
 
@@ -154,10 +170,10 @@ public class GroupDetailActivity extends BaseInitActivity implements EaseTitleBa
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.tv_group_member_title :// 群成员
-                showToast("跳转到群成员");
+                GroupMemberTypeActivity.actionStart(mContext, groupId, isOwner());
                 break;
             case R.id.tv_group_invite ://邀请群成员
-                showToast("邀请群成员");
+                GroupPickContactsActivity.actionStartForResult(mContext, groupId, isOwner(), REQUEST_CODE_ADD_USER);
                 break;
             case R.id.item_group_name ://群名称
                 showGroupNameDialog();
@@ -175,13 +191,17 @@ public class GroupDetailActivity extends BaseInitActivity implements EaseTitleBa
                 showToast("查找聊天记录");
                 break;
             case R.id.tv_group_refund ://退出群组
-                showToast("退出群组");
+                if(isOwner()) {
+                    viewModel.destroyGroup(groupId);
+                }else {
+                    viewModel.leaveGroup(groupId);
+                }
                 break;
         }
     }
 
     @Override
-    public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+    public void onCheckedChanged(SwitchItemView buttonView, boolean isChecked) {
         switch (buttonView.getId()) {
             case R.id.item_group_not_disturb ://消息免打扰
                 showToast("消息免打扰");
@@ -235,6 +255,18 @@ public class GroupDetailActivity extends BaseInitActivity implements EaseTitleBa
     }
 
     @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if(resultCode == RESULT_OK) {
+            switch (resultCode) {
+                case REQUEST_CODE_ADD_USER :
+                    loadGroup();
+                    break;
+            }
+        }
+    }
+
+    @Override
     public void onBackPress(View view) {
         onBackPressed();
     }
@@ -244,7 +276,7 @@ public class GroupDetailActivity extends BaseInitActivity implements EaseTitleBa
      * @return
      */
     private boolean isCanInvite() {
-        return group.isMemberAllowToInvite() || isOwner() || isAdmin();
+        return GroupHelper.isCanInvite(group);
     }
 
     /**
@@ -252,13 +284,7 @@ public class GroupDetailActivity extends BaseInitActivity implements EaseTitleBa
      * @return
      */
     private boolean isAdmin() {
-        synchronized (GroupDetailActivity.this) {
-            List<String> adminList = group.getAdminList();
-            if(adminList != null && !adminList.isEmpty()) {
-                return adminList.contains(DemoHelper.getInstance().getCurrentUser());
-            }
-        }
-        return false;
+        return GroupHelper.isAdmin(group);
     }
 
     /**
@@ -266,10 +292,6 @@ public class GroupDetailActivity extends BaseInitActivity implements EaseTitleBa
      * @return
      */
     private boolean isOwner() {
-        if(group == null ||
-                TextUtils.isEmpty(group.getOwner())) {
-            return false;
-        }
-        return TextUtils.equals(group.getOwner(), DemoHelper.getInstance().getCurrentUser());
+        return GroupHelper.isOwner(group);
     }
 }

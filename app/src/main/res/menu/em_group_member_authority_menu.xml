@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item
+        android:id="@+id/action_group_member"
+        android:orderInCategory="100"
+        android:visible="false"
+        android:title="@string/em_authority_menu_member_list"
+        app:showAsAction="never"/>
+
+    <item
+        android:id="@+id/action_group_black"
+        android:orderInCategory="100"
+        android:visible="false"
+        android:title="@string/em_authority_menu_black_list"
+        app:showAsAction="never"/>
+
+    <item
+        android:id="@+id/action_group_mute"
+        android:orderInCategory="100"
+        android:visible="false"
+        android:title="@string/em_authority_menu_mute_list"
+        app:showAsAction="never"/>
+
+    <item
+        android:id="@+id/action_group_add"
+        android:orderInCategory="100"
+        android:visible="false"
+        android:title="@string/em_authority_menu_add_contact"
+        app:showAsAction="never"/>
+
+</menu>

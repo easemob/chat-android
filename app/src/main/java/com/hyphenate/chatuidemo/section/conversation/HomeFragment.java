@@ -29,6 +29,7 @@ import com.hyphenate.chatuidemo.section.chat.viewmodel.MessageViewModel;
 import com.hyphenate.chatuidemo.section.conversation.adapter.HomeAdapter;
 import com.hyphenate.chatuidemo.section.conversation.viewmodel.HomeViewModel;
 import com.hyphenate.easeui.interfaces.OnItemClickListener;
+import com.hyphenate.easeui.model.EaseEvent;
 import com.hyphenate.easeui.utils.EaseCommonUtils;
 import com.hyphenate.easeui.widget.EaseRecyclerView;
 import com.hyphenate.easeui.widget.EaseSearchTextView;
@@ -178,7 +179,7 @@ public class HomeFragment extends BaseInitFragment implements OnRefreshListener,
             if(change == null) {
                 return;
             }
-            if(mContext.isMessageChange(change) || mContext.isNotify(change)) {
+            if(change.isMessgeChange() || change.isNotifyChange() || change.isGroupLeave()) {
                 mViewModel.loadConversationList();
             }
         });

@@ -1,11 +1,13 @@
 package com.hyphenate.chatuidemo.common.livedatas;
 
+import com.hyphenate.easeui.model.EaseEvent;
+
 import androidx.lifecycle.MutableLiveData;
 
 /**
  * 检测会话变化
  */
-public class MessageChangeLiveData extends MutableLiveData<String> {
+public class MessageChangeLiveData extends MutableLiveData<EaseEvent> {
 
     private static MessageChangeLiveData instance;
     private MessageChangeLiveData(){}

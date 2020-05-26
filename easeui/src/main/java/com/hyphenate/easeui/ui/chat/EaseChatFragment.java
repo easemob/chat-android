@@ -56,6 +56,7 @@ import com.hyphenate.easeui.interfaces.IViewHolderProvider;
 import com.hyphenate.easeui.interfaces.MessageListItemClickListener;
 import com.hyphenate.easeui.model.EaseAtMessageHelper;
 import com.hyphenate.easeui.model.EaseCompat;
+import com.hyphenate.easeui.model.EaseEvent;
 import com.hyphenate.easeui.ui.EaseBaiduMapActivity;
 import com.hyphenate.easeui.ui.base.EaseBaseFragment;
 import com.hyphenate.easeui.utils.EaseCommonUtils;
@@ -372,7 +373,8 @@ public class EaseChatFragment extends EaseBaseFragment implements View.OnClickLi
     @Override
     public void onSuccess() {
         if(messageChangeListener != null) {
-            messageChangeListener.onMessageChange(EaseConstant.MESSAGE_CHANGE_SEND_SUCCESS);
+            EaseEvent event = EaseEvent.create(EaseConstant.MESSAGE_CHANGE_SEND_SUCCESS, EaseEvent.TYPE.MESSAGE);
+            messageChangeListener.onMessageChange(event);
         }
         EMLog.i(TAG, "send message success");
         refreshMessages();
@@ -384,7 +386,8 @@ public class EaseChatFragment extends EaseBaseFragment implements View.OnClickLi
     @Override
     public void onError(int code, String error) {
         if(messageChangeListener != null) {
-            messageChangeListener.onMessageChange(EaseConstant.MESSAGE_CHANGE_SEND_ERROR);
+            EaseEvent event = EaseEvent.create(EaseConstant.MESSAGE_CHANGE_SEND_ERROR, EaseEvent.TYPE.MESSAGE);
+            messageChangeListener.onMessageChange(event);
         }
         EMLog.i(TAG, "send message error = "+error);
         refreshMessages();
@@ -396,7 +399,8 @@ public class EaseChatFragment extends EaseBaseFragment implements View.OnClickLi
     @Override
     public void onProgress(int progress, String status) {
         if(messageChangeListener != null) {
-            messageChangeListener.onMessageChange(EaseConstant.MESSAGE_CHANGE_SEND_PROGRESS);
+            EaseEvent event = EaseEvent.create(EaseConstant.MESSAGE_CHANGE_SEND_PROGRESS, EaseEvent.TYPE.MESSAGE);
+            messageChangeListener.onMessageChange(event);
         }
         EMLog.i(TAG, "send message on progress");
         refreshMessages();
@@ -409,7 +413,8 @@ public class EaseChatFragment extends EaseBaseFragment implements View.OnClickLi
     @Override
     public void onMessageReceived(List<EMMessage> messages) {
         if(messageChangeListener != null) {
-            messageChangeListener.onMessageChange(EaseConstant.MESSAGE_CHANGE_RECEIVE);
+            EaseEvent event = EaseEvent.create(EaseConstant.MESSAGE_CHANGE_RECEIVE, EaseEvent.TYPE.MESSAGE);
+            messageChangeListener.onMessageChange(event);
         }
         boolean refresh = false;
         for (EMMessage message : messages) {
@@ -480,7 +485,8 @@ public class EaseChatFragment extends EaseBaseFragment implements View.OnClickLi
     @Override
     public void onMessageRecalled(List<EMMessage> messages) {
         if(messageChangeListener != null) {
-            messageChangeListener.onMessageChange(EaseConstant.MESSAGE_CHANGE_RECALL);
+            EaseEvent event = EaseEvent.create(EaseConstant.MESSAGE_CHANGE_RECALL, EaseEvent.TYPE.MESSAGE);
+            messageChangeListener.onMessageChange(event);
         }
         refreshMessages();
     }
@@ -493,7 +499,7 @@ public class EaseChatFragment extends EaseBaseFragment implements View.OnClickLi
     @Override
     public void onMessageChanged(EMMessage message, Object change) {
         if(messageChangeListener != null) {
-            messageChangeListener.onMessageChange(EaseConstant.MESSAGE_CHANGE_CHANGE);
+            messageChangeListener.onMessageChange(EaseEvent.create(EaseConstant.MESSAGE_CHANGE_CHANGE, EaseEvent.TYPE.MESSAGE));
         }
         refreshMessages();
     }
@@ -588,7 +594,7 @@ public class EaseChatFragment extends EaseBaseFragment implements View.OnClickLi
         if(messageChangeListener != null) {
             int count = conversation.getUnreadMsgCount();
             if(count > 0) {
-                messageChangeListener.onMessageChange(EaseConstant.CONVERSATION_READ);
+                messageChangeListener.onMessageChange(EaseEvent.create(EaseConstant.CONVERSATION_READ, EaseEvent.TYPE.MESSAGE));
             }
         }
 
@@ -700,7 +706,7 @@ public class EaseChatFragment extends EaseBaseFragment implements View.OnClickLi
      * 用于监听消息的变化，发送消息及接收消息
      */
     public interface OnMessageChangeListener {
-        void onMessageChange(String change);
+        void onMessageChange(EaseEvent change);
     }
 
     public void setIChatTitleProvider(IChatTitleProvider titleProvider) {

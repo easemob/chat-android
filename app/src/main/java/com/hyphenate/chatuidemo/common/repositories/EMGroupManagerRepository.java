@@ -17,6 +17,7 @@ import com.hyphenate.chatuidemo.common.db.entity.EmUserEntity;
 import com.hyphenate.chatuidemo.common.interfaceOrImplement.ResultCallBack;
 import com.hyphenate.chatuidemo.common.net.ErrorCode;
 import com.hyphenate.chatuidemo.common.net.Resource;
+import com.hyphenate.chatuidemo.common.utils.ThreadManager;
 import com.hyphenate.easeui.domain.EaseUser;
 import com.hyphenate.easeui.utils.EaseCommonUtils;
 import com.hyphenate.exceptions.HyphenateException;
@@ -105,8 +106,85 @@ public class EMGroupManagerRepository extends BaseEMRepository{
         }.asLiveData();
     }
 
+    public LiveData<Resource<List<String>>> getGroupMembersByName(String groupId) {
+        return new NetworkOnlyResource<List<String>>() {
+
+            @Override
+            protected void createCall(@NonNull ResultCallBack<LiveData<List<String>>> callBack) {
+                if(!isLoggedIn()) {
+                    callBack.onError(ErrorCode.EM_NOT_LOGIN);
+                    return;
+                }
+                DemoHelper.getInstance().getGroupManager().asyncGetGroupFromServer(groupId, new EMValueCallBack<EMGroup>() {
+                    @Override
+                    public void onSuccess(EMGroup value) {
+                        List<String> members = value.getMembers();
+                        if(members.size() < (value.getMemberCount() - value.getAdminList().size() - 1)) {
+                            members = getAllGroupMemberByServer(groupId);
+                        }
+                        members.addAll(value.getAdminList());
+                        members.add(value.getOwner());
+                        if(!members.isEmpty()) {
+                            callBack.onSuccess(createLiveData(members));
+                        }else {
+                            callBack.onError(ErrorCode.EM_ERR_GROUP_NO_MEMBERS);
+                        }
+                    }
+
+                    @Override
+                    public void onError(int error, String errorMsg) {
+                        callBack.onError(error, errorMsg);
+                    }
+                });
+            }
+
+        }.asLiveData();
+    }
+
     /**
-     * 获取群组成员列表
+     * 获取群组成员列表(包含管理员和群主)
+     * @param groupId
+     * @return
+     */
+    public LiveData<Resource<List<EaseUser>>> getGroupAllMembers(String groupId) {
+        return new NetworkOnlyResource<List<EaseUser>>() {
+
+            @Override
+            protected void createCall(@NonNull ResultCallBack<LiveData<List<EaseUser>>> callBack) {
+                if(!isLoggedIn()) {
+                    callBack.onError(ErrorCode.EM_NOT_LOGIN);
+                    return;
+                }
+                DemoHelper.getInstance().getGroupManager().asyncGetGroupFromServer(groupId, new EMValueCallBack<EMGroup>() {
+                    @Override
+                    public void onSuccess(EMGroup value) {
+                        List<String> members = value.getMembers();
+                        if(members.size() < (value.getMemberCount() - value.getAdminList().size() - 1)) {
+                            members = getAllGroupMemberByServer(groupId);
+                        }
+                        members.addAll(value.getAdminList());
+                        members.add(value.getOwner());
+                        if(!members.isEmpty()) {
+                            List<EaseUser> users = EmUserEntity.parse(members);
+                            sortUserData(users);
+                            callBack.onSuccess(createLiveData(users));
+                        }else {
+                            callBack.onError(ErrorCode.EM_ERR_GROUP_NO_MEMBERS);
+                        }
+                    }
+
+                    @Override
+                    public void onError(int error, String errorMsg) {
+                        callBack.onError(error, errorMsg);
+                    }
+                });
+            }
+
+        }.asLiveData();
+    }
+
+    /**
+     * 获取群组成员列表(不包含管理员和群主)
      * @param groupId
      * @return
      */
@@ -123,16 +201,14 @@ public class EMGroupManagerRepository extends BaseEMRepository{
                     @Override
                     public void onSuccess(EMGroup value) {
                         List<String> members = value.getMembers();
-                        if(members.size() < value.getMemberCount()) {
+                        Log.e("TAG", "memberCount = "+value.getMemberCount());
+                        if(members.size() < (value.getMemberCount() - value.getAdminList().size() - 1)) {
                             members = getAllGroupMemberByServer(groupId);
                         }
-                        members.addAll(value.getAdminList());
-                        members.add(value.getOwner());
-                        if(!members.isEmpty()) {
-                            List<EaseUser> users = EmUserEntity.parse(members);
-                            sortUserData(users);
-                            callBack.onSuccess(createLiveData(users));
-                        }
+                        List<EaseUser> users = EmUserEntity.parse(members);
+                        sortUserData(users);
+                        callBack.onSuccess(createLiveData(users));
+
                     }
 
                     @Override
@@ -155,20 +231,25 @@ public class EMGroupManagerRepository extends BaseEMRepository{
 
             @Override
             protected void createCall(@NonNull ResultCallBack<LiveData<Map<String, Long>>> callBack) {
-                Map<String, Long> map = null;
-                Map<String, Long> result = new HashMap<>();
-                int pageSize = 200;
-                do{
-                    try {
-                        map = getGroupManager().fetchGroupMuteList(groupId, 0, pageSize);
-                    } catch (HyphenateException e) {
-                        e.printStackTrace();
-                    }
-                    if(map != null) {
-                        result.putAll(map);
-                    }
-                }while (map == null || map.isEmpty() || map.size() < 200);
-                callBack.onSuccess(createLiveData(result));
+                ThreadManager.getInstance().runOnIOThread(() -> {
+                    Map<String, Long> map = null;
+                    Map<String, Long> result = new HashMap<>();
+                    int pageSize = 200;
+                    do{
+                        try {
+                            map = getGroupManager().fetchGroupMuteList(groupId, 0, pageSize);
+                        } catch (HyphenateException e) {
+                            e.printStackTrace();
+                            callBack.onError(e.getErrorCode(), e.getMessage());
+                            break;
+                        }
+                        if(map != null) {
+                            result.putAll(map);
+                        }
+                    }while (map != null && map.size() >= 200);
+                    callBack.onSuccess(createLiveData(result));
+                });
+
             }
 
         }.asLiveData();
@@ -184,20 +265,25 @@ public class EMGroupManagerRepository extends BaseEMRepository{
 
             @Override
             protected void createCall(@NonNull ResultCallBack<LiveData<List<String>>> callBack) {
-                List<String> list = null;
-                List<String> result = new ArrayList<>();
-                int pageSize = 200;
-                do{
-                    try {
-                        list = getGroupManager().fetchGroupBlackList(groupId, 0, pageSize);
-                    } catch (HyphenateException e) {
-                        e.printStackTrace();
-                    }
-                    if(list != null) {
-                        result.addAll(list);
-                    }
-                }while (list == null || list.isEmpty() || list.size() < 200);
-                callBack.onSuccess(createLiveData(result));
+                ThreadManager.getInstance().runOnIOThread(() -> {
+                    List<String> list = null;
+                    List<String> result = new ArrayList<>();
+                    int pageSize = 200;
+                    do{
+                        try {
+                            list = getGroupManager().fetchGroupBlackList(groupId, 0, pageSize);
+                        } catch (HyphenateException e) {
+                            e.printStackTrace();
+                            callBack.onError(e.getErrorCode(), e.getMessage());
+                            break;
+                        }
+                        if(list != null) {
+                            result.addAll(list);
+                        }
+                    }while (list != null && list.size() >= 200);
+                    callBack.onSuccess(createLiveData(result));
+                });
+
             }
 
         }.asLiveData();
@@ -359,6 +445,12 @@ public class EMGroupManagerRepository extends BaseEMRepository{
         }.asLiveData();
     }
 
+    /**
+     * 设置群公告
+     * @param groupId
+     * @param announcement
+     * @return
+     */
     public LiveData<Resource<String>> setGroupAnnouncement(String groupId, String announcement) {
         return new NetworkOnlyResource<String>() {
             @Override
@@ -366,7 +458,6 @@ public class EMGroupManagerRepository extends BaseEMRepository{
                 getGroupManager().asyncUpdateGroupAnnouncement(groupId, announcement, new EMCallBack() {
                     @Override
                     public void onSuccess() {
-                        Log.e("TAG", "setGroupAnnouncement success");
                         callBack.onSuccess(createLiveData(announcement));
                     }
 
@@ -384,6 +475,12 @@ public class EMGroupManagerRepository extends BaseEMRepository{
         }.asLiveData();
     }
 
+    /**
+     * 设置群描述
+     * @param groupId
+     * @param description
+     * @return
+     */
     public LiveData<Resource<String>> setGroupDescription(String groupId, String description) {
         return new NetworkOnlyResource<String>() {
             @Override
@@ -506,6 +603,329 @@ public class EMGroupManagerRepository extends BaseEMRepository{
             @Override
             protected void createCall(@NonNull ResultCallBack<LiveData<Boolean>> callBack) {
                 getGroupManager().asyncUploadGroupSharedFile(groupId, filePath, new EMCallBack() {
+                    @Override
+                    public void onSuccess() {
+                        callBack.onSuccess(createLiveData(true));
+                    }
+
+                    @Override
+                    public void onError(int code, String error) {
+                        callBack.onError(code, error);
+                    }
+
+                    @Override
+                    public void onProgress(int progress, String status) {
+
+                    }
+                });
+            }
+        }.asLiveData();
+    }
+
+    /**
+     * 邀请群成员
+     * @param isOwner
+     * @param groupId
+     * @param members
+     * @return
+     */
+    public LiveData<Resource<Boolean>> addMembers(boolean isOwner, String groupId, String[] members) {
+        return new NetworkOnlyResource<Boolean>() {
+            @Override
+            protected void createCall(@NonNull ResultCallBack<LiveData<Boolean>> callBack) {
+                if(isOwner) {
+                    getGroupManager().asyncAddUsersToGroup(groupId, members, new EMCallBack() {
+                        @Override
+                        public void onSuccess() {
+                            callBack.onSuccess(createLiveData(true));
+                        }
+
+                        @Override
+                        public void onError(int code, String error) {
+                            callBack.onError(code, error);
+                        }
+
+                        @Override
+                        public void onProgress(int progress, String status) {
+
+                        }
+                    });
+                }else {
+                    getGroupManager().asyncInviteUser(groupId, members, null, new EMCallBack() {
+                        @Override
+                        public void onSuccess() {
+                            callBack.onSuccess(createLiveData(true));
+                        }
+
+                        @Override
+                        public void onError(int code, String error) {
+                            callBack.onError(code, error);
+                        }
+
+                        @Override
+                        public void onProgress(int progress, String status) {
+
+                        }
+                    });
+                }
+            }
+        }.asLiveData();
+    }
+
+    /**
+     * 移交群主权限
+     * @param groupId
+     * @param username
+     * @return
+     */
+    public LiveData<Resource<Boolean>> changeOwner(String groupId, String username) {
+        return new NetworkOnlyResource<Boolean>() {
+            @Override
+            protected void createCall(@NonNull ResultCallBack<LiveData<Boolean>> callBack) {
+                getGroupManager().asyncChangeOwner(groupId, username, new EMValueCallBack<EMGroup>() {
+                    @Override
+                    public void onSuccess(EMGroup value) {
+                        callBack.onSuccess(createLiveData(true));
+                    }
+
+                    @Override
+                    public void onError(int error, String errorMsg) {
+                        callBack.onError(error, errorMsg);
+                    }
+                });
+            }
+        }.asLiveData();
+    }
+
+    /**
+     * 设为群管理员
+     * @param groupId
+     * @param username
+     * @return
+     */
+    public LiveData<Resource<Boolean>> addGroupAdmin(String groupId, String username) {
+        return new NetworkOnlyResource<Boolean>() {
+            @Override
+            protected void createCall(@NonNull ResultCallBack<LiveData<Boolean>> callBack) {
+                getGroupManager().asyncAddGroupAdmin(groupId, username, new EMValueCallBack<EMGroup>() {
+                    @Override
+                    public void onSuccess(EMGroup value) {
+                        callBack.onSuccess(createLiveData(true));
+                    }
+
+                    @Override
+                    public void onError(int error, String errorMsg) {
+                        callBack.onError(error, errorMsg);
+                    }
+                });
+            }
+        }.asLiveData();
+    }
+
+    /**
+     * 移除群管理员
+     * @param groupId
+     * @param username
+     * @return
+     */
+    public LiveData<Resource<Boolean>> removeGroupAdmin(String groupId, String username) {
+        return new NetworkOnlyResource<Boolean>() {
+            @Override
+            protected void createCall(@NonNull ResultCallBack<LiveData<Boolean>> callBack) {
+                getGroupManager().asyncRemoveGroupAdmin(groupId, username, new EMValueCallBack<EMGroup>() {
+                    @Override
+                    public void onSuccess(EMGroup value) {
+                        callBack.onSuccess(createLiveData(true));
+                    }
+
+                    @Override
+                    public void onError(int error, String errorMsg) {
+                        callBack.onError(error, errorMsg);
+                    }
+                });
+            }
+        }.asLiveData();
+    }
+
+    /**
+     * 移出群
+     * @param groupId
+     * @param username
+     * @return
+     */
+    public LiveData<Resource<Boolean>> removeUserFromGroup(String groupId, String username) {
+        return new NetworkOnlyResource<Boolean>() {
+            @Override
+            protected void createCall(@NonNull ResultCallBack<LiveData<Boolean>> callBack) {
+                getGroupManager().asyncRemoveUserFromGroup(groupId, username, new EMCallBack() {
+                    @Override
+                    public void onSuccess() {
+                        callBack.onSuccess(createLiveData(true));
+                    }
+
+                    @Override
+                    public void onError(int code, String error) {
+                        callBack.onError(code, error);
+                    }
+
+                    @Override
+                    public void onProgress(int progress, String status) {
+
+                    }
+                });
+            }
+        }.asLiveData();
+    }
+
+    /**
+     * 添加到群黑名单
+     * @param groupId
+     * @param username
+     * @return
+     */
+    public LiveData<Resource<Boolean>> blockUser(String groupId, String username) {
+        return new NetworkOnlyResource<Boolean>() {
+            @Override
+            protected void createCall(@NonNull ResultCallBack<LiveData<Boolean>> callBack) {
+                getGroupManager().asyncBlockUser(groupId, username, new EMCallBack() {
+                    @Override
+                    public void onSuccess() {
+                        callBack.onSuccess(createLiveData(true));
+                    }
+
+                    @Override
+                    public void onError(int code, String error) {
+                        callBack.onError(code, error);
+                    }
+
+                    @Override
+                    public void onProgress(int progress, String status) {
+
+                    }
+                });
+            }
+        }.asLiveData();
+    }
+
+    /**
+     * 移出群黑名单
+     * @param groupId
+     * @param username
+     * @return
+     */
+    public LiveData<Resource<Boolean>> unblockUser(String groupId, String username) {
+        return new NetworkOnlyResource<Boolean>() {
+            @Override
+            protected void createCall(@NonNull ResultCallBack<LiveData<Boolean>> callBack) {
+                getGroupManager().asyncUnblockUser(groupId, username, new EMCallBack() {
+                    @Override
+                    public void onSuccess() {
+                        callBack.onSuccess(createLiveData(true));
+                    }
+
+                    @Override
+                    public void onError(int code, String error) {
+                        callBack.onError(code, error);
+                    }
+
+                    @Override
+                    public void onProgress(int progress, String status) {
+
+                    }
+                });
+            }
+        }.asLiveData();
+    }
+
+    /**
+     * 禁言
+     * @param groupId
+     * @param usernames
+     * @return
+     */
+    public LiveData<Resource<Boolean>> muteGroupMembers(String groupId, List<String> usernames, long duration) {
+        return new NetworkOnlyResource<Boolean>() {
+            @Override
+            protected void createCall(@NonNull ResultCallBack<LiveData<Boolean>> callBack) {
+                getGroupManager().aysncMuteGroupMembers(groupId, usernames, duration, new EMValueCallBack<EMGroup>() {
+                    @Override
+                    public void onSuccess(EMGroup value) {
+                        callBack.onSuccess(createLiveData(true));
+                    }
+
+                    @Override
+                    public void onError(int error, String errorMsg) {
+                        callBack.onError(error, errorMsg);
+                    }
+                });
+            }
+        }.asLiveData();
+    }
+
+    /**
+     * 禁言
+     * @param groupId
+     * @param usernames
+     * @return
+     */
+    public LiveData<Resource<Boolean>> unMuteGroupMembers(String groupId, List<String> usernames) {
+        return new NetworkOnlyResource<Boolean>() {
+            @Override
+            protected void createCall(@NonNull ResultCallBack<LiveData<Boolean>> callBack) {
+                getGroupManager().asyncUnMuteGroupMembers(groupId, usernames, new EMValueCallBack<EMGroup>() {
+                    @Override
+                    public void onSuccess(EMGroup value) {
+                        callBack.onSuccess(createLiveData(true));
+                    }
+
+                    @Override
+                    public void onError(int error, String errorMsg) {
+                        callBack.onError(error, errorMsg);
+                    }
+                });
+            }
+        }.asLiveData();
+    }
+
+    /**
+     * 退群
+     * @param groupId
+     * @return
+     */
+    public LiveData<Resource<Boolean>> leaveGroup(String groupId) {
+        return new NetworkOnlyResource<Boolean>() {
+            @Override
+            protected void createCall(@NonNull ResultCallBack<LiveData<Boolean>> callBack) {
+                getGroupManager().asyncLeaveGroup(groupId, new EMCallBack() {
+                    @Override
+                    public void onSuccess() {
+                        callBack.onSuccess(createLiveData(true));
+                    }
+
+                    @Override
+                    public void onError(int code, String error) {
+                        callBack.onError(code, error);
+                    }
+
+                    @Override
+                    public void onProgress(int progress, String status) {
+
+                    }
+                });
+            }
+        }.asLiveData();
+    }
+
+    /**
+     * 解散群
+     * @param groupId
+     * @return
+     */
+    public LiveData<Resource<Boolean>> destroyGroup(String groupId) {
+        return new NetworkOnlyResource<Boolean>() {
+            @Override
+            protected void createCall(@NonNull ResultCallBack<LiveData<Boolean>> callBack) {
+                getGroupManager().asyncDestroyGroup(groupId, new EMCallBack() {
                     @Override
                     public void onSuccess() {
                         callBack.onSuccess(createLiveData(true));

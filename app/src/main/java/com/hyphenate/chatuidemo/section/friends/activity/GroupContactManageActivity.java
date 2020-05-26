@@ -59,6 +59,9 @@ public class GroupContactManageActivity extends BaseInitActivity implements Ease
         mVpGroupContact.setAdapter(adapter);
 
         GroupContactViewModel viewModel = new ViewModelProvider(mContext).get(GroupContactViewModel.class);
+        viewModel.getMessageObservable().observe(this, event -> {
+            viewModel.loadAllGroups();
+        });
         viewModel.loadAllGroups();
     }
 

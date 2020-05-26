@@ -19,6 +19,8 @@ import com.hyphenate.easeui.domain.EaseUser;
 import com.hyphenate.exceptions.HyphenateException;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 public class EMContactManagerRepository extends BaseEMRepository{
@@ -91,7 +93,9 @@ public class EMContactManagerRepository extends BaseEMRepository{
                         if(ids != null && !ids.isEmpty()) {
                             usernames.addAll(ids);
                         }
-                        callBack.onSuccess(createLiveData(EmUserEntity.parse(usernames)));
+                        List<EaseUser> easeUsers = EmUserEntity.parse(usernames);
+                        sortData(easeUsers);
+                        callBack.onSuccess(createLiveData(easeUsers));
 
                     } catch (HyphenateException e) {
                         e.printStackTrace();
@@ -107,6 +111,29 @@ public class EMContactManagerRepository extends BaseEMRepository{
             }
 
         }.asLiveData();
+    }
+
+    private void sortData(List<EaseUser> data) {
+        if(data == null || data.isEmpty()) {
+            return;
+        }
+        Collections.sort(data, new Comparator<EaseUser>() {
+
+            @Override
+            public int compare(EaseUser lhs, EaseUser rhs) {
+                if(lhs.getInitialLetter().equals(rhs.getInitialLetter())){
+                    return lhs.getNickname().compareTo(rhs.getNickname());
+                }else{
+                    if("#".equals(lhs.getInitialLetter())){
+                        return 1;
+                    }else if("#".equals(rhs.getInitialLetter())){
+                        return -1;
+                    }
+                    return lhs.getInitialLetter().compareTo(rhs.getInitialLetter());
+                }
+
+            }
+        });
     }
 
     /**

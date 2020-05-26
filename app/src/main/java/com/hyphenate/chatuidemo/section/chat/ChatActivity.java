@@ -24,6 +24,7 @@ import com.hyphenate.chatuidemo.section.group.ChatRoomDetailActivity;
 import com.hyphenate.chatuidemo.section.group.GroupDetailActivity;
 import com.hyphenate.easeui.constants.EaseConstant;
 import com.hyphenate.easeui.domain.EaseUser;
+import com.hyphenate.easeui.model.EaseEvent;
 import com.hyphenate.easeui.ui.chat.EaseChatFragment;
 import com.hyphenate.easeui.utils.EaseCommonUtils;
 import com.hyphenate.easeui.widget.EaseTitleBar;
@@ -123,9 +124,18 @@ public class ChatActivity extends BaseInitActivity implements EaseTitleBar.OnBac
                 @Override
                 public void onSuccess(Boolean data) {
                     finish();
-                    messageViewModel.setMessageChange(DemoConstant.CONVERSATION_DELETE);
+                    EaseEvent event = EaseEvent.create(DemoConstant.CONVERSATION_DELETE, EaseEvent.TYPE.MESSAGE);
+                    messageViewModel.setMessageChange(event);
                 }
             });
+        });
+        messageViewModel.getMessageChange().observe(this, event -> {
+            if(event == null) {
+                return;
+            }
+            if(event.isGroupLeave()) {
+                finish();
+            }
         });
     }
 

@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item
+        android:id="@+id/action_group_add_admin"
+        android:orderInCategory="100"
+        android:visible="false"
+        android:title="@string/em_authority_menu_add_admin"
+        app:showAsAction="ifRoom"/>
+
+    <item
+        android:id="@+id/action_group_remove_admin"
+        android:orderInCategory="100"
+        android:visible="false"
+        android:title="@string/em_authority_menu_remove_admin"
+        app:showAsAction="ifRoom"/>
+
+    <item
+        android:id="@+id/action_group_transfer_owner"
+        android:orderInCategory="100"
+        android:visible="false"
+        android:title="@string/em_authority_menu_transfer_owner"
+        app:showAsAction="ifRoom"/>
+
+    <item
+        android:id="@+id/action_group_remove_member"
+        android:orderInCategory="100"
+        android:visible="false"
+        android:title="@string/em_authority_menu_remove_member"
+        app:showAsAction="ifRoom"/>
+
+    <item
+        android:id="@+id/action_group_add_black"
+        android:orderInCategory="100"
+        android:visible="false"
+        android:title="@string/em_authority_menu_add_black"
+        app:showAsAction="ifRoom"/>
+
+    <item
+        android:id="@+id/action_group_remove_black"
+        android:orderInCategory="100"
+        android:visible="false"
+        android:title="@string/em_authority_menu_remove_black"
+        app:showAsAction="ifRoom"/>
+
+    <item
+        android:id="@+id/action_group_mute"
+        android:orderInCategory="100"
+        android:visible="false"
+        android:title="@string/em_authority_menu_mute"
+        app:showAsAction="ifRoom"/>
+
+    <item
+        android:id="@+id/action_group_unmute"
+        android:orderInCategory="100"
+        android:visible="false"
+        android:title="@string/em_authority_menu_unmute"
+        app:showAsAction="ifRoom"/>
+
+</menu>

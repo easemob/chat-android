@@ -138,7 +138,6 @@
                     app:layout_constraintTop_toBottomOf="@id/tv_group_member_title"
                     app:layout_constraintLeft_toLeftOf="parent"
                     app:layout_constraintRight_toRightOf="parent"
-                    android:layout_marginTop="@dimen/em_margin_10"
                     android:paddingLeft="@dimen/em_margin_20"
                     android:paddingStart="@dimen/em_margin_20"
                     android:text="@string/em_chat_group_invite_group_member"
