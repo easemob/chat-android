@@ -47,7 +47,7 @@ public abstract class EaseMessageAdapterDelegate<T, VH extends EaseChatRowViewHo
     }
 
     public boolean isMessageSender(EMMessage message) {
-        return message.direct() == EMMessage.Direct.SEND;
+        return message.direct() != EMMessage.Direct.RECEIVE;
     }
 
     @Override

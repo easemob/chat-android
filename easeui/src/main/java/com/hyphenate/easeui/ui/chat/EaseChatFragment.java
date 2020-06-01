@@ -18,6 +18,7 @@ import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
+import android.view.OrientationEventListener;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
@@ -52,6 +53,7 @@ import com.hyphenate.easeui.domain.EaseEmojicon;
 import com.hyphenate.easeui.domain.EaseUser;
 import com.hyphenate.easeui.interfaces.EaseChatRoomListener;
 import com.hyphenate.easeui.interfaces.EaseGroupListener;
+import com.hyphenate.easeui.interfaces.EaseMessageCallback;
 import com.hyphenate.easeui.interfaces.IChatAdapterProvider;
 import com.hyphenate.easeui.interfaces.IViewHolderProvider;
 import com.hyphenate.easeui.interfaces.MessageListItemClickListener;
@@ -204,6 +206,7 @@ public class EaseChatFragment extends EaseBaseFragment implements View.OnClickLi
         messageList.setOnTouchListener(this);
         inputMenu.getPrimaryMenu().getEditText().addTextChangedListener(this);
         setMessageClickListener();
+        setMessageCallbackListener();
         addGroupListener();
         addChatRoomListener();
         initChildListener();
@@ -217,6 +220,23 @@ public class EaseChatFragment extends EaseBaseFragment implements View.OnClickLi
         hideNickname();
         setTypingHandler();
         initChildData();
+    }
+
+    /**
+     * 设置消息发送回调监听
+     */
+    private void setMessageCallbackListener() {
+        EaseMessageCallback msgCallback = new EaseMessageCallback() {
+            @Override
+            public void onSuccess(EMMessage message, int position) {
+
+            }
+
+            @Override
+            public void onError(int code, String error) {
+                super.onError(code, error);
+            }
+        };
     }
 
     private void setMessageClickListener() {
@@ -1096,9 +1116,25 @@ public class EaseChatFragment extends EaseBaseFragment implements View.OnClickLi
         }else if(chatType == EaseConstant.CHATTYPE_CHATROOM){
             message.setChatType(EMMessage.ChatType.ChatRoom);
         }
-        message.setMessageStatusCallback(this);
         // send message
         EMClient.getInstance().chatManager().sendMessage(message);
+        message.setMessageStatusCallback(new EaseMessageCallback() {
+            @Override
+            public void onSuccess() {
+                super.onSuccess();
+                Log.e("TAG", "onSuccess()");
+            }
+
+            @Override
+            public void onSuccess(EMMessage message, int position) {
+                Log.e("TAG", "onSuccess(EMMessage message, int position)");
+            }
+
+            @Override
+            public void onError(int code, String error) {
+                super.onError(code, error);
+            }
+        });
         // refresh messages
         refreshMessages();
         SeekToPosition(conversation.getAllMessages().size() - 1);

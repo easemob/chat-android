@@ -62,4 +62,11 @@
         <attr name="chat_extend_menu_vertical_spacing" format="dimension"/>
     </declare-styleable>
 
+    <declare-styleable name="EaseChatMessageList">
+        <attr name="msgListMyBubbleBackground" format="reference"/>
+        <attr name="msgListOtherBubbleBackground" format="reference"/>
+        <attr name="msgListShowUserAvatar" format="boolean"/>
+        <attr name="msgListShowUserNick" format="boolean"/>
+    </declare-styleable>
+
 </resources>

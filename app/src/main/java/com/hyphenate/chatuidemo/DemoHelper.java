@@ -33,6 +33,7 @@ import com.hyphenate.chatuidemo.section.chat.receiver.CallReceiver;
 import com.hyphenate.easeui.EaseUI;
 import com.hyphenate.easeui.domain.EaseEmojicon;
 import com.hyphenate.easeui.domain.EaseEmojiconGroupEntity;
+import com.hyphenate.easeui.manager.EaseSetManager;
 import com.hyphenate.easeui.provider.EaseEmojiconInfoProvider;
 import com.hyphenate.easeui.provider.EaseSettingsProvider;
 import com.hyphenate.push.EMPushConfig;
@@ -67,19 +68,29 @@ public class DemoHelper {
     }
 
     public void init(Context context) {
+        //初始化IM SDK
+        initSDK(context);
+        // debug mode, you'd better set it to false, if you want release your App officially.
+        EMClient.getInstance().setDebugMode(true);
+        // set Call options
+        setCallOptions(context);
+        //初始化推送
+        initPush(context);
+        //注册call Receiver
+        initReceiver(context);
+        //初始化ease ui相关
+        initEaseUI(context);
+        //注册对话类型
+        registerConversationType();
+    }
+
+    private void initSDK(Context context) {
         // 根据项目需求对SDK进行配置
         EMOptions options = initChatOptions(context);
         // 初始化SDK
         EMClient.getInstance().init(context, options);
         // 记录本地标记，是否初始化过
         setSDKInit(true);
-        // debug mode, you'd better set it to false, if you want release your App officially.
-        EMClient.getInstance().setDebugMode(true);
-        // set Call options
-        setCallOptions(context);
-        initPush(context);
-        initReceiver(context);
-        initEaseUI(context);
     }
 
     private void initReceiver(Context context) {
@@ -88,6 +99,10 @@ public class DemoHelper {
             callReceiver = new CallReceiver();
         }
         context.registerReceiver(callReceiver, callFilter);
+    }
+
+    private void registerConversationType() {
+
     }
 
     /**
