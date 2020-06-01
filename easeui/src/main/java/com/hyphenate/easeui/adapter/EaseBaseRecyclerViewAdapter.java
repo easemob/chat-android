@@ -20,10 +20,11 @@ import java.util.List;
  * 作为RecyclerView Adapter的基类，有默认空白布局
  * 如果要修改默认布局可以采用以下两种方式：1、在app layout中新建ease_layout_default_no_data.xml覆盖。
  * 2、继承EaseBaseRecyclerViewAdapter后，重写getEmptyLayoutId()方法，返回自定义的布局即可。
+ * 3、{@link #VIEW_TYPE_EMPTY}建议设置成负值，以防占用{@link EaseAdapterDelegatesManager#addDelegate(EaseAdapterDelegate, String)}中相应的position
  * @param <T>
  */
 public abstract class EaseBaseRecyclerViewAdapter<T> extends EaseBaseAdapter<EaseBaseRecyclerViewAdapter.ViewHolder> {
-    private static final int VIEW_TYPE_EMPTY = 1;
+    private static final int VIEW_TYPE_EMPTY = -1;
     private static final int VIEW_TYPE_ITEM = 0;
     private OnItemClickListener mOnItemClickListener;
     private OnItemLongClickListener mOnItemLongClickListener;
