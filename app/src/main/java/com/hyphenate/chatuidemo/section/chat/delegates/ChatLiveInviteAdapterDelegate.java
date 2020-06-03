@@ -18,7 +18,6 @@ import static com.hyphenate.chat.EMMessage.Type.TXT;
 public class ChatLiveInviteAdapterDelegate extends EaseMessageAdapterDelegate<EMMessage, EaseChatRowViewHolder> {
     @Override
     public boolean isForViewType(EMMessage item, int position) {
-        mIsSender = isMessageSender(item);
         return item.getType() == TXT && !item.getStringAttribute(DemoConstant.EM_CONFERENCE_OP, "").equals("");
     }
 

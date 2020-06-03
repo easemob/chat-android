@@ -1,7 +1,6 @@
 package com.hyphenate.easeui.ui.chat.delegates;
 
-import android.util.Log;
-import android.view.LayoutInflater;
+import android.text.TextUtils;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -11,14 +10,10 @@ import com.hyphenate.easeui.interfaces.MessageListItemClickListener;
 import com.hyphenate.easeui.model.styles.EaseMessageListItemStyle;
 import com.hyphenate.easeui.viewholder.EaseChatRowViewHolder;
 import com.hyphenate.easeui.widget.chatrow.EaseChatRow;
-import com.hyphenate.easeui.adapter.EaseBaseRecyclerViewAdapter.ViewHolder;
-
-import androidx.recyclerview.widget.RecyclerView;
 
 public abstract class EaseMessageAdapterDelegate<T, VH extends EaseChatRowViewHolder> extends EaseAdapterDelegate<T, VH> {
     private MessageListItemClickListener mItemClickListener;
     private EaseMessageListItemStyle mItemStyle;
-    public boolean mIsSender;
 
     public EaseMessageAdapterDelegate() {
         this.mItemStyle = createDefaultItemStyle();
@@ -46,14 +41,14 @@ public abstract class EaseMessageAdapterDelegate<T, VH extends EaseChatRowViewHo
         return builder.build();
     }
 
-    public boolean isMessageSender(EMMessage message) {
-        return message.direct() != EMMessage.Direct.RECEIVE;
+    @Override
+    public VH onCreateViewHolder(ViewGroup parent, String tag) {
+        EaseChatRow view = getEaseChatRow(parent, isSender(tag));
+        return createViewHolder(view, mItemClickListener, mItemStyle);
     }
 
-    @Override
-    public VH onCreateViewHolder(ViewGroup parent) {
-        EaseChatRow view = getEaseChatRow(parent, mIsSender);
-        return createViewHolder(view, mItemClickListener, mItemStyle);
+    private boolean isSender(String tag) {
+        return !TextUtils.isEmpty(tag) && TextUtils.equals(tag, EMMessage.Direct.SEND.toString());
     }
 
     protected abstract EaseChatRow getEaseChatRow(ViewGroup parent, boolean isSender);

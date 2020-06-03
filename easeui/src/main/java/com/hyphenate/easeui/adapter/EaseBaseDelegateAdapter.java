@@ -8,7 +8,10 @@ import java.util.List;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.hyphenate.util.EMLog;
+
 public abstract class EaseBaseDelegateAdapter<T> extends EaseBaseRecyclerViewAdapter<T> {
+    private static final String TAG = "adapter";
     private EaseAdapterDelegatesManager delegatesManager;
 
     public EaseBaseDelegateAdapter() {
@@ -26,7 +29,7 @@ public abstract class EaseBaseDelegateAdapter<T> extends EaseBaseRecyclerViewAda
     }
 
     public EaseBaseDelegateAdapter addDelegate(EaseAdapterDelegate delegate, String tag) {
-        delegate.tag = tag;
+        delegate.setTag(tag);
         delegatesManager.addDelegate(delegate, tag);
         notifyDataSetChanged();
         return this;
@@ -59,6 +62,12 @@ public abstract class EaseBaseDelegateAdapter<T> extends EaseBaseRecyclerViewAda
     @Override
     public ViewHolder getViewHolder(ViewGroup parent, int viewType) {
         return delegatesManager.onCreateViewHolder(parent, viewType);
+    }
+
+    @Override
+    public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
+        super.onBindViewHolder(holder, position);
+        //已经通过super处理相应的onBindViewHolder的逻辑，此处不再处理
     }
 
     @Override

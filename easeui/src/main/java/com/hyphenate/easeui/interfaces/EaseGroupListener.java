@@ -97,4 +97,19 @@ public abstract class EaseGroupListener implements EMGroupChangeListener {
     public void onSharedFileDeleted(String groupId, String fileId) {
 
     }
+
+    @Override
+    public void onWhiteListAdded(String groupId, List<String> whitelist) {
+
+    }
+
+    @Override
+    public void onWhiteListRemoved(String groupId, List<String> whitelist) {
+
+    }
+
+    @Override
+    public void onAllMemberMuteStateChanged(String groupId, boolean isMuted) {
+
+    }
 }

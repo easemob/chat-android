@@ -49,4 +49,19 @@ public abstract class EaseChatRoomListener implements EMChatRoomChangeListener {
     public void onAnnouncementChanged(final String chatroomId, final String announcement) {
 
     }
+
+    @Override
+    public void onWhiteListAdded(String chatRoomId, List<String> whitelist) {
+
+    }
+
+    @Override
+    public void onWhiteListRemoved(String chatRoomId, List<String> whitelist) {
+
+    }
+
+    @Override
+    public void onAllMemberMuteStateChanged(String chatRoomId, boolean isMuted) {
+
+    }
 }

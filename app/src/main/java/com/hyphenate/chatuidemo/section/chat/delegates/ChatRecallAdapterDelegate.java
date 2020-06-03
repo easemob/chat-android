@@ -19,7 +19,6 @@ public class ChatRecallAdapterDelegate extends EaseMessageAdapterDelegate<EMMess
 
     @Override
     public boolean isForViewType(EMMessage item, int position) {
-        mIsSender = isMessageSender(item);
         return item.getType() == TXT && item.getBooleanAttribute(DemoConstant.MESSAGE_TYPE_RECALL, false);
     }
 

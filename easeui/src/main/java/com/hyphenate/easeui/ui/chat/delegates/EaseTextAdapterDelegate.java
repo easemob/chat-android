@@ -23,7 +23,6 @@ public class EaseTextAdapterDelegate extends EaseMessageAdapterDelegate<EMMessag
 
     @Override
     public boolean isForViewType(EMMessage item, int position) {
-        mIsSender = isMessageSender(item);
         return item.getType() == EMMessage.Type.TXT;
     }
 

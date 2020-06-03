@@ -24,7 +24,6 @@ public class EaseExpressionAdapterDelegate extends EaseMessageAdapterDelegate<EM
 
     @Override
     public boolean isForViewType(EMMessage item, int position) {
-        mIsSender = isMessageSender(item);
         return item.getType() == EMMessage.Type.TXT && item.getBooleanAttribute(EaseConstant.MESSAGE_ATTR_IS_BIG_EXPRESSION, false);
     }
 

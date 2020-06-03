@@ -706,6 +706,21 @@ public class ChatPresenter extends EaseChatPresenter {
         }
 
         @Override
+        public void onWhiteListAdded(String chatRoomId, List<String> whitelist) {
+
+        }
+
+        @Override
+        public void onWhiteListRemoved(String chatRoomId, List<String> whitelist) {
+
+        }
+
+        @Override
+        public void onAllMemberMuteStateChanged(String chatRoomId, boolean isMuted) {
+
+        }
+
+        @Override
         public void onAdminAdded(String chatRoomId, String admin) {
             setChatRoomEvent(chatRoomId, EaseEvent.TYPE.CHAT_ROOM);
         }

@@ -7,12 +7,10 @@ import android.view.ViewGroup;
 import com.hyphenate.easeui.adapter.EaseAdapterDelegate;
 import com.hyphenate.easeui.adapter.EaseBaseRecyclerViewAdapter;
 
-import androidx.recyclerview.widget.RecyclerView;
-
 public abstract class NewFriendsMsgDelegate<T, VH extends EaseBaseRecyclerViewAdapter.ViewHolder> extends EaseAdapterDelegate<T, VH> {
 
     @Override
-    public VH onCreateViewHolder(ViewGroup parent) {
+    public VH onCreateViewHolder(ViewGroup parent, String tag) {
         View view = LayoutInflater.from(parent.getContext()).inflate(getLayoutId(), parent, false);
         return createViewHolder(view);
     }

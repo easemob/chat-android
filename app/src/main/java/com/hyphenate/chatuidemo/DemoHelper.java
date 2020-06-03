@@ -33,9 +33,16 @@ import com.hyphenate.chatuidemo.section.chat.receiver.CallReceiver;
 import com.hyphenate.easeui.EaseUI;
 import com.hyphenate.easeui.domain.EaseEmojicon;
 import com.hyphenate.easeui.domain.EaseEmojiconGroupEntity;
-import com.hyphenate.easeui.manager.EaseSetManager;
+import com.hyphenate.easeui.manager.EaseConTypeSetManager;
 import com.hyphenate.easeui.provider.EaseEmojiconInfoProvider;
 import com.hyphenate.easeui.provider.EaseSettingsProvider;
+import com.hyphenate.easeui.ui.chat.delegates.EaseExpressionAdapterDelegate;
+import com.hyphenate.easeui.ui.chat.delegates.EaseFileAdapterDelegate;
+import com.hyphenate.easeui.ui.chat.delegates.EaseImageAdapterDelegate;
+import com.hyphenate.easeui.ui.chat.delegates.EaseLocationAdapterDelegate;
+import com.hyphenate.easeui.ui.chat.delegates.EaseTextAdapterDelegate;
+import com.hyphenate.easeui.ui.chat.delegates.EaseVideoAdapterDelegate;
+import com.hyphenate.easeui.ui.chat.delegates.EaseVoiceAdapterDelegate;
 import com.hyphenate.push.EMPushConfig;
 import com.hyphenate.push.EMPushHelper;
 import com.hyphenate.push.EMPushType;
@@ -101,8 +108,19 @@ public class DemoHelper {
         context.registerReceiver(callReceiver, callFilter);
     }
 
+    /**
+     *注册对话类型
+     */
     private void registerConversationType() {
-
+        EaseConTypeSetManager.getInstance()
+                .addConversationType(new EaseExpressionAdapterDelegate())   //自定义表情
+                .addConversationType(new EaseFileAdapterDelegate())         //文件
+                .addConversationType(new EaseImageAdapterDelegate())        //图片
+                .addConversationType(new EaseLocationAdapterDelegate())     //定位
+                .addConversationType(new EaseVideoAdapterDelegate())        //视频
+                .addConversationType(new EaseVoiceAdapterDelegate())        //声音
+                .addConversationType(new EaseTextAdapterDelegate())         //文本
+                .setDefaultConversionType(new EaseTextAdapterDelegate());   //文本
     }
 
     /**

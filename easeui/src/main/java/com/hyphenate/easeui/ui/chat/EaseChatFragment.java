@@ -18,7 +18,6 @@ import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
-import android.view.OrientationEventListener;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
@@ -29,7 +28,6 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.hyphenate.EMCallBack;
 import com.hyphenate.EMMessageListener;
@@ -38,44 +36,32 @@ import com.hyphenate.chat.EMChatRoom;
 import com.hyphenate.chat.EMClient;
 import com.hyphenate.chat.EMCmdMessageBody;
 import com.hyphenate.chat.EMConversation;
-import com.hyphenate.chat.EMCursorResult;
 import com.hyphenate.chat.EMGroup;
 import com.hyphenate.chat.EMImageMessageBody;
 import com.hyphenate.chat.EMMessage;
 import com.hyphenate.chat.EMTextMessageBody;
 import com.hyphenate.chat.adapter.EMAChatRoomManagerListener;
 import com.hyphenate.easeui.R;
-import com.hyphenate.easeui.adapter.EaseAdapterDelegate;
-import com.hyphenate.easeui.adapter.EaseBaseMessageAdapter;
 import com.hyphenate.easeui.adapter.EaseMessageAdapter;
 import com.hyphenate.easeui.constants.EaseConstant;
 import com.hyphenate.easeui.domain.EaseEmojicon;
 import com.hyphenate.easeui.domain.EaseUser;
 import com.hyphenate.easeui.interfaces.EaseChatRoomListener;
 import com.hyphenate.easeui.interfaces.EaseGroupListener;
-import com.hyphenate.easeui.interfaces.EaseMessageCallback;
-import com.hyphenate.easeui.interfaces.IChatAdapterProvider;
-import com.hyphenate.easeui.interfaces.IViewHolderProvider;
 import com.hyphenate.easeui.interfaces.MessageListItemClickListener;
+import com.hyphenate.easeui.manager.EaseConTypeSetManager;
 import com.hyphenate.easeui.model.EaseAtMessageHelper;
 import com.hyphenate.easeui.model.EaseCompat;
 import com.hyphenate.easeui.model.EaseEvent;
 import com.hyphenate.easeui.ui.EaseBaiduMapActivity;
 import com.hyphenate.easeui.ui.base.EaseBaseFragment;
-import com.hyphenate.easeui.ui.chat.delegates.EaseExpressionAdapterDelegate;
-import com.hyphenate.easeui.ui.chat.delegates.EaseFileAdapterDelegate;
-import com.hyphenate.easeui.ui.chat.delegates.EaseImageAdapterDelegate;
-import com.hyphenate.easeui.ui.chat.delegates.EaseLocationAdapterDelegate;
-import com.hyphenate.easeui.ui.chat.delegates.EaseMessageAdapterDelegate;
-import com.hyphenate.easeui.ui.chat.delegates.EaseTextAdapterDelegate;
-import com.hyphenate.easeui.ui.chat.delegates.EaseVideoAdapterDelegate;
-import com.hyphenate.easeui.ui.chat.delegates.EaseVoiceAdapterDelegate;
 import com.hyphenate.easeui.utils.EaseCommonUtils;
 import com.hyphenate.easeui.utils.EaseDingMessageHelper;
 import com.hyphenate.easeui.utils.EaseUserUtils;
 import com.hyphenate.easeui.widget.EaseAlertDialog;
 import com.hyphenate.easeui.widget.EaseChatExtendMenu;
 import com.hyphenate.easeui.widget.EaseChatInputMenu;
+import com.hyphenate.easeui.widget.EaseChatMessageList;
 import com.hyphenate.easeui.widget.EaseVoiceRecorderView;
 import com.hyphenate.util.EMLog;
 import com.hyphenate.util.PathUtil;
@@ -85,9 +71,9 @@ import java.io.FileOutputStream;
 import java.util.List;
 
 public class EaseChatFragment extends EaseBaseFragment implements View.OnClickListener,
-        SwipeRefreshLayout.OnRefreshListener, EaseChatInputMenu.ChatInputMenuListener,
+        EaseChatInputMenu.ChatInputMenuListener,
         EaseChatExtendMenu.EaseChatExtendMenuItemClickListener, MessageListItemClickListener,
-        EMCallBack, EMMessageListener, View.OnTouchListener, TextWatcher {
+        EMCallBack, EMMessageListener, TextWatcher, EaseChatMessageList.OnMessageListListener {
 
     private static final String TAG = EaseChatFragment.class.getSimpleName();
 
@@ -106,8 +92,7 @@ public class EaseChatFragment extends EaseBaseFragment implements View.OnClickLi
     protected static final int REQUEST_CODE_SELECT_FILE = 12;
 
     protected TextView tvErrorMsg;
-    protected SwipeRefreshLayout srlRefresh;
-    protected RecyclerView messageList;
+    protected EaseChatMessageList chatMessageList;
     protected EaseChatInputMenu inputMenu;
     protected EaseVoiceRecorderView voiceRecorderView;
 
@@ -124,7 +109,6 @@ public class EaseChatFragment extends EaseBaseFragment implements View.OnClickLi
      * 消息类别，SDK定义
      */
     protected String toChatUsername;
-    protected EaseMessageAdapter messageAdapter;
     protected File cameraFile;
     /**
      * chat conversation
@@ -143,7 +127,6 @@ public class EaseChatFragment extends EaseBaseFragment implements View.OnClickLi
     private GroupListener groupListener;
     private Handler typingHandler;
     protected OnMessageChangeListener messageChangeListener;
-    private List<EMMessage> currentMessages;
     private IChatTitleProvider titleProvider;//provide title to activity's title bar
 
     @Nullable
@@ -180,39 +163,29 @@ public class EaseChatFragment extends EaseBaseFragment implements View.OnClickLi
 
     private void initView() {
         tvErrorMsg = findViewById(R.id.tv_error_msg);
-        srlRefresh = findViewById(R.id.srl_refresh);
-        messageList = findViewById(R.id.message_list);
+        chatMessageList = findViewById(R.id.chat_message_list);
         inputMenu = findViewById(R.id.input_menu);
         voiceRecorderView = findViewById(R.id.voice_recorder);
-
+        //子类做初始化布局
         initChildView();
-
-        messageList.setLayoutManager(provideLayoutManager());
-        messageAdapter = new EaseMessageAdapter();
-        addMessageDelegates(messageAdapter);
-        addMoreMessageDelegates(messageAdapter);
-        messageAdapter.setFallbackDelegate(new EaseTextAdapterDelegate());
-        messageList.setAdapter(messageAdapter);
-
+        addMoreMessageDelegates(EaseConTypeSetManager.getInstance());
         initInputMenu();
-        addExtendInputMenu();
         mContext.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
     }
 
     private void initListener() {
         tvErrorMsg.setOnClickListener(this);
-        srlRefresh.setOnRefreshListener(this);
         inputMenu.setChatInputMenuListener(this);
-        messageList.setOnTouchListener(this);
         inputMenu.getPrimaryMenu().getEditText().addTextChangedListener(this);
+        chatMessageList.setOnMessageListListener(this);
         setMessageClickListener();
-        setMessageCallbackListener();
         addGroupListener();
         addChatRoomListener();
         initChildListener();
     }
 
     private void initData() {
+        chatMessageList.init(toChatUsername, chatType);
         initConversation();
         initChatType();
         sendForwardMsg();
@@ -222,26 +195,13 @@ public class EaseChatFragment extends EaseBaseFragment implements View.OnClickLi
         initChildData();
     }
 
-    /**
-     * 设置消息发送回调监听
-     */
-    private void setMessageCallbackListener() {
-        EaseMessageCallback msgCallback = new EaseMessageCallback() {
-            @Override
-            public void onSuccess(EMMessage message, int position) {
-
-            }
-
-            @Override
-            public void onError(int code, String error) {
-                super.onError(code, error);
-            }
-        };
+    protected void refreshMessages() {
+        chatMessageList.refreshMessages();
     }
 
     private void setMessageClickListener() {
-        if(messageAdapter != null) {
-            messageAdapter.setListItemClickListener(this);
+        if(chatMessageList != null) {
+            chatMessageList.setItemClickListener(this);
         }
     }
 
@@ -273,9 +233,32 @@ public class EaseChatFragment extends EaseBaseFragment implements View.OnClickLi
         }
     }
 
+    /**
+     * {@link EaseChatMessageList#setOnMessageListListener(EaseChatMessageList.OnMessageListListener)}
+     * @param v
+     * @param event
+     */
+    @Override
+    public void onTouch(View v, MotionEvent event) {
+        hideKeyboard();
+        inputMenu.hideExtendMenuContainer();
+    }
+
+    /**
+     * {@link EaseChatMessageList#setOnMessageListListener(EaseChatMessageList.OnMessageListListener)}
+     */
     @Override
     public void onRefresh() {
-        loadMoreMessages(PAGE_SIZE, isRoaming);
+        chatMessageList.loadMoreMessages(PAGE_SIZE, isRoaming);
+    }
+
+    /**
+     * {@link EaseChatMessageList#setOnMessageListListener(EaseChatMessageList.OnMessageListListener)}
+     * @param message
+     */
+    @Override
+    public void onMessageListError(String message) {
+        showMsgToast(message);
     }
 
     /**
@@ -531,13 +514,6 @@ public class EaseChatFragment extends EaseBaseFragment implements View.OnClickLi
         refreshMessages();
     }
 
-    @Override
-    public boolean onTouch(View v, MotionEvent event) {
-        hideKeyboard();
-        inputMenu.hideExtendMenuContainer();
-        return false;
-    }
-
     /**
      * inputMenu addTextChangedListener
      * @param s
@@ -602,12 +578,14 @@ public class EaseChatFragment extends EaseBaseFragment implements View.OnClickLi
      */
     protected void initInputMenu() {
         inputMenu.registerDefaultMenuItems(this);
+        addExtendInputMenu(inputMenu);
     }
 
     /**
      * developer can add extend menu item by override the method
+     * @param inputMenu
      */
-    protected void addExtendInputMenu() {
+    protected void addExtendInputMenu(EaseChatInputMenu inputMenu) {
         // inputMenu.registerExtendMenuItem(nameRes, drawableRes, itemId, listener);
     }
 
@@ -630,31 +608,22 @@ public class EaseChatFragment extends EaseBaseFragment implements View.OnClickLi
         isInitMsg = true;
         //如果设置为漫游
         if(isRoaming) {
-            loadMoreServerMessages(PAGE_SIZE);
+            if(chatMessageList != null) {
+                chatMessageList.loadMoreServerMessages(PAGE_SIZE);
+            }
             return;
         }
         // 非漫游，从本地数据库拉取数据
-        loadMessagesFromLocal();
+        if(chatMessageList != null) {
+            chatMessageList.loadMessagesFromLocal(PAGE_SIZE);
+        }
     }
 
     /**
      * add more other adapter delegations
-     * @param messageAdapter
+     * @param manager
      */
-    protected void addMoreMessageDelegates(EaseMessageAdapter messageAdapter) {}
-
-    /**
-     * 增加消息类型
-     * @param messageAdapter
-     */
-    protected void addMessageDelegates(EaseMessageAdapter messageAdapter) {
-        messageAdapter.addDelegate(new EaseExpressionAdapterDelegate())
-                .addDelegate(new EaseFileAdapterDelegate())
-                .addDelegate(new EaseImageAdapterDelegate())
-                .addDelegate(new EaseLocationAdapterDelegate())
-                .addDelegate(new EaseVideoAdapterDelegate())
-                .addDelegate(new EaseVoiceAdapterDelegate());
-    }
+    protected void addMoreMessageDelegates(EaseConTypeSetManager manager) {}
 
 //============================ child init end ================================
 
@@ -684,12 +653,6 @@ public class EaseChatFragment extends EaseBaseFragment implements View.OnClickLi
         }
     }
 
-    protected void finishRefresh() {
-        if(srlRefresh != null) {
-            srlRefresh.setRefreshing(false);
-        }
-    }
-
     /**
      * provide recyclerView LayoutManager
      * @return
@@ -704,21 +667,6 @@ public class EaseChatFragment extends EaseBaseFragment implements View.OnClickLi
      */
     protected void showMsgToast(String message) {
         // developer can show the message by your own style
-    }
-
-    /**
-     * no more message
-     */
-    protected void showNoMoreMsgToast() {
-        showMsgToast(getResources().getString(R.string.no_more_messages));
-    }
-
-    /**
-     * error msg or no more message
-     * @param errorMsg
-     */
-    protected void showLoadMsgToast(String errorMsg) {
-        showMsgToast(TextUtils.isEmpty(errorMsg) ? getResources().getString(R.string.no_more_messages) : errorMsg);
     }
 
     public void setOnMessageChangeListener(OnMessageChangeListener listener) {
@@ -750,173 +698,6 @@ public class EaseChatFragment extends EaseBaseFragment implements View.OnClickLi
 
 
 //============================== view control end ===========================
-
-//============================ load and show messages start ==================================
-
-    private void checkIfSeekToLatest() {
-        List<EMMessage> messages = conversation.getAllMessages();
-        if(currentMessages == null || messages.size() > currentMessages.size()) {
-            SeekToPosition(messages.size() - 1);
-        }
-        currentMessages = messages;
-    }
-
-    /**
-     * seek to latest position
-     */
-    public void refreshToLatest() {
-        List<EMMessage> messages = conversation.getAllMessages();
-        boolean refresh = currentMessages != null && messages.size() > currentMessages.size();
-        refreshMessages();
-        if(refresh) {
-            SeekToPosition(messages.size() - 1);
-        }
-    }
-
-    /**
-     * fresh messages
-     */
-    public void refreshMessages() {
-        if(isActivityDisable()) {
-            return;
-        }
-        mContext.runOnUiThread(() -> {
-            List<EMMessage> messages = conversation.getAllMessages();
-            conversation.markAllMessagesAsRead();
-            if(messageAdapter != null) {
-                messageAdapter.setData(messages);
-            }
-            currentMessages = messages;
-            finishRefresh();
-        });
-
-    }
-
-    /**
-     * load more messages
-     */
-    protected void loadMoreMessages(int pageSize, boolean loadFromServer) {
-        if(loadFromServer) {
-            loadMoreServerMessages(pageSize);
-            return;
-        }
-        loadMoreLocalMessages(pageSize);
-    }
-
-    private void loadMoreServerMessages(int pageSize) {
-        int count = getCacheMessageCount();
-        EMClient.getInstance().chatManager().asyncFetchHistoryMessage(toChatUsername,
-                EaseCommonUtils.getConversationType(chatType), pageSize, count > 0 ? conversation.getAllMessages().get(0).getMsgId() : null,
-                new EMValueCallBack<EMCursorResult<EMMessage>>() {
-                    @Override
-                    public void onSuccess(EMCursorResult<EMMessage> value) {
-                        if(isActivityDisable()) {
-                            return;
-                        }
-                        mContext.runOnUiThread(() -> loadMoreLocalMessages(pageSize));
-                    }
-
-                    @Override
-                    public void onError(int error, String errorMsg) {
-                        if(isActivityDisable()) {
-                            return;
-                        }
-                        mContext.runOnUiThread(()-> {
-                            showLoadMsgToast(errorMsg);
-                            loadMoreLocalMessages(pageSize);
-                        });
-                    }
-                });
-    }
-
-    private void loadMoreLocalMessages(int pageSize) {
-        List<EMMessage> messageList = conversation.getAllMessages();
-        int msgCount = messageList != null ? messageList.size() : 0;
-        int allMsgCount = conversation.getAllMsgCount();
-        if(msgCount < allMsgCount) {
-            String msgId = null;
-            if(msgCount > 0) {
-                msgId = messageList.get(0).getMsgId();
-            }
-            List<EMMessage> moreMsgs = null;
-            String errorMsg = null;
-            try {
-                moreMsgs = conversation.loadMoreMsgFromDB(msgId, pageSize);
-            } catch (Exception e) {
-                errorMsg = e.getMessage();
-                e.printStackTrace();
-            }
-            // 刷新数据，一则刷新数据，二则需要消息进行定位
-            if(moreMsgs == null || moreMsgs.isEmpty()) {
-                showLoadMsgToast(errorMsg);
-                return;
-            }
-            refreshMessages();
-            // 对消息进行定位
-            SeekToPosition(moreMsgs.size() - 1);
-        }else {
-            finishRefresh();
-            showNoMoreMsgToast();
-        }
-    }
-
-    /**
-     * 移动到指定位置
-     * @param position
-     */
-    private void SeekToPosition(int position) {
-        if(isInitMsg) {
-            position = conversation.getAllMessages().size() - 1;
-            isInitMsg = false;
-        }
-        if(position < 0) {
-            position = 0;
-        }
-        RecyclerView.LayoutManager manager = messageList.getLayoutManager();
-        if(manager instanceof LinearLayoutManager) {
-            if(isActivityDisable()) {
-                return;
-            }
-            int finalPosition = position;
-            mContext.runOnUiThread(()-> {
-                ((LinearLayoutManager)manager).scrollToPositionWithOffset(finalPosition, 0);
-            });
-        }
-    }
-
-    /**
-     * 获取内存中消息数目
-     * @return
-     */
-    protected int getCacheMessageCount() {
-        if(conversation == null) {
-            return 0;
-        }
-        List<EMMessage> messageList = conversation.getAllMessages();
-        return messageList != null ? messageList.size() : 0;
-    }
-
-    /**
-     * 获取数据库中消息总数目
-     * @return
-     */
-    protected int getAllMsgCountFromDb() {
-        return conversation == null ? 0 : conversation.getAllMsgCount();
-    }
-
-    /**
-     * 从本地数据库拉取数据
-     */
-    private void loadMessagesFromLocal() {
-        int msgCount = getCacheMessageCount();
-        if(msgCount < getAllMsgCountFromDb() && msgCount < PAGE_SIZE) {
-            loadMoreMessages(PAGE_SIZE - msgCount, false);
-        }else {
-            SeekToPosition(msgCount - 1);
-        }
-    }
-
-//============================ load and show messages start ==================================
 
 //======================= choose resources start ============================
 
@@ -1118,26 +899,33 @@ public class EaseChatFragment extends EaseBaseFragment implements View.OnClickLi
         }
         // send message
         EMClient.getInstance().chatManager().sendMessage(message);
-        message.setMessageStatusCallback(new EaseMessageCallback() {
+        message.setMessageStatusCallback(new EMCallBack() {
             @Override
             public void onSuccess() {
-                super.onSuccess();
-                Log.e("TAG", "onSuccess()");
-            }
-
-            @Override
-            public void onSuccess(EMMessage message, int position) {
-                Log.e("TAG", "onSuccess(EMMessage message, int position)");
+                EMLog.d("msg", "send message onSuccess");
+                if(chatMessageList != null) {
+                    chatMessageList.refreshMessages();
+                }
             }
 
             @Override
             public void onError(int code, String error) {
-                super.onError(code, error);
+                EMLog.d("msg", "send message onError");
+                if(chatMessageList != null) {
+                    chatMessageList.refreshMessages();
+                }
+            }
+
+            @Override
+            public void onProgress(int progress, String status) {
+                EMLog.d("msg", "send message onProgress");
+                if(chatMessageList != null) {
+                    chatMessageList.refreshMessages();
+                }
             }
         });
         // refresh messages
-        refreshMessages();
-        SeekToPosition(conversation.getAllMessages().size() - 1);
+        refreshToLatest();
     }
 
     /**
@@ -1203,6 +991,12 @@ public class EaseChatFragment extends EaseBaseFragment implements View.OnClickLi
         EMClient.getInstance().chatManager().addMessageListener(this);
         if(isGroupChat()) {
             EaseAtMessageHelper.get().removeAtMeGroup(toChatUsername);
+        }
+    }
+
+    private void refreshToLatest() {
+        if(chatMessageList != null) {
+            chatMessageList.refreshToLatest();
         }
     }
 
@@ -1312,7 +1106,7 @@ public class EaseChatFragment extends EaseBaseFragment implements View.OnClickLi
      */
     protected void hideNickname() {
         if(isSingleChat()) {
-            messageAdapter.showUserNick(false);
+            chatMessageList.showUserNick(false);
         }
     }
 

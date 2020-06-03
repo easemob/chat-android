@@ -22,7 +22,6 @@ public class EaseVideoAdapterDelegate extends EaseMessageAdapterDelegate<EMMessa
 
     @Override
     public boolean isForViewType(EMMessage item, int position) {
-        mIsSender = isMessageSender(item);
         return item.getType() == EMMessage.Type.VIDEO;
     }
 

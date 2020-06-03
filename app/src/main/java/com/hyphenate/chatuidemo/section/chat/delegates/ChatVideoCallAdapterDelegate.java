@@ -19,7 +19,6 @@ import static com.hyphenate.chat.EMMessage.Type.TXT;
 public class ChatVideoCallAdapterDelegate extends EaseMessageAdapterDelegate<EMMessage, EaseChatRowViewHolder> {
     @Override
     public boolean isForViewType(EMMessage item, int position) {
-        mIsSender = isMessageSender(item);
         return item.getType() == TXT && item.getBooleanAttribute(EaseConstant.MESSAGE_ATTR_IS_VIDEO_CALL, false);
     }
 

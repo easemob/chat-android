@@ -7,7 +7,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.view.menu.MenuBuilder;
@@ -34,33 +33,17 @@ import com.hyphenate.chatuidemo.section.chat.delegates.ChatLiveInviteAdapterDele
 import com.hyphenate.chatuidemo.section.chat.delegates.ChatRecallAdapterDelegate;
 import com.hyphenate.chatuidemo.section.chat.delegates.ChatVideoCallAdapterDelegate;
 import com.hyphenate.chatuidemo.section.chat.delegates.ChatVoiceCallAdapterDelegate;
-import com.hyphenate.chatuidemo.section.chat.viewholder.ChatConferenceInviteViewHolder;
-import com.hyphenate.chatuidemo.section.chat.viewholder.ChatLiveInviteViewHolder;
-import com.hyphenate.chatuidemo.section.chat.viewholder.ChatRecallViewHolder;
-import com.hyphenate.chatuidemo.section.chat.viewholder.ChatVideoCallViewHolder;
-import com.hyphenate.chatuidemo.section.chat.viewholder.ChatVoiceCallViewHolder;
 import com.hyphenate.chatuidemo.section.chat.viewmodel.MessageViewModel;
 import com.hyphenate.chatuidemo.section.friends.activity.ContactDetailActivity;
 import com.hyphenate.chatuidemo.section.friends.activity.ForwardMessageActivity;
-import com.hyphenate.easeui.adapter.EaseMessageAdapter;
 import com.hyphenate.easeui.constants.EaseConstant;
 import com.hyphenate.easeui.domain.EaseUser;
-import com.hyphenate.easeui.interfaces.IChatAdapterProvider;
-import com.hyphenate.easeui.interfaces.IViewHolderProvider;
-import com.hyphenate.easeui.interfaces.MessageListItemClickListener;
+import com.hyphenate.easeui.manager.EaseConTypeSetManager;
 import com.hyphenate.easeui.model.EaseEvent;
-import com.hyphenate.easeui.model.styles.EaseMessageListItemStyle;
-import com.hyphenate.easeui.viewholder.EaseViewHolderProvider;
 import com.hyphenate.easeui.ui.chat.EaseChatFragment;
-import com.hyphenate.easeui.viewholder.EaseChatRowViewHolder;
-import com.hyphenate.easeui.viewholder.EaseViewHolderHelper;
 import com.hyphenate.easeui.widget.EaseChatInputMenu;
 import com.hyphenate.easeui.widget.emojicon.EaseEmojiconMenu;
 import com.hyphenate.exceptions.HyphenateException;
-
-import java.util.Map;
-
-import static com.hyphenate.chat.EMMessage.Type.TXT;
 
 public class ChatFragment extends EaseChatFragment implements EaseChatFragment.OnMessageChangeListener {
     private MessageViewModel viewModel;
@@ -82,17 +65,17 @@ public class ChatFragment extends EaseChatFragment implements EaseChatFragment.O
     }
 
     @Override
-    protected void addMoreMessageDelegates(EaseMessageAdapter messageAdapter) {
-        messageAdapter.addDelegate(new ChatConferenceInviteAdapterDelegate())
-                .addDelegate(new ChatLiveInviteAdapterDelegate())
-                .addDelegate(new ChatRecallAdapterDelegate())
-                .addDelegate(new ChatVideoCallAdapterDelegate())
-                .addDelegate(new ChatVoiceCallAdapterDelegate());
+    protected void addMoreMessageDelegates(EaseConTypeSetManager manager) {
+        manager.addConversationType(new ChatConferenceInviteAdapterDelegate())
+                .addConversationType(new ChatLiveInviteAdapterDelegate())
+                .addConversationType(new ChatRecallAdapterDelegate())
+                .addConversationType(new ChatVideoCallAdapterDelegate())
+                .addConversationType(new ChatVoiceCallAdapterDelegate());
     }
 
     @Override
-    protected void addExtendInputMenu() {
-        super.addExtendInputMenu();
+    protected void addExtendInputMenu(EaseChatInputMenu inputMenu) {
+        super.addExtendInputMenu(inputMenu);
         //添加扩展槽
         if(chatType == EaseConstant.CHATTYPE_SINGLE){
             inputMenu.registerExtendMenuItem(R.string.attach_voice_call, R.drawable.em_chat_voice_call_selector, EaseChatInputMenu.ITEM_VOICE_CALL, this);

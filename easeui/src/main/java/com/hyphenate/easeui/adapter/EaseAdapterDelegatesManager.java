@@ -13,6 +13,8 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.collection.SparseArrayCompat;
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.hyphenate.chat.EMMessage;
 import com.hyphenate.easeui.adapter.EaseBaseRecyclerViewAdapter.ViewHolder;
 
 public class EaseAdapterDelegatesManager {
@@ -58,7 +60,8 @@ public class EaseAdapterDelegatesManager {
         if(delegate == null) {
             throw new NullPointerException("No EaseAdapterDelegate added for ViewType "+viewType);
         }
-        return delegate.onCreateViewHolder(parent);
+        String tag = getTagByViewType(viewType);
+        return delegate.onCreateViewHolder(parent, tag);
     }
 
     public void onBindViewHolder(@NonNull ViewHolder holder, int position, Object item) {
@@ -92,7 +95,7 @@ public class EaseAdapterDelegatesManager {
         List<Integer> indexList = indexesOfValue(dataTypeWithTags, typeWithTag);
         for (int index : indexList) {
             EaseAdapterDelegate<Object, ViewHolder> delegate = delegates.get(index);
-            if(delegate != null && TextUtils.equals(delegate.tag, tag) && delegate.isForViewType(item, position)) {
+            if(delegate != null && delegate.getTags().contains(tag) && delegate.isForViewType(item, position)) {
                 return hasConsistItemType ? delegate.getItemViewType() : index;
             }
         }
@@ -153,23 +156,34 @@ public class EaseAdapterDelegatesManager {
         return index > 0 ? delegates.keyAt(index) : -1;
     }
 
+    private String getTagByViewType(int viewType) {
+        String typeWithTag = dataTypeWithTags.get(viewType);
+        if(TextUtils.isEmpty(typeWithTag)) {
+            return typeWithTag;
+        }
+        if(!typeWithTag.contains(":")) {
+            return typeWithTag;
+        }
+        return typeWithTag.split(":")[1];
+    }
+
     private String typeWithTag(Class<?> clazz, String tag) {
         return TextUtils.isEmpty(tag) ? clazz.getName() : clazz.getName() + ":" + tag;
     }
 
     private Object targetItem(Object item) {
-        return item instanceof EaseItemModel ? ((EaseItemModel) item).getData() : item;
+        return item;
     }
 
     private String targetTag(Object item) {
-        return item instanceof EaseItemModel ? ((EaseItemModel) item).getTag() : EaseAdapterDelegate.DEFAULT_TAG;
+        return item instanceof EMMessage ? ((EMMessage) item).direct().toString() : EaseAdapterDelegate.DEFAULT_TAG;
     }
 
     private List<Integer> indexesOfValue(SparseArrayCompat<String> array, String value) {
         List<Integer> indexes = new ArrayList<>();
         for(int i = 0; i < array.size(); i++) {
             if(TextUtils.equals(array.valueAt(i), value)) {
-                indexes.add(i);
+                indexes.add(array.keyAt(i));
             }
         }
         return indexes;

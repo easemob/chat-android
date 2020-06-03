@@ -2,6 +2,7 @@ package com.hyphenate.easeui.adapter;
 
 import android.view.ViewGroup;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import androidx.annotation.NonNull;
@@ -10,18 +11,21 @@ import androidx.recyclerview.widget.RecyclerView;
 public abstract class EaseAdapterDelegate<T, VH extends RecyclerView.ViewHolder> {
     public static final String DEFAULT_TAG = "";
     public String tag = DEFAULT_TAG;
+    public List<String> tags = new ArrayList<>();
 
-    public EaseAdapterDelegate() {}
+    public EaseAdapterDelegate() {
+        setTag(this.tag);
+    }
 
     public EaseAdapterDelegate(String tag) {
-        this.tag = tag;
+        setTag(tag);
     }
 
     public boolean isForViewType(T item, int position) {
         return true;
     }
 
-    public abstract VH onCreateViewHolder(ViewGroup parent);
+    public abstract VH onCreateViewHolder(ViewGroup parent, String tag);
 
     public void onBindViewHolder(VH holder, int position, T item){}
 
@@ -54,4 +58,13 @@ public abstract class EaseAdapterDelegate<T, VH extends RecyclerView.ViewHolder>
     public void onDetachedFromRecyclerView(@NonNull RecyclerView recyclerView) {}
 
     public int getItemViewType() { return 0;}
+
+    public void setTag(String tag) {
+        this.tag = tag;
+        tags.add(tag);
+    }
+
+    public List<String> getTags() {
+        return tags;
+    }
 }
