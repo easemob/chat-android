@@ -1,15 +1,19 @@
 package com.hyphenate.easeui.adapter;
 
-import android.util.Log;
 import android.view.ViewGroup;
-
-import java.util.List;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.hyphenate.util.EMLog;
-
+/**
+ * （1）做为与{@link RecyclerView}关联的adapter的基类，实现了与{@link EaseAdapterDelegatesManager}的关联,
+ * 将{@link RecyclerView.Adapter}中的{@link #getItemViewType(int)}, {@link #getViewHolder(ViewGroup, int)},
+ * {@link #onViewRecycled(ViewHolder)}等与{@link EaseAdapterDelegatesManager}关联。
+ * （2）需要注意的是{@link #onBindViewHolder(ViewHolder, int)}已经在父类{@link EaseBaseRecyclerViewAdapter}中将绑定
+ * 数据的实现委托在ViewHolder中了，在本类中就不需要再和{@link EaseAdapterDelegatesManager}绑定。
+ * （3）添加布局，获取ViewHolder均通过各自的delegate实现。见基类{@link EaseAdapterDelegate}。
+ * @param <T>
+ */
 public abstract class EaseBaseDelegateAdapter<T> extends EaseBaseRecyclerViewAdapter<T> {
     private static final String TAG = "adapter";
     private EaseAdapterDelegatesManager delegatesManager;

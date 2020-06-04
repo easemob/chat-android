@@ -11,6 +11,9 @@ import com.hyphenate.easeui.viewholder.EaseVoiceViewHolder;
 import com.hyphenate.easeui.widget.chatrow.EaseChatRow;
 import com.hyphenate.easeui.widget.chatrow.EaseChatRowVoice;
 
+/**
+ * 声音代理类
+ */
 public class EaseVoiceAdapterDelegate extends EaseMessageAdapterDelegate<EMMessage, EaseChatRowViewHolder> {
 
     public EaseVoiceAdapterDelegate() {

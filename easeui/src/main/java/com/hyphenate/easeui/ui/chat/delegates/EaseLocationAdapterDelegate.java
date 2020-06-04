@@ -13,6 +13,9 @@ import com.hyphenate.easeui.widget.chatrow.EaseChatRowLocation;
 
 import java.util.regex.Pattern;
 
+/**
+ * 定位代理类
+ */
 public class EaseLocationAdapterDelegate extends EaseMessageAdapterDelegate<EMMessage, EaseChatRowViewHolder> {
 
     public EaseLocationAdapterDelegate() {

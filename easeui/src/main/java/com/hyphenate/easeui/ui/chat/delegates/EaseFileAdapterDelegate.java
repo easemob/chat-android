@@ -11,6 +11,9 @@ import com.hyphenate.easeui.viewholder.EaseFileViewHolder;
 import com.hyphenate.easeui.widget.chatrow.EaseChatRow;
 import com.hyphenate.easeui.widget.chatrow.EaseChatRowFile;
 
+/**
+ * 文件代理类
+ */
 public class EaseFileAdapterDelegate extends EaseMessageAdapterDelegate<EMMessage, EaseChatRowViewHolder> {
 
     public EaseFileAdapterDelegate() {

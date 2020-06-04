@@ -14,6 +14,9 @@ import com.hyphenate.easeui.viewholder.EaseViewHolderHelper;
 
 import androidx.annotation.Nullable;
 
+/**
+ * 做为对话列表的adapter，继承自{@link EaseBaseDelegateAdapter}
+ */
 public class EaseMessageAdapter extends EaseBaseDelegateAdapter<EMMessage> {
     public MessageListItemClickListener itemClickListener;
     public EaseMessageListItemStyle itemStyle;

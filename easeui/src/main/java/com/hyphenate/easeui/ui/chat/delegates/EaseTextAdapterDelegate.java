@@ -12,6 +12,9 @@ import com.hyphenate.easeui.viewholder.EaseTextViewHolder;
 import com.hyphenate.easeui.widget.chatrow.EaseChatRow;
 import com.hyphenate.easeui.widget.chatrow.EaseChatRowText;
 
+/**
+ * 文本代理类
+ */
 public class EaseTextAdapterDelegate extends EaseMessageAdapterDelegate<EMMessage, EaseChatRowViewHolder> {
 
     public EaseTextAdapterDelegate() {

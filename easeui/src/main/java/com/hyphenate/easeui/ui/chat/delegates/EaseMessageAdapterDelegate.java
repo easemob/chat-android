@@ -11,6 +11,11 @@ import com.hyphenate.easeui.model.styles.EaseMessageListItemStyle;
 import com.hyphenate.easeui.viewholder.EaseChatRowViewHolder;
 import com.hyphenate.easeui.widget.chatrow.EaseChatRow;
 
+/**
+ * 本类设计的目的是做为对话消息代理类的基类，添加了对话代理类特有的方法
+ * @param <T>
+ * @param <VH>
+ */
 public abstract class EaseMessageAdapterDelegate<T, VH extends EaseChatRowViewHolder> extends EaseAdapterDelegate<T, VH> {
     private MessageListItemClickListener mItemClickListener;
     private EaseMessageListItemStyle mItemStyle;

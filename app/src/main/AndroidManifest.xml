@@ -359,7 +359,8 @@
         <activity android:name=".section.me.PrivacyIndexActivity" />
         <!--联系人黑名单-->
         <activity android:name=".section.friends.activity.ContactBlackListActivity" />
-
+        <!--下载并展示文件-->
+        <activity android:name="com.hyphenate.easeui.ui.EaseShowNormalFileActivity"/>
     </application>
 
 </manifest>

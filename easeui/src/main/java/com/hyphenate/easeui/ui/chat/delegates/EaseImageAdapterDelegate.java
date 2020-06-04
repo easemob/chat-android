@@ -11,6 +11,9 @@ import com.hyphenate.easeui.viewholder.EaseImageViewHolder;
 import com.hyphenate.easeui.widget.chatrow.EaseChatRow;
 import com.hyphenate.easeui.widget.chatrow.EaseChatRowImage;
 
+/**
+ * 图片代理类
+ */
 public class EaseImageAdapterDelegate extends EaseMessageAdapterDelegate<EMMessage, EaseChatRowViewHolder> {
 
     public EaseImageAdapterDelegate() {

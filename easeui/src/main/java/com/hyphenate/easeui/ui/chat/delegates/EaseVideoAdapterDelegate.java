@@ -11,6 +11,9 @@ import com.hyphenate.easeui.viewholder.EaseVideoViewHolder;
 import com.hyphenate.easeui.widget.chatrow.EaseChatRow;
 import com.hyphenate.easeui.widget.chatrow.EaseChatRowVideo;
 
+/**
+ * 视频代理类
+ */
 public class EaseVideoAdapterDelegate extends EaseMessageAdapterDelegate<EMMessage, EaseChatRowViewHolder> {
 
     public EaseVideoAdapterDelegate() {
