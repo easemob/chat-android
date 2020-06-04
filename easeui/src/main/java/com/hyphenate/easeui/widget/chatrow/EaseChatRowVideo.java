@@ -90,7 +90,6 @@ public class EaseChatRowVideo extends EaseChatRowFile {
                     showVideoThumbView(localThumb, imageView, videoBody.getThumbnailUrl(), message);
                 }
             }
-            return;
         }else{
             if (videoBody.thumbnailDownloadStatus() == EMFileMessageBody.EMDownloadStatus.DOWNLOADING ||
                     videoBody.thumbnailDownloadStatus() == EMFileMessageBody.EMDownloadStatus.PENDING ||
@@ -99,17 +98,15 @@ public class EaseChatRowVideo extends EaseChatRowFile {
                 percentageView.setVisibility(View.INVISIBLE);
                 imageView.setImageResource(R.drawable.ease_default_image);
             } else {
-                progressBar.setVisibility(View.GONE);
-                percentageView.setVisibility(View.GONE);
+                progressBar.setVisibility(View.INVISIBLE);
+                percentageView.setVisibility(View.INVISIBLE);
                 imageView.setImageResource(R.drawable.ease_default_image);
                 showVideoThumbView(localThumb, imageView, videoBody.getThumbnailUrl(), message);
             }
         }
 	}
 
-
-
-	/**
+    /**
      * show video thumbnails
      * 
      * @param localThumb

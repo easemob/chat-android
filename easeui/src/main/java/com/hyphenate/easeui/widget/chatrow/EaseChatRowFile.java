@@ -112,7 +112,9 @@ public class EaseChatRowFile extends EaseChatRow {
     }
 
     private void onMessageInProgress() {
-        progressBar.setVisibility(View.VISIBLE);
+        if(progressBar.getVisibility() != VISIBLE) {
+            progressBar.setVisibility(View.VISIBLE);
+        }
         if (percentageView != null) {
             percentageView.setVisibility(View.VISIBLE);
             percentageView.setText(message.progress() + "%");

@@ -897,8 +897,6 @@ public class EaseChatFragment extends EaseBaseFragment implements View.OnClickLi
         }else if(chatType == EaseConstant.CHATTYPE_CHATROOM){
             message.setChatType(EMMessage.ChatType.ChatRoom);
         }
-        // send message
-        EMClient.getInstance().chatManager().sendMessage(message);
         message.setMessageStatusCallback(new EMCallBack() {
             @Override
             public void onSuccess() {
@@ -924,6 +922,8 @@ public class EaseChatFragment extends EaseBaseFragment implements View.OnClickLi
                 }
             }
         });
+        // send message
+        EMClient.getInstance().chatManager().sendMessage(message);
         // refresh messages
         refreshToLatest();
     }
