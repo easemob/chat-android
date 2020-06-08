@@ -185,12 +185,13 @@ public class EaseChatFragment extends EaseBaseFragment implements View.OnClickLi
     }
 
     private void initData() {
+        //此方法放在chatMessageList.init之前
         chatMessageList.init(toChatUsername, chatType);
         initConversation();
         initChatType();
+        hideNickname();
         sendForwardMsg();
         refreshMessages();
-        hideNickname();
         setTypingHandler();
         initChildData();
     }

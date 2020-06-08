@@ -25,14 +25,16 @@ public abstract class EaseMessageAdapterDelegate<T, VH extends EaseChatRowViewHo
     }
 
     public EaseMessageAdapterDelegate(MessageListItemClickListener itemClickListener) {
+        this();
         this.mItemClickListener = itemClickListener;
-        this.mItemStyle = createDefaultItemStyle();
     }
 
     public EaseMessageAdapterDelegate(MessageListItemClickListener itemClickListener,
                                       EaseMessageListItemStyle itemStyle) {
-        this.mItemClickListener = itemClickListener;
-        this.mItemStyle = itemStyle;
+        this(itemClickListener);
+        if(itemStyle != null) {
+            this.mItemStyle = itemStyle;
+        }
     }
 
     /**
@@ -63,5 +65,11 @@ public abstract class EaseMessageAdapterDelegate<T, VH extends EaseChatRowViewHo
 
     public void setListItemClickListener(MessageListItemClickListener itemClickListener) {
         this.mItemClickListener = itemClickListener;
+    }
+
+    public void setItemStyle(EaseMessageListItemStyle itemStyle) {
+        if(itemStyle != null) {
+            this.mItemStyle = itemStyle;
+        }
     }
 }

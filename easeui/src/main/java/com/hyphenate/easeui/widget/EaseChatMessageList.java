@@ -38,8 +38,10 @@ public class EaseChatMessageList extends RelativeLayout implements View.OnTouchL
     private String toChatUsername;
     private EMConversation conversation;
     private EaseMessageAdapter messageAdapter;
+    private MessageListItemClickListener itemClickListener;
     private OnMessageListListener listener;
     private List<EMMessage> currentMessages;
+    private boolean showUserNick;
 
     public EaseChatMessageList(Context context) {
         this(context, null);
@@ -84,6 +86,9 @@ public class EaseChatMessageList extends RelativeLayout implements View.OnTouchL
         messageAdapter = new EaseMessageAdapter();
         registerDelegates();
         messageList.setAdapter(messageAdapter);
+
+        messageAdapter.setListItemClickListener(itemClickListener);
+        messageAdapter.showUserNick(showUserNick);
 
         initListener();
     }
@@ -294,9 +299,15 @@ public class EaseChatMessageList extends RelativeLayout implements View.OnTouchL
         return context == null || (context instanceof Activity && ((Activity) context).isFinishing());
     }
 
+    /**
+     * 设置条目点击监听
+     * @param listener
+     */
     public void setItemClickListener(MessageListItemClickListener listener) {
+        this.itemClickListener = listener;
         if(messageAdapter != null) {
             messageAdapter.setListItemClickListener(listener);
+            messageAdapter.notifyDataSetChanged();
         }
     }
 
@@ -308,9 +319,15 @@ public class EaseChatMessageList extends RelativeLayout implements View.OnTouchL
         this.listener = listener;
     }
 
+    /**
+     * 是否展示昵称
+     * @param showUserNick
+     */
     public void showUserNick(boolean showUserNick) {
+        this.showUserNick = showUserNick;
         if(messageAdapter != null) {
             messageAdapter.showUserNick(showUserNick);
+            messageAdapter.notifyDataSetChanged();
         }
     }
 

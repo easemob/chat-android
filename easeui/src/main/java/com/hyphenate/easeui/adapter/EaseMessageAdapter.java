@@ -40,6 +40,21 @@ public class EaseMessageAdapter extends EaseBaseDelegateAdapter<EMMessage> {
     }
 
     /**
+     * 为每个delegate添加item listener和item style
+     * @param delegate
+     * @return
+     */
+    @Override
+    public EaseBaseDelegateAdapter addDelegate(EaseAdapterDelegate delegate) {
+        //设置点击事件
+        if(delegate instanceof EaseMessageAdapterDelegate) {
+            ((EaseMessageAdapterDelegate) delegate).setListItemClickListener(itemClickListener);
+            ((EaseMessageAdapterDelegate) delegate).setItemStyle(itemStyle);
+        }
+        return super.addDelegate(delegate);
+    }
+
+    /**
      * get item message
      * @param position
      * @return
