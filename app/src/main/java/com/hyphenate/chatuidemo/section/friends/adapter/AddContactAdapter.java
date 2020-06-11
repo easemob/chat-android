@@ -19,12 +19,12 @@ public class AddContactAdapter extends EaseBaseRecyclerViewAdapter<String> {
 
     @Override
     public ViewHolder getViewHolder(ViewGroup parent, int viewType) {
-        return new MyViewHolder(LayoutInflater.from(mContext).inflate(R.layout.em_item_search_list, parent, false));
+        return new MyViewHolder(LayoutInflater.from(mContext).inflate(R.layout.demo_item_search_list, parent, false));
     }
 
     @Override
     public int getEmptyLayoutId() {
-        return R.layout.em_layout_empty_list_invisible;
+        return R.layout.demo_layout_empty_list_invisible;
     }
 
     private class MyViewHolder extends ViewHolder<String> {

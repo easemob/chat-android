@@ -16,7 +16,7 @@
         android:layout_width="match_parent"
         android:layout_height="@dimen/adaptive_52dp"
         android:layout_alignParentBottom="true"
-        android:background="@drawable/em_btn_bg_conference_start"
+        android:background="@drawable/demo_btn_bg_conference_start"
         android:clickable="true"
         android:gravity="center"
         android:onClick="onClick"

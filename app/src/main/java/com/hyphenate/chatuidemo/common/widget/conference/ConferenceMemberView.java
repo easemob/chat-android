@@ -43,7 +43,7 @@ public class ConferenceMemberView extends RelativeLayout {
     public ConferenceMemberView(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         this.context = context;
-        LayoutInflater.from(context).inflate(R.layout.em_widget_conference_view, this);
+        LayoutInflater.from(context).inflate(R.layout.demo_widget_conference_view, this);
         init();
     }
 

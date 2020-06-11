@@ -14,7 +14,7 @@ public class OtherMsgDelegate extends NewFriendsMsgDelegate<InviteMessage, Other
 
     @Override
     protected int getLayoutId() {
-        return R.layout.em_layout_item_invite_msg_agree;
+        return R.layout.demo_layout_item_invite_msg_agree;
     }
 
     @Override

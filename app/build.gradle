@@ -43,7 +43,7 @@ android {
     }
 
     //use legacy for android 6.0
-    useLibrary 'org.apache.http.legacy'
+    //useLibrary 'org.apache.http.legacy'
     //自3.6.0开始需要java8的支持
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8

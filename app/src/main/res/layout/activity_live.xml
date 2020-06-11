@@ -28,7 +28,7 @@
                 android:id="@+id/state_cover_main"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/adaptive_88dp"
-                android:background="@drawable/em_conference_member_cover"
+                android:background="@drawable/demo_conference_member_cover"
                 android:orientation="vertical"
                 android:visibility="gone">
 
@@ -138,7 +138,7 @@
                     android:gravity="center" />
 
                 <include
-                    layout="@layout/em_layout_tools_panel_live"
+                    layout="@layout/demo_layout_tools_panel_live"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_below="@+id/indicator"

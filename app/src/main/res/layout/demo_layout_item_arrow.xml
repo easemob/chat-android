@@ -73,6 +73,6 @@
         android:layout_marginRight="@dimen/em_margin_15"
         android:layout_marginStart="@dimen/em_margin_15"
         android:layout_marginEnd="@dimen/em_margin_15"
-        android:background="@drawable/em_default_divider_list"/>
+        android:background="@drawable/demo_default_divider_list"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

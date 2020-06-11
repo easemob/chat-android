@@ -88,7 +88,7 @@ public class RecorderVideoActivity extends EaseBaseActivity implements
 				WindowManager.LayoutParams.FLAG_FULLSCREEN);// full screen
 		// translucency mode，used in surface view
 		getWindow().setFormat(PixelFormat.TRANSLUCENT);
-		setContentView(R.layout.em_recorder_activity);
+		setContentView(R.layout.demo_recorder_activity);
 		PowerManager pm = (PowerManager) getSystemService(Context.POWER_SERVICE);
 		mWakeLock = pm.newWakeLock(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON,
 				CLASS_LABEL);

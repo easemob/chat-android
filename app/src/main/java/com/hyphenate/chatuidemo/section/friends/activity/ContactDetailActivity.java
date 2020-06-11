@@ -24,12 +24,10 @@ import com.hyphenate.chatuidemo.section.chat.ChatVoiceCallActivity;
 import com.hyphenate.chatuidemo.section.dialog.DemoDialogFragment;
 import com.hyphenate.chatuidemo.section.dialog.SimpleDialogFragment;
 import com.hyphenate.chatuidemo.section.friends.viewmodels.ContactDetailViewModel;
-import com.hyphenate.chatuidemo.section.friends.viewmodels.FriendsViewModel;
 import com.hyphenate.easeui.constants.EaseConstant;
 import com.hyphenate.easeui.domain.EaseUser;
 import com.hyphenate.easeui.model.EaseEvent;
 import com.hyphenate.easeui.widget.EaseImageView;
-import com.hyphenate.easeui.widget.EaseRecyclerView;
 import com.hyphenate.easeui.widget.EaseTitleBar;
 
 import java.util.List;
@@ -64,7 +62,7 @@ public class ContactDetailActivity extends BaseInitActivity implements EaseTitle
 
     @Override
     protected int getLayoutId() {
-        return R.layout.em_activity_friends_contact_detail;
+        return R.layout.demo_activity_friends_contact_detail;
     }
 
     @Override
@@ -74,7 +72,7 @@ public class ContactDetailActivity extends BaseInitActivity implements EaseTitle
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.em_friends_contact_detail_menu, menu);
+        getMenuInflater().inflate(R.menu.demo_friends_contact_detail_menu, menu);
         return super.onCreateOptionsMenu(menu);
     }
 

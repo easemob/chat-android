@@ -29,7 +29,7 @@ public class ContactManageFragment extends BaseInitFragment implements EaseSideb
 
     @Override
     protected int getLayoutId() {
-        return R.layout.em_fragment_friends_group_manage;
+        return R.layout.demo_fragment_friends_group_manage;
     }
 
     @Override

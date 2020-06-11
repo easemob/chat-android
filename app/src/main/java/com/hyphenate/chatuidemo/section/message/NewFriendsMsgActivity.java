@@ -3,7 +3,6 @@ package com.hyphenate.chatuidemo.section.message;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.sax.StartElementListener;
 import android.view.ContextMenu;
 import android.view.MenuItem;
 import android.view.View;
@@ -45,7 +44,7 @@ public class NewFriendsMsgActivity extends BaseInitActivity implements OnRefresh
 
     @Override
     protected int getLayoutId() {
-        return R.layout.em_activity_new_friends_msg;
+        return R.layout.demo_activity_new_friends_msg;
     }
 
     @Override
@@ -70,7 +69,7 @@ public class NewFriendsMsgActivity extends BaseInitActivity implements OnRefresh
     @Override
     public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
         super.onCreateContextMenu(menu, v, menuInfo);
-        getMenuInflater().inflate(R.menu.em_invite_list_menu, menu);
+        getMenuInflater().inflate(R.menu.demo_invite_list_menu, menu);
         int position = ((EaseRecyclerView.RecyclerViewContextMenuInfo) menuInfo).position;
         InviteMessage item = adapter.getItem(position);
         InviteMessage.InviteMessageStatus statusEnum = item.getStatusEnum();

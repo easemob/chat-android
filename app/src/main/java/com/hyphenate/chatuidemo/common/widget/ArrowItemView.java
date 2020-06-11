@@ -3,7 +3,6 @@ package com.hyphenate.chatuidemo.common.widget;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.util.AttributeSet;
-import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,7 +13,6 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.content.ContextCompat;
 
 import com.hyphenate.chatuidemo.R;
-import com.hyphenate.easeui.utils.EaseCommonUtils;
 import com.hyphenate.easeui.widget.EaseImageView;
 
 public class ArrowItemView extends ConstraintLayout {
@@ -45,7 +43,7 @@ public class ArrowItemView extends ConstraintLayout {
     }
 
     public void init(Context context, AttributeSet attrs) {
-        root = LayoutInflater.from(context).inflate(R.layout.em_layout_item_arrow, this);
+        root = LayoutInflater.from(context).inflate(R.layout.demo_layout_item_arrow, this);
         avatar = findViewById(R.id.avatar);
         tvTitle = findViewById(R.id.tv_title);
         tvContent = findViewById(R.id.tv_content);

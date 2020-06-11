@@ -22,7 +22,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="@dimen/recall_dimen"
-            android:background="@drawable/em_recall_message_bg"
+            android:background="@drawable/demo_recall_message_bg"
             android:gravity="center"
             android:orientation="vertical"
             android:paddingBottom="@dimen/recall_dimen_4"

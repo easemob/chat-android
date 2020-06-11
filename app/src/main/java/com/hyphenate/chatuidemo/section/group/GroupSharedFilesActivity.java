@@ -52,7 +52,7 @@ public class GroupSharedFilesActivity extends BaseInitActivity implements OnRefr
 
     @Override
     protected int getLayoutId() {
-        return R.layout.em_activity_chat_group_shared_files;
+        return R.layout.demo_activity_chat_group_shared_files;
     }
 
     @Override
@@ -79,7 +79,7 @@ public class GroupSharedFilesActivity extends BaseInitActivity implements OnRefr
     @Override
     public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
         super.onCreateContextMenu(menu, v, menuInfo);
-        getMenuInflater().inflate(R.menu.em_group_shared_files_menu, menu);
+        getMenuInflater().inflate(R.menu.demo_group_shared_files_menu, menu);
     }
 
     @Override

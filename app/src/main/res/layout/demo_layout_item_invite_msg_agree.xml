@@ -5,6 +5,6 @@
     android:layout_height="wrap_content"
     android:minHeight="80dp">
 
-    <include layout="@layout/em_layout_invite_msg_common" />
+    <include layout="@layout/demo_layout_invite_msg_common" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

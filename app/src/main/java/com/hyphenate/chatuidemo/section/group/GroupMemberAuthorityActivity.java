@@ -24,7 +24,6 @@ import com.hyphenate.chatuidemo.section.dialog.SimpleDialogFragment;
 import com.hyphenate.chatuidemo.section.friends.activity.ContactDetailActivity;
 import com.hyphenate.chatuidemo.section.group.adapter.GroupMemberAuthorityAdapter;
 import com.hyphenate.chatuidemo.section.group.viewmodels.GroupMemberAuthorityViewModel;
-import com.hyphenate.easeui.constants.EaseConstant;
 import com.hyphenate.easeui.domain.EaseUser;
 import com.hyphenate.easeui.interfaces.OnItemClickListener;
 import com.hyphenate.easeui.interfaces.OnItemLongClickListener;
@@ -77,7 +76,7 @@ public class GroupMemberAuthorityActivity extends BaseInitActivity implements Ea
 
     @Override
     protected int getLayoutId() {
-        return R.layout.em_activity_group_member_authority;
+        return R.layout.demo_activity_group_member_authority;
     }
 
     @Override
@@ -136,7 +135,7 @@ public class GroupMemberAuthorityActivity extends BaseInitActivity implements Ea
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         if(mContext instanceof GroupMemberAuthorityActivity) {
-            getMenuInflater().inflate(R.menu.em_group_member_authority_menu, menu);
+            getMenuInflater().inflate(R.menu.demo_group_member_authority_menu, menu);
             return true;
         }
         return super.onCreateOptionsMenu(menu);
@@ -310,7 +309,7 @@ public class GroupMemberAuthorityActivity extends BaseInitActivity implements Ea
         }
         PopupMenu menu = new PopupMenu(mContext, view);
         menu.setGravity(Gravity.CENTER_HORIZONTAL);
-        menu.getMenuInflater().inflate(R.menu.em_group_member_authority_item_menu, menu.getMenu());
+        menu.getMenuInflater().inflate(R.menu.demo_group_member_authority_item_menu, menu.getMenu());
         MenuPopupHelper menuPopupHelper = new MenuPopupHelper(mContext, (MenuBuilder) menu.getMenu(), view);
         menuPopupHelper.setForceShowIcon(true);
         menuPopupHelper.setGravity(Gravity.CENTER_HORIZONTAL);

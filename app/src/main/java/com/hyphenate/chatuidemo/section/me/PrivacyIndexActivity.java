@@ -23,7 +23,7 @@ public class PrivacyIndexActivity extends BaseInitActivity implements View.OnCli
 
     @Override
     protected int getLayoutId() {
-        return R.layout.em_activity_privacy_index;
+        return R.layout.demo_activity_privacy_index;
     }
 
     @Override

@@ -21,7 +21,7 @@
         android:layout_width="match_parent"
         android:layout_height="39dp"
         android:layout_margin="10dp"
-        android:background="@drawable/em_button_normal_shape"
+        android:background="@drawable/demo_button_normal_shape"
         android:hint="@string/em_group_new_name_hint"
         android:paddingLeft="5dp"
         android:singleLine="true"
@@ -38,7 +38,7 @@
         android:layout_marginLeft="10dp"
         android:layout_marginRight="10dp"
         android:layout_marginTop="10dp"
-        android:background="@drawable/em_button_normal_shape"
+        android:background="@drawable/demo_button_normal_shape"
         android:gravity="top"
         android:hint="@string/em_group_new_profile_hint"
         android:lines="5"
@@ -57,7 +57,7 @@
         android:layout_marginLeft="10dp"
         android:layout_marginRight="10dp"
         android:layout_marginTop="10dp"
-        android:background="@drawable/em_button_normal_shape"
+        android:background="@drawable/demo_button_normal_shape"
         app:layout_constraintTop_toBottomOf="@id/et_group_introduction"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent">
@@ -78,7 +78,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="0"
             android:layout_gravity="center_vertical"
-            android:button="@drawable/em_checkbox_bg_selector" />
+            android:button="@drawable/demo_checkbox_bg_selector" />
 
     </LinearLayout>
 
@@ -90,7 +90,7 @@
         android:layout_marginLeft="10dp"
         android:layout_marginRight="10dp"
         android:layout_marginTop="10dp"
-        android:background="@drawable/em_button_normal_shape"
+        android:background="@drawable/demo_button_normal_shape"
         app:layout_constraintTop_toBottomOf="@id/ll_if_public"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent">
@@ -112,7 +112,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="0"
             android:layout_gravity="center_vertical"
-            android:button="@drawable/em_checkbox_bg_selector" />
+            android:button="@drawable/demo_checkbox_bg_selector" />
 
     </LinearLayout>
 

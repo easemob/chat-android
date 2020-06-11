@@ -18,7 +18,7 @@ public class ChatRowConferenceInvite extends EaseChatRow {
 
     @Override
     protected void onInflateView() {
-        inflater.inflate(R.layout.em_row_conference_invite, this);
+        inflater.inflate(R.layout.demo_row_conference_invite, this);
     }
 
     @Override

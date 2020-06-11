@@ -18,7 +18,7 @@ public class SharedFilesAdapter extends EaseBaseRecyclerViewAdapter<EMMucSharedF
 
     @Override
     public ViewHolder getViewHolder(ViewGroup parent, int viewType) {
-        return new MyViewHolder(LayoutInflater.from(mContext).inflate(R.layout.em_layout_item_shared_file_row, parent, false));
+        return new MyViewHolder(LayoutInflater.from(mContext).inflate(R.layout.demo_layout_item_shared_file_row, parent, false));
     }
 
     private class MyViewHolder extends ViewHolder<EMMucSharedFile> {

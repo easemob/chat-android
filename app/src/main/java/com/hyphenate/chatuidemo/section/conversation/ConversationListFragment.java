@@ -36,7 +36,7 @@ import com.scwang.smartrefresh.layout.listener.OnRefreshListener;
 
 import java.util.List;
 
-public class HomeFragment extends BaseInitFragment implements OnRefreshListener, View.OnClickListener, OnItemClickListener {
+public class ConversationListFragment extends BaseInitFragment implements OnRefreshListener, View.OnClickListener, OnItemClickListener {
     private EaseSearchTextView mTvSearch;
     private EaseRecyclerView mRvHomeList;
     private SmartRefreshLayout mRefreshLayout;
@@ -45,7 +45,7 @@ public class HomeFragment extends BaseInitFragment implements OnRefreshListener,
 
     @Override
     protected int getLayoutId() {
-        return R.layout.em_fragment_home;
+        return R.layout.demo_fragment_home;
     }
 
     @Override
@@ -62,14 +62,14 @@ public class HomeFragment extends BaseInitFragment implements OnRefreshListener,
         mHomeAdapter = new HomeAdapter();
         mRvHomeList.setAdapter(mHomeAdapter);
         DividerItemDecoration decoration = new DividerItemDecoration(mContext, DividerItemDecoration.VERTICAL);
-        decoration.setDrawable(ContextCompat.getDrawable(mContext, R.drawable.em_home_divider_list));
+        decoration.setDrawable(ContextCompat.getDrawable(mContext, R.drawable.demo_home_divider_list));
         mRvHomeList.addItemDecoration(decoration);
     }
 
     @Override
     public void onCreateContextMenu(@NonNull ContextMenu menu, @NonNull View v, @Nullable ContextMenu.ContextMenuInfo menuInfo) {
         super.onCreateContextMenu(menu, v, menuInfo);
-        requireActivity().getMenuInflater().inflate(R.menu.em_conversation_list_menu, menu);
+        requireActivity().getMenuInflater().inflate(R.menu.demo_conversation_list_menu, menu);
         if(menuInfo instanceof EaseRecyclerView.RecyclerViewContextMenuInfo) {
             int position = ((EaseRecyclerView.RecyclerViewContextMenuInfo) menuInfo).position;
             Object item = mHomeAdapter.getItem(position);

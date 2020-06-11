@@ -1,11 +1,7 @@
 package com.hyphenate.chatuidemo.section.group.fragment;
 
 import android.app.Activity;
-import android.app.Dialog;
-import android.content.DialogInterface;
-import android.graphics.Color;
 import android.graphics.Rect;
-import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
@@ -14,9 +10,7 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.EditText;
 
-import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.core.content.ContextCompat;
 import androidx.fragment.app.FragmentTransaction;
 
 import com.hyphenate.chatuidemo.R;
@@ -48,7 +42,7 @@ public class GroupEditFragment extends BaseDialogFragment implements EaseTitleBa
 
     @Override
     public int getLayoutId() {
-        return R.layout.em_fragment_group_edit;
+        return R.layout.demo_fragment_group_edit;
     }
 
     @Override

@@ -49,7 +49,7 @@ public class ChatActivity extends BaseInitActivity implements EaseTitleBar.OnBac
 
     @Override
     protected int getLayoutId() {
-        return R.layout.em_activity_chat;
+        return R.layout.demo_activity_chat;
     }
 
     @Override

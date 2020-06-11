@@ -1,23 +1,17 @@
 package com.hyphenate.chatuidemo.section.friends.fragment;
 
 import android.os.Bundle;
-import android.text.TextUtils;
-import android.util.Log;
 import android.view.ContextMenu;
 import android.view.MenuItem;
-import android.view.MotionEvent;
 import android.view.View;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.hyphenate.chatuidemo.R;
-import com.hyphenate.chatuidemo.common.db.DemoDbHelper;
-import com.hyphenate.chatuidemo.common.db.dao.EmUserDao;
 import com.hyphenate.chatuidemo.common.interfaceOrImplement.OnResourceParseCallback;
 import com.hyphenate.chatuidemo.common.manager.SidebarPresenter;
 import com.hyphenate.chatuidemo.common.widget.ContactItemView;
@@ -38,8 +32,6 @@ import com.scwang.smartrefresh.layout.SmartRefreshLayout;
 import com.scwang.smartrefresh.layout.api.RefreshLayout;
 import com.scwang.smartrefresh.layout.listener.OnRefreshListener;
 
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
 
 
@@ -61,7 +53,7 @@ public class FriendsFragment extends BaseInitFragment implements View.OnClickLis
 
     @Override
     protected int getLayoutId() {
-        return R.layout.em_fragment_friends;
+        return R.layout.demo_fragment_friends;
     }
 
     @Override
@@ -87,7 +79,7 @@ public class FriendsFragment extends BaseInitFragment implements View.OnClickLis
     @Override
     public void onCreateContextMenu(@NonNull ContextMenu menu, @NonNull View v, @Nullable ContextMenu.ContextMenuInfo menuInfo) {
         super.onCreateContextMenu(menu, v, menuInfo);
-        requireActivity().getMenuInflater().inflate(R.menu.em_friends_list_menu, menu);
+        requireActivity().getMenuInflater().inflate(R.menu.demo_friends_list_menu, menu);
     }
 
     @Override
@@ -208,7 +200,7 @@ public class FriendsFragment extends BaseInitFragment implements View.OnClickLis
      */
     private void addHeader() {
         // 获取头布局，应该放在RecyclerView的setLayoutManager之后
-        View header = getLayoutInflater().inflate(R.layout.em_header_friends_list, mRvFriendsList, false);
+        View header = getLayoutInflater().inflate(R.layout.demo_header_friends_list, mRvFriendsList, false);
         mRvFriendsList.addHeaderView(header);
 
         mCivNewChat = header.findViewById(R.id.civ_new_chat);

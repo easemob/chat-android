@@ -209,7 +209,7 @@ public class ConferenceInviteActivity extends BaseInitActivity implements View.O
             View contentView = convertView;
             ViewHolder viewHolder = null;
             if(contentView == null) {
-                contentView = LayoutInflater.from(mContext).inflate(R.layout.em_contact_item, null);
+                contentView = LayoutInflater.from(mContext).inflate(R.layout.demo_contact_item, null);
                 viewHolder = new ViewHolder(contentView);
                 contentView.setTag(viewHolder);
             }else {
@@ -223,7 +223,7 @@ public class ConferenceInviteActivity extends BaseInitActivity implements View.O
             EaseUserUtils.setUserNick(userName, viewHolder.nameText);
             switch (contact.getSecond()) {
                 case STATE_CHECKED_UNCHANGEABLE :
-                    viewHolder.checkBox.setButtonDrawable(R.drawable.em_checkbox_bg_gray_selector);
+                    viewHolder.checkBox.setButtonDrawable(R.drawable.demo_checkbox_bg_gray_selector);
                     viewHolder.checkBox.setChecked(true);
                     viewHolder.checkBox.setClickable(false);
                     break;
@@ -232,7 +232,7 @@ public class ConferenceInviteActivity extends BaseInitActivity implements View.O
                     contentView.setOnClickListener(view -> {
                         finalViewHolder.checkBox.toggle();
                     });
-                    viewHolder.checkBox.setButtonDrawable(R.drawable.em_checkbox_bg_selector);
+                    viewHolder.checkBox.setButtonDrawable(R.drawable.demo_checkbox_bg_selector);
                     viewHolder.checkBox.setChecked(contact.getSecond() == STATE_CHECKED);
                     viewHolder.checkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                         @Override

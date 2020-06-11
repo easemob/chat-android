@@ -50,8 +50,8 @@
                 android:layout_marginRight="@dimen/em_login_margin_right"
                 android:layout_marginEnd="@dimen/em_login_margin_right"
                 android:switchMinWidth="20dp"
-                android:thumb="@drawable/em_switch_thumb_selector"
-                android:track="@drawable/em_switch_track_selector"
+                android:thumb="@drawable/demo_switch_thumb_selector"
+                android:track="@drawable/demo_switch_track_selector"
                 app:layout_constraintLeft_toRightOf="@id/tv_server_title"
                 app:layout_constraintRight_toRightOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
@@ -100,8 +100,8 @@
                 android:id="@+id/switch_specify_server"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:track="@drawable/em_switch_track_selector"
-                android:thumb="@drawable/em_switch_thumb_selector"
+                android:track="@drawable/demo_switch_track_selector"
+                android:thumb="@drawable/demo_switch_thumb_selector"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toRightOf="parent"
                 app:layout_constraintTop_toTopOf="@id/tv_server_specify"
@@ -157,8 +157,8 @@
                 android:id="@+id/switch_https_set"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:track="@drawable/em_switch_track_selector"
-                android:thumb="@drawable/em_switch_thumb_selector"
+                android:track="@drawable/demo_switch_track_selector"
+                android:thumb="@drawable/demo_switch_thumb_selector"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toRightOf="parent"
                 app:layout_constraintTop_toTopOf="@id/tv_https_set"
@@ -183,7 +183,7 @@
                 android:text="@string/em_server_set_button_reset_text"
                 android:textSize="14sp"
                 android:visibility="visible"
-                android:background="@drawable/em_login_server_btn_shape"
+                android:background="@drawable/demo_login_server_btn_shape"
                 android:textColor="@color/black"/>
 
             <Button

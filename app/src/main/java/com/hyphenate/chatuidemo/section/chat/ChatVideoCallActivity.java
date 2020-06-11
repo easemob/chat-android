@@ -6,8 +6,6 @@ import android.os.Bundle;
 import android.view.View;
 import android.view.WindowManager;
 
-import androidx.fragment.app.Fragment;
-
 import com.hyphenate.chatuidemo.R;
 import com.hyphenate.chatuidemo.section.base.BaseInitActivity;
 import com.hyphenate.easeui.ui.chat.fragment.EaseVideoCallFragment;
@@ -25,7 +23,7 @@ public class ChatVideoCallActivity extends BaseInitActivity {
 
     @Override
     protected int getLayoutId() {
-        return R.layout.em_common_fragment;
+        return R.layout.demo_common_fragment;
     }
 
     @Override

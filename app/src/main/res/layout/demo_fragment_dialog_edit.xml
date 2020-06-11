@@ -12,4 +12,4 @@
     android:paddingStart="@dimen/em_padding_15"
     android:paddingRight="@dimen/em_padding_15"
     android:paddingEnd="@dimen/em_padding_15"
-    android:background="@drawable/em_dialog_edit_bg_shape"/>
+    android:background="@drawable/demo_dialog_edit_bg_shape"/>

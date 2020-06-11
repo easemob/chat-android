@@ -5,14 +5,9 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 
-import androidx.lifecycle.ViewModelProvider;
-
-import com.hyphenate.chatuidemo.DemoHelper;
 import com.hyphenate.chatuidemo.R;
 import com.hyphenate.chatuidemo.section.base.BaseInitActivity;
 import com.hyphenate.chatuidemo.section.friends.fragment.ChatRoomContactManageFragment;
-import com.hyphenate.chatuidemo.section.friends.viewmodels.ChatRoomContactViewModel;
-import com.hyphenate.easeui.interfaces.EaseChatRoomListener;
 import com.hyphenate.easeui.widget.EaseSearchTextView;
 import com.hyphenate.easeui.widget.EaseTitleBar;
 
@@ -27,7 +22,7 @@ public class ChatRoomContactManageActivity extends BaseInitActivity implements E
 
     @Override
     protected int getLayoutId() {
-        return R.layout.em_activity_friends_chat_room_contact_manage;
+        return R.layout.demo_activity_friends_chat_room_contact_manage;
     }
 
     @Override

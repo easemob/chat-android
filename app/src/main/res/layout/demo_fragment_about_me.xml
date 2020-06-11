@@ -28,7 +28,7 @@
                     android:id="@+id/top"
                     android:layout_width="match_parent"
                     android:layout_height="200dp"
-                    android:background="@drawable/em_about_me_top_bg"/>
+                    android:background="@drawable/demo_about_me_top_bg"/>
 
                 <View
                     android:layout_width="match_parent"
@@ -69,6 +69,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             app:layout_constraintTop_toTopOf="parent"
+                            app:layout_constraintBottom_toTopOf="@id/message"
                             app:layout_constraintLeft_toRightOf="@id/avatar"
                             android:layout_marginLeft="11dp"
                             android:layout_marginStart="11dp"
@@ -81,6 +82,7 @@
                             android:id="@+id/message"
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
+                            app:layout_constraintTop_toBottomOf="@id/name"
                             app:layout_constraintBottom_toBottomOf="parent"
                             app:layout_constraintLeft_toRightOf="@id/avatar"
                             app:layout_constraintRight_toRightOf="parent"
@@ -94,6 +96,7 @@
                             android:padding="7dp"
                             android:textColor="@color/em_conversation_color_item_message"
                             android:textSize="14sp"
+                            android:visibility="gone"
                             tools:text="ssdd"/>
 
                     </androidx.constraintlayout.widget.ConstraintLayout>
@@ -134,12 +137,12 @@
                 app:arrowItemShowAvatar="true"
                 app:arrowItemAvatarHeight="@dimen/em_about_me_avatar_size"
                 app:arrowItemAvatarWidth="@dimen/em_about_me_avatar_size"
-                app:arrowItemTitle="@string/em_about_me_common"
-                android:foreground="@drawable/em_ripple_click_gray"
+                app:arrowItemTitle="@string/em_about_me_set"
+                android:foreground="@drawable/demo_ripple_click_gray"
                 android:background="@color/white"/>
 
             <com.hyphenate.chatuidemo.common.widget.ArrowItemView
-                android:id="@+id/item_privacy_set"
+                android:id="@+id/item_feedback"
                 android:layout_width="0dp"
                 android:layout_height="66dp"
                 app:layout_constraintLeft_toLeftOf="parent"
@@ -149,41 +152,39 @@
                 app:arrowItemAvatarHeight="@dimen/em_about_me_avatar_size"
                 app:arrowItemAvatarWidth="@dimen/em_about_me_avatar_size"
                 app:arrowItemShowAvatar="true"
-                app:arrowItemTitle="@string/em_about_me_privacy"
+                app:arrowItemTitle="@string/em_about_me_feedback"
                 android:background="@color/white"
-                android:foreground="@drawable/em_ripple_click_gray"/>
+                android:foreground="@drawable/demo_ripple_click_gray"/>
 
             <com.hyphenate.chatuidemo.common.widget.ArrowItemView
-                android:id="@+id/item_message_set"
+                android:id="@+id/item_about_hx"
                 android:layout_width="0dp"
                 android:layout_height="66dp"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/item_privacy_set"
+                app:layout_constraintTop_toBottomOf="@id/item_feedback"
                 app:arrowItemAvatarSrc="@drawable/ease_default_avatar"
                 app:arrowItemAvatarHeight="@dimen/em_about_me_avatar_size"
                 app:arrowItemAvatarWidth="@dimen/em_about_me_avatar_size"
                 app:arrowItemShowAvatar="true"
-                app:arrowItemTitle="@string/em_about_me_message_set"
+                app:arrowItemTitle="@string/em_about_me_hx"
                 android:background="@color/white"
-                android:foreground="@drawable/em_ripple_click_gray"
-                android:layout_marginTop="@dimen/em_margin_20"/>
+                android:foreground="@drawable/demo_ripple_click_gray"/>
 
             <com.hyphenate.chatuidemo.common.widget.ArrowItemView
-                android:id="@+id/item_service_set"
+                android:id="@+id/item_developer_set"
                 android:layout_width="0dp"
                 android:layout_height="66dp"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/item_message_set"
+                app:layout_constraintTop_toBottomOf="@id/item_about_hx"
                 app:arrowItemAvatarSrc="@drawable/ease_default_avatar"
                 app:arrowItemAvatarHeight="@dimen/em_about_me_avatar_size"
                 app:arrowItemAvatarWidth="@dimen/em_about_me_avatar_size"
                 app:arrowItemShowAvatar="true"
-                app:arrowItemTitle="@string/em_about_me_service_set"
+                app:arrowItemTitle="@string/em_about_me_developer"
                 android:background="@color/white"
-                android:foreground="@drawable/em_ripple_click_gray"
-                android:layout_marginTop="@dimen/em_margin_20"/>
+                android:foreground="@drawable/demo_ripple_click_gray"/>
 
             <Button
                 android:id="@+id/btn_logout"
@@ -191,7 +192,7 @@
                 android:layout_height="66dp"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/item_service_set"
+                app:layout_constraintTop_toBottomOf="@id/item_developer_set"
                 app:layout_constraintBottom_toBottomOf="parent"
                 android:layout_marginBottom="20dp"
                 android:layout_marginTop="@dimen/em_margin_30"
@@ -199,7 +200,8 @@
                 android:textSize="@dimen/em_size_big"
                 android:textColor="@color/em_color_warning"
                 android:background="@color/white"
-                android:foreground="@drawable/em_ripple_click_gray"/>
+                android:visibility="gone"
+                android:foreground="@drawable/demo_ripple_click_gray"/>
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

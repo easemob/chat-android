@@ -1,15 +1,12 @@
 package com.hyphenate.chatuidemo.section.group;
 
 import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.TextView;
 
-import com.baidu.mapapi.map.Text;
-import com.google.android.gms.common.SignInButton;
 import com.hyphenate.chatuidemo.R;
 import com.hyphenate.chatuidemo.common.interfaceOrImplement.OnResourceParseCallback;
 import com.hyphenate.chatuidemo.common.manager.SidebarPresenter;
@@ -23,7 +20,6 @@ import com.scwang.smartrefresh.layout.SmartRefreshLayout;
 import com.scwang.smartrefresh.layout.api.RefreshLayout;
 import com.scwang.smartrefresh.layout.listener.OnRefreshListener;
 
-import java.util.Collections;
 import java.util.List;
 
 import androidx.lifecycle.ViewModelProvider;
@@ -56,7 +52,7 @@ public class GroupPickContactsActivity extends BaseInitActivity implements EaseT
 
     @Override
     protected int getLayoutId() {
-        return R.layout.em_activity_chat_group_pick_contacts;
+        return R.layout.demo_activity_chat_group_pick_contacts;
     }
 
     @Override

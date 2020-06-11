@@ -49,7 +49,7 @@
             android:layout_weight="1"
             android:background="#000">
 
-            <include layout="@layout/em_layout_debug_detail" />
+            <include layout="@layout/demo_layout_debug_detail" />
         </ScrollView>
 
     </LinearLayout>

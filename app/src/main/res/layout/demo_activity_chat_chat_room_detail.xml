@@ -74,7 +74,7 @@
                 app:layout_constraintBottom_toTopOf="@id/item_chat_room_members"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toRightOf="parent"
-                android:background="@drawable/em_default_divider_list"/>
+                android:background="@drawable/demo_default_divider_list"/>
 
             <com.hyphenate.chatuidemo.common.widget.ArrowItemView
                 android:id="@+id/item_chat_room_members"
@@ -93,7 +93,7 @@
                 app:layout_constraintBottom_toTopOf="@id/item_chat_room_admins"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toRightOf="parent"
-                android:background="@drawable/em_default_divider_list"/>
+                android:background="@drawable/demo_default_divider_list"/>
 
             <com.hyphenate.chatuidemo.common.widget.ArrowItemView
                 android:id="@+id/item_chat_room_admins"
@@ -112,7 +112,7 @@
                 app:layout_constraintBottom_toTopOf="@id/tv_chat_room_refund"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toRightOf="parent"
-                android:background="@drawable/em_default_divider_list"/>
+                android:background="@drawable/demo_default_divider_list"/>
 
             <TextView
                 android:id="@+id/tv_chat_room_refund"
@@ -124,7 +124,7 @@
                 android:gravity="center"
                 android:textColor="@color/em_dialog_color_btn_warning"
                 android:textSize="@dimen/em_size_big"
-                android:foreground="@drawable/em_ripple_click_gray"
+                android:foreground="@drawable/demo_ripple_click_gray"
                 style="@style/em_group_arrow_item"/>
 
             <View
@@ -137,7 +137,7 @@
                 app:layout_constraintRight_toRightOf="parent"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintVertical_weight="1"
-                android:background="@drawable/em_default_divider_list"/>
+                android:background="@drawable/demo_default_divider_list"/>
 
             <androidx.constraintlayout.widget.Group
                 android:id="@+id/group_owner"

@@ -33,7 +33,7 @@ public class NewChatRoomActivity extends BaseInitActivity implements EaseTitleBa
 
     @Override
     protected int getLayoutId() {
-        return R.layout.em_activity_new_chat_room;
+        return R.layout.demo_activity_new_chat_room;
     }
 
     @Override

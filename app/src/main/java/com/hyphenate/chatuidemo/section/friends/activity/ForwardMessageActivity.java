@@ -12,7 +12,6 @@ import com.hyphenate.chatuidemo.DemoApp;
 import com.hyphenate.chatuidemo.R;
 import com.hyphenate.chatuidemo.common.interfaceOrImplement.OnResourceParseCallback;
 import com.hyphenate.chatuidemo.common.manager.PushAndMessageHelper;
-import com.hyphenate.chatuidemo.section.base.BaseDialogFragment;
 import com.hyphenate.chatuidemo.section.base.BaseInitActivity;
 import com.hyphenate.chatuidemo.section.chat.ChatActivity;
 import com.hyphenate.chatuidemo.section.chat.adapter.PickUserAdapter;
@@ -52,7 +51,7 @@ public class ForwardMessageActivity extends BaseInitActivity implements OnRefres
 
     @Override
     protected int getLayoutId() {
-        return R.layout.em_activity_contact_list;
+        return R.layout.demo_activity_contact_list;
     }
 
     @Override

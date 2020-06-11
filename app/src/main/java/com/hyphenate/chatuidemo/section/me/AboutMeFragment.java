@@ -25,13 +25,13 @@ public class AboutMeFragment extends BaseInitFragment implements View.OnClickLis
     private ConstraintLayout clUser;
     private TextView name;
     private ArrowItemView itemCommonSet;
-    private ArrowItemView itemPrivacySet;
-    private ArrowItemView itemMessageSet;
-    private ArrowItemView itemServiceSet;
+    private ArrowItemView itemFeedback;
+    private ArrowItemView itemAboutHx;
+    private ArrowItemView itemDeveloperSet;
     private Button mBtnLogout;
     @Override
     protected int getLayoutId() {
-        return R.layout.em_fragment_about_me;
+        return R.layout.demo_fragment_about_me;
     }
 
     @Override
@@ -40,9 +40,9 @@ public class AboutMeFragment extends BaseInitFragment implements View.OnClickLis
         clUser = findViewById(R.id.cl_user);
         name = findViewById(R.id.name);
         itemCommonSet = findViewById(R.id.item_common_set);
-        itemPrivacySet = findViewById(R.id.item_privacy_set);
-        itemMessageSet = findViewById(R.id.item_message_set);
-        itemServiceSet = findViewById(R.id.item_service_set);
+        itemFeedback = findViewById(R.id.item_feedback);
+        itemAboutHx = findViewById(R.id.item_about_hx);
+        itemDeveloperSet = findViewById(R.id.item_developer_set);
         mBtnLogout = findViewById(R.id.btn_logout);
 
         name.setText(DemoHelper.getInstance().getCurrentUser());
@@ -54,9 +54,9 @@ public class AboutMeFragment extends BaseInitFragment implements View.OnClickLis
         mBtnLogout.setOnClickListener(this);
         clUser.setOnClickListener(this);
         itemCommonSet.setOnClickListener(this);
-        itemPrivacySet.setOnClickListener(this);
-        itemMessageSet.setOnClickListener(this);
-        itemServiceSet.setOnClickListener(this);
+        itemFeedback.setOnClickListener(this);
+        itemAboutHx.setOnClickListener(this);
+        itemDeveloperSet.setOnClickListener(this);
     }
 
     @Override
@@ -73,13 +73,13 @@ public class AboutMeFragment extends BaseInitFragment implements View.OnClickLis
             case R.id.item_common_set:
 
                 break;
-            case R.id.item_privacy_set:
+            case R.id.item_feedback:
                 PrivacyIndexActivity.actionStart(mContext);
                 break;
-            case R.id.item_message_set:
+            case R.id.item_about_hx:
 
                 break;
-            case R.id.item_service_set:
+            case R.id.item_developer_set:
 
                 break;
         }

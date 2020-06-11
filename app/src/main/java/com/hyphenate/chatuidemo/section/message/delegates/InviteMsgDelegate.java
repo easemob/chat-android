@@ -24,7 +24,7 @@ public class InviteMsgDelegate extends NewFriendsMsgDelegate<InviteMessage, Invi
 
     @Override
     protected int getLayoutId() {
-        return R.layout.em_layout_item_invite_msg_invite;
+        return R.layout.demo_layout_item_invite_msg_invite;
     }
 
     @Override

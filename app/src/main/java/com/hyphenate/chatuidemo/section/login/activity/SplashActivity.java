@@ -1,25 +1,19 @@
 package com.hyphenate.chatuidemo.section.login.activity;
 
-import android.os.Bundle;
-import android.os.SystemClock;
-import android.view.animation.AlphaAnimation;
-
 import androidx.lifecycle.ViewModelProvider;
-import androidx.lifecycle.ViewModelProviders;
 
 import com.hyphenate.chatuidemo.MainActivity;
 import com.hyphenate.chatuidemo.R;
 import com.hyphenate.chatuidemo.common.interfaceOrImplement.OnResourceParseCallback;
 import com.hyphenate.chatuidemo.common.utils.DemoLog;
 import com.hyphenate.chatuidemo.section.base.BaseInitActivity;
-import com.hyphenate.chatuidemo.common.enums.Status;
 import com.hyphenate.chatuidemo.section.login.viewmodels.SplashViewModel;
 
 public class SplashActivity extends BaseInitActivity {
 
     @Override
     protected int getLayoutId() {
-        return R.layout.em_splash_activity;
+        return R.layout.demo_splash_activity;
     }
 
     @Override

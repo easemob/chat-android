@@ -10,7 +10,6 @@ import android.widget.TextView;
 import androidx.annotation.Nullable;
 import androidx.lifecycle.ViewModelProvider;
 
-import com.hyphenate.chat.EMClient;
 import com.hyphenate.chat.EMConversation;
 import com.hyphenate.chat.EMGroup;
 import com.hyphenate.chatuidemo.DemoHelper;
@@ -62,7 +61,7 @@ public class GroupDetailActivity extends BaseInitActivity implements EaseTitleBa
 
     @Override
     protected int getLayoutId() {
-        return R.layout.em_activity_chat_group_detail;
+        return R.layout.demo_activity_chat_group_detail;
     }
 
     @Override

@@ -8,7 +8,7 @@
         <item name="colorAccent">@color/em_base_color_accent</item>
         <item name="android:textColorHint">@color/em_base_color_text_hint</item>
         <item name="android:windowBackground">@color/em_base_color_window_bg</item>
-        <item name="android:divider">@drawable/em_default_divider_list</item>
+        <item name="android:divider">@drawable/demo_default_divider_list</item>
     </style>
 
     <style name="NoActionBar.Dark" parent="Theme.AppCompat.NoActionBar">
@@ -36,7 +36,7 @@
         <item name="searchHintIcon">@drawable/ease_search_icon</item>
         <!--清理按钮图标-->
         <item name="closeIcon">@drawable/em_search_close</item>
-        <item name="android:background">@drawable/em_search_tv_bg_shape</item>
+        <item name="android:background">@drawable/demo_search_tv_bg_shape</item>
     </style>
 
     <style name="Toolbar.EaseBar" parent="Widget.AppCompat.Toolbar">

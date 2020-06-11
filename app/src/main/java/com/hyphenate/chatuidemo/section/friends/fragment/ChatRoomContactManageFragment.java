@@ -39,7 +39,7 @@ public class ChatRoomContactManageFragment extends BaseInitFragment implements O
 
     @Override
     protected int getLayoutId() {
-        return R.layout.em_common_list;
+        return R.layout.demo_common_list;
     }
 
     @Override
@@ -143,7 +143,7 @@ public class ChatRoomContactManageFragment extends BaseInitFragment implements O
     }
 
     private void addHeaderView() {
-        View headerView = LayoutInflater.from(mContext).inflate(R.layout.em_widget_contact_item, mRvCommonList, false);
+        View headerView = LayoutInflater.from(mContext).inflate(R.layout.demo_widget_contact_item, mRvCommonList, false);
         ImageView avatar = headerView.findViewById(R.id.avatar);
         TextView name = headerView.findViewById(R.id.name);
         avatar.setImageResource(R.drawable.em_create_group);

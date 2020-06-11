@@ -1,7 +1,5 @@
 package com.hyphenate.chatuidemo.section.chat;
 
-import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -53,7 +51,7 @@ public class PickAtUserActivity extends BaseInitActivity implements OnRefreshLis
 
     @Override
     protected int getLayoutId() {
-        return R.layout.em_activity_chat_pick_at_user;
+        return R.layout.demo_activity_chat_pick_at_user;
     }
 
     @Override
@@ -122,7 +120,7 @@ public class PickAtUserActivity extends BaseInitActivity implements OnRefreshLis
     }
 
     private void AddHeader() {
-        View view = LayoutInflater.from(this).inflate(R.layout.em_widget_contact_item, mRvPickUserList, false);
+        View view = LayoutInflater.from(this).inflate(R.layout.demo_widget_contact_item, mRvPickUserList, false);
         ImageView avatarView = (ImageView) view.findViewById(R.id.avatar);
         TextView textView = (TextView) view.findViewById(R.id.name);
         textView.setText(getString(R.string.all_members));

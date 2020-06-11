@@ -58,7 +58,7 @@ public class DeskShareWindow {
         layoutParams.type = EaseCompat.getSupportedWindowType();
         layoutParams.flags = WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE | WindowManager.LayoutParams.FLAG_ALT_FOCUSABLE_IM;
 
-        floatView = LayoutInflater.from(context).inflate(R.layout.em_widget_desk_share_window, null);
+        floatView = LayoutInflater.from(context).inflate(R.layout.demo_widget_desk_share_window, null);
         windowManager.addView(floatView, layoutParams);
 
         floatView.setOnClickListener(new View.OnClickListener() {

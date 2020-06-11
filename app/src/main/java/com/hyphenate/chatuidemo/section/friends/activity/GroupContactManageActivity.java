@@ -30,7 +30,7 @@ public class GroupContactManageActivity extends BaseInitActivity implements Ease
 
     @Override
     protected int getLayoutId() {
-        return R.layout.em_activity_friends_group_contact_manage;
+        return R.layout.demo_activity_friends_group_contact_manage;
     }
 
     @Override

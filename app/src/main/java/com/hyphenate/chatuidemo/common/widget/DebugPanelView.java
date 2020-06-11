@@ -8,7 +8,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
-import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.ListView;
@@ -23,7 +22,6 @@ import com.hyphenate.chatuidemo.R;
 import com.hyphenate.util.EMLog;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -61,7 +59,7 @@ public class DebugPanelView extends LinearLayout implements View.OnClickListener
     }
 
     private void init() {
-        LayoutInflater.from(getContext()).inflate(R.layout.em_layout_debug_panel, this);
+        LayoutInflater.from(getContext()).inflate(R.layout.demo_layout_debug_panel, this);
         tv_version = findViewById(R.id.tv_version);
         btn_close = findViewById(R.id.btn_close);
         list_stream = findViewById(R.id.list_stream);
@@ -196,7 +194,7 @@ public class DebugPanelView extends LinearLayout implements View.OnClickListener
             View contentView = convertView;
             ViewHolder viewHolder = null;
             if(contentView == null) {
-                contentView = LayoutInflater.from(getContext()).inflate(R.layout.em_item_layout_debug, null);
+                contentView = LayoutInflater.from(getContext()).inflate(R.layout.demo_item_layout_debug, null);
                 viewHolder = new ViewHolder(contentView);
                 contentView.setTag(viewHolder);
             }else {

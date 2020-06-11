@@ -185,7 +185,10 @@
     <string name="em_notify_refuse">拒绝</string>
     <string name="em_notify_delete">删除</string>
 
-    <string name="em_about_me_common">通用</string>
+    <string name="em_about_me_set">设置</string>
+    <string name="em_about_me_feedback">意见反馈</string>
+    <string name="em_about_me_hx">关于环信IM</string>
+    <string name="em_about_me_developer">开发者服务</string>
     <string name="em_about_me_privacy">安全与隐私</string>
     <string name="em_about_me_message_set">消息设置</string>
     <string name="em_about_me_service_set">服务诊断</string>

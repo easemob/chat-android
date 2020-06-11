@@ -11,7 +11,6 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import com.hyphenate.chat.EMGroup;
-import com.hyphenate.chat.EMGroupManager;
 import com.hyphenate.chat.EMGroupOptions;
 import com.hyphenate.chatuidemo.DemoHelper;
 import com.hyphenate.chatuidemo.R;
@@ -19,7 +18,6 @@ import com.hyphenate.chatuidemo.common.DemoConstant;
 import com.hyphenate.chatuidemo.common.interfaceOrImplement.OnResourceParseCallback;
 import com.hyphenate.chatuidemo.common.livedatas.MessageChangeLiveData;
 import com.hyphenate.chatuidemo.section.base.BaseInitActivity;
-import com.hyphenate.chatuidemo.section.dialog.DemoDialogFragment;
 import com.hyphenate.chatuidemo.section.dialog.SimpleDialogFragment;
 import com.hyphenate.chatuidemo.section.friends.viewmodels.NewGroupViewModel;
 import com.hyphenate.chatuidemo.section.group.GroupPickContactsActivity;
@@ -48,7 +46,7 @@ public class NewGroupActivity extends BaseInitActivity implements EaseTitleBar.O
 
     @Override
     protected int getLayoutId() {
-        return R.layout.em_activity_new_group;
+        return R.layout.demo_activity_new_group;
     }
 
     @Override

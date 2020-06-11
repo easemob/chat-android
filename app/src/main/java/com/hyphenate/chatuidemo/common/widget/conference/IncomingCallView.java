@@ -42,7 +42,7 @@ public class IncomingCallView extends FrameLayout {
     }
 
     private void init() {
-        LayoutInflater.from(getContext()).inflate(R.layout.em_incoming_call_view, this);
+        LayoutInflater.from(getContext()).inflate(R.layout.demo_incoming_call_view, this);
         mBtnReject = findViewById(R.id.btn_reject);
         mBtnPickup = findViewById(R.id.btn_pickup);
         mInviterName = findViewById(R.id.tv_inviter_name);

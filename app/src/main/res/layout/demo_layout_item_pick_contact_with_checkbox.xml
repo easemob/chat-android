@@ -28,7 +28,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
             android:focusable="false"
-            android:button="@drawable/em_checkbox_bg_selector" />
+            android:button="@drawable/demo_checkbox_bg_selector" />
 
         <com.hyphenate.easeui.widget.EaseImageView
             android:id="@+id/avatar"

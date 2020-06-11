@@ -5,7 +5,7 @@
     android:minWidth="240dp"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:background="@drawable/em_toast_bg">
+    android:background="@drawable/demo_toast_bg">
 
     <ImageView
         android:id="@+id/iv_toast"

@@ -19,7 +19,7 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="@dimen/adaptive_44dp"
-        android:background="@drawable/em_conference_member_cover">
+        android:background="@drawable/demo_conference_member_cover">
 
         <TextView
             android:id="@+id/text_name"

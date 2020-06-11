@@ -7,26 +7,26 @@
 
     <fragment
         android:id="@+id/em_main_nav_home"
-        android:name="com.hyphenate.chatuidemo.section.conversation.HomeFragment"
+        android:name="com.hyphenate.chatuidemo.section.conversation.ConversationListFragment"
         android:label="@string/em_main_title_home"
-        tools:layout="@layout/em_fragment_home" />
+        tools:layout="@layout/demo_fragment_home" />
 
     <fragment
         android:id="@+id/em_main_nav_friends"
         android:name="com.hyphenate.chatuidemo.section.friends.fragment.FriendsFragment"
         android:label="@string/em_main_title_friends"
-        tools:layout="@layout/em_fragment_friends" />
+        tools:layout="@layout/demo_fragment_friends" />
 
     <fragment
         android:id="@+id/em_main_nav_discover"
         android:name="com.hyphenate.chatuidemo.section.discover.DiscoverFragment"
         android:label="@string/em_main_title_discover"
-        tools:layout="@layout/em_fragment_discover" />
+        tools:layout="@layout/demo_fragment_discover" />
 
     <fragment
         android:id="@+id/em_main_nav_me"
         android:name="com.hyphenate.chatuidemo.section.me.AboutMeFragment"
         android:label="@string/em_main_title_me"
-        tools:layout="@layout/em_fragment_about_me" />
+        tools:layout="@layout/demo_fragment_about_me" />
 
 </navigation>

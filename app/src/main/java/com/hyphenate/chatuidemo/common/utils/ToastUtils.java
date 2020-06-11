@@ -229,7 +229,7 @@ public class ToastUtils {
 
     private static Toast getToast(Context context, String title, String message, int type, int duration, int gravity) {
         Toast toast = new Toast(context);
-        View toastView = LayoutInflater.from(context).inflate(R.layout.em_toast_layout, null);
+        View toastView = LayoutInflater.from(context).inflate(R.layout.demo_toast_layout, null);
         toast.setView(toastView);
         ImageView ivToast = toastView.findViewById(R.id.iv_toast);
         TextView tvToastTitle = toastView.findViewById(R.id.tv_toast_title);

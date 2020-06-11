@@ -12,7 +12,7 @@ import androidx.annotation.NonNull;
 public class AgreeMsgDelegate extends NewFriendsMsgDelegate<InviteMessage, AgreeMsgDelegate.ViewHolder> {
     @Override
     protected int getLayoutId() {
-        return R.layout.em_layout_item_invite_msg_agree;
+        return R.layout.demo_layout_item_invite_msg_agree;
     }
 
     @Override

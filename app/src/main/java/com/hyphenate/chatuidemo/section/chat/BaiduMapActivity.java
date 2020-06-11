@@ -34,7 +34,7 @@ public class BaiduMapActivity extends BaseInitActivity implements BaiduMapFragme
 
     @Override
     protected int getLayoutId() {
-        return R.layout.em_common_fragment;
+        return R.layout.demo_common_fragment;
     }
 
     @Override

@@ -1,7 +1,5 @@
 package com.hyphenate.chatuidemo.section.friends.adapter;
 
-import android.text.TextUtils;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,13 +10,12 @@ import androidx.annotation.NonNull;
 import com.hyphenate.chat.EMChatRoom;
 import com.hyphenate.chatuidemo.R;
 import com.hyphenate.easeui.adapter.EaseBaseRecyclerViewAdapter;
-import com.hyphenate.easeui.utils.EaseCommonUtils;
 import com.hyphenate.easeui.widget.EaseImageView;
 
 public class ChatRoomContactAdapter extends EaseBaseRecyclerViewAdapter<EMChatRoom> {
     @Override
     public ViewHolder getViewHolder(ViewGroup parent, int viewType) {
-        return new GroupViewHolder(LayoutInflater.from(mContext).inflate(R.layout.em_widget_contact_item, parent, false));
+        return new GroupViewHolder(LayoutInflater.from(mContext).inflate(R.layout.demo_widget_contact_item, parent, false));
     }
 
     private class GroupViewHolder extends ViewHolder<EMChatRoom> {

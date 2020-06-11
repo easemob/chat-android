@@ -30,7 +30,7 @@ public class GroupMemberTypeActivity extends BaseInitActivity implements EaseTit
 
     @Override
     protected int getLayoutId() {
-        return R.layout.em_activity_chat_group_member_type;
+        return R.layout.demo_activity_chat_group_member_type;
     }
 
     public static void actionStart(Context context, String groupId, boolean owner) {

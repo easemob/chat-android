@@ -7,16 +7,10 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 
-import androidx.fragment.app.FragmentTransaction;
-
 import com.hyphenate.chatuidemo.R;
 import com.hyphenate.chatuidemo.common.utils.ThreadManager;
 import com.hyphenate.chatuidemo.common.utils.ToastUtils;
-import com.hyphenate.chatuidemo.section.base.BaseFragment;
 import com.hyphenate.chatuidemo.section.base.BaseInitActivity;
-import com.hyphenate.chatuidemo.section.login.fragment.LoginFragment;
-import com.hyphenate.chatuidemo.section.login.fragment.RegisterFragment;
-import com.hyphenate.chatuidemo.section.login.fragment.ServerSetFragment;
 
 public class TestActivity extends BaseInitActivity implements View.OnClickListener {
     private Button btn_success_1;
@@ -35,7 +29,7 @@ public class TestActivity extends BaseInitActivity implements View.OnClickListen
 
     @Override
     protected int getLayoutId() {
-        return R.layout.em_activity_test;
+        return R.layout.demo_activity_test;
     }
 
     @Override

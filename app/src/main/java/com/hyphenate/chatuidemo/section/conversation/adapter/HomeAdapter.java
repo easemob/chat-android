@@ -27,13 +27,12 @@ import com.hyphenate.util.DateUtils;
 import com.hyphenate.chatuidemo.common.db.entity.InviteMessage.InviteMessageStatus;
 
 import java.util.Date;
-import java.util.concurrent.locks.LockSupport;
 
 public class HomeAdapter extends EaseBaseRecyclerViewAdapter<Object> {
 
     @Override
     public ViewHolder getViewHolder(ViewGroup parent, int viewType) {
-        return new MyViewHolder(LayoutInflater.from(mContext).inflate(R.layout.ease_item_row_chat_history, parent, false));
+        return new MyViewHolder(LayoutInflater.from(mContext).inflate(R.layout.demo_item_row_chat_history, parent, false));
     }
 
     private class MyViewHolder extends ViewHolder<Object> {

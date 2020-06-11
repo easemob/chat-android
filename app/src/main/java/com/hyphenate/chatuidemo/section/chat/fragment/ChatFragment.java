@@ -120,7 +120,7 @@ public class ChatFragment extends EaseChatFragment implements EaseChatFragment.O
     public void onBubbleLongClick(View v, EMMessage message) {
         super.onBubbleLongClick(v, message);
         PopupMenu menu = new PopupMenu(mContext, v);
-        menu.getMenuInflater().inflate(R.menu.em_chat_list_menu, menu.getMenu());
+        menu.getMenuInflater().inflate(R.menu.demo_chat_list_menu, menu.getMenu());
         MenuPopupHelper menuPopupHelper = new MenuPopupHelper(mContext, (MenuBuilder) menu.getMenu(), v);
         menuPopupHelper.setForceShowIcon(true);
         menuPopupHelper.show();

@@ -31,7 +31,7 @@ public class EditTextDialogFragment extends DemoDialogFragment {
 
     @Override
     public int getMiddleLayoutId() {
-        return R.layout.em_fragment_dialog_edit;
+        return R.layout.demo_fragment_dialog_edit;
     }
 
     @Override
@@ -48,7 +48,7 @@ public class EditTextDialogFragment extends DemoDialogFragment {
     public void initView(Bundle savedInstanceState) {
         super.initView(savedInstanceState);
         etInput = findViewById(R.id.et_input);
-        mBtnDialogConfirm.setTextColor(ContextCompat.getColorStateList(mContext, R.color.em_dialog_btn_text_brand_color_selector));
+        mBtnDialogConfirm.setTextColor(ContextCompat.getColorStateList(mContext, R.color.demo_dialog_btn_text_brand_color_selector));
         mTvDialogTitle.setText(title);
         etInput.setText(content);
     }

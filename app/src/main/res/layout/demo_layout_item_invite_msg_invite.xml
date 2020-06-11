@@ -7,7 +7,7 @@
 
     <include
         android:id="@+id/include_common"
-        layout="@layout/em_layout_invite_msg_common" />
+        layout="@layout/demo_layout_invite_msg_common" />
 
     <Button
         android:id="@+id/agree"

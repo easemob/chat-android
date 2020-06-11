@@ -42,7 +42,7 @@ public class ContactBlackListActivity extends BaseInitActivity implements OnRefr
 
     @Override
     protected int getLayoutId() {
-        return R.layout.em_activity_contact_black_list;
+        return R.layout.demo_activity_contact_black_list;
     }
 
     @Override
@@ -62,7 +62,7 @@ public class ContactBlackListActivity extends BaseInitActivity implements OnRefr
     @Override
     public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
         super.onCreateContextMenu(menu, v, menuInfo);
-        getMenuInflater().inflate(R.menu.em_black_list_menu, menu);
+        getMenuInflater().inflate(R.menu.demo_black_list_menu, menu);
     }
 
     @Override

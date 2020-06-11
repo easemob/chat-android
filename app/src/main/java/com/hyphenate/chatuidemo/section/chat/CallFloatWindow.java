@@ -75,7 +75,7 @@ public class CallFloatWindow {
         layoutParams.type = EaseCompat.getSupportedWindowType();
         layoutParams.flags = WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE | WindowManager.LayoutParams.FLAG_ALT_FOCUSABLE_IM;
 
-        floatView = LayoutInflater.from(context).inflate(R.layout.em_widget_call_float_window, null);
+        floatView = LayoutInflater.from(context).inflate(R.layout.demo_widget_call_float_window, null);
         windowManager.addView(floatView, layoutParams);
         floatView.post(new Runnable() {
             @Override

@@ -52,7 +52,7 @@ public class EasePageIndicator extends LinearLayout {
         View indicator = new View(getContext());
         ViewGroup.LayoutParams lp = new ViewGroup.LayoutParams((int)EaseCommonUtils.dip2px(getContext(), 16f), (int)EaseCommonUtils.dip2px(getContext(), 4f));
         indicator.setLayoutParams(lp);
-        indicator.setBackground(ContextCompat.getDrawable(getContext(), R.drawable.em_indicator_selector));
+        indicator.setBackground(ContextCompat.getDrawable(getContext(), R.drawable.demo_indicator_selector));
         addView(indicator);
         if(indicator.getLayoutParams() instanceof MarginLayoutParams) {
             int margin = (int) EaseCommonUtils.dip2px(getContext(), 5f);

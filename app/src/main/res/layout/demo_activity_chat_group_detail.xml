@@ -84,7 +84,7 @@
                 android:layout_marginRight="@dimen/em_margin_15"
                 android:layout_marginStart="@dimen/em_margin_15"
                 android:layout_marginEnd="@dimen/em_margin_15"
-                android:background="@drawable/em_default_divider_list"/>
+                android:background="@drawable/demo_default_divider_list"/>
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/cl_member"
@@ -104,7 +104,7 @@
                     style="@style/em_group_text_item_title"
                     android:layout_width="0dp"
                     android:gravity="center_vertical"
-                    android:foreground="@drawable/em_ripple_click_gray"/>
+                    android:foreground="@drawable/demo_ripple_click_gray"/>
 
                 <ImageView
                     android:id="@+id/iv_group_member_right"
@@ -147,7 +147,7 @@
                     android:drawableLeft="@drawable/em_contact_menu_add"
                     android:drawableTint="@color/em_color_brand"
                     android:textColor="@color/em_color_brand"
-                    android:foreground="@drawable/em_ripple_click_gray"/>
+                    android:foreground="@drawable/demo_ripple_click_gray"/>
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -158,7 +158,7 @@
                 app:layout_constraintTop_toBottomOf="@id/cl_member"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toRightOf="parent"
-                android:background="@drawable/em_default_divider_list"/>
+                android:background="@drawable/demo_default_divider_list"/>
 
             <com.hyphenate.chatuidemo.common.widget.ArrowItemView
                 android:id="@+id/item_group_name"
@@ -201,7 +201,7 @@
                 app:layout_constraintTop_toBottomOf="@id/item_group_introduction"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toRightOf="parent"
-                android:background="@drawable/em_default_divider_list"/>
+                android:background="@drawable/demo_default_divider_list"/>
 
             <com.hyphenate.chatuidemo.common.widget.ArrowItemView
                 android:id="@+id/item_group_history"
@@ -218,7 +218,7 @@
                 app:layout_constraintTop_toBottomOf="@id/item_group_history"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toRightOf="parent"
-                android:background="@drawable/em_default_divider_list"/>
+                android:background="@drawable/demo_default_divider_list"/>
 
             <com.hyphenate.chatuidemo.common.widget.SwitchItemView
                 android:id="@+id/item_group_not_disturb"
@@ -252,7 +252,7 @@
                 app:layout_constraintTop_toBottomOf="@id/item_group_top"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toRightOf="parent"
-                android:background="@drawable/em_default_divider_list"/>
+                android:background="@drawable/demo_default_divider_list"/>
 
             <TextView
                 android:id="@+id/tv_group_refund"
@@ -263,7 +263,7 @@
                 android:gravity="center"
                 android:textColor="@color/em_dialog_color_btn_warning"
                 android:textSize="@dimen/em_size_big"
-                android:foreground="@drawable/em_ripple_click_gray"
+                android:foreground="@drawable/demo_ripple_click_gray"
                 style="@style/em_group_arrow_item"/>
 
             <View
@@ -273,7 +273,7 @@
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toRightOf="parent"
                 app:layout_constraintBottom_toBottomOf="parent"
-                android:background="@drawable/em_default_divider_list"/>
+                android:background="@drawable/demo_default_divider_list"/>
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

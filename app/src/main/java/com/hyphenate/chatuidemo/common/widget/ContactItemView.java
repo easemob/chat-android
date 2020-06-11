@@ -7,9 +7,7 @@ import android.util.AttributeSet;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -41,7 +39,7 @@ public class ContactItemView extends RelativeLayout {
     }
     
     private void init(Context context, AttributeSet attrs){
-        LayoutInflater.from(context).inflate(R.layout.em_widget_contact_item, this);
+        LayoutInflater.from(context).inflate(R.layout.demo_widget_contact_item, this);
         mClUser = findViewById(R.id.cl_user);
         mAvatar = (ImageView) findViewById(R.id.avatar);
         unreadMsgView = (TextView) findViewById(R.id.unread_msg_number);

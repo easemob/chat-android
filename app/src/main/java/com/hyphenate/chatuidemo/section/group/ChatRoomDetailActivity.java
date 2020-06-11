@@ -47,7 +47,7 @@ public class ChatRoomDetailActivity extends BaseInitActivity implements EaseTitl
 
     @Override
     protected int getLayoutId() {
-        return R.layout.em_activity_chat_chat_room_detail;
+        return R.layout.demo_activity_chat_chat_room_detail;
     }
 
     @Override

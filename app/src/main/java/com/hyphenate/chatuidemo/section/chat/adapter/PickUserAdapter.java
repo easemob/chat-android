@@ -8,9 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.hyphenate.chat.EMGroup;
 import com.hyphenate.chatuidemo.R;
-import com.hyphenate.chatuidemo.section.friends.adapter.GroupContactAdapter;
 import com.hyphenate.easeui.adapter.EaseBaseRecyclerViewAdapter;
 import com.hyphenate.easeui.domain.EaseUser;
 import com.hyphenate.easeui.utils.EaseCommonUtils;
@@ -21,7 +19,7 @@ import androidx.annotation.NonNull;
 public class PickUserAdapter extends EaseBaseRecyclerViewAdapter<EaseUser> {
     @Override
     public ViewHolder getViewHolder(ViewGroup parent, int viewType) {
-        return new PickUserViewHolder(LayoutInflater.from(mContext).inflate(R.layout.em_widget_contact_item, parent, false));
+        return new PickUserViewHolder(LayoutInflater.from(mContext).inflate(R.layout.demo_widget_contact_item, parent, false));
     }
 
     private class PickUserViewHolder extends ViewHolder<EaseUser> {

@@ -4,7 +4,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -17,7 +16,6 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.hyphenate.chatuidemo.R;
 import com.hyphenate.chatuidemo.common.enums.SearchType;
-import com.hyphenate.chatuidemo.common.enums.Status;
 import com.hyphenate.chatuidemo.common.interfaceOrImplement.OnResourceParseCallback;
 import com.hyphenate.chatuidemo.section.base.BaseInitActivity;
 import com.hyphenate.chatuidemo.section.friends.adapter.AddContactAdapter;
@@ -53,12 +51,12 @@ public class AddContactActivity extends BaseInitActivity implements EaseTitleBar
 
     @Override
     protected int getLayoutId() {
-        return R.layout.em_activity_friends_add_contact;
+        return R.layout.demo_activity_friends_add_contact;
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.em_search_menu, menu);
+        getMenuInflater().inflate(R.menu.demo_search_menu, menu);
         MenuItem searchItem = menu.findItem(R.id.action_search);
         mSearchView = (SearchView) searchItem.getActionView();
         // 搜索框直接展开显示，输入内容后有清空图标

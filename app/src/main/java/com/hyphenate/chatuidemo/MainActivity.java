@@ -24,7 +24,7 @@ import com.hyphenate.chatuidemo.section.MainViewModel;
 import com.hyphenate.chatuidemo.section.base.BaseFragment;
 import com.hyphenate.chatuidemo.section.base.BaseInitActivity;
 import com.hyphenate.chatuidemo.section.chat.ConferenceActivity;
-import com.hyphenate.chatuidemo.section.conversation.HomeFragment;
+import com.hyphenate.chatuidemo.section.conversation.ConversationListFragment;
 import com.hyphenate.chatuidemo.section.discover.DiscoverFragment;
 import com.hyphenate.chatuidemo.section.friends.activity.NewGroupActivity;
 import com.hyphenate.chatuidemo.section.friends.fragment.FriendsFragment;
@@ -38,10 +38,10 @@ import java.lang.reflect.Method;
 public class MainActivity extends BaseInitActivity implements BottomNavigationView.OnNavigationItemSelectedListener {
     private BottomNavigationView navView;
     private EaseTitleBar mTitleBar;
-    private BaseFragment mHomeFragment, mFriendsFragment, mDiscoverFragment, mAboutMeFragment;
+    private BaseFragment mConversationListFragment, mFriendsFragment, mDiscoverFragment, mAboutMeFragment;
     private BaseFragment mCurrentFragment;
     private TextView mTvMainHomeMsg, mTvMainFriendsMsg, mTvMainDiscoverMsg, mTvMainAboutMeMsg;
-    private int[] badgeIds = {R.layout.em_badge_home, R.layout.em_badge_friends, R.layout.em_badge_discover, R.layout.em_badge_about_me};
+    private int[] badgeIds = {R.layout.demo_badge_home, R.layout.demo_badge_friends, R.layout.demo_badge_discover, R.layout.demo_badge_about_me};
     private int[] msgIds = {R.id.tv_main_home_msg, R.id.tv_main_friends_msg, R.id.tv_main_discover_msg, R.id.tv_main_about_me_msg};
     private MainViewModel viewModel;
 
@@ -52,12 +52,12 @@ public class MainActivity extends BaseInitActivity implements BottomNavigationVi
 
     @Override
     protected int getLayoutId() {
-        return R.layout.em_activity_main;
+        return R.layout.demo_activity_main;
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.em_conversation_menu, menu);
+        getMenuInflater().inflate(R.menu.demo_conversation_menu, menu);
         return true;
     }
 
@@ -215,10 +215,10 @@ public class MainActivity extends BaseInitActivity implements BottomNavigationVi
     }
 
     private void switchToHome() {
-        if(mHomeFragment == null) {
-            mHomeFragment = new HomeFragment();
+        if(mConversationListFragment == null) {
+            mConversationListFragment = new ConversationListFragment();
         }
-        replace(mHomeFragment);
+        replace(mConversationListFragment);
     }
 
     private void switchToFriends() {

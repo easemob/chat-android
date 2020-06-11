@@ -5,17 +5,14 @@ import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 
 import androidx.core.content.ContextCompat;
 import androidx.lifecycle.ViewModelProvider;
-import androidx.lifecycle.ViewModelProviders;
 
 import com.hyphenate.chatuidemo.R;
-import com.hyphenate.chatuidemo.common.enums.Status;
 import com.hyphenate.chatuidemo.common.interfaceOrImplement.OnResourceParseCallback;
 import com.hyphenate.chatuidemo.common.utils.ToastUtils;
 import com.hyphenate.easeui.widget.EaseTitleBar;
@@ -36,7 +33,7 @@ public class RegisterFragment extends BaseInitFragment implements TextWatcher, V
 
     @Override
     protected int getLayoutId() {
-        return R.layout.em_fragment_register;
+        return R.layout.demo_fragment_register;
     }
 
     @Override
@@ -126,9 +123,9 @@ public class RegisterFragment extends BaseInitFragment implements TextWatcher, V
         //同时需要修改右侧drawalbeRight对应的资源
         Drawable rightDrawable;
         if(enable) {
-            rightDrawable = ContextCompat.getDrawable(mContext, R.drawable.em_login_btn_right_enable);
+            rightDrawable = ContextCompat.getDrawable(mContext, R.drawable.demo_login_btn_right_enable);
         }else {
-            rightDrawable = ContextCompat.getDrawable(mContext, R.drawable.em_login_btn_right_unable);
+            rightDrawable = ContextCompat.getDrawable(mContext, R.drawable.demo_login_btn_right_unable);
         }
         mBtnLogin.setCompoundDrawablesWithIntrinsicBounds(null, null, rightDrawable, null);
     }

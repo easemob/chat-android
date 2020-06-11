@@ -9,7 +9,6 @@ import android.widget.CompoundButton;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
-import com.huawei.updatesdk.sdk.service.annotation.SecurityLevel;
 import com.hyphenate.chatuidemo.R;
 import com.hyphenate.easeui.adapter.EaseBaseRecyclerViewAdapter;
 import com.hyphenate.easeui.domain.EaseUser;
@@ -30,7 +29,7 @@ public class GroupPickContactsAdapter extends EaseBaseRecyclerViewAdapter<EaseUs
 
     @Override
     public ViewHolder getViewHolder(ViewGroup parent, int viewType) {
-        return new ContactViewHolder(LayoutInflater.from(mContext).inflate(R.layout.em_layout_item_pick_contact_with_checkbox, parent, false));
+        return new ContactViewHolder(LayoutInflater.from(mContext).inflate(R.layout.demo_layout_item_pick_contact_with_checkbox, parent, false));
     }
 
     public void setExistMember(List<String> existMembers) {
@@ -78,11 +77,11 @@ public class GroupPickContactsAdapter extends EaseBaseRecyclerViewAdapter<EaseUs
                 headerView.setVisibility(View.GONE);
             }
             if(existMembers != null && existMembers.contains(username)){
-                checkbox.setButtonDrawable(R.drawable.em_checkbox_bg_gray_selector);
+                checkbox.setButtonDrawable(R.drawable.demo_checkbox_bg_gray_selector);
                 checkbox.setChecked(true);
                 checkbox.setEnabled(false);
             }else{
-                checkbox.setButtonDrawable(R.drawable.em_checkbox_bg_selector);
+                checkbox.setButtonDrawable(R.drawable.demo_checkbox_bg_selector);
                 checkbox.setChecked(false);
                 checkbox.setEnabled(true);
             }

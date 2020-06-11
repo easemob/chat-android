@@ -3,10 +3,8 @@ package com.hyphenate.chatuidemo.section.login.activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 
 import androidx.lifecycle.ViewModelProvider;
-import androidx.lifecycle.ViewModelProviders;
 
 import com.hyphenate.chatuidemo.R;
 import com.hyphenate.chatuidemo.section.base.BaseFragment;
@@ -25,7 +23,7 @@ public class LoginActivity extends BaseInitActivity {
 
     @Override
     protected int getLayoutId() {
-        return R.layout.em_activity_login;
+        return R.layout.demo_activity_login;
     }
 
     @Override

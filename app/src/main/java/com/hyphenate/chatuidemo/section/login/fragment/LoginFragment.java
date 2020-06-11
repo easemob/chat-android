@@ -1,33 +1,26 @@
 package com.hyphenate.chatuidemo.section.login.fragment;
 
-import android.content.Context;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.InputType;
 import android.text.TextUtils;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
-import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
-import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
-import androidx.lifecycle.ViewModelProviders;
 
 import com.hyphenate.chatuidemo.DemoHelper;
 import com.hyphenate.chatuidemo.MainActivity;
 import com.hyphenate.chatuidemo.R;
-import com.hyphenate.chatuidemo.common.enums.Status;
 import com.hyphenate.chatuidemo.common.interfaceOrImplement.OnResourceParseCallback;
 import com.hyphenate.chatuidemo.common.utils.ToastUtils;
 import com.hyphenate.chatuidemo.section.base.BaseInitFragment;
-import com.hyphenate.chatuidemo.section.login.activity.TestActivity;
 import com.hyphenate.chatuidemo.section.login.viewmodels.LoginFragmentViewModel;
 import com.hyphenate.chatuidemo.section.login.viewmodels.LoginViewModel;
 import com.hyphenate.easeui.domain.EaseUser;
@@ -47,7 +40,7 @@ public class LoginFragment extends BaseInitFragment implements View.OnClickListe
 
     @Override
     protected int getLayoutId() {
-        return R.layout.em_fragment_login;
+        return R.layout.demo_fragment_login;
     }
 
     @Override
@@ -186,9 +179,9 @@ public class LoginFragment extends BaseInitFragment implements View.OnClickListe
         //同时需要修改右侧drawalbeRight对应的资源
         Drawable rightDrawable;
         if(enable) {
-            rightDrawable = ContextCompat.getDrawable(mContext, R.drawable.em_login_btn_right_enable);
+            rightDrawable = ContextCompat.getDrawable(mContext, R.drawable.demo_login_btn_right_enable);
         }else {
-            rightDrawable = ContextCompat.getDrawable(mContext, R.drawable.em_login_btn_right_unable);
+            rightDrawable = ContextCompat.getDrawable(mContext, R.drawable.demo_login_btn_right_unable);
         }
         mBtnLogin.setCompoundDrawablesWithIntrinsicBounds(null, null, rightDrawable, null);
     }
