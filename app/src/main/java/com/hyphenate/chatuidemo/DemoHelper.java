@@ -24,6 +24,7 @@ import com.hyphenate.chatuidemo.common.db.entity.InviteMessage;
 import com.hyphenate.chatuidemo.common.db.entity.MsgTypeManageEntity;
 import com.hyphenate.chatuidemo.common.manager.HMSPushHelper;
 import com.hyphenate.chatuidemo.common.manager.OptionsHelper;
+import com.hyphenate.chatuidemo.common.model.DemoModel;
 import com.hyphenate.chatuidemo.common.model.DemoServerSetBean;
 import com.hyphenate.chatuidemo.common.model.EmojiconExampleGroupData;
 import com.hyphenate.chatuidemo.common.receiver.HeadsetReceiver;
@@ -60,6 +61,7 @@ public class DemoHelper {
     public boolean isSDKInit;//SDK是否初始化
     private static DemoHelper mInstance;
     private CallReceiver callReceiver;
+    private DemoModel demoModel = null;
 
     private DemoHelper() {}
 
@@ -92,6 +94,7 @@ public class DemoHelper {
     }
 
     private void initSDK(Context context) {
+        demoModel = new DemoModel(context);
         // 根据项目需求对SDK进行配置
         EMOptions options = initChatOptions(context);
         // 初始化SDK
@@ -263,7 +266,7 @@ public class DemoHelper {
         options.setRequireDeliveryAck(false);
 
         // 设置是否使用 fcm，有些华为设备本身带有 google 服务，
-        options.setUseFCM(isUseFCM());
+        options.setUseFCM(demoModel.isUseFCM());
 
         /**
          * NOTE:你需要设置自己申请的账号来使用三方推送功能，详见集成文档

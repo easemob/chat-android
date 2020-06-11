@@ -361,7 +361,15 @@
         <!--下载并展示文件-->
         <activity android:name="com.hyphenate.easeui.ui.EaseShowNormalFileActivity"/>
         <!--设置-->
-        <activity android:name=".section.me.SetIndexActivity" />
+        <activity android:name=".section.me.activity.SetIndexActivity" />
+        <!--账号与安全-->
+        <activity android:name=".section.me.activity.AccountSecurityActivity" />
+        <!--输入用户名密码-->
+        <activity android:name=".section.me.activity.NamePasswordActivity" />
+        <!--多端多设备管理-->
+        <activity android:name=".section.me.activity.MultiDeviceActivity" />
+        <!--新消息提醒-->
+        <activity android:name=".section.me.activity.MessageReceiveSetActivity" />
     </application>
 
 </manifest>

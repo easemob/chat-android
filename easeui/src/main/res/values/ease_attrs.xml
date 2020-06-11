@@ -23,6 +23,7 @@
             <enum name="none" value="0" />
             <enum name="round" value="1" />
             <enum name="rectangle" value="2" />
+            <enum name="rectangle2" value="3" />
         </attr>
     </declare-styleable>
 
@@ -67,6 +68,24 @@
         <attr name="msgListOtherBubbleBackground" format="reference"/>
         <attr name="msgListShowUserAvatar" format="boolean"/>
         <attr name="msgListShowUserNick" format="boolean"/>
+    </declare-styleable>
+
+    <declare-styleable name="EaseRoundImageView">
+        <attr name="ease_round_border_color" format="color" />
+        <attr name="ease_round_border_width" format="dimension" />
+        <attr name="ease_round_press_alpha" format="integer" />
+        <attr name="ease_round_press_color" format="color" />
+        <attr name="ease_round_radius" format="dimension" />
+        <attr name="ease_round_show_left_up" format="boolean"/>
+        <attr name="ease_round_show_left_down" format="boolean"/>
+        <attr name="ease_round_show_right_up" format="boolean"/>
+        <attr name="ease_round_show_right_down" format="boolean"/>
+        <attr name="roundWidth" format="dimension" />
+        <attr name="roundHeight" format="dimension" />
+        <attr name="ease_round_shape_type" format="enum">
+            <enum name="round" value="1" />
+            <enum name="rectangle" value="2" />
+        </attr>
     </declare-styleable>
 
 </resources>

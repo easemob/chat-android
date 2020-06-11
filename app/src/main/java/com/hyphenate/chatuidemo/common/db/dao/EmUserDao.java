@@ -33,6 +33,9 @@ public interface EmUserDao {
     @Query("select username from em_users")
     List<String> loadAllUsers();
 
+    @Query("select * from em_users")
+    List<EaseUser> loadAllEaseUsers();
+
     @Query("delete from em_users")
     int clearUsers();
 

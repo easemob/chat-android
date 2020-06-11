@@ -15,6 +15,7 @@ import com.hyphenate.chatuidemo.section.dialog.DemoDialogFragment;
 import com.hyphenate.chatuidemo.section.dialog.SimpleDialogFragment;
 import com.hyphenate.chatuidemo.section.friends.activity.ContactDetailActivity;
 import com.hyphenate.chatuidemo.section.login.activity.LoginActivity;
+import com.hyphenate.chatuidemo.section.me.activity.SetIndexActivity;
 import com.hyphenate.easeui.domain.EaseUser;
 import com.hyphenate.easeui.utils.StatusBarCompat;
 
@@ -71,16 +72,16 @@ public class AboutMeFragment extends BaseInitFragment implements View.OnClickLis
                 ContactDetailActivity.actionStart(mContext, user);
                 break;
             case R.id.item_common_set:
-
+                SetIndexActivity.actionStart(mContext);
                 break;
             case R.id.item_feedback:
-                PrivacyIndexActivity.actionStart(mContext);
+                showToast("意见反馈");
                 break;
             case R.id.item_about_hx:
-
+                showToast("关于环信IM");
                 break;
             case R.id.item_developer_set:
-
+                showToast("开发者服务");
                 break;
         }
     }

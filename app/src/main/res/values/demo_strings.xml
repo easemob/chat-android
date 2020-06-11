@@ -1,6 +1,9 @@
 <resources>
     <string name="app_name">chatuidemo</string>
 
+    <string name="username">用户名</string>
+    <string name="password">密码</string>
+
     <string name="em_main_title_home">会话</string>
     <string name="em_main_title_friends">通讯录</string>
     <string name="em_main_title_discover">发现</string>
@@ -189,11 +192,17 @@
     <string name="em_about_me_feedback">意见反馈</string>
     <string name="em_about_me_hx">关于环信IM</string>
     <string name="em_about_me_developer">开发者服务</string>
-    <string name="em_about_me_privacy">安全与隐私</string>
-    <string name="em_about_me_message_set">消息设置</string>
+    <string name="em_set_security">账号与安全</string>
+    <string name="em_set_privacy">隐私</string>
+    <string name="em_set_message_set">新消息设置</string>
+    <string name="em_set_common_set">通用</string>
     <string name="em_about_me_service_set">服务诊断</string>
     <string name="em_privacy_black">黑名单</string>
     <string name="em_privacy_equipments">多端多设备管理</string>
+
+    <string name="newnotify">接收新消息通知</string>
+    <string name="voice">声音</string>
+    <string name="shake">震动</string>
 
     <string name="confirm_forward_to">确定转发到：%1$s ?</string>
 

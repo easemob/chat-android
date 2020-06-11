@@ -63,5 +63,9 @@
     <color name="recall_black">#61212121</color>
     <color name="em_blue">#1E88E5</color>
     <color name="em_blue_pressed">#0000aF</color>
+    <color name="btn_register_normal">#ffffff</color>
+    <color name="btn_register_pressed">#00acff</color>
+    <color name="btn_login_normal">#00acff</color>
+    <color name="btn_login_pressed">#46678d</color>
 
 </resources>
