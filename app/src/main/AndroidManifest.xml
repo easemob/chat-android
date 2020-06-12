@@ -370,6 +370,10 @@
         <activity android:name=".section.me.activity.MultiDeviceActivity" />
         <!--新消息提醒-->
         <activity android:name=".section.me.activity.MessageReceiveSetActivity" />
+        <!--通用设置-->
+        <activity android:name=".section.me.activity.CommonSettingsActivity" />
+        <!--消息推送设置-->
+        <activity android:name=".section.me.activity.OfflinePushSettingsActivity" />
     </application>
 
 </manifest>

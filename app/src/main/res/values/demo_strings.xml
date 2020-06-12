@@ -4,6 +4,8 @@
     <string name="username">用户名</string>
     <string name="password">密码</string>
 
+    <string name="save">保存</string>
+
     <string name="em_main_title_home">会话</string>
     <string name="em_main_title_friends">通讯录</string>
     <string name="em_main_title_discover">发现</string>
@@ -203,6 +205,21 @@
     <string name="newnotify">接收新消息通知</string>
     <string name="voice">声音</string>
     <string name="shake">震动</string>
+    <string name="push_settings">消息推送设置</string>
+    <string name="push_use_fcm">消息推送使用 FCM</string>
+    <string name="push_no_disturb">推送消息免打扰(针对GCM、小米、华为等推送)</string>
+    <string name="push_no_disturb_on">开启</string>
+    <string name="push_only_on">只在夜间开启(22:00 - 7:00)</string>
+    <string name="push_no_disturb_off">关闭</string>
+    <string name="push_saving_settings">正在保存...</string>
+    <string name="push_save_failed">保存失败</string>
+
+    <string name="title_msg_typing">单聊消息显示\"正在输入\"</string>
+    <string name="chatroom_allow_owner_leave"> 允许聊天室群主离开</string>
+    <string name="delete_msg_when_exit_group">退出群组时删除聊天数据</string>
+    <string name="set_transfer_file_by_userself">无需用户实现上传下载</string>
+    <string name="set_autodownload_thumbnail">是否自动下载缩略图附件</string>
+    <string name="auto_accept_group_invitation">自动同意群组加群邀请</string>
 
     <string name="confirm_forward_to">确定转发到：%1$s ?</string>
 

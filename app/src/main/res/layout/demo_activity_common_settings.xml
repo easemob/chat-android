@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <com.hyphenate.easeui.widget.EaseTitleBar
+        android:id="@+id/title_bar"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/em_common_title_bar_height"
+        app:titleBarTitle="@string/em_set_common_set"
+        app:titleBarDisplayHomeAsUpEnabled="true"/>
+
+    <com.hyphenate.chatuidemo.common.widget.ArrowItemView
+        android:id="@+id/item_notification"
+        android:layout_width="match_parent"
+        android:layout_height="66dp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/item_security"
+        app:arrowItemAvatarHeight="@dimen/em_about_me_avatar_size"
+        app:arrowItemAvatarWidth="@dimen/em_about_me_avatar_size"
+        app:arrowItemTitle="@string/push_settings"
+        android:foreground="@drawable/demo_ripple_click_gray"
+        android:background="@color/white"/>
+
+    <com.hyphenate.chatuidemo.common.widget.SwitchItemView
+        android:id="@+id/item_switch_typing"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        app:switchItemTitle="@string/title_msg_typing"
+        app:switchItemShowDivider="true"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:layout_marginBottom="10dp"
+        android:text="群组设置:"
+        android:layout_marginLeft="20dp"
+        android:textSize="16sp"
+        android:textColor="@color/black"/>
+
+    <com.hyphenate.chatuidemo.common.widget.SwitchItemView
+        android:id="@+id/item_switch_chatroom"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        app:switchItemTitle="@string/chatroom_allow_owner_leave"
+        app:switchItemShowDivider="true"/>
+
+    <com.hyphenate.chatuidemo.common.widget.SwitchItemView
+        android:id="@+id/item_switch_delete_msg"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        app:switchItemTitle="@string/delete_msg_when_exit_group"
+        app:switchItemShowDivider="true"/>
+
+    <com.hyphenate.chatuidemo.common.widget.SwitchItemView
+        android:id="@+id/item_switch_auto_file"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        app:switchItemTitle="@string/set_transfer_file_by_userself"
+        app:switchItemShowDivider="true"/>
+
+    <com.hyphenate.chatuidemo.common.widget.SwitchItemView
+        android:id="@+id/item_switch_auto_download"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        app:switchItemTitle="@string/set_autodownload_thumbnail"
+        app:switchItemShowDivider="true"/>
+
+    <com.hyphenate.chatuidemo.common.widget.SwitchItemView
+        android:id="@+id/item_switch_auto_accept_group"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        app:switchItemTitle="@string/auto_accept_group_invitation"
+        app:switchItemShowDivider="true"/>
+
+</LinearLayout>

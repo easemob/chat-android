@@ -78,7 +78,7 @@ public class LoginFragment extends BaseInitFragment implements View.OnClickListe
             parseResource(response, new OnResourceParseCallback<EaseUser>(true) {
                 @Override
                 public void onSuccess(EaseUser data) {
-                    DemoHelper.getInstance().setAutoLogin(true);
+                    DemoHelper.getInstance().getModel().setAutoLogin(true);
                     //跳转到主页
                     MainActivity.startAction(mContext);
                     mContext.finish();

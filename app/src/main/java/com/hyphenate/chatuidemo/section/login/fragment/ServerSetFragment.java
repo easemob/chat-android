@@ -101,17 +101,17 @@ public class ServerSetFragment extends BaseInitFragment implements EaseTitleBar.
             mBtnServer.setEnabled(false);
         }
         //判断是否显示设置数据，及是否可以自定义设置
-        mCustomServerEnable = DemoHelper.getInstance().isCustomServerEnable();
+        mCustomServerEnable = DemoHelper.getInstance().getModel().isCustomServerEnable();
         mSwitchServer.setChecked(mCustomServerEnable);
         mSwitchSpecifyServer.setChecked(mCustomServerEnable);
-        mSwitchHttpsSet.setChecked(DemoHelper.getInstance().getUsingHttpsOnly());
-        String appkey = DemoHelper.getInstance().getCutomAppkey();
+        mSwitchHttpsSet.setChecked(DemoHelper.getInstance().getModel().getUsingHttpsOnly());
+        String appkey = DemoHelper.getInstance().getModel().getCutomAppkey();
         mEtAppkey.setText(TextUtils.isEmpty(appkey) ? "":appkey);
-        String imServer = DemoHelper.getInstance().getIMServer();
+        String imServer = DemoHelper.getInstance().getModel().getIMServer();
         mEtServerAddress.setText(TextUtils.isEmpty(imServer) ? "" : imServer);
-        int imServerPort = DemoHelper.getInstance().getIMServerPort();
+        int imServerPort = DemoHelper.getInstance().getModel().getIMServerPort();
         mEtServerPort.setText(imServerPort == 0 ? "" : imServerPort+"");
-        String restServer = DemoHelper.getInstance().getRestServer();
+        String restServer = DemoHelper.getInstance().getModel().getRestServer();
         mEtServerRest.setText(TextUtils.isEmpty(restServer) ? "" : restServer);
         mGroupServerSet.setVisibility(mSwitchServer.isChecked() ? View.VISIBLE : View.GONE);
         setResetButtonVisible(mSwitchServer.isChecked(), isInited);
@@ -171,7 +171,7 @@ public class ServerSetFragment extends BaseInitFragment implements EaseTitleBar.
     @Override
     public void afterTextChanged(Editable s) {
         mAppkey = mEtAppkey.getText().toString().trim();
-        DemoHelper.getInstance().enableCustomAppkey(!TextUtils.isEmpty(mAppkey));
+        DemoHelper.getInstance().getModel().enableCustomAppkey(!TextUtils.isEmpty(mAppkey));
         mServerAddress = mEtServerAddress.getText().toString().trim();
         mServerPort = mEtServerPort.getText().toString().trim();
         mRestServerAddress = mEtServerRest.getText().toString().trim();
@@ -198,7 +198,7 @@ public class ServerSetFragment extends BaseInitFragment implements EaseTitleBar.
             SimpleDialogFragment.showDialog(mContext, R.string.em_server_set_dialog_reset, new DemoDialogFragment.OnConfirmClickListener() {
                 @Override
                 public void onConfirmClick(View view) {
-                    DemoServerSetBean set = DemoHelper.getInstance().getDefServerSet();
+                    DemoServerSetBean set = DemoHelper.getInstance().getModel().getDefServerSet();
                     mEtAppkey.setText(set.getAppkey());
                     mEtServerAddress.setText(set.getImServer());
                     mEtServerPort.setText(set.getImPort()+"");
@@ -230,19 +230,19 @@ public class ServerSetFragment extends BaseInitFragment implements EaseTitleBar.
         }
         // 保存设置
         if(!TextUtils.isEmpty(mAppkey)) {
-            DemoHelper.getInstance().setCustomAppkey(mAppkey);
+            DemoHelper.getInstance().getModel().setCustomAppkey(mAppkey);
         }
         if(!TextUtils.isEmpty(mServerAddress)) {
-            DemoHelper.getInstance().setIMServer(mServerAddress);
+            DemoHelper.getInstance().getModel().setIMServer(mServerAddress);
         }
         if(!TextUtils.isEmpty(mServerPort)) {
-            DemoHelper.getInstance().setIMServerPort(Integer.valueOf(mServerPort));
+            DemoHelper.getInstance().getModel().setIMServerPort(Integer.valueOf(mServerPort));
         }
         if(!TextUtils.isEmpty(mRestServerAddress)) {
-            DemoHelper.getInstance().setRestServer(mRestServerAddress);
+            DemoHelper.getInstance().getModel().setRestServer(mRestServerAddress);
         }
-        DemoHelper.getInstance().enableCustomServer(mCustomServerEnable);
-        DemoHelper.getInstance().setUsingHttpsOnly(mSwitchHttpsSet.isChecked());
+        DemoHelper.getInstance().getModel().enableCustomServer(mCustomServerEnable);
+        DemoHelper.getInstance().getModel().setUsingHttpsOnly(mSwitchHttpsSet.isChecked());
 
         //保存成功后，回退到生一个页面
         onBackPress();

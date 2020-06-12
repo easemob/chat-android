@@ -74,7 +74,7 @@ public class EMClientRepository extends BaseEMRepository{
                 //注册之前先判断SDK是否已经初始化，如果没有先进行SDK的初始化
                 if(!DemoHelper.getInstance().isSDKInit) {
                     DemoHelper.getInstance().init(DemoApp.getInstance());
-                    DemoHelper.getInstance().setCurrentUserName(userName);
+                    DemoHelper.getInstance().getModel().setCurrentUserName(userName);
                 }
                 runOnIOThread(() -> {
                     try {
@@ -102,7 +102,7 @@ public class EMClientRepository extends BaseEMRepository{
             @Override
             protected void createCall(@NonNull ResultCallBack<LiveData<EaseUser>> callBack) {
                 DemoHelper.getInstance().init(DemoApp.getInstance());
-                DemoHelper.getInstance().setCurrentUserName(userName);
+                DemoHelper.getInstance().getModel().setCurrentUserName(userName);
                 if(isTokenFlag) {
                     EMClient.getInstance().loginWithToken(userName, pwd, new DemoEmCallBack() {
                         @Override

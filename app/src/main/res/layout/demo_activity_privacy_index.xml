@@ -28,6 +28,7 @@
         android:id="@+id/item_equipment_manager"
         android:layout_width="0dp"
         android:layout_height="66dp"
+        android:visibility="gone"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toBottomOf="@id/item_black_manager"

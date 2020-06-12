@@ -47,7 +47,7 @@ public class DemoApp extends Application implements Thread.UncaughtExceptionHand
         // 初始化PreferenceManager
         PreferenceManager.init(this);
         // init hx sdk
-        if(DemoHelper.getInstance().getAutoLogin()) {
+        if(DemoHelper.getInstance().getModel().getAutoLogin()) {
             DemoHelper.getInstance().init(this);
         }
 

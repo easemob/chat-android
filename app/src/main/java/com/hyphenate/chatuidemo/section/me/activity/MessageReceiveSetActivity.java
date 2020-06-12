@@ -1,5 +1,7 @@
 package com.hyphenate.chatuidemo.section.me.activity;
 
+import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 
@@ -16,6 +18,11 @@ public class MessageReceiveSetActivity extends BaseInitActivity implements Switc
     private SwitchItemView rlSwitchSound;
     private SwitchItemView rlSwitchVibrate;
     private DemoModel model;
+
+    public static void actionStart(Context context) {
+        Intent intent = new Intent(context, MessageReceiveSetActivity.class);
+        context.startActivity(intent);
+    }
 
     @Override
     protected int getLayoutId() {

@@ -60,10 +60,10 @@ public class SetIndexActivity extends BaseInitActivity implements EaseTitleBar.O
                 AccountSecurityActivity.actionStart(mContext);
                 break;
             case R.id.item_notification ://消息设置
-
+                MessageReceiveSetActivity.actionStart(mContext);
                 break;
             case R.id.item_common_set ://通用
-
+                CommonSettingsActivity.actionStart(mContext);
                 break;
             case R.id.item_privacy ://隐私
                 PrivacyIndexActivity.actionStart(mContext);
