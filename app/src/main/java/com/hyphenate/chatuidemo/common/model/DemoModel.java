@@ -2,9 +2,13 @@ package com.hyphenate.chatuidemo.common.model;
 
 import android.content.Context;
 
+import com.hyphenate.chatuidemo.DemoApp;
 import com.hyphenate.chatuidemo.common.db.DemoDbHelper;
 import com.hyphenate.chatuidemo.common.db.dao.EmUserDao;
 import com.hyphenate.chatuidemo.common.db.entity.EmUserEntity;
+import com.hyphenate.chatuidemo.common.db.entity.InviteMessage;
+import com.hyphenate.chatuidemo.common.db.entity.MsgTypeManageEntity;
+import com.hyphenate.chatuidemo.common.manager.OptionsHelper;
 import com.hyphenate.chatuidemo.common.utils.PreferenceManager;
 import com.hyphenate.easeui.domain.EaseUser;
 import com.hyphenate.easeui.model.EaseAtMessageHelper;
@@ -59,6 +63,44 @@ public class DemoModel {
         }
         dao.insert(EmUserEntity.parseParent(user));
     }
+
+    /**
+     * get DemoDbHelper
+     * @return
+     */
+    public DemoDbHelper getDbHelper() {
+        return DemoDbHelper.getInstance(DemoApp.getInstance());
+    }
+
+    /**
+     * 向数据库中插入数据
+     * @param object
+     */
+    public void insert(Object object) {
+        DemoDbHelper dbHelper = getDbHelper();
+        if(object instanceof InviteMessage) {
+            dbHelper.getInviteMessageDao().insert((InviteMessage) object);
+        }else if(object instanceof MsgTypeManageEntity) {
+            dbHelper.getMsgTypeManageDao().insert((MsgTypeManageEntity) object);
+        }else if(object instanceof EmUserEntity) {
+            dbHelper.getUserDao().insert((EmUserEntity) object);
+        }
+    }
+
+    /**
+     * update
+     * @param object
+     */
+    public void update(Object object) {
+        DemoDbHelper dbHelper = getDbHelper();
+        if(object instanceof InviteMessage) {
+            dbHelper.getInviteMessageDao().update((InviteMessage) object);
+        }else if(object instanceof MsgTypeManageEntity) {
+            dbHelper.getMsgTypeManageDao().update((MsgTypeManageEntity) object);
+        }else if(object instanceof EmUserEntity) {
+            dbHelper.getUserDao().insert((EmUserEntity) object);
+        }
+    }
     
     /**
      * save current username
@@ -70,6 +112,30 @@ public class DemoModel {
 
     public String getCurrentUsernName(){
         return PreferenceManager.getInstance().getCurrentUsername();
+    }
+
+    /**
+     * 设置昵称
+     * @param nickname
+     */
+    public void setCurrentUserNick(String nickname) {
+        PreferenceManager.getInstance().setCurrentUserNick(nickname);
+    }
+
+    public String getCurrentUserNick() {
+        return PreferenceManager.getInstance().getCurrentUserNick();
+    }
+
+    /**
+     * 设置头像
+     * @param avatar
+     */
+    private void setCurrentUserAvatar(String avatar) {
+        PreferenceManager.getInstance().setCurrentUserAvatar(avatar);
+    }
+
+    private String getCurrentUserAvatar() {
+        return PreferenceManager.getInstance().getCurrentUserAvatar();
     }
     
     public void setSettingMsgNotification(boolean paramBoolean) {
@@ -220,46 +286,6 @@ public class DemoModel {
         return PreferenceManager.getInstance().isBacklistSynced();
     }
     
-    public void allowChatroomOwnerLeave(boolean value){
-        PreferenceManager.getInstance().setSettingAllowChatroomOwnerLeave(value);
-    }
-    
-    public boolean isChatroomOwnerLeaveAllowed(){
-        return PreferenceManager.getInstance().getSettingAllowChatroomOwnerLeave();
-    }
-   
-    public void setDeleteMessagesAsExitGroup(boolean value) {
-        PreferenceManager.getInstance().setDeleteMessagesAsExitGroup(value);
-    }
-    
-    public boolean isDeleteMessagesAsExitGroup() {
-        return PreferenceManager.getInstance().isDeleteMessagesAsExitGroup();
-    }
-
-    public void setTransfeFileByUser(boolean value) {
-        PreferenceManager.getInstance().setTransferFileByUser(value);
-    }
-
-    public boolean isSetTransferFileByUser() {
-        return PreferenceManager.getInstance().isSetTransferFileByUser();
-    }
-
-    public void setAutodownloadThumbnail(boolean autodownload) {
-        PreferenceManager.getInstance().setAudodownloadThumbnail(autodownload);
-    }
-
-    public boolean isSetAutodownloadThumbnail() {
-        return PreferenceManager.getInstance().isSetAutodownloadThumbnail();
-    }
-
-    public void setAutoAcceptGroupInvitation(boolean value) {
-        PreferenceManager.getInstance().setAutoAcceptGroupInvitation(value);
-    }
-    
-    public boolean isAutoAcceptGroupInvitation() {
-        return PreferenceManager.getInstance().isAutoAcceptGroupInvitation();
-    }
-    
 
     public void setAdaptiveVideoEncode(boolean value) {
         PreferenceManager.getInstance().setAdaptiveVideoEncode(value);
@@ -275,42 +301,6 @@ public class DemoModel {
 
     public boolean isPushCall() {
         return PreferenceManager.getInstance().isPushCall();
-    }
-
-    public void setRestServer(String restServer){
-        PreferenceManager.getInstance().setRestServer(restServer);
-    }
-
-    public String getRestServer(){
-        return  PreferenceManager.getInstance().getRestServer();
-    }
-
-    public void setIMServer(String imServer){
-        PreferenceManager.getInstance().setIMServer(imServer);
-    }
-
-    public String getIMServer(){
-        return PreferenceManager.getInstance().getIMServer();
-    }
-
-    public void enableCustomServer(boolean enable){
-        PreferenceManager.getInstance().enableCustomServer(enable);
-    }
-
-    public boolean isCustomServerEnable(){
-        return PreferenceManager.getInstance().isCustomServerEnable();
-    }
-
-    public void enableCustomAppkey(boolean enable) {
-        PreferenceManager.getInstance().enableCustomAppkey(enable);
-    }
-
-    public boolean isCustomAppkeyEnabled() {
-        return PreferenceManager.getInstance().isCustomAppkeyEnabled();
-    }
-
-    public void setCustomAppkey(String appkey) {
-        PreferenceManager.getInstance().setCustomAppkey(appkey);
     }
 
     public boolean isMsgRoaming() {
@@ -329,8 +319,28 @@ public class DemoModel {
         PreferenceManager.getInstance().showMsgTyping(show);
     }
 
-    public String getCutomAppkey() {
-        return PreferenceManager.getInstance().getCustomAppkey();
+    /**
+     * 设置本地标记，是否自动登录
+     * @param autoLogin
+     */
+    public void setAutoLogin(boolean autoLogin) {
+        PreferenceManager.getInstance().setAutoLogin(autoLogin);
+    }
+
+    /**
+     * 获取本地标记，是否自动登录
+     * @return
+     */
+    public boolean getAutoLogin() {
+        return PreferenceManager.getInstance().getAutoLogin();
+    }
+
+    /**
+     * 获取默认的服务器设置
+     * @return
+     */
+    public DemoServerSetBean getDefServerSet() {
+        return OptionsHelper.getInstance().getDefServerSet();
     }
 
     /**
@@ -347,6 +357,195 @@ public class DemoModel {
      */
     public boolean isUseFCM() {
         return PreferenceManager.getInstance().isUseFCM();
+    }
+
+    /**
+     * 自定义服务器是否可用
+     * @return
+     */
+    public boolean isCustomServerEnable() {
+        return OptionsHelper.getInstance().isCustomServerEnable();
+    }
+
+    /**
+     * 这是自定义服务器是否可用
+     * @param enable
+     */
+    public void enableCustomServer(boolean enable){
+        OptionsHelper.getInstance().enableCustomServer(enable);
+    }
+
+    /**
+     * 设置闲置服务器
+     * @param restServer
+     */
+    public void setRestServer(String restServer){
+        OptionsHelper.getInstance().setRestServer(restServer);
+    }
+
+    /**
+     * 获取闲置服务器
+     * @return
+     */
+    public String getRestServer(){
+        return  OptionsHelper.getInstance().getRestServer();
+    }
+
+    /**
+     * 设置IM服务器
+     * @param imServer
+     */
+    public void setIMServer(String imServer){
+        OptionsHelper.getInstance().setIMServer(imServer);
+    }
+
+    /**
+     * 获取IM服务器
+     * @return
+     */
+    public String getIMServer(){
+        return OptionsHelper.getInstance().getIMServer();
+    }
+
+    /**
+     * 设置端口号
+     * @param port
+     */
+    public void setIMServerPort(int port) {
+        OptionsHelper.getInstance().setIMServerPort(port);
+    }
+
+    public int getIMServerPort() {
+        return OptionsHelper.getInstance().getIMServerPort();
+    }
+
+    /**
+     * 设置自定义appkey是否可用
+     * @param enable
+     */
+    public void enableCustomAppkey(boolean enable) {
+        OptionsHelper.getInstance().enableCustomAppkey(enable);
+    }
+
+    /**
+     * 获取自定义appkey是否可用
+     * @return
+     */
+    public boolean isCustomAppkeyEnabled() {
+        return OptionsHelper.getInstance().isCustomAppkeyEnabled();
+    }
+
+    /**
+     * 设置自定义appkey
+     * @param appkey
+     */
+    public void setCustomAppkey(String appkey) {
+        OptionsHelper.getInstance().setCustomAppkey(appkey);
+    }
+
+    /**
+     * 获取自定义appkey
+     * @return
+     */
+    public String getCutomAppkey() {
+        return OptionsHelper.getInstance().getCustomAppkey();
+    }
+
+    /**
+     * 设置是否允许聊天室owner离开并删除会话记录，意味着owner再不会受到任何消息
+     * @param value
+     */
+    public void allowChatroomOwnerLeave(boolean value){
+        OptionsHelper.getInstance().allowChatroomOwnerLeave(value);
+    }
+
+    /**
+     * 获取聊天室owner离开时的设置
+     * @return
+     */
+    public boolean isChatroomOwnerLeaveAllowed(){
+        return OptionsHelper.getInstance().isChatroomOwnerLeaveAllowed();
+    }
+
+    /**
+     * 设置退出(主动和被动退出)群组时是否删除聊天消息
+     * @param value
+     */
+    public void setDeleteMessagesAsExitGroup(boolean value) {
+        OptionsHelper.getInstance().setDeleteMessagesAsExitGroup(value);
+    }
+
+    /**
+     * 获取退出(主动和被动退出)群组时是否删除聊天消息
+     * @return
+     */
+    public boolean isDeleteMessagesAsExitGroup() {
+        return OptionsHelper.getInstance().isDeleteMessagesAsExitGroup();
+    }
+
+    /**
+     * 设置是否自动接受加群邀请
+     * @param value
+     */
+    public void setAutoAcceptGroupInvitation(boolean value) {
+        OptionsHelper.getInstance().setAutoAcceptGroupInvitation(value);
+    }
+
+    /**
+     * 获取是否自动接受加群邀请
+     * @return
+     */
+    public boolean isAutoAcceptGroupInvitation() {
+        return OptionsHelper.getInstance().isAutoAcceptGroupInvitation();
+    }
+
+    /**
+     * 设置是否自动将消息附件上传到环信服务器，默认为True是使用环信服务器上传下载
+     * @param value
+     */
+    public void setTransfeFileByUser(boolean value) {
+        OptionsHelper.getInstance().setTransfeFileByUser(value);
+    }
+
+    /**
+     * 获取是否自动将消息附件上传到环信服务器，默认为True是使用环信服务器上传下载
+     * @return
+     */
+    public boolean isSetTransferFileByUser() {
+        return OptionsHelper.getInstance().isSetTransferFileByUser();
+    }
+
+    /**
+     * 是否自动下载缩略图，默认是true为自动下载
+     * @param autodownload
+     */
+    public void setAutodownloadThumbnail(boolean autodownload) {
+        OptionsHelper.getInstance().setAutodownloadThumbnail(autodownload);
+    }
+
+    /**
+     * 获取是否自动下载缩略图
+     * @return
+     */
+    public boolean isSetAutodownloadThumbnail() {
+        return OptionsHelper.getInstance().isSetAutodownloadThumbnail();
+    }
+
+
+    /**
+     * 设置是否只使用Https
+     * @param usingHttpsOnly
+     */
+    public void setUsingHttpsOnly(boolean usingHttpsOnly) {
+        OptionsHelper.getInstance().setUsingHttpsOnly(usingHttpsOnly);
+    }
+
+    /**
+     * 获取是否只使用Https
+     * @return
+     */
+    public boolean getUsingHttpsOnly() {
+        return OptionsHelper.getInstance().getUsingHttpsOnly();
     }
 
     enum Key{
