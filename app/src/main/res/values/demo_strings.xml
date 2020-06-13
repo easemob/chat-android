@@ -201,6 +201,9 @@
     <string name="em_about_me_service_set">服务诊断</string>
     <string name="em_privacy_black">黑名单</string>
     <string name="em_privacy_equipments">多端多设备管理</string>
+    <string name="em_about_hx_product_introduction">产品介绍</string>
+    <string name="em_about_hx_company_introduction">公司介绍</string>
+    <string name="em_about_hx_version">环信IM %1$s</string>
 
     <string name="newnotify">接收新消息通知</string>
     <string name="voice">声音</string>

@@ -374,6 +374,8 @@
         <activity android:name=".section.me.activity.CommonSettingsActivity" />
         <!--消息推送设置-->
         <activity android:name=".section.me.activity.OfflinePushSettingsActivity" />
+        <!--关于环信IM-->
+        <activity android:name=".section.me.activity.AboutHxActivity" />
     </application>
 
 </manifest>
