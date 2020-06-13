@@ -43,7 +43,7 @@ public class BaseEMRepository {
      * @return
      */
     public boolean isAutoLogin() {
-        return DemoHelper.getInstance().getModel().getAutoLogin();
+        return DemoHelper.getInstance().getAutoLogin();
     }
 
     /**

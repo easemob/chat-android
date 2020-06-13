@@ -424,7 +424,7 @@ public class DemoHelper {
             @Override
             public void onSuccess() {
                 Log.d(TAG, "logout: onSuccess");
-                demoModel.setAutoLogin(false);
+                setAutoLogin(false);
                 //reset();
                 if (callback != null) {
                     callback.onSuccess();
@@ -476,6 +476,22 @@ public class DemoHelper {
 
     public DemoModel getModel(){
         return demoModel;
+    }
+
+    /**
+     * 设置本地标记，是否自动登录
+     * @param autoLogin
+     */
+    public void setAutoLogin(boolean autoLogin) {
+        PreferenceManager.getInstance().setAutoLogin(autoLogin);
+    }
+
+    /**
+     * 获取本地标记，是否自动登录
+     * @return
+     */
+    public boolean getAutoLogin() {
+        return PreferenceManager.getInstance().getAutoLogin();
     }
 
     /**
