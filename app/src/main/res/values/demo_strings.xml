@@ -204,6 +204,17 @@
     <string name="em_about_hx_product_introduction">产品介绍</string>
     <string name="em_about_hx_company_introduction">公司介绍</string>
     <string name="em_about_hx_version">环信IM %1$s</string>
+    <string name="em_developer_version">当前版本</string>
+    <string name="em_developer_appkey_self">自定义AppKey</string>
+    <string name="em_developer_appkey_self_add">添加自定义AppKey</string>
+    <string name="em_developer_allow_token">允许使用token登录</string>
+    <string name="em_developer_from_server">优先从服务器获取消息</string>
+    <string name="em_developer_upload_to_hx">消息附件上传到环信服务器</string>
+    <string name="em_developer_upload_to_hx_notice">上传附件到环信服务器，关闭需自定义文件上传</string>
+    <string name="em_developer_msg_sort">消息排序</string>
+    <string name="em_developer_msg_sort_receive">按接收顺序</string>
+    <string name="em_developer_msg_sort_server">按服务器顺序</string>
+    <string name="em_developer_service_result_unfinished">未完成</string>
 
     <string name="newnotify">接收新消息通知</string>
     <string name="voice">声音</string>
@@ -221,7 +232,7 @@
     <string name="chatroom_allow_owner_leave"> 允许聊天室群主离开</string>
     <string name="delete_msg_when_exit_group">退出群组时删除聊天数据</string>
     <string name="set_transfer_file_by_userself">无需用户实现上传下载</string>
-    <string name="set_autodownload_thumbnail">是否自动下载缩略图附件</string>
+    <string name="set_autodownload_thumbnail">自动下载图片缩略图</string>
     <string name="auto_accept_group_invitation">自动同意群组加群邀请</string>
 
     <string name="confirm_forward_to">确定转发到：%1$s ?</string>
@@ -256,6 +267,13 @@
     <string name="delete_conversation">删除会话</string>
     <string name="copy_message">复制消息</string>
     <string name="em_send_forward_msg_success">已发送</string>
+    <string name="diagnose">诊断</string>
+    <string name="Current_version">当前版本</string>
+    <string name="Upload_the_log">上传日志中</string>
+    <string name="button_uploadlog">上传运行日志</string>
+    <string name="Not_Set">未设置</string>
+    <string name="Log_uploaded_successfully">日志上传成功</string>
+    <string name="Log_Upload_failed">log上传失败</string>
 
     <string name="Agreed_to_your_group_chat_application">同意了你的群聊申请</string>
     <string name="Invite_you_to_join_a_group_chat">邀请你加入了群聊</string>

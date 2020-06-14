@@ -376,6 +376,14 @@
         <activity android:name=".section.me.activity.OfflinePushSettingsActivity" />
         <!--关于环信IM-->
         <activity android:name=".section.me.activity.AboutHxActivity" />
+        <!--开发者服务-->
+        <activity android:name=".section.me.activity.DeveloperSetActivity" />
+        <!--自定义AppKey-->
+        <activity android:name=".section.me.activity.AppKeyManageActivity" />
+        <!--添加自定义AppKey-->
+        <activity android:name=".section.me.activity.AppKeyAddActivity" />
+        <!--诊断-->
+        <activity android:name=".section.me.activity.DiagnoseActivity" />
     </application>
 
 </manifest>

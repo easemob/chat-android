@@ -70,6 +70,7 @@ public class PreferenceManager {
 	private static String SHARED_KEY_PUSH_USE_FCM = "shared_key_push_use_fcm";
 	private static String SHARED_KEY_AUTO_LOGIN = "shared_key_auto_login";
 	private static String SHARED_KEY_HTTPS_ONLY = "shared_key_https_only";
+	private static String SHARED_KEY_SORT_MESSAGE_BY_SERVER_TIME = "sort_message_by_server_time";
 
 	@SuppressLint("CommitPrefEdits")
 	private PreferenceManager(Context cxt) {
@@ -492,5 +493,14 @@ public class PreferenceManager {
 
 	public int getIMServerPort() {
 		return mSharedPreferences.getInt(SHARED_KEY_IM_SERVER_PORT, 0);
+	}
+
+	public void setSortMessageByServerTime(boolean sortByServerTime) {
+		editor.putBoolean(SHARED_KEY_SORT_MESSAGE_BY_SERVER_TIME, sortByServerTime);
+		editor.apply();
+	}
+
+	public boolean isSortMessageByServerTime() {
+		return mSharedPreferences.getBoolean(SHARED_KEY_SORT_MESSAGE_BY_SERVER_TIME, false);
 	}
 }

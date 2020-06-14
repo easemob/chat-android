@@ -213,6 +213,14 @@ public class OptionsHelper {
         return PreferenceManager.getInstance().isSetAutodownloadThumbnail();
     }
 
+    public void setSortMessageByServerTime(boolean sortByServerTime) {
+        PreferenceManager.getInstance().setSortMessageByServerTime(sortByServerTime);
+    }
+
+    public boolean isSortMessageByServerTime() {
+        return PreferenceManager.getInstance().isSortMessageByServerTime();
+    }
+
     public String getDefAppkey() {
         return DEF_APPKEY;
     }

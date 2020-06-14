@@ -4,7 +4,9 @@ import android.content.Context;
 
 import com.hyphenate.chatuidemo.DemoApp;
 import com.hyphenate.chatuidemo.common.db.DemoDbHelper;
+import com.hyphenate.chatuidemo.common.db.dao.AppKeyDao;
 import com.hyphenate.chatuidemo.common.db.dao.EmUserDao;
+import com.hyphenate.chatuidemo.common.db.entity.AppKeyEntity;
 import com.hyphenate.chatuidemo.common.db.entity.EmUserEntity;
 import com.hyphenate.chatuidemo.common.db.entity.InviteMessage;
 import com.hyphenate.chatuidemo.common.db.entity.MsgTypeManageEntity;
@@ -62,6 +64,44 @@ public class DemoModel {
             return;
         }
         dao.insert(EmUserEntity.parseParent(user));
+    }
+
+    public List<AppKeyEntity> getAppKeys() {
+        AppKeyDao dao = DemoDbHelper.getInstance(context).getAppKeyDao();
+        if(dao == null) {
+            return new ArrayList<>();
+        }
+        List<AppKeyEntity> keys = dao.loadAllAppKeys();
+        if(keys == null || keys.isEmpty()) {
+            dao.insert(new AppKeyEntity(OptionsHelper.getInstance().getDefAppkey()));
+        }
+        keys = dao.loadAllAppKeys();
+        return keys;
+    }
+
+    /**
+     * 保存appKey
+     * @param appKey
+     */
+    public void saveAppKey(String appKey) {
+        AppKeyDao dao = DemoDbHelper.getInstance(context).getAppKeyDao();
+        if(dao == null) {
+            return;
+        }
+        List<AppKeyEntity> keys = dao.loadAllAppKeys();
+        if(keys == null || keys.isEmpty()) {
+            dao.insert(new AppKeyEntity(OptionsHelper.getInstance().getDefAppkey()));
+        }
+        AppKeyEntity entity = new AppKeyEntity(appKey);
+        dao.insert(entity);
+    }
+
+    public void deleteAppKey(String appKey) {
+        AppKeyDao dao = DemoDbHelper.getInstance(context).getAppKeyDao();
+        if(dao == null) {
+            return;
+        }
+        dao.deleteAppKey(appKey);
     }
 
     /**
@@ -530,6 +570,14 @@ public class DemoModel {
      */
     public boolean getUsingHttpsOnly() {
         return OptionsHelper.getInstance().getUsingHttpsOnly();
+    }
+
+    public void setSortMessageByServerTime(boolean sortByServerTime) {
+        OptionsHelper.getInstance().setSortMessageByServerTime(sortByServerTime);
+    }
+
+    public boolean isSortMessageByServerTime() {
+        return OptionsHelper.getInstance().isSortMessageByServerTime();
     }
 
     enum Key{

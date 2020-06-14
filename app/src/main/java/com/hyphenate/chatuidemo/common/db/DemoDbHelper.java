@@ -6,6 +6,7 @@ import android.text.TextUtils;
 import androidx.lifecycle.MutableLiveData;
 import androidx.room.Room;
 
+import com.hyphenate.chatuidemo.common.db.dao.AppKeyDao;
 import com.hyphenate.chatuidemo.common.db.dao.EmUserDao;
 import com.hyphenate.chatuidemo.common.db.dao.InviteMessageDao;
 import com.hyphenate.chatuidemo.common.db.dao.MsgTypeManageDao;
@@ -88,6 +89,14 @@ public class DemoDbHelper {
             return mDatabase.msgTypeManageDao();
         }
         EMLog.i(TAG, "get msgTypeManageDao failed, should init db first");
+        return null;
+    }
+
+    public AppKeyDao getAppKeyDao() {
+        if(mDatabase != null) {
+            return mDatabase.appKeyDao();
+        }
+        EMLog.i(TAG, "get appKeyDao failed, should init db first");
         return null;
     }
 }
