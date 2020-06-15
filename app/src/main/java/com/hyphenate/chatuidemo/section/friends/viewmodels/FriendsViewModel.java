@@ -7,7 +7,7 @@ import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MediatorLiveData;
 
-import com.hyphenate.chatuidemo.common.livedatas.MessageChangeLiveData;
+import com.hyphenate.chatuidemo.common.livedatas.LiveDataBus;
 import com.hyphenate.chatuidemo.common.livedatas.SingleSourceLiveData;
 import com.hyphenate.chatuidemo.common.net.Resource;
 import com.hyphenate.chatuidemo.common.repositories.EMContactManagerRepository;
@@ -35,8 +35,8 @@ public class FriendsViewModel extends AndroidViewModel {
         return blackObservable;
     }
 
-    public MessageChangeLiveData messageChangeObservable() {
-        return MessageChangeLiveData.getInstance();
+    public LiveDataBus messageChangeObservable() {
+        return LiveDataBus.get();
     }
 
     public void getBlackList() {

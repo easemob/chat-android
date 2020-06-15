@@ -3,7 +3,7 @@ package com.hyphenate.chatuidemo.section.group.viewmodels;
 import android.app.Application;
 
 import com.hyphenate.chat.EMChatRoom;
-import com.hyphenate.chatuidemo.common.livedatas.MessageChangeLiveData;
+import com.hyphenate.chatuidemo.common.livedatas.LiveDataBus;
 import com.hyphenate.chatuidemo.common.livedatas.SingleSourceLiveData;
 import com.hyphenate.chatuidemo.common.net.Resource;
 import com.hyphenate.chatuidemo.common.repositories.EMChatRoomManagerRepository;
@@ -22,7 +22,7 @@ public class ChatRoomMemberViewModel extends AndroidViewModel {
     private SingleSourceLiveData<Resource<List<String>>> blackObservable;
     private SingleSourceLiveData<Resource<Map<String, Long>>> muteMapObservable;
     private SingleSourceLiveData<Resource<List<String>>> membersObservable;
-    private MessageChangeLiveData messageChangeObservable;
+    private LiveDataBus messageChangeObservable;
 
     public ChatRoomMemberViewModel(@NonNull Application application) {
         super(application);
@@ -32,7 +32,7 @@ public class ChatRoomMemberViewModel extends AndroidViewModel {
         blackObservable = new SingleSourceLiveData<>();
         muteMapObservable = new SingleSourceLiveData<>();
         membersObservable = new SingleSourceLiveData<>();
-        messageChangeObservable = MessageChangeLiveData.getInstance();
+        messageChangeObservable = LiveDataBus.get();
     }
 
     public LiveData<Resource<EMChatRoom>> chatRoomObservable() {
@@ -55,7 +55,7 @@ public class ChatRoomMemberViewModel extends AndroidViewModel {
         return membersObservable;
     }
 
-    public MessageChangeLiveData getMessageChangeObservable() {
+    public LiveDataBus getMessageChangeObservable() {
         return messageChangeObservable;
     }
 

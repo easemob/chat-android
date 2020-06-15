@@ -10,8 +10,10 @@ import android.view.View;
 import com.hyphenate.chat.EMGroup;
 import com.hyphenate.chatuidemo.DemoHelper;
 import com.hyphenate.chatuidemo.R;
+import com.hyphenate.chatuidemo.common.DemoConstant;
 import com.hyphenate.chatuidemo.common.db.entity.EmUserEntity;
 import com.hyphenate.chatuidemo.common.interfaceOrImplement.OnResourceParseCallback;
+import com.hyphenate.easeui.model.EaseEvent;
 import com.scwang.smartrefresh.layout.api.RefreshLayout;
 
 import java.util.ArrayList;
@@ -57,7 +59,7 @@ public class GroupAdminAuthorityActivity extends GroupMemberAuthorityActivity {
                 }
             });
         });
-        viewModel.getMessageChangeObservable().observe(this, event -> {
+        viewModel.getMessageChangeObservable().with(DemoConstant.GROUP_CHANGE, EaseEvent.class).observe(this, event -> {
             if(event == null) {
                 return;
             }

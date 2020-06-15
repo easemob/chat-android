@@ -8,7 +8,7 @@ import com.hyphenate.chatuidemo.common.DemoConstant;
 import com.hyphenate.chatuidemo.common.db.DemoDbHelper;
 import com.hyphenate.chatuidemo.common.db.dao.InviteMessageDao;
 import com.hyphenate.chatuidemo.common.db.entity.InviteMessage;
-import com.hyphenate.chatuidemo.common.livedatas.MessageChangeLiveData;
+import com.hyphenate.chatuidemo.common.livedatas.LiveDataBus;
 import com.hyphenate.chatuidemo.common.livedatas.SingleSourceLiveData;
 import com.hyphenate.chatuidemo.common.db.entity.InviteMessage.InviteMessageStatus;
 import com.hyphenate.chatuidemo.common.net.Resource;
@@ -29,7 +29,7 @@ public class NewFriendsViewModel extends AndroidViewModel {
     private SingleSourceLiveData<List<InviteMessage>> inviteMsgObservable;
     private SingleSourceLiveData<List<InviteMessage>> moreInviteMsgObservable;
     private MutableLiveData<Resource<Boolean>> resultObservable;
-    private MessageChangeLiveData messageChangeObservable = MessageChangeLiveData.getInstance();
+    private LiveDataBus messageChangeObservable = LiveDataBus.get();
 
     public NewFriendsViewModel(@NonNull Application application) {
         super(application);
@@ -39,7 +39,7 @@ public class NewFriendsViewModel extends AndroidViewModel {
         resultObservable = new MutableLiveData<>();
     }
 
-    public MessageChangeLiveData messageChangeObservable() {
+    public LiveDataBus messageChangeObservable() {
         return messageChangeObservable;
     }
 
@@ -76,7 +76,7 @@ public class NewFriendsViewModel extends AndroidViewModel {
                 msg.setStatus(InviteMessageStatus.AGREED);
                 messageDao.update(msg);
                 resultObservable.postValue(Resource.success(true));
-                messageChangeObservable.postValue(EaseEvent.create(DemoConstant.NOTIFY_CHANGE, EaseEvent.TYPE.NOTIFY));
+                messageChangeObservable.with(DemoConstant.NOTIFY_CHANGE).postValue(EaseEvent.create(DemoConstant.NOTIFY_CHANGE, EaseEvent.TYPE.NOTIFY));
             } catch (HyphenateException e) {
                 e.printStackTrace();
                 resultObservable.postValue(Resource.error(e.getErrorCode(), e.getMessage(), false));
@@ -97,7 +97,7 @@ public class NewFriendsViewModel extends AndroidViewModel {
                 msg.setStatus(InviteMessageStatus.REFUSED);
                 messageDao.update(msg);
                 resultObservable.postValue(Resource.success(true));
-                messageChangeObservable.postValue(EaseEvent.create(DemoConstant.NOTIFY_CHANGE, EaseEvent.TYPE.NOTIFY));
+                messageChangeObservable.with(DemoConstant.NOTIFY_CHANGE).postValue(EaseEvent.create(DemoConstant.NOTIFY_CHANGE, EaseEvent.TYPE.NOTIFY));
             } catch (HyphenateException e) {
                 e.printStackTrace();
                 resultObservable.postValue(Resource.error(e.getErrorCode(), e.getMessage(), false));
@@ -112,6 +112,6 @@ public class NewFriendsViewModel extends AndroidViewModel {
 
     public void makeAllMsgRead() {
         messageDao.makeAllReaded();
-        messageChangeObservable.postValue(EaseEvent.create(DemoConstant.NOTIFY_CHANGE, EaseEvent.TYPE.NOTIFY));
+        messageChangeObservable.with(DemoConstant.NOTIFY_CHANGE).postValue(EaseEvent.create(DemoConstant.NOTIFY_CHANGE, EaseEvent.TYPE.NOTIFY));
     }
 }

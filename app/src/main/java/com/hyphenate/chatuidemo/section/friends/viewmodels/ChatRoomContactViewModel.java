@@ -7,7 +7,7 @@ import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
 
 import com.hyphenate.chat.EMChatRoom;
-import com.hyphenate.chatuidemo.common.livedatas.MessageChangeLiveData;
+import com.hyphenate.chatuidemo.common.livedatas.LiveDataBus;
 import com.hyphenate.chatuidemo.common.livedatas.SingleSourceLiveData;
 import com.hyphenate.chatuidemo.common.net.Resource;
 import com.hyphenate.chatuidemo.common.repositories.EMChatRoomManagerRepository;
@@ -18,7 +18,7 @@ public class ChatRoomContactViewModel extends AndroidViewModel {
     private EMChatRoomManagerRepository mRepository;
     private SingleSourceLiveData<Resource<List<EMChatRoom>>> loadObservable;
     private SingleSourceLiveData<Resource<List<EMChatRoom>>> loadMoreObservable;
-    private MessageChangeLiveData messageChangeObservable = MessageChangeLiveData.getInstance();
+    private LiveDataBus messageChangeObservable = LiveDataBus.get();
 
     public ChatRoomContactViewModel(@NonNull Application application) {
         super(application);
@@ -27,7 +27,7 @@ public class ChatRoomContactViewModel extends AndroidViewModel {
         loadMoreObservable = new SingleSourceLiveData<>();
     }
 
-    public MessageChangeLiveData getMessageChangeObservable() {
+    public LiveDataBus getMessageChangeObservable() {
         return messageChangeObservable;
     }
 

@@ -9,11 +9,13 @@ import android.view.View;
 import com.hyphenate.chat.EMGroup;
 import com.hyphenate.chatuidemo.DemoHelper;
 import com.hyphenate.chatuidemo.R;
+import com.hyphenate.chatuidemo.common.DemoConstant;
 import com.hyphenate.chatuidemo.common.interfaceOrImplement.OnResourceParseCallback;
 import com.hyphenate.chatuidemo.common.widget.ArrowItemView;
 import com.hyphenate.chatuidemo.section.base.BaseInitActivity;
 import com.hyphenate.chatuidemo.section.group.viewmodels.GroupMemberAuthorityViewModel;
 import com.hyphenate.easeui.domain.EaseUser;
+import com.hyphenate.easeui.model.EaseEvent;
 import com.hyphenate.easeui.widget.EaseTitleBar;
 
 import java.util.List;
@@ -87,7 +89,7 @@ public class GroupMemberTypeActivity extends BaseInitActivity implements EaseTit
                 }
             });
         });
-        viewModel.getMessageChangeObservable().observe(this, event -> {
+        viewModel.getMessageChangeObservable().with(DemoConstant.GROUP_CHANGE, EaseEvent.class).observe(this, event -> {
             if(event.isGroupChange()) {
                 viewModel.getGroup(groupId);
                 viewModel.getMembers(groupId);

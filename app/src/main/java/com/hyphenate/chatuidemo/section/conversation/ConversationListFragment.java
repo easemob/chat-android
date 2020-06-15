@@ -16,6 +16,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import com.hyphenate.chat.EMConversation;
 import com.hyphenate.chatuidemo.DemoHelper;
 import com.hyphenate.chatuidemo.R;
+import com.hyphenate.chatuidemo.common.DemoConstant;
 import com.hyphenate.chatuidemo.common.db.entity.MsgTypeManageEntity;
 import com.hyphenate.chatuidemo.common.interfaceOrImplement.OnResourceParseCallback;
 import com.hyphenate.chatuidemo.common.utils.ThreadManager;
@@ -171,16 +172,20 @@ public class ConversationListFragment extends BaseInitFragment implements OnRefr
         });
 
         MessageViewModel messageViewModel = new ViewModelProvider(this).get(MessageViewModel.class);
-        messageViewModel.getMessageChange().observe(this, change -> {
-            if(change == null) {
-                return;
-            }
-            if(change.isMessageChange() || change.isNotifyChange()
-                    || change.isGroupLeave() || change.isChatRoomLeave()
-                    || change.type == EaseEvent.TYPE.CHAT_ROOM || change.isGroupChange()) {
-                mViewModel.loadConversationList();
-            }
-        });
+        messageViewModel.getMessageChange().with(DemoConstant.MESSAGE_CHANGE_CHANGE, EaseEvent.class).observe(this, this::loadList);
+        messageViewModel.getMessageChange().with(DemoConstant.GROUP_CHANGE, EaseEvent.class).observe(this, this::loadList);
+        messageViewModel.getMessageChange().with(DemoConstant.CHAT_ROOM_CHANGE, EaseEvent.class).observe(this, this::loadList);
+    }
+
+    private void loadList(EaseEvent change) {
+        if(change == null) {
+            return;
+        }
+        if(change.isMessageChange() || change.isNotifyChange()
+                || change.isGroupLeave() || change.isChatRoomLeave()
+                || change.type == EaseEvent.TYPE.CHAT_ROOM || change.isGroupChange()) {
+            mViewModel.loadConversationList();
+        }
     }
 
     @Override

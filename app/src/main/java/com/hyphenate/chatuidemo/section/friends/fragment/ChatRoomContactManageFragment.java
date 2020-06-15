@@ -19,6 +19,7 @@ import com.hyphenate.chatuidemo.section.chat.ChatActivity;
 import com.hyphenate.chatuidemo.section.friends.activity.NewChatRoomActivity;
 import com.hyphenate.chatuidemo.section.friends.adapter.ChatRoomContactAdapter;
 import com.hyphenate.chatuidemo.section.friends.viewmodels.ChatRoomContactViewModel;
+import com.hyphenate.easeui.constants.EaseConstant;
 import com.hyphenate.easeui.interfaces.EaseChatRoomListener;
 import com.hyphenate.easeui.interfaces.OnItemClickListener;
 import com.hyphenate.easeui.model.EaseEvent;
@@ -87,7 +88,7 @@ public class ChatRoomContactManageFragment extends BaseInitFragment implements O
                 }
             });
         });
-        mViewModel.getMessageChangeObservable().observe(this, event -> {
+        mViewModel.getMessageChangeObservable().with(DemoConstant.CHAT_ROOM_CHANGE, EaseEvent.class).observe(this, event -> {
             if(event == null) {
                 return;
             }

@@ -10,6 +10,7 @@ import android.view.View;
 import com.hyphenate.chat.EMChatRoom;
 import com.hyphenate.chat.EMGroup;
 import com.hyphenate.chatuidemo.R;
+import com.hyphenate.chatuidemo.common.DemoConstant;
 import com.hyphenate.chatuidemo.common.db.entity.EmUserEntity;
 import com.hyphenate.chatuidemo.common.interfaceOrImplement.OnResourceParseCallback;
 import com.hyphenate.easeui.model.EaseEvent;
@@ -57,7 +58,7 @@ public class ChatRoomAdminAuthorityActivity extends ChatRoomMemberAuthorityActiv
                 }
             });
         });
-        viewModel.getMessageChangeObservable().observe(this, event -> {
+        viewModel.getMessageChangeObservable().with(DemoConstant.CHAT_ROOM_CHANGE, EaseEvent.class).observe(this, event -> {
             if(event == null) {
                 return;
             }

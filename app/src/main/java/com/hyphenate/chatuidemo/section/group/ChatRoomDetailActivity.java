@@ -12,7 +12,7 @@ import com.hyphenate.chatuidemo.DemoHelper;
 import com.hyphenate.chatuidemo.R;
 import com.hyphenate.chatuidemo.common.DemoConstant;
 import com.hyphenate.chatuidemo.common.interfaceOrImplement.OnResourceParseCallback;
-import com.hyphenate.chatuidemo.common.livedatas.MessageChangeLiveData;
+import com.hyphenate.chatuidemo.common.livedatas.LiveDataBus;
 import com.hyphenate.chatuidemo.common.widget.ArrowItemView;
 import com.hyphenate.chatuidemo.section.base.BaseInitActivity;
 import com.hyphenate.chatuidemo.section.dialog.DemoDialogFragment;
@@ -114,13 +114,13 @@ public class ChatRoomDetailActivity extends BaseInitActivity implements EaseTitl
                 public void onSuccess(Boolean data) {
                     EaseEvent easeEvent = new EaseEvent(DemoConstant.CHAT_ROOM_CHANGE, EaseEvent.TYPE.CHAT_ROOM_LEAVE);
                     easeEvent.message = roomId;
-                    MessageChangeLiveData.getInstance().postValue(easeEvent);
+                    LiveDataBus.get().with(DemoConstant.CHAT_ROOM_CHANGE).postValue(easeEvent);
                     finish();
                 }
             });
         });
 
-        viewModel.getMessageChangeObservable().observe(this, event -> {
+        viewModel.getMessageChangeObservable().with(DemoConstant.CHAT_ROOM_CHANGE, EaseEvent.class).observe(this, event -> {
             if(event == null) {
                 return;
             }

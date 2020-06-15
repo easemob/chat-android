@@ -12,7 +12,7 @@ import com.hyphenate.chatuidemo.R;
 import com.hyphenate.chatuidemo.common.DemoConstant;
 import com.hyphenate.chatuidemo.common.db.entity.EmUserEntity;
 import com.hyphenate.chatuidemo.common.interfaceOrImplement.OnResourceParseCallback;
-import com.hyphenate.chatuidemo.common.livedatas.MessageChangeLiveData;
+import com.hyphenate.chatuidemo.common.livedatas.LiveDataBus;
 import com.hyphenate.chatuidemo.section.group.viewmodels.ChatRoomDetailViewModel;
 import com.hyphenate.chatuidemo.section.group.viewmodels.ChatRoomMemberViewModel;
 import com.hyphenate.easeui.domain.EaseUser;
@@ -152,7 +152,7 @@ public class ChatRoomMemberAuthorityActivity extends GroupMemberAuthorityActivit
             });
         });
 
-        viewModel.getMessageChangeObservable().observe(this, event -> {
+        viewModel.getMessageChangeObservable().with(DemoConstant.CHAT_ROOM_CHANGE, EaseEvent.class).observe(this, event -> {
             if(event == null) {
                 return;
             }
@@ -200,24 +200,24 @@ public class ChatRoomMemberAuthorityActivity extends GroupMemberAuthorityActivit
     @Override
     protected void addToAdmins(String username) {
         viewModel.addGroupAdmin(roomId, username);
-        MessageChangeLiveData.getInstance().postValue(EaseEvent.create(DemoConstant.CHAT_ROOM_CHANGE, EaseEvent.TYPE.CHAT_ROOM));
+        LiveDataBus.get().with(DemoConstant.CHAT_ROOM_CHANGE).postValue(EaseEvent.create(DemoConstant.CHAT_ROOM_CHANGE, EaseEvent.TYPE.CHAT_ROOM));
     }
 
     @Override
     protected void removeFromAdmins(String username) {
         viewModel.removeGroupAdmin(roomId, username);
-        MessageChangeLiveData.getInstance().postValue(EaseEvent.create(DemoConstant.CHAT_ROOM_CHANGE, EaseEvent.TYPE.CHAT_ROOM));
+        LiveDataBus.get().with(DemoConstant.CHAT_ROOM_CHANGE).postValue(EaseEvent.create(DemoConstant.CHAT_ROOM_CHANGE, EaseEvent.TYPE.CHAT_ROOM));
     }
 
     @Override
     protected void transferOwner(String username) {
         viewModel.changeOwner(roomId, username);
-        MessageChangeLiveData.getInstance().postValue(EaseEvent.create(DemoConstant.CHAT_ROOM_CHANGE, EaseEvent.TYPE.CHAT_ROOM));
+        LiveDataBus.get().with(DemoConstant.CHAT_ROOM_CHANGE).postValue(EaseEvent.create(DemoConstant.CHAT_ROOM_CHANGE, EaseEvent.TYPE.CHAT_ROOM));
     }
 
     @Override
     protected void removeFromGroup(String username) {
-        MessageChangeLiveData.getInstance().postValue(EaseEvent.create(DemoConstant.CHAT_ROOM_CHANGE, EaseEvent.TYPE.CHAT_ROOM));
+        LiveDataBus.get().with(DemoConstant.CHAT_ROOM_CHANGE).postValue(EaseEvent.create(DemoConstant.CHAT_ROOM_CHANGE, EaseEvent.TYPE.CHAT_ROOM));
         List<String> usernames = new ArrayList<>();
         usernames.add(username);
         viewModel.removeUserFromGroup(roomId, usernames);
@@ -228,7 +228,7 @@ public class ChatRoomMemberAuthorityActivity extends GroupMemberAuthorityActivit
         List<String> usernames = new ArrayList<>();
         usernames.add(username);
         viewModel.blockUser(roomId, usernames);
-        MessageChangeLiveData.getInstance().postValue(EaseEvent.create(DemoConstant.CHAT_ROOM_CHANGE, EaseEvent.TYPE.CHAT_ROOM));
+        LiveDataBus.get().with(DemoConstant.CHAT_ROOM_CHANGE).postValue(EaseEvent.create(DemoConstant.CHAT_ROOM_CHANGE, EaseEvent.TYPE.CHAT_ROOM));
     }
 
     @Override
@@ -236,7 +236,7 @@ public class ChatRoomMemberAuthorityActivity extends GroupMemberAuthorityActivit
         List<String> usernames = new ArrayList<>();
         usernames.add(username);
         viewModel.unblockUser(roomId, usernames);
-        MessageChangeLiveData.getInstance().postValue(EaseEvent.create(DemoConstant.CHAT_ROOM_CHANGE, EaseEvent.TYPE.CHAT_ROOM));
+        LiveDataBus.get().with(DemoConstant.CHAT_ROOM_CHANGE).postValue(EaseEvent.create(DemoConstant.CHAT_ROOM_CHANGE, EaseEvent.TYPE.CHAT_ROOM));
     }
 
     @Override

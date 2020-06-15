@@ -130,12 +130,19 @@ public class ChatActivity extends BaseInitActivity implements EaseTitleBar.OnBac
                 }
             });
         });
-        messageViewModel.getMessageChange().observe(this, event -> {
+        messageViewModel.getMessageChange().with(DemoConstant.GROUP_CHANGE, EaseEvent.class).observe(this, event -> {
             if(event == null) {
                 return;
             }
-            if((event.isGroupLeave() && TextUtils.equals(toChatUsername, event.message))
-                    || (event.isChatRoomLeave() && TextUtils.equals(toChatUsername,  event.message))) {
+            if(event.isGroupLeave() && TextUtils.equals(toChatUsername, event.message)) {
+                finish();
+            }
+        });
+        messageViewModel.getMessageChange().with(DemoConstant.CHAT_ROOM_CHANGE, EaseEvent.class).observe(this, event -> {
+            if(event == null) {
+                return;
+            }
+            if(event.isChatRoomLeave() && TextUtils.equals(toChatUsername,  event.message)) {
                 finish();
             }
         });
@@ -149,15 +156,8 @@ public class ChatActivity extends BaseInitActivity implements EaseTitleBar.OnBac
     @Override
     public void onRightClick(View view) {
         if(chatType == DemoConstant.CHATTYPE_SINGLE) {
-            // 是否删除会话
-            SimpleDialogFragment.showDialog(mContext, R.string.em_chat_delete_conversation, new DemoDialogFragment.OnConfirmClickListener() {
-                @Override
-                public void onConfirmClick(View view) {
-                    EMConversation conversation = DemoHelper.getInstance().getConversation(toChatUsername,
-                            EaseCommonUtils.getConversationType(chatType), true);
-                    viewModel.deleteConversationById(conversation.conversationId());
-                }
-            });
+            //跳转到单聊设置页面
+            SingleChatSetActivity.actionStart(mContext, toChatUsername);
         }else {
             // 跳转到群组设置
             if(chatType == DemoConstant.CHATTYPE_GROUP) {

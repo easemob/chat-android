@@ -17,6 +17,7 @@ import androidx.lifecycle.ViewModelProvider;
 import com.google.android.material.bottomnavigation.BottomNavigationItemView;
 import com.google.android.material.bottomnavigation.BottomNavigationMenuView;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.hyphenate.chatuidemo.common.DemoConstant;
 import com.hyphenate.chatuidemo.common.enums.SearchType;
 import com.hyphenate.chatuidemo.common.permission.PermissionsManager;
 import com.hyphenate.chatuidemo.common.permission.PermissionsResultAction;
@@ -30,6 +31,7 @@ import com.hyphenate.chatuidemo.section.friends.activity.NewGroupActivity;
 import com.hyphenate.chatuidemo.section.friends.fragment.FriendsFragment;
 import com.hyphenate.chatuidemo.section.friends.activity.AddContactActivity;
 import com.hyphenate.chatuidemo.section.me.AboutMeFragment;
+import com.hyphenate.easeui.model.EaseEvent;
 import com.hyphenate.easeui.widget.EaseTitleBar;
 
 import java.lang.reflect.Method;
@@ -155,15 +157,17 @@ public class MainActivity extends BaseInitActivity implements BottomNavigationVi
             mTvMainHomeMsg.setVisibility(showRedIcon ? View.VISIBLE : View.GONE);
         });
 
-        viewModel.messageChangeObservable().observe(this, event -> {
-            if(event == null) {
-                return;
-            }
-            if(event.isGroupChange() || event.isNotifyChange() || event.isMessageChange()) {
-                viewModel.checkUnreadMsg();
-            }
-        });
+        viewModel.messageChangeObservable().with(DemoConstant.GROUP_CHANGE, EaseEvent.class).observe(this, this::checkUnReadMsg);
+        viewModel.messageChangeObservable().with(DemoConstant.NOTIFY_CHANGE, EaseEvent.class).observe(this, this::checkUnReadMsg);
+        viewModel.messageChangeObservable().with(DemoConstant.MESSAGE_CHANGE_CHANGE, EaseEvent.class).observe(this, this::checkUnReadMsg);
 
+    }
+
+    private void checkUnReadMsg(EaseEvent event) {
+        if(event == null) {
+            return;
+        }
+        viewModel.checkUnreadMsg();
     }
 
     /**

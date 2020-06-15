@@ -27,7 +27,7 @@ import com.hyphenate.chatuidemo.common.db.dao.InviteMessageDao;
 import com.hyphenate.chatuidemo.common.db.entity.EmUserEntity;
 import com.hyphenate.chatuidemo.common.db.entity.InviteMessage;
 import com.hyphenate.chatuidemo.common.db.entity.MsgTypeManageEntity;
-import com.hyphenate.chatuidemo.common.livedatas.MessageChangeLiveData;
+import com.hyphenate.chatuidemo.common.livedatas.LiveDataBus;
 import com.hyphenate.chatuidemo.common.livedatas.NetworkChangeLiveData;
 import com.hyphenate.chatuidemo.common.manager.PushAndMessageHelper;
 import com.hyphenate.chatuidemo.common.repositories.EMContactManagerRepository;
@@ -45,14 +45,14 @@ import java.util.UUID;
 public class ChatPresenter extends EaseChatPresenter {
     private static final String TAG = ChatPresenter.class.getSimpleName();
     private static ChatPresenter instance;
-    private MessageChangeLiveData messageChangeLiveData;
+    private LiveDataBus messageChangeLiveData;
     private NetworkChangeLiveData networkChangeLiveData;
     private boolean isGroupsSyncedWithServer = false;
     private boolean isContactsSyncedWithServer = false;
     private boolean isBlackListSyncedWithServer = false;
 
     private ChatPresenter() {
-        messageChangeLiveData = MessageChangeLiveData.getInstance();
+        messageChangeLiveData = LiveDataBus.get();
         networkChangeLiveData = NetworkChangeLiveData.getInstance();
         //添加网络连接状态监听
         DemoHelper.getInstance().getEMClient().addConnectionListener(new ChatConnectionListener());
@@ -84,7 +84,7 @@ public class ChatPresenter extends EaseChatPresenter {
     public void onMessageReceived(List<EMMessage> messages) {
         super.onMessageReceived(messages);
         EaseEvent event = EaseEvent.create(DemoConstant.MESSAGE_CHANGE_RECEIVE, EaseEvent.TYPE.MESSAGE);
-        messageChangeLiveData.postValue(event);
+        messageChangeLiveData.with(DemoConstant.MESSAGE_CHANGE_CHANGE).postValue(event);
         for (EMMessage message : messages) {
             EMLog.d(TAG, "onMessageReceived id : " + message.getMsgId());
             // 判断一下是否是会议邀请
@@ -101,13 +101,13 @@ public class ChatPresenter extends EaseChatPresenter {
     public void onCmdMessageReceived(List<EMMessage> messages) {
         super.onCmdMessageReceived(messages);
         EaseEvent event = EaseEvent.create(DemoConstant.MESSAGE_CHANGE_CMD_RECEIVE, EaseEvent.TYPE.MESSAGE);
-        messageChangeLiveData.postValue(event);
+        messageChangeLiveData.with(DemoConstant.MESSAGE_CHANGE_CHANGE).postValue(event);
     }
 
     @Override
     public void onMessageRecalled(List<EMMessage> messages) {
         EaseEvent event = EaseEvent.create(DemoConstant.MESSAGE_CHANGE_RECALL, EaseEvent.TYPE.MESSAGE);
-        messageChangeLiveData.postValue(event);
+        messageChangeLiveData.with(DemoConstant.MESSAGE_CHANGE_CHANGE).postValue(event);
         for (EMMessage msg : messages) {
             if(msg.getChatType() == EMMessage.ChatType.GroupChat && EaseAtMessageHelper.get().isAtMeMsg(msg)){
                 EaseAtMessageHelper.get().removeAtMeGroup(msg.getTo());
@@ -255,7 +255,7 @@ public class ChatPresenter extends EaseChatPresenter {
             msg.setType(MsgTypeManageEntity.msgType.NOTIFICATION);
             notifyNewInviteMessage(msg);
             EaseEvent event = EaseEvent.create(DemoConstant.NOTIFY_GROUP_INVITE_RECEIVE, EaseEvent.TYPE.NOTIFY);
-            messageChangeLiveData.postValue(event);
+            messageChangeLiveData.with(DemoConstant.NOTIFY_CHANGE).postValue(event);
         }
 
         @Override
@@ -285,7 +285,7 @@ public class ChatPresenter extends EaseChatPresenter {
             msg.setType(MsgTypeManageEntity.msgType.NOTIFICATION);
             notifyNewInviteMessage(msg);
             EaseEvent event = EaseEvent.create(DemoConstant.NOTIFY_GROUP_INVITE_ACCEPTED, EaseEvent.TYPE.NOTIFY);
-            messageChangeLiveData.postValue(event);
+            messageChangeLiveData.with(DemoConstant.NOTIFY_CHANGE).postValue(event);
         }
 
         @Override
@@ -313,21 +313,21 @@ public class ChatPresenter extends EaseChatPresenter {
             msg.setType(MsgTypeManageEntity.msgType.NOTIFICATION);
             notifyNewInviteMessage(msg);
             EaseEvent event = EaseEvent.create(DemoConstant.NOTIFY_GROUP_INVITE_DECLINED, EaseEvent.TYPE.NOTIFY);
-            messageChangeLiveData.postValue(event);
+            messageChangeLiveData.with(DemoConstant.NOTIFY_CHANGE).postValue(event);
         }
 
         @Override
         public void onUserRemoved(String groupId, String groupName) {
             EaseEvent easeEvent = new EaseEvent(DemoConstant.GROUP_CHANGE, EaseEvent.TYPE.GROUP_LEAVE);
             easeEvent.message = groupId;
-            messageChangeLiveData.postValue(easeEvent);
+            messageChangeLiveData.with(DemoConstant.GROUP_CHANGE).postValue(easeEvent);
         }
 
         @Override
         public void onGroupDestroyed(String groupId, String groupName) {
             EaseEvent easeEvent = new EaseEvent(DemoConstant.GROUP_CHANGE, EaseEvent.TYPE.GROUP_LEAVE);
             easeEvent.message = groupId;
-            messageChangeLiveData.postValue(easeEvent);
+            messageChangeLiveData.with(DemoConstant.GROUP_CHANGE).postValue(easeEvent);
         }
 
         @Override
@@ -344,7 +344,7 @@ public class ChatPresenter extends EaseChatPresenter {
             msg.setType(MsgTypeManageEntity.msgType.NOTIFICATION);
             notifyNewInviteMessage(msg);
             EaseEvent event = EaseEvent.create(DemoConstant.NOTIFY_GROUP_JOIN_RECEIVE, EaseEvent.TYPE.NOTIFY);
-            messageChangeLiveData.postValue(event);
+            messageChangeLiveData.with(DemoConstant.NOTIFY_CHANGE).postValue(event);
         }
 
         @Override
@@ -362,7 +362,7 @@ public class ChatPresenter extends EaseChatPresenter {
             // save accept message
             EMClient.getInstance().chatManager().saveMessage(msg);
             EaseEvent event = EaseEvent.create(DemoConstant.MESSAGE_GROUP_JOIN_ACCEPTED, EaseEvent.TYPE.MESSAGE);
-            messageChangeLiveData.postValue(event);
+            messageChangeLiveData.with(DemoConstant.MESSAGE_CHANGE_CHANGE).postValue(event);
         }
 
         @Override
@@ -385,7 +385,7 @@ public class ChatPresenter extends EaseChatPresenter {
             // save invitation as messages
             EMClient.getInstance().chatManager().saveMessage(msg);
             EaseEvent event = EaseEvent.create(DemoConstant.MESSAGE_GROUP_AUTO_ACCEPT, EaseEvent.TYPE.MESSAGE);
-            messageChangeLiveData.postValue(event);
+            messageChangeLiveData.with(DemoConstant.MESSAGE_CHANGE_CHANGE).postValue(event);
         }
     }
 
@@ -398,7 +398,7 @@ public class ChatPresenter extends EaseChatPresenter {
             entity.setUsername(username);
             DemoDbHelper.getInstance(DemoApp.getInstance()).getUserDao().insert(entity);
             EaseEvent event = EaseEvent.create(DemoConstant.CONTACT_CHANGE, EaseEvent.TYPE.CONTACT);
-            messageChangeLiveData.postValue(event);
+            messageChangeLiveData.with(DemoConstant.CONTACT_CHANGE).postValue(event);
         }
 
         @Override
@@ -409,7 +409,7 @@ public class ChatPresenter extends EaseChatPresenter {
             helper.getInviteMessageDao().deleteByFrom(username);
             EMClient.getInstance().chatManager().deleteConversation(username, false);
             EaseEvent event = EaseEvent.create(DemoConstant.CONTACT_CHANGE, EaseEvent.TYPE.CONTACT);
-            messageChangeLiveData.postValue(event);
+            messageChangeLiveData.with(DemoConstant.CONTACT_CHANGE).postValue(event);
         }
 
         @Override
@@ -432,7 +432,7 @@ public class ChatPresenter extends EaseChatPresenter {
             msg.setType(MsgTypeManageEntity.msgType.NOTIFICATION);
             notifyNewInviteMessage(msg);
             EaseEvent event = EaseEvent.create(DemoConstant.CONTACT_CHANGE, EaseEvent.TYPE.CONTACT);
-            messageChangeLiveData.postValue(event);
+            messageChangeLiveData.with(DemoConstant.CONTACT_CHANGE).postValue(event);
         }
 
         @Override
@@ -450,7 +450,7 @@ public class ChatPresenter extends EaseChatPresenter {
             msg.setType(MsgTypeManageEntity.msgType.NOTIFICATION);
             notifyNewInviteMessage(msg);
             EaseEvent event = EaseEvent.create(DemoConstant.CONTACT_CHANGE, EaseEvent.TYPE.CONTACT);
-            messageChangeLiveData.postValue(event);
+            messageChangeLiveData.with(DemoConstant.CONTACT_CHANGE).postValue(event);
         }
 
         @Override
@@ -505,7 +505,7 @@ public class ChatPresenter extends EaseChatPresenter {
             }
             if(!TextUtils.isEmpty(message)) {
                 EaseEvent easeEvent = EaseEvent.create(message, EaseEvent.TYPE.CONTACT);
-                messageChangeLiveData.postValue(easeEvent);
+                messageChangeLiveData.with(message).postValue(easeEvent);
             }
         }
 
@@ -620,7 +620,7 @@ public class ChatPresenter extends EaseChatPresenter {
             }
             if(!TextUtils.isEmpty(message)) {
                 EaseEvent easeEvent = EaseEvent.create(message, EaseEvent.TYPE.GROUP);
-                messageChangeLiveData.postValue(easeEvent);
+                messageChangeLiveData.with(message).postValue(easeEvent);
             }
         }
     }
@@ -744,6 +744,6 @@ public class ChatPresenter extends EaseChatPresenter {
     private void setChatRoomEvent(String roomId, EaseEvent.TYPE type) {
         EaseEvent easeEvent = new EaseEvent(DemoConstant.CHAT_ROOM_CHANGE, type);
         easeEvent.message = roomId;
-        messageChangeLiveData.postValue(easeEvent);
+        messageChangeLiveData.with(DemoConstant.CHAT_ROOM_CHANGE).postValue(easeEvent);
     }
 }

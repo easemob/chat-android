@@ -10,7 +10,7 @@ import android.view.View;
 import com.hyphenate.chatuidemo.R;
 import com.hyphenate.chatuidemo.common.DemoConstant;
 import com.hyphenate.chatuidemo.common.interfaceOrImplement.OnResourceParseCallback;
-import com.hyphenate.chatuidemo.common.livedatas.MessageChangeLiveData;
+import com.hyphenate.chatuidemo.common.livedatas.LiveDataBus;
 import com.hyphenate.chatuidemo.section.base.BaseInitActivity;
 import com.hyphenate.chatuidemo.section.friends.adapter.BlackContactAdapter;
 import com.hyphenate.chatuidemo.section.friends.viewmodels.ContactBlackViewModel;
@@ -107,7 +107,7 @@ public class ContactBlackListActivity extends BaseInitActivity implements OnRefr
                 @Override
                 public void onSuccess(Boolean data) {
                     viewModel.getBlackList();
-                    MessageChangeLiveData.getInstance().postValue(EaseEvent.create(DemoConstant.CONTACT_CHANGE, EaseEvent.TYPE.CONTACT));
+                    LiveDataBus.get().with(DemoConstant.CONTACT_CHANGE).postValue(EaseEvent.create(DemoConstant.CONTACT_CHANGE, EaseEvent.TYPE.CONTACT));
                 }
             });
         });

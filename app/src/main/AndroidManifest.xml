@@ -388,6 +388,8 @@
         <activity android:name=".section.me.activity.OfflinePushNickActivity" />
         <!--通话设置-->
         <activity android:name=".section.me.activity.CallOptionActivity" />
+        <!--聊天信息-->
+        <activity android:name=".section.chat.SingleChatSetActivity" />
     </application>
 
 </manifest>

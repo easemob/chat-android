@@ -10,7 +10,7 @@ import androidx.lifecycle.MutableLiveData;
 import com.hyphenate.chatuidemo.DemoHelper;
 import com.hyphenate.chatuidemo.common.db.DemoDbHelper;
 import com.hyphenate.chatuidemo.common.db.dao.InviteMessageDao;
-import com.hyphenate.chatuidemo.common.livedatas.MessageChangeLiveData;
+import com.hyphenate.chatuidemo.common.livedatas.LiveDataBus;
 import com.hyphenate.chatuidemo.common.livedatas.SingleSourceLiveData;
 
 public class MainViewModel extends AndroidViewModel {
@@ -41,8 +41,8 @@ public class MainViewModel extends AndroidViewModel {
         return homeUnReadObservable;
     }
 
-    public MessageChangeLiveData messageChangeObservable() {
-        return MessageChangeLiveData.getInstance();
+    public LiveDataBus messageChangeObservable() {
+        return LiveDataBus.get();
     }
 
     public void checkUnreadMsg() {

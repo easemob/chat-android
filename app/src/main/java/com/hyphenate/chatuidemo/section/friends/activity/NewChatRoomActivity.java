@@ -11,7 +11,7 @@ import com.hyphenate.chat.EMChatRoom;
 import com.hyphenate.chatuidemo.R;
 import com.hyphenate.chatuidemo.common.DemoConstant;
 import com.hyphenate.chatuidemo.common.interfaceOrImplement.OnResourceParseCallback;
-import com.hyphenate.chatuidemo.common.livedatas.MessageChangeLiveData;
+import com.hyphenate.chatuidemo.common.livedatas.LiveDataBus;
 import com.hyphenate.chatuidemo.section.base.BaseInitActivity;
 import com.hyphenate.chatuidemo.section.dialog.SimpleDialogFragment;
 import com.hyphenate.chatuidemo.section.friends.viewmodels.NewChatRoomViewModel;
@@ -59,7 +59,7 @@ public class NewChatRoomActivity extends BaseInitActivity implements EaseTitleBa
             parseResource(response, new OnResourceParseCallback<EMChatRoom>() {
                 @Override
                 public void onSuccess(EMChatRoom data) {
-                    MessageChangeLiveData.getInstance().postValue(EaseEvent.create(DemoConstant.CHAT_ROOM_CHANGE, EaseEvent.TYPE.CHAT_ROOM));
+                    LiveDataBus.get().with(DemoConstant.CHAT_ROOM_CHANGE).postValue(EaseEvent.create(DemoConstant.CHAT_ROOM_CHANGE, EaseEvent.TYPE.CHAT_ROOM));
                     finish();
                 }
             });

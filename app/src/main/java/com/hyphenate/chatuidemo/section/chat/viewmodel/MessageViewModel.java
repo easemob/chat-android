@@ -6,22 +6,22 @@ import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
 
-import com.hyphenate.chatuidemo.common.livedatas.MessageChangeLiveData;
+import com.hyphenate.chatuidemo.common.livedatas.LiveDataBus;
 import com.hyphenate.easeui.model.EaseEvent;
 
 public class MessageViewModel extends AndroidViewModel {
-    private MessageChangeLiveData messageObservable;
+    private LiveDataBus messageObservable;
 
     public MessageViewModel(@NonNull Application application) {
         super(application);
-        messageObservable = MessageChangeLiveData.getInstance();
+        messageObservable = LiveDataBus.get();
     }
 
     public void setMessageChange(EaseEvent change) {
-        messageObservable.postValue(change);
+        messageObservable.with(change.event).postValue(change);
     }
 
-    public LiveData<EaseEvent> getMessageChange() {
+    public LiveDataBus getMessageChange() {
         return messageObservable;
     }
 

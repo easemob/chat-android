@@ -5,7 +5,7 @@ import android.app.Application;
 import com.hyphenate.chat.EMGroup;
 import com.hyphenate.chatuidemo.DemoHelper;
 import com.hyphenate.chatuidemo.common.db.entity.EmUserEntity;
-import com.hyphenate.chatuidemo.common.livedatas.MessageChangeLiveData;
+import com.hyphenate.chatuidemo.common.livedatas.LiveDataBus;
 import com.hyphenate.chatuidemo.common.livedatas.SingleSourceLiveData;
 import com.hyphenate.chatuidemo.common.net.Resource;
 import com.hyphenate.chatuidemo.common.repositories.EMGroupManagerRepository;
@@ -28,7 +28,7 @@ public class GroupMemberAuthorityViewModel extends AndroidViewModel {
     private SingleSourceLiveData<Resource<Map<String, Long>>> muteMembersObservable;
     private SingleSourceLiveData<Resource<List<String>>> blackMembersObservable;
     private MediatorLiveData<Resource<Boolean>> refreshObservable;
-    private MessageChangeLiveData messageChangeLiveData = MessageChangeLiveData.getInstance();
+    private LiveDataBus messageChangeLiveData = LiveDataBus.get();
 
     public GroupMemberAuthorityViewModel(@NonNull Application application) {
         super(application);
@@ -40,7 +40,7 @@ public class GroupMemberAuthorityViewModel extends AndroidViewModel {
         refreshObservable = new MediatorLiveData<>();
     }
 
-    public LiveData<EaseEvent> getMessageChangeObservable() {
+    public LiveDataBus getMessageChangeObservable() {
         return messageChangeLiveData;
     }
 

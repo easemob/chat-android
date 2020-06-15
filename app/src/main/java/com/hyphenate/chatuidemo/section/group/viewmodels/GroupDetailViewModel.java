@@ -8,7 +8,7 @@ import androidx.lifecycle.LiveData;
 
 import com.hyphenate.chat.EMGroup;
 import com.hyphenate.chatuidemo.DemoHelper;
-import com.hyphenate.chatuidemo.common.livedatas.MessageChangeLiveData;
+import com.hyphenate.chatuidemo.common.livedatas.LiveDataBus;
 import com.hyphenate.chatuidemo.common.livedatas.SingleSourceLiveData;
 import com.hyphenate.chatuidemo.common.net.Resource;
 import com.hyphenate.chatuidemo.common.repositories.EMGroupManagerRepository;
@@ -43,8 +43,8 @@ public class GroupDetailViewModel extends AndroidViewModel {
         offPushObservable = new SingleSourceLiveData<>();
     }
 
-    public LiveData<EaseEvent> getMessageChangeObservable() {
-        return MessageChangeLiveData.getInstance();
+    public LiveDataBus getMessageChangeObservable() {
+        return LiveDataBus.get();
     }
 
     public LiveData<Resource<EMGroup>> getGroupObservable() {

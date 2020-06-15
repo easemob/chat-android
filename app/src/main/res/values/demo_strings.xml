@@ -114,6 +114,11 @@
 
     <string name="em_chat_pick_user_title">选择联系人</string>
 
+    <string name="em_single_set_title">聊天信息</string>
+    <string name="em_single_search_history">查找聊天记录</string>
+    <string name="em_single_clear_history">清空聊天记录</string>
+    <string name="em_single_conversation_top">会话置顶</string>
+
     <string name="em_chat_delete_conversation">是否删除会话？</string>
     <string name="em_chat_group_detail_title">群组信息</string>
     <string name="em_chat_group_detail_group_member">群成员</string>

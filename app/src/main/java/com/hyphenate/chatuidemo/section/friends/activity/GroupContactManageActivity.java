@@ -11,9 +11,11 @@ import androidx.viewpager.widget.ViewPager;
 
 import com.google.android.material.tabs.TabLayout;
 import com.hyphenate.chatuidemo.R;
+import com.hyphenate.chatuidemo.common.DemoConstant;
 import com.hyphenate.chatuidemo.section.base.BaseInitActivity;
 import com.hyphenate.chatuidemo.section.friends.adapter.GroupContactFragmentAdapter;
 import com.hyphenate.chatuidemo.section.friends.viewmodels.GroupContactViewModel;
+import com.hyphenate.easeui.model.EaseEvent;
 import com.hyphenate.easeui.widget.EaseSearchTextView;
 import com.hyphenate.easeui.widget.EaseTitleBar;
 
@@ -59,7 +61,7 @@ public class GroupContactManageActivity extends BaseInitActivity implements Ease
         mVpGroupContact.setAdapter(adapter);
 
         GroupContactViewModel viewModel = new ViewModelProvider(mContext).get(GroupContactViewModel.class);
-        viewModel.getMessageObservable().observe(this, event -> {
+        viewModel.getMessageObservable().with(DemoConstant.GROUP_CHANGE, EaseEvent.class).observe(this, event -> {
             if(event == null) {
                 return;
             }

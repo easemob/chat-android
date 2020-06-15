@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/common_bg"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <com.hyphenate.easeui.widget.EaseTitleBar
+        android:id="@+id/title_bar"
+        android:layout_width="0dp"
+        android:layout_height="@dimen/em_common_title_bar_height"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:titleBarTitle="@string/em_single_set_title"
+        app:titleBarDisplayHomeAsUpEnabled="true"/>
+
+    <com.hyphenate.chatuidemo.common.widget.ArrowItemView
+        android:id="@+id/item_user_info"
+        android:layout_width="0dp"
+        android:layout_height="80dp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/title_bar"
+        app:arrowItemAvatarSrc="@drawable/ease_default_avatar"
+        app:arrowItemAvatarHeight="50dp"
+        app:arrowItemAvatarWidth="50dp"
+        app:arrowItemShowAvatar="true"
+        app:arrowItemShowDivider="false"
+        android:background="@color/white"
+        android:foreground="@drawable/demo_ripple_click_gray"/>
+
+    <com.hyphenate.chatuidemo.common.widget.ArrowItemView
+        android:id="@+id/item_search_history"
+        android:layout_width="0dp"
+        android:layout_height="50dp"
+        android:layout_marginTop="@dimen/em_margin_20"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/item_user_info"
+        app:arrowItemTitle="@string/em_single_search_history"
+        android:background="@color/white"
+        android:foreground="@drawable/demo_ripple_click_gray"/>
+
+    <com.hyphenate.chatuidemo.common.widget.ArrowItemView
+        android:id="@+id/item_clear_history"
+        android:layout_width="0dp"
+        android:layout_height="50dp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/item_search_history"
+        app:arrowItemTitle="@string/em_single_clear_history"
+        app:arrowItemShowDivider="false"
+        android:background="@color/white"
+        android:foreground="@drawable/demo_ripple_click_gray"/>
+
+    <com.hyphenate.chatuidemo.common.widget.SwitchItemView
+        android:id="@+id/item_switch_top"
+        android:layout_width="0dp"
+        android:layout_height="50dp"
+        android:layout_marginTop="@dimen/em_margin_20"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/item_clear_history"
+        app:switchItemShowDivider="false"
+        android:background="@color/white"
+        app:switchItemTitle="@string/em_single_conversation_top"/>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
