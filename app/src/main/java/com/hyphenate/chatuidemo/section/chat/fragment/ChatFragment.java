@@ -66,11 +66,16 @@ public class ChatFragment extends EaseChatFragment implements EaseChatFragment.O
 
     @Override
     protected void addMoreMessageDelegates(EaseConTypeSetManager manager) {
-        manager.addConversationType(new ChatConferenceInviteAdapterDelegate())
-                .addConversationType(new ChatLiveInviteAdapterDelegate())
-                .addConversationType(new ChatRecallAdapterDelegate())
-                .addConversationType(new ChatVideoCallAdapterDelegate())
-                .addConversationType(new ChatVoiceCallAdapterDelegate());
+//        manager.addConversationType(new ChatConferenceInviteAdapterDelegate())
+//                .addConversationType(new ChatLiveInviteAdapterDelegate())
+//                .addConversationType(new ChatRecallAdapterDelegate())
+//                .addConversationType(new ChatVideoCallAdapterDelegate())
+//                .addConversationType(new ChatVoiceCallAdapterDelegate());
+        manager.addConversationType(ChatConferenceInviteAdapterDelegate.class)
+                .addConversationType(ChatLiveInviteAdapterDelegate.class)
+                .addConversationType(ChatRecallAdapterDelegate.class)
+                .addConversationType(ChatVideoCallAdapterDelegate.class)
+                .addConversationType(ChatVoiceCallAdapterDelegate.class);
     }
 
     @Override

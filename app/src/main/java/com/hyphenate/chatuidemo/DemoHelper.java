@@ -126,14 +126,14 @@ public class DemoHelper {
      */
     private void registerConversationType() {
         EaseConTypeSetManager.getInstance()
-                .addConversationType(new EaseExpressionAdapterDelegate())   //自定义表情
-                .addConversationType(new EaseFileAdapterDelegate())         //文件
-                .addConversationType(new EaseImageAdapterDelegate())        //图片
-                .addConversationType(new EaseLocationAdapterDelegate())     //定位
-                .addConversationType(new EaseVideoAdapterDelegate())        //视频
-                .addConversationType(new EaseVoiceAdapterDelegate())        //声音
-                .addConversationType(new EaseTextAdapterDelegate())         //文本
-                .setDefaultConversionType(new EaseTextAdapterDelegate());   //文本
+                .addConversationType(EaseExpressionAdapterDelegate.class)   //自定义表情
+                .addConversationType(EaseFileAdapterDelegate.class)         //文件
+                .addConversationType(EaseImageAdapterDelegate.class)        //图片
+                .addConversationType(EaseLocationAdapterDelegate.class)     //定位
+                .addConversationType(EaseVideoAdapterDelegate.class)        //视频
+                .addConversationType(EaseVoiceAdapterDelegate.class)        //声音
+                .addConversationType(EaseTextAdapterDelegate.class)         //文本
+                .setDefaultConversionType(EaseTextAdapterDelegate.class);   //文本
     }
 
     /**

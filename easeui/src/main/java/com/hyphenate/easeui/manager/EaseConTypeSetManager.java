@@ -8,14 +8,14 @@ import com.hyphenate.easeui.ui.chat.delegates.EaseTextAdapterDelegate;
 
 import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
 public class EaseConTypeSetManager {
     private static EaseConTypeSetManager mInstance;
-    private Set<EaseAdapterDelegate<?, ?>> delegates = new HashSet<>();
     private EaseAdapterDelegate<?,?> defaultDelegate = new EaseTextAdapterDelegate();
+    private Class<? extends EaseAdapterDelegate<?,?>> defaultDelegateCls;
+    private Set<Class<? extends EaseAdapterDelegate<?, ?>>> delegates = new HashSet<>();
     private boolean hasConsistItemType;
 
     private EaseConTypeSetManager(){}
@@ -41,23 +41,18 @@ public class EaseConTypeSetManager {
         return this;
     }
 
-    /**
-     * 添加对话类型
-     * @param delegate
-     * @return
-     */
-    public EaseConTypeSetManager addConversationType(EaseAdapterDelegate<?, ?> delegate) {
-        delegates.add(delegate);
+    public EaseConTypeSetManager addConversationType(Class<? extends EaseAdapterDelegate<?, ?>> cls) {
+        delegates.add(cls);
         return this;
     }
 
     /**
      * 设置默认的对话类型
-     * @param delegate
+     * @param cls
      * @return
      */
-    public EaseConTypeSetManager setDefaultConversionType(EaseAdapterDelegate<?, ?> delegate) {
-        this.defaultDelegate = delegate;
+    public EaseConTypeSetManager setDefaultConversionType(Class<? extends EaseAdapterDelegate<?, ?>> cls) {
+        this.defaultDelegateCls = cls;
         return this;
     }
 
@@ -65,14 +60,15 @@ public class EaseConTypeSetManager {
      * 注册对话类型
      * @param adapter
      */
-    public void registerConversationType(EaseBaseDelegateAdapter adapter) {
+    public void registerConversationType(EaseBaseDelegateAdapter adapter) throws InstantiationException, IllegalAccessException{
         if(adapter == null) {
             return;
         }
         if(delegates.size() <= 0) {
             return;
         }
-        for (EaseAdapterDelegate<?, ?> delegate : delegates) {
+        for (Class<? extends EaseAdapterDelegate<?, ?>> cls : delegates) {
+            EaseAdapterDelegate delegate = cls.newInstance();
             if(adapter instanceof EaseMessageAdapter) {
                 adapter.addDelegate(delegate, EMMessage.Direct.SEND.toString());
                 adapter.addDelegate(delegate, EMMessage.Direct.RECEIVE.toString());
@@ -80,8 +76,11 @@ public class EaseConTypeSetManager {
                 adapter.addDelegate(delegate);
             }
         }
-        if(defaultDelegate == null) {
+
+        if(defaultDelegateCls == null) {
             defaultDelegate = new EaseTextAdapterDelegate();
+        }else {
+            defaultDelegate = defaultDelegateCls.newInstance();
         }
         adapter.setFallbackDelegate(defaultDelegate);
     }
@@ -90,7 +89,4 @@ public class EaseConTypeSetManager {
         return this.hasConsistItemType;
     }
 
-    public List<EaseAdapterDelegate<?,?>> getConversationTypeList() {
-        return new ArrayList<>(delegates);
-    }
 }

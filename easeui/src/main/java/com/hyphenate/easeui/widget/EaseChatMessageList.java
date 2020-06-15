@@ -102,7 +102,13 @@ public class EaseChatMessageList extends RelativeLayout implements View.OnTouchL
      * 设置默认的消息类型
      */
     private void registerDelegates() {
-        EaseConTypeSetManager.getInstance().registerConversationType(messageAdapter);
+        try {
+            EaseConTypeSetManager.getInstance().registerConversationType(messageAdapter);
+        } catch (InstantiationException e) {
+            e.printStackTrace();
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
