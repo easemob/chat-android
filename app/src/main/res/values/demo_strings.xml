@@ -281,6 +281,8 @@
     <string name="Log_uploaded_successfully">日志上传成功</string>
     <string name="Log_Upload_failed">log上传失败</string>
     <string name="default_appkey">默认</string>
+    <string name="button_logout">退出登录</string>
+    <string name="Are_logged_out">正在退出登录..</string>
 
     <string name="Agreed_to_your_group_chat_application">同意了你的群聊申请</string>
     <string name="Invite_you_to_join_a_group_chat">邀请你加入了群聊</string>

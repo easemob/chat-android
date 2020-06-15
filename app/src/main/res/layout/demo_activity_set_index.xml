@@ -68,4 +68,22 @@
         android:foreground="@drawable/demo_ripple_click_gray"
         android:background="@color/white"/>
 
+    <Button
+        android:id="@+id/btn_logout"
+        android:layout_width="0dp"
+        android:layout_height="44dp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/item_privacy"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintVertical_bias="0.9"
+        android:layout_marginBottom="12dp"
+        android:layout_marginLeft="10dip"
+        android:layout_marginRight="10dip"
+        android:layout_marginTop="12dp"
+        android:background="@drawable/demo_btn_style_alert_dialog_special"
+        android:text="@string/button_logout"
+        android:textColor="@android:color/white"
+        android:textSize="@dimen/em_size_big" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>
