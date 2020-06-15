@@ -1,19 +1,23 @@
 package com.hyphenate.chatuidemo.section.me.activity;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.RadioButton;
 import android.widget.TextView;
 
 import com.hyphenate.chatuidemo.DemoHelper;
 import com.hyphenate.chatuidemo.R;
 import com.hyphenate.chatuidemo.common.db.entity.AppKeyEntity;
+import com.hyphenate.chatuidemo.common.model.DemoModel;
 import com.hyphenate.chatuidemo.section.base.BaseInitActivity;
 import com.hyphenate.easeui.adapter.EaseBaseRecyclerViewAdapter;
 import com.hyphenate.easeui.interfaces.OnItemClickListener;
@@ -37,10 +41,11 @@ public class AppKeyManageActivity extends BaseInitActivity implements EaseTitleB
     private RvAdapter adapter;
 
     private int selectedPosition;
+    private DemoModel settingsModel;
 
-    public static void actionStart(Context context) {
-        Intent starter = new Intent(context, AppKeyManageActivity.class);
-        context.startActivity(starter);
+    public static void actionStartForResult(Activity activity, int requestCode) {
+        Intent starter = new Intent(activity, AppKeyManageActivity.class);
+        activity.startActivityForResult(starter, requestCode);
     }
 
     @Override
@@ -66,6 +71,8 @@ public class AppKeyManageActivity extends BaseInitActivity implements EaseTitleB
     @Override
     protected void initData() {
         super.initData();
+        settingsModel = DemoHelper.getInstance().getModel();
+
         rvList.setLayoutManager(new LinearLayoutManager(mContext));
         adapter = new RvAdapter();
         rvList.setAdapter(adapter);
@@ -85,6 +92,12 @@ public class AppKeyManageActivity extends BaseInitActivity implements EaseTitleB
             public void onItemClick(View view, int position) {
                 selectedPosition = position;
                 adapter.notifyDataSetChanged();
+                String appKey = adapter.getItem(position).getAppKey();
+                settingsModel.setCustomAppkey(appKey);
+                Intent intent = new Intent();
+                intent.putExtra("appkey", appKey);
+                setResult(RESULT_OK, intent);
+                finish();
             }
         });
 
@@ -117,7 +130,16 @@ public class AppKeyManageActivity extends BaseInitActivity implements EaseTitleB
 
     private void getData() {
         List<AppKeyEntity> appKeys = DemoHelper.getInstance().getModel().getAppKeys();
-        adapter.setData(appKeys);
+        String appkey = settingsModel.getCutomAppkey();
+        if(appKeys != null && !appKeys.isEmpty()) {
+            for(int i = 0; i < appKeys.size(); i++) {
+                AppKeyEntity entity = appKeys.get(i);
+                if(TextUtils.equals(entity.getAppKey(), appkey)) {
+                    selectedPosition = i;
+                }
+            }
+            adapter.setData(appKeys);
+        }
         if(srlRefresh != null) {
             srlRefresh.finishRefresh();
         }
@@ -155,7 +177,7 @@ public class AppKeyManageActivity extends BaseInitActivity implements EaseTitleB
         }
 
         private class MyViewHolder extends ViewHolder<AppKeyEntity> {
-            private ImageView ivArrow;
+            private RadioButton ivArrow;
             private TextView tvContent;
 
             public MyViewHolder(@NonNull View itemView) {
@@ -173,8 +195,10 @@ public class AppKeyManageActivity extends BaseInitActivity implements EaseTitleB
                 tvContent.setText(item.getAppKey());
                 if(selectedPosition == position) {
                     ivArrow.setVisibility(View.VISIBLE);
+                    ivArrow.setChecked(true);
                 }else {
                     ivArrow.setVisibility(View.INVISIBLE);
+                    ivArrow.setChecked(false);
                 }
             }
         }

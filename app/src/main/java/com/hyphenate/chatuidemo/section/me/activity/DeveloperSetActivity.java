@@ -5,13 +5,17 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.View;
+
+import androidx.annotation.Nullable;
 
 import com.hyphenate.chat.EMClient;
 import com.hyphenate.chat.EMOptions;
 import com.hyphenate.chatuidemo.BuildConfig;
 import com.hyphenate.chatuidemo.DemoHelper;
 import com.hyphenate.chatuidemo.R;
+import com.hyphenate.chatuidemo.common.manager.OptionsHelper;
 import com.hyphenate.chatuidemo.common.model.DemoModel;
 import com.hyphenate.chatuidemo.common.widget.ArrowItemView;
 import com.hyphenate.chatuidemo.common.widget.SwitchItemView;
@@ -19,6 +23,7 @@ import com.hyphenate.chatuidemo.section.base.BaseInitActivity;
 import com.hyphenate.easeui.widget.EaseTitleBar;
 
 public class DeveloperSetActivity extends BaseInitActivity implements EaseTitleBar.OnBackPressListener, View.OnClickListener, SwitchItemView.OnCheckedChangeListener {
+    private static final int APPKEY_REQUEST_CODE = 110;
     private EaseTitleBar  titleBar;
     private ArrowItemView itemVersion;
     private ArrowItemView itemAppkey;
@@ -85,6 +90,8 @@ public class DeveloperSetActivity extends BaseInitActivity implements EaseTitleB
         itemSwitchUploadToHx.getSwitch().setChecked(!settingsModel.isSetTransferFileByUser());
         itemSwitchAutoDownloadThumbnail.getSwitch().setChecked(settingsModel.isSetAutodownloadThumbnail());
         itemMsgSort.getTvContent().setText(settingsModel.isSortMessageByServerTime() ? sortType[1] : sortType[0]);
+
+        setAppKey(settingsModel.getCutomAppkey());
     }
 
     @Override
@@ -96,7 +103,7 @@ public class DeveloperSetActivity extends BaseInitActivity implements EaseTitleB
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.item_appkey :
-                AppKeyManageActivity.actionStart(mContext);
+                AppKeyManageActivity.actionStartForResult(mContext, APPKEY_REQUEST_CODE);
                 break;
             case R.id.item_msg_sort :
                 showSelectDialog();
@@ -141,6 +148,25 @@ public class DeveloperSetActivity extends BaseInitActivity implements EaseTitleB
                 settingsModel.setAutodownloadThumbnail(isChecked);
                 options.setAutoDownloadThumbnail(isChecked);
                 break;
+        }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if(requestCode == APPKEY_REQUEST_CODE && resultCode == RESULT_OK) {
+            if(data != null) {
+                String appkey = data.getStringExtra("appkey");
+                setAppKey(appkey);
+            }
+        }
+    }
+
+    private void setAppKey(String appKey) {
+        if(TextUtils.equals(appKey, OptionsHelper.getInstance().getDefAppkey())) {
+            itemAppkey.getTvContent().setText(getString(R.string.default_appkey));
+        }else {
+            itemAppkey.getTvContent().setText(appKey);
         }
     }
 }
