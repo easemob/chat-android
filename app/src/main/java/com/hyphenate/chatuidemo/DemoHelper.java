@@ -24,6 +24,7 @@ import com.hyphenate.chatuidemo.common.db.entity.InviteMessage;
 import com.hyphenate.chatuidemo.common.db.entity.MsgTypeManageEntity;
 import com.hyphenate.chatuidemo.common.manager.HMSPushHelper;
 import com.hyphenate.chatuidemo.common.manager.OptionsHelper;
+import com.hyphenate.chatuidemo.common.manager.UserProfileManager;
 import com.hyphenate.chatuidemo.common.model.DemoModel;
 import com.hyphenate.chatuidemo.common.model.DemoServerSetBean;
 import com.hyphenate.chatuidemo.common.model.EmojiconExampleGroupData;
@@ -34,9 +35,11 @@ import com.hyphenate.chatuidemo.section.chat.receiver.CallReceiver;
 import com.hyphenate.easeui.EaseUI;
 import com.hyphenate.easeui.domain.EaseEmojicon;
 import com.hyphenate.easeui.domain.EaseEmojiconGroupEntity;
+import com.hyphenate.easeui.domain.EaseUser;
 import com.hyphenate.easeui.manager.EaseConTypeSetManager;
 import com.hyphenate.easeui.provider.EaseEmojiconInfoProvider;
 import com.hyphenate.easeui.provider.EaseSettingsProvider;
+import com.hyphenate.easeui.provider.EaseUserProfileProvider;
 import com.hyphenate.easeui.ui.chat.delegates.EaseExpressionAdapterDelegate;
 import com.hyphenate.easeui.ui.chat.delegates.EaseFileAdapterDelegate;
 import com.hyphenate.easeui.ui.chat.delegates.EaseImageAdapterDelegate;
@@ -44,14 +47,18 @@ import com.hyphenate.easeui.ui.chat.delegates.EaseLocationAdapterDelegate;
 import com.hyphenate.easeui.ui.chat.delegates.EaseTextAdapterDelegate;
 import com.hyphenate.easeui.ui.chat.delegates.EaseVideoAdapterDelegate;
 import com.hyphenate.easeui.ui.chat.delegates.EaseVoiceAdapterDelegate;
+import com.hyphenate.easeui.utils.EaseCommonUtils;
 import com.hyphenate.push.EMPushConfig;
 import com.hyphenate.push.EMPushHelper;
 import com.hyphenate.push.EMPushType;
 import com.hyphenate.push.PushListener;
 import com.hyphenate.util.EMLog;
 
+import java.util.Hashtable;
 import java.util.List;
 import java.util.Map;
+
+import static com.hyphenate.easeui.utils.EaseUserUtils.getUserInfo;
 
 /**
  * 作为hyphenate-sdk的入口控制类，获取sdk下的基础类均通过此类
@@ -63,6 +70,8 @@ public class DemoHelper {
     private static DemoHelper mInstance;
     private CallReceiver callReceiver;
     private DemoModel demoModel = null;
+    private Map<String, EaseUser> contactList;
+    private UserProfileManager userProManager;
 
     private DemoHelper() {}
 
@@ -269,8 +278,31 @@ public class DemoHelper {
                     public Map<String, Object> getTextEmojiconMapping() {
                         return null;
                     }
+                })
+                .setUserProvider(new EaseUserProfileProvider() {
+                    @Override
+                    public EaseUser getUser(String username) {
+                        return getUserInfo(username);
+                    }
                 });
     }
+
+    private EaseUser getUserInfo(String username) {
+        // To get instance of EaseUser, here we get it from the user list in memory
+        // You'd better cache it if you get it from your server
+        EaseUser user = null;
+        if(username.equals(EMClient.getInstance().getCurrentUser()))
+            return getUserProfileManager().getCurrentUserInfo();
+        user = getContactList().get(username);
+
+        // if user is not in your contacts, set inital letter for him/her
+        if(user == null){
+            user = new EaseUser(username);
+            EaseCommonUtils.setUserInitialLetter(user);
+        }
+        return user;
+    }
+
 
     /**
      * 根据自己的需要进行配置
@@ -520,5 +552,41 @@ public class DemoHelper {
      */
     public void update(Object object) {
         demoModel.update(object);
+    }
+
+    /**
+     * get contact list
+     *
+     * @return
+     */
+    public Map<String, EaseUser> getContactList() {
+        if (isLoggedIn() && contactList == null) {
+            contactList = demoModel.getContactList();
+        }
+
+        // return a empty non-null object to avoid app crash
+        if(contactList == null){
+            return new Hashtable<String, EaseUser>();
+        }
+
+        return contactList;
+    }
+
+    public UserProfileManager getUserProfileManager() {
+        if (userProManager == null) {
+            userProManager = new UserProfileManager();
+        }
+        return userProManager;
+    }
+
+    /**
+     * data sync listener
+     */
+    public interface DataSyncListener {
+        /**
+         * sync complete
+         * @param success true：data sync successful，false: failed to sync data
+         */
+        void onSyncComplete(boolean success);
     }
 }

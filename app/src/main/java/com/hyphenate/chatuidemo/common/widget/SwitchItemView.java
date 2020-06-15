@@ -3,6 +3,7 @@ package com.hyphenate.chatuidemo.common.widget;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.util.AttributeSet;
+import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.CompoundButton;
@@ -62,11 +63,12 @@ public class SwitchItemView extends ConstraintLayout {
         tvTitle.setTextColor(titleColor);
 
         int titleSizeId = a.getResourceId(R.styleable.SwitchItemView_switchItemTitleSize, -1);
-        titleSize = a.getDimension(R.styleable.SwitchItemView_switchItemTitleSize, 16);
+        titleSize = a.getDimension(R.styleable.SwitchItemView_switchItemTitleSize, sp2px(getContext(), 16));
+
         if(titleSizeId != -1) {
             titleSize = getResources().getDimension(titleSizeId);
         }
-        tvTitle.setTextSize(titleSize);
+        tvTitle.getPaint().setTextSize(titleSize);
 
         boolean showDivider = a.getBoolean(R.styleable.SwitchItemView_switchItemShowDivider, true);
         viewDivider.setVisibility(showDivider ? VISIBLE : GONE);
@@ -97,6 +99,16 @@ public class SwitchItemView extends ConstraintLayout {
 
     public void setOnCheckedChangeListener(OnCheckedChangeListener listener) {
         this.listener = listener;
+    }
+
+    /**
+     * sp to px
+     * @param context
+     * @param value
+     * @return
+     */
+    public static float sp2px(Context context, float value) {
+        return TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_SP, value, context.getResources().getDisplayMetrics());
     }
 
     /**

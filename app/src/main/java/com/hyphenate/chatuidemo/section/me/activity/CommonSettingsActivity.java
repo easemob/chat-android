@@ -18,7 +18,9 @@ import com.hyphenate.easeui.widget.EaseTitleBar;
 public class CommonSettingsActivity extends BaseInitActivity implements View.OnClickListener, SwitchItemView.OnCheckedChangeListener, EaseTitleBar.OnBackPressListener {
     private EaseTitleBar titleBar;
     private ArrowItemView itemNotification;
+    private ArrowItemView itemCallOption;
     private SwitchItemView itemTyping;
+    private SwitchItemView itemSwitchSpeaker;
     private SwitchItemView itemChatroom;
     private SwitchItemView itemDeleteMsg;
     private SwitchItemView itemAutoFile;
@@ -43,7 +45,9 @@ public class CommonSettingsActivity extends BaseInitActivity implements View.OnC
         super.initView(savedInstanceState);
         titleBar = findViewById(R.id.title_bar);
         itemNotification = findViewById(R.id.item_notification);
+        itemCallOption = findViewById(R.id.item_call_option);
         itemTyping = findViewById(R.id.item_switch_typing);
+        itemSwitchSpeaker = findViewById(R.id.item_switch_speaker);
         itemChatroom = findViewById(R.id.item_switch_chatroom);
         itemDeleteMsg = findViewById(R.id.item_switch_delete_msg);
         itemAutoFile = findViewById(R.id.item_switch_auto_file);
@@ -56,7 +60,9 @@ public class CommonSettingsActivity extends BaseInitActivity implements View.OnC
         super.initListener();
         titleBar.setOnBackPressListener(this);
         itemNotification.setOnClickListener(this);
+        itemCallOption.setOnClickListener(this);
         itemTyping.setOnCheckedChangeListener(this);
+        itemSwitchSpeaker.setOnCheckedChangeListener(this);
         itemChatroom.setOnCheckedChangeListener(this);
         itemDeleteMsg.setOnCheckedChangeListener(this);
         itemAutoFile.setOnCheckedChangeListener(this);
@@ -71,6 +77,7 @@ public class CommonSettingsActivity extends BaseInitActivity implements View.OnC
         chatOptions = EMClient.getInstance().getOptions();
 
         itemTyping.getSwitch().setChecked(settingsModel.isShowMsgTyping());
+        itemSwitchSpeaker.getSwitch().setChecked(settingsModel.getSettingMsgSpeaker());
         itemChatroom.getSwitch().setChecked(settingsModel.isChatroomOwnerLeaveAllowed());
         itemDeleteMsg.getSwitch().setChecked(settingsModel.isDeleteMessagesAsExitGroup());
         itemAutoFile.getSwitch().setChecked(settingsModel.isSetTransferFileByUser());
@@ -80,7 +87,15 @@ public class CommonSettingsActivity extends BaseInitActivity implements View.OnC
 
     @Override
     public void onClick(View v) {
-        OfflinePushSettingsActivity.actionStart(mContext);
+        switch (v.getId()) {
+            case R.id.item_notification :
+                OfflinePushSettingsActivity.actionStart(mContext);
+                break;
+            case R.id.item_call_option :
+                CallOptionActivity.actionStart(mContext);
+                break;
+        }
+
     }
 
     @Override
@@ -88,6 +103,9 @@ public class CommonSettingsActivity extends BaseInitActivity implements View.OnC
         switch (buttonView.getId()) {
             case R.id.item_switch_typing :
                 settingsModel.showMsgTyping(isChecked);
+                break;
+            case R.id.item_switch_speaker :
+                settingsModel.setSettingMsgSpeaker(isChecked);
                 break;
             case R.id.item_switch_chatroom :
                 settingsModel.allowChatroomOwnerLeave(isChecked);

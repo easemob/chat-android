@@ -27,6 +27,7 @@ public class DeveloperSetActivity extends BaseInitActivity implements EaseTitleB
     private SwitchItemView itemSwitchUploadToHx;
     private SwitchItemView itemSwitchAutoDownloadThumbnail;
     private ArrowItemView itemMsgSort;
+    private ArrowItemView itemPushNick;
     private ArrowItemView itemMsgServiceDiagnose;
     private DemoModel settingsModel;
     private EMOptions options;
@@ -54,6 +55,7 @@ public class DeveloperSetActivity extends BaseInitActivity implements EaseTitleB
         itemSwitchUploadToHx = findViewById(R.id.item_switch_upload_to_hx);
         itemSwitchAutoDownloadThumbnail = findViewById(R.id.item_switch_auto_download_thumbnail);
         itemMsgSort = findViewById(R.id.item_msg_sort);
+        itemPushNick = findViewById(R.id.item_push_nick);
         itemMsgServiceDiagnose = findViewById(R.id.item_msg_service_diagnose);
     }
 
@@ -67,6 +69,7 @@ public class DeveloperSetActivity extends BaseInitActivity implements EaseTitleB
         itemSwitchUploadToHx.setOnCheckedChangeListener(this);
         itemSwitchAutoDownloadThumbnail.setOnCheckedChangeListener(this);
         itemMsgSort.setOnClickListener(this);
+        itemPushNick.setOnClickListener(this);
         itemMsgServiceDiagnose.setOnClickListener(this);
     }
 
@@ -97,6 +100,9 @@ public class DeveloperSetActivity extends BaseInitActivity implements EaseTitleB
                 break;
             case R.id.item_msg_sort :
                 showSelectDialog();
+                break;
+            case R.id.item_push_nick:
+                OfflinePushNickActivity.actionStart(mContext);
                 break;
             case R.id.item_msg_service_diagnose :
                 DiagnoseActivity.actionStart(mContext);

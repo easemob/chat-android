@@ -227,6 +227,12 @@
     <string name="push_no_disturb_off">关闭</string>
     <string name="push_saving_settings">正在保存...</string>
     <string name="push_save_failed">保存失败</string>
+    <string name="push_nick">iOS离线推送昵称</string>
+    <string name="input_new_nick_hint">输入新昵称</string>
+    <string name="nickname_description">设置此昵称以后，在与iOS客户端demo聊天过程中，iOS一侧会显示此昵称而不是环信ID，如果对方使用安卓客户端则此设置不生效</string>
+    <string name="yangshengqi">使用扬声器播放语音</string>
+    <string name="call_option">通话设置</string>
+    <string name="offline_call_push">通话离线推送</string>
 
     <string name="title_msg_typing">单聊消息显示\"正在输入\"</string>
     <string name="chatroom_allow_owner_leave"> 允许聊天室群主离开</string>

@@ -384,6 +384,10 @@
         <activity android:name=".section.me.activity.AppKeyAddActivity" />
         <!--诊断-->
         <activity android:name=".section.me.activity.DiagnoseActivity" />
+        <!--iOS离线推送昵称-->
+        <activity android:name=".section.me.activity.OfflinePushNickActivity" />
+        <!--通话设置-->
+        <activity android:name=".section.me.activity.CallOptionActivity" />
     </application>
 
 </manifest>

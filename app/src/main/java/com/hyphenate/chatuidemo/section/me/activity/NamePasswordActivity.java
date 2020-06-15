@@ -8,13 +8,31 @@ import android.widget.EditText;
 import com.hyphenate.chatuidemo.R;
 import com.hyphenate.chatuidemo.section.base.BaseActivity;
 import com.hyphenate.chatuidemo.section.base.BaseInitActivity;
+import com.hyphenate.easeui.widget.EaseTitleBar;
 
 public class NamePasswordActivity extends BaseInitActivity {
-
+    private EaseTitleBar titleBar;
 
     @Override
     protected int getLayoutId() {
         return R.layout.demo_activity_name_password;
+    }
+
+    @Override
+    protected void initView(Bundle savedInstanceState) {
+        super.initView(savedInstanceState);
+        titleBar = findViewById(R.id.title_bar);
+    }
+
+    @Override
+    protected void initListener() {
+        super.initListener();
+        titleBar.setOnBackPressListener(new EaseTitleBar.OnBackPressListener() {
+            @Override
+            public void onBackPress(View view) {
+                back(view);
+            }
+        });
     }
 
     public void back(View view) {

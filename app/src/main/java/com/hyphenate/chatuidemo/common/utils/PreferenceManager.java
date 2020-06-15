@@ -67,6 +67,9 @@ public class PreferenceManager {
 	private static String SHARED_KEY_CALL_FRONT_CAMERA_RESOLUTION = "SHARED_KEY_FRONT_CAMERA_RESOLUTIOIN";
 	private static String SHARED_KEY_CALL_FIX_SAMPLE_RATE = "SHARED_KEY_CALL_FIX_SAMPLE_RATE";
 
+	private static String SHARED_KEY_EXTERNAL_INPUT_AUDIO_RESOLUTION = "SHARED_KEY_EXTERNAL_INPUT_AUDIO_RESOLUTION";
+	private static String SHARED_KEY_WATER_MARK_RESOLUTION = "SHARED_KEY_WATER_MARK_RESOLUTION";
+
 	private static String SHARED_KEY_PUSH_USE_FCM = "shared_key_push_use_fcm";
 	private static String SHARED_KEY_AUTO_LOGIN = "shared_key_auto_login";
 	private static String SHARED_KEY_HTTPS_ONLY = "shared_key_https_only";
@@ -472,6 +475,24 @@ public class PreferenceManager {
 	public void setCallFixedVideoResolution(boolean enable) {
 		editor.putBoolean(SHARED_KEY_CALL_FIX_SAMPLE_RATE, enable);
 		editor.apply();
+	}
+
+	public void setExternalAudioInputResolution(boolean enable) {
+		editor.putBoolean(SHARED_KEY_EXTERNAL_INPUT_AUDIO_RESOLUTION, enable);
+		editor.apply();
+	}
+
+	public boolean isExternalAudioInputResolution(){
+		return mSharedPreferences.getBoolean(SHARED_KEY_EXTERNAL_INPUT_AUDIO_RESOLUTION,false);
+	}
+
+	public void setWatermarkResolution(boolean enable) {
+		editor.putBoolean(SHARED_KEY_WATER_MARK_RESOLUTION, enable);
+		editor.apply();
+	}
+
+	public boolean isWatermarkResolution(){
+		return mSharedPreferences.getBoolean(SHARED_KEY_WATER_MARK_RESOLUTION,false);
 	}
 
 	public void setUseFCM(boolean useFCM) {

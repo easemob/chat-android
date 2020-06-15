@@ -273,6 +273,16 @@ public class EaseCommonUtils {
     }
 
     /**
+     * sp to px
+     * @param context
+     * @param value
+     * @return
+     */
+    public static float sp2px(Context context, float value) {
+        return TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_SP, value, context.getResources().getDisplayMetrics());
+    }
+
+    /**
      * 判断是否是时间戳
      * @param time
      * @return
