@@ -8,6 +8,7 @@ import com.hyphenate.chat.EMClient;
 import com.hyphenate.chat.EMGroupReadAck;
 import com.hyphenate.chat.EMMessage;
 import com.hyphenate.easeui.model.EaseAtMessageHelper;
+import com.hyphenate.easeui.model.EaseNotifier;
 import com.hyphenate.easeui.utils.EaseDingMessageHelper;
 
 import java.util.List;
@@ -86,5 +87,9 @@ public class EaseChatPresenter implements EMMessageListener {
         for (EMGroupReadAck ack : groupReadAcks) {
             EaseDingMessageHelper.get().handleGroupReadAck(ack);
         }
+    }
+
+    public EaseNotifier getNotifier() {
+        return EaseUI.getInstance().getNotifier();
     }
 }

@@ -33,9 +33,11 @@ import com.hyphenate.chatuidemo.common.manager.PushAndMessageHelper;
 import com.hyphenate.chatuidemo.common.repositories.EMContactManagerRepository;
 import com.hyphenate.chatuidemo.common.repositories.EMGroupManagerRepository;
 import com.hyphenate.easeui.EaseChatPresenter;
+import com.hyphenate.easeui.EaseUI;
 import com.hyphenate.easeui.interfaces.EaseGroupListener;
 import com.hyphenate.easeui.model.EaseAtMessageHelper;
 import com.hyphenate.easeui.model.EaseEvent;
+import com.hyphenate.easeui.model.EaseNotifier;
 import com.hyphenate.util.EMLog;
 import com.hyphenate.chatuidemo.common.db.entity.InviteMessage.InviteMessageStatus;
 
@@ -94,6 +96,12 @@ public class ChatPresenter extends EaseChatPresenter {
                 String extension = message.getStringAttribute(DemoConstant.MSG_ATTR_EXTENSION, "");
                 PushAndMessageHelper.goConference(context, confId, password, extension);
             }
+            // in background, do not refresh UI, notify it in notification bar
+            if(!DemoApp.getInstance().getActivityLifecycle().isFront()){
+                getNotifier().notify(message);
+            }
+            //notify new message
+            getNotifier().vibrateAndPlayTone(message);
         }
     }
 
@@ -361,6 +369,9 @@ public class ChatPresenter extends EaseChatPresenter {
             msg.setStatus(EMMessage.Status.SUCCESS);
             // save accept message
             EMClient.getInstance().chatManager().saveMessage(msg);
+            // notify the accept message
+            getNotifier().vibrateAndPlayTone(msg);
+
             EaseEvent event = EaseEvent.create(DemoConstant.MESSAGE_GROUP_JOIN_ACCEPTED, EaseEvent.TYPE.MESSAGE);
             messageChangeLiveData.with(DemoConstant.MESSAGE_CHANGE_CHANGE).postValue(event);
         }
@@ -384,6 +395,8 @@ public class ChatPresenter extends EaseChatPresenter {
             msg.setStatus(EMMessage.Status.SUCCESS);
             // save invitation as messages
             EMClient.getInstance().chatManager().saveMessage(msg);
+            // notify invitation message
+            getNotifier().vibrateAndPlayTone(msg);
             EaseEvent event = EaseEvent.create(DemoConstant.MESSAGE_GROUP_AUTO_ACCEPT, EaseEvent.TYPE.MESSAGE);
             messageChangeLiveData.with(DemoConstant.MESSAGE_CHANGE_CHANGE).postValue(event);
         }
@@ -628,6 +641,8 @@ public class ChatPresenter extends EaseChatPresenter {
     private void notifyNewInviteMessage(InviteMessage msg) {
         msg.setUnread(true);
         DemoHelper.getInstance().insert(msg);
+        // notify there is new message
+        getNotifier().vibrateAndPlayTone(null);
     }
 
     private void updateContactNotificationStatus(String from, String reason, InviteMessage.InviteMessageStatus status) {

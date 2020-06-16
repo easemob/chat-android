@@ -37,6 +37,7 @@ import com.hyphenate.easeui.domain.EaseEmojicon;
 import com.hyphenate.easeui.domain.EaseEmojiconGroupEntity;
 import com.hyphenate.easeui.domain.EaseUser;
 import com.hyphenate.easeui.manager.EaseConTypeSetManager;
+import com.hyphenate.easeui.model.EaseNotifier;
 import com.hyphenate.easeui.provider.EaseEmojiconInfoProvider;
 import com.hyphenate.easeui.provider.EaseSettingsProvider;
 import com.hyphenate.easeui.provider.EaseUserProfileProvider;
@@ -508,6 +509,14 @@ public class DemoHelper {
 
     public DemoModel getModel(){
         return demoModel;
+    }
+
+    /**
+     * get instance of EaseNotifier
+     * @return
+     */
+    public EaseNotifier getNotifier(){
+        return EaseUI.getInstance().getNotifier();
     }
 
     /**

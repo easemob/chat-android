@@ -19,6 +19,7 @@ import com.hyphenate.chat.EMMessage;
 import com.hyphenate.chat.EMTextMessageBody;
 import com.hyphenate.chatuidemo.R;
 import com.hyphenate.chatuidemo.common.DemoConstant;
+import com.hyphenate.chatuidemo.common.livedatas.LiveDataBus;
 import com.hyphenate.chatuidemo.common.model.EmojiconExampleGroupData;
 import com.hyphenate.chatuidemo.common.utils.ThreadManager;
 import com.hyphenate.chatuidemo.common.utils.ToastUtils;
@@ -62,6 +63,12 @@ public class ChatFragment extends EaseChatFragment implements EaseChatFragment.O
     protected void initChildListener() {
         super.initChildListener();
         setOnMessageChangeListener(this);
+    }
+
+    @Override
+    protected void initChildData() {
+        super.initChildData();
+        LiveDataBus.get().with(DemoConstant.MESSAGE_CHANGE_CHANGE).postValue(new EaseEvent(DemoConstant.MESSAGE_CHANGE_CHANGE, EaseEvent.TYPE.MESSAGE));
     }
 
     @Override

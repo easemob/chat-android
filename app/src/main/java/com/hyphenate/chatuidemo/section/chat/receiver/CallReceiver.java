@@ -17,35 +17,59 @@ package com.hyphenate.chatuidemo.section.chat.receiver;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.os.Build;
 import android.util.Log;
 
 import com.hyphenate.chatuidemo.DemoHelper;
+import com.hyphenate.chatuidemo.R;
 import com.hyphenate.chatuidemo.section.chat.ChatVideoCallActivity;
 import com.hyphenate.chatuidemo.section.chat.ChatVoiceCallActivity;
+import com.hyphenate.easeui.ui.chat.VideoCallActivity;
+import com.hyphenate.easeui.ui.chat.VoiceCallActivity;
 import com.hyphenate.util.EMLog;
+import com.hyphenate.util.EasyUtils;
 
 public class CallReceiver extends BroadcastReceiver{
 
 	@Override
 	public void onReceive(Context context, Intent intent) {
-		Log.e("TAG", "onReceive执行到这里了");
-		if(!DemoHelper.getInstance().getEMClient().isLoggedInBefore())
-		    return;
+		if(!DemoHelper.getInstance().isLoggedIn())
+			return;
 		//username
 		String from = intent.getStringExtra("from");
 		//call type
 		String type = intent.getStringExtra("type");
-		Log.e("TAG", "from = "+from + " type = "+type);
-		if("video".equals(type)){ //video call
-		    context.startActivity(new Intent(context, ChatVideoCallActivity.class).
-                    putExtra("username", from).putExtra("isComingCall", true).
-                    addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
-		}else{ //voice call
-		    context.startActivity(new Intent(context, ChatVoiceCallActivity.class).
-		            putExtra("username", from).putExtra("isComingCall", true).
-		            addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
+		if(Build.VERSION.SDK_INT >= 29 && !EasyUtils.isAppRunningForeground(context)) {
+			Intent fullScreenIntent;
+			String content = "";
+			if("video".equals(type)) { //video call
+				fullScreenIntent = new Intent(context, VideoCallActivity.class);
+				content = context.getString(R.string.alert_request_video, from);
+			}else {
+				fullScreenIntent = new Intent(context, VoiceCallActivity.class);
+				content = context.getString(R.string.alert_request_voice, from);
+			}
+			fullScreenIntent.putExtra("username", from)
+					.putExtra("isComingCall", true).
+					addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+			DemoHelper.getInstance().getNotifier().notify(fullScreenIntent, "Hyphenate", content);
+		}else {
+			startTargetActivity(context, from, type);
 		}
+
 		EMLog.d("CallReceiver", "app received a incoming call");
+	}
+
+	private void startTargetActivity(Context context, String from, String type) {
+		if("video".equals(type)){ //video call
+			context.startActivity(new Intent(context, VideoCallActivity.class).
+					putExtra("username", from).putExtra("isComingCall", true).
+					addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
+		}else{ //voice call
+			context.startActivity(new Intent(context, VoiceCallActivity.class).
+					putExtra("username", from).putExtra("isComingCall", true).
+					addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
+		}
 	}
 
 }

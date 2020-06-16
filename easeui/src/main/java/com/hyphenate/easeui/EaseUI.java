@@ -3,6 +3,7 @@ package com.hyphenate.easeui;
 import android.content.Context;
 
 import com.hyphenate.easeui.domain.EaseAvatarOptions;
+import com.hyphenate.easeui.model.EaseNotifier;
 import com.hyphenate.easeui.provider.EaseEmojiconInfoProvider;
 import com.hyphenate.easeui.provider.EaseSettingsProvider;
 import com.hyphenate.easeui.provider.EaseUserProfileProvider;
@@ -23,6 +24,10 @@ public class EaseUI {
      * application context
      */
     private Context appContext = null;
+    /**
+     * the notifier
+     */
+    private EaseNotifier notifier = null;
 
     public boolean isVoiceCalling;
     public boolean isVideoCalling;
@@ -43,8 +48,13 @@ public class EaseUI {
 
     public synchronized void init(Context context) {
         appContext = context.getApplicationContext();
+        initNotifier();
         presenter = new EaseChatPresenter();
         presenter.attachApp(appContext);
+    }
+
+    private void initNotifier(){
+        notifier = new EaseNotifier(appContext);
     }
 
     public void addChatPresenter(EaseChatPresenter presenter) {
@@ -98,6 +108,10 @@ public class EaseUI {
      */
     public EaseUserProfileProvider getUserProvider() {
         return userProvider;
+    }
+
+    public EaseNotifier getNotifier(){
+        return notifier;
     }
 
     /**
