@@ -390,6 +390,18 @@
         <activity android:name=".section.me.activity.CallOptionActivity" />
         <!--聊天信息-->
         <activity android:name=".section.chat.SingleChatSetActivity" />
+        <!--搜索聊天室-->
+        <activity android:name=".section.search.SearchChatRoomActivity" />
+        <!--搜索群组-->
+        <activity android:name=".section.search.SearchGroupActivity" />
+        <!--搜索会话-->
+        <activity android:name=".section.search.SearchConversationActivity" />
+        <!--搜索联系人-->
+        <activity android:name=".section.search.SearchFriendsActivity" />
+        <!--搜索群聊会话-->
+        <activity android:name=".section.search.SearchGroupChatActivity" />
+        <!--搜索单人会话-->
+        <activity android:name=".section.search.SearchSingleChatActivity" />
     </application>
 
 </manifest>

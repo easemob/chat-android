@@ -26,6 +26,8 @@ import com.hyphenate.chatuidemo.section.chat.viewmodel.MessageViewModel;
 import com.hyphenate.chatuidemo.section.conversation.adapter.HomeAdapter;
 import com.hyphenate.chatuidemo.section.conversation.viewmodel.HomeViewModel;
 import com.hyphenate.chatuidemo.section.message.NewFriendsMsgActivity;
+import com.hyphenate.chatuidemo.section.search.SearchActivity;
+import com.hyphenate.chatuidemo.section.search.SearchConversationActivity;
 import com.hyphenate.easeui.interfaces.OnItemClickListener;
 import com.hyphenate.easeui.model.EaseEvent;
 import com.hyphenate.easeui.utils.EaseCommonUtils;
@@ -219,7 +221,7 @@ public class ConversationListFragment extends BaseInitFragment implements OnRefr
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.tv_search :
-                showToast("跳转到搜索页面");
+                SearchConversationActivity.actionStart(mContext);
                 break;
         }
     }

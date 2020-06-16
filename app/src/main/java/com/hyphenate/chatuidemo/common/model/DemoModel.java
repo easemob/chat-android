@@ -2,6 +2,7 @@ package com.hyphenate.chatuidemo.common.model;
 
 import android.content.Context;
 
+import com.hyphenate.chat.EMChatRoom;
 import com.hyphenate.chatuidemo.DemoApp;
 import com.hyphenate.chatuidemo.common.db.DemoDbHelper;
 import com.hyphenate.chatuidemo.common.db.dao.AppKeyDao;
@@ -27,6 +28,7 @@ public class DemoModel {
     EmUserDao dao = null;
     protected Context context = null;
     protected Map<Key,Object> valueCache = new HashMap<Key,Object>();
+    public List<EMChatRoom> chatRooms;
     
     public DemoModel(Context ctx){
         context = ctx;

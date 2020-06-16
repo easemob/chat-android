@@ -25,10 +25,12 @@ import com.hyphenate.chatuidemo.section.friends.activity.ContactDetailActivity;
 import com.hyphenate.chatuidemo.section.friends.activity.GroupContactManageActivity;
 import com.hyphenate.chatuidemo.section.friends.adapter.FriendsAdapter;
 import com.hyphenate.chatuidemo.section.friends.viewmodels.FriendsViewModel;
+import com.hyphenate.chatuidemo.section.search.SearchFriendsActivity;
 import com.hyphenate.easeui.domain.EaseUser;
 import com.hyphenate.easeui.interfaces.OnItemClickListener;
 import com.hyphenate.easeui.model.EaseEvent;
 import com.hyphenate.easeui.widget.EaseRecyclerView;
+import com.hyphenate.easeui.widget.EaseSearchTextView;
 import com.hyphenate.easeui.widget.EaseSidebar;
 import com.scwang.smartrefresh.layout.SmartRefreshLayout;
 import com.scwang.smartrefresh.layout.api.RefreshLayout;
@@ -38,6 +40,7 @@ import java.util.List;
 
 
 public class FriendsFragment extends BaseInitFragment implements View.OnClickListener, OnRefreshListener, OnItemClickListener {
+    private EaseSearchTextView tvFriendSearch;
     private SmartRefreshLayout mSrlFriendRefresh;
     private EaseRecyclerView mRvFriendsList;
     private EaseSidebar mSideBarFriend;
@@ -61,6 +64,7 @@ public class FriendsFragment extends BaseInitFragment implements View.OnClickLis
     @Override
     protected void initView(Bundle savedInstanceState) {
         super.initView(savedInstanceState);
+        tvFriendSearch = findViewById(R.id.tv_friend_search);
         mRvFriendsList = findViewById(R.id.rv_friends_list);
         mSrlFriendRefresh = findViewById(R.id.srl_friend_refresh);
         mSideBarFriend = findViewById(R.id.side_bar_friend);
@@ -111,6 +115,7 @@ public class FriendsFragment extends BaseInitFragment implements View.OnClickLis
     @Override
     protected void initListener() {
         super.initListener();
+        tvFriendSearch.setOnClickListener(this);
         mCivNewChat.setOnClickListener(this);
         mCivGroupChat.setOnClickListener(this);
         mCivLabel.setOnClickListener(this);
@@ -125,6 +130,9 @@ public class FriendsFragment extends BaseInitFragment implements View.OnClickLis
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
+            case R.id.tv_friend_search :
+                SearchFriendsActivity.actionStart(mContext);
+                break;
             case R.id.civ_new_chat :
                 showToast("new chat");
                 break;

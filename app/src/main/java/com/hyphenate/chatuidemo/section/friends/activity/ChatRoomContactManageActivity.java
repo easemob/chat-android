@@ -8,6 +8,7 @@ import android.view.View;
 import com.hyphenate.chatuidemo.R;
 import com.hyphenate.chatuidemo.section.base.BaseInitActivity;
 import com.hyphenate.chatuidemo.section.friends.fragment.ChatRoomContactManageFragment;
+import com.hyphenate.chatuidemo.section.search.SearchChatRoomActivity;
 import com.hyphenate.easeui.widget.EaseSearchTextView;
 import com.hyphenate.easeui.widget.EaseTitleBar;
 
@@ -52,7 +53,7 @@ public class ChatRoomContactManageActivity extends BaseInitActivity implements E
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.search_chat_room :
-                showToast("跳转到聊天室");
+                SearchChatRoomActivity.actionStart(mContext);
                 break;
         }
     }

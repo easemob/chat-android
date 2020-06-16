@@ -15,6 +15,7 @@ import com.hyphenate.chatuidemo.common.DemoConstant;
 import com.hyphenate.chatuidemo.section.base.BaseInitActivity;
 import com.hyphenate.chatuidemo.section.friends.adapter.GroupContactFragmentAdapter;
 import com.hyphenate.chatuidemo.section.friends.viewmodels.GroupContactViewModel;
+import com.hyphenate.chatuidemo.section.search.SearchGroupActivity;
 import com.hyphenate.easeui.model.EaseEvent;
 import com.hyphenate.easeui.widget.EaseSearchTextView;
 import com.hyphenate.easeui.widget.EaseTitleBar;
@@ -86,7 +87,7 @@ public class GroupContactManageActivity extends BaseInitActivity implements Ease
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.search_group :
-                showToast("跳转到搜索群组页面");
+                SearchGroupActivity.actionStart(mContext);
                 break;
         }
     }

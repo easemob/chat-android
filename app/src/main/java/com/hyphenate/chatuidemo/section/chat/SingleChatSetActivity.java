@@ -23,6 +23,7 @@ import com.hyphenate.chatuidemo.section.chat.viewmodel.ChatViewModel;
 import com.hyphenate.chatuidemo.section.dialog.DemoDialogFragment;
 import com.hyphenate.chatuidemo.section.dialog.SimpleDialogFragment;
 import com.hyphenate.chatuidemo.section.friends.activity.ContactDetailActivity;
+import com.hyphenate.chatuidemo.section.search.SearchSingleChatActivity;
 import com.hyphenate.easeui.constants.EaseConstant;
 import com.hyphenate.easeui.domain.EaseUser;
 import com.hyphenate.easeui.model.EaseEvent;
@@ -115,7 +116,7 @@ public class SingleChatSetActivity extends BaseInitActivity implements EaseTitle
                 ContactDetailActivity.actionStart(mContext, user);
                 break;
             case R.id.item_search_history :
-
+                SearchSingleChatActivity.actionStart(mContext, toChatUsername);
                 break;
             case R.id.item_clear_history :
                 clearHistory();

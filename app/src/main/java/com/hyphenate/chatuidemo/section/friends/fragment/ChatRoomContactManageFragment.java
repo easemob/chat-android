@@ -14,6 +14,7 @@ import com.hyphenate.chatuidemo.DemoHelper;
 import com.hyphenate.chatuidemo.R;
 import com.hyphenate.chatuidemo.common.DemoConstant;
 import com.hyphenate.chatuidemo.common.interfaceOrImplement.OnResourceParseCallback;
+import com.hyphenate.chatuidemo.common.livedatas.LiveDataBus;
 import com.hyphenate.chatuidemo.section.base.BaseInitFragment;
 import com.hyphenate.chatuidemo.section.chat.ChatActivity;
 import com.hyphenate.chatuidemo.section.friends.activity.NewChatRoomActivity;
@@ -65,6 +66,7 @@ public class ChatRoomContactManageFragment extends BaseInitFragment implements O
                 @Override
                 public void onSuccess(List<EMChatRoom> data) {
                     mAdapter.setData(data);
+                    DemoHelper.getInstance().getModel().chatRooms = mAdapter.getData();
                 }
 
                 @Override
@@ -79,6 +81,7 @@ public class ChatRoomContactManageFragment extends BaseInitFragment implements O
                 @Override
                 public void onSuccess(List<EMChatRoom> data) {
                     mAdapter.addData(data);
+                    DemoHelper.getInstance().getModel().chatRooms = mAdapter.getData();
                 }
 
                 @Override
