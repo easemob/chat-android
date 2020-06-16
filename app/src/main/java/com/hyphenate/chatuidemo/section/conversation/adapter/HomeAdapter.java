@@ -8,6 +8,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.core.content.ContextCompat;
 
 import com.hyphenate.chat.EMChatRoom;
 import com.hyphenate.chat.EMConversation;
@@ -36,6 +38,7 @@ public class HomeAdapter extends EaseBaseRecyclerViewAdapter<Object> {
     }
 
     private class MyViewHolder extends ViewHolder<Object> {
+        private ConstraintLayout listIteaseLayout;
         private EaseImageView avatar;
         private TextView mUnreadMsgNumber;
         private TextView name;
@@ -50,6 +53,7 @@ public class HomeAdapter extends EaseBaseRecyclerViewAdapter<Object> {
 
         @Override
         public void initView(View itemView) {
+            listIteaseLayout = findViewById(R.id.list_itease_layout);
             avatar = findViewById(R.id.avatar);
             mUnreadMsgNumber = findViewById(R.id.unread_msg_number);
             name = findViewById(R.id.name);
@@ -64,6 +68,9 @@ public class HomeAdapter extends EaseBaseRecyclerViewAdapter<Object> {
             if(object instanceof EMConversation) {
                 EMConversation item = (EMConversation)object;
                 String username = item.conversationId();
+                listIteaseLayout.setBackground(!TextUtils.isEmpty(item.getExtField())
+                                                ? ContextCompat.getDrawable(mContext, R.drawable.demo_conversation_top_bg)
+                                                : null);
                 mentioned.setVisibility(View.GONE);
                 if(item.getType() == EMConversation.EMConversationType.GroupChat) {
                     if(EaseAtMessageHelper.get().hasAtMeMsg(username)) {
@@ -104,6 +111,9 @@ public class HomeAdapter extends EaseBaseRecyclerViewAdapter<Object> {
                 if(lastMsg == null || TextUtils.isEmpty(type)) {
                     return;
                 }
+                listIteaseLayout.setBackground(!TextUtils.isEmpty(((MsgTypeManageEntity) object).getExtField())
+                        ? ContextCompat.getDrawable(mContext, R.drawable.demo_conversation_top_bg)
+                        : null);
                 if(TextUtils.equals(type, MsgTypeManageEntity.msgType.NOTIFICATION.name())) {
                     avatar.setImageResource(R.drawable.em_system_nofinication);
                     name.setText(mContext.getString(R.string.em_conversation_system_notification));

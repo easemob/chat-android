@@ -3,10 +3,12 @@ package com.hyphenate.chatuidemo.section.chat;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.View;
 
 import androidx.lifecycle.ViewModelProvider;
 
+import com.hyphenate.chat.EMClient;
 import com.hyphenate.chat.EMConversation;
 import com.hyphenate.chat.EMMessage;
 import com.hyphenate.chatuidemo.DemoHelper;
@@ -36,6 +38,7 @@ public class SingleChatSetActivity extends BaseInitActivity implements EaseTitle
 
     private ChatViewModel viewModel;
     private String toChatUsername;
+    private EMConversation conversation;
 
     public static void actionStart(Context context, String toChatUsername) {
         Intent intent = new Intent(context, SingleChatSetActivity.class);
@@ -77,8 +80,12 @@ public class SingleChatSetActivity extends BaseInitActivity implements EaseTitle
     @Override
     protected void initData() {
         super.initData();
+        conversation = EMClient.getInstance()
+                                                .chatManager()
+                                                .getConversation(toChatUsername, EaseCommonUtils.getConversationType(EaseConstant.CHATTYPE_SINGLE), true);
         itemUserInfo.getAvatar().setShapeType(1);
         itemUserInfo.getTvTitle().setText(toChatUsername);
+        itemSwitchTop.getSwitch().setChecked(!TextUtils.isEmpty(conversation.getExtField()));
 
         viewModel = new ViewModelProvider(this).get(ChatViewModel.class);
         viewModel.getDeleteObservable().observe(this, response -> {
@@ -121,8 +128,6 @@ public class SingleChatSetActivity extends BaseInitActivity implements EaseTitle
         SimpleDialogFragment.showDialog(mContext, R.string.em_chat_delete_conversation, new DemoDialogFragment.OnConfirmClickListener() {
             @Override
             public void onConfirmClick(View view) {
-                EMConversation conversation = DemoHelper.getInstance().getConversation(toChatUsername,
-                        EaseCommonUtils.getConversationType(EaseConstant.CHATTYPE_SINGLE), true);
                 viewModel.deleteConversationById(conversation.conversationId());
             }
         });
@@ -132,7 +137,8 @@ public class SingleChatSetActivity extends BaseInitActivity implements EaseTitle
     public void onCheckedChanged(SwitchItemView buttonView, boolean isChecked) {
         switch (buttonView.getId()) {
             case R.id.item_switch_top :
-
+                conversation.setExtField(isChecked ? (System.currentTimeMillis()+"") : "");
+                LiveDataBus.get().with(DemoConstant.MESSAGE_CHANGE_CHANGE).postValue(new EaseEvent(DemoConstant.MESSAGE_CHANGE_CHANGE, EaseEvent.TYPE.MESSAGE));
                 break;
         }
     }

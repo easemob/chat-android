@@ -4,8 +4,8 @@
     android:layout_width="match_parent"
     android:layout_height="74dp"
     xmlns:tools="http://schemas.android.com/tools"
-    android:background="?selectableItemBackground"
     android:id="@+id/list_itease_layout"
+    android:foreground="@drawable/em_ripple_click_gray"
     android:longClickable="true">
 
     <com.hyphenate.easeui.widget.EaseImageView

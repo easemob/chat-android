@@ -14,7 +14,8 @@
     <item
         android:id="@+id/em_main_nav_discover"
         android:icon="@drawable/demo_main_tab_discover_selector"
-        android:title="@string/em_main_title_discover" />
+        android:title="@string/em_main_title_discover"
+        android:visible="false"/>
 
     <item
         android:id="@+id/em_main_nav_me"

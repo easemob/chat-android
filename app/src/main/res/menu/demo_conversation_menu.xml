@@ -28,6 +28,7 @@
         android:icon="@drawable/em_conversation_menu_scan"
         android:orderInCategory="100"
         android:title="@string/em_conversation_menu_scan"
-        app:showAsAction="never"/>
+        app:showAsAction="never"
+        android:visible="false"/>
 
 </menu>
