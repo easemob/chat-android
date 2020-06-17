@@ -38,6 +38,7 @@ public class ChatActivity extends BaseInitActivity implements EaseTitleBar.OnBac
     private int chatType;
     private EaseChatFragment fragment;
     private String forwardMsgId;
+    private String historyMsgId;
     private ChatViewModel viewModel;
 
     public static void actionStart(Context context, String userId, int chatType) {
@@ -58,6 +59,7 @@ public class ChatActivity extends BaseInitActivity implements EaseTitleBar.OnBac
         toChatUsername = intent.getStringExtra(EaseConstant.EXTRA_USER_ID);
         chatType = intent.getIntExtra(EaseConstant.EXTRA_CHAT_TYPE, EaseConstant.CHATTYPE_SINGLE);
         forwardMsgId = intent.getStringExtra(DemoConstant.FORWARD_MSG_ID);
+        historyMsgId = intent.getStringExtra(DemoConstant.HISTORY_MSG_ID);
     }
 
     @Override
@@ -69,6 +71,8 @@ public class ChatActivity extends BaseInitActivity implements EaseTitleBar.OnBac
         bundle.putString(EaseConstant.EXTRA_USER_ID, toChatUsername);
         bundle.putInt(EaseConstant.EXTRA_CHAT_TYPE, chatType);
         bundle.putString(DemoConstant.FORWARD_MSG_ID, forwardMsgId);
+        bundle.putString(DemoConstant.HISTORY_MSG_ID, historyMsgId);
+        bundle.putBoolean("isRoaming", DemoHelper.getInstance().getModel().isMsgRoaming());
         fragment.setArguments(bundle);
         getSupportFragmentManager().beginTransaction().replace(R.id.fl_fragment, fragment, "chat").commit();
 

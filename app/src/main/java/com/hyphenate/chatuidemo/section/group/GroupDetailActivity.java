@@ -23,6 +23,7 @@ import com.hyphenate.chatuidemo.section.base.BaseInitActivity;
 import com.hyphenate.chatuidemo.section.dialog.EditTextDialogFragment;
 import com.hyphenate.chatuidemo.section.group.fragment.GroupEditFragment;
 import com.hyphenate.chatuidemo.section.group.viewmodels.GroupDetailViewModel;
+import com.hyphenate.chatuidemo.section.search.SearchGroupChatActivity;
 import com.hyphenate.easeui.model.EaseEvent;
 import com.hyphenate.easeui.utils.EaseCommonUtils;
 import com.hyphenate.easeui.widget.EaseImageView;
@@ -221,7 +222,7 @@ public class GroupDetailActivity extends BaseInitActivity implements EaseTitleBa
                 showIntroductionDialog();
                 break;
             case R.id.item_group_history ://查找聊天记录
-                showToast("查找聊天记录");
+                SearchGroupChatActivity.actionStart(mContext, groupId);
                 break;
             case R.id.tv_group_refund ://退出群组
                 if(isOwner()) {

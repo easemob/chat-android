@@ -100,7 +100,14 @@ public class EaseChatFragment extends EaseBaseFragment implements View.OnClickLi
      * 消息类别，自定义
      */
     protected int chatType = EaseConstant.CHATTYPE_SINGLE;
+    /**
+     * 转发消息的消息id
+     */
     private String forwardMsgId;
+    /**
+     * 历史消息id（搜索时用）
+     */
+    private String historyMsgId;
     /**
      * "正在输入"功能的开关，打开后本设备发送消息将持续发送cmd类型消息通知对方"正在输入"
      */
@@ -156,6 +163,7 @@ public class EaseChatFragment extends EaseBaseFragment implements View.OnClickLi
             chatType = bundle.getInt(EaseConstant.EXTRA_CHAT_TYPE, EaseConstant.CHATTYPE_SINGLE);
             toChatUsername = bundle.getString(EaseConstant.EXTRA_USER_ID);
             forwardMsgId = bundle.getString(EaseConstant.FORWARD_MSG_ID);
+            historyMsgId = bundle.getString(EaseConstant.HISTORY_MSG_ID);
             turnOnTyping = openTurnOnTyping();
             initChildArguments();
         }
@@ -187,6 +195,7 @@ public class EaseChatFragment extends EaseBaseFragment implements View.OnClickLi
     private void initData() {
         //此方法放在chatMessageList.init之前
         chatMessageList.init(toChatUsername, chatType);
+        chatMessageList.setHistoryMsgId(historyMsgId);
         initConversation();
         initChatType();
         hideNickname();
@@ -260,6 +269,14 @@ public class EaseChatFragment extends EaseBaseFragment implements View.OnClickLi
     @Override
     public void onMessageListError(String message) {
         showMsgToast(message);
+    }
+
+    /**
+     * {@link EaseChatMessageList#setOnMessageListListener(EaseChatMessageList.OnMessageListListener)}
+     */
+    @Override
+    public void onLoadMore() {
+        chatMessageList.loadMoreHistoryMessages(PAGE_SIZE, EMConversation.EMSearchDirection.DOWN);
     }
 
     /**

@@ -3,6 +3,7 @@ package com.hyphenate.easeui.widget;
 import android.app.Activity;
 import android.content.Context;
 import android.content.res.TypedArray;
+import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -10,6 +11,7 @@ import android.view.View;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
@@ -25,7 +27,6 @@ import com.hyphenate.easeui.interfaces.MessageListItemClickListener;
 import com.hyphenate.easeui.manager.EaseConTypeSetManager;
 import com.hyphenate.easeui.model.styles.EaseMessageListItemStyle;
 import com.hyphenate.easeui.utils.EaseCommonUtils;
-import com.hyphenate.util.EMLog;
 
 import java.util.List;
 
@@ -42,6 +43,11 @@ public class EaseChatMessageList extends RelativeLayout implements View.OnTouchL
     private OnMessageListListener listener;
     private List<EMMessage> currentMessages;
     private boolean showUserNick;
+    private LinearLayoutManager layoutManager;
+    private loadMoreStatus status = loadMoreStatus.HAS_MORE;
+    private String historyMsgId;//历史消息id
+    private boolean isHistoryStatus;//是否是搜索历史消息状态，根据historyMsgId是否为空判断
+    private boolean isHistoryMoveToLatest;//历史消息滑动到最新的一条了
 
     public EaseChatMessageList(Context context) {
         this(context, null);
@@ -82,7 +88,8 @@ public class EaseChatMessageList extends RelativeLayout implements View.OnTouchL
         this.chatType = chatType;
         this.toChatUsername = toChatUsername;
         conversation = EMClient.getInstance().chatManager().getConversation(toChatUsername, EaseCommonUtils.getConversationType(chatType), true);
-        messageList.setLayoutManager(new LinearLayoutManager(context));
+        layoutManager = new LinearLayoutManager(context);
+        messageList.setLayoutManager(layoutManager);
         messageAdapter = new EaseMessageAdapter();
         registerDelegates();
         messageList.setAdapter(messageAdapter);
@@ -93,9 +100,34 @@ public class EaseChatMessageList extends RelativeLayout implements View.OnTouchL
         initListener();
     }
 
+    /**
+     * 设置历史消息id，用于搜索消息
+     * @param historyMsgId
+     */
+    public void setHistoryMsgId(String historyMsgId) {
+        this.historyMsgId = historyMsgId;
+        if(!TextUtils.isEmpty(historyMsgId)) {
+            isHistoryStatus = true;
+        }
+    }
+
     private void initListener() {
         srlRefresh.setOnRefreshListener(this);
         messageList.setOnTouchListener(this);
+        messageList.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
+                super.onScrollStateChanged(recyclerView, newState);
+                if(newState == RecyclerView.SCROLL_STATE_IDLE
+                        && status == loadMoreStatus.HAS_MORE
+                        && layoutManager.findLastVisibleItemPosition() == layoutManager.getItemCount() -1){
+                    //showLiveList(true);
+                    if(listener != null) {
+                        listener.onLoadMore();
+                    }
+                }
+            }
+        });
     }
 
     /**
@@ -134,13 +166,22 @@ public class EaseChatMessageList extends RelativeLayout implements View.OnTouchL
             return;
         }
         messageList.post(()-> {
-            List<EMMessage> messages = conversation.getAllMessages();
-            conversation.markAllMessagesAsRead();
-            if(messageAdapter != null) {
-                messageAdapter.setData(messages);
+            if(isHistoryStatus && !isHistoryMoveToLatest) {
+                //如果是历史消息状态，则需要从数据库中直接查询数据
+                List<EMMessage> messages = conversation.searchMsgFromDB(conversation.getMessage(historyMsgId, true).getMsgTime() - 1, 20, EMConversation.EMSearchDirection.DOWN);
+                if(messageAdapter != null) {
+                    messageAdapter.setData(messages);
+                }
+                currentMessages = messages;
+            }else {
+                List<EMMessage> messages = conversation.getAllMessages();
+                conversation.markAllMessagesAsRead();
+                if(messageAdapter != null) {
+                    messageAdapter.setData(messages);
+                }
+                currentMessages = messages;
+                finishRefresh();
             }
-            currentMessages = messages;
-            finishRefresh();
         });
     }
 
@@ -148,12 +189,32 @@ public class EaseChatMessageList extends RelativeLayout implements View.OnTouchL
         if(isActivityDisable() || conversation == null) {
             return;
         }
-        List<EMMessage> messages = conversation.getAllMessages();
-        boolean refresh = currentMessages != null && messages.size() > currentMessages.size();
-        refreshMessages();
-        if(refresh) {
-            seekToPosition(messages.size() - 1);
+        //如果是历史消息状态，则判断当前消息中是否有最近的消息，如果没有的话，不刷新到最下面
+        if(isHistoryStatus) {
+            if(currentMessages == null) {
+                return;
+            }
+            EMMessage message = currentMessages.get(currentMessages.size() - 1);
+            List<EMMessage> allMessages = conversation.getAllMessages();
+            if(allMessages == null || allMessages.size() < 2) {
+                return;
+            }
+            EMMessage lastMessage = allMessages.get(allMessages.size() - 2);
+            if(!TextUtils.equals(message.getMsgId(), lastMessage.getMsgId()) || status != loadMoreStatus.NO_MORE_DATA) {
+                return;
+            }
+            isHistoryMoveToLatest = true;
+            refreshMessages();
+            seekToPosition(conversation.getAllMessages().size() - 1);
+        }else {
+            List<EMMessage> messages = conversation.getAllMessages();
+            boolean refresh = currentMessages != null && messages.size() > currentMessages.size();
+            refreshMessages();
+            if(refresh) {
+                seekToPosition(messages.size() - 1);
+            }
         }
+
     }
 
     private void finishRefresh() {
@@ -189,11 +250,52 @@ public class EaseChatMessageList extends RelativeLayout implements View.OnTouchL
      * load more messages
      */
     public void loadMoreMessages(int pageSize, boolean loadFromServer) {
-        if(loadFromServer) {
-            loadMoreServerMessages(pageSize);
+        if(isHistoryStatus) {
+            loadMoreHistoryMessages(pageSize, EMConversation.EMSearchDirection.UP);
+        }else {
+            if(loadFromServer) {
+                loadMoreServerMessages(pageSize);
+                return;
+            }
+            loadMoreLocalMessages(pageSize);
+        }
+
+    }
+
+    /**
+     * 从本地获取更多的历史消息
+     * @param pageSize
+     */
+    public void loadMoreHistoryMessages(int pageSize, EMConversation.EMSearchDirection direction) {
+        long timeStamp = 0;
+        List<EMMessage> data = messageAdapter.getData();
+        try {
+            if(direction == EMConversation.EMSearchDirection.UP) {
+                timeStamp = data.get(0).getMsgTime();
+            }else {
+                timeStamp = data.get(data.size() - 1).getMsgTime();
+                status = loadMoreStatus.IS_LOADING;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        if(timeStamp == 0) {
             return;
         }
-        loadMoreLocalMessages(pageSize);
+        List<EMMessage> messages = conversation.searchMsgFromDB(timeStamp, pageSize, direction);
+        if(direction == EMConversation.EMSearchDirection.UP) {
+            data.addAll(0, messages);
+        }else {
+            data.addAll(messages);
+            if(messages.size() >= pageSize) {
+                status = loadMoreStatus.HAS_MORE;
+            }else {
+                status = loadMoreStatus.NO_MORE_DATA;
+            }
+        }
+        finishRefresh();
+        messageAdapter.setData(data);
+        currentMessages = data;
     }
 
     /**
@@ -358,5 +460,17 @@ public class EaseChatMessageList extends RelativeLayout implements View.OnTouchL
          * @param message
          */
         void onMessageListError(String message);
+
+        /**
+         * 上拉加载更多
+         */
+        void onLoadMore();
+    }
+
+    /**
+     * 加载更多的状态
+     */
+    public enum loadMoreStatus {
+        IS_LOADING, HAS_MORE, NO_MORE_DATA
     }
 }

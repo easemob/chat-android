@@ -25,6 +25,7 @@ public interface EaseConstant {
     String MESSAGE_ATTR_VALUE_AT_MSG_ALL = "ALL";
 
     String FORWARD_MSG_ID = "forward_msg_id";
+    String HISTORY_MSG_ID = "history_msg_id";
 
     int CHATTYPE_SINGLE = 1;
     int CHATTYPE_GROUP = 2;

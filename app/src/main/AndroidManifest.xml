@@ -289,6 +289,7 @@
             android:name=".section.chat.ChatActivity"
             android:windowSoftInputMode="stateHidden|adjustPan"
             android:launchMode="singleTask"/>
+
         <activity android:name=".section.friends.activity.GroupContactManageActivity" />
         <activity android:name=".section.friends.activity.ChatRoomContactManageActivity" />
         <activity android:name="com.hyphenate.easeui.ui.EaseShowBigImageActivity"/>
@@ -402,6 +403,8 @@
         <activity android:name=".section.search.SearchGroupChatActivity" />
         <!--搜索单人会话-->
         <activity android:name=".section.search.SearchSingleChatActivity" />
+        <!--聊天历史-->
+        <activity android:name=".section.chat.ChatHistoryActivity" />
     </application>
 
 </manifest>
