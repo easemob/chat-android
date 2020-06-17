@@ -54,18 +54,43 @@
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toBottomOf="@id/et_login_pwd"
-        app:layout_constraintBottom_toTopOf="@id/btn_login"
+        app:layout_constraintBottom_toTopOf="@id/cb_select"
         android:layout_marginTop="20dp"
         android:inputType="textPassword"
         android:hint="@string/em_register_password_confirm_hint"
         style="@style/em_login_et_input"/>
 
+    <CheckBox
+        android:id="@+id/cb_select"
+        android:layout_width="wrap_content"
+        android:layout_height="30dp"
+        android:padding="3dp"
+        android:layout_marginTop="@dimen/em_margin_10"
+        app:layout_constraintTop_toBottomOf="@id/et_login_pwd_confirm"
+        app:layout_constraintLeft_toLeftOf="parent"
+        android:button="@drawable/demo_cb_agreement_select"
+        android:textSize="12sp"
+        android:textColor="@color/white"
+        android:layout_marginLeft="50dp"/>
+
+    <TextView
+        android:id="@+id/tv_agreement"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintLeft_toRightOf="@id/cb_select"
+        app:layout_constraintTop_toTopOf="@id/cb_select"
+        app:layout_constraintBottom_toBottomOf="@id/cb_select"
+        android:layout_marginLeft="5dp"
+        android:text="@string/em_login_agreement"
+        android:textSize="12sp"/>
+
     <Button
         android:id="@+id/btn_login"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/et_login_pwd_confirm"
+        app:layout_constraintTop_toBottomOf="@id/tv_agreement"
         style="@style/em_login_btn"
-        android:text="@string/em_register_btn"/>
+        android:text="@string/em_register_btn"
+        android:layout_marginTop="@dimen/em_margin_20"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

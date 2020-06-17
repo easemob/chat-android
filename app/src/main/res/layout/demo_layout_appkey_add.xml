@@ -1,16 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
-    <com.hyphenate.chatuidemo.common.widget.ArrowItemView
-        android:id="@+id/item_add_appkey"
+    <TextView
         android:layout_width="match_parent"
         android:layout_height="50dp"
-        android:layout_marginTop="20dp"
-        app:arrowItemTitle="@string/em_developer_appkey_self_add"
-        android:background="@color/white"
-        android:foreground="@drawable/demo_ripple_click_gray"/>
+        android:layout_marginTop="@dimen/em_margin_15"
+        android:text="@string/em_developer_appkey_self_add"
+        android:textSize="14sp"
+        android:textColor="@color/em_color_brand"
+        android:gravity="center"
+        android:background="@color/white"/>
 
 </RelativeLayout>

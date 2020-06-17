@@ -57,7 +57,7 @@
     <TextView
         android:id="@+id/tv_note"
         android:layout_width="0dp"
-        android:layout_height="66dp"
+        android:layout_height="@dimen/em_common_item_height"
         android:text="@string/em_friends_detail_note"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"

@@ -13,6 +13,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.hyphenate.chatuidemo.R;
 import com.hyphenate.chatuidemo.common.DemoConstant;
+import com.hyphenate.chatuidemo.common.enums.SearchType;
 import com.hyphenate.chatuidemo.common.interfaceOrImplement.OnResourceParseCallback;
 import com.hyphenate.chatuidemo.common.manager.SidebarPresenter;
 import com.hyphenate.chatuidemo.common.widget.ContactItemView;
@@ -20,6 +21,7 @@ import com.hyphenate.chatuidemo.section.base.BaseInitFragment;
 import com.hyphenate.chatuidemo.section.chat.ConferenceActivity;
 import com.hyphenate.chatuidemo.section.dialog.DemoDialogFragment;
 import com.hyphenate.chatuidemo.section.dialog.SimpleDialogFragment;
+import com.hyphenate.chatuidemo.section.friends.activity.AddContactActivity;
 import com.hyphenate.chatuidemo.section.friends.activity.ChatRoomContactManageActivity;
 import com.hyphenate.chatuidemo.section.friends.activity.ContactDetailActivity;
 import com.hyphenate.chatuidemo.section.friends.activity.GroupContactManageActivity;
@@ -134,7 +136,7 @@ public class FriendsFragment extends BaseInitFragment implements View.OnClickLis
                 SearchFriendsActivity.actionStart(mContext);
                 break;
             case R.id.civ_new_chat :
-                showToast("new chat");
+                AddContactActivity.startAction(mContext, SearchType.CHAT);
                 break;
             case R.id.civ_group_chat :
                 GroupContactManageActivity.actionStart(mContext);

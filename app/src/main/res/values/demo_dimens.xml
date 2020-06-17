@@ -3,6 +3,7 @@
     <dimen name="em_common_title_bar_height">44dp</dimen>
     <dimen name="em_common_search_height">36dp</dimen>
     <dimen name="em_common_side_bar_width">25dp</dimen>
+    <dimen name="em_common_item_height">66dp</dimen>
 
     <dimen name="activity_horizontal_margin">16dp</dimen>
     <dimen name="activity_vertical_margin">16dp</dimen>

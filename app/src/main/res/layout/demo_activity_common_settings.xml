@@ -3,13 +3,15 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@color/common_bg">
 
     <com.hyphenate.easeui.widget.EaseTitleBar
         android:id="@+id/title_bar"
         android:layout_width="match_parent"
         android:layout_height="@dimen/em_common_title_bar_height"
         app:titleBarTitle="@string/em_set_common_set"
+        android:background="@color/white"
         app:titleBarDisplayHomeAsUpEnabled="true"/>
 
     <ScrollView
@@ -52,21 +54,23 @@
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
                 app:switchItemTitle="@string/title_msg_typing"
-                app:switchItemShowDivider="true"/>
+                app:switchItemShowDivider="true"
+                android:background="@color/white"/>
 
             <com.hyphenate.chatuidemo.common.widget.SwitchItemView
                 android:id="@+id/item_switch_speaker"
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
                 app:switchItemTitle="@string/yangshengqi"
-                app:switchItemShowDivider="true"/>
+                app:switchItemShowDivider="true"
+                android:background="@color/white"/>
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="20dp"
                 android:layout_marginBottom="10dp"
-                android:text="群组设置:"
+                android:text="群组设置"
                 android:layout_marginLeft="20dp"
                 android:textSize="14sp"
                 android:textColor="@color/gray_normal"/>
@@ -76,14 +80,24 @@
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
                 app:switchItemTitle="@string/chatroom_allow_owner_leave"
-                app:switchItemShowDivider="true"/>
+                app:switchItemShowDivider="true"
+                android:background="@color/white"/>
 
             <com.hyphenate.chatuidemo.common.widget.SwitchItemView
                 android:id="@+id/item_switch_delete_msg"
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
                 app:switchItemTitle="@string/delete_msg_when_exit_group"
-                app:switchItemShowDivider="true"/>
+                app:switchItemShowDivider="true"
+                android:background="@color/white"/>
+
+            <com.hyphenate.chatuidemo.common.widget.SwitchItemView
+                android:id="@+id/item_switch_auto_accept_group"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                app:switchItemTitle="@string/auto_accept_group_invitation"
+                app:switchItemShowDivider="true"
+                android:background="@color/white"/>
 
             <com.hyphenate.chatuidemo.common.widget.SwitchItemView
                 android:id="@+id/item_switch_auto_file"
@@ -91,21 +105,17 @@
                 android:layout_height="50dp"
                 android:layout_marginTop="@dimen/em_margin_20"
                 app:switchItemTitle="@string/set_transfer_file_by_userself"
-                app:switchItemShowDivider="true"/>
+                app:switchItemShowDivider="true"
+                android:visibility="gone"/>
 
             <com.hyphenate.chatuidemo.common.widget.SwitchItemView
                 android:id="@+id/item_switch_auto_download"
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
                 app:switchItemTitle="@string/set_autodownload_thumbnail"
-                app:switchItemShowDivider="true"/>
+                app:switchItemShowDivider="true"
+                android:visibility="gone"/>
 
-            <com.hyphenate.chatuidemo.common.widget.SwitchItemView
-                android:id="@+id/item_switch_auto_accept_group"
-                android:layout_width="match_parent"
-                android:layout_height="50dp"
-                app:switchItemTitle="@string/auto_accept_group_invitation"
-                app:switchItemShowDivider="true"/>
 
         </LinearLayout>
 

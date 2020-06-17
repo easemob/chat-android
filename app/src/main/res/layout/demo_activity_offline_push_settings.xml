@@ -14,7 +14,8 @@
         app:titleBarTitle="@string/push_settings"
         app:titleBarDisplayHomeAsUpEnabled="true"
         app:titleBarRightVisible="true"
-        app:titleBarRightTitle="@string/save"/>
+        app:titleBarRightTitle="@string/save"
+        android:background="@color/white"/>
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -41,7 +42,8 @@
         android:id="@+id/rl_no_disturb"
         android:layout_width="match_parent"
         android:layout_height="50dip"
-        android:padding="10dip" >
+        android:padding="10dip"
+        android:background="@color/white">
 
         <TextView
             android:layout_width="wrap_content"
@@ -70,7 +72,8 @@
         android:id="@+id/rl_no_disturb_only_night"
         android:layout_width="match_parent"
         android:layout_height="50dip"
-        android:padding="10dip" >
+        android:padding="10dip"
+        android:background="@color/white">
 
         <TextView
             android:layout_width="wrap_content"
@@ -100,7 +103,8 @@
         android:id="@+id/rl_no_disturb_off"
         android:layout_width="match_parent"
         android:layout_height="50dip"
-        android:padding="10dip" >
+        android:padding="10dip"
+        android:background="@color/white">
 
         <TextView
             android:layout_width="wrap_content"
@@ -134,6 +138,7 @@
         android:layout_width="match_parent"
         android:layout_height="50dp"
         app:switchItemTitle="@string/push_use_fcm"
-        app:switchItemTitleSize="14sp"/>
+        app:switchItemTitleSize="14sp"
+        android:background="@color/white"/>
 
 </LinearLayout>

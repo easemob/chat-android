@@ -3,6 +3,7 @@ package com.hyphenate.chatuidemo.common.widget;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.util.AttributeSet;
+import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -66,11 +67,11 @@ public class ArrowItemView extends ConstraintLayout {
         tvTitle.setTextColor(titleColor);
 
         int titleSizeId = a.getResourceId(R.styleable.ArrowItemView_arrowItemTitleSize, -1);
-        titleSize = a.getDimension(R.styleable.ArrowItemView_arrowItemTitleSize, 16);
+        titleSize = a.getDimension(R.styleable.ArrowItemView_arrowItemTitleSize, sp2px(getContext(), 16));
         if(titleSizeId != -1) {
             titleSize = getResources().getDimension(titleSizeId);
         }
-        tvTitle.setTextSize(titleSize);
+        tvTitle.getPaint().setTextSize(titleSize);
 
         int contentResourceId = a.getResourceId(R.styleable.ArrowItemView_arrowItemContent, -1);
         content = a.getString(R.styleable.ArrowItemView_arrowItemContent);
@@ -135,4 +136,14 @@ public class ArrowItemView extends ConstraintLayout {
     }
 
     public EaseImageView getAvatar() { return avatar; }
+
+    /**
+     * sp to px
+     * @param context
+     * @param value
+     * @return
+     */
+    public static float sp2px(Context context, float value) {
+        return TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_SP, value, context.getResources().getDisplayMetrics());
+    }
 }

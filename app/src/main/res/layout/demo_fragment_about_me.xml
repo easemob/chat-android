@@ -8,7 +8,7 @@
 
     <com.google.android.material.appbar.AppBarLayout
         android:layout_width="match_parent"
-        android:layout_height="250dp">
+        android:layout_height="150dp">
 
         <com.google.android.material.appbar.CollapsingToolbarLayout
             android:layout_width="match_parent"
@@ -27,7 +27,7 @@
                 <View
                     android:id="@+id/top"
                     android:layout_width="match_parent"
-                    android:layout_height="200dp"
+                    android:layout_height="100dp"
                     android:background="@drawable/demo_about_me_top_bg"/>
 
                 <View
@@ -73,7 +73,7 @@
                             app:layout_constraintLeft_toRightOf="@id/avatar"
                             android:layout_marginLeft="11dp"
                             android:layout_marginStart="11dp"
-                            android:textSize="16sp"
+                            android:textSize="@dimen/em_size_big_notify"
                             android:textColor="@color/em_conversation_color_item_name"
                             tools:text="ss"/>
 
@@ -128,67 +128,71 @@
             <com.hyphenate.chatuidemo.common.widget.ArrowItemView
                 android:id="@+id/item_common_set"
                 android:layout_width="0dp"
-                android:layout_height="66dp"
+                android:layout_height="@dimen/em_common_item_height"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toRightOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                app:arrowItemAvatarSrc="@drawable/ease_default_avatar"
+                app:arrowItemAvatarSrc="@drawable/d_set"
                 app:arrowItemShowAvatar="true"
                 app:arrowItemAvatarHeight="@dimen/em_about_me_avatar_size"
                 app:arrowItemAvatarWidth="@dimen/em_about_me_avatar_size"
                 app:arrowItemTitle="@string/em_about_me_set"
+                app:arrowItemTitleSize="14sp"
                 android:foreground="@drawable/demo_ripple_click_gray"
                 android:background="@color/white"/>
 
             <com.hyphenate.chatuidemo.common.widget.ArrowItemView
                 android:id="@+id/item_feedback"
                 android:layout_width="0dp"
-                android:layout_height="66dp"
+                android:layout_height="@dimen/em_common_item_height"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toRightOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/item_common_set"
-                app:arrowItemAvatarSrc="@drawable/ease_default_avatar"
+                app:arrowItemAvatarSrc="@drawable/d_feedback"
                 app:arrowItemAvatarHeight="@dimen/em_about_me_avatar_size"
                 app:arrowItemAvatarWidth="@dimen/em_about_me_avatar_size"
                 app:arrowItemShowAvatar="true"
                 app:arrowItemTitle="@string/em_about_me_feedback"
+                app:arrowItemTitleSize="14sp"
                 android:background="@color/white"
                 android:foreground="@drawable/demo_ripple_click_gray"/>
 
             <com.hyphenate.chatuidemo.common.widget.ArrowItemView
                 android:id="@+id/item_about_hx"
                 android:layout_width="0dp"
-                android:layout_height="66dp"
+                android:layout_height="@dimen/em_common_item_height"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toRightOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/item_feedback"
-                app:arrowItemAvatarSrc="@drawable/ease_default_avatar"
+                app:arrowItemAvatarSrc="@drawable/d_about_hx"
                 app:arrowItemAvatarHeight="@dimen/em_about_me_avatar_size"
                 app:arrowItemAvatarWidth="@dimen/em_about_me_avatar_size"
                 app:arrowItemShowAvatar="true"
                 app:arrowItemTitle="@string/em_about_me_hx"
+                app:arrowItemTitleSize="14sp"
                 android:background="@color/white"
                 android:foreground="@drawable/demo_ripple_click_gray"/>
 
             <com.hyphenate.chatuidemo.common.widget.ArrowItemView
                 android:id="@+id/item_developer_set"
                 android:layout_width="0dp"
-                android:layout_height="66dp"
+                android:layout_height="@dimen/em_common_item_height"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toRightOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/item_about_hx"
-                app:arrowItemAvatarSrc="@drawable/ease_default_avatar"
+                app:arrowItemAvatarSrc="@drawable/d_developer_set"
                 app:arrowItemAvatarHeight="@dimen/em_about_me_avatar_size"
                 app:arrowItemAvatarWidth="@dimen/em_about_me_avatar_size"
                 app:arrowItemShowAvatar="true"
                 app:arrowItemTitle="@string/em_about_me_developer"
+                app:arrowItemTitleSize="14sp"
                 android:background="@color/white"
                 android:foreground="@drawable/demo_ripple_click_gray"/>
 
             <Button
                 android:id="@+id/btn_logout"
                 android:layout_width="0dp"
-                android:layout_height="66dp"
+                android:layout_height="@dimen/em_common_item_height"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toRightOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/item_developer_set"

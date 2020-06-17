@@ -1,16 +1,27 @@
 package com.hyphenate.chatuidemo.section.login.fragment;
 
+import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.InputType;
+import android.text.SpannableString;
+import android.text.Spanned;
+import android.text.TextPaint;
 import android.text.TextUtils;
 import android.text.TextWatcher;
+import android.text.method.LinkMovementMethod;
+import android.text.style.ClickableSpan;
+import android.text.style.UnderlineSpan;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
 import androidx.lifecycle.ViewModelProvider;
@@ -19,24 +30,29 @@ import com.hyphenate.chatuidemo.DemoHelper;
 import com.hyphenate.chatuidemo.MainActivity;
 import com.hyphenate.chatuidemo.R;
 import com.hyphenate.chatuidemo.common.interfaceOrImplement.OnResourceParseCallback;
+import com.hyphenate.chatuidemo.common.utils.EditTextUtils;
 import com.hyphenate.chatuidemo.common.utils.ToastUtils;
 import com.hyphenate.chatuidemo.section.base.BaseInitFragment;
 import com.hyphenate.chatuidemo.section.login.viewmodels.LoginFragmentViewModel;
 import com.hyphenate.chatuidemo.section.login.viewmodels.LoginViewModel;
 import com.hyphenate.easeui.domain.EaseUser;
 
-public class LoginFragment extends BaseInitFragment implements View.OnClickListener, TextWatcher {
+public class LoginFragment extends BaseInitFragment implements View.OnClickListener, TextWatcher, CompoundButton.OnCheckedChangeListener {
     private EditText mEtLoginName;
     private EditText mEtLoginPwd;
     private TextView mTvLoginRegister;
     private TextView mTvLoginToken;
     private TextView mTvLoginServerSet;
     private Button mBtnLogin;
+    private CheckBox cbSelect;
+    private TextView tvAgreement;
     private String mUserName;
     private String mPwd;
     private LoginViewModel mViewModel;
     private boolean isTokenFlag;//是否是token登录
     private LoginFragmentViewModel mFragmentViewModel;
+    private Drawable clear;
+    private Drawable eyeOpen;
 
     @Override
     protected int getLayoutId() {
@@ -52,6 +68,8 @@ public class LoginFragment extends BaseInitFragment implements View.OnClickListe
         mTvLoginToken = findViewById(R.id.tv_login_token);
         mTvLoginServerSet = findViewById(R.id.tv_login_server_set);
         mBtnLogin = findViewById(R.id.btn_login);
+        tvAgreement = findViewById(R.id.tv_agreement);
+        cbSelect = findViewById(R.id.cb_select);
         // 保证切换fragment后相关状态正确
         if(isTokenFlag) {
             switchLogin();
@@ -67,6 +85,8 @@ public class LoginFragment extends BaseInitFragment implements View.OnClickListe
         mTvLoginToken.setOnClickListener(this);
         mTvLoginServerSet.setOnClickListener(this);
         mBtnLogin.setOnClickListener(this);
+        cbSelect.setOnCheckedChangeListener(this);
+        EditTextUtils.clearEditTextListener(mEtLoginName);
     }
 
     @Override
@@ -108,8 +128,18 @@ public class LoginFragment extends BaseInitFragment implements View.OnClickListe
             });
 
         });
+    }
 
-
+    @Override
+    protected void initData() {
+        super.initData();
+        tvAgreement.setText(getSpannable());
+        tvAgreement.setMovementMethod(LinkMovementMethod.getInstance());
+        //切换密码可见不可见的两张图片
+        Drawable eyeClose = getResources().getDrawable(R.drawable.d_pwd_hide);
+        eyeOpen = getResources().getDrawable(R.drawable.d_pwd_show);
+        clear = getResources().getDrawable(R.drawable.d_clear);
+        EditTextUtils.changePwdDrawableRight(mEtLoginPwd, eyeOpen, eyeClose, null, null, null);
     }
 
     @Override
@@ -171,7 +201,18 @@ public class LoginFragment extends BaseInitFragment implements View.OnClickListe
     public void afterTextChanged(Editable s) {
         mUserName = mEtLoginName.getText().toString().trim();
         mPwd = mEtLoginPwd.getText().toString().trim();
-        setButtonEnable(!TextUtils.isEmpty(mUserName) && !TextUtils.isEmpty(mPwd));
+        EditTextUtils.showRightDrawable(mEtLoginName, clear);
+        EditTextUtils.showRightDrawable(mEtLoginPwd, isTokenFlag ? null : eyeOpen);
+        setButtonEnable(!TextUtils.isEmpty(mUserName) && !TextUtils.isEmpty(mPwd) && cbSelect.isChecked());
+    }
+
+    @Override
+    public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+        switch (buttonView.getId()) {
+            case R.id.cb_select :
+                setButtonEnable(!TextUtils.isEmpty(mUserName) && !TextUtils.isEmpty(mPwd) && isChecked);
+                break;
+        }
     }
 
     private void setButtonEnable(boolean enable) {
@@ -184,5 +225,35 @@ public class LoginFragment extends BaseInitFragment implements View.OnClickListe
             rightDrawable = ContextCompat.getDrawable(mContext, R.drawable.demo_login_btn_right_unable);
         }
         mBtnLogin.setCompoundDrawablesWithIntrinsicBounds(null, null, rightDrawable, null);
+    }
+
+    private SpannableString getSpannable() {
+        SpannableString spanStr = new SpannableString(getString(R.string.em_login_agreement));
+        //设置下划线
+        //spanStr.setSpan(new UnderlineSpan(), 3, 7, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+        spanStr.setSpan(new MyClickableSpan() {
+            @Override
+            public void onClick(@NonNull View widget) {
+                showToast("跳转到服务条款");
+            }
+        }, 3, 7, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+
+        //spanStr.setSpan(new UnderlineSpan(), 10, 14, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+        spanStr.setSpan(new MyClickableSpan() {
+            @Override
+            public void onClick(@NonNull View widget) {
+                showToast("跳转到隐私协议");
+            }
+        }, 10, 14, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+        return spanStr;
+    }
+
+    private abstract class MyClickableSpan extends ClickableSpan {
+
+        @Override
+        public void updateDrawState(@NonNull TextPaint ds) {
+            super.updateDrawState(ds);
+            ds.bgColor = Color.TRANSPARENT;
+        }
     }
 }

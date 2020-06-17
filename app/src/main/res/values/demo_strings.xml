@@ -5,6 +5,8 @@
     <string name="password">密码</string>
 
     <string name="save">保存</string>
+    <string name="required">必填</string>
+    <string name="submit">提交</string>
 
     <string name="em_main_title_home">会话</string>
     <string name="em_main_title_friends">通讯录</string>
@@ -27,6 +29,7 @@
     <string name="em_login_tv_server_set">服务器配置</string>
     <string name="em_login_btn_info_incomplete">用户名或者密码不能为空</string>
     <string name="em_login_failed">登录失败</string>
+    <string name="em_login_agreement">同意 服务条款 与 隐私协议</string>
     
     <string name="em_register_btn">注\u0020册</string>
     <string name="em_register_password_confirm_hint">确认密码</string>
@@ -239,7 +242,7 @@
     <string name="call_option">通话设置</string>
     <string name="offline_call_push">通话离线推送</string>
 
-    <string name="title_msg_typing">单聊消息显示\"正在输入\"</string>
+    <string name="title_msg_typing">显示输入状态</string>
     <string name="chatroom_allow_owner_leave"> 允许聊天室群主离开</string>
     <string name="delete_msg_when_exit_group">退出群组时删除聊天数据</string>
     <string name="set_transfer_file_by_userself">无需用户实现上传下载</string>

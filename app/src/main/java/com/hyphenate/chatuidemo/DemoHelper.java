@@ -508,6 +508,9 @@ public class DemoHelper {
     }
 
     public DemoModel getModel(){
+        if(demoModel == null) {
+            demoModel = new DemoModel(DemoApp.getInstance());
+        }
         return demoModel;
     }
 

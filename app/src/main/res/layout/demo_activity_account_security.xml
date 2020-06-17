@@ -2,6 +2,7 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/common_bg"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <com.hyphenate.easeui.widget.EaseTitleBar
@@ -12,17 +13,17 @@
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:titleBarTitle="@string/em_set_security"
+        android:background="@color/white"
         app:titleBarDisplayHomeAsUpEnabled="true"/>
 
 
     <com.hyphenate.chatuidemo.common.widget.ArrowItemView
         android:id="@+id/item_equipments"
         android:layout_width="0dp"
-        android:layout_height="66dp"
+        android:layout_height="@dimen/em_common_item_height"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toBottomOf="@id/title_bar"
-        android:layout_marginTop="@dimen/em_margin_15"
         app:arrowItemAvatarHeight="@dimen/em_about_me_avatar_size"
         app:arrowItemAvatarWidth="@dimen/em_about_me_avatar_size"
         app:arrowItemTitle="@string/em_privacy_equipments"

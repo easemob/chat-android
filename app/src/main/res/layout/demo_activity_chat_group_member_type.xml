@@ -14,13 +14,13 @@
     <com.hyphenate.chatuidemo.common.widget.ArrowItemView
         android:id="@+id/item_admin"
         android:layout_width="match_parent"
-        android:layout_height="66dp"
+        android:layout_height="@dimen/em_common_item_height"
         app:arrowItemTitle="@string/em_group_member_type_admin"/>
 
     <com.hyphenate.chatuidemo.common.widget.ArrowItemView
         android:id="@+id/item_member"
         android:layout_width="match_parent"
-        android:layout_height="66dp"
+        android:layout_height="@dimen/em_common_item_height"
         app:arrowItemTitle="@string/em_group_member_type_member"/>
 
 </LinearLayout>
