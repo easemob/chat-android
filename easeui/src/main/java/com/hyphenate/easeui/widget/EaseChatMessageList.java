@@ -1,5 +1,7 @@
 package com.hyphenate.easeui.widget;
 
+import android.animation.ObjectAnimator;
+import android.animation.ValueAnimator;
 import android.app.Activity;
 import android.content.Context;
 import android.content.res.TypedArray;
@@ -207,12 +209,8 @@ public class EaseChatMessageList extends RelativeLayout implements View.OnTouchL
             refreshMessages();
             seekToPosition(conversation.getAllMessages().size() - 1);
         }else {
-            List<EMMessage> messages = conversation.getAllMessages();
-            boolean refresh = currentMessages != null && messages.size() > currentMessages.size();
             refreshMessages();
-            if(refresh) {
-                seekToPosition(messages.size() - 1);
-            }
+            seekToPosition(conversation.getAllMessages().size() - 1);
         }
 
     }
@@ -241,9 +239,22 @@ public class EaseChatMessageList extends RelativeLayout implements View.OnTouchL
             }
             int finalPosition = position;
             messageList.post(()-> {
-                ((LinearLayoutManager)manager).scrollToPositionWithOffset(finalPosition, 0);
+                setMoveAnimation(manager, finalPosition);
             });
         }
+    }
+
+    private void setMoveAnimation(RecyclerView.LayoutManager manager, int position) {
+        ValueAnimator animator = ValueAnimator.ofInt(-200, 0);
+        animator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+            @Override
+            public void onAnimationUpdate(ValueAnimator animation) {
+                int value = (int) animation.getAnimatedValue();
+                ((LinearLayoutManager)manager).scrollToPositionWithOffset(position, value);
+            }
+        });
+        animator.setDuration(500);
+        animator.start();
     }
 
     /**
@@ -319,6 +330,15 @@ public class EaseChatMessageList extends RelativeLayout implements View.OnTouchL
     }
 
     public void loadMoreServerMessages(int pageSize) {
+        loadMoreServerMessages(pageSize, false);
+    }
+
+    /**
+     * 从服务器加载更多数据
+     * @param pageSize 一次加载的条数
+     * @param moveToLast 是否移动到最后
+     */
+    public void loadMoreServerMessages(int pageSize, boolean moveToLast) {
         int count = getCacheMessageCount();
         EMClient.getInstance().chatManager().asyncFetchHistoryMessage(toChatUsername,
                 EaseCommonUtils.getConversationType(chatType), pageSize, count > 0 ? conversation.getAllMessages().get(0).getMsgId() : null,
@@ -332,7 +352,7 @@ public class EaseChatMessageList extends RelativeLayout implements View.OnTouchL
                             return;
                         }
                         messageList.post(()->{
-                            loadMoreLocalMessages(pageSize);
+                            loadMoreLocalMessages(pageSize, moveToLast);
                         });
                     }
 
@@ -367,6 +387,15 @@ public class EaseChatMessageList extends RelativeLayout implements View.OnTouchL
     }
 
     private void loadMoreLocalMessages(int pageSize) {
+        loadMoreLocalMessages(pageSize, false);
+    }
+
+    /**
+     * 加载更多的本地数据
+     * @param pageSize
+     * @param moveToLast
+     */
+    private void loadMoreLocalMessages(int pageSize, boolean moveToLast) {
         List<EMMessage> messageList = conversation.getAllMessages();
         int msgCount = messageList != null ? messageList.size() : 0;
         int allMsgCount = conversation.getAllMsgCount();
@@ -392,7 +421,7 @@ public class EaseChatMessageList extends RelativeLayout implements View.OnTouchL
             }
             refreshMessages();
             // 对消息进行定位
-            seekToPosition(moreMsgs.size() - 1);
+            seekToPosition(moveToLast ? conversation.getAllMessages().size() - 1 : moreMsgs.size() - 1);
         }else {
             finishRefresh();
             Toast.makeText(context, getResources().getString(R.string.no_more_messages), Toast.LENGTH_SHORT).show();

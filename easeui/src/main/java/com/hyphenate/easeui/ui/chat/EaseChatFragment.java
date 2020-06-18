@@ -199,7 +199,6 @@ public class EaseChatFragment extends EaseBaseFragment implements View.OnClickLi
         initChatType();
         hideNickname();
         sendForwardMsg();
-        refreshMessages();
         setTypingHandler();
         initChildData();
     }
@@ -621,13 +620,23 @@ public class EaseChatFragment extends EaseBaseFragment implements View.OnClickLi
         }
 
         conversation.markAllMessagesAsRead();
-
+        List<EMMessage> allMessages = conversation.getAllMessages();
         isInitMsg = true;
         //如果设置为漫游
         if(isRoaming) {
-            if(chatMessageList != null) {
-                chatMessageList.loadMoreServerMessages(PAGE_SIZE);
+            //第一次展示，如果本地数据足够，先不从服务器取数据
+            if(allMessages != null && allMessages.size() >= PAGE_SIZE) {
+                refreshMessages();
+                return;
             }
+            if(chatMessageList != null) {
+                chatMessageList.loadMoreServerMessages(PAGE_SIZE, true);
+            }
+            return;
+        }
+        //第一次展示，如果本地数据足够，先不从数据取更多数据
+        if(allMessages != null && allMessages.size() >= PAGE_SIZE) {
+            refreshMessages();
             return;
         }
         // 非漫游，从本地数据库拉取数据
@@ -635,12 +644,6 @@ public class EaseChatFragment extends EaseBaseFragment implements View.OnClickLi
             chatMessageList.loadMessagesFromLocal(PAGE_SIZE);
         }
     }
-
-    /**
-     * add more other adapter delegations
-     * @param manager
-     */
-    protected void addMoreMessageDelegates(EaseConTypeSetManager manager) {}
 
 //============================ child init end ================================
 
