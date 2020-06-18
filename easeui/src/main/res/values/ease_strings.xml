@@ -32,6 +32,7 @@
     <string name="Is_download_voice_click_later">正在下载语音，稍后点击</string>
     <string name="alert_kicked_for_offline">您已由于断线被踢出聊天室,点击重新加入.</string>
     <string name="button_pushtotalk">按住说话</string>
+    <string name="button_pushtotalk_pressed">松开发送</string>
     <string name="Recording_without_permission">无录音权限</string>
     <string name="The_recording_time_is_too_short">录音时间太短</string>
     <string name="send_failure_please">发送失败，请检测服务器是否连接</string>

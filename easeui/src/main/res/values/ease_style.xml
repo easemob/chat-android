@@ -18,7 +18,7 @@
         <item name="android:paddingRight">12dip</item>
         <item name="android:textColor">@color/btn_gray_normal</item>
         <item name="android:textSize">12sp</item>
-        <item name="android:background">@drawable/ease_timestampe_bg</item>
+        <!--<item name="android:background">@drawable/ease_timestampe_bg</item>-->
     </style>
 
     <style name="chat_text_name_style">
@@ -34,6 +34,26 @@
         <item name="android:textSize">15sp</item>
         <item name="android:lineSpacingExtra">2dp</item>
         <item name="android:background">#bfbfbf</item>
+    </style>
+
+    <style name="ease_row_sent_iv_fail_style">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginTop">10dp</item>
+        <item name="android:layout_marginRight">10dp</item>
+        <item name="android:clickable">true</item>
+        <item name="android:src">@drawable/ease_msg_state_failed_resend</item>
+        <item name="android:visibility">invisible</item>
+    </style>
+
+    <style name="ease_row_sent_iv_userhead_style">
+        <item name="android:layout_width">@dimen/size_avatar</item>
+        <item name="android:layout_height">@dimen/size_avatar</item>
+        <item name="android:layout_alignParentRight">true</item>
+        <item name="android:layout_alignParentTop">true</item>
+        <item name="android:layout_marginRight">@dimen/margin_chat_activity</item>
+        <item name="android:src">@drawable/ease_default_avatar</item>
+        <item name="android:scaleType">fitXY</item>
     </style>
 
 </resources>

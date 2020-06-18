@@ -116,6 +116,11 @@ public abstract class EaseChatPrimaryMenuBase extends RelativeLayout{
          * on text input is clicked
          */
         void onEditTextClicked();
+
+        /**
+         * if edit text has focus
+         */
+        void onEditTextHasFocus(boolean hasFocus);
         
     }
 

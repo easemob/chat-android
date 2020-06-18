@@ -20,13 +20,7 @@
 
         <com.hyphenate.easeui.widget.EaseImageView
             android:id="@+id/iv_userhead"
-            android:layout_width="@dimen/size_avatar"
-            android:layout_height="@dimen/size_avatar"
-            android:layout_alignParentRight="true"
-            android:layout_alignParentTop="true"
-            android:layout_marginRight="@dimen/margin_chat_activity"
-            android:src="@drawable/ease_default_avatar"
-            android:scaleType="fitXY" />
+            style="@style/ease_row_sent_iv_userhead_style"/>
 
         <RelativeLayout
             android:id="@+id/bubble"
@@ -71,13 +65,8 @@
 
         <ImageView
             android:id="@+id/msg_status"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerVertical="true"
             android:layout_toLeftOf="@id/bubble"
-            android:clickable="true"
-            android:src="@drawable/ease_msg_state_failed_resend"
-            android:visibility="gone" />
+            style="@style/ease_row_sent_iv_fail_style"/>
 
         <TextView
             android:id="@+id/tv_ack"

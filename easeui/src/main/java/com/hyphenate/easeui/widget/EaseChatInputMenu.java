@@ -274,6 +274,13 @@ public class EaseChatInputMenu extends LinearLayout {
                 hideExtendMenuContainer();
             }
 
+            @Override
+            public void onEditTextHasFocus(boolean hasFocus) {
+                if(hasFocus) {
+                    hideExtendMenuContainer();
+                }
+            }
+
 
             @Override
             public boolean onPressToSpeakBtnTouch(View v, MotionEvent event) {

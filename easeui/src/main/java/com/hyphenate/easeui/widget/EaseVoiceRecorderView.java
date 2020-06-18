@@ -9,6 +9,7 @@ import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -104,12 +105,14 @@ public class EaseVoiceRecorderView extends RelativeLayout {
                 if (voicePlayer.isPlaying())
                     voicePlayer.stop();
                 v.setPressed(true);
+                setTextContent(v, true);
                 startRecording();
             } catch (Exception e) {
                 v.setPressed(false);
             }
             return true;
         case MotionEvent.ACTION_MOVE:
+            setTextContent(v, true);
             if (event.getY() < 0) {
                 showReleaseToCancelHint();
             } else {
@@ -118,6 +121,7 @@ public class EaseVoiceRecorderView extends RelativeLayout {
             return true;
         case MotionEvent.ACTION_UP:
             v.setPressed(false);
+            setTextContent(v, false);
             if (event.getY() < 0) {
                 // discard the recorded audio.
                 discardRecording();
@@ -143,6 +147,15 @@ public class EaseVoiceRecorderView extends RelativeLayout {
         default:
             discardRecording();
             return false;
+        }
+    }
+
+    private void setTextContent(View view, boolean pressed) {
+        if(view instanceof ViewGroup && ((ViewGroup) view).getChildCount() > 0) {
+            View child = ((ViewGroup) view).getChildAt(0);
+            if(child instanceof TextView) {
+                ((TextView) child).setText(getContext().getString(pressed ? R.string.button_pushtotalk_pressed : R.string.button_pushtotalk));
+            }
         }
     }
 

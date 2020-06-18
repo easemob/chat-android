@@ -21,7 +21,7 @@
         android:id="@+id/extend_menu_container"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="#fff"
+        android:background="#fff8f8f8"
         android:visibility="gone" >
 
         <com.hyphenate.easeui.widget.EaseChatExtendMenu

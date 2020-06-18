@@ -19,13 +19,7 @@
 
         <com.hyphenate.easeui.widget.EaseImageView
             android:id="@+id/iv_userhead"
-            android:layout_width="@dimen/size_avatar"
-            android:layout_height="@dimen/size_avatar"
-            android:layout_alignParentRight="true"
-            android:layout_alignParentTop="true"
-            android:layout_marginRight="@dimen/margin_chat_activity"
-            android:src="@drawable/ease_default_avatar"
-            android:scaleType="fitXY" />
+            style="@style/ease_row_sent_iv_userhead_style"/>
 
         <RelativeLayout
             android:id="@+id/bubble"
@@ -40,15 +34,15 @@
                 android:id="@+id/tv_chatcontent"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
                 android:autoLink="web"
-                android:layout_centerInParent="true"
                 android:gravity="center|left"
-                android:paddingRight="6dp"
-                android:paddingLeft="1dp"
-                android:minHeight="38dp"
                 android:lineSpacingExtra="2dp"
-              	android:textColor="#000000"
                 android:maxWidth="225.0dip"
+                android:minHeight="38dp"
+                android:paddingLeft="1dp"
+                android:paddingRight="6dp"
+                android:textColor="#000000"
                 android:textSize="15sp" />
         </RelativeLayout>
 
@@ -64,13 +58,8 @@
 
         <ImageView
             android:id="@+id/msg_status"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerVertical="true"
             android:layout_toLeftOf="@id/bubble"
-            android:clickable="true"
-            android:src="@drawable/ease_msg_state_failed_resend"
-            android:visibility="gone" />
+            style="@style/ease_row_sent_iv_fail_style"/>
 
         <TextView
             android:id="@+id/tv_ack"

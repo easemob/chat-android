@@ -12,4 +12,6 @@
 
     <dimen name="image_thumbnail_size">100dp</dimen>
     <dimen name="image_thumbnail_spacing">1dp</dimen>
+
+    <dimen name="ease_chat_primary_menu_icon_size">24dp</dimen>
 </resources>
