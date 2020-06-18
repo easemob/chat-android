@@ -2,9 +2,10 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    xmlns:tools="http://schemas.android.com/tools"
     android:gravity="center_horizontal"
     android:orientation="vertical"
-    android:paddingTop="13dp" >
+    android:paddingTop="13dp">
 
     <TextView
         android:id="@+id/timestamp"
@@ -35,25 +36,26 @@
             android:layout_toLeftOf="@id/iv_userhead"
             android:background="@drawable/ease_chatto_bg" >
 
-            <ImageView
-                android:layout_marginLeft="4dp"
-                android:id="@+id/iv_call_icon"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerVertical="true"
-                android:src="@drawable/ease_chat_video_call_self" />
-
             <TextView
                 android:id="@+id/tv_chatcontent"
                 style="@style/chat_content_date_style"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerVertical="true"
-                android:layout_toRightOf="@id/iv_call_icon"
                 android:background="@null"
                 android:minHeight="40dp"
                 android:padding="6dp"
-              />
+                tools:text="已取消" />
+
+            <ImageView
+                android:layout_marginRight="4dp"
+                android:id="@+id/iv_call_icon"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_toRightOf="@id/tv_chatcontent"
+                android:layout_centerVertical="true"
+                android:src="@drawable/d_chat_video_call_self" />
+
         </RelativeLayout>
 
         <ImageView

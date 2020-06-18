@@ -17,6 +17,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.hyphenate.chat.EMClient;
 import com.hyphenate.chat.EMMessage;
 import com.hyphenate.chat.EMMessage.Direct;
+import com.hyphenate.easeui.EaseUI;
 import com.hyphenate.easeui.R;
 import com.hyphenate.easeui.adapter.EaseBaseAdapter;
 import com.hyphenate.easeui.domain.EaseAvatarOptions;
@@ -262,7 +263,7 @@ public abstract class EaseChatRow extends LinearLayout {
      * @return
      */
     protected EaseAvatarOptions provideAvatarOptions() {
-        return null;
+        return EaseUI.getInstance().getAvatarOptions();
     }
 
     /**

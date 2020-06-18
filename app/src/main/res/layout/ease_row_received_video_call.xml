@@ -2,9 +2,10 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    xmlns:tools="http://schemas.android.com/tools"
     android:gravity="center_horizontal"
     android:orientation="vertical"
-    android:paddingTop="13dp" >
+    android:paddingTop="13dp">
 
     <TextView
         android:id="@+id/timestamp"
@@ -36,26 +37,27 @@
             android:layout_below="@+id/tv_userid"
             android:background="@drawable/ease_chatfrom_bg" >
 
-            <ImageView
-                android:layout_marginLeft="4dp"
-                android:id="@+id/iv_call_icon"
-               android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerVertical="true"
-                android:src="@drawable/ease_chat_video_call_receive" 
-                 />
-
             <TextView
-                android:layout_toRightOf="@id/iv_call_icon"
                 android:id="@+id/tv_chatcontent"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-               android:padding="6dp"
+                android:padding="6dp"
                 android:minHeight="40dp"
                 android:textSize="15sp"
                 android:layout_centerVertical="true"
                 android:gravity="center_vertical"
-                android:textColor="#ff000000" />
+                android:textColor="#ff000000"
+                tools:text="通话时长"/>
+
+            <ImageView
+                android:layout_marginRight="4dp"
+                android:id="@+id/iv_call_icon"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_toRightOf="@id/tv_chatcontent"
+                android:layout_centerVertical="true"
+                android:src="@drawable/d_chat_video_call_receive" />
+
         </RelativeLayout>
 
          <TextView

@@ -176,7 +176,6 @@ public class EaseChatFragment extends EaseBaseFragment implements View.OnClickLi
         voiceRecorderView = findViewById(R.id.voice_recorder);
         //子类做初始化布局
         initChildView();
-        addMoreMessageDelegates(EaseConTypeSetManager.getInstance());
         initInputMenu();
         mContext.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
     }

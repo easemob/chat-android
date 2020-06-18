@@ -101,7 +101,11 @@ public class EaseAdapterDelegatesManager {
         }
         
         if(fallbackDelegate != null && fallbackDelegate.isForViewType(item, position)) {
-            return delegates.size();
+            int index = 0;
+            if(fallbackDelegate.getTags().contains(tag)) {
+                index = fallbackDelegate.getTags().indexOf(tag);
+            }
+            return hasConsistItemType ? fallbackDelegate.getItemViewType() + index : delegates.size() + index;
         }
 
         throw new NullPointerException("No EaseAdapterDelegate added that matches position = " + position + " item = " + targetItem(item) + " in data source.");
@@ -157,14 +161,22 @@ public class EaseAdapterDelegatesManager {
     }
 
     private String getTagByViewType(int viewType) {
-        String typeWithTag = dataTypeWithTags.get(viewType);
-        if(TextUtils.isEmpty(typeWithTag)) {
-            return typeWithTag;
+        if(dataTypeWithTags.containsKey(viewType)) {
+            String typeWithTag = dataTypeWithTags.get(viewType);
+            if(TextUtils.isEmpty(typeWithTag)) {
+                return typeWithTag;
+            }
+            if(!typeWithTag.contains(":")) {
+                return typeWithTag;
+            }
+            return typeWithTag.split(":")[1];
+        }else {
+            int index = hasConsistItemType ? viewType - fallbackDelegate.getItemViewType() : viewType - delegates.size();
+            if(fallbackDelegate.getTags().size() <= index) {
+                return null;
+            }
+            return fallbackDelegate.getTags().get(index);
         }
-        if(!typeWithTag.contains(":")) {
-            return typeWithTag;
-        }
-        return typeWithTag.split(":")[1];
     }
 
     private String typeWithTag(Class<?> clazz, String tag) {

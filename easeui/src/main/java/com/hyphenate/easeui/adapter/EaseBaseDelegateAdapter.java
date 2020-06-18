@@ -41,6 +41,11 @@ public abstract class EaseBaseDelegateAdapter<T> extends EaseBaseRecyclerViewAda
         return delegatesManager.getDelegateViewType(delegate);
     }
 
+    public EaseBaseDelegateAdapter setFallbackDelegate(EaseAdapterDelegate delegate, String tag) {
+        delegate.setTag(tag);
+        return setFallbackDelegate(delegate);
+    }
+
     public EaseBaseDelegateAdapter setFallbackDelegate(EaseAdapterDelegate delegate) {
         delegatesManager.fallbackDelegate = delegate;
         return this;

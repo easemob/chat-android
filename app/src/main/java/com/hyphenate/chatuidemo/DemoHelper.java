@@ -31,8 +31,14 @@ import com.hyphenate.chatuidemo.common.model.EmojiconExampleGroupData;
 import com.hyphenate.chatuidemo.common.receiver.HeadsetReceiver;
 import com.hyphenate.chatuidemo.common.utils.PreferenceManager;
 import com.hyphenate.chatuidemo.section.chat.ChatPresenter;
+import com.hyphenate.chatuidemo.section.chat.delegates.ChatConferenceInviteAdapterDelegate;
+import com.hyphenate.chatuidemo.section.chat.delegates.ChatLiveInviteAdapterDelegate;
+import com.hyphenate.chatuidemo.section.chat.delegates.ChatRecallAdapterDelegate;
+import com.hyphenate.chatuidemo.section.chat.delegates.ChatVideoCallAdapterDelegate;
+import com.hyphenate.chatuidemo.section.chat.delegates.ChatVoiceCallAdapterDelegate;
 import com.hyphenate.chatuidemo.section.chat.receiver.CallReceiver;
 import com.hyphenate.easeui.EaseUI;
+import com.hyphenate.easeui.domain.EaseAvatarOptions;
 import com.hyphenate.easeui.domain.EaseEmojicon;
 import com.hyphenate.easeui.domain.EaseEmojiconGroupEntity;
 import com.hyphenate.easeui.domain.EaseUser;
@@ -127,14 +133,18 @@ public class DemoHelper {
      */
     private void registerConversationType() {
         EaseConTypeSetManager.getInstance()
-                .addConversationType(EaseExpressionAdapterDelegate.class)   //自定义表情
-                .addConversationType(EaseFileAdapterDelegate.class)         //文件
-                .addConversationType(EaseImageAdapterDelegate.class)        //图片
-                .addConversationType(EaseLocationAdapterDelegate.class)     //定位
-                .addConversationType(EaseVideoAdapterDelegate.class)        //视频
-                .addConversationType(EaseVoiceAdapterDelegate.class)        //声音
-                .addConversationType(EaseTextAdapterDelegate.class)         //文本
-                .setDefaultConversionType(EaseTextAdapterDelegate.class);   //文本
+                .addConversationType(EaseExpressionAdapterDelegate.class)       //自定义表情
+                .addConversationType(EaseFileAdapterDelegate.class)             //文件
+                .addConversationType(EaseImageAdapterDelegate.class)            //图片
+                .addConversationType(EaseLocationAdapterDelegate.class)         //定位
+                .addConversationType(EaseVideoAdapterDelegate.class)            //视频
+                .addConversationType(EaseVoiceAdapterDelegate.class)            //声音
+                .addConversationType(ChatConferenceInviteAdapterDelegate.class) //会议邀请
+                .addConversationType(ChatLiveInviteAdapterDelegate.class)       //语音邀请
+                .addConversationType(ChatRecallAdapterDelegate.class)           //消息撤回
+                .addConversationType(ChatVideoCallAdapterDelegate.class)        //视频通话
+                .addConversationType(ChatVoiceCallAdapterDelegate.class)        //语音通话
+                .setDefaultConversionType(EaseTextAdapterDelegate.class);       //文本
     }
 
     /**
@@ -280,12 +290,23 @@ public class DemoHelper {
                         return null;
                     }
                 })
+                .setAvatarOptions(getAvatarOptions())
                 .setUserProvider(new EaseUserProfileProvider() {
                     @Override
                     public EaseUser getUser(String username) {
                         return getUserInfo(username);
                     }
                 });
+    }
+
+    /**
+     * 统一配置头像
+     * @return
+     */
+    private EaseAvatarOptions getAvatarOptions() {
+        EaseAvatarOptions avatarOptions = new EaseAvatarOptions();
+        avatarOptions.setAvatarShape(1);
+        return avatarOptions;
     }
 
     private EaseUser getUserInfo(String username) {

@@ -82,7 +82,8 @@ public class EaseConTypeSetManager {
         }else {
             defaultDelegate = defaultDelegateCls.newInstance();
         }
-        adapter.setFallbackDelegate(defaultDelegate);
+        adapter.setFallbackDelegate(defaultDelegate, EMMessage.Direct.SEND.toString());
+        adapter.setFallbackDelegate(defaultDelegate, EMMessage.Direct.RECEIVE.toString());
     }
 
     public boolean hasConsistItemType() {
