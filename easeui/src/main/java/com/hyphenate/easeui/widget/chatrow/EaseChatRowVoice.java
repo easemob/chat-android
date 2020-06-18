@@ -57,10 +57,10 @@ public class EaseChatRowVoice extends EaseChatRowFile {
         }
         if (message.direct() == EMMessage.Direct.RECEIVE) {
             voiceImageView.setImageResource(R.drawable.ease_chatfrom_voice_playing);
-            voiceImageView.setPadding((int)(EaseCommonUtils.dip2px(getContext(), 10)), 0, padding, 0);
+            voiceLengthView.setPadding(padding, 0, 0, 0);
         } else {
             voiceImageView.setImageResource(R.drawable.ease_chatto_voice_playing);
-            voiceImageView.setPadding(padding, 0, (int)(EaseCommonUtils.dip2px(getContext(), 10)), 0);
+            voiceLengthView.setPadding(0, 0, padding, 0);
         }
 
         if (message.direct() == EMMessage.Direct.RECEIVE) {
