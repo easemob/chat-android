@@ -27,6 +27,7 @@
         <attr name="switchItemTitleColor" format="color|reference"/>
         <attr name="switchItemTitleSize" format="dimension|reference"/>
         <attr name="switchItemShowDivider" format="boolean"/>
+        <attr name="switchItemHint" format="string|reference"/>
     </declare-styleable>
 
 </resources>

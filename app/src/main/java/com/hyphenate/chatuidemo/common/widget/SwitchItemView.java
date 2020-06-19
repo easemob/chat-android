@@ -2,6 +2,7 @@ package com.hyphenate.chatuidemo.common.widget;
 
 import android.content.Context;
 import android.content.res.TypedArray;
+import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
@@ -17,6 +18,7 @@ import com.hyphenate.chatuidemo.R;
 
 public class SwitchItemView extends ConstraintLayout {
     private TextView tvTitle;
+    private TextView tvHint;
     private View viewDivider;
     private String title;
     private String content;
@@ -24,6 +26,7 @@ public class SwitchItemView extends ConstraintLayout {
     private int contentColor;
     private float titleSize;
     private float contentSize;
+    private String hint;
     private View root;
     private Switch switchItem;
     private OnCheckedChangeListener listener;
@@ -44,6 +47,7 @@ public class SwitchItemView extends ConstraintLayout {
     public void init(Context context, AttributeSet attrs) {
         root = LayoutInflater.from(context).inflate(R.layout.demo_layout_item_switch, this);
         tvTitle = findViewById(R.id.tv_title);
+        tvHint = findViewById(R.id.tv_hint);
         viewDivider = findViewById(R.id.view_divider);
         switchItem = findViewById(R.id.switch_item);
 
@@ -73,9 +77,18 @@ public class SwitchItemView extends ConstraintLayout {
         boolean showDivider = a.getBoolean(R.styleable.SwitchItemView_switchItemShowDivider, true);
         viewDivider.setVisibility(showDivider ? VISIBLE : GONE);
 
+        int hintResourceId = a.getResourceId(R.styleable.SwitchItemView_switchItemHint, -1);
+        hint = a.getString(R.styleable.SwitchItemView_switchItemHint);
+        if(hintResourceId != -1) {
+            hint = getContext().getString(hintResourceId);
+        }
+        tvHint.setText(hint);
+
         a.recycle();
 
         setListener();
+
+        tvHint.setVisibility(TextUtils.isEmpty(hint) ? GONE : VISIBLE);
     }
 
     private void setListener() {
@@ -95,6 +108,10 @@ public class SwitchItemView extends ConstraintLayout {
 
     public Switch getSwitch() {
         return switchItem;
+    }
+
+    public TextView getTvHint(){
+        return tvHint;
     }
 
     public void setOnCheckedChangeListener(OnCheckedChangeListener listener) {

@@ -11,11 +11,31 @@
         android:layout_height="wrap_content"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/tv_hint"
         android:layout_marginLeft="@dimen/em_margin_20"
         android:layout_marginStart="@dimen/em_margin_20"
         android:textSize="@dimen/em_size_big"
         android:textColor="@color/em_color_common_text_black"
+        app:layout_constraintVertical_chainStyle="packed"
+        tools:text="群文件"/>
+
+    <TextView
+        android:id="@+id/tv_hint"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tv_title"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintRight_toLeftOf="@id/switch_item"
+        app:layout_constraintHorizontal_bias="0"
+        android:layout_marginLeft="@dimen/em_margin_20"
+        android:layout_marginStart="@dimen/em_margin_20"
+        android:layout_marginRight="@dimen/em_margin_10"
+        android:layout_marginEnd="@dimen/em_margin_10"
+        android:layout_marginTop="2dp"
+        android:textSize="@dimen/em_size_small"
+        android:textColor="@color/em_color_common_text_gray"
+        android:visibility="visible"
         tools:text="群文件"/>
 
     <Switch

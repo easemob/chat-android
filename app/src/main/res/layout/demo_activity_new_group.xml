@@ -2,6 +2,7 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/common_bg"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <com.hyphenate.easeui.widget.EaseTitleBar
@@ -14,106 +15,74 @@
         app:titleBarRightVisible="true"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"/>
-
-    <EditText
-        android:id="@+id/et_group_name"
-        android:layout_width="match_parent"
-        android:layout_height="39dp"
-        android:layout_margin="10dp"
-        android:background="@drawable/demo_button_normal_shape"
-        android:hint="@string/em_group_new_name_hint"
-        android:paddingLeft="5dp"
-        android:singleLine="true"
-        android:textSize="18sp"
+        app:layout_constraintRight_toRightOf="parent"
+        android:background="@color/white"/>
+    
+    <com.hyphenate.chatuidemo.common.widget.ArrowItemView
+        android:id="@+id/item_group_name"
+        android:layout_width="0dp"
+        android:layout_height="@dimen/em_common_item_height"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toBottomOf="@id/title_bar"
+        app:arrowItemTitle="@string/em_group_new_name"
+        app:arrowItemContent="@string/em_group_new_name_hint"
+        android:background="@color/white"/>
+
+    <com.hyphenate.chatuidemo.common.widget.ArrowItemView
+        android:id="@+id/item_group_profile"
+        android:layout_width="0dp"
+        android:layout_height="@dimen/em_common_item_height"
         app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"/>
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/item_group_name"
+        app:arrowItemTitle="@string/em_group_new_profile"
+        app:arrowItemContent="@string/em_group_new_profile_hint"
+        android:background="@color/white"/>
 
-    <EditText
-        android:id="@+id/et_group_introduction"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="10dp"
-        android:layout_marginLeft="10dp"
-        android:layout_marginRight="10dp"
-        android:layout_marginTop="10dp"
-        android:background="@drawable/demo_button_normal_shape"
-        android:gravity="top"
-        android:hint="@string/em_group_new_profile_hint"
-        android:lines="5"
-        android:paddingLeft="5dp"
-        android:paddingTop="5dp"
-        android:textSize="18sp"
-        app:layout_constraintTop_toBottomOf="@id/et_group_name"
+    <com.hyphenate.chatuidemo.common.widget.ArrowItemView
+        android:id="@+id/item_group_max_users"
+        android:layout_width="0dp"
+        android:layout_height="@dimen/em_common_item_height"
         app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"/>
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/item_group_profile"
+        app:arrowItemTitle="@string/em_group_max_users"
+        android:background="@color/white"/>
 
-    <LinearLayout
-        android:id="@+id/ll_if_public"
-        android:layout_width="match_parent"
-        android:layout_height="39dp"
-        android:layout_marginBottom="10dp"
-        android:layout_marginLeft="10dp"
-        android:layout_marginRight="10dp"
-        android:layout_marginTop="10dp"
-        android:background="@drawable/demo_button_normal_shape"
-        app:layout_constraintTop_toBottomOf="@id/et_group_introduction"
+    <com.hyphenate.chatuidemo.common.widget.SwitchItemView
+        android:id="@+id/item_switch_public"
+        android:layout_width="0dp"
+        android:layout_height="@dimen/em_common_item_height"
         app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent">
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/item_group_max_users"
+        android:layout_marginTop="@dimen/em_margin_15"
+        app:switchItemTitle="@string/em_group_new_if_public"
+        app:switchItemHint="@string/em_group_new_if_public_hint"
+        android:background="@color/white"/>
 
-        <TextView
-            android:layout_marginLeft="5dp"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/em_group_new_if_public"
-            android:textColor="#333"
-            android:layout_gravity="center_vertical"
-            android:textSize="18sp"
-            android:layout_weight="1" />
-
-        <CheckBox
-            android:id="@+id/cb_public"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="0"
-            android:layout_gravity="center_vertical"
-            android:button="@drawable/demo_checkbox_bg_selector" />
-
-    </LinearLayout>
-
-    <LinearLayout
-        android:id="@+id/ll_open_invite"
-        android:layout_width="match_parent"
-        android:layout_height="39dp"
-        android:layout_marginBottom="10dp"
-        android:layout_marginLeft="10dp"
-        android:layout_marginRight="10dp"
-        android:layout_marginTop="10dp"
-        android:background="@drawable/demo_button_normal_shape"
-        app:layout_constraintTop_toBottomOf="@id/ll_if_public"
+    <com.hyphenate.chatuidemo.common.widget.SwitchItemView
+        android:id="@+id/item_switch_invite"
+        android:layout_width="0dp"
+        android:layout_height="@dimen/em_common_item_height"
         app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent">
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/item_switch_public"
+        app:switchItemTitle="@string/em_group_new_open_invite"
+        app:switchItemHint="@string/em_group_new_open_invite_hint"
+        android:background="@color/white"/>
 
-        <TextView
-            android:id="@+id/second_desc"
-            android:layout_marginLeft="5dp"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/em_group_new_need_owner_approval"
-            android:textColor="#333"
-            android:layout_gravity="center_vertical"
-            android:textSize="18sp"
-            android:layout_weight="1" />
 
-        <CheckBox
-            android:id="@+id/cb_member_inviter"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="0"
-            android:layout_gravity="center_vertical"
-            android:button="@drawable/demo_checkbox_bg_selector" />
-
-    </LinearLayout>
+    <com.hyphenate.chatuidemo.common.widget.ArrowItemView
+        android:id="@+id/item_group_members"
+        android:layout_width="0dp"
+        android:layout_height="@dimen/em_common_item_height"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/item_switch_invite"
+        android:layout_marginTop="@dimen/em_margin_15"
+        app:arrowItemTitle="@string/em_group_members"
+        android:background="@color/white"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -149,13 +149,20 @@
     <string name="em_group_member_type_member">群成员</string>
     <string name="em_group_member_type_member_num">共%1$d人</string>
 
-    <string name="em_group_new_title">新建群组</string>
-    <string name="em_group_new_save">保存</string>
-    <string name="em_group_new_name_hint">群聊名称</string>
-    <string name="em_group_new_profile_hint">群聊简介</string>
-    <string name="em_group_new_if_public">是否公开</string>
-    <string name="em_group_new_open_invite">开放群成员邀请</string>
-    <string name="em_group_new_need_owner_approval">加入公开群需要群主同意</string>
+    <string name="em_group_new_title">创建群组</string>
+    <string name="em_group_new_save">完成</string>
+    <string name="em_group_new_name">名称</string>
+    <string name="em_group_new_name_hint">请输入群组名称</string>
+    <string name="em_group_new_profile">简介</string>
+    <string name="em_group_new_profile_hint">请输入群组简介</string>
+    <string name="em_group_max_users">群组人数</string>
+    <string name="em_group_set_max_users">设置群组最大人数</string>
+    <string name="em_group_members">群组成员</string>
+    <string name="em_group_new_if_public">是否公开群组</string>
+    <string name="em_group_new_if_public_hint">其他用户不能查找到此群</string>
+    <string name="em_group_new_open_invite">群成员是否有邀请权限</string>
+    <string name="em_group_new_open_invite_hint">只允许群主邀请用户进群</string>
+    <string name="em_group_new_need_owner_approval">入群需要群主同意</string>
     <string name="em_group_new_name_cannot_be_empty">群组名称不能为空</string>
     <string name="em_group_new_invite_join_group">%1$s邀请加入群：%2$s</string>
 

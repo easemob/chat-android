@@ -57,27 +57,14 @@
                 app:switchItemShowDivider="true"
                 android:background="@color/white"/>
 
-            <RelativeLayout
+            <com.hyphenate.chatuidemo.common.widget.SwitchItemView
+                android:id="@+id/item_switch_upload_to_hx"
                 android:layout_width="match_parent"
-                android:layout_height="75dp">
-
-                <com.hyphenate.chatuidemo.common.widget.SwitchItemView
-                    android:id="@+id/item_switch_upload_to_hx"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    app:switchItemTitle="@string/em_developer_upload_to_hx"
-                    app:switchItemShowDivider="true"
-                    android:background="@color/white"/>
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="20dp"
-                    android:textSize="12sp"
-                    android:layout_alignParentBottom="true"
-                    android:paddingBottom="8dp"
-                    android:text="@string/em_developer_upload_to_hx_notice"/>
-            </RelativeLayout>
+                android:layout_height="@dimen/em_common_item_height"
+                app:switchItemTitle="@string/em_developer_upload_to_hx"
+                app:switchItemShowDivider="true"
+                app:switchItemHint="@string/em_developer_upload_to_hx_notice"
+                android:background="@color/white"/>
 
             <com.hyphenate.chatuidemo.common.widget.SwitchItemView
                 android:id="@+id/item_switch_auto_download_thumbnail"
