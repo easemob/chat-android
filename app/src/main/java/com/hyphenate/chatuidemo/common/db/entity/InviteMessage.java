@@ -4,7 +4,7 @@ import androidx.annotation.StringRes;
 import androidx.room.Entity;
 import androidx.room.Index;
 
-import com.hyphenate.chatuidemo.DemoApp;
+import com.hyphenate.chatuidemo.DemoApplication;
 import com.hyphenate.chatuidemo.R;
 import com.hyphenate.chatuidemo.common.db.DemoDbHelper;
 
@@ -121,7 +121,7 @@ public class InviteMessage implements Serializable {
         //保存相应类型的MsgTypeManageEntity
         MsgTypeManageEntity entity = new MsgTypeManageEntity();
         entity.setType(type.name());
-        DemoDbHelper.getInstance(DemoApp.getInstance()).getMsgTypeManageDao().insert(entity);
+        DemoDbHelper.getInstance(DemoApplication.getInstance()).getMsgTypeManageDao().insert(entity);
         this.type = type.name();
     }
 

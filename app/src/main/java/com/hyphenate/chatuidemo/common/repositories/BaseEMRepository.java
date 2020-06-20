@@ -10,12 +10,11 @@ import com.hyphenate.chat.EMConferenceManager;
 import com.hyphenate.chat.EMContactManager;
 import com.hyphenate.chat.EMGroupManager;
 import com.hyphenate.chat.EMPushManager;
-import com.hyphenate.chatuidemo.DemoApp;
+import com.hyphenate.chatuidemo.DemoApplication;
 import com.hyphenate.chatuidemo.DemoHelper;
 import com.hyphenate.chatuidemo.common.db.DemoDbHelper;
 import com.hyphenate.chatuidemo.common.db.dao.EmUserDao;
 import com.hyphenate.chatuidemo.common.db.dao.MsgTypeManageDao;
-import com.hyphenate.chatuidemo.common.db.entity.MsgTypeManageEntity;
 import com.hyphenate.chatuidemo.common.utils.ThreadManager;
 
 public class BaseEMRepository {
@@ -106,7 +105,7 @@ public class BaseEMRepository {
      * init room
      */
     public void initDb() {
-        DemoDbHelper.getInstance(DemoApp.getInstance()).initDb(getCurrentUser());
+        DemoDbHelper.getInstance(DemoApplication.getInstance()).initDb(getCurrentUser());
     }
 
     /**
@@ -114,7 +113,7 @@ public class BaseEMRepository {
      * @return
      */
     public EmUserDao getUserDao() {
-        return DemoDbHelper.getInstance(DemoApp.getInstance()).getUserDao();
+        return DemoDbHelper.getInstance(DemoApplication.getInstance()).getUserDao();
     }
 
     /**
@@ -122,7 +121,7 @@ public class BaseEMRepository {
      * @return
      */
     public MsgTypeManageDao getMsgTypeManageDao() {
-        return DemoDbHelper.getInstance(DemoApp.getInstance()).getMsgTypeManageDao();
+        return DemoDbHelper.getInstance(DemoApplication.getInstance()).getMsgTypeManageDao();
     }
 
     /**

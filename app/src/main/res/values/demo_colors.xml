@@ -10,6 +10,7 @@
     <color name="blue">#FF5A5DD0</color>
     <color name="black">#ff000000</color>
     <color name="transparent">@android:color/transparent</color>
+    <color name="color_transparent">#00000000</color>
 
     <color name="common_bg">#fff9f9f9</color>
     <color name="em_color_brand">#ff04aef0</color>

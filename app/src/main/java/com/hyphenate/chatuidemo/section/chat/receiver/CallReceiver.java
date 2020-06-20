@@ -18,14 +18,11 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
-import android.util.Log;
 
 import com.hyphenate.chatuidemo.DemoHelper;
 import com.hyphenate.chatuidemo.R;
-import com.hyphenate.chatuidemo.section.chat.ChatVideoCallActivity;
-import com.hyphenate.chatuidemo.section.chat.ChatVoiceCallActivity;
-import com.hyphenate.easeui.ui.chat.VideoCallActivity;
-import com.hyphenate.easeui.ui.chat.VoiceCallActivity;
+import com.hyphenate.chatuidemo.section.chat.VideoCallActivity;
+import com.hyphenate.chatuidemo.section.chat.VoiceCallActivity;
 import com.hyphenate.util.EMLog;
 import com.hyphenate.util.EasyUtils;
 

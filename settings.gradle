@@ -1,2 +1,2 @@
-include ':app', ':hmspush', ':easeui'
+include ':app', ':easeui'
 rootProject.name='chatuidemo'

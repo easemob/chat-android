@@ -63,7 +63,7 @@ public class GroupHelper {
      * @return
      */
     public static boolean isCanInvite(EMGroup group) {
-        return group.isMemberAllowToInvite() || isOwner(group) || isAdmin(group);
+        return group != null && (group.isMemberAllowToInvite() || isOwner(group) || isAdmin(group));
     }
 
     /**

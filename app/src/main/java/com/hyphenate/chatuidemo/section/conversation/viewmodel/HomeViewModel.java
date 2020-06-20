@@ -6,8 +6,7 @@ import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
 
-import com.hyphenate.chat.EMConversation;
-import com.hyphenate.chatuidemo.DemoApp;
+import com.hyphenate.chatuidemo.DemoApplication;
 import com.hyphenate.chatuidemo.common.db.DemoDbHelper;
 import com.hyphenate.chatuidemo.common.db.entity.MsgTypeManageEntity;
 import com.hyphenate.chatuidemo.common.livedatas.SingleSourceLiveData;
@@ -59,7 +58,7 @@ public class HomeViewModel extends AndroidViewModel {
      */
     public void deleteSystemMsg(MsgTypeManageEntity msg) {
         try {
-            DemoDbHelper dbHelper = DemoDbHelper.getInstance(DemoApp.getInstance());
+            DemoDbHelper dbHelper = DemoDbHelper.getInstance(DemoApplication.getInstance());
             dbHelper.getInviteMessageDao().delete("type", msg.getType());
             dbHelper.getMsgTypeManageDao().delete(msg);
             deleteConversationObservable.postValue(Resource.success(true));

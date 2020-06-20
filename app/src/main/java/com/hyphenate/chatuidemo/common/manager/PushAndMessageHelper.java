@@ -1,27 +1,20 @@
 package com.hyphenate.chatuidemo.common.manager;
 
 import android.content.Context;
-import android.os.SystemClock;
 import android.text.TextUtils;
-import android.util.Log;
 
-import com.hyphenate.EMCallBack;
 import com.hyphenate.chat.EMClient;
 import com.hyphenate.chat.EMImageMessageBody;
 import com.hyphenate.chat.EMMessage;
 import com.hyphenate.chat.EMTextMessageBody;
-import com.hyphenate.chatuidemo.DemoApp;
+import com.hyphenate.chatuidemo.DemoApplication;
 import com.hyphenate.chatuidemo.DemoHelper;
-import com.hyphenate.chatuidemo.R;
 import com.hyphenate.chatuidemo.common.DemoConstant;
 import com.hyphenate.chatuidemo.common.db.entity.InviteMessage;
 import com.hyphenate.chatuidemo.common.interfaceOrImplement.UserActivityLifecycleCallbacks;
-import com.hyphenate.chatuidemo.common.utils.ThreadManager;
-import com.hyphenate.chatuidemo.common.utils.ToastUtils;
-import com.hyphenate.chatuidemo.section.chat.ConferenceActivity;
+import com.hyphenate.chatuidemo.section.conference.ConferenceActivity;
 import com.hyphenate.chatuidemo.section.chat.LiveActivity;
 import com.hyphenate.easeui.constants.EaseConstant;
-import com.hyphenate.easeui.model.EaseAtMessageHelper;
 import com.hyphenate.easeui.utils.EaseCommonUtils;
 import com.hyphenate.chatuidemo.common.db.entity.InviteMessage.InviteMessageStatus;
 
@@ -74,7 +67,7 @@ public class PushAndMessageHelper {
     }
 
     private static boolean isDuringMediaCommunication() {
-        UserActivityLifecycleCallbacks lifecycle = DemoApp.getInstance().getActivityLifecycle();
+        UserActivityLifecycleCallbacks lifecycle = DemoApplication.getInstance().getLifecycleCallbacks();
         String topClassName = lifecycle.current().getClass().getSimpleName();
         if (lifecycle.count() > 0 && ("LiveActivity".equals(topClassName) || "ConferenceActivity".equals(topClassName))) {
             return true;
@@ -130,7 +123,7 @@ public class PushAndMessageHelper {
             return "";
         }
         String messge;
-        Context context = DemoApp.getInstance();
+        Context context = DemoApplication.getInstance();
         StringBuilder builder = new StringBuilder(context.getString(status.getMsgContent()));
         switch (status) {
             case BEAPPLYED:

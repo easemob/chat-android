@@ -1,10 +1,12 @@
 package com.hyphenate.chatuidemo.section.chat;
 
-import android.content.Intent;
+import android.content.Context;
+import android.os.Looper;
+import android.os.Message;
 import android.text.TextUtils;
 import android.util.Log;
+import android.widget.Toast;
 
-import com.google.firebase.analytics.FirebaseAnalytics;
 import com.hyphenate.EMChatRoomChangeListener;
 import com.hyphenate.EMConferenceListener;
 import com.hyphenate.EMConnectionListener;
@@ -18,7 +20,7 @@ import com.hyphenate.chat.EMGroup;
 import com.hyphenate.chat.EMMessage;
 import com.hyphenate.chat.EMStreamStatistics;
 import com.hyphenate.chat.EMTextMessageBody;
-import com.hyphenate.chatuidemo.DemoApp;
+import com.hyphenate.chatuidemo.DemoApplication;
 import com.hyphenate.chatuidemo.DemoHelper;
 import com.hyphenate.chatuidemo.R;
 import com.hyphenate.chatuidemo.common.DemoConstant;
@@ -33,16 +35,16 @@ import com.hyphenate.chatuidemo.common.manager.PushAndMessageHelper;
 import com.hyphenate.chatuidemo.common.repositories.EMContactManagerRepository;
 import com.hyphenate.chatuidemo.common.repositories.EMGroupManagerRepository;
 import com.hyphenate.easeui.EaseChatPresenter;
-import com.hyphenate.easeui.EaseUI;
 import com.hyphenate.easeui.interfaces.EaseGroupListener;
 import com.hyphenate.easeui.model.EaseAtMessageHelper;
 import com.hyphenate.easeui.model.EaseEvent;
-import com.hyphenate.easeui.model.EaseNotifier;
 import com.hyphenate.util.EMLog;
 import com.hyphenate.chatuidemo.common.db.entity.InviteMessage.InviteMessageStatus;
 
 import java.util.List;
+import java.util.Queue;
 import java.util.UUID;
+import java.util.concurrent.ConcurrentLinkedQueue;
 
 public class ChatPresenter extends EaseChatPresenter {
     private static final String TAG = ChatPresenter.class.getSimpleName();
@@ -52,8 +54,14 @@ public class ChatPresenter extends EaseChatPresenter {
     private boolean isGroupsSyncedWithServer = false;
     private boolean isContactsSyncedWithServer = false;
     private boolean isBlackListSyncedWithServer = false;
+    private Context appContext;
+    protected android.os.Handler handler;
+
+    Queue<String> msgQueue = new ConcurrentLinkedQueue<>();
 
     private ChatPresenter() {
+        appContext = DemoApplication.getInstance();
+        initHandler(appContext.getMainLooper());
         messageChangeLiveData = LiveDataBus.get();
         networkChangeLiveData = NetworkChangeLiveData.getInstance();
         //添加网络连接状态监听
@@ -82,6 +90,29 @@ public class ChatPresenter extends EaseChatPresenter {
         return instance;
     }
 
+    public void initHandler(Looper looper) {
+        handler = new android.os.Handler(looper) {
+            @Override
+            public void handleMessage(Message msg) {
+                String str = (String)msg.obj;
+                Toast.makeText(appContext, str, Toast.LENGTH_LONG).show();
+            }
+        };
+        while (!msgQueue.isEmpty()) {
+            showToast(msgQueue.remove());
+        }
+    }
+
+    void showToast(final String message) {
+        Log.d(TAG, "receive invitation to join the group：" + message);
+        if (handler != null) {
+            Message msg = Message.obtain(handler, 0, message);
+            handler.sendMessage(msg);
+        } else {
+            msgQueue.add(message);
+        }
+    }
+
     @Override
     public void onMessageReceived(List<EMMessage> messages) {
         super.onMessageReceived(messages);
@@ -89,6 +120,7 @@ public class ChatPresenter extends EaseChatPresenter {
         messageChangeLiveData.with(DemoConstant.MESSAGE_CHANGE_CHANGE).postValue(event);
         for (EMMessage message : messages) {
             EMLog.d(TAG, "onMessageReceived id : " + message.getMsgId());
+            EMLog.d(TAG, "onMessageReceived: " + message.getType());
             // 判断一下是否是会议邀请
             String confId = message.getStringAttribute(DemoConstant.MSG_ATTR_CONF_ID, "");
             if(!"".equals(confId)){
@@ -97,7 +129,7 @@ public class ChatPresenter extends EaseChatPresenter {
                 PushAndMessageHelper.goConference(context, confId, password, extension);
             }
             // in background, do not refresh UI, notify it in notification bar
-            if(!DemoApp.getInstance().getActivityLifecycle().isFront()){
+            if(!DemoApplication.getInstance().getLifecycleCallbacks().isFront()){
                 getNotifier().notify(message);
             }
             //notify new message
@@ -400,6 +432,27 @@ public class ChatPresenter extends EaseChatPresenter {
             EaseEvent event = EaseEvent.create(DemoConstant.MESSAGE_GROUP_AUTO_ACCEPT, EaseEvent.TYPE.MESSAGE);
             messageChangeLiveData.with(DemoConstant.MESSAGE_CHANGE_CHANGE).postValue(event);
         }
+
+        @Override
+        public void onWhiteListAdded(String groupId, List<String> whitelist) {
+            EaseEvent easeEvent = new EaseEvent(DemoConstant.GROUP_CHANGE, EaseEvent.TYPE.GROUP);
+            easeEvent.message = groupId;
+            messageChangeLiveData.with(DemoConstant.GROUP_CHANGE).postValue(easeEvent);
+        }
+
+        @Override
+        public void onWhiteListRemoved(String groupId, List<String> whitelist) {
+            EaseEvent easeEvent = new EaseEvent(DemoConstant.GROUP_CHANGE, EaseEvent.TYPE.GROUP);
+            easeEvent.message = groupId;
+            messageChangeLiveData.with(DemoConstant.GROUP_CHANGE).postValue(easeEvent);
+        }
+
+        @Override
+        public void onAllMemberMuteStateChanged(String groupId, boolean isMuted) {
+            EaseEvent easeEvent = new EaseEvent(DemoConstant.GROUP_CHANGE, EaseEvent.TYPE.GROUP);
+            easeEvent.message = groupId;
+            messageChangeLiveData.with(DemoConstant.GROUP_CHANGE).postValue(easeEvent);
+        }
     }
 
     private class ChatContactListener implements EMContactListener {
@@ -409,7 +462,7 @@ public class ChatPresenter extends EaseChatPresenter {
             EMLog.i("ChatContactListener", "onContactAdded");
             EmUserEntity entity = new EmUserEntity();
             entity.setUsername(username);
-            DemoDbHelper.getInstance(DemoApp.getInstance()).getUserDao().insert(entity);
+            DemoDbHelper.getInstance(DemoApplication.getInstance()).getUserDao().insert(entity);
             EaseEvent event = EaseEvent.create(DemoConstant.CONTACT_CHANGE, EaseEvent.TYPE.CONTACT);
             messageChangeLiveData.with(DemoConstant.CONTACT_CHANGE).postValue(event);
         }
@@ -417,7 +470,7 @@ public class ChatPresenter extends EaseChatPresenter {
         @Override
         public void onContactDeleted(String username) {
             EMLog.i("ChatContactListener", "onContactDeleted");
-            DemoDbHelper helper = DemoDbHelper.getInstance(DemoApp.getInstance());
+            DemoDbHelper helper = DemoDbHelper.getInstance(DemoApplication.getInstance());
             helper.getUserDao().deleteUser(username);
             helper.getInviteMessageDao().deleteByFrom(username);
             EMClient.getInstance().chatManager().deleteConversation(username, false);
@@ -428,7 +481,7 @@ public class ChatPresenter extends EaseChatPresenter {
         @Override
         public void onContactInvited(String username, String reason) {
             EMLog.i("ChatContactListener", "onContactInvited");
-            InviteMessageDao dao = DemoDbHelper.getInstance(DemoApp.getInstance()).getInviteMessageDao();
+            InviteMessageDao dao = DemoDbHelper.getInstance(DemoApplication.getInstance()).getInviteMessageDao();
             List<InviteMessage> messages = dao.loadAll();
             if(messages != null && !messages.isEmpty()) {
                 for (InviteMessage message : messages) {
@@ -451,7 +504,7 @@ public class ChatPresenter extends EaseChatPresenter {
         @Override
         public void onFriendRequestAccepted(String username) {
             EMLog.i("ChatContactListener", "onFriendRequestAccepted");
-            InviteMessageDao dao = DemoDbHelper.getInstance(DemoApp.getInstance()).getInviteMessageDao();
+            InviteMessageDao dao = DemoDbHelper.getInstance(DemoApplication.getInstance()).getInviteMessageDao();
             List<String> messages = dao.loadAllNames();
             if(messages.contains(username)) {
                 return;
@@ -477,7 +530,7 @@ public class ChatPresenter extends EaseChatPresenter {
         @Override
         public void onContactEvent(int event, String target, String ext) {
             EMLog.i("ChatMultiDeviceListener", "onContactEvent event"+event);
-            DemoDbHelper dbHelper = DemoDbHelper.getInstance(DemoApp.getInstance());
+            DemoDbHelper dbHelper = DemoDbHelper.getInstance(DemoApplication.getInstance());
             String message = null;
             switch (event) {
                 case CONTACT_REMOVE: //好友已经在其他机子上被移除
@@ -525,7 +578,7 @@ public class ChatPresenter extends EaseChatPresenter {
         @Override
         public void onGroupEvent(int event, String groupId, List<String> usernames) {
             EMLog.i("ChatMultiDeviceListener", "onGroupEvent event"+event);
-            InviteMessageDao messageDao = DemoDbHelper.getInstance(DemoApp.getInstance()).getInviteMessageDao();
+            InviteMessageDao messageDao = DemoDbHelper.getInstance(DemoApplication.getInstance()).getInviteMessageDao();
             String message = null;
             switch (event) {
                 case GROUP_CREATE:
@@ -647,7 +700,7 @@ public class ChatPresenter extends EaseChatPresenter {
 
     private void updateContactNotificationStatus(String from, String reason, InviteMessage.InviteMessageStatus status) {
         InviteMessage msg = null;
-        InviteMessageDao dao = DemoDbHelper.getInstance(DemoApp.getInstance()).getInviteMessageDao();
+        InviteMessageDao dao = DemoDbHelper.getInstance(DemoApplication.getInstance()).getInviteMessageDao();
         List<InviteMessage> messages = dao.loadAll();
         if(messages != null && !messages.isEmpty()) {
             for (InviteMessage _msg : messages) {
@@ -722,17 +775,25 @@ public class ChatPresenter extends EaseChatPresenter {
 
         @Override
         public void onWhiteListAdded(String chatRoomId, List<String> whitelist) {
-
+            StringBuilder sb = new StringBuilder();
+            for (String member : whitelist) {
+                sb.append(member).append(",");
+            }
+            showToast("onWhiteListAdded: " + sb.toString());
         }
 
         @Override
         public void onWhiteListRemoved(String chatRoomId, List<String> whitelist) {
-
+            StringBuilder sb = new StringBuilder();
+            for (String member : whitelist) {
+                sb.append(member).append(",");
+            }
+            showToast("onWhiteListRemoved: " + sb.toString());
         }
 
         @Override
         public void onAllMemberMuteStateChanged(String chatRoomId, boolean isMuted) {
-
+            showToast("onAllMemberMuteStateChanged: " + isMuted);
         }
 
         @Override

@@ -25,21 +25,17 @@ import com.hyphenate.chatuidemo.common.utils.ThreadManager;
 import com.hyphenate.chatuidemo.common.utils.ToastUtils;
 import com.hyphenate.chatuidemo.section.chat.ChatVideoCallActivity;
 import com.hyphenate.chatuidemo.section.chat.ChatVoiceCallActivity;
-import com.hyphenate.chatuidemo.section.chat.ConferenceActivity;
+import com.hyphenate.chatuidemo.section.chat.VideoCallActivity;
+import com.hyphenate.chatuidemo.section.chat.VoiceCallActivity;
+import com.hyphenate.chatuidemo.section.conference.ConferenceActivity;
 import com.hyphenate.chatuidemo.section.chat.ImageGridActivity;
 import com.hyphenate.chatuidemo.section.chat.LiveActivity;
 import com.hyphenate.chatuidemo.section.chat.PickAtUserActivity;
-import com.hyphenate.chatuidemo.section.chat.delegates.ChatConferenceInviteAdapterDelegate;
-import com.hyphenate.chatuidemo.section.chat.delegates.ChatLiveInviteAdapterDelegate;
-import com.hyphenate.chatuidemo.section.chat.delegates.ChatRecallAdapterDelegate;
-import com.hyphenate.chatuidemo.section.chat.delegates.ChatVideoCallAdapterDelegate;
-import com.hyphenate.chatuidemo.section.chat.delegates.ChatVoiceCallAdapterDelegate;
 import com.hyphenate.chatuidemo.section.chat.viewmodel.MessageViewModel;
 import com.hyphenate.chatuidemo.section.friends.activity.ContactDetailActivity;
 import com.hyphenate.chatuidemo.section.friends.activity.ForwardMessageActivity;
 import com.hyphenate.easeui.constants.EaseConstant;
 import com.hyphenate.easeui.domain.EaseUser;
-import com.hyphenate.easeui.manager.EaseConTypeSetManager;
 import com.hyphenate.easeui.model.EaseEvent;
 import com.hyphenate.easeui.ui.chat.EaseChatFragment;
 import com.hyphenate.easeui.widget.EaseChatInputMenu;
@@ -242,16 +238,6 @@ public class ChatFragment extends EaseChatFragment implements EaseChatFragment.O
     }
 
     @Override
-    protected void startChatVideoCall() {
-        ChatVideoCallActivity.actionStart(mContext, toChatUsername);
-    }
-
-    @Override
-    protected void startChatVoiceCall() {
-        ChatVoiceCallActivity.actionStart(mContext, toChatUsername);
-    }
-
-    @Override
     protected void showMsgToast(String message) {
         super.showMsgToast(message);
         ToastUtils.showToast(message);
@@ -275,6 +261,42 @@ public class ChatFragment extends EaseChatFragment implements EaseChatFragment.O
                     break;
             }
         }
+    }
+
+    //================================== for video and voice start ====================================
+
+    /**
+     * start video call
+     */
+    protected void startVideoCall() {
+        if (!EMClient.getInstance().isConnected()) {
+            showMsgToast(getResources().getString(com.hyphenate.easeui.R.string.not_connect_to_server));
+        }else {
+            startChatVideoCall();
+            // videoCallBtn.setEnabled(false);
+            inputMenu.hideExtendMenuContainer();
+        }
+    }
+
+    /**
+     * start voice call
+     */
+    protected void startVoiceCall() {
+        if (!EMClient.getInstance().isConnected()) {
+            showMsgToast(getResources().getString(com.hyphenate.easeui.R.string.not_connect_to_server));
+        } else {
+            startChatVoiceCall();
+            // voiceCallBtn.setEnabled(false);
+            inputMenu.hideExtendMenuContainer();
+        }
+    }
+
+    protected void startChatVideoCall() {
+        ChatVideoCallActivity.actionStart(mContext, toChatUsername);
+    }
+
+    protected void startChatVoiceCall() {
+        ChatVoiceCallActivity.actionStart(mContext, toChatUsername);
     }
 
 }

@@ -5,14 +5,12 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
 import com.hyphenate.chat.EMClient;
-import com.hyphenate.chatuidemo.DemoApp;
+import com.hyphenate.chatuidemo.DemoApplication;
 import com.hyphenate.chatuidemo.DemoHelper;
-import com.hyphenate.chatuidemo.common.db.DemoDbHelper;
 import com.hyphenate.chatuidemo.common.interfaceOrImplement.DemoEmCallBack;
 import com.hyphenate.chatuidemo.common.livedatas.UserInstanceLiveData;
 import com.hyphenate.chatuidemo.common.net.ErrorCode;
 import com.hyphenate.chatuidemo.common.net.Resource;
-import com.hyphenate.chatuidemo.common.utils.ThreadManager;
 import com.hyphenate.chatuidemo.common.interfaceOrImplement.ResultCallBack;
 import com.hyphenate.easeui.domain.EaseUser;
 import com.hyphenate.exceptions.HyphenateException;
@@ -73,7 +71,7 @@ public class EMClientRepository extends BaseEMRepository{
             protected void createCall(@NonNull ResultCallBack<LiveData<String>> callBack) {
                 //注册之前先判断SDK是否已经初始化，如果没有先进行SDK的初始化
                 if(!DemoHelper.getInstance().isSDKInit) {
-                    DemoHelper.getInstance().init(DemoApp.getInstance());
+                    DemoHelper.getInstance().init(DemoApplication.getInstance());
                     DemoHelper.getInstance().getModel().setCurrentUserName(userName);
                 }
                 runOnIOThread(() -> {
@@ -101,7 +99,7 @@ public class EMClientRepository extends BaseEMRepository{
 
             @Override
             protected void createCall(@NonNull ResultCallBack<LiveData<EaseUser>> callBack) {
-                DemoHelper.getInstance().init(DemoApp.getInstance());
+                DemoHelper.getInstance().init(DemoApplication.getInstance());
                 DemoHelper.getInstance().getModel().setCurrentUserName(userName);
                 if(isTokenFlag) {
                     EMClient.getInstance().loginWithToken(userName, pwd, new DemoEmCallBack() {

@@ -1,5 +1,6 @@
 package com.hyphenate.chatuidemo.section.base;
 
+import android.app.Activity;
 import android.content.Context;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
@@ -22,12 +23,19 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.content.ContextCompat;
 
+import com.hyphenate.chatuidemo.DemoApplication;
 import com.hyphenate.chatuidemo.R;
 import com.hyphenate.chatuidemo.common.enums.Status;
 import com.hyphenate.chatuidemo.common.interfaceOrImplement.OnResourceParseCallback;
+import com.hyphenate.chatuidemo.common.interfaceOrImplement.UserActivityLifecycleCallbacks;
 import com.hyphenate.chatuidemo.common.net.Resource;
 import com.hyphenate.chatuidemo.common.utils.ToastUtils;
+import com.hyphenate.chatuidemo.section.conference.CallFloatWindow;
+import com.hyphenate.chatuidemo.section.conference.ConferenceActivity;
+import com.hyphenate.chatuidemo.section.conference.ConferenceInviteActivity;
 import com.hyphenate.easeui.utils.StatusBarCompat;
+
+import java.util.List;
 
 /**
  * 作为基础activity,放置一些公共的方法
@@ -39,6 +47,7 @@ public class BaseActivity extends AppCompatActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mContext = this;
+        checkIfConferenceExit();
     }
 
 
@@ -280,5 +289,31 @@ public class BaseActivity extends AppCompatActivity {
         }
         return false;
     }
-
+    /**
+     * 将此方法放置在基类，用于检查是否有正在进行的音视频会议
+     */
+    private void checkIfConferenceExit() {
+        // 如果当前的activity是否是ConferenceActivity
+        if(this instanceof ConferenceActivity || this instanceof ConferenceInviteActivity) {
+            return;
+        }
+        UserActivityLifecycleCallbacks lifecycleCallbacks = DemoApplication.getInstance().getLifecycleCallbacks();
+        if(lifecycleCallbacks == null) {
+            return;
+        }
+        List<Activity> activityList = lifecycleCallbacks.getActivityList();
+        if(activityList != null && activityList.size() > 0) {
+            for (Activity activity : activityList) {
+                if(activity instanceof ConferenceActivity) {
+                    //如果没有显示悬浮框，则启动ConferenceActivity
+                    if(activity.isFinishing()) {
+                        return;
+                    }
+                    if(!CallFloatWindow.getInstance(DemoApplication.getInstance()).isShowing()) {
+                        ConferenceActivity.startConferenceCall(this, null);
+                    }
+                }
+            }
+        }
+    }
 }

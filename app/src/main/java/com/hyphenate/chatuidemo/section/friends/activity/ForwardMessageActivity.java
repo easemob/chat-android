@@ -8,7 +8,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.widget.TextView;
 
-import com.hyphenate.chatuidemo.DemoApp;
+import com.hyphenate.chatuidemo.DemoApplication;
 import com.hyphenate.chatuidemo.R;
 import com.hyphenate.chatuidemo.common.interfaceOrImplement.OnResourceParseCallback;
 import com.hyphenate.chatuidemo.common.manager.PushAndMessageHelper;
@@ -122,7 +122,7 @@ public class ForwardMessageActivity extends BaseInitActivity implements OnRefres
     }
 
     private void finishChatActivity() {
-        DemoApp.getInstance().getActivityLifecycle().finishTarget(ChatActivity.class);
+        DemoApplication.getInstance().getLifecycleCallbacks().finishTarget(ChatActivity.class);
     }
 
     @Override

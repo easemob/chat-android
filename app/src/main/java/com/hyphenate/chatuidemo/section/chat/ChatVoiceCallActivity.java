@@ -7,7 +7,7 @@ import android.view.View;
 
 import com.hyphenate.chatuidemo.R;
 import com.hyphenate.chatuidemo.section.base.BaseInitActivity;
-import com.hyphenate.easeui.ui.chat.fragment.EaseVoiceCallFragment;
+import com.hyphenate.chatuidemo.section.chat.fragment.EaseVoiceCallFragment;
 import com.hyphenate.easeui.widget.EaseTitleBar;
 
 public class ChatVoiceCallActivity extends BaseInitActivity {

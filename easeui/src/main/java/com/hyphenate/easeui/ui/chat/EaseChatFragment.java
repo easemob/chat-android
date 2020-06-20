@@ -14,7 +14,6 @@ import android.provider.MediaStore;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -42,14 +41,12 @@ import com.hyphenate.chat.EMMessage;
 import com.hyphenate.chat.EMTextMessageBody;
 import com.hyphenate.chat.adapter.EMAChatRoomManagerListener;
 import com.hyphenate.easeui.R;
-import com.hyphenate.easeui.adapter.EaseMessageAdapter;
 import com.hyphenate.easeui.constants.EaseConstant;
 import com.hyphenate.easeui.domain.EaseEmojicon;
 import com.hyphenate.easeui.domain.EaseUser;
 import com.hyphenate.easeui.interfaces.EaseChatRoomListener;
 import com.hyphenate.easeui.interfaces.EaseGroupListener;
 import com.hyphenate.easeui.interfaces.MessageListItemClickListener;
-import com.hyphenate.easeui.manager.EaseConTypeSetManager;
 import com.hyphenate.easeui.model.EaseAtMessageHelper;
 import com.hyphenate.easeui.model.EaseCompat;
 import com.hyphenate.easeui.model.EaseEvent;
@@ -1410,47 +1407,5 @@ public class EaseChatFragment extends EaseBaseFragment implements View.OnClickLi
     }
 
 //================================ for chat room end =====================================
-
-//================================== for video and voice start ====================================
-
-    /**
-     * start video call
-     */
-    protected void startVideoCall() {
-        if (!EMClient.getInstance().isConnected()) {
-            showMsgToast(getResources().getString(R.string.not_connect_to_server));
-        }else {
-            startChatVideoCall();
-            // videoCallBtn.setEnabled(false);
-            inputMenu.hideExtendMenuContainer();
-        }
-    }
-
-    protected void startChatVideoCall() {
-        startActivity(new Intent(getActivity(), VideoCallActivity.class).putExtra("username", toChatUsername)
-                .putExtra("isComingCall", false));
-    }
-
-    /**
-     * start voice call
-     */
-    protected void startVoiceCall() {
-        if (!EMClient.getInstance().isConnected()) {
-            showMsgToast(getResources().getString(R.string.not_connect_to_server));
-        } else {
-            startChatVoiceCall();
-            // voiceCallBtn.setEnabled(false);
-            inputMenu.hideExtendMenuContainer();
-        }
-    }
-
-    protected void startChatVoiceCall() {
-        startActivity(new Intent(getActivity(), VoiceCallActivity.class).putExtra("username", toChatUsername)
-                .putExtra("isComingCall", false));
-    }
-
-
-//================================== for video and voice end ====================================
-
 
 }

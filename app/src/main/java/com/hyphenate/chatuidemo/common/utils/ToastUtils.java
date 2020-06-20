@@ -14,7 +14,7 @@ import android.widget.Toast;
 
 import androidx.annotation.StringRes;
 
-import com.hyphenate.chatuidemo.DemoApp;
+import com.hyphenate.chatuidemo.DemoApplication;
 import com.hyphenate.chatuidemo.R;
 
 import java.lang.reflect.Field;
@@ -179,7 +179,7 @@ public class ToastUtils {
      * @param duration
      */
     public static void showCenterToast(String title, String message, int type, int duration) {
-        showToast(DemoApp.getInstance(), title, message, type, duration, Gravity.CENTER);
+        showToast(DemoApplication.getInstance(), title, message, type, duration, Gravity.CENTER);
     }
 
     /**
@@ -190,7 +190,7 @@ public class ToastUtils {
      * @param duration
      */
     public static void showCenterToast(@StringRes int title, @StringRes int message, int type, int duration) {
-        showToast(DemoApp.getInstance(), title, message, type, duration, Gravity.CENTER);
+        showToast(DemoApplication.getInstance(), title, message, type, duration, Gravity.CENTER);
     }
 
     /**

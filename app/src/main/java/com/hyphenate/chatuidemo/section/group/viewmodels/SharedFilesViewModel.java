@@ -10,7 +10,7 @@ import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
 
 import com.hyphenate.chat.EMMucSharedFile;
-import com.hyphenate.chatuidemo.DemoApp;
+import com.hyphenate.chatuidemo.DemoApplication;
 import com.hyphenate.chatuidemo.common.livedatas.SingleSourceLiveData;
 import com.hyphenate.chatuidemo.common.net.ErrorCode;
 import com.hyphenate.chatuidemo.common.net.Resource;
@@ -107,7 +107,7 @@ public class SharedFilesViewModel extends AndroidViewModel {
             Cursor cursor = null;
 
             try {
-                cursor = DemoApp.getInstance().getContentResolver().query(uri, filePathColumn, null, null, null);
+                cursor = DemoApplication.getInstance().getContentResolver().query(uri, filePathColumn, null, null, null);
                 int column_index = cursor.getColumnIndexOrThrow("_data");
                 if (cursor.moveToFirst()) {
                     filePath = cursor.getString(column_index);

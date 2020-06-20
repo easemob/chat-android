@@ -5,20 +5,14 @@ import android.text.TextUtils;
 import androidx.annotation.NonNull;
 import androidx.lifecycle.LiveData;
 
-import com.hyphenate.chat.EMClient;
 import com.hyphenate.chat.EMConferenceMember;
-import com.hyphenate.chat.EMCursorResult;
-import com.hyphenate.chatuidemo.DemoApp;
-import com.hyphenate.chatuidemo.DemoHelper;
+import com.hyphenate.chatuidemo.DemoApplication;
 import com.hyphenate.chatuidemo.common.DemoConstant;
 import com.hyphenate.chatuidemo.common.db.DemoDbHelper;
 import com.hyphenate.chatuidemo.common.interfaceOrImplement.ResultCallBack;
 import com.hyphenate.chatuidemo.common.net.Resource;
 import com.hyphenate.chatuidemo.common.utils.ThreadManager;
-import com.hyphenate.chatuidemo.section.chat.ConferenceInviteActivity;
 import com.hyphenate.chatuidemo.section.chat.model.KV;
-import com.hyphenate.easeui.domain.EaseUser;
-import com.hyphenate.exceptions.HyphenateException;
 import com.hyphenate.util.EasyUtils;
 
 import java.util.ArrayList;
@@ -36,7 +30,7 @@ public class EMConferenceManagerRepository extends BaseEMRepository {
                     List<String> contactList = new ArrayList<>();
                     if(TextUtils.isEmpty(groupId)) {
                         // 直接从本地加载所有的联系人
-                        contactList.addAll(DemoDbHelper.getInstance(DemoApp.getInstance()).getUserDao().loadAllUsers());
+                        contactList.addAll(DemoDbHelper.getInstance(DemoApplication.getInstance()).getUserDao().loadAllUsers());
                     }else {
                         // 根据groupId获取群组中所有成员
                         contactList = new EMGroupManagerRepository().getAllGroupMemberByServer(groupId);

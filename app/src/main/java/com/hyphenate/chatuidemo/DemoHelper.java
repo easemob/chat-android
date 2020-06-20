@@ -18,15 +18,9 @@ import com.hyphenate.chat.EMGroupManager;
 import com.hyphenate.chat.EMMessage;
 import com.hyphenate.chat.EMOptions;
 import com.hyphenate.chat.EMPushManager;
-import com.hyphenate.chatuidemo.common.db.DemoDbHelper;
-import com.hyphenate.chatuidemo.common.db.entity.EmUserEntity;
-import com.hyphenate.chatuidemo.common.db.entity.InviteMessage;
-import com.hyphenate.chatuidemo.common.db.entity.MsgTypeManageEntity;
 import com.hyphenate.chatuidemo.common.manager.HMSPushHelper;
-import com.hyphenate.chatuidemo.common.manager.OptionsHelper;
 import com.hyphenate.chatuidemo.common.manager.UserProfileManager;
 import com.hyphenate.chatuidemo.common.model.DemoModel;
-import com.hyphenate.chatuidemo.common.model.DemoServerSetBean;
 import com.hyphenate.chatuidemo.common.model.EmojiconExampleGroupData;
 import com.hyphenate.chatuidemo.common.receiver.HeadsetReceiver;
 import com.hyphenate.chatuidemo.common.utils.PreferenceManager;
@@ -64,8 +58,6 @@ import com.hyphenate.util.EMLog;
 import java.util.Hashtable;
 import java.util.List;
 import java.util.Map;
-
-import static com.hyphenate.easeui.utils.EaseUserUtils.getUserInfo;
 
 /**
  * 作为hyphenate-sdk的入口控制类，获取sdk下的基础类均通过此类
@@ -446,12 +438,20 @@ public class DemoHelper {
         EMClient.getInstance().callManager().getCallOptions().enableFixedVideoResolution(enableFixSampleRate);
 
         // Offline call push
-        EMClient.getInstance().callManager().getCallOptions().setIsSendPushIfOffline(PreferenceManager.getInstance().isPushCall());
+        EMClient.getInstance().callManager().getCallOptions().setIsSendPushIfOffline(getModel().isPushCall());
+
+        //init externalAudio
+        int hz = PreferenceManager.getInstance().getCallAudioSampleRate();
+        if(hz == -1){
+            hz = 16000;
+        }
+        boolean isExternalAudio = PreferenceManager.getInstance().isExternalAudioInputResolution();
+        EMClient.getInstance().callManager().getCallOptions().setExternalAudioParam(isExternalAudio,hz,1);
     }
 
     public void initPush(Context context) {
         if(DemoHelper.getInstance().isMainProcess(context)) {
-            HMSPushHelper.getInstance().initHMSAgent(DemoApp.getInstance());
+            //HMSPushHelper.getInstance().initHMSAgent(DemoApplication.getInstance());
             EMPushHelper.getInstance().setPushListener(new PushListener() {
                 @Override
                 public void onError(EMPushType pushType, long errorCode) {
@@ -530,7 +530,7 @@ public class DemoHelper {
 
     public DemoModel getModel(){
         if(demoModel == null) {
-            demoModel = new DemoModel(DemoApp.getInstance());
+            demoModel = new DemoModel(DemoApplication.getInstance());
         }
         return demoModel;
     }

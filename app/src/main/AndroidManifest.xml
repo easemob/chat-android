@@ -71,7 +71,7 @@
         android:roundIcon="@mipmap/em_logo_uidemo"
         android:supportsRtl="true"
         android:usesNonSdkApi="true"
-        android:name=".DemoApp"
+        android:name=".DemoApplication"
         android:theme="@style/AppTheme">
 
         <!--android 9.0要求-->
@@ -115,21 +115,12 @@
         <!-- FCM required end -->
 
         <!--华为 HMS Config-->
-        <!--接入HMSSDK PUSH模块需要注册，第三方相关 :接收Push消息（注册、Push消息、Push连接状态）广播，
-                此receiver类需要开发者自己创建并继承com.huawei.hms.support.api.push.PushReceiver类，
-                参考示例代码中的类：com.huawei.hmsagent.HuaweiPushRevicer-->
-        <receiver android:name=".common.receiver.HMSPushReceiver">
+        <service android:name=".service.HMSPushService"
+            android:exported="false">
             <intent-filter>
-                <!-- 必须,用于接收 TOKEN -->
-                <action android:name="com.huawei.android.push.intent.REGISTRATION"/>
-                <!-- 必须，用于接收消息 -->
-                <action android:name="com.huawei.android.push.intent.RECEIVE"/>
-                <!-- 可选，用于点击通知栏或通知栏上的按钮后触发 onEvent 回调 -->
-                <action android:name="com.huawei.android.push.intent.CLICK"/>
-                <!-- 可选，查看 PUSH 通道是否连接，不查看则不需要 -->
-                <action android:name="com.huawei.intent.action.PUSH_STATE"/>
+                <action android:name="com.huawei.push.action.MESSAGING_EVENT" />
             </intent-filter>
-        </receiver>
+        </service>
         <!-- huawei push end -->
 
         <!-- VIVO推送配置 start -->
@@ -295,8 +286,8 @@
         <activity android:name="com.hyphenate.easeui.ui.EaseShowBigImageActivity"/>
         <activity android:name="com.hyphenate.easeui.ui.EaseBaiduMapActivity"/>
         <activity android:name=".section.chat.ImageGridActivity" />
-        <activity android:name="com.hyphenate.easeui.ui.chat.VideoCallActivity" />
-        <activity android:name="com.hyphenate.easeui.ui.chat.VoiceCallActivity" />
+        <activity android:name=".section.chat.VideoCallActivity" />
+        <activity android:name=".section.chat.VoiceCallActivity" />
         <activity android:name=".section.chat.BaiduMapActivity" />
         <activity android:name=".section.chat.RecorderVideoActivity"/>
         <activity android:name="com.hyphenate.easeui.ui.EaseShowVideoActivity"/>
@@ -322,13 +313,13 @@
             android:launchMode="singleTask"/>
         <!--多人会议-->
         <activity
-            android:name=".section.chat.ConferenceActivity"
+            android:name=".section.conference.ConferenceActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:excludeFromRecents="true"
             android:launchMode="singleInstance"/>
         <!--会议成员邀请-->
         <activity
-            android:name=".section.chat.ConferenceInviteActivity"
+            android:name=".section.conference.ConferenceInviteActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:windowSoftInputMode="adjustPan"/>
         <activity android:name=".section.chat.PickAtUserActivity" />
@@ -405,6 +396,11 @@
         <activity android:name=".section.search.SearchSingleChatActivity" />
         <!--聊天历史-->
         <activity android:name=".section.chat.ChatHistoryActivity" />
+
+        <!--捕获屏幕service-->
+        <service android:name=".section.conference.SRForegroundService"
+            android:enabled="true"
+            android:foregroundServiceType="mediaProjection"/>
     </application>
 
 </manifest>

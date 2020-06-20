@@ -3,18 +3,13 @@ package com.hyphenate.chatuidemo.common.repositories;
 import androidx.annotation.NonNull;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
-import androidx.lifecycle.Observer;
 
 import com.hyphenate.EMCallBack;
 import com.hyphenate.EMValueCallBack;
-import com.hyphenate.chatuidemo.DemoApp;
-import com.hyphenate.chatuidemo.DemoHelper;
-import com.hyphenate.chatuidemo.common.db.DemoDbHelper;
 import com.hyphenate.chatuidemo.common.db.entity.EmUserEntity;
 import com.hyphenate.chatuidemo.common.interfaceOrImplement.ResultCallBack;
 import com.hyphenate.chatuidemo.common.net.ErrorCode;
 import com.hyphenate.chatuidemo.common.net.Resource;
-import com.hyphenate.chatuidemo.common.utils.ThreadManager;
 import com.hyphenate.easeui.domain.EaseUser;
 import com.hyphenate.exceptions.HyphenateException;
 

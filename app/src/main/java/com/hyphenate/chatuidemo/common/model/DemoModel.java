@@ -3,7 +3,7 @@ package com.hyphenate.chatuidemo.common.model;
 import android.content.Context;
 
 import com.hyphenate.chat.EMChatRoom;
-import com.hyphenate.chatuidemo.DemoApp;
+import com.hyphenate.chatuidemo.DemoApplication;
 import com.hyphenate.chatuidemo.common.db.DemoDbHelper;
 import com.hyphenate.chatuidemo.common.db.dao.AppKeyDao;
 import com.hyphenate.chatuidemo.common.db.dao.EmUserDao;
@@ -14,7 +14,6 @@ import com.hyphenate.chatuidemo.common.db.entity.MsgTypeManageEntity;
 import com.hyphenate.chatuidemo.common.manager.OptionsHelper;
 import com.hyphenate.chatuidemo.common.utils.PreferenceManager;
 import com.hyphenate.easeui.domain.EaseUser;
-import com.hyphenate.easeui.model.EaseAtMessageHelper;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -111,7 +110,7 @@ public class DemoModel {
      * @return
      */
     public DemoDbHelper getDbHelper() {
-        return DemoDbHelper.getInstance(DemoApp.getInstance());
+        return DemoDbHelper.getInstance(DemoApplication.getInstance());
     }
 
     /**

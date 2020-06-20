@@ -112,4 +112,12 @@ public class UserActivityLifecycleCallbacks implements Application.ActivityLifec
             }
         }
     }
+
+    /**
+     * 判断app是否在前台
+     * @return
+     */
+    public boolean isOnForeground() {
+        return resumeActivity != null && !resumeActivity.isEmpty();
+    }
 }

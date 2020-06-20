@@ -1,6 +1,6 @@
 package com.hyphenate.chatuidemo.common.model;
 
-import com.hyphenate.chatuidemo.DemoApp;
+import com.hyphenate.chatuidemo.DemoApplication;
 import com.hyphenate.chatuidemo.R;
 import com.hyphenate.easeui.domain.EaseEmojicon;
 import com.hyphenate.easeui.domain.EaseEmojicon.Type;
@@ -58,7 +58,7 @@ public class EmojiconExampleGroupData {
             datas[i] = new EaseEmojicon(icons[i], null, Type.BIG_EXPRESSION);
             datas[i].setBigIcon(bigIcons[i]);
             //you can replace this to any you want
-            datas[i].setName(DemoApp.getInstance().getApplicationContext().getString(R.string.emojicon_test_name)+ (i+1));
+            datas[i].setName(DemoApplication.getInstance().getApplicationContext().getString(R.string.emojicon_test_name)+ (i+1));
             datas[i].setIdentityCode("em"+ (1000+i+1));
         }
         emojiconGroupEntity.setEmojiconList(Arrays.asList(datas));

@@ -4,7 +4,7 @@ import android.text.TextUtils;
 
 import androidx.annotation.Nullable;
 
-import com.hyphenate.chatuidemo.DemoApp;
+import com.hyphenate.chatuidemo.DemoApplication;
 import com.hyphenate.chatuidemo.common.enums.Status;
 
 public class Resource<T> {
@@ -55,7 +55,7 @@ public class Resource<T> {
             return message;
         }
         if(messageId > 0) {
-            return DemoApp.getInstance().getString(messageId);
+            return DemoApplication.getInstance().getString(messageId);
         }
         return "";
     }

@@ -1,6 +1,7 @@
 apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android-extensions'
 apply plugin: 'kotlin-android'
+apply plugin: 'com.huawei.agconnect'
 
 android {
     compileSdkVersion 29
@@ -71,8 +72,8 @@ dependencies {
     implementation 'com.ashokvarma.android:bottom-navigation-bar:2.1.0'
     implementation 'com.android.support:multidex:1.0.3'
 
-    // huawei push
-    implementation project(path: ':hmspush')
+    // hms push
+    implementation 'com.huawei.hms:push:4.0.2.300'
     // meizu push
     implementation 'com.meizu.flyme.internet:push-internal:3.7.0@aar'//配置集成sdk
     // Google firebase cloud messaging
