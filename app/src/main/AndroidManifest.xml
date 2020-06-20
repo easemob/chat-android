@@ -16,6 +16,7 @@
     <uses-permission android:name="com.android.launcher.permission.READ_SETTINGS" />
     <uses-permission android:name="android.permission.BROADCAST_STICKY" />
     <uses-permission android:name="android.permission.REQUEST_IGNORE_BATTERY_OPTIMIZATIONS" />
+    <uses-permission android:name="android.permission.USE_FULL_SCREEN_INTENT"/>
     <!-- 悬浮窗权限 -->
     <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
     <!-- 这个权限用于进行网络定位-->
@@ -54,6 +55,7 @@
 
     <!-- Oppo推送配置 start -->
     <uses-permission android:name="com.coloros.mcs.permission.RECIEVE_MCS_MESSAGE"/>
+    <uses-permission android:name="com.heytap.mcs.permission.RECIEVE_MCS_MESSAGE"/>
     <!-- Oppo推送配置 end -->
 
     <!-- Mi推送配置 start -->
@@ -64,6 +66,9 @@
     <uses-permission android:name="${applicationId}.permission.MIPUSH_RECEIVE" />
     <!-- Mi推送配置 end -->
 
+    <!--捕获屏幕所需权限-->
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE"/>
+
     <application
         android:allowBackup="true"
         android:icon="@mipmap/em_logo_uidemo"
@@ -71,6 +76,7 @@
         android:roundIcon="@mipmap/em_logo_uidemo"
         android:supportsRtl="true"
         android:usesNonSdkApi="true"
+        android:requestLegacyExternalStorage="false"
         android:name=".DemoApplication"
         android:theme="@style/AppTheme">
 
@@ -171,10 +177,18 @@
 
         <!-- Oppo推送配置 start -->
         <service
-            android:name="com.coloros.mcssdk.PushService"
+            android:name="com.heytap.mcssdk.PushService"
             android:permission="com.coloros.mcs.permission.SEND_MCS_MESSAGE">
             <intent-filter>
-                <action android:name="com.coloros.mcs.action.RECEIVE_MCS_MESSAGE" />
+                <action android:name="com.coloros.mcs.action.RECEIVE_MCS_MESSAGE"/>
+            </intent-filter>
+        </service>
+
+        <service
+            android:name="com.heytap.mcssdk.AppPushService"
+            android:permission="com.heytap.mcs.permission.SEND_MCS_MESSAGE">
+            <intent-filter>
+                <action android:name="com.heytap.mcs.action.RECEIVE_MCS_MESSAGE"/>
             </intent-filter>
         </service>
         <!-- Oppo推送配置 end -->

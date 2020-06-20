@@ -81,7 +81,9 @@ public class CallFloatWindow {
             @Override
             public void run() {
                 // Get the size of floatView;
-                floatViewWidth = floatView.getWidth();
+                if(floatView != null) {
+                    floatViewWidth = floatView.getWidth();
+                }
             }
         });
         avatarView = (ImageView) floatView.findViewById(R.id.iv_avatar);

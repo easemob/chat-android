@@ -288,4 +288,10 @@ public class MainActivity extends BaseInitActivity implements BottomNavigationVi
     private void checkUnreadMsg() {
         viewModel.checkUnreadMsg();
     }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        DemoHelper.getInstance().showNotificationPermissionDialog();
+    }
 }

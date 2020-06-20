@@ -5,9 +5,11 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.ContextMenu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -25,6 +27,7 @@ import com.hyphenate.easeui.interfaces.OnItemClickListener;
 import com.hyphenate.easeui.model.EaseCompat;
 import com.hyphenate.easeui.widget.EaseRecyclerView;
 import com.hyphenate.easeui.widget.EaseTitleBar;
+import com.hyphenate.util.VersionUtils;
 import com.scwang.smartrefresh.layout.SmartRefreshLayout;
 import com.scwang.smartrefresh.layout.api.RefreshLayout;
 import com.scwang.smartrefresh.layout.listener.OnRefreshListener;
@@ -198,16 +201,7 @@ public class GroupSharedFilesActivity extends BaseInitActivity implements OnRefr
     }
 
     private void selectFileFromLocal() {
-        Intent intent = null;
-        if (Build.VERSION.SDK_INT < 19) { //api 19 and later, we can't use this way, demo just select from images
-            intent = new Intent(Intent.ACTION_GET_CONTENT);
-            intent.setType("*/*");
-            intent.addCategory(Intent.CATEGORY_OPENABLE);
-
-        } else {
-            intent = new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-        }
-        startActivityForResult(intent, REQUEST_CODE_SELECT_FILE);
+        EaseCompat.openImage(this, REQUEST_CODE_SELECT_FILE);
     }
 
     @Override
@@ -222,9 +216,26 @@ public class GroupSharedFilesActivity extends BaseInitActivity implements OnRefr
             if (data != null) {
                 Uri uri = data.getData();
                 if (uri != null) {
+                    if(VersionUtils.isTargetQ(this)) {
+                        viewModel.uploadFileByUri(groupId, uri);
+                    }else {
+                        sendByPath(uri);
+                    }
+
+                }
+                if (uri != null) {
                     viewModel.uploadFileByUri(groupId, uri);
                 }
             }
         }
+    }
+
+    private void sendByPath(Uri uri) {
+        String path = EaseCompat.getPath(this, uri);
+        if(TextUtils.isEmpty(path)) {
+            Toast.makeText(this, R.string.File_does_not_exist, Toast.LENGTH_SHORT).show();
+            return;
+        }
+        viewModel.uploadFileByUri(groupId, Uri.parse(path));
     }
 }

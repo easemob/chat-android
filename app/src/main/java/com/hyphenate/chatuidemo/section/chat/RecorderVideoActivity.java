@@ -79,7 +79,6 @@ public class RecorderVideoActivity extends EaseBaseActivity implements
 	private SurfaceHolder mSurfaceHolder;
 	int defaultVideoFrameRate = -1;
 
-	@SuppressLint("InvalidWakeLockTag")
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -116,7 +115,6 @@ public class RecorderVideoActivity extends EaseBaseActivity implements
 		finish();
 	}
 
-	@SuppressLint("InvalidWakeLockTag")
 	@Override
 	protected void onResume() {
 		super.onResume();
@@ -225,12 +223,14 @@ public class RecorderVideoActivity extends EaseBaseActivity implements
 
 	@Override
 	public void onClick(View view) {
-		int id = view.getId();
-		if (id == R.id.switch_btn) {
+		switch (view.getId()) {
+		case R.id.switch_btn:
 			switchCamera();
-		} else if (id == R.id.recorder_start) {// start recording
-			if (!startRecording())
-				return;
+			break;
+		case R.id.recorder_start:
+			// start recording
+		    if(!startRecording())
+		        return;
 			Toast.makeText(this, R.string.The_video_to_start, Toast.LENGTH_SHORT).show();
 			btn_switch.setVisibility(View.INVISIBLE);
 			btnStart.setVisibility(View.INVISIBLE);
@@ -238,8 +238,9 @@ public class RecorderVideoActivity extends EaseBaseActivity implements
 			btnStop.setVisibility(View.VISIBLE);
 			chronometer.setBase(SystemClock.elapsedRealtime());
 			chronometer.start();
-		} else if (id == R.id.recorder_stop) {
-			btnStop.setEnabled(false);
+			break;
+		case R.id.recorder_stop:
+		    btnStop.setEnabled(false);
 			stopRecording();
 			btn_switch.setVisibility(View.VISIBLE);
 			chronometer.stop();
@@ -252,7 +253,7 @@ public class RecorderVideoActivity extends EaseBaseActivity implements
 
 								@Override
 								public void onClick(DialogInterface dialog,
-													int which) {
+										int which) {
 									dialog.dismiss();
 									sendVideo(null);
 
@@ -263,16 +264,20 @@ public class RecorderVideoActivity extends EaseBaseActivity implements
 
 								@Override
 								public void onClick(DialogInterface dialog,
-													int which) {
-									if (localPath != null) {
-										File file = new File(localPath);
-										if (file.exists())
-											file.delete();
-									}
-									finish();
-
+										int which) {
+								    if(localPath != null){
+								        File file = new File(localPath);
+								        if(file.exists())
+								            file.delete();
+								    }
+								    finish();
+									
 								}
 							}).setCancelable(false).show();
+			break;
+
+		default:
+			break;
 		}
 	}
 
@@ -464,7 +469,11 @@ public class RecorderVideoActivity extends EaseBaseActivity implements
     						EMLog.d(TAG, "scanner completed");
     						msc.disconnect();
     						progressDialog.dismiss();
-    						setResult(RESULT_OK, getIntent().putExtra("uri", uri));
+    						if(uri == null) {
+								setResult(RESULT_OK, getIntent().putExtra("path", path));
+    						}else {
+								setResult(RESULT_OK, getIntent().putExtra("uri", uri));
+							}
     						finish();
     					}
     

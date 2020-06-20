@@ -6,10 +6,12 @@ import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
+import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Build.VERSION_CODES;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -25,22 +27,26 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import androidx.fragment.app.Fragment;
-
 import com.hyphenate.chatuidemo.BuildConfig;
 import com.hyphenate.chatuidemo.R;
 import com.hyphenate.chatuidemo.common.utils.video.ImageCache;
 import com.hyphenate.chatuidemo.common.utils.video.ImageResizer;
 import com.hyphenate.chatuidemo.common.utils.video.Utils;
+import com.hyphenate.chatuidemo.common.widget.RecyclingImageView;
 import com.hyphenate.chatuidemo.section.chat.RecorderVideoActivity;
 import com.hyphenate.easeui.model.VideoEntity;
-import com.hyphenate.chatuidemo.common.widget.RecyclingImageView;
 import com.hyphenate.util.DateUtils;
 import com.hyphenate.util.EMLog;
 import com.hyphenate.util.TextFormater;
+import com.hyphenate.util.UriUtils;
+import com.hyphenate.util.VersionUtils;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+
+import androidx.fragment.app.Fragment;
 
 public class ImageGridFragment extends Fragment implements OnItemClickListener {
 
@@ -173,7 +179,12 @@ public class ImageGridFragment extends Fragment implements OnItemClickListener {
 			startActivityForResult(intent, 100);
 		}else{
 			VideoEntity vEntty=mList.get(position-1);
-			Intent intent=getActivity().getIntent().putExtra("path", vEntty.filePath).putExtra("dur", vEntty.duration);
+			Intent intent;
+			if(VersionUtils.isTargetQ(getContext())) {
+				intent=getActivity().getIntent().putExtra("uri", vEntty.uri.toString()).putExtra("dur", vEntty.duration);
+			}else {
+				intent=getActivity().getIntent().putExtra("path", vEntty.filePath).putExtra("dur", vEntty.duration);
+			}
 			getActivity().setResult(Activity.RESULT_OK, intent);
 			getActivity().finish();
 		}
@@ -297,8 +308,11 @@ public class ImageGridFragment extends Fragment implements OnItemClickListener {
 				String title = cursor.getString(cursor
 						.getColumnIndexOrThrow(MediaStore.Video.Media.TITLE));
 				// path：MediaStore.Audio.Media.DATA
-				String url = cursor.getString(cursor
-						.getColumnIndexOrThrow(MediaStore.Video.Media.DATA));
+				String url = null;
+				if(!VersionUtils.isTargetQ(getContext())) {
+					url = cursor.getString(cursor
+							.getColumnIndexOrThrow(MediaStore.Video.Media.DATA));
+				}
 
 				// duration：MediaStore.Audio.Media.DURATION
 				int duration = cursor
@@ -309,12 +323,15 @@ public class ImageGridFragment extends Fragment implements OnItemClickListener {
 				int size = (int) cursor.getLong(cursor
 						.getColumnIndexOrThrow(MediaStore.Video.Media.SIZE));
 
+				Uri uri = Uri.parse(MediaStore.Video.Media.EXTERNAL_CONTENT_URI.toString() + File.separator + id);
+
 				VideoEntity entty = new VideoEntity();
 				entty.ID = id;
 				entty.title = title;
 				entty.filePath = url;
 				entty.duration = duration;
 				entty.size = size;
+				entty.uri = uri;
 				mList.add(entty);
 			} while (cursor.moveToNext());
 
@@ -330,36 +347,70 @@ public class ImageGridFragment extends Fragment implements OnItemClickListener {
 		super.onActivityResult(requestCode, resultCode, data);
 		if(resultCode==Activity.RESULT_OK)
 		{
-			if(requestCode==100)
-			{
-				Uri uri=data.getParcelableExtra("uri");
-				String[] projects = new String[] { MediaStore.Video.Media.DATA,
-						MediaStore.Video.Media.DURATION };
-				Cursor cursor = getActivity().getContentResolver().query(
-						uri, projects, null,
-						null, null);
-				int duration=0;
-				String filePath=null;
-				
-				if (cursor.moveToFirst()) {
-					// path：MediaStore.Audio.Media.DATA
-					filePath = cursor.getString(cursor
-							.getColumnIndexOrThrow(MediaStore.Video.Media.DATA));
-					// duration：MediaStore.Audio.Media.DURATION
-					duration = cursor
-							.getInt(cursor
-									.getColumnIndexOrThrow(MediaStore.Video.Media.DURATION));
-					EMLog.d(TAG, "duration:"+duration);
+			if(requestCode==100) {
+				Uri uri = data.getParcelableExtra("uri");
+				if(uri != null) {
+					if(!VersionUtils.isTargetQ(getContext())) {
+						String[] projects = new String[] { MediaStore.Video.Media.DATA,
+								MediaStore.Video.Media.DURATION };
+						Cursor cursor = getActivity().getContentResolver().query(
+								uri, projects, null,
+								null, null);
+						int duration=0;
+						String filePath=null;
+
+						if (cursor.moveToFirst()) {
+							// path：MediaStore.Audio.Media.DATA
+							filePath = cursor.getString(cursor
+									.getColumnIndexOrThrow(MediaStore.Video.Media.DATA));
+							// duration：MediaStore.Audio.Media.DURATION
+							duration = cursor
+									.getInt(cursor
+											.getColumnIndexOrThrow(MediaStore.Video.Media.DURATION));
+							EMLog.d(TAG, "duration:"+duration);
+						}
+						if(cursor!=null)
+						{
+							cursor.close();
+							cursor=null;
+						}
+						if(duration == 0) {
+							duration = UriUtils.getVideoOrAudioDuration(getActivity(), uri);
+						}
+						if(!TextUtils.isEmpty(filePath)) {
+							getActivity().setResult(Activity.RESULT_OK, getActivity().getIntent().putExtra("path", filePath).putExtra("dur", duration));
+						}else {
+							getActivity().setResult(Activity.RESULT_OK, getActivity().getIntent().putExtra("uri", uri.toString()).putExtra("dur", duration));
+						}
+					}else {
+						String filePath = UriUtils.getFilePath(getActivity(), uri);
+						int duration = UriUtils.getVideoOrAudioDuration(getActivity(), uri);
+						EMLog.d(TAG, "duration = "+duration);
+
+						if(!VersionUtils.isTargetQ(getContext()) && !TextUtils.isEmpty(filePath)) {
+							getActivity().setResult(Activity.RESULT_OK, getActivity().getIntent().putExtra("path", filePath).putExtra("dur", duration));
+						}else {
+							getActivity().setResult(Activity.RESULT_OK, getActivity().getIntent().putExtra("uri", uri.toString()).putExtra("dur", duration));
+						}
+					}
+
+				}else {
+					String path = data.getStringExtra("path");
+					int duration=0;
+					if(!TextUtils.isEmpty(path) && new File(path).exists()) {
+						File file = new File(path);
+						MediaPlayer player = new MediaPlayer();
+						try {
+							player.setDataSource(file.getPath());
+							player.prepare();
+							duration = player.getDuration();
+						} catch (IOException e) {
+							e.printStackTrace();
+						}
+					}
+					getActivity().setResult(Activity.RESULT_OK, getActivity().getIntent().putExtra("path", path).putExtra("dur", duration));
 				}
-				if(cursor!=null)
-                {
-                	cursor.close();
-                	cursor=null;
-                }
-				 
-				getActivity().setResult(Activity.RESULT_OK, getActivity().getIntent().putExtra("path", filePath).putExtra("dur", duration));
 				getActivity().finish();
-				
 			}
 		}	
 	}

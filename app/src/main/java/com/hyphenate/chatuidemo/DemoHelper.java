@@ -7,6 +7,7 @@ import android.content.IntentFilter;
 import android.text.TextUtils;
 import android.util.Log;
 
+import com.heytap.mcssdk.PushManager;
 import com.hyphenate.EMCallBack;
 import com.hyphenate.chat.EMChatManager;
 import com.hyphenate.chat.EMChatRoomManager;
@@ -18,7 +19,6 @@ import com.hyphenate.chat.EMGroupManager;
 import com.hyphenate.chat.EMMessage;
 import com.hyphenate.chat.EMOptions;
 import com.hyphenate.chat.EMPushManager;
-import com.hyphenate.chatuidemo.common.manager.HMSPushHelper;
 import com.hyphenate.chatuidemo.common.manager.UserProfileManager;
 import com.hyphenate.chatuidemo.common.model.DemoModel;
 import com.hyphenate.chatuidemo.common.model.EmojiconExampleGroupData;
@@ -106,6 +106,10 @@ public class DemoHelper {
         demoModel = new DemoModel(context);
         // 根据项目需求对SDK进行配置
         EMOptions options = initChatOptions(context);
+//        options.setRestServer("a1-hsb.easemob.com");
+//        options.setIMServer("39.107.54.56");
+//        options.setIMServer("116.85.43.118");
+//        options.setImPort(6717);
         // 初始化SDK
         EMClient.getInstance().init(context, options);
         // 记录本地标记，是否初始化过
@@ -333,6 +337,8 @@ public class DemoHelper {
         options.setRequireAck(true);
         // 设置是否需要接受方送达确认,默认false
         options.setRequireDeliveryAck(false);
+
+        options.setUseRtcConfig(true);
 
         // 设置是否使用 fcm，有些华为设备本身带有 google 服务，
         options.setUseFCM(demoModel.isUseFCM());
@@ -610,6 +616,17 @@ public class DemoHelper {
             userProManager = new UserProfileManager();
         }
         return userProManager;
+    }
+
+    /**
+     * 展示通知设置页面
+     */
+    public void showNotificationPermissionDialog() {
+        EMPushType pushType = EMPushHelper.getInstance().getPushType();
+        // oppo
+        if(pushType == EMPushType.OPPOPUSH && PushManager.isSupportPush(DemoApplication.getInstance())) {
+            PushManager.getInstance().requestNotificationPermission();
+        }
     }
 
     /**

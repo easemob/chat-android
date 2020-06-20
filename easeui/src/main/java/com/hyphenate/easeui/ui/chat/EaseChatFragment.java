@@ -62,6 +62,7 @@ import com.hyphenate.easeui.widget.EaseChatMessageList;
 import com.hyphenate.easeui.widget.EaseVoiceRecorderView;
 import com.hyphenate.util.EMLog;
 import com.hyphenate.util.PathUtil;
+import com.hyphenate.util.VersionUtils;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -729,9 +730,15 @@ public class EaseChatFragment extends EaseBaseFragment implements View.OnClickLi
      * select local file
      */
     protected void selectFileFromLocal() {
-        Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
+        Intent intent = new Intent();
+        if(VersionUtils.isTargetQ(getActivity())) {
+            intent.setAction(Intent.ACTION_OPEN_DOCUMENT);
+        }else {
+            intent.setAction(Intent.ACTION_GET_CONTENT);
+        }
         intent.addCategory(Intent.CATEGORY_OPENABLE);
         intent.setType("*/*");
+
         startActivityForResult(intent, REQUEST_CODE_SELECT_FILE);
     }
 
@@ -891,6 +898,11 @@ public class EaseChatFragment extends EaseBaseFragment implements View.OnClickLi
      */
     protected void sendVideoMessage(String videoPath, String thumbPath, int videoLength) {
         EMMessage message = EMMessage.createVideoSendMessage(videoPath, thumbPath, videoLength, toChatUsername);
+        sendMessage(message);
+    }
+
+    protected void sendVideoMessage(Uri videoUri, String thumbPath, int videoLength) {
+        EMMessage message = EMMessage.createVideoSendMessage(videoUri, thumbPath, videoLength, toChatUsername);
         sendMessage(message);
     }
 
@@ -1058,21 +1070,6 @@ public class EaseChatFragment extends EaseBaseFragment implements View.OnClickLi
                 // Send the ding-type msg.
                 EMMessage dingMsg = EaseDingMessageHelper.get().createDingMessage(toChatUsername, msgContent);
                 sendMessage(dingMsg);
-            }else if(requestCode == REQUEST_CODE_SELECT_VIDEO) {
-                if (data != null) {
-                    int duration = data.getIntExtra("dur", 0);
-                    String videoPath = data.getStringExtra("path");
-                    File file = new File(PathUtil.getInstance().getImagePath(), "thvideo" + System.currentTimeMillis());
-                    try {
-                        FileOutputStream fos = new FileOutputStream(file);
-                        Bitmap ThumbBitmap = ThumbnailUtils.createVideoThumbnail(videoPath, 3);
-                        ThumbBitmap.compress(Bitmap.CompressFormat.JPEG, 100, fos);
-                        fos.close();
-                        sendVideoMessage(videoPath, file.getAbsolutePath(), duration);
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
-                }
             }else if(requestCode == REQUEST_CODE_SELECT_FILE) {
                 if (data != null) {
                     Uri uri = data.getData();

@@ -5,6 +5,11 @@ import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.media.MediaMetadataRetriever;
+import android.media.ThumbnailUtils;
+import android.net.Uri;
+import android.text.TextUtils;
 import android.view.MenuItem;
 import android.view.View;
 
@@ -41,8 +46,15 @@ import com.hyphenate.easeui.ui.chat.EaseChatFragment;
 import com.hyphenate.easeui.widget.EaseChatInputMenu;
 import com.hyphenate.easeui.widget.emojicon.EaseEmojiconMenu;
 import com.hyphenate.exceptions.HyphenateException;
+import com.hyphenate.util.EMLog;
+import com.hyphenate.util.PathUtil;
+import com.hyphenate.util.UriUtils;
+
+import java.io.File;
+import java.io.FileOutputStream;
 
 public class ChatFragment extends EaseChatFragment implements EaseChatFragment.OnMessageChangeListener {
+    private static final String TAG = ChatFragment.class.getSimpleName();
     private MessageViewModel viewModel;
     protected ClipboardManager clipboard;
 
@@ -77,7 +89,8 @@ public class ChatFragment extends EaseChatFragment implements EaseChatFragment.O
         }
         if (chatType == EaseConstant.CHATTYPE_GROUP) { // 音视频会议
             inputMenu.registerExtendMenuItem(R.string.voice_and_video_conference, R.drawable.em_chat_video_call_selector, EaseChatInputMenu.ITEM_CONFERENCE_CALL, this);
-            inputMenu.registerExtendMenuItem(R.string.title_live, R.drawable.em_chat_video_call_selector, EaseChatInputMenu.ITEM_LIVE, this);
+            //目前普通模式也支持设置主播和观众人数，都建议使用普通模式
+            //inputMenu.registerExtendMenuItem(R.string.title_live, R.drawable.em_chat_video_call_selector, EaseChatInputMenu.ITEM_LIVE, this);
         }
         //添加扩展表情
         ((EaseEmojiconMenu)(inputMenu.getEmojiconMenu())).addEmojiconGroup(EmojiconExampleGroupData.getData());
@@ -257,6 +270,41 @@ public class ChatFragment extends EaseChatFragment implements EaseChatFragment.O
                     if(data != null){
                         String username = data.getStringExtra("username");
                         inputAtUsername(username, false);
+                    }
+                    break;
+                case REQUEST_CODE_SELECT_VIDEO: //send the video
+                    if (data != null) {
+                        int duration = data.getIntExtra("dur", 0);
+                        String videoPath = data.getStringExtra("path");
+                        String uriString = data.getStringExtra("uri");
+                        EMLog.d(TAG, "path = "+videoPath + " uriString = "+uriString);
+                        if(!TextUtils.isEmpty(videoPath)) {
+                            File file = new File(PathUtil.getInstance().getVideoPath(), "thvideo" + System.currentTimeMillis());
+                            try {
+                                FileOutputStream fos = new FileOutputStream(file);
+                                Bitmap ThumbBitmap = ThumbnailUtils.createVideoThumbnail(videoPath, 3);
+                                ThumbBitmap.compress(Bitmap.CompressFormat.JPEG, 100, fos);
+                                fos.close();
+                                sendVideoMessage(videoPath, file.getAbsolutePath(), duration);
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                                EMLog.e(TAG, e.getMessage());
+                            }
+                        }else {
+                            Uri videoUri = UriUtils.getLocalUriFromString(uriString);
+                            File file = new File(PathUtil.getInstance().getVideoPath(), "thvideo" + System.currentTimeMillis());
+                            try {
+                                FileOutputStream fos = new FileOutputStream(file);
+                                MediaMetadataRetriever media = new MediaMetadataRetriever();
+                                media.setDataSource(getContext(), videoUri);
+                                Bitmap frameAtTime = media.getFrameAtTime();
+                                frameAtTime.compress(Bitmap.CompressFormat.JPEG, 100, fos);
+                                fos.close();
+                                sendVideoMessage(videoUri, file.getAbsolutePath(), duration);
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                            }
+                        }
                     }
                     break;
             }
