@@ -26,7 +26,6 @@
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toBottomOf="@id/title_bar"
         app:arrowItemTitle="@string/em_group_new_name"
-        app:arrowItemContent="@string/em_group_new_name_hint"
         android:background="@color/white"/>
 
     <com.hyphenate.chatuidemo.common.widget.ArrowItemView
@@ -37,7 +36,6 @@
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toBottomOf="@id/item_group_name"
         app:arrowItemTitle="@string/em_group_new_profile"
-        app:arrowItemContent="@string/em_group_new_profile_hint"
         android:background="@color/white"/>
 
     <com.hyphenate.chatuidemo.common.widget.ArrowItemView

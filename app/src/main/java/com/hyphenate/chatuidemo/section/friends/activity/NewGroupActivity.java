@@ -62,6 +62,9 @@ public class NewGroupActivity extends BaseInitActivity implements EaseTitleBar.O
         itemSwitchPublic = findViewById(R.id.item_switch_public);
         itemSwitchInvite = findViewById(R.id.item_switch_invite);
         itemGroupMembers = findViewById(R.id.item_group_members);
+
+        itemGroupName.getTvContent().setHint(getString(R.string.em_group_new_name_hint));
+        itemGroupProfile.getTvContent().setHint(getString(R.string.em_group_new_profile_hint));
     }
 
     @Override
@@ -149,7 +152,7 @@ public class NewGroupActivity extends BaseInitActivity implements EaseTitleBar.O
                 setGroupMaxUsersDialog();
                 break;
             case R.id.item_group_members :
-                GroupPickContactsActivity.actionStartForResult(mContext, ADD_NEW_CONTACTS);
+                GroupPickContactsActivity.actionStartForResult(mContext, newmembers, ADD_NEW_CONTACTS);
                 break;
         }
     }
@@ -195,6 +198,11 @@ public class NewGroupActivity extends BaseInitActivity implements EaseTitleBar.O
                     public void onConfirmClick(View view, String content) {
                         if(!TextUtils.isEmpty(content)) {
                             maxUsers = Integer.valueOf(content);
+                            if(maxUsers > 2000) {
+                                maxUsers = Integer.valueOf(itemGroupMaxUsers.getTvContent().getText().toString().trim());
+                                showToast("建群最大人数不能超过2000！");
+                                return;
+                            }
                             itemGroupMaxUsers.getTvContent().setText(content);
                         }
                     }
@@ -208,9 +216,11 @@ public class NewGroupActivity extends BaseInitActivity implements EaseTitleBar.O
                 if(isChecked){
                     itemSwitchInvite.getTvTitle().setText(R.string.em_group_new_need_owner_approval);
                     itemSwitchInvite.getTvHint().setText("");
+                    itemSwitchInvite.getTvHint().setVisibility(View.GONE);
                 }else{
                     itemSwitchInvite.getTvTitle().setText(R.string.em_group_new_open_invite);
                     itemSwitchInvite.getTvHint().setText(R.string.em_group_new_open_invite_hint);
+                    itemSwitchInvite.getTvHint().setVisibility(View.VISIBLE);
                 }
                 break;
         }

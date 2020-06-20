@@ -67,14 +67,14 @@ public class EditTextDialogFragment extends DemoDialogFragment {
         mBtnDialogConfirm.setTextColor(ContextCompat.getColorStateList(mContext, R.color.demo_dialog_btn_text_brand_color_selector));
         mTvDialogTitle.setText(title);
         etInput.setText(content);
-        if(inputType == DialogInputType.TYPE_CLASS_NONE) {
-            etInput.setInputType(InputType.TYPE_NULL);
-        }else if(inputType == DialogInputType.TYPE_CLASS_NUMBER) {
+        if(inputType == DialogInputType.TYPE_CLASS_NUMBER) {
             etInput.setInputType(InputType.TYPE_CLASS_NUMBER);
         }else if(inputType == DialogInputType.TYPE_CLASS_DECIMAL) {
             etInput.setInputType(InputType.TYPE_CLASS_NUMBER|InputType.TYPE_NUMBER_FLAG_DECIMAL);
         }else if(inputType == DialogInputType.TYPE_CLASS_PASSWORD) {
             etInput.setInputType(InputType.TYPE_CLASS_TEXT|InputType.TYPE_TEXT_VARIATION_PASSWORD);
+        }else {
+            etInput.setInputType(InputType.TYPE_CLASS_TEXT);
         }
     }
 

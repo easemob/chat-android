@@ -20,6 +20,7 @@ import com.scwang.smartrefresh.layout.SmartRefreshLayout;
 import com.scwang.smartrefresh.layout.api.RefreshLayout;
 import com.scwang.smartrefresh.layout.listener.OnRefreshListener;
 
+import java.util.Arrays;
 import java.util.List;
 
 import androidx.lifecycle.ViewModelProvider;
@@ -37,9 +38,11 @@ public class GroupPickContactsActivity extends BaseInitActivity implements EaseT
     private GroupPickContactsViewModel viewModel;
     private String groupId;
     private boolean isOwner;
+    private String[] newmembers;
 
-    public static void actionStartForResult(Activity context, int requestCode) {
+    public static void actionStartForResult(Activity context, String[] newmembers, int requestCode) {
         Intent starter = new Intent(context, GroupPickContactsActivity.class);
+        starter.putExtra("newmembers", newmembers);
         context.startActivityForResult(starter, requestCode);
     }
 
@@ -60,6 +63,7 @@ public class GroupPickContactsActivity extends BaseInitActivity implements EaseT
         super.initIntent(intent);
         groupId = intent.getStringExtra("groupId");
         isOwner = intent.getBooleanExtra("isOwner", false);
+        newmembers = intent.getStringArrayExtra("newmembers");
     }
 
     @Override
@@ -72,7 +76,7 @@ public class GroupPickContactsActivity extends BaseInitActivity implements EaseT
         floatingHeader = findViewById(R.id.floating_header);
 
         rvList.setLayoutManager(new LinearLayoutManager(mContext));
-        adapter = new GroupPickContactsAdapter();
+        adapter = new GroupPickContactsAdapter(TextUtils.isEmpty(groupId));
         rvList.setAdapter(adapter);
 
         presenter = new SidebarPresenter();
@@ -99,6 +103,10 @@ public class GroupPickContactsActivity extends BaseInitActivity implements EaseT
                     adapter.setData(data);
                     if(!TextUtils.isEmpty(groupId)) {
                         viewModel.getGroupMembers(groupId);
+                    }else {
+                        if(newmembers != null) {
+                            adapter.setExistMember(Arrays.asList(newmembers));
+                        }
                     }
                 }
 

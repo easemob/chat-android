@@ -22,8 +22,15 @@ import androidx.annotation.NonNull;
 public class GroupPickContactsAdapter extends EaseBaseRecyclerViewAdapter<EaseUser> {
     private List<String> existMembers;
     private List<String> selectedMembers;
+    private boolean isCreateGroup;
 
     public GroupPickContactsAdapter() {
+        this.isCreateGroup = false;
+        selectedMembers = new ArrayList<>();
+    }
+
+    public GroupPickContactsAdapter(boolean isCreateGroup) {
+        this.isCreateGroup = isCreateGroup;
         selectedMembers = new ArrayList<>();
     }
 
@@ -34,6 +41,10 @@ public class GroupPickContactsAdapter extends EaseBaseRecyclerViewAdapter<EaseUs
 
     public void setExistMember(List<String> existMembers) {
         this.existMembers = existMembers;
+        if(isCreateGroup) {
+            selectedMembers.clear();
+            selectedMembers.addAll(existMembers);
+        }
         notifyDataSetChanged();
     }
 
@@ -77,9 +88,14 @@ public class GroupPickContactsAdapter extends EaseBaseRecyclerViewAdapter<EaseUs
                 headerView.setVisibility(View.GONE);
             }
             if(existMembers != null && existMembers.contains(username)){
-                checkbox.setButtonDrawable(R.drawable.demo_checkbox_bg_gray_selector);
                 checkbox.setChecked(true);
-                checkbox.setEnabled(false);
+                if(isCreateGroup) {
+                    checkbox.setButtonDrawable(R.drawable.demo_checkbox_bg_selector);
+                    checkbox.setEnabled(true);
+                }else {
+                    checkbox.setButtonDrawable(R.drawable.demo_checkbox_bg_gray_selector);
+                    checkbox.setEnabled(false);
+                }
             }else{
                 checkbox.setButtonDrawable(R.drawable.demo_checkbox_bg_selector);
                 checkbox.setChecked(false);
@@ -88,7 +104,7 @@ public class GroupPickContactsAdapter extends EaseBaseRecyclerViewAdapter<EaseUs
             checkbox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                 @Override
                 public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                    if(existMembers == null || !existMembers.contains(username)) {
+                    if(isCreateGroup || existMembers == null || !existMembers.contains(username)) {
                         if(isChecked) {
                             if(!selectedMembers.contains(username)) {
                                 selectedMembers.add(username);
