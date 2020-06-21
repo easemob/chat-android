@@ -16,6 +16,7 @@ import com.hyphenate.chat.EMVideoMessageBody;
 import com.hyphenate.easeui.R;
 import com.hyphenate.easeui.utils.EaseCommonUtils;
 import com.hyphenate.easeui.utils.EaseImageCache;
+import com.hyphenate.easeui.utils.EaseImageUtils;
 import com.hyphenate.util.DateUtils;
 import com.hyphenate.util.EMLog;
 import com.hyphenate.util.ImageUtils;
@@ -32,9 +33,12 @@ public class EaseChatRowVideo extends EaseChatRowFile {
     private TextView sizeView;
     private TextView timeLengthView;
     private ImageView playView;
+    private int maxWidth;
+    private int maxHeight;
 
     public EaseChatRowVideo(Context context, boolean isSender) {
         super(context, isSender);
+        getScreenInfo(context);
     }
 
     public EaseChatRowVideo(Context context, EMMessage message, int position, Object adapter) {
@@ -129,7 +133,7 @@ public class EaseChatRowVideo extends EaseChatRowFile {
         Bitmap bitmap = EaseImageCache.getInstance().get(localThumb);
         if (bitmap != null) {
             // thumbnail image is already loaded, reuse the drawable
-            iv.setImageBitmap(bitmap);
+            EaseImageUtils.showImage(iv, bitmap, maxWidth, maxHeight);
         } else {
             imageView.setImageResource(R.drawable.ease_default_image);
             new AsyncTask<Void, Void, Bitmap>() {
@@ -142,7 +146,7 @@ public class EaseChatRowVideo extends EaseChatRowFile {
                     String filePath = UriUtils.getFilePath(localThumb);
                     if(!TextUtils.isEmpty(filePath)) {
                         if (new File(filePath).exists()) {
-                            return ImageUtils.decodeScaleImage(filePath, 160, 160);
+                            return ImageUtils.decodeScaleImage(filePath, maxWidth, maxHeight);
                         } else {
                             return null;
                         }
@@ -151,7 +155,7 @@ public class EaseChatRowVideo extends EaseChatRowFile {
                             if(UriUtils.isFileExistByUri(context, UriUtils.getLocalUriFromString(localThumb))) {
                                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
                                     try {
-                                        return ImageUtils.decodeScaleImage(context, UriUtils.getLocalUriFromString(localThumb), 160, 160);
+                                        return ImageUtils.decodeScaleImage(context, UriUtils.getLocalUriFromString(localThumb), maxWidth, maxHeight);
                                     } catch (IOException e) {
                                         e.printStackTrace();
                                     }
@@ -167,7 +171,7 @@ public class EaseChatRowVideo extends EaseChatRowFile {
                 protected void onPostExecute(Bitmap result) {
                     super.onPostExecute(result);
                     if (result != null) {
-                        iv.setImageBitmap(result);
+                        EaseImageUtils.showImage(iv, result, maxWidth, maxHeight);
                         EaseImageCache.getInstance().put(localThumb, result);
                     } else {
                         if (message.status() == EMMessage.Status.FAIL) {
@@ -181,6 +185,14 @@ public class EaseChatRowVideo extends EaseChatRowFile {
             }.execute();
         }
         
+    }
+
+    private void getScreenInfo(Context context) {
+        float[] screenInfo = EaseCommonUtils.getScreenInfo(context);
+        if(screenInfo != null) {
+            maxWidth = (int) (screenInfo[0] / 3);
+            maxHeight = (int) (screenInfo[1] / 2);
+        }
     }
 
 }

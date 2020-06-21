@@ -35,7 +35,6 @@ public class EaseChatRowImage extends EaseChatRowFile {
     private EMImageMessageBody imgBody;
     private int maxWidth;
     private int maxHeight;
-    private float mRadio;
 
     public EaseChatRowImage(Context context, boolean isSender) {
         super(context, isSender);
@@ -132,7 +131,7 @@ public class EaseChatRowImage extends EaseChatRowFile {
 
         if (bitmap != null) {
             // thumbnail image is already loaded, reuse the drawable
-            showImage(bitmap);
+            EaseImageUtils.showImage(imageView, bitmap, maxWidth, maxHeight);
         } else {
             imageView.setImageResource(R.drawable.ease_default_image);
             new AsyncTask<Object, Void, Bitmap>() {
@@ -148,11 +147,11 @@ public class EaseChatRowImage extends EaseChatRowFile {
                             if (UriUtils.isFileExistByUri(context, localFullSizePath)) {
                                 String filePath = UriUtils.getFilePath(localFullSizePath);
                                 if(!TextUtils.isEmpty(filePath)) {
-                                    return EaseImageUtils.decodeScaleImage(filePath, 160, 160);
+                                    return EaseImageUtils.decodeScaleImage(filePath, maxWidth, maxHeight);
                                 }
                                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
                                     try {
-                                        return EaseImageUtils.decodeScaleImage(context, localFullSizePath, 160, 160);
+                                        return EaseImageUtils.decodeScaleImage(context, localFullSizePath, maxWidth, maxHeight);
                                     } catch (IOException e) {
                                         e.printStackTrace();
                                         return null;
@@ -168,7 +167,7 @@ public class EaseChatRowImage extends EaseChatRowFile {
                 protected void onPostExecute(Bitmap image) {
                     if (image != null) {
                         EMLog.d("img", "bitmap width = "+image.getWidth() + " height = "+image.getHeight());
-                        showImage(image);
+                        EaseImageUtils.showImage(imageView, image, maxWidth, maxHeight);
                         EaseImageCache.getInstance().put(thumbernailPath.toString(), image);
                     }
                 }
@@ -177,11 +176,11 @@ public class EaseChatRowImage extends EaseChatRowFile {
                     String filePath = UriUtils.getFilePath(fileUri);
                     EMLog.d(EaseChatRow.TAG, "fileUri = "+fileUri);
                     if(!TextUtils.isEmpty(filePath) && new File(filePath).exists()) {
-                        return EaseImageUtils.decodeScaleImage(filePath, 160, 160);
+                        return EaseImageUtils.decodeScaleImage(filePath, maxWidth, maxHeight);
                     }
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
                         try {
-                            return EaseImageUtils.decodeScaleImage(context, fileUri, 160, 160);
+                            return EaseImageUtils.decodeScaleImage(context, fileUri, maxWidth, maxHeight);
                         } catch (IOException e) {
                             e.printStackTrace();
                         }
@@ -197,55 +196,7 @@ public class EaseChatRowImage extends EaseChatRowFile {
         if(screenInfo != null) {
             maxWidth = (int) (screenInfo[0] / 3);
             maxHeight = (int) (screenInfo[1] / 2);
-            mRadio = maxWidth * 1.0f / maxHeight;
         }
-    }
-
-    /**
-     * 展示图片的逻辑如下：
-     * 1、图片的宽度不超过屏幕宽度的1/3，高度不超过屏幕宽度1/2，这样的话，图片的长宽比位3：2
-     * 2、如果图片的长宽比大于3：2，则选择高度方向与规定一致，宽度方向按比例缩放
-     * 3、如果图片的长宽比小于3：2，则选择宽度方向与规定一致，高度方向按比例缩放
-     * 4、如果图片的长和宽都小的话，就按照图片的大小展示就好
-     * @param bitmap
-     */
-    private void showImage(Bitmap bitmap) {
-        imageView.setScaleType(ImageView.ScaleType.FIT_CENTER);
-        //获取图片的长和宽
-        int width = bitmap.getWidth();
-        int height = bitmap.getHeight();
-        float radio  = width * 1.0f / height;
-        //按原图展示的情况
-        if((maxHeight == 0 && maxWidth == 0) || (width <= maxWidth && height <= maxHeight)) {
-            imageView.setImageBitmap(bitmap);
-            return;
-        }
-        ViewGroup.LayoutParams params = imageView.getLayoutParams();
-        //如果宽度方向大于最大值，且宽高比过大,将图片设置为centerCrop类型
-        //宽度方向设置为最大值，高度的话设置为宽度的1/2
-        if(mRadio / radio < 0.1f) {
-            imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
-            params.width = maxWidth;
-            params.height = maxWidth / 2;
-        }else if(mRadio / radio > 4) {
-            //如果高度方向大于最大值，且宽高比过大,将图片设置为centerCrop类型
-            //高度方向设置为最大值，宽度的话设置为宽度的1/2
-            imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
-            params.width = maxHeight / 2;
-            params.height = maxHeight;
-        }else {
-            //对比图片的宽高比，找到最接近最大值的，其余方向，按比例缩放
-            if(radio < mRadio) {
-                //说明高度方向上更大
-                params.height = maxHeight;
-                params.width = (int) (maxHeight * radio);
-            }else {
-                //宽度方向上更大
-                params.height = maxHeight;
-                params.width = (int) (maxWidth / radio);
-            }
-        }
-        imageView.setImageBitmap(bitmap);
     }
 
 }

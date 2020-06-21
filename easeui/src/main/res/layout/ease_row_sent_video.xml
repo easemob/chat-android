@@ -3,9 +3,10 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:gravity="center_horizontal"
     android:orientation="vertical"
-    android:paddingTop="13dp" >
+    android:paddingTop="13dp">
 
     <TextView
         android:id="@+id/timestamp"
@@ -27,15 +28,15 @@
             android:layout_width="130dp"
             android:layout_height="145dp"
             android:layout_marginRight="@dimen/margin_chat_activity"
-            android:layout_toLeftOf="@id/iv_userhead"
-            android:background="@drawable/ease_chatto_bg"
-             >
+            android:layout_toLeftOf="@id/iv_userhead">
 
-            <ImageView
+            <com.hyphenate.easeui.widget.EaseImageView
                 android:id="@+id/chatting_content_iv"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:scaleType="fitXY" />
+                app:ease_shape_type="rectangle"
+                app:ease_radius="@dimen/ease_chat_image_corner_radius"
+                android:scaleType="fitCenter" />
 
             <LinearLayout
                 android:id="@+id/chatting_video_data_area"

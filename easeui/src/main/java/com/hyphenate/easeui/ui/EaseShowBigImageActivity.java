@@ -58,7 +58,7 @@ public class EaseShowBigImageActivity extends EaseBaseActivity {
 	protected void onCreate(Bundle savedInstanceState) {
 		setContentView(R.layout.ease_activity_show_big_image);
 		super.onCreate(savedInstanceState);
-
+		setFitSystemForTheme(true, R.color.black, false);
 		image = (EasePhotoView) findViewById(R.id.image);
 		ProgressBar loadLocalPb = (ProgressBar) findViewById(R.id.pb_load_local);
 		default_res = getIntent().getIntExtra("default_image", R.drawable.ease_default_avatar);
