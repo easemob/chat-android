@@ -134,6 +134,9 @@ public class MainActivity extends BaseInitActivity implements BottomNavigationVi
         initViewModel();
         requestPermissions();
         checkUnreadMsg();
+
+        // 获取华为 HMS 推送 token
+        HMSPushHelper.getInstance().getHMSToken(this);
     }
 
     private void initViewModel() {

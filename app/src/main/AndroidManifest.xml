@@ -121,7 +121,7 @@
         <!-- FCM required end -->
 
         <!--华为 HMS Config-->
-        <service android:name=".service.HMSPushService"
+        <service android:name=".common.service.HMSPushService"
             android:exported="false">
             <intent-filter>
                 <action android:name="com.huawei.push.action.MESSAGING_EVENT" />
