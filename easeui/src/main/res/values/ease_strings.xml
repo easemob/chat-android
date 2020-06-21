@@ -6,6 +6,7 @@
     <string name="picture">[图片]</string>
     <string name="video">[视频]</string>
     <string name="file">[文件]</string>
+    <string name="custom">[自定义消息]</string>
     <string name="voice_prefix">[语音]</string>
     <string name="voice_call">[语音通话]</string>
     <string name="video_call">[视频通话]</string>
@@ -116,5 +117,7 @@
     <string name="ease_list_no_data_text">暂无数据</string>
 
     <string name="ease_map_title">位置信息</string>
+
+    <string name="custom_message">自定义消息: %1$s</string>
 
 </resources>

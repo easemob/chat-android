@@ -41,6 +41,7 @@ import com.hyphenate.easeui.model.EaseNotifier;
 import com.hyphenate.easeui.provider.EaseEmojiconInfoProvider;
 import com.hyphenate.easeui.provider.EaseSettingsProvider;
 import com.hyphenate.easeui.provider.EaseUserProfileProvider;
+import com.hyphenate.easeui.ui.chat.delegates.EaseCustomAdapterDelegate;
 import com.hyphenate.easeui.ui.chat.delegates.EaseExpressionAdapterDelegate;
 import com.hyphenate.easeui.ui.chat.delegates.EaseFileAdapterDelegate;
 import com.hyphenate.easeui.ui.chat.delegates.EaseImageAdapterDelegate;
@@ -140,6 +141,7 @@ public class DemoHelper {
                 .addConversationType(ChatRecallAdapterDelegate.class)           //消息撤回
                 .addConversationType(ChatVideoCallAdapterDelegate.class)        //视频通话
                 .addConversationType(ChatVoiceCallAdapterDelegate.class)        //语音通话
+                .addConversationType(EaseCustomAdapterDelegate.class)           //自定义消息
                 .setDefaultConversionType(EaseTextAdapterDelegate.class);       //文本
     }
 
