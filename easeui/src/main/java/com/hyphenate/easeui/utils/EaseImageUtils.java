@@ -13,7 +13,9 @@
  */
 package com.hyphenate.easeui.utils;
 
+import android.content.Context;
 import android.graphics.Bitmap;
+import android.util.Log;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 
@@ -53,6 +55,20 @@ public class EaseImageUtils extends com.hyphenate.util.ImageUtils{
     }
 
 	/**
+	 * 获取图片最大的长和宽
+	 * @param context
+	 */
+	public static int[] getImageMaxSize(Context context) {
+		float[] screenInfo = EaseCommonUtils.getScreenInfo(context);
+		int[] maxSize = new int[2];
+		if(screenInfo != null) {
+			maxSize[0] = (int) (screenInfo[0] / 3);
+			maxSize[1] = (int) (screenInfo[0] / 2);
+		}
+		return maxSize;
+	}
+
+	/**
 	 * 展示图片的逻辑如下：
 	 * 1、图片的宽度不超过屏幕宽度的1/3，高度不超过屏幕宽度1/2，这样的话，图片的长宽比位3：2
 	 * 2、如果图片的长宽比大于3：2，则选择高度方向与规定一致，宽度方向按比例缩放
@@ -60,7 +76,7 @@ public class EaseImageUtils extends com.hyphenate.util.ImageUtils{
 	 * 4、如果图片的长和宽都小的话，就按照图片的大小展示就好
 	 * @param bitmap
 	 */
-	public static void showImage(ImageView imageView, Bitmap bitmap, int maxWidth, int maxHeight) {
+	public static ViewGroup.LayoutParams showImage(ImageView imageView, Bitmap bitmap, int maxWidth, int maxHeight) {
 		float mRadio = maxWidth * 1.0f / maxHeight;
 		imageView.setScaleType(ImageView.ScaleType.FIT_CENTER);
 		//获取图片的长和宽
@@ -68,9 +84,9 @@ public class EaseImageUtils extends com.hyphenate.util.ImageUtils{
 		int height = bitmap.getHeight();
 		float radio  = width * 1.0f / height;
 		//按原图展示的情况
-		if((maxHeight == 0 && maxWidth == 0) || (width <= maxWidth && height <= maxHeight)) {
+		if((maxHeight == 0 && maxWidth == 0) /*|| (width <= maxWidth && height <= maxHeight)*/) {
 			imageView.setImageBitmap(bitmap);
-			return;
+			return imageView.getLayoutParams();
 		}
 		ViewGroup.LayoutParams params = imageView.getLayoutParams();
 		//如果宽度方向大于最大值，且宽高比过大,将图片设置为centerCrop类型
@@ -93,11 +109,12 @@ public class EaseImageUtils extends com.hyphenate.util.ImageUtils{
 				params.width = (int) (maxHeight * radio);
 			}else {
 				//宽度方向上更大
-				params.height = maxHeight;
-				params.width = (int) (maxWidth / radio);
+				params.width = maxWidth;
+				params.height = (int) (maxWidth / radio);
 			}
 		}
 		imageView.setImageBitmap(bitmap);
+		return params;
 	}
 
 

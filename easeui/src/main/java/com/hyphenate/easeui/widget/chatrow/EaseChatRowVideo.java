@@ -1,11 +1,13 @@
 package com.hyphenate.easeui.widget.chatrow;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.text.TextUtils;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -43,6 +45,7 @@ public class EaseChatRowVideo extends EaseChatRowFile {
 
     public EaseChatRowVideo(Context context, EMMessage message, int position, Object adapter) {
         super(context, message, position, adapter);
+        getScreenInfo(context);
     }
 
 	@Override
@@ -127,13 +130,15 @@ public class EaseChatRowVideo extends EaseChatRowFile {
      *            Url on server for thumbnails
      * @param message
      */
+    @SuppressLint("StaticFieldLeak")
     private void showVideoThumbView(final String localThumb, final ImageView iv, String thumbnailUrl, final EMMessage message) {
         // first check if the thumbnail image already loaded into cache
         EMLog.d(EMClient.TAG, " localThumb = "+localThumb);
         Bitmap bitmap = EaseImageCache.getInstance().get(localThumb);
         if (bitmap != null) {
             // thumbnail image is already loaded, reuse the drawable
-            EaseImageUtils.showImage(iv, bitmap, maxWidth, maxHeight);
+            ViewGroup.LayoutParams params = EaseImageUtils.showImage(iv, bitmap, maxWidth, maxHeight);
+            setBubbleView(params.width, params.height);
         } else {
             imageView.setImageResource(R.drawable.ease_default_image);
             new AsyncTask<Void, Void, Bitmap>() {
@@ -171,7 +176,8 @@ public class EaseChatRowVideo extends EaseChatRowFile {
                 protected void onPostExecute(Bitmap result) {
                     super.onPostExecute(result);
                     if (result != null) {
-                        EaseImageUtils.showImage(iv, result, maxWidth, maxHeight);
+                        ViewGroup.LayoutParams params = EaseImageUtils.showImage(iv, result, maxWidth, maxHeight);
+                        setBubbleView(params.width, params.height);
                         EaseImageCache.getInstance().put(localThumb, result);
                     } else {
                         if (message.status() == EMMessage.Status.FAIL) {
@@ -188,11 +194,15 @@ public class EaseChatRowVideo extends EaseChatRowFile {
     }
 
     private void getScreenInfo(Context context) {
-        float[] screenInfo = EaseCommonUtils.getScreenInfo(context);
-        if(screenInfo != null) {
-            maxWidth = (int) (screenInfo[0] / 3);
-            maxHeight = (int) (screenInfo[1] / 2);
-        }
+        int[] imageMaxSize = EaseImageUtils.getImageMaxSize(context);
+        maxWidth = imageMaxSize[0];
+        maxHeight = imageMaxSize[1];
+    }
+
+    private void setBubbleView(int width, int height) {
+        ViewGroup.LayoutParams params = bubbleLayout.getLayoutParams();
+        params.width = width;
+        params.height = height;
     }
 
 }

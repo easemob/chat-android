@@ -43,6 +43,7 @@ public class EaseChatRowImage extends EaseChatRowFile {
 
     public EaseChatRowImage(Context context, EMMessage message, int position, Object adapter) {
         super(context, message, position, adapter);
+        getScreenInfo(context);
     }
 
     @Override
@@ -138,10 +139,10 @@ public class EaseChatRowImage extends EaseChatRowFile {
 
                 @Override
                 protected Bitmap doInBackground(Object... args) {
-                    if (UriUtils.isFileExistByUri(context, thumbernailPath)) {
-                        return getCacheBitmap(thumbernailPath);
-                    } else if(UriUtils.isFileExistByUri(context, localFullSizePath)) {
+                    if (UriUtils.isFileExistByUri(context, localFullSizePath)) {
                         return getCacheBitmap(localFullSizePath);
+                    } else if(UriUtils.isFileExistByUri(context, thumbernailPath)) {
+                        return getCacheBitmap(thumbernailPath);
                     } else {
                         if (message.direct() == EMMessage.Direct.SEND) {
                             if (UriUtils.isFileExistByUri(context, localFullSizePath)) {
@@ -192,11 +193,9 @@ public class EaseChatRowImage extends EaseChatRowFile {
     }
 
     private void getScreenInfo(Context context) {
-        float[] screenInfo = EaseCommonUtils.getScreenInfo(context);
-        if(screenInfo != null) {
-            maxWidth = (int) (screenInfo[0] / 3);
-            maxHeight = (int) (screenInfo[1] / 2);
-        }
+        int[] imageMaxSize = EaseImageUtils.getImageMaxSize(context);
+        maxWidth = imageMaxSize[0];
+        maxHeight = imageMaxSize[1];
     }
 
 }

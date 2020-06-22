@@ -424,7 +424,12 @@ public class EaseChatMessageList extends RelativeLayout implements View.OnTouchL
             seekToPosition(moveToLast ? conversation.getAllMessages().size() - 1 : moreMsgs.size() - 1);
         }else {
             finishRefresh();
-            Toast.makeText(context, getResources().getString(R.string.no_more_messages), Toast.LENGTH_SHORT).show();
+            // 对消息进行定位
+            if(moveToLast) {
+                seekToPosition(conversation.getAllMessages().size() - 1);
+            }else {
+                Toast.makeText(context, getResources().getString(R.string.no_more_messages), Toast.LENGTH_SHORT).show();
+            }
         }
     }
 
