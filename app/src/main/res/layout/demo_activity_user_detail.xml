@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/common_bg">
+
+    <com.hyphenate.easeui.widget.EaseTitleBar
+        android:id="@+id/title_bar"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/em_common_title_bar_height"
+        app:titleBarTitle="@string/em_user_detail_title"
+        android:background="@color/white"
+        app:titleBarDisplayHomeAsUpEnabled="true"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/em_common_item_height"
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        android:background="@color/white">
+
+        <TextView
+            android:id="@+id/tv_title"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/em_margin_20"
+            android:layout_marginStart="@dimen/em_margin_20"
+            android:textSize="@dimen/em_size_big"
+            android:textColor="@color/em_color_common_text_black"
+            android:text="@string/em_user_detail_avatar"/>
+
+        <com.hyphenate.easeui.widget.EaseImageView
+            android:layout_width="36dp"
+            android:layout_height="36dp"
+            android:layout_marginRight="42dp"
+            android:src="@drawable/em_default_avatar"
+            app:ease_shape_type="round"/>
+
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_marginLeft="@dimen/em_margin_15"
+        android:layout_marginRight="@dimen/em_margin_15"
+        android:layout_marginStart="@dimen/em_margin_15"
+        android:layout_marginEnd="@dimen/em_margin_15"
+        android:background="@drawable/demo_default_divider_list"/>
+
+    <com.hyphenate.chatuidemo.common.widget.ArrowItemView
+        android:id="@+id/item_hx_id"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/em_common_item_height"
+        app:arrowItemTitle="@string/em_user_detail_id"
+        android:background="@color/white"
+        app:arrowItemShowArrow="false"/>
+
+    <com.hyphenate.chatuidemo.common.widget.ArrowItemView
+        android:id="@+id/item_nickname"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/em_common_item_height"
+        app:arrowItemTitle="@string/em_user_detail_nickname"
+        android:background="@color/white"/>
+
+</LinearLayout>

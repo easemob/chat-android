@@ -75,6 +75,8 @@ public class PreferenceManager {
 	private static String SHARED_KEY_HTTPS_ONLY = "shared_key_https_only";
 	private static String SHARED_KEY_SORT_MESSAGE_BY_SERVER_TIME = "sort_message_by_server_time";
 
+	private static String SHARED_KEY_ENABLE_TOKEN_LOGIN = "enable_token_login";
+
 	@SuppressLint("CommitPrefEdits")
 	private PreferenceManager(Context cxt) {
 		mSharedPreferences = cxt.getSharedPreferences(PREFERENCE_NAME, Context.MODE_PRIVATE);
@@ -523,5 +525,18 @@ public class PreferenceManager {
 
 	public boolean isSortMessageByServerTime() {
 		return mSharedPreferences.getBoolean(SHARED_KEY_SORT_MESSAGE_BY_SERVER_TIME, false);
+	}
+
+	/**
+	 * 是否允许token登录
+	 * @param isChecked
+	 */
+	public void setEnableTokenLogin(boolean isChecked) {
+		editor.putBoolean(SHARED_KEY_ENABLE_TOKEN_LOGIN, isChecked);
+		editor.apply();
+	}
+
+	public boolean isEnableTokenLogin() {
+		return mSharedPreferences.getBoolean(SHARED_KEY_ENABLE_TOKEN_LOGIN, true);
 	}
 }

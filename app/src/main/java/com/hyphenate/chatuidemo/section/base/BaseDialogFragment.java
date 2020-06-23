@@ -1,12 +1,17 @@
 package com.hyphenate.chatuidemo.section.base;
 
+import android.app.Activity;
 import android.content.Context;
 import android.graphics.Color;
+import android.graphics.Rect;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -82,6 +87,62 @@ public abstract class BaseDialogFragment extends DialogFragment {
      */
     protected <T extends View> T findViewById(@IdRes int id) {
         return getView().findViewById(id);
+    }
+
+    /**
+     * dialog宽度占满，高度自定义
+     */
+    public void setDialogParams() {
+        try {
+            Window dialogWindow = getDialog().getWindow();
+            WindowManager.LayoutParams lp = dialogWindow.getAttributes();
+            lp.dimAmount = 0.6f;
+            lp.width = ViewGroup.LayoutParams.MATCH_PARENT;
+            lp.height = ViewGroup.LayoutParams.WRAP_CONTENT;
+            lp.gravity =  Gravity.BOTTOM;
+            setDialogParams(lp);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * dialog全屏
+     */
+    public void setDialogFullParams() {
+        int dialogHeight = getContextRect(mContext);
+        int height = dialogHeight == 0? ViewGroup.LayoutParams.MATCH_PARENT:dialogHeight;
+        setDialogParams(ViewGroup.LayoutParams.MATCH_PARENT, height, 0.0f);
+    }
+
+    public void setDialogParams(int width, int height, float dimAmount) {
+        try {
+            Window dialogWindow = getDialog().getWindow();
+            WindowManager.LayoutParams lp = dialogWindow.getAttributes();
+            lp.dimAmount = dimAmount;
+            lp.width = width;
+            lp.height = height;
+            dialogWindow.setAttributes(lp);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void setDialogParams(WindowManager.LayoutParams layoutParams) {
+        try {
+            Window dialogWindow = getDialog().getWindow();
+            dialogWindow.setAttributes(layoutParams);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    //获取内容区域
+    private int getContextRect(Activity activity){
+        //应用区域
+        Rect outRect1 = new Rect();
+        activity.getWindow().getDecorView().getWindowVisibleDisplayFrame(outRect1);
+        return outRect1.height();
     }
 
 }

@@ -71,6 +71,8 @@ public class LoginFragment extends BaseInitFragment implements View.OnClickListe
         tvAgreement = findViewById(R.id.tv_agreement);
         cbSelect = findViewById(R.id.cb_select);
         // 保证切换fragment后相关状态正确
+        boolean enableTokenLogin = DemoHelper.getInstance().getModel().isEnableTokenLogin();
+        mTvLoginToken.setVisibility(enableTokenLogin ? View.VISIBLE : View.GONE);
         if(isTokenFlag) {
             switchLogin();
         }

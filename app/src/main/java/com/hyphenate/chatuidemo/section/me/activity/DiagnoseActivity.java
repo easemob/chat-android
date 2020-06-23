@@ -106,49 +106,53 @@ public class DiagnoseActivity extends BaseInitActivity{
 		progressDialog.setCancelable(false);
 		progressDialog.show();
 		final String st = getResources().getString(R.string.Log_uploaded_successfully);
-		EMClient.getInstance().uploadLog(new EMCallBack() {
+		try {
+			EMClient.getInstance().uploadLog(new EMCallBack() {
 
-			@Override
-			public void onSuccess() {
-				runOnUiThread(new Runnable() {
+				@Override
+				public void onSuccess() {
+					runOnUiThread(new Runnable() {
 
-					@Override
-					public void run() {
-						progressDialog.dismiss();
-						Toast.makeText(DiagnoseActivity.this, st,
-								Toast.LENGTH_SHORT).show();
-					}
-				});
-			}
+						@Override
+						public void run() {
+							progressDialog.dismiss();
+							Toast.makeText(DiagnoseActivity.this, st,
+									Toast.LENGTH_SHORT).show();
+						}
+					});
+				}
 
-			@Override
-			public void onProgress(final int progress, String status) {
-				// getActivity().runOnUiThread(new Runnable() {
-				//
-				// @Override
-				// public void run() {
-				// progressDialog.setMessage("上传中 "+progress+"%");
-				//
-				// }
-				// });
+				@Override
+				public void onProgress(final int progress, String status) {
+					// getActivity().runOnUiThread(new Runnable() {
+					//
+					// @Override
+					// public void run() {
+					// progressDialog.setMessage("上传中 "+progress+"%");
+					//
+					// }
+					// });
 
-			}
-			@Override
-			public void onError(int code, String message) {
-				EMLog.e("###", message);
-				runOnUiThread(new Runnable() {
+				}
+				@Override
+				public void onError(int code, String message) {
+					EMLog.e("###", message);
+					runOnUiThread(new Runnable() {
 
-					@Override
-					public void run() {
-						progressDialog.dismiss();
-						String st3 = getResources().getString(R.string.Log_Upload_failed);
-						Toast.makeText(DiagnoseActivity.this, st3,
-								Toast.LENGTH_SHORT).show();
-					}
-				});
+						@Override
+						public void run() {
+							progressDialog.dismiss();
+							String st3 = getResources().getString(R.string.Log_Upload_failed);
+							Toast.makeText(DiagnoseActivity.this, st3,
+									Toast.LENGTH_SHORT).show();
+						}
+					});
 
-			}
-		});
+				}
+			});
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 
 	}
 

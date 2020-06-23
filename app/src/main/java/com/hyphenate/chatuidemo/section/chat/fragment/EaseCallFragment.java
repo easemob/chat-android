@@ -26,6 +26,8 @@ import com.hyphenate.chat.EMMessage;
 import com.hyphenate.chat.EMTextMessageBody;
 import com.hyphenate.chat.EMWaterMarkOption;
 import com.hyphenate.chat.EMWaterMarkPosition;
+import com.hyphenate.chatuidemo.common.DemoConstant;
+import com.hyphenate.chatuidemo.common.livedatas.LiveDataBus;
 import com.hyphenate.chatuidemo.common.utils.PreferenceManager;
 import com.hyphenate.easeui.R;
 import com.hyphenate.easeui.constants.EaseConstant;
@@ -453,6 +455,8 @@ public class EaseCallFragment extends EaseBaseFragment {
 
         // save
         EMClient.getInstance().chatManager().saveMessage(message);
+
+        LiveDataBus.get().with(DemoConstant.MESSAGE_CALL_SAVE).postValue(true);
     }
 
     enum CallingState {

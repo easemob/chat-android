@@ -3,7 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:background="#eff2f6"
+    android:background="@color/common_bg"
     android:orientation="vertical">
 
     <com.hyphenate.easeui.widget.EaseTitleBar
@@ -11,6 +11,7 @@
         android:layout_width="match_parent"
         android:layout_height="@dimen/em_common_title_bar_height"
         app:titleBarTitle="@string/push_nick"
+        android:background="@color/white"
         app:titleBarDisplayHomeAsUpEnabled="true"/>
 
     <LinearLayout

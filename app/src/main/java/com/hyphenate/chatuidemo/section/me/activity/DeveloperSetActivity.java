@@ -86,8 +86,9 @@ public class DeveloperSetActivity extends BaseInitActivity implements EaseTitleB
         settingsModel = DemoHelper.getInstance().getModel();
         options = EMClient.getInstance().getOptions();
 
+        itemSwitchTokenLogin.getSwitch().setChecked(settingsModel.isEnableTokenLogin());
         itemSwitchMsgFromServer.getSwitch().setChecked(settingsModel.isMsgRoaming());
-        itemSwitchUploadToHx.getSwitch().setChecked(!settingsModel.isSetTransferFileByUser());
+        itemSwitchUploadToHx.getSwitch().setChecked(settingsModel.isSetTransferFileByUser());
         itemSwitchAutoDownloadThumbnail.getSwitch().setChecked(settingsModel.isSetAutodownloadThumbnail());
         itemMsgSort.getTvContent().setText(settingsModel.isSortMessageByServerTime() ? sortType[1] : sortType[0]);
 
@@ -135,7 +136,7 @@ public class DeveloperSetActivity extends BaseInitActivity implements EaseTitleB
     public void onCheckedChanged(SwitchItemView buttonView, boolean isChecked) {
         switch (buttonView.getId()) {
             case R.id.item_switch_token_login :
-
+                settingsModel.setEnableTokenLogin(isChecked);
                 break;
             case R.id.item_switch_msg_from_server :
                 settingsModel.setMsgRoaming(isChecked);

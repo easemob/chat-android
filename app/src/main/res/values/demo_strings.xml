@@ -7,6 +7,7 @@
     <string name="save">保存</string>
     <string name="required">必填</string>
     <string name="submit">提交</string>
+    <string name="cancel">取消</string>
 
     <string name="em_main_title_home">会话</string>
     <string name="em_main_title_friends">通讯录</string>
@@ -121,6 +122,7 @@
     <string name="em_single_search_history">查找聊天记录</string>
     <string name="em_single_clear_history">清空聊天记录</string>
     <string name="em_single_conversation_top">会话置顶</string>
+    <string name="em_single_call_type">选择通话类型</string>
 
     <string name="em_chat_delete_conversation">是否删除会话？</string>
     <string name="em_chat_group_detail_title">群组信息</string>
@@ -213,7 +215,7 @@
     <string name="em_set_privacy">隐私</string>
     <string name="em_set_message_set">新消息设置</string>
     <string name="em_set_common_set">通用</string>
-    <string name="em_about_me_service_set">服务诊断</string>
+    <string name="em_about_me_service_set">诊断</string>
     <string name="em_privacy_black">黑名单</string>
     <string name="em_privacy_equipments">多端多设备管理</string>
     <string name="em_about_hx_product_introduction">产品介绍</string>
@@ -230,6 +232,10 @@
     <string name="em_developer_msg_sort_receive">按接收顺序</string>
     <string name="em_developer_msg_sort_server">按服务器顺序</string>
     <string name="em_developer_service_result_unfinished">未完成</string>
+    <string name="em_user_detail_title">个人资料</string>
+    <string name="em_user_detail_avatar">头像</string>
+    <string name="em_user_detail_id">环信ID</string>
+    <string name="em_user_detail_nickname">昵称</string>
 
     <string name="newnotify">接收新消息通知</string>
     <string name="voice">声音</string>

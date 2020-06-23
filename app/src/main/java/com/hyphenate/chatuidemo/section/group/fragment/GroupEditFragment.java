@@ -55,26 +55,7 @@ public class GroupEditFragment extends BaseDialogFragment implements EaseTitleBa
     @Override
     public void onStart() {
         super.onStart();
-        try {
-            Window dialogWindow = getDialog().getWindow();
-            //设置背景为透明
-            int dialogHeight = getContextRect(mContext);
-            WindowManager.LayoutParams lp = dialogWindow.getAttributes();
-            lp.dimAmount = 0.0f;
-            lp.width = ViewGroup.LayoutParams.MATCH_PARENT;
-            lp.height = dialogHeight == 0? ViewGroup.LayoutParams.MATCH_PARENT:dialogHeight;
-            dialogWindow.setAttributes(lp);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
-    //获取内容区域
-    private int getContextRect(Activity activity){
-        //应用区域
-        Rect outRect1 = new Rect();
-        activity.getWindow().getDecorView().getWindowVisibleDisplayFrame(outRect1);
-        return outRect1.height();
+        setDialogFullParams();
     }
 
     @Override

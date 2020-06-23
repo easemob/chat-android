@@ -50,4 +50,6 @@ public interface DemoConstant extends EaseConstant {
     String CHAT_ROOM_CHANGE = "chat_room_change";
     String CHAT_ROOM_DESTROY = "chat_room_destroy";
 
+    String REFRESH_NICKNAME = "refresh_nickname";
+
 }

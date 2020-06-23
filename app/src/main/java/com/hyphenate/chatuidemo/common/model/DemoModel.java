@@ -581,6 +581,18 @@ public class DemoModel {
         return OptionsHelper.getInstance().isSortMessageByServerTime();
     }
 
+    /**
+     * 是否允许token登录
+     * @param isChecked
+     */
+    public void setEnableTokenLogin(boolean isChecked) {
+        PreferenceManager.getInstance().setEnableTokenLogin(isChecked);
+    }
+
+    public boolean isEnableTokenLogin() {
+        return PreferenceManager.getInstance().isEnableTokenLogin();
+    }
+
     enum Key{
         VibrateAndPlayToneOn,
         VibrateOn,

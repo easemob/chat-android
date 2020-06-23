@@ -18,6 +18,7 @@ import com.hyphenate.chatuidemo.section.login.activity.LoginActivity;
 import com.hyphenate.chatuidemo.section.me.activity.AboutHxActivity;
 import com.hyphenate.chatuidemo.section.me.activity.DeveloperSetActivity;
 import com.hyphenate.chatuidemo.section.me.activity.SetIndexActivity;
+import com.hyphenate.chatuidemo.section.me.activity.UserDetailActivity;
 import com.hyphenate.easeui.domain.EaseUser;
 import com.hyphenate.easeui.utils.StatusBarCompat;
 
@@ -69,9 +70,7 @@ public class AboutMeFragment extends BaseInitFragment implements View.OnClickLis
                 logout();
                 break;
             case R.id.cl_user:
-                EaseUser user = new EaseUser();
-                user.setUsername(DemoHelper.getInstance().getCurrentUser());
-                ContactDetailActivity.actionStart(mContext, user);
+                UserDetailActivity.actionStart(mContext);
                 break;
             case R.id.item_common_set:
                 SetIndexActivity.actionStart(mContext);

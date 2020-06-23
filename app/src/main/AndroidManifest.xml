@@ -410,6 +410,8 @@
         <activity android:name=".section.search.SearchSingleChatActivity" />
         <!--聊天历史-->
         <activity android:name=".section.chat.ChatHistoryActivity" />
+        <!--个人资料-->
+        <activity android:name=".section.me.activity.UserDetailActivity" />
 
         <!--捕获屏幕service-->
         <service android:name=".section.conference.SRForegroundService"

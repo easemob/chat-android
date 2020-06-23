@@ -47,6 +47,7 @@
         android:layout_width="match_parent"
         android:layout_height="@dimen/em_friends_header_item_height"
         app:contactItemImage="@drawable/em_chat_video_call_normal"
-        app:contactItemName="@string/em_friends_av_conference"/>
+        app:contactItemName="@string/em_friends_av_conference"
+        android:visibility="gone"/>
 
 </LinearLayout>

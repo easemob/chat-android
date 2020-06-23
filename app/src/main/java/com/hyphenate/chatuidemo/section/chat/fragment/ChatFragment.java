@@ -28,6 +28,7 @@ import com.hyphenate.chatuidemo.common.livedatas.LiveDataBus;
 import com.hyphenate.chatuidemo.common.model.EmojiconExampleGroupData;
 import com.hyphenate.chatuidemo.common.utils.ThreadManager;
 import com.hyphenate.chatuidemo.common.utils.ToastUtils;
+import com.hyphenate.chatuidemo.section.base.BaseActivity;
 import com.hyphenate.chatuidemo.section.chat.ChatVideoCallActivity;
 import com.hyphenate.chatuidemo.section.chat.ChatVoiceCallActivity;
 import com.hyphenate.chatuidemo.section.chat.VideoCallActivity;
@@ -37,6 +38,7 @@ import com.hyphenate.chatuidemo.section.chat.ImageGridActivity;
 import com.hyphenate.chatuidemo.section.chat.LiveActivity;
 import com.hyphenate.chatuidemo.section.chat.PickAtUserActivity;
 import com.hyphenate.chatuidemo.section.chat.viewmodel.MessageViewModel;
+import com.hyphenate.chatuidemo.section.dialog.DemoListDialogFragment;
 import com.hyphenate.chatuidemo.section.friends.activity.ContactDetailActivity;
 import com.hyphenate.chatuidemo.section.friends.activity.ForwardMessageActivity;
 import com.hyphenate.easeui.constants.EaseConstant;
@@ -59,6 +61,7 @@ public class ChatFragment extends EaseChatFragment implements EaseChatFragment.O
     protected ClipboardManager clipboard;
 
     private static final int REQUEST_CODE_SELECT_AT_USER = 15;
+    private static final String[] calls = {"视频通话", "语音通话"};
 
     @Override
     protected void initChildView() {
@@ -77,6 +80,14 @@ public class ChatFragment extends EaseChatFragment implements EaseChatFragment.O
     protected void initChildData() {
         super.initChildData();
         LiveDataBus.get().with(DemoConstant.MESSAGE_CHANGE_CHANGE).postValue(new EaseEvent(DemoConstant.MESSAGE_CHANGE_CHANGE, EaseEvent.TYPE.MESSAGE));
+        LiveDataBus.get().with(DemoConstant.MESSAGE_CALL_SAVE, Boolean.class).observe(getViewLifecycleOwner(), event -> {
+            if(event == null) {
+                return;
+            }
+            if(event) {
+                chatMessageList.refreshToLatest();
+            }
+        });
     }
 
     @Override
@@ -84,7 +95,7 @@ public class ChatFragment extends EaseChatFragment implements EaseChatFragment.O
         super.addExtendInputMenu(inputMenu);
         //添加扩展槽
         if(chatType == EaseConstant.CHATTYPE_SINGLE){
-            inputMenu.registerExtendMenuItem(R.string.attach_voice_call, R.drawable.em_chat_voice_call_selector, EaseChatInputMenu.ITEM_VOICE_CALL, this);
+            //inputMenu.registerExtendMenuItem(R.string.attach_voice_call, R.drawable.em_chat_voice_call_selector, EaseChatInputMenu.ITEM_VOICE_CALL, this);
             inputMenu.registerExtendMenuItem(R.string.attach_video_call, R.drawable.em_chat_video_call_selector, EaseChatInputMenu.ITEM_VIDEO_CALL, this);
         }
         if (chatType == EaseConstant.CHATTYPE_GROUP) { // 音视频会议
@@ -101,11 +112,12 @@ public class ChatFragment extends EaseChatFragment implements EaseChatFragment.O
         super.onChatExtendMenuItemClick(itemId, view);
         switch (itemId) {
             case EaseChatInputMenu.ITEM_VIDEO_CALL:
-                startVideoCall();
+                //startVideoCall();
+                showSelectDialog();
                 break;
-            case EaseChatInputMenu.ITEM_VOICE_CALL:
-                startVoiceCall();
-                break;
+//            case EaseChatInputMenu.ITEM_VOICE_CALL:
+//                showSelectDialog();
+//                break;
             case EaseChatInputMenu.ITEM_CONFERENCE_CALL:
                 ConferenceActivity.startConferenceCall(getActivity(), toChatUsername);
                 break;
@@ -113,6 +125,27 @@ public class ChatFragment extends EaseChatFragment implements EaseChatFragment.O
                 LiveActivity.startLive(getContext(), toChatUsername);
                 break;
         }
+    }
+
+    private void showSelectDialog() {
+        new DemoListDialogFragment.Builder((BaseActivity) mContext)
+                .setTitle(R.string.em_single_call_type)
+                .setData(calls)
+                .setWindowAnimations(R.style.animate_dialog)
+                .setOnItemClickListener(new DemoListDialogFragment.OnDialogItemClickListener() {
+                    @Override
+                    public void OnItemClick(View view, int position) {
+                        switch (position) {
+                            case 0 :
+                                startVideoCall();
+                                break;
+                            case 1 :
+                                startVoiceCall();
+                                break;
+                        }
+                    }
+                })
+                .show();
     }
 
     @Override
