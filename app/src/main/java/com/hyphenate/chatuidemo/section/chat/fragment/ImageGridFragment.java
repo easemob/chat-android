@@ -383,7 +383,7 @@ public class ImageGridFragment extends Fragment implements OnItemClickListener {
 							getActivity().setResult(Activity.RESULT_OK, getActivity().getIntent().putExtra("uri", uri.toString()).putExtra("dur", duration));
 						}
 					}else {
-						String filePath = UriUtils.getFilePath(uri);
+						String filePath = UriUtils.getFilePath(getActivity(), uri);
 						int duration = UriUtils.getVideoOrAudioDuration(getActivity(), uri);
 						EMLog.d(TAG, "duration = "+duration);
 

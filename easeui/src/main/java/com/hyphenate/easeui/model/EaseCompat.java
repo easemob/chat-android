@@ -187,7 +187,7 @@ public class EaseCompat {
 
     public static boolean openApk(Context context, Uri uri) {
         String filename = UriUtils.getFileNameByUri(context, uri);
-        String filePath = UriUtils.getFilePath(uri);
+        String filePath = UriUtils.getFilePath(context, uri);
         if(filename.endsWith(".apk")) {
             if(TextUtils.isEmpty(filePath) || !new File(filePath).exists()) {
                 Toast.makeText(context, "Can't find proper app to open this file", Toast.LENGTH_LONG).show();

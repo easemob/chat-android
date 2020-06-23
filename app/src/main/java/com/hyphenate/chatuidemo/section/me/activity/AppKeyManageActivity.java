@@ -112,6 +112,7 @@ public class AppKeyManageActivity extends BaseInitActivity implements EaseTitleB
     private void showConfirmDialog(int position) {
         new SimpleDialogFragment.Builder(mContext)
                 .setTitle(R.string.em_developer_appkey_warning)
+                .setTitleSize(14)
                 .setOnConfirmClickListener(R.string.em_developer_appkey_confirm, new DemoDialogFragment.OnConfirmClickListener() {
                     @Override
                     public void onConfirmClick(View view) {

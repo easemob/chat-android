@@ -177,6 +177,7 @@ public class ConversationListFragment extends BaseInitFragment implements OnRefr
         messageViewModel.getMessageChange().with(DemoConstant.MESSAGE_CHANGE_CHANGE, EaseEvent.class).observe(this, this::loadList);
         messageViewModel.getMessageChange().with(DemoConstant.GROUP_CHANGE, EaseEvent.class).observe(this, this::loadList);
         messageViewModel.getMessageChange().with(DemoConstant.CHAT_ROOM_CHANGE, EaseEvent.class).observe(this, this::loadList);
+        messageViewModel.getMessageChange().with(DemoConstant.CONVERSATION_DELETE, EaseEvent.class).observe(this, this::loadList);
     }
 
     private void loadList(EaseEvent change) {

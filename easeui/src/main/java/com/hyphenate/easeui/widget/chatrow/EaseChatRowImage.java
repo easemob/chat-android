@@ -146,7 +146,7 @@ public class EaseChatRowImage extends EaseChatRowFile {
                     } else {
                         if (message.direct() == EMMessage.Direct.SEND) {
                             if (UriUtils.isFileExistByUri(context, localFullSizePath)) {
-                                String filePath = UriUtils.getFilePath(localFullSizePath);
+                                String filePath = UriUtils.getFilePath(context, localFullSizePath);
                                 if(!TextUtils.isEmpty(filePath)) {
                                     return EaseImageUtils.decodeScaleImage(filePath, maxWidth, maxHeight);
                                 }
@@ -174,7 +174,7 @@ public class EaseChatRowImage extends EaseChatRowFile {
                 }
 
                 private Bitmap getCacheBitmap(Uri fileUri) {
-                    String filePath = UriUtils.getFilePath(fileUri);
+                    String filePath = UriUtils.getFilePath(context, fileUri);
                     EMLog.d(EaseChatRow.TAG, "fileUri = "+fileUri);
                     if(!TextUtils.isEmpty(filePath) && new File(filePath).exists()) {
                         return EaseImageUtils.decodeScaleImage(filePath, maxWidth, maxHeight);

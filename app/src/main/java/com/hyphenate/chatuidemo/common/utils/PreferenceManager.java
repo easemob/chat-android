@@ -307,7 +307,7 @@ public class PreferenceManager {
 	}
 
 	public boolean isCustomAppkeyEnabled() {
-		return mSharedPreferences.getBoolean(SHARED_KEY_ENABLE_CUSTOM_APPKEY, false);
+		return mSharedPreferences.getBoolean(SHARED_KEY_ENABLE_CUSTOM_APPKEY, true);
 	}
 
 	public String getCustomAppkey() {

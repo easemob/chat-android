@@ -148,7 +148,7 @@ public class EaseChatRowVideo extends EaseChatRowFile {
                     if(!UriUtils.isFileExistByUri(context, UriUtils.getLocalUriFromString(localThumb))) {
                         return null;
                     }
-                    String filePath = UriUtils.getFilePath(localThumb);
+                    String filePath = UriUtils.getFilePath(context, localThumb);
                     if(!TextUtils.isEmpty(filePath)) {
                         if (new File(filePath).exists()) {
                             return ImageUtils.decodeScaleImage(filePath, maxWidth, maxHeight);

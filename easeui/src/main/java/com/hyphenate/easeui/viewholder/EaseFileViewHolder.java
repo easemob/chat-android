@@ -41,7 +41,7 @@ public class EaseFileViewHolder extends EaseChatRowViewHolder{
         super.onBubbleClick(message);
         EMNormalFileMessageBody fileMessageBody = (EMNormalFileMessageBody) message.getBody();
         Uri filePath = fileMessageBody.getLocalUri();
-        String fileLocalPath = UriUtils.getFilePath(filePath);
+        String fileLocalPath = UriUtils.getFilePath(getContext(), filePath);
         File file = null;
         if(!TextUtils.isEmpty(fileLocalPath)) {
             file = new File(fileLocalPath);
