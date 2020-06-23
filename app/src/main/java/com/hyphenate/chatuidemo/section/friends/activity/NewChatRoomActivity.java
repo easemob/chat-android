@@ -13,6 +13,7 @@ import com.hyphenate.chatuidemo.common.DemoConstant;
 import com.hyphenate.chatuidemo.common.interfaceOrImplement.OnResourceParseCallback;
 import com.hyphenate.chatuidemo.common.livedatas.LiveDataBus;
 import com.hyphenate.chatuidemo.section.base.BaseInitActivity;
+import com.hyphenate.chatuidemo.section.dialog.DemoDialogFragment;
 import com.hyphenate.chatuidemo.section.dialog.SimpleDialogFragment;
 import com.hyphenate.chatuidemo.section.friends.viewmodels.NewChatRoomViewModel;
 import com.hyphenate.easeui.model.EaseEvent;
@@ -74,7 +75,9 @@ public class NewChatRoomActivity extends BaseInitActivity implements EaseTitleBa
     private void createChatRoom() {
         String name = etGroupName.getText().toString();
         if(TextUtils.isEmpty(name)) {
-            SimpleDialogFragment.showDialog(mContext, R.string.em_chat_room_new_name_cannot_be_empty, null);
+            new SimpleDialogFragment.Builder(mContext)
+                    .setTitle(R.string.em_chat_room_new_name_cannot_be_empty)
+                    .show();
             return;
         }
         String desc = etGroupIntroduction.getText().toString();

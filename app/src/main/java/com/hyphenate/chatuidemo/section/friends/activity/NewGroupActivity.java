@@ -107,7 +107,9 @@ public class NewGroupActivity extends BaseInitActivity implements EaseTitleBar.O
     private void checkGroupInfo() {
         String groupName = itemGroupName.getTvContent().getText().toString().trim();
         if(TextUtils.isEmpty(groupName)) {
-            SimpleDialogFragment.showDialog(mContext, R.string.em_group_new_name_cannot_be_empty, null);
+            new SimpleDialogFragment.Builder(mContext)
+                    .setTitle(R.string.em_group_new_name_cannot_be_empty)
+                    .show();
             return;
         }
         String desc = itemGroupProfile.getTvContent().getText().toString();

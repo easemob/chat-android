@@ -164,12 +164,16 @@ public class ChatRoomDetailActivity extends BaseInitActivity implements EaseTitl
                 ChatRoomAdminAuthorityActivity.actionStart(mContext, roomId);
                 break;
             case R.id.tv_chat_room_refund :
-                SimpleDialogFragment.showDialog(mContext, R.string.em_chat_room_detail_destroy_info, new DemoDialogFragment.OnConfirmClickListener() {
-                    @Override
-                    public void onConfirmClick(View view) {
-                        viewModel.destroyGroup(roomId);
-                    }
-                });
+                new SimpleDialogFragment.Builder(mContext)
+                        .setTitle(R.string.em_chat_room_detail_destroy_info)
+                        .setOnConfirmClickListener(new DemoDialogFragment.OnConfirmClickListener() {
+                            @Override
+                            public void onConfirmClick(View view) {
+                                viewModel.destroyGroup(roomId);
+                            }
+                        })
+                        .showCancelButton(true)
+                        .show();
                 break;
         }
     }

@@ -16,6 +16,7 @@ import com.hyphenate.chatuidemo.R;
 import com.hyphenate.chatuidemo.common.DemoConstant;
 import com.hyphenate.chatuidemo.common.interfaceOrImplement.OnResourceParseCallback;
 import com.hyphenate.chatuidemo.common.livedatas.LiveDataBus;
+import com.hyphenate.chatuidemo.common.model.DemoServerSetBean;
 import com.hyphenate.chatuidemo.common.widget.ArrowItemView;
 import com.hyphenate.chatuidemo.common.widget.SwitchItemView;
 import com.hyphenate.chatuidemo.section.base.BaseInitActivity;
@@ -126,12 +127,16 @@ public class SingleChatSetActivity extends BaseInitActivity implements EaseTitle
 
     private void clearHistory() {
         // 是否删除会话
-        SimpleDialogFragment.showDialog(mContext, R.string.em_chat_delete_conversation, new DemoDialogFragment.OnConfirmClickListener() {
-            @Override
-            public void onConfirmClick(View view) {
-                viewModel.deleteConversationById(conversation.conversationId());
-            }
-        });
+        new SimpleDialogFragment.Builder(mContext)
+                .setTitle(R.string.em_chat_delete_conversation)
+                .setOnConfirmClickListener(new DemoDialogFragment.OnConfirmClickListener() {
+                    @Override
+                    public void onConfirmClick(View view) {
+                        viewModel.deleteConversationById(conversation.conversationId());
+                    }
+                })
+                .showCancelButton(true)
+                .show();
     }
 
     @Override

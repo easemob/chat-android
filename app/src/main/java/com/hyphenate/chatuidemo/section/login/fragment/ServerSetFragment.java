@@ -195,16 +195,20 @@ public class ServerSetFragment extends BaseInitFragment implements EaseTitleBar.
         if(v.getId() == R.id.btn_server) {
             saveServerSet();
         }else if(v.getId() == R.id.btn_reset) {
-            SimpleDialogFragment.showDialog(mContext, R.string.em_server_set_dialog_reset, new DemoDialogFragment.OnConfirmClickListener() {
-                @Override
-                public void onConfirmClick(View view) {
-                    DemoServerSetBean set = DemoHelper.getInstance().getModel().getDefServerSet();
-                    mEtAppkey.setText(set.getAppkey());
-                    mEtServerAddress.setText(set.getImServer());
-                    mEtServerPort.setText(set.getImPort()+"");
-                    mEtServerRest.setText(set.getRestServer());
-                }
-            });
+            new SimpleDialogFragment.Builder(mContext)
+                    .setTitle(R.string.em_server_set_dialog_reset)
+                    .setOnConfirmClickListener(new DemoDialogFragment.OnConfirmClickListener() {
+                        @Override
+                        public void onConfirmClick(View view) {
+                            DemoServerSetBean set = DemoHelper.getInstance().getModel().getDefServerSet();
+                            mEtAppkey.setText(set.getAppkey());
+                            mEtServerAddress.setText(set.getImServer());
+                            mEtServerPort.setText(set.getImPort()+"");
+                            mEtServerRest.setText(set.getRestServer());
+                        }
+                    })
+                    .showCancelButton(true)
+                    .show();
         }
     }
 

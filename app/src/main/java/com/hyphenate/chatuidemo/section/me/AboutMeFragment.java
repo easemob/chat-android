@@ -13,13 +13,11 @@ import com.hyphenate.chatuidemo.common.widget.ArrowItemView;
 import com.hyphenate.chatuidemo.section.base.BaseInitFragment;
 import com.hyphenate.chatuidemo.section.dialog.DemoDialogFragment;
 import com.hyphenate.chatuidemo.section.dialog.SimpleDialogFragment;
-import com.hyphenate.chatuidemo.section.friends.activity.ContactDetailActivity;
 import com.hyphenate.chatuidemo.section.login.activity.LoginActivity;
 import com.hyphenate.chatuidemo.section.me.activity.AboutHxActivity;
 import com.hyphenate.chatuidemo.section.me.activity.DeveloperSetActivity;
 import com.hyphenate.chatuidemo.section.me.activity.SetIndexActivity;
 import com.hyphenate.chatuidemo.section.me.activity.UserDetailActivity;
-import com.hyphenate.easeui.domain.EaseUser;
 import com.hyphenate.easeui.utils.StatusBarCompat;
 
 import androidx.constraintlayout.widget.ConstraintLayout;
@@ -105,27 +103,31 @@ public class AboutMeFragment extends BaseInitFragment implements View.OnClickLis
     }
 
     private void logout() {
-        SimpleDialogFragment.showDialog(mContext, "是否退出？", new DemoDialogFragment.OnConfirmClickListener() {
-            @Override
-            public void onConfirmClick(View view) {
-                DemoHelper.getInstance().logout(true, new EMCallBack() {
+        new SimpleDialogFragment.Builder(mContext)
+                .setTitle(R.string.em_login_out_hint)
+                .showCancelButton(true)
+                .setOnConfirmClickListener(R.string.em_dialog_btn_confirm, new DemoDialogFragment.OnConfirmClickListener() {
                     @Override
-                    public void onSuccess() {
-                        LoginActivity.startAction(mContext);
-                        mContext.finish();
-                    }
+                    public void onConfirmClick(View view) {
+                        DemoHelper.getInstance().logout(true, new EMCallBack() {
+                            @Override
+                            public void onSuccess() {
+                                LoginActivity.startAction(mContext);
+                                mContext.finish();
+                            }
 
-                    @Override
-                    public void onError(int code, String error) {
-                        ThreadManager.getInstance().runOnMainThread(()-> showToast(error));
-                    }
+                            @Override
+                            public void onError(int code, String error) {
+                                ThreadManager.getInstance().runOnMainThread(()-> showToast(error));
+                            }
 
-                    @Override
-                    public void onProgress(int progress, String status) {
+                            @Override
+                            public void onProgress(int progress, String status) {
 
+                            }
+                        });
                     }
-                });
-            }
-        });
+                })
+                .show();
     }
 }

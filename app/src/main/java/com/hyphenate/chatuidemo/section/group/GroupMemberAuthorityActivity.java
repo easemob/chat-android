@@ -351,12 +351,16 @@ public class GroupMemberAuthorityActivity extends BaseInitActivity implements Ea
                         transferOwner(username);
                         break;
                     case R.id.action_group_remove_member ://踢出群
-                        SimpleDialogFragment.showDialog(mContext, R.string.em_authority_remove_group, new DemoDialogFragment.OnConfirmClickListener() {
-                            @Override
-                            public void onConfirmClick(View view) {
-                                removeFromGroup(username);
-                            }
-                        });
+                        new SimpleDialogFragment.Builder(mContext)
+                                .setTitle(R.string.em_authority_remove_group)
+                                .setOnConfirmClickListener(new DemoDialogFragment.OnConfirmClickListener() {
+                                    @Override
+                                    public void onConfirmClick(View view) {
+                                        removeFromGroup(username);
+                                    }
+                                })
+                                .showCancelButton(true)
+                                .show();
 
                         break;
                     case R.id.action_group_add_black ://加入黑名单

@@ -106,12 +106,16 @@ public class FriendsFragment extends BaseInitFragment implements View.OnClickLis
     }
 
     private void showDeleteDialog(EaseUser user) {
-        SimpleDialogFragment.showDialog(mContext, R.string.em_friends_delete_contact_hint, new DemoDialogFragment.OnConfirmClickListener() {
-            @Override
-            public void onConfirmClick(View view) {
-                mViewModel.deleteContact(user.getUsername());
-            }
-        });
+        new SimpleDialogFragment.Builder(mContext)
+                .setTitle(R.string.em_friends_delete_contact_hint)
+                .setOnConfirmClickListener(new DemoDialogFragment.OnConfirmClickListener() {
+                    @Override
+                    public void onConfirmClick(View view) {
+                        mViewModel.deleteContact(user.getUsername());
+                    }
+                })
+                .showCancelButton(true)
+                .show();
     }
 
     @Override

@@ -162,12 +162,16 @@ public class ContactDetailActivity extends BaseInitActivity implements EaseTitle
     }
 
     private void showDeleteDialog(EaseUser user) {
-        SimpleDialogFragment.showDialog(mContext, R.string.em_friends_delete_contact_hint, new DemoDialogFragment.OnConfirmClickListener() {
-            @Override
-            public void onConfirmClick(View view) {
-                viewModel.deleteContact(user.getUsername());
-            }
-        });
+        new SimpleDialogFragment.Builder(mContext)
+                .setTitle(R.string.em_friends_delete_contact_hint)
+                .setOnConfirmClickListener(new DemoDialogFragment.OnConfirmClickListener() {
+                    @Override
+                    public void onConfirmClick(View view) {
+                        viewModel.deleteContact(user.getUsername());
+                    }
+                })
+                .showCancelButton(true)
+                .show();
     }
 
     @Override

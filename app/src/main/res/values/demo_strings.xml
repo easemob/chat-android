@@ -236,6 +236,7 @@
     <string name="em_user_detail_avatar">头像</string>
     <string name="em_user_detail_id">环信ID</string>
     <string name="em_user_detail_nickname">昵称</string>
+    <string name="em_login_out_hint">是否退出？</string>
 
     <string name="newnotify">接收新消息通知</string>
     <string name="voice">声音</string>

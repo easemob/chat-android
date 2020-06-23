@@ -112,13 +112,17 @@ public class ForwardMessageActivity extends BaseInitActivity implements OnRefres
     @Override
     public void onItemClick(View view, int position) {
         EaseUser user = mAdapter.getData().get(position);
-        SimpleDialogFragment.showDialog(mContext, getString(R.string.confirm_forward_to, user.getNickname()), new DemoDialogFragment.OnConfirmClickListener() {
-            @Override
-            public void onConfirmClick(View view) {
-                PushAndMessageHelper.sendForwardMessage(user.getUsername(), mForwardMsgId);
-                finish();
-            }
-        });
+        new SimpleDialogFragment.Builder(mContext)
+                .setTitle(getString(R.string.confirm_forward_to, user.getNickname()))
+                .setOnConfirmClickListener(new DemoDialogFragment.OnConfirmClickListener() {
+                    @Override
+                    public void onConfirmClick(View view) {
+                        PushAndMessageHelper.sendForwardMessage(user.getUsername(), mForwardMsgId);
+                        finish();
+                    }
+                })
+                .showCancelButton(true)
+                .show();
     }
 
     private void finishChatActivity() {
