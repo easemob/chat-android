@@ -88,6 +88,15 @@ public class ChatFragment extends EaseChatFragment implements EaseChatFragment.O
                 chatMessageList.refreshToLatest();
             }
         });
+
+        LiveDataBus.get().with(DemoConstant.CONVERSATION_DELETE, Boolean.class).observe(getViewLifecycleOwner(), event -> {
+            if(event == null) {
+                return;
+            }
+            if(event) {
+                chatMessageList.refreshMessages();
+            }
+        });
     }
 
     @Override

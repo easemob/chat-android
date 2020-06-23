@@ -133,6 +133,8 @@
     <string name="em_chat_group_detail_announcement">群公告</string>
     <string name="em_chat_group_detail_announcement_hint">请输入群公告</string>
     <string name="em_chat_group_detail_history">查找聊天记录</string>
+    <string name="em_chat_group_detail_clear_history">清空聊天记录</string>
+    <string name="em_chat_group_detail_clear_history_warning">是否清空聊天记录？</string>
     <string name="em_chat_group_detail_introduction">群介绍</string>
     <string name="em_chat_group_detail_introduction_hint">请输入群介绍</string>
     <string name="em_chat_group_detail_not_disturb">消息免打扰</string>
@@ -237,6 +239,8 @@
     <string name="em_user_detail_id">环信ID</string>
     <string name="em_user_detail_nickname">昵称</string>
     <string name="em_login_out_hint">是否退出？</string>
+    <string name="em_developer_appkey_warning">当前appKey以及环境已经配置生效，更换当前appKey需重启客户端！</string>
+    <string name="em_developer_appkey_confirm">重启</string>
 
     <string name="newnotify">接收新消息通知</string>
     <string name="voice">声音</string>

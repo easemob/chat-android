@@ -1,9 +1,12 @@
 package com.hyphenate.chatuidemo;
 
+import android.app.Activity;
 import android.app.ActivityManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.os.Process;
+import android.provider.Settings;
 import android.text.TextUtils;
 import android.util.Log;
 
@@ -512,6 +515,20 @@ public class DemoHelper {
         });
     }
 
+    /**
+     * 关闭当前进程
+     */
+    public void killApp() {
+        List<Activity> activities = DemoApplication.getInstance().getLifecycleCallbacks().getActivityList();
+        if(activities != null && !activities.isEmpty()) {
+            for(Activity activity : activities) {
+                activity.finish();
+            }
+        }
+        Process.killProcess(Process.myPid());
+        System.exit(0);
+    }
+
     private void endCall() {
         try {
             EMClient.getInstance().callManager().endCall();
@@ -541,6 +558,10 @@ public class DemoHelper {
             demoModel = new DemoModel(DemoApplication.getInstance());
         }
         return demoModel;
+    }
+
+    public String getCurrentLoginUser() {
+        return getModel().getCurrentUsernName();
     }
 
     /**

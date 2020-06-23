@@ -20,7 +20,9 @@ import com.hyphenate.chatuidemo.common.livedatas.LiveDataBus;
 import com.hyphenate.chatuidemo.common.widget.ArrowItemView;
 import com.hyphenate.chatuidemo.common.widget.SwitchItemView;
 import com.hyphenate.chatuidemo.section.base.BaseInitActivity;
+import com.hyphenate.chatuidemo.section.dialog.DemoDialogFragment;
 import com.hyphenate.chatuidemo.section.dialog.EditTextDialogFragment;
+import com.hyphenate.chatuidemo.section.dialog.SimpleDialogFragment;
 import com.hyphenate.chatuidemo.section.group.fragment.GroupEditFragment;
 import com.hyphenate.chatuidemo.section.group.viewmodels.GroupDetailViewModel;
 import com.hyphenate.chatuidemo.section.search.SearchGroupChatActivity;
@@ -45,6 +47,7 @@ public class GroupDetailActivity extends BaseInitActivity implements EaseTitleBa
     private ArrowItemView itemGroupNotice;
     private ArrowItemView itemGroupIntroduction;
     private ArrowItemView itemGroupHistory;
+    private ArrowItemView itemGroupClearHistory;
     private SwitchItemView itemGroupNotDisturb;
     private SwitchItemView itemGroupOffPush;
     private SwitchItemView itemGroupTop;
@@ -86,6 +89,7 @@ public class GroupDetailActivity extends BaseInitActivity implements EaseTitleBa
         itemGroupNotice = findViewById(R.id.item_group_notice);
         itemGroupIntroduction = findViewById(R.id.item_group_introduction);
         itemGroupHistory = findViewById(R.id.item_group_history);
+        itemGroupClearHistory = findViewById(R.id.item_group_clear_history);
         itemGroupNotDisturb = findViewById(R.id.item_group_not_disturb);
         itemGroupOffPush = findViewById(R.id.item_group_off_push);
         itemGroupTop = findViewById(R.id.item_group_top);
@@ -107,6 +111,7 @@ public class GroupDetailActivity extends BaseInitActivity implements EaseTitleBa
         itemGroupNotice.setOnClickListener(this);
         itemGroupIntroduction.setOnClickListener(this);
         itemGroupHistory.setOnClickListener(this);
+        itemGroupClearHistory.setOnClickListener(this);
         itemGroupNotDisturb.setOnCheckedChangeListener(this);
         itemGroupOffPush.setOnCheckedChangeListener(this);
         itemGroupTop.setOnCheckedChangeListener(this);
@@ -193,6 +198,14 @@ public class GroupDetailActivity extends BaseInitActivity implements EaseTitleBa
                 loadGroup();
             }
         });
+        viewModel.getClearHistoryObservable().observe(this, response -> {
+            parseResource(response, new OnResourceParseCallback<Boolean>() {
+                @Override
+                public void onSuccess(Boolean data) {
+                    LiveDataBus.get().with(DemoConstant.CONVERSATION_DELETE).postValue(true);
+                }
+            });
+        });
         loadGroup();
     }
 
@@ -224,14 +237,43 @@ public class GroupDetailActivity extends BaseInitActivity implements EaseTitleBa
             case R.id.item_group_history ://查找聊天记录
                 SearchGroupChatActivity.actionStart(mContext, groupId);
                 break;
+            case R.id.item_group_clear_history://清空聊天记录
+                showClearConfirmDialog();
+                break;
             case R.id.tv_group_refund ://退出群组
-                if(isOwner()) {
-                    viewModel.destroyGroup(groupId);
-                }else {
-                    viewModel.leaveGroup(groupId);
-                }
+                showConfirmDialog();
                 break;
         }
+    }
+
+    private void showClearConfirmDialog() {
+        new SimpleDialogFragment.Builder(mContext)
+                .setTitle(R.string.em_chat_group_detail_clear_history_warning)
+                .setOnConfirmClickListener(new DemoDialogFragment.OnConfirmClickListener() {
+                    @Override
+                    public void onConfirmClick(View view) {
+                        viewModel.clearHistory(groupId);
+                    }
+                })
+                .showCancelButton(true)
+                .show();
+    }
+
+    private void showConfirmDialog() {
+        new SimpleDialogFragment.Builder(mContext)
+                .setTitle(isOwner() ? R.string.em_chat_group_detail_dissolve : R.string.em_chat_group_detail_refund)
+                .setOnConfirmClickListener(new DemoDialogFragment.OnConfirmClickListener() {
+                    @Override
+                    public void onConfirmClick(View view) {
+                        if(isOwner()) {
+                            viewModel.destroyGroup(groupId);
+                        }else {
+                            viewModel.leaveGroup(groupId);
+                        }
+                    }
+                })
+                .showCancelButton(true)
+                .show();
     }
 
     @Override

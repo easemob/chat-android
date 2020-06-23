@@ -19,6 +19,8 @@ import com.hyphenate.chatuidemo.R;
 import com.hyphenate.chatuidemo.common.db.entity.AppKeyEntity;
 import com.hyphenate.chatuidemo.common.model.DemoModel;
 import com.hyphenate.chatuidemo.section.base.BaseInitActivity;
+import com.hyphenate.chatuidemo.section.dialog.DemoDialogFragment;
+import com.hyphenate.chatuidemo.section.dialog.SimpleDialogFragment;
 import com.hyphenate.easeui.adapter.EaseBaseRecyclerViewAdapter;
 import com.hyphenate.easeui.interfaces.OnItemClickListener;
 import com.hyphenate.easeui.interfaces.OnItemLongClickListener;
@@ -90,14 +92,7 @@ public class AppKeyManageActivity extends BaseInitActivity implements EaseTitleB
         adapter.setOnItemClickListener(new OnItemClickListener() {
             @Override
             public void onItemClick(View view, int position) {
-                selectedPosition = position;
-                adapter.notifyDataSetChanged();
-                String appKey = adapter.getItem(position).getAppKey();
-                settingsModel.setCustomAppkey(appKey);
-                Intent intent = new Intent();
-                intent.putExtra("appkey", appKey);
-                setResult(RESULT_OK, intent);
-                finish();
+                showConfirmDialog(position);
             }
         });
 
@@ -112,6 +107,26 @@ public class AppKeyManageActivity extends BaseInitActivity implements EaseTitleB
         });
 
         getData();
+    }
+
+    private void showConfirmDialog(int position) {
+        new SimpleDialogFragment.Builder(mContext)
+                .setTitle(R.string.em_developer_appkey_warning)
+                .setOnConfirmClickListener(R.string.em_developer_appkey_confirm, new DemoDialogFragment.OnConfirmClickListener() {
+                    @Override
+                    public void onConfirmClick(View view) {
+                        selectedPosition = position;
+                        adapter.notifyDataSetChanged();
+                        String appKey = adapter.getItem(position).getAppKey();
+                        settingsModel.setCustomAppkey(appKey);
+                        Intent intent = new Intent();
+                        intent.putExtra("appkey", appKey);
+                        setResult(RESULT_OK, intent);
+                        finish();
+                    }
+                })
+                .showCancelButton(true)
+                .show();
     }
 
     private void showDeleteDialog(int position) {

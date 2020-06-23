@@ -73,6 +73,9 @@ public class LoginFragment extends BaseInitFragment implements View.OnClickListe
         // 保证切换fragment后相关状态正确
         boolean enableTokenLogin = DemoHelper.getInstance().getModel().isEnableTokenLogin();
         mTvLoginToken.setVisibility(enableTokenLogin ? View.VISIBLE : View.GONE);
+        if(!TextUtils.isEmpty(DemoHelper.getInstance().getCurrentLoginUser())) {
+            mEtLoginName.setText(DemoHelper.getInstance().getCurrentLoginUser());
+        }
         if(isTokenFlag) {
             switchLogin();
         }

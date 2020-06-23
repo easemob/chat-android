@@ -159,8 +159,13 @@ public class DeveloperSetActivity extends BaseInitActivity implements EaseTitleB
             if(data != null) {
                 String appkey = data.getStringExtra("appkey");
                 setAppKey(appkey);
+                killApp();
             }
         }
+    }
+
+    private void killApp() {
+        DemoHelper.getInstance().killApp();
     }
 
     private void setAppKey(String appKey) {

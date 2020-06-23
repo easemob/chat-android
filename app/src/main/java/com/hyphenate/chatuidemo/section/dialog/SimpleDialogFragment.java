@@ -2,10 +2,12 @@ package com.hyphenate.chatuidemo.section.dialog;
 
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.TypedValue;
 import android.view.View;
 
 import androidx.annotation.ColorInt;
 import androidx.annotation.ColorRes;
+import androidx.annotation.DimenRes;
 import androidx.annotation.StringRes;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.FragmentTransaction;
@@ -20,6 +22,7 @@ public class SimpleDialogFragment extends DemoDialogFragment {
     private boolean showCancel;
     private int titleColor;
     private String cancel;
+    private float titleSize;
 
     @Override
     public void initArgument() {
@@ -36,6 +39,9 @@ public class SimpleDialogFragment extends DemoDialogFragment {
         }
         if(titleColor != 0) {
             mTvDialogTitle.setTextColor(titleColor);
+        }
+        if(titleSize != 0) {
+            mTvDialogTitle.setTextSize(TypedValue.COMPLEX_UNIT_SP, titleSize);
         }
         if(!TextUtils.isEmpty(confirm)) {
             mBtnDialogConfirm.setText(confirm);
@@ -81,6 +87,7 @@ public class SimpleDialogFragment extends DemoDialogFragment {
         private BaseActivity context;
         private String title;
         private int titleColor;
+        private float titleSize;
         private boolean showCancel;
         private String confirmText;
         private OnConfirmClickListener listener;
@@ -110,6 +117,11 @@ public class SimpleDialogFragment extends DemoDialogFragment {
 
         public Builder setTitleColorInt(@ColorInt int color) {
             this.titleColor = color;
+            return this;
+        }
+
+        public Builder setTitleSize(float size) {
+            this.titleSize = size;
             return this;
         }
 
@@ -171,6 +183,7 @@ public class SimpleDialogFragment extends DemoDialogFragment {
             SimpleDialogFragment fragment = new SimpleDialogFragment();
             fragment.setTitle(title);
             fragment.setTitleColor(titleColor);
+            fragment.setTitleSize(titleSize);
             fragment.showCancelButton(showCancel);
             fragment.setConfirmText(confirmText);
             fragment.setOnConfirmClickListener(this.listener);
@@ -188,6 +201,10 @@ public class SimpleDialogFragment extends DemoDialogFragment {
             fragment.show(transaction, null);
             return fragment;
         }
+    }
+
+    private void setTitleSize(float titleSize) {
+        this.titleSize = titleSize;
     }
 
     private void setCancelText(String cancel) {

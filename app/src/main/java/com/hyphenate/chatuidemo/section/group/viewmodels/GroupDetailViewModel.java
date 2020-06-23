@@ -11,6 +11,7 @@ import com.hyphenate.chatuidemo.DemoHelper;
 import com.hyphenate.chatuidemo.common.livedatas.LiveDataBus;
 import com.hyphenate.chatuidemo.common.livedatas.SingleSourceLiveData;
 import com.hyphenate.chatuidemo.common.net.Resource;
+import com.hyphenate.chatuidemo.common.repositories.EMChatManagerRepository;
 import com.hyphenate.chatuidemo.common.repositories.EMGroupManagerRepository;
 import com.hyphenate.chatuidemo.common.repositories.EMPushManagerRepository;
 import com.hyphenate.chatuidemo.common.utils.ThreadManager;
@@ -22,24 +23,28 @@ import java.util.List;
 
 public class GroupDetailViewModel extends AndroidViewModel {
     private EMGroupManagerRepository repository;
+    private EMChatManagerRepository chatRepository;
     private SingleSourceLiveData<Resource<EMGroup>> groupObservable;
     private SingleSourceLiveData<Resource<String>> announcementObservable;
     private SingleSourceLiveData<Resource<String>> refreshObservable;
     private SingleSourceLiveData<Resource<Boolean>> leaveGroupObservable;
     private SingleSourceLiveData<Resource<Boolean>> blockGroupMessageObservable;
     private SingleSourceLiveData<Resource<Boolean>> unblockGroupMessage;
+    private SingleSourceLiveData<Resource<Boolean>> clearHistoryObservable;
     private SingleSourceLiveData<Boolean> offPushObservable;
 
 
     public GroupDetailViewModel(@NonNull Application application) {
         super(application);
         repository = new EMGroupManagerRepository();
+        chatRepository = new EMChatManagerRepository();
         groupObservable = new SingleSourceLiveData<>();
         announcementObservable = new SingleSourceLiveData<>();
         refreshObservable = new SingleSourceLiveData<>();
         leaveGroupObservable = new SingleSourceLiveData<>();
         blockGroupMessageObservable = new SingleSourceLiveData<>();
         unblockGroupMessage = new SingleSourceLiveData<>();
+        clearHistoryObservable = new SingleSourceLiveData<>();
         offPushObservable = new SingleSourceLiveData<>();
     }
 
@@ -125,5 +130,13 @@ public class GroupDetailViewModel extends AndroidViewModel {
             offPushObservable.postValue(true);
         });
 
+    }
+
+    public LiveData<Resource<Boolean>> getClearHistoryObservable() {
+        return clearHistoryObservable;
+    }
+
+    public void clearHistory(String conversationId) {
+        clearHistoryObservable.setSource(chatRepository.deleteConversationById(conversationId));
     }
 }
