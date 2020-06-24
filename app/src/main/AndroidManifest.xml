@@ -267,44 +267,73 @@
         <meta-data
             android:name="com.baidu.lbsapi.API_KEY"
             android:value="3ecea51f560650b1ed8a4b99808f52e8" />
-
+        <!--主页-->
         <activity
             android:name=".MainActivity"
             android:label="@string/app_name"
-            android:screenOrientation="portrait"/>
-
+            android:screenOrientation="portrait">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+            </intent-filter>
+        </activity>
+        <!--启动页-->
         <activity
             android:name=".section.login.activity.SplashActivity"
             android:screenOrientation="portrait"
             android:theme="@style/NoActionBar.SplashTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <!--登录-->
         <activity
             android:name=".section.login.activity.LoginActivity"
+            android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustPan|stateHidden" />
         <activity android:name=".section.login.activity.TestActivity" />
+        <!--添加好友-->
         <activity android:name=".section.friends.activity.AddContactActivity"
+            android:screenOrientation="portrait"
             android:theme="@style/AppTheme.AddContactTheme"/>
-        <activity android:name=".section.friends.activity.ContactDetailActivity" />
+        <!--好友资料-->
+        <activity android:name=".section.friends.activity.ContactDetailActivity"
+            android:screenOrientation="portrait"/>
+        <!--聊天页面-->
         <activity
             android:name=".section.chat.ChatActivity"
             android:windowSoftInputMode="stateHidden|adjustPan"
+            android:screenOrientation="portrait"
             android:launchMode="singleTask"/>
-
-        <activity android:name=".section.friends.activity.GroupContactManageActivity" />
-        <activity android:name=".section.friends.activity.ChatRoomContactManageActivity" />
-        <activity android:name="com.hyphenate.easeui.ui.EaseShowBigImageActivity"/>
-        <activity android:name="com.hyphenate.easeui.ui.EaseBaiduMapActivity"/>
-        <activity android:name=".section.chat.ImageGridActivity" />
-        <activity android:name=".section.chat.VideoCallActivity" />
-        <activity android:name=".section.chat.VoiceCallActivity" />
-        <activity android:name=".section.chat.BaiduMapActivity" />
-        <activity android:name=".section.chat.RecorderVideoActivity"/>
-        <activity android:name="com.hyphenate.easeui.ui.EaseShowVideoActivity"/>
+        <!--群组列表-->
+        <activity android:name=".section.friends.activity.GroupContactManageActivity"
+            android:screenOrientation="portrait"/>
+        <!--聊天室列表-->
+        <activity android:name=".section.friends.activity.ChatRoomContactManageActivity"
+            android:screenOrientation="portrait"/>
+        <!--展示大图-->
+        <activity android:name="com.hyphenate.easeui.ui.EaseShowBigImageActivity"
+            android:screenOrientation="portrait"/>
+        <!--地图-->
+        <activity android:name="com.hyphenate.easeui.ui.EaseBaiduMapActivity"
+            android:screenOrientation="portrait"/>
+        <!--视频列表-->
+        <activity android:name=".section.chat.ImageGridActivity"
+            android:screenOrientation="portrait"/>
+        <!--视频通话-->
+        <activity android:name=".section.chat.VideoCallActivity"
+            android:screenOrientation="portrait"/>
+        <!--语音通话-->
+        <activity android:name=".section.chat.VoiceCallActivity"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".section.chat.BaiduMapActivity"
+            android:screenOrientation="portrait"/>
+        <!--录制视频-->
+        <activity android:name=".section.chat.RecorderVideoActivity"
+            android:screenOrientation="portrait"/>
+        <!--播放视频-->
+        <activity android:name="com.hyphenate.easeui.ui.EaseShowVideoActivity"
+            android:screenOrientation="portrait"/>
         <!--语音通话-->
         <activity
             android:name=".section.chat.ChatVideoCallActivity"
@@ -324,94 +353,141 @@
             android:name=".section.chat.LiveActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:excludeFromRecents="true"
+            android:screenOrientation="portrait"
             android:launchMode="singleTask"/>
         <!--多人会议-->
         <activity
             android:name=".section.conference.ConferenceActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:excludeFromRecents="true"
+            android:screenOrientation="portrait"
             android:launchMode="singleInstance"/>
         <!--会议成员邀请-->
         <activity
             android:name=".section.conference.ConferenceInviteActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
+            android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustPan"/>
-        <activity android:name=".section.chat.PickAtUserActivity" />
-        <activity android:name=".section.friends.activity.ForwardMessageActivity" />
-        <activity android:name=".section.group.GroupDetailActivity" />
-        <activity android:name=".section.group.ChatRoomDetailActivity" />
+        <!--添加现有好友-->
+        <activity android:name=".section.chat.PickAtUserActivity"
+            android:screenOrientation="portrait"/>
+        <!--转发好友列表-->
+        <activity android:name=".section.friends.activity.ForwardMessageActivity"
+            android:screenOrientation="portrait"/>
+        <!--群组详情-->
+        <activity android:name=".section.group.GroupDetailActivity"
+            android:screenOrientation="portrait"/>
+        <!--聊天室详情-->
+        <activity android:name=".section.group.ChatRoomDetailActivity"
+            android:screenOrientation="portrait"/>
         <!--群分享文件-->
-        <activity android:name=".section.group.GroupSharedFilesActivity" />
+        <activity android:name=".section.group.GroupSharedFilesActivity"
+            android:screenOrientation="portrait"/>
         <!--邀请群成员-->
-        <activity android:name=".section.group.GroupPickContactsActivity" />
+        <activity android:name=".section.group.GroupPickContactsActivity"
+            android:screenOrientation="portrait"/>
         <!--群成员身份统计-->
-        <activity android:name=".section.group.GroupMemberTypeActivity" />
+        <activity android:name=".section.group.GroupMemberTypeActivity"
+            android:screenOrientation="portrait"/>
         <!--群成员权限管理-->
-        <activity android:name=".section.group.GroupMemberAuthorityActivity" />
+        <activity android:name=".section.group.GroupMemberAuthorityActivity"
+            android:screenOrientation="portrait"/>
         <!--群管理员管理-->
-        <activity android:name=".section.group.GroupAdminAuthorityActivity" />
+        <activity android:name=".section.group.GroupAdminAuthorityActivity"
+            android:screenOrientation="portrait"/>
         <!--聊天室成员权限管理-->
-        <activity android:name=".section.group.ChatRoomMemberAuthorityActivity" />
+        <activity android:name=".section.group.ChatRoomMemberAuthorityActivity"
+            android:screenOrientation="portrait"/>
         <!--聊天室管理员管理-->
-        <activity android:name=".section.group.ChatRoomAdminAuthorityActivity" />
+        <activity android:name=".section.group.ChatRoomAdminAuthorityActivity"
+            android:screenOrientation="portrait"/>
         <!--新建群组-->
-        <activity android:name=".section.friends.activity.NewGroupActivity" />
+        <activity android:name=".section.friends.activity.NewGroupActivity"
+            android:screenOrientation="portrait"/>
         <!--新建聊天室-->
-        <activity android:name=".section.friends.activity.NewChatRoomActivity" />
+        <activity android:name=".section.friends.activity.NewChatRoomActivity"
+            android:screenOrientation="portrait"/>
         <!--系统通知-->
-        <activity android:name=".section.message.NewFriendsMsgActivity" />
+        <activity android:name=".section.message.NewFriendsMsgActivity"
+            android:screenOrientation="portrait"/>
         <!--安全与隐私首页-->
-        <activity android:name=".section.me.PrivacyIndexActivity" />
+        <activity android:name=".section.me.PrivacyIndexActivity"
+            android:screenOrientation="portrait"/>
         <!--联系人黑名单-->
-        <activity android:name=".section.friends.activity.ContactBlackListActivity" />
+        <activity android:name=".section.friends.activity.ContactBlackListActivity"
+            android:screenOrientation="portrait"/>
         <!--下载并展示文件-->
-        <activity android:name="com.hyphenate.easeui.ui.EaseShowNormalFileActivity"/>
+        <activity android:name="com.hyphenate.easeui.ui.EaseShowNormalFileActivity"
+            android:screenOrientation="portrait"/>
         <!--设置-->
-        <activity android:name=".section.me.activity.SetIndexActivity" />
+        <activity android:name=".section.me.activity.SetIndexActivity"
+            android:screenOrientation="portrait"/>
         <!--账号与安全-->
-        <activity android:name=".section.me.activity.AccountSecurityActivity" />
+        <activity android:name=".section.me.activity.AccountSecurityActivity"
+            android:screenOrientation="portrait"/>
         <!--输入用户名密码-->
-        <activity android:name=".section.me.activity.NamePasswordActivity" />
+        <activity android:name=".section.me.activity.NamePasswordActivity"
+            android:screenOrientation="portrait"/>
         <!--多端多设备管理-->
-        <activity android:name=".section.me.activity.MultiDeviceActivity" />
+        <activity android:name=".section.me.activity.MultiDeviceActivity"
+            android:screenOrientation="portrait"/>
         <!--新消息提醒-->
-        <activity android:name=".section.me.activity.MessageReceiveSetActivity" />
+        <activity android:name=".section.me.activity.MessageReceiveSetActivity"
+            android:screenOrientation="portrait"/>
         <!--通用设置-->
-        <activity android:name=".section.me.activity.CommonSettingsActivity" />
+        <activity android:name=".section.me.activity.CommonSettingsActivity"
+            android:screenOrientation="portrait"/>
         <!--消息推送设置-->
-        <activity android:name=".section.me.activity.OfflinePushSettingsActivity" />
+        <activity android:name=".section.me.activity.OfflinePushSettingsActivity"
+            android:screenOrientation="portrait"/>
         <!--关于环信IM-->
-        <activity android:name=".section.me.activity.AboutHxActivity" />
+        <activity android:name=".section.me.activity.AboutHxActivity"
+            android:screenOrientation="portrait"/>
         <!--开发者服务-->
-        <activity android:name=".section.me.activity.DeveloperSetActivity" />
+        <activity android:name=".section.me.activity.DeveloperSetActivity"
+            android:screenOrientation="portrait"/>
         <!--自定义AppKey-->
-        <activity android:name=".section.me.activity.AppKeyManageActivity" />
+        <activity android:name=".section.me.activity.AppKeyManageActivity"
+            android:screenOrientation="portrait"/>
         <!--添加自定义AppKey-->
-        <activity android:name=".section.me.activity.AppKeyAddActivity" />
+        <activity android:name=".section.me.activity.AppKeyAddActivity"
+            android:screenOrientation="portrait"/>
         <!--诊断-->
-        <activity android:name=".section.me.activity.DiagnoseActivity" />
+        <activity android:name=".section.me.activity.DiagnoseActivity"
+            android:screenOrientation="portrait"/>
         <!--iOS离线推送昵称-->
-        <activity android:name=".section.me.activity.OfflinePushNickActivity" />
+        <activity android:name=".section.me.activity.OfflinePushNickActivity"
+            android:screenOrientation="portrait"/>
         <!--通话设置-->
-        <activity android:name=".section.me.activity.CallOptionActivity" />
+        <activity android:name=".section.me.activity.CallOptionActivity"
+            android:screenOrientation="portrait"/>
         <!--聊天信息-->
-        <activity android:name=".section.chat.SingleChatSetActivity" />
+        <activity android:name=".section.chat.SingleChatSetActivity"
+            android:screenOrientation="portrait"/>
         <!--搜索聊天室-->
-        <activity android:name=".section.search.SearchChatRoomActivity" />
+        <activity android:name=".section.search.SearchChatRoomActivity"
+            android:screenOrientation="portrait"/>
         <!--搜索群组-->
-        <activity android:name=".section.search.SearchGroupActivity" />
+        <activity android:name=".section.search.SearchGroupActivity"
+            android:screenOrientation="portrait"/>
         <!--搜索会话-->
-        <activity android:name=".section.search.SearchConversationActivity" />
+        <activity android:name=".section.search.SearchConversationActivity"
+            android:screenOrientation="portrait"/>
         <!--搜索联系人-->
-        <activity android:name=".section.search.SearchFriendsActivity" />
+        <activity android:name=".section.search.SearchFriendsActivity"
+            android:screenOrientation="portrait"/>
         <!--搜索群聊会话-->
-        <activity android:name=".section.search.SearchGroupChatActivity" />
+        <activity android:name=".section.search.SearchGroupChatActivity"
+            android:screenOrientation="portrait"/>
         <!--搜索单人会话-->
-        <activity android:name=".section.search.SearchSingleChatActivity" />
+        <activity android:name=".section.search.SearchSingleChatActivity"
+            android:screenOrientation="portrait"/>
         <!--聊天历史-->
-        <activity android:name=".section.chat.ChatHistoryActivity" />
+        <activity android:name=".section.chat.ChatHistoryActivity"
+            android:screenOrientation="portrait"/>
         <!--个人资料-->
-        <activity android:name=".section.me.activity.UserDetailActivity" />
+        <activity android:name=".section.me.activity.UserDetailActivity"
+            android:screenOrientation="portrait"/>
 
         <!--捕获屏幕service-->
         <service android:name=".section.conference.SRForegroundService"
