@@ -10,6 +10,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewTreeObserver;
 import android.view.accessibility.AccessibilityEvent;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
@@ -51,6 +52,7 @@ public class EaseChatMessageList extends RelativeLayout implements SwipeRefreshL
     private String historyMsgId;//历史消息id
     private boolean isHistoryStatus;//是否是搜索历史消息状态，根据historyMsgId是否为空判断
     private boolean isHistoryMoveToLatest;//历史消息滑动到最新的一条了
+    private int recyclerViewLastHeight;//用于记录RecyclerView上一次的高度，用于判断是否高度发生变化
 
     public EaseChatMessageList(Context context) {
         this(context, null);
@@ -128,6 +130,23 @@ public class EaseChatMessageList extends RelativeLayout implements SwipeRefreshL
                         listener.onLoadMore();
                     }
                 }
+            }
+        });
+        //用于监听RecyclerView高度的变化，从而刷新列表
+        messageList.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+            @Override
+            public void onGlobalLayout() {
+                int height = messageList.getHeight();
+                if(recyclerViewLastHeight == 0) {
+                    recyclerViewLastHeight = height;
+                }
+                if(recyclerViewLastHeight != height) {
+                    //RecyclerView高度发生变化，刷新页面
+                    if(currentMessages != null) {
+                        seekToPosition(currentMessages.size() - 1);
+                    }
+                }
+                recyclerViewLastHeight = height;
             }
         });
     }
