@@ -33,7 +33,7 @@ import com.hyphenate.easeui.utils.EaseCommonUtils;
 
 import java.util.List;
 
-public class EaseChatMessageList extends RelativeLayout implements View.OnTouchListener, SwipeRefreshLayout.OnRefreshListener {
+public class EaseChatMessageList extends RelativeLayout implements SwipeRefreshLayout.OnRefreshListener {
     private Context context;
     private SwipeRefreshLayout srlRefresh;
     private EaseRecyclerView messageList;
@@ -116,7 +116,6 @@ public class EaseChatMessageList extends RelativeLayout implements View.OnTouchL
 
     private void initListener() {
         srlRefresh.setOnRefreshListener(this);
-        messageList.setOnTouchListener(this);
         messageList.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
             public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
@@ -133,6 +132,14 @@ public class EaseChatMessageList extends RelativeLayout implements View.OnTouchL
         });
     }
 
+    @Override
+    public boolean dispatchTouchEvent(MotionEvent ev) {
+        if(this.listener != null) {
+            this.listener.onTouch(this, ev);
+        }
+        return super.dispatchTouchEvent(ev);
+    }
+
     /**
      * 设置默认的消息类型
      */
@@ -144,14 +151,6 @@ public class EaseChatMessageList extends RelativeLayout implements View.OnTouchL
         } catch (IllegalAccessException e) {
             e.printStackTrace();
         }
-    }
-
-    @Override
-    public boolean onTouch(View v, MotionEvent event) {
-        if(this.listener != null) {
-            this.listener.onTouch(v, event);
-        }
-        return false;
     }
 
     @Override
