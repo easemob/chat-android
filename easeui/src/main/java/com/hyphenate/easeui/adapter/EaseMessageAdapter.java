@@ -1,18 +1,12 @@
 package com.hyphenate.easeui.adapter;
 
-import android.util.Log;
 import android.view.ViewGroup;
 
 import com.hyphenate.chat.EMMessage;
 import com.hyphenate.easeui.R;
-import com.hyphenate.easeui.interfaces.IViewHolderProvider;
 import com.hyphenate.easeui.interfaces.MessageListItemClickListener;
 import com.hyphenate.easeui.model.styles.EaseMessageListItemStyle;
 import com.hyphenate.easeui.ui.chat.delegates.EaseMessageAdapterDelegate;
-import com.hyphenate.easeui.viewholder.EaseChatRowViewHolder;
-import com.hyphenate.easeui.viewholder.EaseViewHolderHelper;
-
-import androidx.annotation.Nullable;
 
 /**
  * 做为对话列表的adapter，继承自{@link EaseBaseDelegateAdapter}

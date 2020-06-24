@@ -2,11 +2,7 @@ package com.hyphenate.easeui.ui.chat;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.database.Cursor;
-import android.graphics.Bitmap;
-import android.media.ThumbnailUtils;
 import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -14,7 +10,6 @@ import android.provider.MediaStore;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -65,7 +60,6 @@ import com.hyphenate.util.PathUtil;
 import com.hyphenate.util.VersionUtils;
 
 import java.io.File;
-import java.io.FileOutputStream;
 import java.util.List;
 
 public class EaseChatFragment extends EaseBaseFragment implements View.OnClickListener,
@@ -124,6 +118,10 @@ public class EaseChatFragment extends EaseBaseFragment implements View.OnClickLi
      * 是否是页面初始化的时候
      */
     private boolean isInitMsg;
+    /**
+     * 首次onResume不刷新
+     */
+    private boolean isNotFirst;
     /**
      * load count from db or server
      */
@@ -190,10 +188,12 @@ public class EaseChatFragment extends EaseBaseFragment implements View.OnClickLi
     }
 
     private void initData() {
-        //此方法放在chatMessageList.init之前
-        chatMessageList.init(toChatUsername, chatType);
-        chatMessageList.setHistoryMsgId(historyMsgId);
-        initConversation();
+        //此处排除chatRoom的目的是，加入聊天室后，再进行初始化
+        if(chatType != EaseConstant.CHATTYPE_CHATROOM) {
+            chatMessageList.init(toChatUsername, chatType);
+            chatMessageList.setHistoryMsgId(historyMsgId);
+            initConversation();
+        }
         initChatType();
         hideNickname();
         sendForwardMsg();
@@ -626,7 +626,6 @@ public class EaseChatFragment extends EaseBaseFragment implements View.OnClickLi
         }
 
         conversation.markAllMessagesAsRead();
-        List<EMMessage> allMessages = conversation.getAllMessages();
         isInitMsg = true;
         //如果设置为漫游
         if(isRoaming) {
@@ -634,11 +633,6 @@ public class EaseChatFragment extends EaseBaseFragment implements View.OnClickLi
             if(chatMessageList != null) {
                 chatMessageList.loadMoreServerMessages(PAGE_SIZE, true);
             }
-            return;
-        }
-        //第一次展示，如果本地数据足够，先不从数据取更多数据
-        if(allMessages != null && allMessages.size() >= PAGE_SIZE) {
-            chatMessageList.refreshToLatest();
             return;
         }
         // 非漫游，从本地数据库拉取数据
@@ -927,6 +921,7 @@ public class EaseChatFragment extends EaseBaseFragment implements View.OnClickLi
             @Override
             public void onError(int code, String error) {
                 EMLog.d("msg", "send message onError");
+                showMsgToast("error code:"+code+" error message:"+message);
                 if(chatMessageList != null) {
                     chatMessageList.refreshMessages();
                 }
@@ -1005,8 +1000,18 @@ public class EaseChatFragment extends EaseBaseFragment implements View.OnClickLi
     public void onResume() {
         super.onResume();
         if(isInitMsg) {
-            refreshMessages();
+            if(!isNotFirst) {
+                refreshToLatest();
+            }else {
+                //判断是否有新的消息，如果有新的消息，则刷新到最近的一条消息
+                if(chatMessageList != null && chatMessageList.haveNewMessages()) {
+                    refreshToLatest();
+                }else {
+                    refreshMessages();
+                }
+            }
         }
+        isNotFirst = true;
         // register the event listener when enter the foreground
         EMClient.getInstance().chatManager().addMessageListener(this);
         if(isGroupChat()) {
@@ -1311,6 +1316,10 @@ public class EaseChatFragment extends EaseBaseFragment implements View.OnClickLi
                     EMChatRoom room = EMClient.getInstance().chatroomManager().getChatRoom(toChatUsername);
                     String title = room != null ? room.getName() : toChatUsername;
                     setTitleBarText(title);
+                    //初始化
+                    chatMessageList.init(toChatUsername, chatType);
+                    initConversation();
+                    tvErrorMsg.setVisibility(View.GONE);
                 });
             }
 

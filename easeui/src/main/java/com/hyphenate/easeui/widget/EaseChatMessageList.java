@@ -1,15 +1,16 @@
 package com.hyphenate.easeui.widget;
 
-import android.animation.ObjectAnimator;
 import android.animation.ValueAnimator;
 import android.app.Activity;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.text.TextUtils;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.accessibility.AccessibilityEvent;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
 
@@ -169,12 +170,7 @@ public class EaseChatMessageList extends RelativeLayout implements View.OnTouchL
         }
         messageList.post(()-> {
             if(isHistoryStatus && !isHistoryMoveToLatest) {
-                //如果是历史消息状态，则需要从数据库中直接查询数据
-                List<EMMessage> messages = conversation.searchMsgFromDB(conversation.getMessage(historyMsgId, true).getMsgTime() - 1, 20, EMConversation.EMSearchDirection.DOWN);
-                if(messageAdapter != null) {
-                    messageAdapter.setData(messages);
-                }
-                currentMessages = messages;
+                //如果是历史消息状态，且没有移动到最新的一条数据，则什么也不做
             }else {
                 List<EMMessage> messages = conversation.getAllMessages();
                 conversation.markAllMessagesAsRead();
@@ -202,6 +198,7 @@ public class EaseChatMessageList extends RelativeLayout implements View.OnTouchL
                 return;
             }
             EMMessage lastMessage = allMessages.get(allMessages.size() - 2);
+            //当前页面的最新的一条数据，不是数据库中最近的一条；或者还有更多的消息，都不移动到页面的最底部
             if(!TextUtils.equals(message.getMsgId(), lastMessage.getMsgId()) || status != loadMoreStatus.NO_MORE_DATA) {
                 return;
             }
@@ -275,33 +272,49 @@ public class EaseChatMessageList extends RelativeLayout implements View.OnTouchL
 
     /**
      * 从本地获取更多的历史消息
+     * 此方法主要用于搜索历史消息，上拉加载和下拉加载
      * @param pageSize
      */
     public void loadMoreHistoryMessages(int pageSize, EMConversation.EMSearchDirection direction) {
         long timeStamp = 0;
         List<EMMessage> data = messageAdapter.getData();
-        try {
-            if(direction == EMConversation.EMSearchDirection.UP) {
-                timeStamp = data.get(0).getMsgTime();
-            }else {
-                timeStamp = data.get(data.size() - 1).getMsgTime();
-                status = loadMoreStatus.IS_LOADING;
+        //如果当前页面还没有数据的话，则使用historyMsgId从数据库查找数据
+        List<EMMessage> messages;
+        if(data == null || data.isEmpty()) {
+            messages = conversation.searchMsgFromDB(conversation.getMessage(historyMsgId, true).getMsgTime() - 1,
+                    pageSize, direction);
+            data = messages;
+            if(direction != EMConversation.EMSearchDirection.UP) {
+                if(messages.size() >= pageSize) {
+                    status = loadMoreStatus.HAS_MORE;
+                }else {
+                    status = loadMoreStatus.NO_MORE_DATA;
+                }
             }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        if(timeStamp == 0) {
-            return;
-        }
-        List<EMMessage> messages = conversation.searchMsgFromDB(timeStamp, pageSize, direction);
-        if(direction == EMConversation.EMSearchDirection.UP) {
-            data.addAll(0, messages);
         }else {
-            data.addAll(messages);
-            if(messages.size() >= pageSize) {
-                status = loadMoreStatus.HAS_MORE;
+            try {
+                if(direction == EMConversation.EMSearchDirection.UP) {
+                    timeStamp = data.get(0).getMsgTime();
+                }else {
+                    timeStamp = data.get(data.size() - 1).getMsgTime();
+                    status = loadMoreStatus.IS_LOADING;
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            if(timeStamp == 0) {
+                return;
+            }
+            messages = conversation.searchMsgFromDB(timeStamp, pageSize, direction);
+            if(direction == EMConversation.EMSearchDirection.UP) {
+                data.addAll(0, messages);
             }else {
-                status = loadMoreStatus.NO_MORE_DATA;
+                data.addAll(messages);
+                if(messages.size() >= pageSize) {
+                    status = loadMoreStatus.HAS_MORE;
+                }else {
+                    status = loadMoreStatus.NO_MORE_DATA;
+                }
             }
         }
         finishRefresh();
@@ -313,8 +326,13 @@ public class EaseChatMessageList extends RelativeLayout implements View.OnTouchL
      * 从本地数据库拉取数据
      */
     public void loadMessagesFromLocal(int pageSize) {
+        //如果是历史模式，则直接从数据库中获取数据
+        if(isHistoryStatus) {
+            loadMoreHistoryMessages(pageSize, EMConversation.EMSearchDirection.DOWN);
+            return;
+        }
         int msgCount = getCacheMessageCount();
-        if(msgCount < getAllMsgCountFromDb() && msgCount < pageSize) {
+        if(msgCount < getAllMsgCount() && msgCount < pageSize) {
             loadMoreMessages(pageSize - msgCount, false);
         }else {
             seekToPosition(msgCount - 1);
@@ -325,7 +343,7 @@ public class EaseChatMessageList extends RelativeLayout implements View.OnTouchL
      * 获取数据库中消息总数目
      * @return
      */
-    protected int getAllMsgCountFromDb() {
+    protected int getAllMsgCount() {
         return conversation == null ? 0 : conversation.getAllMsgCount();
     }
 
@@ -339,9 +357,15 @@ public class EaseChatMessageList extends RelativeLayout implements View.OnTouchL
      * @param moveToLast 是否移动到最后
      */
     public void loadMoreServerMessages(int pageSize, boolean moveToLast) {
+        //如果是搜索历史模式，则直接从数据库获取数据
+        if(isHistoryStatus) {
+            loadMoreHistoryMessages(pageSize, EMConversation.EMSearchDirection.DOWN);
+            return;
+        }
         int count = getCacheMessageCount();
+        String msgId = moveToLast ? "" : count > 0 ? conversation.getAllMessages().get(0).getMsgId() : "";
         EMClient.getInstance().chatManager().asyncFetchHistoryMessage(toChatUsername,
-                EaseCommonUtils.getConversationType(chatType), pageSize, count > 0 ? conversation.getAllMessages().get(0).getMsgId() : null,
+                EaseCommonUtils.getConversationType(chatType), pageSize, msgId,
                 new EMValueCallBack<EMCursorResult<EMMessage>>() {
                     @Override
                     public void onSuccess(EMCursorResult<EMMessage> value) {
@@ -368,7 +392,7 @@ public class EaseChatMessageList extends RelativeLayout implements View.OnTouchL
                             if(listener != null) {
                                 listener.onMessageListError(errorMsg);
                             }
-                            loadMoreLocalMessages(pageSize);
+                            loadMoreLocalMessages(pageSize, moveToLast);
                         });
                     }
                 });
@@ -431,6 +455,18 @@ public class EaseChatMessageList extends RelativeLayout implements View.OnTouchL
                 Toast.makeText(context, getResources().getString(R.string.no_more_messages), Toast.LENGTH_SHORT).show();
             }
         }
+    }
+
+    /**
+     * 是否有新的消息
+     * 判断依据为：数据库中最新的一条数据的时间戳是否大于页面上的最新一条数据的时间戳
+     * @return
+     */
+    public boolean haveNewMessages() {
+        if(currentMessages == null) {
+            return false;
+        }
+        return conversation.getLastMessage().getMsgTime() > currentMessages.get(currentMessages.size() - 1).getMsgTime();
     }
 
     /**
