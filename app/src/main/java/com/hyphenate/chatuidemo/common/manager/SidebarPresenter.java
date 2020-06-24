@@ -4,9 +4,11 @@ import android.text.TextUtils;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.TextView;
+import android.widget.WrapperListAdapter;
 
 import com.hyphenate.easeui.adapter.EaseBaseRecyclerViewAdapter;
 import com.hyphenate.easeui.domain.EaseUser;
+import com.hyphenate.easeui.widget.EaseRecyclerView;
 import com.hyphenate.easeui.widget.EaseSidebar;
 
 import java.util.List;
@@ -42,6 +44,9 @@ public class SidebarPresenter implements EaseSidebar.OnTouchEventListener{
 
     private void moveToRecyclerItem(String pointer) {
         RecyclerView.Adapter adapter = mRecyclerView.getAdapter();
+        if(adapter instanceof EaseRecyclerView.WrapperRecyclerViewAdapter) {
+            adapter = ((EaseRecyclerView.WrapperRecyclerViewAdapter) adapter).getAdapter();
+        }
         if(!(adapter instanceof EaseBaseRecyclerViewAdapter)) {
             return;
         }

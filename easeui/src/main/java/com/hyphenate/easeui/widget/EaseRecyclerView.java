@@ -136,7 +136,7 @@ public class EaseRecyclerView extends RecyclerView {
         public int viewType;
     }
 
-    private class WrapperRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+    public class WrapperRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         private Adapter mAdapter;
 
         public WrapperRecyclerViewAdapter(Adapter adapter) {
@@ -229,6 +229,10 @@ public class EaseRecyclerView extends RecyclerView {
             if(recyclerView.getLayoutManager() instanceof StaggeredGridLayoutManager) {
                 isStaggered = true;
             }
+        }
+
+        public Adapter getAdapter() {
+            return mAdapter;
         }
     }
 
