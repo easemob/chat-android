@@ -5,7 +5,7 @@ apply plugin: 'com.huawei.agconnect'
 
 android {
     compileSdkVersion 29
-    buildToolsVersion "29.0.2"
+    buildToolsVersion "29.0.3"
     defaultConfig {
         applicationId "com.hyphenate.chatuidemo"
         //测试oppo离线消息，需修改包名如下，如果配置了FCM推送，同时替换google-services.json 中的 package_name 字段
