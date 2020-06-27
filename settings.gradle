@@ -1,2 +1,4 @@
 include ':app', ':easeui'
 rootProject.name='chatuidemo'
+
+project(':easeui').projectDir = new File('../easeui/easeui')
