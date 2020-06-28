@@ -13,7 +13,8 @@
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:titleBarTitle="@string/em_single_set_title"
-        app:titleBarDisplayHomeAsUpEnabled="true"/>
+        app:titleBarDisplayHomeAsUpEnabled="true"
+        android:background="@color/white"/>
 
     <com.hyphenate.chatuidemo.common.widget.ArrowItemView
         android:id="@+id/item_user_info"

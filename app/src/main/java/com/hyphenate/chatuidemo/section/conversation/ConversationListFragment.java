@@ -174,6 +174,7 @@ public class ConversationListFragment extends BaseInitFragment implements OnRefr
         });
 
         MessageViewModel messageViewModel = new ViewModelProvider(this).get(MessageViewModel.class);
+        messageViewModel.getMessageChange().with(DemoConstant.NOTIFY_CHANGE, EaseEvent.class).observe(this, this::loadList);
         messageViewModel.getMessageChange().with(DemoConstant.MESSAGE_CHANGE_CHANGE, EaseEvent.class).observe(this, this::loadList);
         messageViewModel.getMessageChange().with(DemoConstant.GROUP_CHANGE, EaseEvent.class).observe(this, this::loadList);
         messageViewModel.getMessageChange().with(DemoConstant.CHAT_ROOM_CHANGE, EaseEvent.class).observe(this, this::loadList);
