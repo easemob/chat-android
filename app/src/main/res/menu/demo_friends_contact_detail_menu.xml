@@ -6,7 +6,7 @@
     <item
         android:id="@+id/action_detail_delete"
         android:orderInCategory="100"
-        android:visible="true"
+        android:visible="false"
         android:title="@string/em_friends_delete_the_contact"
         app:showAsAction="never"/>
 

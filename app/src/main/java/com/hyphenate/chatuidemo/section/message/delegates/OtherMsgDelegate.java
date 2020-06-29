@@ -7,10 +7,19 @@ import android.widget.TextView;
 import com.hyphenate.chatuidemo.R;
 import com.hyphenate.chatuidemo.common.db.entity.InviteMessage;
 import com.hyphenate.easeui.adapter.EaseBaseRecyclerViewAdapter;
+import com.hyphenate.chatuidemo.common.db.entity.InviteMessage.InviteMessageStatus;
 
 import androidx.annotation.NonNull;
 
 public class OtherMsgDelegate extends NewFriendsMsgDelegate<InviteMessage, OtherMsgDelegate.ViewHolder> {
+
+    @Override
+    public boolean isForViewType(InviteMessage msg, int position) {
+        return msg.getStatusEnum() != InviteMessageStatus.BEINVITEED &&
+                msg.getStatusEnum() != InviteMessageStatus.BEAPPLYED &&
+                msg.getStatusEnum() != InviteMessageStatus.GROUPINVITATION &&
+                msg.getStatusEnum() != InviteMessageStatus.BEAGREED;
+    }
 
     @Override
     protected int getLayoutId() {

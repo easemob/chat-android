@@ -20,8 +20,10 @@ import androidx.appcompat.widget.PopupMenu;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.hyphenate.chat.EMClient;
+import com.hyphenate.chat.EMGroup;
 import com.hyphenate.chat.EMMessage;
 import com.hyphenate.chat.EMTextMessageBody;
+import com.hyphenate.chatuidemo.DemoHelper;
 import com.hyphenate.chatuidemo.R;
 import com.hyphenate.chatuidemo.common.DemoConstant;
 import com.hyphenate.chatuidemo.common.livedatas.LiveDataBus;
@@ -31,16 +33,16 @@ import com.hyphenate.chatuidemo.common.utils.ToastUtils;
 import com.hyphenate.chatuidemo.section.base.BaseActivity;
 import com.hyphenate.chatuidemo.section.chat.ChatVideoCallActivity;
 import com.hyphenate.chatuidemo.section.chat.ChatVoiceCallActivity;
-import com.hyphenate.chatuidemo.section.chat.VideoCallActivity;
-import com.hyphenate.chatuidemo.section.chat.VoiceCallActivity;
 import com.hyphenate.chatuidemo.section.conference.ConferenceActivity;
 import com.hyphenate.chatuidemo.section.chat.ImageGridActivity;
 import com.hyphenate.chatuidemo.section.chat.LiveActivity;
 import com.hyphenate.chatuidemo.section.chat.PickAtUserActivity;
 import com.hyphenate.chatuidemo.section.chat.viewmodel.MessageViewModel;
 import com.hyphenate.chatuidemo.section.dialog.DemoListDialogFragment;
+import com.hyphenate.chatuidemo.section.dialog.FullEditDialogFragment;
 import com.hyphenate.chatuidemo.section.friends.activity.ContactDetailActivity;
 import com.hyphenate.chatuidemo.section.friends.activity.ForwardMessageActivity;
+import com.hyphenate.chatuidemo.section.group.GroupHelper;
 import com.hyphenate.easeui.constants.EaseConstant;
 import com.hyphenate.easeui.domain.EaseUser;
 import com.hyphenate.easeui.model.EaseEvent;
@@ -61,6 +63,7 @@ public class ChatFragment extends EaseChatFragment implements EaseChatFragment.O
     protected ClipboardManager clipboard;
 
     private static final int REQUEST_CODE_SELECT_AT_USER = 15;
+    private static final int ITEM_DELIVERY = 10;
     private static final String[] calls = {"视频通话", "语音通话"};
 
     @Override
@@ -100,8 +103,16 @@ public class ChatFragment extends EaseChatFragment implements EaseChatFragment.O
     }
 
     @Override
+    protected void initExtendInputMenu() {
+        inputMenu.init();
+    }
+
+    @Override
     protected void addExtendInputMenu(EaseChatInputMenu inputMenu) {
         super.addExtendInputMenu(inputMenu);
+        inputMenu.registerExtendMenuItem(R.string.attach_picture, R.drawable.ease_chat_image_selector, EaseChatInputMenu.ITEM_PICTURE, this);
+        inputMenu.registerExtendMenuItem(R.string.attach_take_pic, R.drawable.ease_chat_takepic_selector, EaseChatInputMenu.ITEM_TAKE_PICTURE, this);
+        inputMenu.registerExtendMenuItem(R.string.attach_video, R.drawable.em_chat_video_selector, EaseChatInputMenu.ITEM_VIDEO, this);
         //添加扩展槽
         if(chatType == EaseConstant.CHATTYPE_SINGLE){
             //inputMenu.registerExtendMenuItem(R.string.attach_voice_call, R.drawable.em_chat_voice_call_selector, EaseChatInputMenu.ITEM_VOICE_CALL, this);
@@ -111,6 +122,15 @@ public class ChatFragment extends EaseChatFragment implements EaseChatFragment.O
             inputMenu.registerExtendMenuItem(R.string.voice_and_video_conference, R.drawable.em_chat_video_call_selector, EaseChatInputMenu.ITEM_CONFERENCE_CALL, this);
             //目前普通模式也支持设置主播和观众人数，都建议使用普通模式
             //inputMenu.registerExtendMenuItem(R.string.title_live, R.drawable.em_chat_video_call_selector, EaseChatInputMenu.ITEM_LIVE, this);
+        }
+        inputMenu.registerExtendMenuItem(R.string.attach_location, R.drawable.ease_chat_location_selector, EaseChatInputMenu.ITEM_LOCATION, this);
+        inputMenu.registerExtendMenuItem(R.string.attach_file, R.drawable.em_chat_file_selector, EaseChatInputMenu.ITEM_FILE, this);
+        //群组类型，开启消息回执，且是owner
+        if(chatType == EaseConstant.CHATTYPE_GROUP && EMClient.getInstance().getOptions().getRequireDeliveryAck()) {
+            EMGroup group = DemoHelper.getInstance().getGroupManager().getGroup(toChatUsername);
+            if(GroupHelper.isOwner(group)) {
+                inputMenu.registerExtendMenuItem(R.string.em_chat_group_delivery_ack, R.drawable.demo_chat_delivery_selector, ITEM_DELIVERY, this);
+            }
         }
         //添加扩展表情
         ((EaseEmojiconMenu)(inputMenu.getEmojiconMenu())).addEmojiconGroup(EmojiconExampleGroupData.getData());
@@ -133,7 +153,24 @@ public class ChatFragment extends EaseChatFragment implements EaseChatFragment.O
             case EaseChatInputMenu.ITEM_LIVE:
                 LiveActivity.startLive(getContext(), toChatUsername);
                 break;
+            case ITEM_DELIVERY://群消息回执
+                showDeliveryDialog();
+                break;
         }
+    }
+
+    private void showDeliveryDialog() {
+        new FullEditDialogFragment.Builder((BaseActivity) mContext)
+                .setTitle(R.string.em_chat_group_read_ack)
+                .setOnConfirmClickListener(R.string.em_chat_group_read_ack_send, new FullEditDialogFragment.OnSaveClickListener() {
+                    @Override
+                    public void onSaveClick(View view, String content) {
+                        sendTextMessage(content, true);
+                    }
+                })
+                .setConfirmColor(R.color.em_color_brand)
+                .setHint(R.string.em_chat_group_read_ack_hint)
+                .show();
     }
 
     private void showSelectDialog() {

@@ -147,6 +147,10 @@
     <string name="em_chat_group_invite_group_member">邀请成员</string>
     <string name="em_chat_group_select_contact">选择联系人</string>
     <string name="em_chat_group_select_contact_save">保存</string>
+    <string name="em_chat_group_delivery_ack">群组回执</string>
+    <string name="em_chat_group_read_ack">阅读回执</string>
+    <string name="em_chat_group_read_ack_send">发送</string>
+    <string name="em_chat_group_read_ack_hint">请输入需要回执的消息内容</string>
 
     <string name="em_group_member_type_title">群成员</string>
     <string name="em_group_member_type_admin">群管理员</string>

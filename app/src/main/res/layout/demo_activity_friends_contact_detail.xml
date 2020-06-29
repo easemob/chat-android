@@ -66,7 +66,8 @@
         android:paddingLeft="20dp"
         android:textSize="@dimen/em_size_normal"
         android:textColor="@color/em_friends_contact_detail_text_normal"
-        android:background="?selectableItemBackground"/>
+        android:background="?selectableItemBackground"
+        android:visibility="gone"/>
 
     <ImageView
         android:id="@+id/iv_skip"
@@ -129,6 +130,6 @@
         android:id="@+id/group_friend"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:constraint_referenced_ids="tv_note,iv_skip,btn_chat,btn_video,btn_voice"/>
+        app:constraint_referenced_ids="iv_skip,btn_chat,btn_video,btn_voice"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
