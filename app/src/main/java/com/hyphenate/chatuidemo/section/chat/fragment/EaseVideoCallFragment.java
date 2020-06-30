@@ -17,14 +17,16 @@ import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;
 import android.widget.Button;
 import android.widget.Chronometer;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.constraintlayout.widget.Group;
 
 import com.hyphenate.chat.EMCallSession;
 import com.hyphenate.chat.EMCallStateChangeListener;
@@ -32,9 +34,9 @@ import com.hyphenate.chat.EMClient;
 import com.hyphenate.chat.EMVideoCallHelper;
 import com.hyphenate.chat.EMWaterMarkOption;
 import com.hyphenate.chat.EMWaterMarkPosition;
+import com.hyphenate.chatuidemo.R;
 import com.hyphenate.chatuidemo.common.utils.PreferenceManager;
 import com.hyphenate.easeui.EaseUI;
-import com.hyphenate.easeui.R;
 import com.hyphenate.easeui.utils.PhoneStateManager;
 import com.hyphenate.exceptions.HyphenateException;
 import com.hyphenate.media.EMCallSurfaceView;
@@ -46,24 +48,25 @@ import java.util.UUID;
 
 public class EaseVideoCallFragment extends EaseCallFragment implements View.OnClickListener {
     private TextView callStateTextView;
-    private LinearLayout comingBtnContainer;
-    private Button refuseBtn;
-    private Button answerBtn;
-    private Button hangupBtn;
+    private Group comingBtnContainer;
+    private ImageButton refuseBtn;
+    private ImageButton answerBtn;
+    private ImageButton hangupBtn;
     private ImageView muteImage;
     private ImageView handsFreeImage;
     private TextView nickTextView;
     private Chronometer chronometer;
-    private LinearLayout voiceContronlLayout;
-    private RelativeLayout rootContainer;
+    private Group voiceContronlLayout;
+    private ConstraintLayout rootContainer;
     private LinearLayout topContainer;
-    private LinearLayout bottomContainer;
+    private ConstraintLayout bottomContainer;
     private TextView monitorTextView;
     private TextView netwrokStatusVeiw;
     private Button switchCameraBtn;
     // 视频通话画面显示控件，这里在新版中使用同一类型的控件，方便本地和远端视图切换
     protected EMCallSurfaceView localSurface;
     protected EMCallSurfaceView oppositeSurface;
+    private Group groupHangUp;
 
     private EMVideoCallHelper callHelper;
     private int surfaceState = -1;
@@ -85,14 +88,13 @@ public class EaseVideoCallFragment extends EaseCallFragment implements View.OnCl
         super.onCreate(savedInstanceState);
         if(savedInstanceState != null) {
             mContext.finish();
-            return;
         }
     }
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.em_activity_video_call, null);
+        return inflater.inflate(R.layout.demo_activity_video_call, null);
     }
 
     @Override
@@ -111,20 +113,19 @@ public class EaseVideoCallFragment extends EaseCallFragment implements View.OnCl
         callType = 1;
 
         callStateTextView = (TextView) findViewById(R.id.tv_call_state);
-        comingBtnContainer = (LinearLayout) findViewById(R.id.ll_coming_call);
-        rootContainer = (RelativeLayout) findViewById(R.id.root_layout);
-        refuseBtn = (Button) findViewById(R.id.btn_refuse_call);
-        answerBtn = (Button) findViewById(R.id.btn_answer_call);
-        hangupBtn = (Button) findViewById(R.id.btn_hangup_call);
+        comingBtnContainer =  findViewById(R.id.ll_coming_call);
+        rootContainer =  findViewById(R.id.root_layout);
+        refuseBtn = findViewById(R.id.btn_refuse_call);
+        answerBtn = findViewById(R.id.btn_answer_call);
+        hangupBtn = findViewById(R.id.btn_hangup_call);
         muteImage = (ImageView) findViewById(R.id.iv_mute);
         handsFreeImage = (ImageView) findViewById(R.id.iv_handsfree);
         callStateTextView = (TextView) findViewById(R.id.tv_call_state);
         nickTextView = (TextView) findViewById(R.id.tv_nick);
         chronometer = (Chronometer) findViewById(R.id.chronometer);
-        voiceContronlLayout = (LinearLayout) findViewById(R.id.ll_voice_control);
-        RelativeLayout btnsContainer = (RelativeLayout) findViewById(R.id.ll_btns);
+        voiceContronlLayout = findViewById(R.id.ll_voice_control);
         topContainer = (LinearLayout) findViewById(R.id.ll_top_container);
-        bottomContainer = (LinearLayout) findViewById(R.id.ll_bottom_container);
+        bottomContainer = findViewById(R.id.ll_bottom_container);
         monitorTextView = (TextView) findViewById(R.id.tv_call_monitor);
         netwrokStatusVeiw = (TextView) findViewById(R.id.tv_network_status);
         switchCameraBtn = (Button) findViewById(R.id.btn_switch_camera);
@@ -132,6 +133,7 @@ public class EaseVideoCallFragment extends EaseCallFragment implements View.OnCl
         localSurface = (EMCallSurfaceView) findViewById(R.id.local_surface);
         // remote surfaceview
         oppositeSurface = (EMCallSurfaceView) findViewById(R.id.opposite_surface);
+        groupHangUp = findViewById(R.id.group_hang_up);
 
         nickTextView.setText(username);
 
@@ -172,7 +174,8 @@ public class EaseVideoCallFragment extends EaseCallFragment implements View.OnCl
             outgoing = soundPool.load(mContext, R.raw.em_outgoing, 1);
 
             comingBtnContainer.setVisibility(View.INVISIBLE);
-            hangupBtn.setVisibility(View.VISIBLE);
+            groupHangUp.setVisibility(View.VISIBLE);
+            groupRequestLayout();
             String st = getResources().getString(R.string.Are_connected_to_each_other);
             callStateTextView.setText(st);
             EMClient.getInstance().callManager().setSurfaceView(localSurface, oppositeSurface);
@@ -192,6 +195,7 @@ public class EaseVideoCallFragment extends EaseCallFragment implements View.OnCl
                 return;
             }
             voiceContronlLayout.setVisibility(View.INVISIBLE);
+            groupRequestLayout();
             localSurface.setVisibility(View.INVISIBLE);
             Uri ringUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_RINGTONE);
             audioManager.setMode(AudioManager.MODE_RINGTONE);
@@ -272,9 +276,10 @@ public class EaseVideoCallFragment extends EaseCallFragment implements View.OnCl
             isAnswered = true;
             isHandsfreeState = true;
             comingBtnContainer.setVisibility(View.INVISIBLE);
-            hangupBtn.setVisibility(View.VISIBLE);
+            groupHangUp.setVisibility(View.VISIBLE);
             voiceContronlLayout.setVisibility(View.VISIBLE);
             localSurface.setVisibility(View.VISIBLE);
+            groupRequestLayout();
         } else if (id == R.id.btn_hangup_call) { // hangup
             hangupBtn.setEnabled(false);
             chronometer.stop();
@@ -332,8 +337,8 @@ public class EaseVideoCallFragment extends EaseCallFragment implements View.OnCl
         } else if (id == R.id.root_layout) {
             if (callingState == CallingState.NORMAL) {
                 if (bottomContainer.getVisibility() == View.VISIBLE) {
-                    bottomContainer.setVisibility(View.GONE);
-                    topContainer.setVisibility(View.GONE);
+                    bottomContainer.setVisibility(View.INVISIBLE);
+                    topContainer.setVisibility(View.INVISIBLE);
                     oppositeSurface.setScaleMode(VideoView.EMCallViewScaleMode.EMCallViewScaleModeAspectFill);
 
                 } else {
@@ -345,6 +350,12 @@ public class EaseVideoCallFragment extends EaseCallFragment implements View.OnCl
         } else if (id == R.id.btn_switch_camera) { //switch camera
             handler.sendEmptyMessage(MSG_CALL_SWITCH_CAMERA);
         }
+    }
+
+    private void groupRequestLayout() {
+        comingBtnContainer.requestLayout();
+        voiceContronlLayout.requestLayout();
+        groupHangUp.requestLayout();
     }
 
     /**

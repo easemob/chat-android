@@ -13,21 +13,21 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;
-import android.widget.Button;
 import android.widget.Chronometer;
+import android.widget.ImageButton;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.constraintlayout.widget.Group;
 
 import com.hyphenate.chat.EMCallSession;
 import com.hyphenate.chat.EMCallStateChangeListener;
 import com.hyphenate.chat.EMClient;
+import com.hyphenate.chatuidemo.R;
 import com.hyphenate.easeui.EaseUI;
-import com.hyphenate.easeui.R;
 import com.hyphenate.easeui.utils.PhoneStateManager;
 import com.hyphenate.exceptions.HyphenateException;
 import com.hyphenate.util.EMLog;
@@ -35,15 +35,16 @@ import com.hyphenate.util.EMLog;
 import java.util.UUID;
 
 public class EaseVoiceCallFragment extends EaseCallFragment implements View.OnClickListener {
-    private LinearLayout comingBtnContainer;
-    private Button hangupBtn;
-    private Button refuseBtn;
-    private Button answerBtn;
+    private Group comingBtnContainer;
+    private ImageButton hangupBtn;
+    private ImageButton refuseBtn;
+    private ImageButton answerBtn;
     private ImageView muteImage;
     private ImageView handsFreeImage;
     private TextView callStateTextView;
-    private LinearLayout voiceContronlLayout;
+    private Group voiceContronlLayout;
     private TextView netwrokStatusVeiw;
+    private Group groupHangUp;
 
     private boolean isMuteState;
     private boolean isHandsfreeState;
@@ -65,7 +66,7 @@ public class EaseVoiceCallFragment extends EaseCallFragment implements View.OnCl
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.em_activity_voice_call, null);
+        return inflater.inflate(R.layout.demo_activity_voice_call, null);
     }
 
     @Override
@@ -85,18 +86,18 @@ public class EaseVoiceCallFragment extends EaseCallFragment implements View.OnCl
         EaseUI.getInstance().isVoiceCalling = true;
         callType = 0;
 
-        comingBtnContainer = (LinearLayout) findViewById(R.id.ll_coming_call);
-        refuseBtn = (Button) findViewById(R.id.btn_refuse_call);
-        answerBtn = (Button) findViewById(R.id.btn_answer_call);
-        hangupBtn = (Button) findViewById(R.id.btn_hangup_call);
+        comingBtnContainer = findViewById(R.id.ll_coming_call);
+        refuseBtn = findViewById(R.id.btn_refuse_call);
+        answerBtn = findViewById(R.id.btn_answer_call);
+        hangupBtn = findViewById(R.id.btn_hangup_call);
         muteImage = (ImageView) findViewById(R.id.iv_mute);
         handsFreeImage = (ImageView) findViewById(R.id.iv_handsfree);
         callStateTextView = (TextView) findViewById(R.id.tv_call_state);
         TextView nickTextView = (TextView) findViewById(R.id.tv_nick);
-        TextView durationTextView = (TextView) findViewById(R.id.tv_calling_duration);
         chronometer = (Chronometer) findViewById(R.id.chronometer);
-        voiceContronlLayout = (LinearLayout) findViewById(R.id.ll_voice_control);
+        voiceContronlLayout = findViewById(R.id.ll_voice_control);
         netwrokStatusVeiw = (TextView) findViewById(R.id.tv_network_status);
+        groupHangUp = findViewById(R.id.group_hang_up);
 
         nickTextView.setText(username);
     }
@@ -120,7 +121,8 @@ public class EaseVoiceCallFragment extends EaseCallFragment implements View.OnCl
             outgoing = soundPool.load(mContext, R.raw.em_outgoing, 1);
 
             comingBtnContainer.setVisibility(View.INVISIBLE);
-            hangupBtn.setVisibility(View.VISIBLE);
+            groupHangUp.setVisibility(View.VISIBLE);
+            groupRequestLayout();
             st1 = getResources().getString(R.string.Are_connected_to_each_other);
             callStateTextView.setText(st1);
             handler.sendEmptyMessage(MSG_CALL_MAKE_VOICE);
@@ -131,6 +133,7 @@ public class EaseVoiceCallFragment extends EaseCallFragment implements View.OnCl
             }, 300);
         } else { // incoming call
             voiceContronlLayout.setVisibility(View.INVISIBLE);
+            groupRequestLayout();
             Uri ringUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_RINGTONE);
             audioManager.setMode(AudioManager.MODE_RINGTONE);
             audioManager.setSpeakerphoneOn(true);
@@ -140,6 +143,11 @@ public class EaseVoiceCallFragment extends EaseCallFragment implements View.OnCl
         final int MAKE_CALL_TIMEOUT = 50 * 1000;
         handler.removeCallbacks(timeoutHangup);
         handler.postDelayed(timeoutHangup, MAKE_CALL_TIMEOUT);
+    }
+
+    private void groupRequestLayout() {
+        comingBtnContainer.requestLayout();
+        voiceContronlLayout.requestLayout();
     }
 
     @Override
@@ -179,8 +187,9 @@ public class EaseVoiceCallFragment extends EaseCallFragment implements View.OnCl
             closeSpeakerOn();
             callStateTextView.setText("正在接听...");
             comingBtnContainer.setVisibility(View.INVISIBLE);
-            hangupBtn.setVisibility(View.VISIBLE);
+            groupHangUp.setVisibility(View.VISIBLE);
             voiceContronlLayout.setVisibility(View.VISIBLE);
+            groupRequestLayout();
             handler.sendEmptyMessage(MSG_CALL_ANSWER);
         } else if (id == R.id.btn_hangup_call) {
             hangupBtn.setEnabled(false);
