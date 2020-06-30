@@ -2,6 +2,7 @@ package com.hyphenate.chatuidemo.section.search;
 
 import android.content.Context;
 import android.content.Intent;
+import android.text.TextUtils;
 import android.view.View;
 
 import com.hyphenate.chat.EMChatRoom;
@@ -18,8 +19,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class SearchFriendsActivity extends SearchActivity {
-    private List<EaseUser> mData;
-    private List<EaseUser> result;
+    public List<EaseUser> mData;
+    public List<EaseUser> result;
 
     public static void actionStart(Context context) {
         Intent intent = new Intent(context, SearchFriendsActivity.class);
@@ -44,7 +45,7 @@ public class SearchFriendsActivity extends SearchActivity {
     }
 
     private void searchResult(String search) {
-        if(mData == null || mData.isEmpty()) {
+        if(mData == null || mData.isEmpty() || TextUtils.isEmpty(search)) {
             return;
         }
 
@@ -65,7 +66,7 @@ public class SearchFriendsActivity extends SearchActivity {
         ContactDetailActivity.actionStart(mContext, item);
     }
 
-    private class SearchFriendAdapter extends FriendsAdapter {
+    public class SearchFriendAdapter extends FriendsAdapter {
         @Override
         public int getEmptyLayoutId() {
             return R.layout.ease_layout_default_no_data;

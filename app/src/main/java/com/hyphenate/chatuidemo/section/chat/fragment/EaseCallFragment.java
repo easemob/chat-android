@@ -452,6 +452,7 @@ public class EaseCallFragment extends EaseBaseFragment {
         message.addBody(txtBody);
         message.setMsgId(msgid);
         message.setStatus(EMMessage.Status.SUCCESS);
+        message.setUnread(false);
 
         // save
         EMClient.getInstance().chatManager().saveMessage(message);

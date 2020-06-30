@@ -14,6 +14,7 @@ import com.hyphenate.chat.EMGroup;
 import com.hyphenate.chat.EMGroupOptions;
 import com.hyphenate.chat.EMMucSharedFile;
 import com.hyphenate.chatuidemo.DemoHelper;
+import com.hyphenate.chatuidemo.common.db.DemoDbHelper;
 import com.hyphenate.chatuidemo.common.db.entity.EmUserEntity;
 import com.hyphenate.chatuidemo.common.interfaceOrImplement.ResultCallBack;
 import com.hyphenate.chatuidemo.common.net.ErrorCode;
@@ -296,7 +297,18 @@ public class EMGroupManagerRepository extends BaseEMRepository{
      * @return
      */
     public LiveData<Resource<String>> getGroupAnnouncement(String groupId) {
-        return new NetworkOnlyResource<String>() {
+        return new NetworkBoundResource<String, String>() {
+
+            @Override
+            protected boolean shouldFetch(String data) {
+                return true;
+            }
+
+            @Override
+            protected LiveData<String> loadFromDb() {
+                String announcement = DemoHelper.getInstance().getGroupManager().getGroup(groupId).getAnnouncement();
+                return createLiveData(announcement);
+            }
 
             @Override
             protected void createCall(@NonNull ResultCallBack<LiveData<String>> callBack) {
@@ -311,6 +323,11 @@ public class EMGroupManagerRepository extends BaseEMRepository{
                         callBack.onError(error, errorMsg);
                     }
                 });
+            }
+
+            @Override
+            protected void saveCallResult(String item) {
+
             }
 
         }.asLiveData();

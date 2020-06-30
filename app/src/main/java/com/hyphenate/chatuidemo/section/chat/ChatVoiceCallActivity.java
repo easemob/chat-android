@@ -44,6 +44,7 @@ public class ChatVoiceCallActivity extends BaseInitActivity {
         fragment = new EaseVoiceCallFragment();
         Bundle bundle = new Bundle();
         bundle.putString("username", getIntent().getStringExtra("username"));
+        bundle.putBoolean("isComingCall", getIntent().getBooleanExtra("isComingCall", false));
         fragment.setArguments(bundle);
         getSupportFragmentManager().beginTransaction().replace(R.id.fl_fragment, fragment).commit();
     }

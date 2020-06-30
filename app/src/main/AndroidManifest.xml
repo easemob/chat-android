@@ -321,11 +321,7 @@
         <activity android:name=".section.chat.ImageGridActivity"
             android:screenOrientation="portrait"/>
         <!--视频通话-->
-        <activity android:name=".section.chat.VideoCallActivity"
-            android:screenOrientation="portrait"/>
         <!--语音通话-->
-        <activity android:name=".section.chat.VoiceCallActivity"
-            android:screenOrientation="portrait"/>
         <activity android:name=".section.chat.BaiduMapActivity"
             android:screenOrientation="portrait"/>
         <!--录制视频-->
@@ -481,6 +477,9 @@
             android:screenOrientation="portrait"/>
         <!--搜索单人会话-->
         <activity android:name=".section.search.SearchSingleChatActivity"
+            android:screenOrientation="portrait"/>
+        <!--搜索黑名单用户-->
+        <activity android:name=".section.search.SearchBlackActivity"
             android:screenOrientation="portrait"/>
         <!--聊天历史-->
         <activity android:name=".section.chat.ChatHistoryActivity"

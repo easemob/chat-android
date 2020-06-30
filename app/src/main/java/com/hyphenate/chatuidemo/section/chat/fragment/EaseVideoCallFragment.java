@@ -1,5 +1,7 @@
 package com.hyphenate.chatuidemo.section.chat.fragment;
 
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.media.AudioManager;
 import android.media.RingtoneManager;
 import android.media.SoundPool;
@@ -28,6 +30,9 @@ import com.hyphenate.chat.EMCallSession;
 import com.hyphenate.chat.EMCallStateChangeListener;
 import com.hyphenate.chat.EMClient;
 import com.hyphenate.chat.EMVideoCallHelper;
+import com.hyphenate.chat.EMWaterMarkOption;
+import com.hyphenate.chat.EMWaterMarkPosition;
+import com.hyphenate.chatuidemo.common.utils.PreferenceManager;
 import com.hyphenate.easeui.EaseUI;
 import com.hyphenate.easeui.R;
 import com.hyphenate.easeui.utils.PhoneStateManager;
@@ -36,6 +41,7 @@ import com.hyphenate.media.EMCallSurfaceView;
 import com.hyphenate.util.EMLog;
 import com.superrtc.sdk.VideoView;
 
+import java.io.InputStream;
 import java.util.UUID;
 
 public class EaseVideoCallFragment extends EaseCallFragment implements View.OnClickListener {
@@ -70,6 +76,10 @@ public class EaseVideoCallFragment extends EaseCallFragment implements View.OnCl
 
     private Handler uiHandler;
 
+    private Button toggleVideoBtn;
+    private Bitmap watermarkbitmap;
+    private EMWaterMarkOption watermark;
+
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -82,8 +92,7 @@ public class EaseVideoCallFragment extends EaseCallFragment implements View.OnCl
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.em_activity_video_call, null);
-        return view;
+        return inflater.inflate(R.layout.em_activity_video_call, null);
     }
 
     @Override
@@ -148,6 +157,16 @@ public class EaseVideoCallFragment extends EaseCallFragment implements View.OnCl
 
     @Override
     protected void initData() {
+        //获取水印图片
+        if(PreferenceManager.getInstance().isWatermarkResolution()) {
+            try {
+                InputStream in = this.getResources().getAssets().open("watermark.png");
+                watermarkbitmap = BitmapFactory.decodeStream(in);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            watermark = new EMWaterMarkOption(watermarkbitmap, 75, 25, EMWaterMarkPosition.TOP_RIGHT, 8, 8);
+        }
         if (!isInComingCall) {// outgoing call
             soundPool = new SoundPool(1, AudioManager.STREAM_RING, 0);
             outgoing = soundPool.load(mContext, R.raw.em_outgoing, 1);
@@ -367,6 +386,11 @@ public class EaseVideoCallFragment extends EaseCallFragment implements View.OnCl
                         case ACCEPTED: // call is accepted
                             surfaceState = 0;
                             handler.removeCallbacks(timeoutHangup);
+
+                            //推流时设置水印图片
+                            if(PreferenceManager.getInstance().isWatermarkResolution()){
+                                EMClient.getInstance().callManager().setWaterMark(watermark);
+                            }
                             try {
                                 if (soundPool != null)
                                     soundPool.stop(streamID);

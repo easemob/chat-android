@@ -9,7 +9,9 @@ import android.widget.CompoundButton;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.hyphenate.chatuidemo.DemoHelper;
 import com.hyphenate.chatuidemo.R;
+import com.hyphenate.easeui.EaseUI;
 import com.hyphenate.easeui.adapter.EaseBaseRecyclerViewAdapter;
 import com.hyphenate.easeui.domain.EaseUser;
 import com.hyphenate.easeui.widget.EaseImageView;
@@ -68,11 +70,12 @@ public class GroupPickContactsAdapter extends EaseBaseRecyclerViewAdapter<EaseUs
             checkbox = findViewById(R.id.checkbox);
             avatar = findViewById(R.id.avatar);
             name = findViewById(R.id.name);
+            avatar.setShapeType(DemoHelper.getInstance().getEaseAvatarOptions().getAvatarShape());
         }
 
         @Override
         public void setData(EaseUser item, int position) {
-            String username = item.getUsername();
+            String username = getRealUsername(item.getUsername());
             name.setText(item.getNickname());
             Glide.with(mContext).load(R.drawable.ease_default_avatar).into(avatar);
             String header = item.getInitialLetter();
@@ -87,7 +90,7 @@ public class GroupPickContactsAdapter extends EaseBaseRecyclerViewAdapter<EaseUs
             } else {
                 headerView.setVisibility(View.GONE);
             }
-            if(existMembers != null && existMembers.contains(username)){
+            if(checkIfContains(username)){
                 checkbox.setChecked(true);
                 if(isCreateGroup) {
                     checkbox.setButtonDrawable(R.drawable.demo_checkbox_bg_selector);
@@ -104,7 +107,7 @@ public class GroupPickContactsAdapter extends EaseBaseRecyclerViewAdapter<EaseUs
             checkbox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                 @Override
                 public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                    if(isCreateGroup || existMembers == null || !existMembers.contains(username)) {
+                    if(isCreateGroup || !checkIfContains(username)) {
                         if(isChecked) {
                             if(!selectedMembers.contains(username)) {
                                 selectedMembers.add(username);
@@ -120,5 +123,30 @@ public class GroupPickContactsAdapter extends EaseBaseRecyclerViewAdapter<EaseUs
 
 
         }
+    }
+
+    /**
+     * 检查是否已存在
+     * @param username
+     * @return
+     */
+    private boolean checkIfContains(String username) {
+        if(existMembers == null) {
+            return false;
+        }
+        return existMembers.contains(username);
+    }
+
+    /**
+     * 因为环信id只能由字母和数字组成，如果含有“/”就可以认为是多端登录用户
+     * @param username
+     * @return
+     */
+    private String getRealUsername(String username) {
+        if(!username.contains("/")) {
+            return username;
+        }
+        String[] multipleUser = username.split("/");
+        return multipleUser[0];
     }
 }

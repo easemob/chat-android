@@ -19,6 +19,7 @@ import com.hyphenate.chatuidemo.R;
 import com.hyphenate.chatuidemo.common.DemoConstant;
 import com.hyphenate.chatuidemo.common.db.entity.MsgTypeManageEntity;
 import com.hyphenate.chatuidemo.common.interfaceOrImplement.OnResourceParseCallback;
+import com.hyphenate.chatuidemo.common.livedatas.LiveDataBus;
 import com.hyphenate.chatuidemo.common.utils.ThreadManager;
 import com.hyphenate.chatuidemo.section.base.BaseInitFragment;
 import com.hyphenate.chatuidemo.section.chat.ChatActivity;
@@ -148,7 +149,7 @@ public class ConversationListFragment extends BaseInitFragment implements OnRefr
     protected void initViewModel() {
         super.initViewModel();
         mViewModel = new ViewModelProvider(this).get(HomeViewModel.class);
-        mViewModel.getConversationObservable().observe(this, response -> {
+        mViewModel.getConversationObservable().observe(getViewLifecycleOwner(), response -> {
             parseResource(response, new OnResourceParseCallback<List<Object>>() {
                 @Override
                 public void onSuccess(List<Object> data) {
@@ -164,7 +165,7 @@ public class ConversationListFragment extends BaseInitFragment implements OnRefr
 
         });
 
-        mViewModel.getDeleteObservable().observe(this, response -> {
+        mViewModel.getDeleteObservable().observe(getViewLifecycleOwner(), response -> {
             parseResource(response, new OnResourceParseCallback<Boolean>() {
                 @Override
                 public void onSuccess(Boolean data) {
@@ -174,12 +175,23 @@ public class ConversationListFragment extends BaseInitFragment implements OnRefr
         });
 
         MessageViewModel messageViewModel = new ViewModelProvider(this).get(MessageViewModel.class);
-        messageViewModel.getMessageChange().with(DemoConstant.NOTIFY_CHANGE, EaseEvent.class).observe(this, this::loadList);
-        messageViewModel.getMessageChange().with(DemoConstant.MESSAGE_CHANGE_CHANGE, EaseEvent.class).observe(this, this::loadList);
-        messageViewModel.getMessageChange().with(DemoConstant.GROUP_CHANGE, EaseEvent.class).observe(this, this::loadList);
-        messageViewModel.getMessageChange().with(DemoConstant.CHAT_ROOM_CHANGE, EaseEvent.class).observe(this, this::loadList);
-        messageViewModel.getMessageChange().with(DemoConstant.CONVERSATION_DELETE, EaseEvent.class).observe(this, this::loadList);
-        messageViewModel.getMessageChange().with(DemoConstant.CONTACT_CHANGE, EaseEvent.class).observe(this, this::loadList);
+        LiveDataBus messageChange = messageViewModel.getMessageChange();
+        messageChange.with(DemoConstant.NOTIFY_CHANGE, EaseEvent.class).observe(getViewLifecycleOwner(), this::loadList);
+        messageChange.with(DemoConstant.MESSAGE_CHANGE_CHANGE, EaseEvent.class).observe(getViewLifecycleOwner(), this::loadList);
+        messageChange.with(DemoConstant.GROUP_CHANGE, EaseEvent.class).observe(getViewLifecycleOwner(), this::loadList);
+        messageChange.with(DemoConstant.CHAT_ROOM_CHANGE, EaseEvent.class).observe(getViewLifecycleOwner(), this::loadList);
+        messageChange.with(DemoConstant.CONVERSATION_DELETE, EaseEvent.class).observe(getViewLifecycleOwner(), this::loadList);
+        messageChange.with(DemoConstant.CONTACT_CHANGE, EaseEvent.class).observe(getViewLifecycleOwner(), this::loadList);
+        messageChange.with(DemoConstant.MESSAGE_CALL_SAVE, Boolean.class).observe(getViewLifecycleOwner(), this::refreshList);
+    }
+
+    private void refreshList(Boolean event) {
+        if(event == null) {
+            return;
+        }
+        if(event) {
+            mViewModel.loadConversationList();
+        }
     }
 
     private void loadList(EaseEvent change) {

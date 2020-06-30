@@ -43,18 +43,6 @@
         android:background="@color/white"
         android:foreground="@drawable/demo_ripple_click_gray"/>
 
-    <com.hyphenate.chatuidemo.common.widget.ArrowItemView
-        android:id="@+id/item_clear_history"
-        android:layout_width="0dp"
-        android:layout_height="50dp"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/item_search_history"
-        app:arrowItemTitle="@string/em_single_clear_history"
-        app:arrowItemShowDivider="false"
-        android:background="@color/white"
-        android:foreground="@drawable/demo_ripple_click_gray"/>
-
     <com.hyphenate.chatuidemo.common.widget.SwitchItemView
         android:id="@+id/item_switch_top"
         android:layout_width="0dp"
@@ -62,9 +50,23 @@
         android:layout_marginTop="@dimen/em_margin_20"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/item_clear_history"
+        app:layout_constraintTop_toBottomOf="@id/item_search_history"
         app:switchItemShowDivider="false"
         android:background="@color/white"
         app:switchItemTitle="@string/em_single_conversation_top"/>
+
+    <com.hyphenate.chatuidemo.common.widget.ArrowItemView
+        android:id="@+id/item_clear_history"
+        android:layout_width="0dp"
+        android:layout_height="50dp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/item_switch_top"
+        android:layout_marginTop="@dimen/em_margin_20"
+        app:arrowItemTitle="@string/em_single_clear_history"
+        app:arrowItemShowDivider="false"
+        android:background="@color/white"
+        android:foreground="@drawable/demo_ripple_click_gray"/>
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

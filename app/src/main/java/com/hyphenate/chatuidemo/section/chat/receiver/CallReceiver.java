@@ -21,8 +21,8 @@ import android.os.Build;
 
 import com.hyphenate.chatuidemo.DemoHelper;
 import com.hyphenate.chatuidemo.R;
-import com.hyphenate.chatuidemo.section.chat.VideoCallActivity;
-import com.hyphenate.chatuidemo.section.chat.VoiceCallActivity;
+import com.hyphenate.chatuidemo.section.chat.ChatVideoCallActivity;
+import com.hyphenate.chatuidemo.section.chat.ChatVoiceCallActivity;
 import com.hyphenate.util.EMLog;
 import com.hyphenate.util.EasyUtils;
 
@@ -40,10 +40,10 @@ public class CallReceiver extends BroadcastReceiver{
 			Intent fullScreenIntent;
 			String content = "";
 			if("video".equals(type)) { //video call
-				fullScreenIntent = new Intent(context, VideoCallActivity.class);
+				fullScreenIntent = new Intent(context, ChatVideoCallActivity.class);
 				content = context.getString(R.string.alert_request_video, from);
 			}else {
-				fullScreenIntent = new Intent(context, VoiceCallActivity.class);
+				fullScreenIntent = new Intent(context, ChatVoiceCallActivity.class);
 				content = context.getString(R.string.alert_request_voice, from);
 			}
 			fullScreenIntent.putExtra("username", from)
@@ -59,11 +59,11 @@ public class CallReceiver extends BroadcastReceiver{
 
 	private void startTargetActivity(Context context, String from, String type) {
 		if("video".equals(type)){ //video call
-			context.startActivity(new Intent(context, VideoCallActivity.class).
+			context.startActivity(new Intent(context, ChatVideoCallActivity.class).
 					putExtra("username", from).putExtra("isComingCall", true).
 					addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
 		}else{ //voice call
-			context.startActivity(new Intent(context, VoiceCallActivity.class).
+			context.startActivity(new Intent(context, ChatVoiceCallActivity.class).
 					putExtra("username", from).putExtra("isComingCall", true).
 					addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
 		}

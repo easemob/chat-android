@@ -553,6 +553,10 @@ public class DemoHelper {
         return false;
     }
 
+    public EaseAvatarOptions getEaseAvatarOptions() {
+        return EaseUI.getInstance().getAvatarOptions();
+    }
+
     public DemoModel getModel(){
         if(demoModel == null) {
             demoModel = new DemoModel(DemoApplication.getInstance());

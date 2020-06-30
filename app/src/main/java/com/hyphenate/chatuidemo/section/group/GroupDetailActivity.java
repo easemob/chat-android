@@ -136,6 +136,11 @@ public class GroupDetailActivity extends BaseInitActivity implements EaseTitleBa
         tvGroupInvite.setVisibility(isCanInvite() ? View.VISIBLE : View.GONE);
         itemGroupNotDisturb.getSwitch().setChecked(group.isMsgBlocked());
 
+        itemGroupIntroduction.getTvContent().setText(group.getDescription());
+
+        makeTextSingleLine(itemGroupNotice.getTvContent());
+        makeTextSingleLine(itemGroupIntroduction.getTvContent());
+
         List<String> disabledIds = DemoHelper.getInstance().getPushManager().getNoPushGroups();
         itemGroupOffPush.getSwitch().setChecked(disabledIds != null && disabledIds.contains(groupId));
     }
@@ -150,6 +155,14 @@ public class GroupDetailActivity extends BaseInitActivity implements EaseTitleBa
                 public void onSuccess(EMGroup data) {
                     group = data;
                     initGroupView();
+                }
+            });
+        });
+        viewModel.getAnnouncementObservable().observe(this, response -> {
+            parseResource(response, new OnResourceParseCallback<String>() {
+                @Override
+                public void onSuccess(String data) {
+                    itemGroupNotice.getTvContent().setText(data);
                 }
             });
         });
@@ -211,6 +224,7 @@ public class GroupDetailActivity extends BaseInitActivity implements EaseTitleBa
 
     private void loadGroup() {
         viewModel.getGroup(groupId);
+        viewModel.getGroupAnnouncement(groupId);
     }
 
     @Override
@@ -346,12 +360,17 @@ public class GroupDetailActivity extends BaseInitActivity implements EaseTitleBa
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if(resultCode == RESULT_OK) {
-            switch (resultCode) {
+            switch (requestCode) {
                 case REQUEST_CODE_ADD_USER :
                     loadGroup();
                     break;
             }
         }
+    }
+
+    private void makeTextSingleLine(TextView tv) {
+        tv.setMaxLines(1);
+        tv.setEllipsize(TextUtils.TruncateAt.END);
     }
 
     @Override

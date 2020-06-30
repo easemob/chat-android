@@ -84,7 +84,8 @@
     <string name="em_conversation_menu_delete">删除会话</string>
     <string name="em_conversation_system_notification">系统通知</string>
 
-    <string name="em_add_contact_item_button_text">添加</string>
+    <string name="em_add_contact_item_button_text">添加好友</string>
+    <string name="em_add_contact_item_button_text_added">已添加</string>
     <string name="em_add_contact_not_add_myself">不能添加自己</string>
     <string name="em_add_contact_user_already_in_contactlist">此用户已是你好友(被拉黑状态)，从黑名单列表中移出即可</string>
     <string name="em_add_contact_this_user_is_already_your_friend">此用户已是你的好友</string>

@@ -30,6 +30,9 @@ public interface EmUserDao {
     @Query("select * from em_users where contact = 1")
     LiveData<List<EaseUser>> loadBlackUsers();
 
+    @Query("select * from em_users where contact = 1")
+    List<EaseUser> loadBlackEaseUsers();
+
     @Query("select username from em_users")
     List<String> loadAllUsers();
 

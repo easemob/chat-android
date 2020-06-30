@@ -7,14 +7,18 @@ import android.text.TextUtils;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 
 import androidx.appcompat.widget.SearchView;
+import androidx.core.content.ContextCompat;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.hyphenate.chatuidemo.DemoHelper;
 import com.hyphenate.chatuidemo.R;
+import com.hyphenate.chatuidemo.common.db.DemoDbHelper;
 import com.hyphenate.chatuidemo.common.enums.SearchType;
 import com.hyphenate.chatuidemo.common.interfaceOrImplement.OnResourceParseCallback;
 import com.hyphenate.chatuidemo.section.base.BaseInitActivity;
@@ -27,6 +31,8 @@ import com.hyphenate.easeui.widget.EaseTitleBar;
 import com.scwang.smartrefresh.layout.SmartRefreshLayout;
 import com.scwang.smartrefresh.layout.api.RefreshLayout;
 import com.scwang.smartrefresh.layout.listener.OnRefreshListener;
+
+import java.util.List;
 
 public class AddContactActivity extends BaseInitActivity implements EaseTitleBar.OnBackPressListener, SearchView.OnQueryTextListener, OnRefreshListener, AddContactAdapter.OnItemAddClickListener, OnItemClickListener {
     private EaseTitleBar mTitleBar;
@@ -104,6 +110,9 @@ public class AddContactActivity extends BaseInitActivity implements EaseTitleBar
             });
 
         });
+        //获取本地的好友列表
+        List<String> localUsers = DemoDbHelper.getInstance(mContext).getUserDao().loadAllUsers();
+        mAdapter.addLocalContacts(localUsers);
     }
 
     @Override

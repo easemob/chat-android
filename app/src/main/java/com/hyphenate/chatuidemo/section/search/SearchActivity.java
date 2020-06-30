@@ -19,13 +19,14 @@ import com.hyphenate.chatuidemo.R;
 import com.hyphenate.chatuidemo.section.base.BaseInitActivity;
 import com.hyphenate.easeui.adapter.EaseBaseRecyclerViewAdapter;
 import com.hyphenate.easeui.interfaces.OnItemClickListener;
+import com.hyphenate.easeui.widget.EaseRecyclerView;
 import com.hyphenate.easeui.widget.EaseTitleBar;
 
 public abstract class SearchActivity extends BaseInitActivity {
     private EaseTitleBar titleBar;
     protected EditText query;
     private ImageButton searchClear;
-    private RecyclerView rvList;
+    protected EaseRecyclerView rvList;
     protected EaseBaseRecyclerViewAdapter adapter;
 
     @Override

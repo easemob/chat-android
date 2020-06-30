@@ -14,9 +14,11 @@ import com.hyphenate.chatuidemo.common.livedatas.LiveDataBus;
 import com.hyphenate.chatuidemo.section.base.BaseInitActivity;
 import com.hyphenate.chatuidemo.section.friends.adapter.BlackContactAdapter;
 import com.hyphenate.chatuidemo.section.friends.viewmodels.ContactBlackViewModel;
+import com.hyphenate.chatuidemo.section.search.SearchBlackActivity;
 import com.hyphenate.easeui.domain.EaseUser;
 import com.hyphenate.easeui.model.EaseEvent;
 import com.hyphenate.easeui.widget.EaseRecyclerView;
+import com.hyphenate.easeui.widget.EaseSearchTextView;
 import com.hyphenate.easeui.widget.EaseTitleBar;
 import com.scwang.smartrefresh.layout.SmartRefreshLayout;
 import com.scwang.smartrefresh.layout.api.RefreshLayout;
@@ -28,10 +30,11 @@ import androidx.annotation.NonNull;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
-public class ContactBlackListActivity extends BaseInitActivity implements OnRefreshListener, EaseTitleBar.OnBackPressListener {
+public class ContactBlackListActivity extends BaseInitActivity implements OnRefreshListener, EaseTitleBar.OnBackPressListener, View.OnClickListener {
     private EaseTitleBar titleBar;
     private SmartRefreshLayout srlRefresh;
     private EaseRecyclerView rvList;
+    private EaseSearchTextView searchBlack;
     private BlackContactAdapter adapter;
     private ContactBlackViewModel viewModel;
 
@@ -51,6 +54,7 @@ public class ContactBlackListActivity extends BaseInitActivity implements OnRefr
         titleBar = findViewById(R.id.title_bar);
         srlRefresh = findViewById(R.id.srl_refresh);
         rvList = findViewById(R.id.rv_list);
+        searchBlack = findViewById(R.id.search_black);
 
         rvList.setLayoutManager(new LinearLayoutManager(mContext));
         adapter = new BlackContactAdapter();
@@ -82,6 +86,7 @@ public class ContactBlackListActivity extends BaseInitActivity implements OnRefr
         super.initListener();
         titleBar.setOnBackPressListener(this);
         srlRefresh.setOnRefreshListener(this);
+        searchBlack.setOnClickListener(this);
     }
 
     @Override
@@ -131,6 +136,15 @@ public class ContactBlackListActivity extends BaseInitActivity implements OnRefr
     private void finishRefresh() {
         if(srlRefresh != null) {
             srlRefresh.finishRefresh();
+        }
+    }
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.search_black :
+                SearchBlackActivity.actionStart(mContext);
+                break;
         }
     }
 }

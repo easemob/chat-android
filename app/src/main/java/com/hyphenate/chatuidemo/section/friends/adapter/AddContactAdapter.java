@@ -8,12 +8,16 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.core.content.ContextCompat;
 
 import com.hyphenate.chatuidemo.R;
 import com.hyphenate.easeui.adapter.EaseBaseRecyclerViewAdapter;
 import com.hyphenate.easeui.widget.EaseImageView;
 
+import java.util.List;
+
 public class AddContactAdapter extends EaseBaseRecyclerViewAdapter<String> {
+    private List<String> mContacts;
 
     private OnItemAddClickListener mListener;
 
@@ -50,6 +54,11 @@ public class AddContactAdapter extends EaseBaseRecyclerViewAdapter<String> {
             mBtnSearchAdd.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    if(v instanceof Button) {
+                        v.setBackground(ContextCompat.getDrawable(mContext, R.drawable.demo_button_unenable_shape));
+                        ((Button) v).setText(R.string.em_add_contact_item_button_text_added);
+                        v.setEnabled(false);
+                    }
                     if(mListener != null) {
                         mListener.onItemAddClick(v, position);
                     }
@@ -60,6 +69,15 @@ public class AddContactAdapter extends EaseBaseRecyclerViewAdapter<String> {
                 return;
             }
             mTvSearchName.setText(item);
+            if(mContacts != null && mContacts.contains(item)) {
+                mBtnSearchAdd.setBackground(ContextCompat.getDrawable(mContext, R.drawable.demo_button_unenable_shape));
+                mBtnSearchAdd.setText(R.string.em_add_contact_item_button_text_added);
+                mBtnSearchAdd.setEnabled(false);
+            }else {
+                mBtnSearchAdd.setBackground(ContextCompat.getDrawable(mContext, R.drawable.demo_add_contact_button_bg));
+                mBtnSearchAdd.setText(R.string.em_add_contact_item_button_text);
+                mBtnSearchAdd.setEnabled(true);
+            }
         }
     }
 
@@ -76,5 +94,9 @@ public class AddContactAdapter extends EaseBaseRecyclerViewAdapter<String> {
      */
     public interface OnItemAddClickListener {
         void onItemAddClick(View view, int position);
+    }
+
+    public void addLocalContacts(List<String> contacts) {
+        this.mContacts = contacts;
     }
 }

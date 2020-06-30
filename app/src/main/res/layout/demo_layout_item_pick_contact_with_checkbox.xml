@@ -9,11 +9,11 @@
         android:id="@+id/header"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@drawable/ease_mm_listitem_disable"
+        android:background="@color/em_base_color_divider"
         android:paddingLeft="10dp"
         android:textColor="@android:color/black"
         android:textSize="15sp"
-        android:visibility="gone" />
+        android:visibility="visible" />
 
     <LinearLayout
         android:layout_width="match_parent"
