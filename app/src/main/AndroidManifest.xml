@@ -490,6 +490,9 @@
         <!--意见反馈-->
         <activity android:name=".section.me.activity.FeedbackActivity"
             android:screenOrientation="portrait"/>
+        <!--已读回执列表-->
+        <activity android:name="com.hyphenate.easeui.ui.EaseDingAckUserListActivity"
+            android:screenOrientation="portrait"/>
 
         <!--捕获屏幕service-->
         <service android:name=".section.conference.SRForegroundService"
