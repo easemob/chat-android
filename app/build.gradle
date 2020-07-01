@@ -10,8 +10,8 @@ android {
         //applicationId "com.hyphenate.chatuidemo.push"
         minSdkVersion 17
         targetSdkVersion 29
-        versionCode 68
-        versionName "3.6.9"
+        versionCode 69
+        versionName "3.6.9.1"
         multiDexEnabled true
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
 
