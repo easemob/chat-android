@@ -182,34 +182,37 @@ public class ChatRoomDetailActivity extends BaseInitActivity implements EaseTitl
         if(!isOwner()) {
             return;
         }
-        EditTextDialogFragment.showDialog(mContext,
-                getString(R.string.em_chat_room_detail_room_name),
-                chatRoom.getName(), new EditTextDialogFragment.ConfirmClickListener(){
-
+        new EditTextDialogFragment.Builder(mContext)
+                .setContent(chatRoom.getName())
+                .setConfirmClickListener(new EditTextDialogFragment.ConfirmClickListener() {
                     @Override
                     public void onConfirmClick(View view, String content) {
                         if(!TextUtils.isEmpty(content)) {
                             viewModel.changeChatRoomSubject(roomId, content);
                         }
                     }
-                });
+                })
+                .setTitle(R.string.em_chat_room_detail_room_name)
+                .show();
+
     }
 
     private void showDescriptionDialog() {
         if(!isOwner()) {
             return;
         }
-        EditTextDialogFragment.showDialog(mContext,
-                getString(R.string.em_chat_room_detail_description),
-                chatRoom.getDescription(), new EditTextDialogFragment.ConfirmClickListener(){
-
+        new EditTextDialogFragment.Builder(mContext)
+                .setContent(chatRoom.getDescription())
+                .setConfirmClickListener(new EditTextDialogFragment.ConfirmClickListener() {
                     @Override
                     public void onConfirmClick(View view, String content) {
                         if(!TextUtils.isEmpty(content)) {
                             viewModel.changeChatroomDescription(roomId, content);
                         }
                     }
-                });
+                })
+                .setTitle(R.string.em_chat_room_detail_description)
+                .show();
     }
 
     @Override

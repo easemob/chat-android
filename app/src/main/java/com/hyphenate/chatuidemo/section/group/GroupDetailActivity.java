@@ -315,17 +315,18 @@ public class GroupDetailActivity extends BaseInitActivity implements EaseTitleBa
     }
 
     private void showGroupNameDialog() {
-        EditTextDialogFragment.showDialog(mContext,
-                getString(R.string.em_chat_group_detail_name),
-                group.getGroupName(), new EditTextDialogFragment.ConfirmClickListener(){
-
+        new EditTextDialogFragment.Builder(mContext)
+                .setContent(group.getGroupName())
+                .setConfirmClickListener(new EditTextDialogFragment.ConfirmClickListener() {
                     @Override
                     public void onConfirmClick(View view, String content) {
                         if(!TextUtils.isEmpty(content)) {
                             viewModel.setGroupName(groupId, content);
                         }
                     }
-                });
+                })
+                .setTitle(R.string.em_chat_group_detail_name)
+                .show();
     }
 
     private void showAnnouncementDialog() {

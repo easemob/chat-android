@@ -2,9 +2,14 @@ package com.hyphenate.chatuidemo.section.dialog;
 
 import android.os.Bundle;
 import android.text.InputType;
+import android.text.TextUtils;
+import android.util.TypedValue;
 import android.view.View;
 import android.widget.EditText;
 
+import androidx.annotation.ColorInt;
+import androidx.annotation.ColorRes;
+import androidx.annotation.StringRes;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.FragmentTransaction;
 
@@ -14,35 +19,12 @@ import com.hyphenate.chatuidemo.section.base.BaseActivity;
 public class EditTextDialogFragment extends DemoDialogFragment {
 
     private EditText etInput;
-    private String title;
     private String content;
-    private int inputType;
+    private int contentColor;
+    private float contentSize;
+    private int inputType = -1;
     private ConfirmClickListener listener;
-
-    public static void showDialog(BaseActivity context, String title, String content, ConfirmClickListener listener) {
-        EditTextDialogFragment fragment = new EditTextDialogFragment();
-        fragment.setOnConfirmClickListener(listener);
-        Bundle bundle = new Bundle();
-        bundle.putString("title", title);
-        bundle.putString("content", content);
-        fragment.setArguments(bundle);
-        FragmentTransaction transaction = context.getSupportFragmentManager().beginTransaction();
-        transaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
-        fragment.show(transaction, null);
-    }
-
-    public static void showDialog(BaseActivity context, String title, String content, int inputType, ConfirmClickListener listener) {
-        EditTextDialogFragment fragment = new EditTextDialogFragment();
-        fragment.setOnConfirmClickListener(listener);
-        Bundle bundle = new Bundle();
-        bundle.putString("title", title);
-        bundle.putString("content", content);
-        bundle.putInt("inputType", inputType);
-        fragment.setArguments(bundle);
-        FragmentTransaction transaction = context.getSupportFragmentManager().beginTransaction();
-        transaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
-        fragment.show(transaction, null);
-    }
+    private String contentHint;
 
     @Override
     public int getMiddleLayoutId() {
@@ -64,28 +46,33 @@ public class EditTextDialogFragment extends DemoDialogFragment {
     public void initView(Bundle savedInstanceState) {
         super.initView(savedInstanceState);
         etInput = findViewById(R.id.et_input);
-        mBtnDialogConfirm.setTextColor(ContextCompat.getColorStateList(mContext, R.color.demo_dialog_btn_text_brand_color_selector));
-        mTvDialogTitle.setText(title);
-        etInput.setText(content);
-        if(inputType == DialogInputType.TYPE_CLASS_NUMBER) {
-            etInput.setInputType(InputType.TYPE_CLASS_NUMBER);
-        }else if(inputType == DialogInputType.TYPE_CLASS_DECIMAL) {
-            etInput.setInputType(InputType.TYPE_CLASS_NUMBER|InputType.TYPE_NUMBER_FLAG_DECIMAL);
-        }else if(inputType == DialogInputType.TYPE_CLASS_PASSWORD) {
-            etInput.setInputType(InputType.TYPE_CLASS_TEXT|InputType.TYPE_TEXT_VARIATION_PASSWORD);
-        }else {
-            etInput.setInputType(InputType.TYPE_CLASS_TEXT);
+        if(!TextUtils.isEmpty(contentHint)) {
+            etInput.setHint(contentHint);
+        }
+        if(!TextUtils.isEmpty(title)) {
+            mTvDialogTitle.setText(title);
+        }
+        if(!TextUtils.isEmpty(content)) {
+            etInput.setText(content);
+        }
+        if(contentColor != 0) {
+            etInput.setTextColor(contentColor);
+        }
+        if(contentSize != 0) {
+            etInput.setTextSize(TypedValue.COMPLEX_UNIT_SP, contentSize);
+        }
+        if(inputType != -1) {
+            etInput.setInputType(inputType);
         }
     }
 
     @Override
     public void onConfirmClick(View v) {
-        super.onConfirmClick(v);
+        dismiss();
         String content = etInput.getText().toString().trim();
         if(listener != null) {
             listener.onConfirmClick(v, content);
         }
-        dismiss();
     }
 
     public void setOnConfirmClickListener(ConfirmClickListener listener) {
@@ -96,11 +83,99 @@ public class EditTextDialogFragment extends DemoDialogFragment {
          void onConfirmClick(View view, String content);
     }
 
+    public static class Builder extends DemoDialogFragment.Builder {
+        private String content;
+        private int contentColor;
+        private float contentSize;
+        private int inputType = -1;
+        private String hint;
+        private ConfirmClickListener listener;
 
-    public class DialogInputType {
-        public static final int TYPE_CLASS_NONE = 0;
-        public static final int TYPE_CLASS_NUMBER = 2;
-        public static final int TYPE_CLASS_DECIMAL = 3;
-        public static final int TYPE_CLASS_PASSWORD = 4;
+        public Builder(BaseActivity context) {
+            super(context);
+        }
+
+        public Builder setContent(@StringRes int title) {
+            this.content = context.getString(title);
+            return this;
+        }
+
+        public Builder setContent(String title) {
+            this.content = title;
+            return this;
+        }
+
+        public Builder setContentColor(@ColorRes int color) {
+            this.contentColor = ContextCompat.getColor(context, color);
+            return this;
+        }
+
+        public Builder setContentColorInt(@ColorInt int color) {
+            this.contentColor = color;
+            return this;
+        }
+
+        public Builder setContentSize(float size) {
+            this.contentSize = size;
+            return this;
+        }
+
+        public Builder setContentInputType(int inputType) {
+            this.inputType = inputType;
+            return this;
+        }
+
+        public Builder setContentHint(@StringRes int hint) {
+            this.hint = context.getString(hint);
+            return this;
+        }
+
+        public Builder setContentHint(String hint) {
+            this.hint = hint;
+            return this;
+        }
+
+        public Builder setConfirmClickListener(ConfirmClickListener listener) {
+            this.listener = listener;
+            return this;
+        }
+
+        @Override
+        protected DemoDialogFragment getFragment() {
+            return new EditTextDialogFragment();
+        }
+
+        @Override
+        public DemoDialogFragment build() {
+            EditTextDialogFragment fragment = (EditTextDialogFragment) super.build();
+            fragment.setContent(content);
+            fragment.setContentColor(contentColor);
+            fragment.setContentSize(contentSize);
+            fragment.setInputType(inputType);
+            fragment.setContentHint(hint);
+            fragment.setOnConfirmClickListener(listener);
+            return fragment;
+        }
+
+    }
+
+    private void setContent(String content) {
+        this.content = content;
+    }
+
+    private void setContentColor(int contentColor) {
+        this.contentColor = contentColor;
+    }
+
+    private void setContentSize(float contentSize) {
+        this.contentSize = contentSize;
+    }
+
+    private void setInputType(int inputType) {
+        this.inputType = inputType;
+    }
+
+    private void setContentHint(String hint) {
+        this.contentHint = hint;
     }
 }

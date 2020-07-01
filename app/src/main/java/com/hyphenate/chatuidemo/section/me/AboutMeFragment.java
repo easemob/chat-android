@@ -16,6 +16,7 @@ import com.hyphenate.chatuidemo.section.dialog.SimpleDialogFragment;
 import com.hyphenate.chatuidemo.section.login.activity.LoginActivity;
 import com.hyphenate.chatuidemo.section.me.activity.AboutHxActivity;
 import com.hyphenate.chatuidemo.section.me.activity.DeveloperSetActivity;
+import com.hyphenate.chatuidemo.section.me.activity.FeedbackActivity;
 import com.hyphenate.chatuidemo.section.me.activity.SetIndexActivity;
 import com.hyphenate.chatuidemo.section.me.activity.UserDetailActivity;
 import com.hyphenate.easeui.utils.StatusBarCompat;
@@ -74,7 +75,7 @@ public class AboutMeFragment extends BaseInitFragment implements View.OnClickLis
                 SetIndexActivity.actionStart(mContext);
                 break;
             case R.id.item_feedback:
-                showToast("意见反馈");
+                FeedbackActivity.actionStart(mContext);
                 break;
             case R.id.item_about_hx:
                 AboutHxActivity.actionStart(mContext);

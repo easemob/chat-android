@@ -246,6 +246,14 @@
     <string name="em_login_out_hint">是否退出？</string>
     <string name="em_developer_appkey_warning">当前appKey以及环境已经配置生效，更换当前appKey需重启客户端！</string>
     <string name="em_developer_appkey_confirm">重启</string>
+    
+    <string name="em_feedback_question_title">选择问题类型</string>
+    <string name="em_feedback_question_bug">BUG反馈</string>
+    <string name="em_feedback_et_hint">问题描述</string>
+    <string name="em_feedback_email_title">您的邮箱</string>
+    <string name="em_feedback_email_hint">请输入邮箱地址</string>
+    <string name="em_feedback_qq_title">您的QQ</string>
+    <string name="em_feedback_qq_hint">请输入QQ号</string>
 
     <string name="newnotify">接收新消息通知</string>
     <string name="voice">声音</string>

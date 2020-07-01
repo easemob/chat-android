@@ -487,6 +487,9 @@
         <!--个人资料-->
         <activity android:name=".section.me.activity.UserDetailActivity"
             android:screenOrientation="portrait"/>
+        <!--意见反馈-->
+        <activity android:name=".section.me.activity.FeedbackActivity"
+            android:screenOrientation="portrait"/>
 
         <!--捕获屏幕service-->
         <service android:name=".section.conference.SRForegroundService"

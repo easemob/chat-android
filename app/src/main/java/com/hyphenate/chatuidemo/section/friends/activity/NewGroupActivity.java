@@ -3,9 +3,9 @@ package com.hyphenate.chatuidemo.section.friends.activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.InputType;
 import android.text.TextUtils;
 import android.view.View;
-import android.widget.CompoundButton;
 
 import com.hyphenate.chat.EMGroup;
 import com.hyphenate.chat.EMGroupOptions;
@@ -160,17 +160,18 @@ public class NewGroupActivity extends BaseInitActivity implements EaseTitleBar.O
     }
 
     private void showGroupNameDialog() {
-        EditTextDialogFragment.showDialog(mContext,
-                getString(R.string.em_group_new_name_hint),
-                itemGroupName.getTvContent().getText().toString().trim(), new EditTextDialogFragment.ConfirmClickListener(){
-
+        new EditTextDialogFragment.Builder(mContext)
+                .setContent(itemGroupName.getTvContent().getText().toString().trim())
+                .setConfirmClickListener(new EditTextDialogFragment.ConfirmClickListener() {
                     @Override
                     public void onConfirmClick(View view, String content) {
                         if(!TextUtils.isEmpty(content)) {
                             itemGroupName.getTvContent().setText(content);
                         }
                     }
-                });
+                })
+                .setTitle(R.string.em_group_new_name_hint)
+                .show();
     }
 
     private void showProfileDialog() {
@@ -190,12 +191,10 @@ public class NewGroupActivity extends BaseInitActivity implements EaseTitleBar.O
     }
 
     private void setGroupMaxUsersDialog() {
-        EditTextDialogFragment.showDialog(mContext,
-                getString(R.string.em_group_set_max_users),
-                itemGroupMaxUsers.getTvContent().getText().toString().trim(),
-                EditTextDialogFragment.DialogInputType.TYPE_CLASS_NUMBER,
-                new EditTextDialogFragment.ConfirmClickListener(){
-
+        new EditTextDialogFragment.Builder(mContext)
+                .setContent(itemGroupMaxUsers.getTvContent().getText().toString().trim())
+                .setContentInputType(InputType.TYPE_CLASS_NUMBER)
+                .setConfirmClickListener(new EditTextDialogFragment.ConfirmClickListener() {
                     @Override
                     public void onConfirmClick(View view, String content) {
                         if(!TextUtils.isEmpty(content)) {
@@ -208,7 +207,9 @@ public class NewGroupActivity extends BaseInitActivity implements EaseTitleBar.O
                             itemGroupMaxUsers.getTvContent().setText(content);
                         }
                     }
-                });
+                })
+                .setTitle(R.string.em_group_set_max_users)
+                .show();
     }
 
     @Override
