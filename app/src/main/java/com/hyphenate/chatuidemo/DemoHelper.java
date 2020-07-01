@@ -341,7 +341,7 @@ public class DemoHelper {
         // 设置是否需要接受方已读确认
         options.setRequireAck(true);
         // 设置是否需要接受方送达确认,默认false
-        options.setRequireDeliveryAck(true);
+        options.setRequireDeliveryAck(false);
 
         options.setUseRtcConfig(true);
 

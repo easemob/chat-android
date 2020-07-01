@@ -126,7 +126,7 @@ public class ChatFragment extends EaseChatFragment implements EaseChatFragment.O
         inputMenu.registerExtendMenuItem(R.string.attach_location, R.drawable.ease_chat_location_selector, EaseChatInputMenu.ITEM_LOCATION, this);
         inputMenu.registerExtendMenuItem(R.string.attach_file, R.drawable.em_chat_file_selector, EaseChatInputMenu.ITEM_FILE, this);
         //群组类型，开启消息回执，且是owner
-        if(chatType == EaseConstant.CHATTYPE_GROUP && EMClient.getInstance().getOptions().getRequireDeliveryAck()) {
+        if(chatType == EaseConstant.CHATTYPE_GROUP && EMClient.getInstance().getOptions().getRequireAck()) {
             EMGroup group = DemoHelper.getInstance().getGroupManager().getGroup(toChatUsername);
             if(GroupHelper.isOwner(group)) {
                 inputMenu.registerExtendMenuItem(R.string.em_chat_group_delivery_ack, R.drawable.demo_chat_delivery_selector, ITEM_DELIVERY, this);
