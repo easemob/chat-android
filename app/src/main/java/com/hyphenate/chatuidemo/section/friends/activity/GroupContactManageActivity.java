@@ -3,8 +3,12 @@ package com.hyphenate.chatuidemo.section.friends.activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.View;
+import android.widget.FrameLayout;
 
+import androidx.constraintlayout.widget.Group;
+import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentPagerAdapter;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.viewpager.widget.ViewPager;
@@ -14,6 +18,7 @@ import com.hyphenate.chatuidemo.R;
 import com.hyphenate.chatuidemo.common.DemoConstant;
 import com.hyphenate.chatuidemo.section.base.BaseInitActivity;
 import com.hyphenate.chatuidemo.section.friends.adapter.GroupContactFragmentAdapter;
+import com.hyphenate.chatuidemo.section.friends.fragment.GroupPublicContactManageFragment;
 import com.hyphenate.chatuidemo.section.friends.viewmodels.GroupContactViewModel;
 import com.hyphenate.chatuidemo.section.search.SearchGroupActivity;
 import com.hyphenate.easeui.model.EaseEvent;
@@ -25,6 +30,8 @@ public class GroupContactManageActivity extends BaseInitActivity implements Ease
     private EaseSearchTextView mSearchGroup;
     private TabLayout mTlGroupContact;
     private ViewPager mVpGroupContact;
+    private FrameLayout flFragment;
+    private Group groupJoin;
 
     public static void actionStart(Context context) {
         Intent intent = new Intent(context, GroupContactManageActivity.class);
@@ -43,8 +50,18 @@ public class GroupContactManageActivity extends BaseInitActivity implements Ease
         mSearchGroup = findViewById(R.id.search_group);
         mTlGroupContact = findViewById(R.id.tl_group_contact);
         mVpGroupContact = findViewById(R.id.vp_group_contact);
+        flFragment = findViewById(R.id.fl_fragment);
+        groupJoin = findViewById(R.id.group_join);
 
         mTlGroupContact.setupWithViewPager(mVpGroupContact);
+
+        Fragment fragment = getSupportFragmentManager().findFragmentByTag("public-contact");
+        if(fragment != null && fragment.isAdded()) {
+            getSupportFragmentManager().beginTransaction().show(fragment);
+        }else {
+            fragment = new GroupPublicContactManageFragment();
+            getSupportFragmentManager().beginTransaction().replace(R.id.fl_fragment, fragment, "public-contact").commit();
+        }
     }
 
     @Override
@@ -80,7 +97,18 @@ public class GroupContactManageActivity extends BaseInitActivity implements Ease
 
     @Override
     public void onRightClick(View view) {
-        showToast("群组设置");
+        String rightContent = mTitleBarGroupContact.getRightText().getText().toString().trim();
+        if(TextUtils.equals(rightContent, getString(R.string.em_friends_group_public))) {
+            //公开群
+            mTitleBarGroupContact.getRightText().setText(R.string.em_friends_group_join);
+            groupJoin.setVisibility(View.GONE);
+            flFragment.setVisibility(View.VISIBLE);
+        }else {
+            //已加入的群
+            mTitleBarGroupContact.getRightText().setText(R.string.em_friends_group_public);
+            groupJoin.setVisibility(View.VISIBLE);
+            flFragment.setVisibility(View.GONE);
+        }
     }
 
     @Override

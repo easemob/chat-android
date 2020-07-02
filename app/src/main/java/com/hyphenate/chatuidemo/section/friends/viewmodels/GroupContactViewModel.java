@@ -6,7 +6,9 @@ import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
 
+import com.hyphenate.chat.EMCursorResult;
 import com.hyphenate.chat.EMGroup;
+import com.hyphenate.chat.EMGroupInfo;
 import com.hyphenate.chatuidemo.DemoHelper;
 import com.hyphenate.chatuidemo.common.livedatas.LiveDataBus;
 import com.hyphenate.chatuidemo.common.livedatas.SingleSourceLiveData;
@@ -22,6 +24,8 @@ public class GroupContactViewModel extends AndroidViewModel {
     private EMGroupManagerRepository mRepository;
     private SingleSourceLiveData<Resource<List<EMGroup>>> allGroupObservable;
     private SingleSourceLiveData<Resource<List<EaseUser>>> groupMemberObservable;
+    private SingleSourceLiveData<Resource<EMCursorResult<EMGroupInfo>>> publicGroupObservable;
+    private SingleSourceLiveData<Resource<EMCursorResult<EMGroupInfo>>> morePublicGroupObservable;
 
     public GroupContactViewModel(@NonNull Application application) {
         super(application);
@@ -29,6 +33,8 @@ public class GroupContactViewModel extends AndroidViewModel {
         mRepository = new EMGroupManagerRepository();
         allGroupObservable = new SingleSourceLiveData<>();
         groupMemberObservable = new SingleSourceLiveData<>();
+        publicGroupObservable = new SingleSourceLiveData<>();
+        morePublicGroupObservable = new SingleSourceLiveData<>();
     }
 
     public LiveDataBus getMessageObservable() {
@@ -59,4 +65,19 @@ public class GroupContactViewModel extends AndroidViewModel {
         return groupMemberObservable;
     }
 
+    public LiveData<Resource<EMCursorResult<EMGroupInfo>>> getPublicGroupObservable() {
+        return publicGroupObservable;
+    }
+
+    public void getPublicGroups(int pageSize) {
+        publicGroupObservable.setSource(mRepository.getPublicGroupFromServer(pageSize, null));
+    }
+
+    public LiveData<Resource<EMCursorResult<EMGroupInfo>>> getMorePublicGroupObservable() {
+        return morePublicGroupObservable;
+    }
+
+    public void getMorePublicGroups(int pageSize, String cursor) {
+        morePublicGroupObservable.setSource(mRepository.getPublicGroupFromServer(pageSize, cursor));
+    }
 }

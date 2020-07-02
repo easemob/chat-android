@@ -11,6 +11,7 @@ import com.hyphenate.EMCallBack;
 import com.hyphenate.EMValueCallBack;
 import com.hyphenate.chat.EMCursorResult;
 import com.hyphenate.chat.EMGroup;
+import com.hyphenate.chat.EMGroupInfo;
 import com.hyphenate.chat.EMGroupOptions;
 import com.hyphenate.chat.EMMucSharedFile;
 import com.hyphenate.chatuidemo.DemoHelper;
@@ -75,6 +76,31 @@ public class EMGroupManagerRepository extends BaseEMRepository{
 
             }
 
+        }.asLiveData();
+    }
+
+    /**
+     * 获取公开群
+     * @param pageSize
+     * @param cursor
+     * @return
+     */
+    public LiveData<Resource<EMCursorResult<EMGroupInfo>>> getPublicGroupFromServer(int pageSize, String cursor) {
+        return new NetworkOnlyResource<EMCursorResult<EMGroupInfo>>() {
+            @Override
+            protected void createCall(@NonNull ResultCallBack<LiveData<EMCursorResult<EMGroupInfo>>> callBack) {
+                DemoHelper.getInstance().getGroupManager().asyncGetPublicGroupsFromServer(pageSize, cursor, new EMValueCallBack<EMCursorResult<EMGroupInfo>>() {
+                    @Override
+                    public void onSuccess(EMCursorResult<EMGroupInfo> value) {
+                        callBack.onSuccess(createLiveData(value));
+                    }
+
+                    @Override
+                    public void onError(int error, String errorMsg) {
+                        callBack.onError(error, errorMsg);
+                    }
+                });
+            }
         }.asLiveData();
     }
 

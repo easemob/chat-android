@@ -113,6 +113,8 @@
     <string name="em_friends_group_contact_manage">我管理的</string>
     <string name="em_friends_group_contact_participate">我参与的</string>
     <string name="em_friends_group_contact_title">群组列表</string>
+    <string name="em_friends_group_public">公开群</string>
+    <string name="em_friends_group_join">已加群</string>
 
     <string name="em_friends_chat_room_contact_title">聊天室列表</string>
     <string name="em_friends_chat_room_create">创建聊天室</string>

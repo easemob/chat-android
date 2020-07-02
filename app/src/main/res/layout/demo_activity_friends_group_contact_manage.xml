@@ -15,7 +15,7 @@
         app:layout_constraintTop_toTopOf="parent"
         app:titleBarTitle="@string/em_friends_group_contact_title"
         app:titleBarDisplayHomeAsUpEnabled="true"
-        app:titleBarRightImage="@drawable/em_friends_group_manage"
+        app:titleBarRightTitle="@string/em_friends_group_join"
         app:titleBarRightVisible="true"/>
 
     <com.hyphenate.easeui.widget.EaseSearchTextView
@@ -54,5 +54,21 @@
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toBottomOf="@id/tl_group_contact"
         app:layout_constraintBottom_toBottomOf="parent"/>
+
+    <FrameLayout
+        android:id="@+id/fl_fragment"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginTop="8dp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/search_group"
+        app:layout_constraintBottom_toBottomOf="parent"/>
+
+    <androidx.constraintlayout.widget.Group
+        android:id="@+id/group_join"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:constraint_referenced_ids="tl_group_contact,vp_group_contact"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
