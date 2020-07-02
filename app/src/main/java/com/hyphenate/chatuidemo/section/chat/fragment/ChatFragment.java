@@ -69,6 +69,7 @@ public class ChatFragment extends EaseChatFragment implements EaseChatFragment.O
     @Override
     protected void initChildView() {
         super.initChildView();
+        inputMenu.insertText(getUnSendMsg());
         clipboard = (ClipboardManager) getActivity().getSystemService(Context.CLIPBOARD_SERVICE);
         viewModel = new ViewModelProvider(this).get(MessageViewModel.class);
     }
@@ -105,6 +106,7 @@ public class ChatFragment extends EaseChatFragment implements EaseChatFragment.O
     @Override
     protected void initExtendInputMenu() {
         inputMenu.init();
+        inputMenu.setHint(R.string.em_chat_et_hint);
     }
 
     @Override
@@ -398,6 +400,17 @@ public class ChatFragment extends EaseChatFragment implements EaseChatFragment.O
         }
     }
 
+    @Override
+    public void onStop() {
+        super.onStop();
+        //保存未发送的文本消息内容
+        if(mContext != null && mContext.isFinishing()) {
+            if(inputMenu != null) {
+                saveUnSendMsg(inputMenu.getInputContent());
+            }
+        }
+    }
+
     //================================== for video and voice start ====================================
 
     /**
@@ -433,5 +446,20 @@ public class ChatFragment extends EaseChatFragment implements EaseChatFragment.O
     protected void startChatVoiceCall() {
         ChatVoiceCallActivity.actionStart(mContext, toChatUsername);
     }
+//================================== for video and voice end ====================================
 
+//================================== for store do not send input logic start ====================================
+
+    /**
+     * 保存未发送的文本消息内容
+     * @param content
+     */
+    private void saveUnSendMsg(String content) {
+        DemoHelper.getInstance().getModel().saveUnSendMsg(toChatUsername, content);
+    }
+
+    private String getUnSendMsg() {
+        return DemoHelper.getInstance().getModel().getUnSendMsg(toChatUsername);
+    }
+//================================== for store do not send input logic end ====================================
 }

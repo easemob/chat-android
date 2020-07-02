@@ -593,6 +593,19 @@ public class DemoModel {
         return PreferenceManager.getInstance().isEnableTokenLogin();
     }
 
+    /**
+     * 保存未发送的文本消息内容
+     * @param toChatUsername
+     * @param content
+     */
+    public void saveUnSendMsg(String toChatUsername, String content) {
+        PreferenceManager.getInstance().saveUnSendMsgInfo(toChatUsername, content);
+    }
+
+    public String getUnSendMsg(String toChatUsername) {
+        return PreferenceManager.getInstance().getUnSendMsgInfo(toChatUsername);
+    }
+
     enum Key{
         VibrateAndPlayToneOn,
         VibrateOn,

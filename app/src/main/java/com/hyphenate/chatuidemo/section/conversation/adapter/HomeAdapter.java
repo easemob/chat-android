@@ -74,6 +74,7 @@ public class HomeAdapter extends EaseBaseRecyclerViewAdapter<Object> {
                 mentioned.setVisibility(View.GONE);
                 if(item.getType() == EMConversation.EMConversationType.GroupChat) {
                     if(EaseAtMessageHelper.get().hasAtMeMsg(username)) {
+                        mentioned.setText(R.string.were_mentioned);
                         mentioned.setVisibility(View.VISIBLE);
                     }
                     avatar.setImageResource(R.drawable.ease_group_icon);
@@ -103,6 +104,15 @@ public class HomeAdapter extends EaseBaseRecyclerViewAdapter<Object> {
                         mMsgState.setVisibility(View.VISIBLE);
                     } else {
                         mMsgState.setVisibility(View.GONE);
+                    }
+                }
+
+                if(mentioned.getVisibility() != View.VISIBLE) {
+                    String unSendMsg = DemoHelper.getInstance().getModel().getUnSendMsg(username);
+                    if(!TextUtils.isEmpty(unSendMsg)) {
+                        mentioned.setText(R.string.were_not_send_msg);
+                        message.setText(unSendMsg);
+                        mentioned.setVisibility(View.VISIBLE);
                     }
                 }
             }else if(object instanceof MsgTypeManageEntity) {

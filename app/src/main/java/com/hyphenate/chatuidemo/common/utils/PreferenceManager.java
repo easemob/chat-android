@@ -539,4 +539,18 @@ public class PreferenceManager {
 	public boolean isEnableTokenLogin() {
 		return mSharedPreferences.getBoolean(SHARED_KEY_ENABLE_TOKEN_LOGIN, true);
 	}
+
+	/**
+	 * 保存未发送的文本消息内容
+	 * @param toChatUsername
+	 * @param content
+	 */
+	public void saveUnSendMsgInfo(String toChatUsername, String content) {
+		editor.putString(toChatUsername, content);
+		editor.apply();
+	}
+
+	public String getUnSendMsgInfo(String toChatUsername) {
+		return mSharedPreferences.getString(toChatUsername, "");
+	}
 }

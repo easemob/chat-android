@@ -72,6 +72,8 @@
     <string name="em_empty_layout_content">寻找自我 保持本色</string>
 
     <string name="were_mentioned">[有人@我]</string>
+    <string name="were_not_send_msg">[草稿]</string>
+    <string name="em_chat_et_hint">输入了什么东西</string>
 
     <string name="em_search_text_hint">搜索</string>
 

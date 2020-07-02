@@ -105,6 +105,6 @@
         android:padding="7dp"
         android:textColor="@color/em_conversation_color_item_message"
         android:textSize="14sp"
-        tools:text="sldfjsljsldf递四方速递地方水电沙发斯蒂芬是否大是大非水电费"/>
+        tools:text="环信成立于2013年4月，是国内领先的企业级软件服务提供商，于2016年荣膺"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
