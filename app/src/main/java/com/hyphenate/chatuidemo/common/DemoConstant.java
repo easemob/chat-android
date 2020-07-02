@@ -54,4 +54,6 @@ public interface DemoConstant extends EaseConstant {
 
     String CONVERSATION_DELETE = "conversation_delete";
 
+    String MESSAGE_NOT_SEND = "message_not_send";
+
 }

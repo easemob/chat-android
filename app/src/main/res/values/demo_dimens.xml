@@ -24,7 +24,7 @@
     <dimen name="em_login_server_hint_text_size">@dimen/em_size_normal</dimen>
 
     <dimen name="em_main_badge_size">25dp</dimen>
-    <dimen name="em_main_badge_margin_left">20dp</dimen>
+    <dimen name="em_main_badge_margin_left">35dp</dimen>
     <dimen name="em_main_badge_margin_top">5dp</dimen>
 
     <dimen name="em_empty_layout_text_size">@dimen/em_size_small</dimen>

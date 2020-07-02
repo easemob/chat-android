@@ -69,7 +69,6 @@ public class ChatFragment extends EaseChatFragment implements EaseChatFragment.O
     @Override
     protected void initChildView() {
         super.initChildView();
-        inputMenu.insertText(getUnSendMsg());
         clipboard = (ClipboardManager) getActivity().getSystemService(Context.CLIPBOARD_SERVICE);
         viewModel = new ViewModelProvider(this).get(MessageViewModel.class);
     }
@@ -83,6 +82,7 @@ public class ChatFragment extends EaseChatFragment implements EaseChatFragment.O
     @Override
     protected void initChildData() {
         super.initChildData();
+        inputMenu.insertText(getUnSendMsg());
         LiveDataBus.get().with(DemoConstant.MESSAGE_CHANGE_CHANGE).postValue(new EaseEvent(DemoConstant.MESSAGE_CHANGE_CHANGE, EaseEvent.TYPE.MESSAGE));
         LiveDataBus.get().with(DemoConstant.MESSAGE_CALL_SAVE, Boolean.class).observe(getViewLifecycleOwner(), event -> {
             if(event == null) {
@@ -407,6 +407,7 @@ public class ChatFragment extends EaseChatFragment implements EaseChatFragment.O
         if(mContext != null && mContext.isFinishing()) {
             if(inputMenu != null) {
                 saveUnSendMsg(inputMenu.getInputContent());
+                LiveDataBus.get().with(DemoConstant.MESSAGE_NOT_SEND).postValue(true);
             }
         }
     }
