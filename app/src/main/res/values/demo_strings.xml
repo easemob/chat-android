@@ -255,6 +255,12 @@
     <string name="em_feedback_qq_title">您的QQ</string>
     <string name="em_feedback_qq_hint">请输入QQ号</string>
 
+    <string name="em_conversation_list_search_hint">搜索会话</string>
+    <string name="em_friend_list_search_hint">搜索好友</string>
+    <string name="em_group_list_search_hint">搜索群聊</string>
+    <string name="em_chat_room_list_search_hint">搜索聊天室</string>
+    <string name="em_black_list_search_hint">搜索黑名单</string>
+
     <string name="newnotify">接收新消息通知</string>
     <string name="voice">声音</string>
     <string name="shake">震动</string>

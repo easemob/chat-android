@@ -21,6 +21,7 @@
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toBottomOf="@id/title_bar_chat_room_contact"
+        android:hint="@string/em_chat_room_list_search_hint"
         android:layout_marginLeft="16dp"
         android:layout_marginStart="16dp"
         android:layout_marginRight="16dp"

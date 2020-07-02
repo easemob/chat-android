@@ -12,6 +12,7 @@
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toTopOf="@id/srl_friend_refresh"
+        android:hint="@string/em_friend_list_search_hint"
         android:layout_marginLeft="16dp"
         android:layout_marginStart="16dp"
         android:layout_marginRight="16dp"
