@@ -16,7 +16,7 @@ import com.hyphenate.chatuidemo.common.livedatas.SingleSourceLiveData;
 public class MainViewModel extends AndroidViewModel {
     private InviteMessageDao inviteMessageDao;
     private SingleSourceLiveData<Integer> switchObservable;
-    private MutableLiveData<Boolean> homeUnReadObservable;
+    private MutableLiveData<String> homeUnReadObservable;
 
     public MainViewModel(@NonNull Application application) {
         super(application);
@@ -37,7 +37,7 @@ public class MainViewModel extends AndroidViewModel {
         switchObservable.setValue(title);
     }
 
-    public LiveData<Boolean> homeUnReadObservable() {
+    public LiveData<String> homeUnReadObservable() {
         return homeUnReadObservable;
     }
 
@@ -48,7 +48,23 @@ public class MainViewModel extends AndroidViewModel {
     public void checkUnreadMsg() {
         int unreadCount = inviteMessageDao.queryUnreadCount();
         int unreadMessageCount = DemoHelper.getInstance().getChatManager().getUnreadMessageCount();
-        homeUnReadObservable.postValue(unreadCount > 0 || unreadMessageCount > 0);
+        String count = getUnreadCount(unreadCount + unreadMessageCount);
+        homeUnReadObservable.postValue(count);
+    }
+
+    /**
+     * 获取未读消息数目
+     * @param count
+     * @return
+     */
+    private String getUnreadCount(int count) {
+        if(count <= 0) {
+            return null;
+        }
+        if(count > 99) {
+            return "99+";
+        }
+        return String.valueOf(count);
     }
 
 }

@@ -46,13 +46,17 @@
     </style>
 
     <style name="em_main_badge_tv">
-        <item name="android:layout_width">@dimen/em_main_badge_size</item>
-        <item name="android:layout_height">@dimen/em_main_badge_size</item>
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
         <item name="android:layout_marginTop">@dimen/em_main_badge_margin_top</item>
         <item name="android:layout_marginLeft">@dimen/em_main_badge_margin_left</item>
         <item name="android:layout_marginStart">@dimen/em_main_badge_margin_left</item>
-        <item name="android:background">@drawable/demo_main_tv_message_shape</item>
-        <item name="android:visibility">gone</item>
+        <item name="android:background">@drawable/demo_unread_count_bg</item>
+        <item name="android:visibility">visible</item>
+        <item name="android:textSize">10sp</item>
+        <item name="android:textColor">@color/white</item>
+        <item name="android:maxLines">1</item>
+        <item name="android:gravity">center</item>
     </style>
 
     <style name="em_friends_contact_detail_tv">

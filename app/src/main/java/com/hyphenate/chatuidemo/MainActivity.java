@@ -3,6 +3,7 @@ package com.hyphenate.chatuidemo;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -153,11 +154,13 @@ public class MainActivity extends BaseInitActivity implements BottomNavigationVi
             }
         });
 
-        viewModel.homeUnReadObservable().observe(this, showRedIcon -> {
-            if(showRedIcon == null) {
-                return;
+        viewModel.homeUnReadObservable().observe(this, readCount -> {
+            if(!TextUtils.isEmpty(readCount)) {
+                mTvMainHomeMsg.setVisibility(View.VISIBLE);
+                mTvMainHomeMsg.setText(readCount);
+            }else {
+                mTvMainHomeMsg.setVisibility(View.GONE);
             }
-            mTvMainHomeMsg.setVisibility(showRedIcon ? View.VISIBLE : View.GONE);
         });
 
         viewModel.messageChangeObservable().with(DemoConstant.GROUP_CHANGE, EaseEvent.class).observe(this, this::checkUnReadMsg);
