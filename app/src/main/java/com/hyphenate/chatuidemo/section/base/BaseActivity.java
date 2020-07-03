@@ -8,6 +8,7 @@ import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
@@ -30,6 +31,7 @@ import com.hyphenate.chatuidemo.common.interfaceOrImplement.OnResourceParseCallb
 import com.hyphenate.chatuidemo.common.interfaceOrImplement.UserActivityLifecycleCallbacks;
 import com.hyphenate.chatuidemo.common.net.Resource;
 import com.hyphenate.chatuidemo.common.utils.ToastUtils;
+import com.hyphenate.chatuidemo.common.widget.EaseProgressDialog;
 import com.hyphenate.chatuidemo.section.conference.CallFloatWindow;
 import com.hyphenate.chatuidemo.section.conference.ConferenceActivity;
 import com.hyphenate.chatuidemo.section.conference.ConferenceInviteActivity;
@@ -42,6 +44,7 @@ import java.util.List;
  */
 public class BaseActivity extends AppCompatActivity {
     public BaseActivity mContext;
+    private EaseProgressDialog dialog;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -314,6 +317,26 @@ public class BaseActivity extends AppCompatActivity {
                     }
                 }
             }
+        }
+    }
+
+    public void showLoading(String message) {
+        if(dialog != null && dialog.isShowing()) {
+            dialog.dismiss();
+        }
+        if(mContext.isFinishing()) {
+            return;
+        }
+        dialog = new EaseProgressDialog.Builder(mContext)
+                .setLoadingMessage(message)
+                .setCancelable(true)
+                .setCanceledOnTouchOutside(true)
+                .show();
+    }
+
+    public void hideLoading() {
+        if(dialog != null && dialog.isShowing()) {
+            dialog.dismiss();
         }
     }
 }
