@@ -134,6 +134,56 @@ public class EMGroupManagerRepository extends BaseEMRepository{
         }.asLiveData();
     }
 
+    /**
+     * 加入群组
+     * @param group
+     * @param reason
+     * @return
+     */
+    public LiveData<Resource<Boolean>> joinGroup(EMGroup group, String reason) {
+        return new NetworkOnlyResource<Boolean>() {
+            @Override
+            protected void createCall(@NonNull ResultCallBack<LiveData<Boolean>> callBack) {
+                if(group.isMemberOnly()) {
+                    getGroupManager().asyncApplyJoinToGroup(group.getGroupId(), reason, new EMCallBack() {
+                        @Override
+                        public void onSuccess() {
+                            callBack.onSuccess(createLiveData(true));
+                        }
+
+                        @Override
+                        public void onError(int code, String error) {
+                            callBack.onError(code,error);
+                        }
+
+                        @Override
+                        public void onProgress(int progress, String status) {
+
+                        }
+                    });
+                }else {
+                    getGroupManager().asyncJoinGroup(group.getGroupId(), new EMCallBack() {
+                        @Override
+                        public void onSuccess() {
+                            callBack.onSuccess(createLiveData(true));
+                        }
+
+                        @Override
+                        public void onError(int code, String error) {
+                            callBack.onError(code,error);
+                        }
+
+                        @Override
+                        public void onProgress(int progress, String status) {
+
+                        }
+                    });
+                }
+
+            }
+        }.asLiveData();
+    }
+
     public LiveData<Resource<List<String>>> getGroupMembersByName(String groupId) {
         return new NetworkOnlyResource<List<String>>() {
 

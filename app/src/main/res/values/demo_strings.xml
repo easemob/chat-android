@@ -261,9 +261,20 @@
 
     <string name="em_conversation_list_search_hint">搜索会话</string>
     <string name="em_friend_list_search_hint">搜索好友</string>
-    <string name="em_group_list_search_hint">搜索群聊</string>
+    <string name="em_group_list_search_hint">搜索群组</string>
     <string name="em_chat_room_list_search_hint">搜索聊天室</string>
     <string name="em_black_list_search_hint">搜索黑名单</string>
+
+    <string name="em_public_group_information">公开群资料</string>
+    <string name="group_name">群名称</string>
+    <string name="group_owner">群主</string>
+    <string name="em_public_group_introduce">简介</string>
+    <string name="em_public_group_introduce_hint">暂无简介</string>
+    <string name="em_public_group_verification_information">填写验证信息</string>
+    <string name="em_public_group_request_to_join">请求加入</string>
+    <string name="em_public_group_add">加入群聊</string>
+    <string name="send_the_request_is">发送请求成功，等待群主同意</string>
+    <string name="Join_the_group_chat">加入群聊成功</string>
 
     <string name="newnotify">接收新消息通知</string>
     <string name="voice">声音</string>

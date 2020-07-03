@@ -55,12 +55,22 @@ public class GroupContactManageActivity extends BaseInitActivity implements Ease
 
         mTlGroupContact.setupWithViewPager(mVpGroupContact);
 
+        //设置公开群fragment
         Fragment fragment = getSupportFragmentManager().findFragmentByTag("public-contact");
         if(fragment != null && fragment.isAdded()) {
             getSupportFragmentManager().beginTransaction().show(fragment);
         }else {
             fragment = new GroupPublicContactManageFragment();
             getSupportFragmentManager().beginTransaction().replace(R.id.fl_fragment, fragment, "public-contact").commit();
+        }
+
+        //默认显示已加入的群
+        if(isPublic()) {
+            groupJoin.setVisibility(View.VISIBLE);
+            flFragment.setVisibility(View.GONE);
+        }else {
+            groupJoin.setVisibility(View.GONE);
+            flFragment.setVisibility(View.VISIBLE);
         }
     }
 
@@ -97,8 +107,25 @@ public class GroupContactManageActivity extends BaseInitActivity implements Ease
 
     @Override
     public void onRightClick(View view) {
-        String rightContent = mTitleBarGroupContact.getRightText().getText().toString().trim();
-        if(TextUtils.equals(rightContent, getString(R.string.em_friends_group_public))) {
+        switchTab();
+    }
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.search_group :
+                if(isPublic()) {
+                    //搜索公开群
+
+                }else {
+                    SearchGroupActivity.actionStart(mContext);
+                }
+                break;
+        }
+    }
+
+    private void switchTab() {
+        if(isPublic()) {
             //公开群
             mTitleBarGroupContact.getRightText().setText(R.string.em_friends_group_join);
             groupJoin.setVisibility(View.GONE);
@@ -111,12 +138,12 @@ public class GroupContactManageActivity extends BaseInitActivity implements Ease
         }
     }
 
-    @Override
-    public void onClick(View v) {
-        switch (v.getId()) {
-            case R.id.search_group :
-                SearchGroupActivity.actionStart(mContext);
-                break;
-        }
+    /**
+     * 是否是公开群
+     * @return
+     */
+    private boolean isPublic() {
+        String rightContent = mTitleBarGroupContact.getRightText().getText().toString().trim();
+        return TextUtils.equals(rightContent, getString(R.string.em_friends_group_public));
     }
 }

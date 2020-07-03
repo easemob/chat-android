@@ -493,6 +493,7 @@
         <!--已读回执列表-->
         <activity android:name="com.hyphenate.easeui.ui.EaseDingAckUserListActivity"
             android:screenOrientation="portrait"/>
+        <activity android:name=".section.friends.activity.GroupSimpleDetailActivity" />
 
         <!--捕获屏幕service-->
         <service android:name=".section.conference.SRForegroundService"

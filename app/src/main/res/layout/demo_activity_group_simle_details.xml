@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@color/common_bg"
+    android:orientation="vertical">
+
+    <com.hyphenate.easeui.widget.EaseTitleBar
+        android:id="@+id/title_bar"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/em_common_title_bar_height"
+        app:titleBarDisplayHomeAsUpEnabled="true"
+        app:titleBarTitle="@string/em_public_group_information"
+        android:background="@color/white"/>
+
+    <com.hyphenate.chatuidemo.common.widget.ArrowItemView
+        android:id="@+id/item_group_name"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/em_common_item_height"
+        app:arrowItemShowArrow="false"
+        app:arrowItemTitle="@string/group_name"
+        android:background="@color/white"/>
+
+    <com.hyphenate.chatuidemo.common.widget.ArrowItemView
+        android:id="@+id/item_group_owner"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/em_common_item_height"
+        app:arrowItemShowArrow="false"
+        app:arrowItemTitle="@string/group_owner"
+        android:background="@color/white"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/em_margin_20"
+        android:layout_marginLeft="@dimen/em_margin_20"
+        android:layout_marginStart="@dimen/em_margin_20"
+        android:textSize="@dimen/em_size_big"
+        android:textColor="@color/em_color_common_text_black"
+        android:gravity="center_vertical"
+        android:text="@string/em_public_group_introduce"/>
+
+    <TextView
+        android:id="@+id/tv_group_introduction"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:minHeight="50dp"
+        android:layout_marginTop="@dimen/em_margin_10"
+        android:layout_marginLeft="11dp"
+        android:layout_marginRight="11dp"
+        android:paddingLeft="@dimen/em_margin_10"
+        android:paddingRight="@dimen/em_margin_10"
+        android:paddingTop="5dp"
+        android:paddingBottom="5dp"
+        android:textSize="@dimen/em_size_big"
+        android:textColor="@color/em_color_common_text_black"
+        android:background="@drawable/demo_button_normal_shape"
+        android:hint="@string/em_public_group_introduce_hint"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/em_public_group_verification_information"
+        android:layout_marginTop="@dimen/em_margin_20"
+        android:layout_marginLeft="@dimen/em_margin_20"
+        android:layout_marginStart="@dimen/em_margin_20"
+        android:textSize="@dimen/em_size_big"
+        android:textColor="@color/em_color_common_text_black"
+        android:gravity="center_vertical"/>
+
+    <EditText
+        android:id="@+id/et_reason"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="11dp"
+        android:layout_marginRight="11dp"
+        android:layout_marginTop="6dp"
+        android:background="@drawable/demo_button_normal_shape"
+        android:gravity="start"
+        android:hint="@string/em_public_group_request_to_join"
+        android:lines="3"
+        android:maxLines="3"
+        android:maxLength="30"
+        android:padding="6dip"
+        android:textSize="16sp" />
+
+    <Button
+        android:id="@+id/btn_add_to_group"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        android:layout_marginLeft="11dp"
+        android:layout_marginRight="11dp"
+        android:layout_marginTop="30dp"
+        android:background="@drawable/demo_btn_common_selector"
+        android:padding="7dp"
+        android:text="@string/em_public_group_add"
+        android:enabled="false"
+        android:textColor="@android:color/white"
+        android:textSize="18sp" />
+
+</LinearLayout>

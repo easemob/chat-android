@@ -40,20 +40,11 @@ public class PublicGroupContactAdapter extends EaseBaseRecyclerViewAdapter<EMGro
             mName = findViewById(R.id.name);
             mSignature = findViewById(R.id.signature);
             mUnreadMsgNumber = findViewById(R.id.unread_msg_number);
+            mHeader.setVisibility(View.GONE);
         }
 
         @Override
         public void setData(EMGroupInfo item, int position) {
-            String header = EaseCommonUtils.getLetter(item.getGroupName());
-            Log.e("TAG", "GroupContactAdapter header = "+header);
-            mHeader.setVisibility(View.GONE);
-            // 是否显示字母
-            if(position == 0 || (header != null && !header.equals(EaseCommonUtils.getLetter(getItem(position - 1).getGroupName())))) {
-                if(!TextUtils.isEmpty(header)) {
-                    mHeader.setVisibility(View.VISIBLE);
-                    mHeader.setText(header);
-                }
-            }
             mName.setText(item.getGroupName());
         }
     }

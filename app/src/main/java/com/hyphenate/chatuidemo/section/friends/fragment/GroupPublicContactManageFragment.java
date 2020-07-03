@@ -1,6 +1,7 @@
 package com.hyphenate.chatuidemo.section.friends.fragment;
 
 import android.os.Bundle;
+import android.view.View;
 
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -11,15 +12,17 @@ import com.hyphenate.chat.EMGroupInfo;
 import com.hyphenate.chatuidemo.R;
 import com.hyphenate.chatuidemo.common.interfaceOrImplement.OnResourceParseCallback;
 import com.hyphenate.chatuidemo.section.base.BaseInitFragment;
+import com.hyphenate.chatuidemo.section.friends.activity.GroupSimpleDetailActivity;
 import com.hyphenate.chatuidemo.section.friends.adapter.PublicGroupContactAdapter;
 import com.hyphenate.chatuidemo.section.friends.viewmodels.GroupContactViewModel;
+import com.hyphenate.easeui.interfaces.OnItemClickListener;
 import com.scwang.smartrefresh.layout.SmartRefreshLayout;
 import com.scwang.smartrefresh.layout.api.RefreshLayout;
 import com.scwang.smartrefresh.layout.listener.OnRefreshLoadMoreListener;
 
 import java.util.List;
 
-public class GroupPublicContactManageFragment extends BaseInitFragment implements OnRefreshLoadMoreListener {
+public class GroupPublicContactManageFragment extends BaseInitFragment implements OnRefreshLoadMoreListener, OnItemClickListener {
     private SmartRefreshLayout srlRefresh;
     private RecyclerView rvList;
     private PublicGroupContactAdapter mAdapter;
@@ -51,6 +54,7 @@ public class GroupPublicContactManageFragment extends BaseInitFragment implement
         rvList.setLayoutManager(new LinearLayoutManager(mContext));
         mAdapter = new PublicGroupContactAdapter();
         rvList.setAdapter(mAdapter);
+        mAdapter.setOnItemClickListener(this);
 
         viewModel = new ViewModelProvider(this).get(GroupContactViewModel.class);
         viewModel.getPublicGroupObservable().observe(getViewLifecycleOwner(), response -> {
@@ -104,5 +108,11 @@ public class GroupPublicContactManageFragment extends BaseInitFragment implement
     @Override
     public void onRefresh(RefreshLayout refreshLayout) {
         viewModel.getPublicGroups(page_size);
+    }
+
+    @Override
+    public void onItemClick(View view, int position) {
+        EMGroupInfo item = mAdapter.getItem(position);
+        GroupSimpleDetailActivity.actionStart(mContext, item.getGroupId());
     }
 }
