@@ -21,6 +21,7 @@ import com.hyphenate.chatuidemo.section.friends.adapter.GroupContactFragmentAdap
 import com.hyphenate.chatuidemo.section.friends.fragment.GroupPublicContactManageFragment;
 import com.hyphenate.chatuidemo.section.friends.viewmodels.GroupContactViewModel;
 import com.hyphenate.chatuidemo.section.search.SearchGroupActivity;
+import com.hyphenate.chatuidemo.section.search.SearchPublicGroupActivity;
 import com.hyphenate.easeui.model.EaseEvent;
 import com.hyphenate.easeui.widget.EaseSearchTextView;
 import com.hyphenate.easeui.widget.EaseTitleBar;
@@ -65,7 +66,7 @@ public class GroupContactManageActivity extends BaseInitActivity implements Ease
         }
 
         //默认显示已加入的群
-        if(isPublic()) {
+        if(isShowPublic()) {
             groupJoin.setVisibility(View.VISIBLE);
             flFragment.setVisibility(View.GONE);
         }else {
@@ -114,18 +115,19 @@ public class GroupContactManageActivity extends BaseInitActivity implements Ease
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.search_group :
-                if(isPublic()) {
+                if(isShowPublic()) {
                     //搜索公开群
-
-                }else {
                     SearchGroupActivity.actionStart(mContext);
+                }else {
+                    //搜索已加入的群
+                    SearchPublicGroupActivity.actionStart(mContext);
                 }
                 break;
         }
     }
 
     private void switchTab() {
-        if(isPublic()) {
+        if(isShowPublic()) {
             //公开群
             mTitleBarGroupContact.getRightText().setText(R.string.em_friends_group_join);
             groupJoin.setVisibility(View.GONE);
@@ -142,7 +144,7 @@ public class GroupContactManageActivity extends BaseInitActivity implements Ease
      * 是否是公开群
      * @return
      */
-    private boolean isPublic() {
+    private boolean isShowPublic() {
         String rightContent = mTitleBarGroupContact.getRightText().getText().toString().trim();
         return TextUtils.equals(rightContent, getString(R.string.em_friends_group_public));
     }
