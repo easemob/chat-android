@@ -31,6 +31,7 @@ import androidx.constraintlayout.widget.Group;
 import com.hyphenate.chat.EMCallSession;
 import com.hyphenate.chat.EMCallStateChangeListener;
 import com.hyphenate.chat.EMClient;
+import com.hyphenate.chat.EMMirror;
 import com.hyphenate.chat.EMVideoCallHelper;
 import com.hyphenate.chat.EMWaterMarkOption;
 import com.hyphenate.chat.EMWaterMarkPosition;
@@ -398,9 +399,20 @@ public class EaseVideoCallFragment extends EaseCallFragment implements View.OnCl
                             surfaceState = 0;
                             handler.removeCallbacks(timeoutHangup);
 
-                            //推流时设置水印图片
-                            if(PreferenceManager.getInstance().isWatermarkResolution()){
-                                EMClient.getInstance().callManager().setWaterMark(watermark);
+                            String callId = EMClient.getInstance().callManager().getCurrentCallSession().getCallId();
+
+                            if(!EMClient.getInstance().callManager().getCurrentCallSession().getIscaller()){
+                                //推流时设置水印图片
+                                if(PreferenceManager.getInstance().isWatermarkResolution()){
+                                    EMClient.getInstance().callManager().setWaterMark(watermark);
+
+                                    //开启水印时候本地不开启镜像显示
+                                    EMClient.getInstance().callManager().getCallOptions().
+                                            setLocalVideoViewMirror(EMMirror.OFF);
+                                }else{
+                                    EMClient.getInstance().callManager().getCallOptions().
+                                            setLocalVideoViewMirror(EMMirror.ON);
+                                }
                             }
                             try {
                                 if (soundPool != null)
