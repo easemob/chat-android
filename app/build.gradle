@@ -2,6 +2,14 @@ apply plugin: 'com.android.application'
 apply plugin: 'com.huawei.agconnect'
 
 android {
+    signingConfigs {
+        debug {
+            storeFile file('/keystore/sdkdemo.jks')
+            storePassword '123456'
+            keyAlias = 'easemob'
+            keyPassword '123456'
+        }
+    }
     compileSdkVersion 29
     buildToolsVersion "29.0.3"
     defaultConfig {
@@ -14,6 +22,7 @@ android {
         versionName "3.6.9.1"
         multiDexEnabled true
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        signingConfig signingConfigs.debug
 
         //指定room.schemaLocation生成的文件路径  处理Room 警告 Schema export Error
         javaCompileOptions {
@@ -33,6 +42,7 @@ android {
 
         debug {
             applicationIdSuffix ".debug"
+            signingConfig signingConfigs.debug
         }
     }
 
