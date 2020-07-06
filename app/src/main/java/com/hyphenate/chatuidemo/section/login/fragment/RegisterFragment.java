@@ -93,6 +93,18 @@ public class RegisterFragment extends BaseInitFragment implements TextWatcher, V
                 public void onError(int code, String message) {
                     ToastUtils.showFailToast(getResources().getString(R.string.em_register_failed), message);
                 }
+
+                @Override
+                public void onLoading() {
+                    super.onLoading();
+                    showLoading();
+                }
+
+                @Override
+                public void hideLoading() {
+                    super.hideLoading();
+                    RegisterFragment.this.hideLoading();
+                }
             });
 
         });

@@ -23,6 +23,7 @@ import com.hyphenate.chatuidemo.common.interfaceOrImplement.DialogCallBack;
 import com.hyphenate.chatuidemo.common.interfaceOrImplement.OnResourceParseCallback;
 import com.hyphenate.chatuidemo.common.net.Resource;
 import com.hyphenate.chatuidemo.common.utils.ToastUtils;
+import com.hyphenate.chatuidemo.common.widget.EaseProgressDialog;
 
 public class BaseFragment extends Fragment {
     public BaseActivity mContext;
@@ -108,6 +109,24 @@ public class BaseFragment extends Fragment {
     public <T> void parseResource(Resource<T> response, @NonNull OnResourceParseCallback<T> callback) {
         if(mContext != null) {
             mContext.parseResource(response, callback);
+        }
+    }
+
+    public void showLoading() {
+        if(mContext != null) {
+            mContext.showLoading();
+        }
+    }
+
+    public void showLoading(String message) {
+        if(mContext != null) {
+            mContext.showLoading(message);
+        }
+    }
+
+    public void hideLoading() {
+        if(mContext != null) {
+            mContext.hideLoading();
         }
     }
 }

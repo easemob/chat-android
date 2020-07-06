@@ -114,6 +114,18 @@ public class LoginFragment extends BaseInitFragment implements View.OnClickListe
                     super.onError(code, message);
                     ToastUtils.showFailToast(getResources().getString(R.string.em_login_failed), message);
                 }
+
+                @Override
+                public void onLoading() {
+                    super.onLoading();
+                    showLoading();
+                }
+
+                @Override
+                public void hideLoading() {
+                    super.hideLoading();
+                    LoginFragment.this.hideLoading();
+                }
             });
 
         });

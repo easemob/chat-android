@@ -8,6 +8,7 @@
     <string name="required">必填</string>
     <string name="submit">提交</string>
     <string name="cancel">取消</string>
+    <string name="loading">加载中&#8230;</string>
 
     <string name="em_main_title_home">会话</string>
     <string name="em_main_title_friends">通讯录</string>
@@ -232,7 +233,7 @@
     <string name="em_about_hx_product_introduction">产品介绍</string>
     <string name="em_about_hx_company_introduction">公司介绍</string>
     <string name="em_about_hx_version">环信IM %1$s</string>
-    <string name="em_developer_version">当前版本</string>
+    <string name="em_developer_version">当前SDK版本</string>
     <string name="em_developer_appkey_self">自定义AppKey</string>
     <string name="em_developer_appkey_self_add">添加自定义AppKey</string>
     <string name="em_developer_allow_token">允许使用token登录</string>

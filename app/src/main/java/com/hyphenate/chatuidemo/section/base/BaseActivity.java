@@ -320,6 +320,10 @@ public class BaseActivity extends AppCompatActivity {
         }
     }
 
+    public void showLoading() {
+        showLoading(getString(R.string.loading));
+    }
+
     public void showLoading(String message) {
         if(dialog != null && dialog.isShowing()) {
             dialog.dismiss();
