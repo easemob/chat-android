@@ -95,6 +95,7 @@
         <item name="android:layout_width">0dp</item>
         <item name="android:layout_height">@dimen/em_common_item_height</item>
         <item name="android:foreground">@drawable/demo_ripple_click_gray</item>
+        <item name="android:background">@color/white</item>
     </style>
 
 </resources>

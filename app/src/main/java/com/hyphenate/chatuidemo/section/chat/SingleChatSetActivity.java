@@ -94,7 +94,7 @@ public class SingleChatSetActivity extends BaseInitActivity implements EaseTitle
             parseResource(response, new OnResourceParseCallback<Boolean>() {
                 @Override
                 public void onSuccess(Boolean data) {
-                    LiveDataBus.get().with(DemoConstant.CONVERSATION_DELETE).postValue(true);
+                    LiveDataBus.get().with(DemoConstant.CONVERSATION_DELETE).postValue(new EaseEvent(DemoConstant.CONTACT_DECLINE, EaseEvent.TYPE.MESSAGE));
                     finish();
                 }
             });

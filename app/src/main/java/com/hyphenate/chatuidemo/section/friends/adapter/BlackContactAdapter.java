@@ -2,7 +2,7 @@ package com.hyphenate.chatuidemo.section.friends.adapter;
 
 import com.hyphenate.chatuidemo.R;
 
-public class BlackContactAdapter extends FriendsAdapter {
+public class BlackContactAdapter extends ContactListAdapter {
 
     @Override
     public int getEmptyLayoutId() {

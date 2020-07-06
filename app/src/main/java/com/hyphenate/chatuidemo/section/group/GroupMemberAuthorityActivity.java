@@ -298,8 +298,8 @@ public class GroupMemberAuthorityActivity extends BaseInitActivity implements Ea
 
     @Override
     public void onItemClick(View view, int position) {
-        //跳转到
-        ContactDetailActivity.actionStart(mContext, adapter.getItem(position));
+        EaseUser user = adapter.getItem(position);
+        ContactDetailActivity.actionStart(mContext, user, DemoHelper.getInstance().getModel().isContact(user.getUsername()));
     }
 
     @Override

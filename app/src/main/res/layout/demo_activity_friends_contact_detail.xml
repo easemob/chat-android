@@ -126,6 +126,16 @@
         android:visibility="gone"
         style="@style/em_friends_contact_detail_tv"/>
 
+    <TextView
+        android:id="@+id/btn_remove_black"
+        android:text="@string/em_friends_move_out_the_blacklist_new"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/btn_video"
+        android:layout_marginTop="10dp"
+        android:visibility="gone"
+        style="@style/em_friends_contact_detail_tv"/>
+
     <androidx.constraintlayout.widget.Group
         android:id="@+id/group_friend"
         android:layout_width="wrap_content"

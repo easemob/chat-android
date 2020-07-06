@@ -61,6 +61,7 @@ public class HomeAdapter extends EaseBaseRecyclerViewAdapter<Object> {
             mMsgState = findViewById(R.id.msg_state);
             mentioned = findViewById(R.id.mentioned);
             message = findViewById(R.id.message);
+            avatar.setShapeType(DemoHelper.getInstance().getEaseAvatarOptions().getAvatarShape());
         }
 
         @Override

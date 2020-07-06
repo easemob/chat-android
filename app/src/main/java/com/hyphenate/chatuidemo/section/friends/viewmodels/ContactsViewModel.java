@@ -15,14 +15,14 @@ import com.hyphenate.easeui.domain.EaseUser;
 
 import java.util.List;
 
-public class FriendsViewModel extends AndroidViewModel {
+public class ContactsViewModel extends AndroidViewModel {
     private EMContactManagerRepository mRepository;
     private SingleSourceLiveData<Resource<List<EaseUser>>> contactObservable;
     private MediatorLiveData<Resource<List<EaseUser>>> blackObservable;
     private SingleSourceLiveData<Resource<Boolean>> blackResultObservable;
     private SingleSourceLiveData<Resource<Boolean>> deleteObservable;
 
-    public FriendsViewModel(@NonNull Application application) {
+    public ContactsViewModel(@NonNull Application application) {
         super(application);
         mRepository = new EMContactManagerRepository();
         contactObservable = new SingleSourceLiveData<>();

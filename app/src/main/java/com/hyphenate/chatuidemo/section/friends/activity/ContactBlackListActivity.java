@@ -7,6 +7,7 @@ import android.view.ContextMenu;
 import android.view.MenuItem;
 import android.view.View;
 
+import com.hyphenate.chatuidemo.DemoHelper;
 import com.hyphenate.chatuidemo.R;
 import com.hyphenate.chatuidemo.common.DemoConstant;
 import com.hyphenate.chatuidemo.common.interfaceOrImplement.OnResourceParseCallback;
@@ -16,6 +17,7 @@ import com.hyphenate.chatuidemo.section.friends.adapter.BlackContactAdapter;
 import com.hyphenate.chatuidemo.section.friends.viewmodels.ContactBlackViewModel;
 import com.hyphenate.chatuidemo.section.search.SearchBlackActivity;
 import com.hyphenate.easeui.domain.EaseUser;
+import com.hyphenate.easeui.interfaces.OnItemClickListener;
 import com.hyphenate.easeui.model.EaseEvent;
 import com.hyphenate.easeui.widget.EaseRecyclerView;
 import com.hyphenate.easeui.widget.EaseSearchTextView;
@@ -30,7 +32,7 @@ import androidx.annotation.NonNull;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
-public class ContactBlackListActivity extends BaseInitActivity implements OnRefreshListener, EaseTitleBar.OnBackPressListener, View.OnClickListener {
+public class ContactBlackListActivity extends BaseInitActivity implements OnRefreshListener, EaseTitleBar.OnBackPressListener, View.OnClickListener, OnItemClickListener {
     private EaseTitleBar titleBar;
     private SmartRefreshLayout srlRefresh;
     private EaseRecyclerView rvList;
@@ -111,12 +113,22 @@ public class ContactBlackListActivity extends BaseInitActivity implements OnRefr
             parseResource(response, new OnResourceParseCallback<Boolean>() {
                 @Override
                 public void onSuccess(Boolean data) {
-                    viewModel.getBlackList();
                     LiveDataBus.get().with(DemoConstant.CONTACT_CHANGE).postValue(EaseEvent.create(DemoConstant.CONTACT_CHANGE, EaseEvent.TYPE.CONTACT));
                 }
             });
         });
         viewModel.getBlackList();
+
+        LiveDataBus.get().with(DemoConstant.CONTACT_CHANGE, EaseEvent.class).observe(this, event -> {
+            if(event == null) {
+                return;
+            }
+            if(event.isContactChange()) {
+                viewModel.getBlackList();
+            }
+        });
+
+        adapter.setOnItemClickListener(this);
     }
 
     private void unBlock(EaseUser user) {
@@ -146,5 +158,11 @@ public class ContactBlackListActivity extends BaseInitActivity implements OnRefr
                 SearchBlackActivity.actionStart(mContext);
                 break;
         }
+    }
+
+    @Override
+    public void onItemClick(View view, int position) {
+        EaseUser user = adapter.getItem(position);
+        ContactDetailActivity.actionStart(mContext, user, DemoHelper.getInstance().getModel().isContact(user.getUsername()));
     }
 }

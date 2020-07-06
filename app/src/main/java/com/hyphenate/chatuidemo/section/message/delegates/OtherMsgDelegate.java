@@ -4,10 +4,12 @@ import android.content.Context;
 import android.view.View;
 import android.widget.TextView;
 
+import com.hyphenate.chatuidemo.DemoHelper;
 import com.hyphenate.chatuidemo.R;
 import com.hyphenate.chatuidemo.common.db.entity.InviteMessage;
 import com.hyphenate.easeui.adapter.EaseBaseRecyclerViewAdapter;
 import com.hyphenate.chatuidemo.common.db.entity.InviteMessage.InviteMessageStatus;
+import com.hyphenate.easeui.widget.EaseImageView;
 
 import androidx.annotation.NonNull;
 
@@ -34,6 +36,7 @@ public class OtherMsgDelegate extends NewFriendsMsgDelegate<InviteMessage, Other
     public class ViewHolder extends EaseBaseRecyclerViewAdapter.ViewHolder<InviteMessage> {
         private TextView name;
         private TextView message;
+        private EaseImageView avatar;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -43,6 +46,8 @@ public class OtherMsgDelegate extends NewFriendsMsgDelegate<InviteMessage, Other
         public void initView(View itemView) {
             name = findViewById(R.id.name);
             message = findViewById(R.id.message);
+            avatar = findViewById(R.id.avatar);
+            avatar.setShapeType(DemoHelper.getInstance().getEaseAvatarOptions().getAvatarShape());
         }
 
         @Override

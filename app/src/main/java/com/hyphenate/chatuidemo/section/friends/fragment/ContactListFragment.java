@@ -25,8 +25,8 @@ import com.hyphenate.chatuidemo.section.friends.activity.AddContactActivity;
 import com.hyphenate.chatuidemo.section.friends.activity.ChatRoomContactManageActivity;
 import com.hyphenate.chatuidemo.section.friends.activity.ContactDetailActivity;
 import com.hyphenate.chatuidemo.section.friends.activity.GroupContactManageActivity;
-import com.hyphenate.chatuidemo.section.friends.adapter.FriendsAdapter;
-import com.hyphenate.chatuidemo.section.friends.viewmodels.FriendsViewModel;
+import com.hyphenate.chatuidemo.section.friends.adapter.ContactListAdapter;
+import com.hyphenate.chatuidemo.section.friends.viewmodels.ContactsViewModel;
 import com.hyphenate.chatuidemo.section.search.SearchFriendsActivity;
 import com.hyphenate.easeui.domain.EaseUser;
 import com.hyphenate.easeui.interfaces.OnItemClickListener;
@@ -41,21 +41,21 @@ import com.scwang.smartrefresh.layout.listener.OnRefreshListener;
 import java.util.List;
 
 
-public class FriendsFragment extends BaseInitFragment implements View.OnClickListener, OnRefreshListener, OnItemClickListener {
+public class ContactListFragment extends BaseInitFragment implements View.OnClickListener, OnRefreshListener, OnItemClickListener {
     private EaseSearchTextView tvFriendSearch;
     private SmartRefreshLayout mSrlFriendRefresh;
     private EaseRecyclerView mRvFriendsList;
     private EaseSidebar mSideBarFriend;
     private TextView mFloatingHeader;
 
-    private FriendsAdapter mAdapter;
+    private ContactListAdapter mAdapter;
     private ContactItemView mCivNewChat;
     private ContactItemView mCivGroupChat;
     private ContactItemView mCivLabel;
     private ContactItemView mCivChatRoom;
     private ContactItemView mCivOfficialAccount;
     private ContactItemView mCivAvConference;
-    private FriendsViewModel mViewModel;
+    private ContactsViewModel mViewModel;
     private SidebarPresenter mPresenter;
 
     @Override
@@ -74,7 +74,7 @@ public class FriendsFragment extends BaseInitFragment implements View.OnClickLis
 
         mRvFriendsList.setHasFixedSize(true);
         mRvFriendsList.setLayoutManager(new LinearLayoutManager(mContext));
-        mAdapter = new FriendsAdapter();
+        mAdapter = new ContactListAdapter();
         mRvFriendsList.setAdapter(mAdapter);
         addHeader();
 
@@ -163,7 +163,7 @@ public class FriendsFragment extends BaseInitFragment implements View.OnClickLis
     @Override
     protected void initData() {
         super.initData();
-        mViewModel = new ViewModelProvider(this).get(FriendsViewModel.class);
+        mViewModel = new ViewModelProvider(this).get(ContactsViewModel.class);
         mViewModel.getContactObservable().observe(this, response -> {
             parseResource(response, new OnResourceParseCallback<List<EaseUser>>() {
                 @Override

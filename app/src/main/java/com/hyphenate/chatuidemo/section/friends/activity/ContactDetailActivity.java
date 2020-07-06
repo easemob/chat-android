@@ -12,6 +12,7 @@ import androidx.annotation.NonNull;
 import androidx.constraintlayout.widget.Group;
 import androidx.lifecycle.ViewModelProvider;
 
+import com.hyphenate.chatuidemo.DemoHelper;
 import com.hyphenate.chatuidemo.R;
 import com.hyphenate.chatuidemo.common.DemoConstant;
 import com.hyphenate.chatuidemo.common.db.DemoDbHelper;
@@ -23,6 +24,8 @@ import com.hyphenate.chatuidemo.section.chat.ChatVideoCallActivity;
 import com.hyphenate.chatuidemo.section.chat.ChatVoiceCallActivity;
 import com.hyphenate.chatuidemo.section.dialog.DemoDialogFragment;
 import com.hyphenate.chatuidemo.section.dialog.SimpleDialogFragment;
+import com.hyphenate.chatuidemo.section.friends.viewmodels.AddContactViewModel;
+import com.hyphenate.chatuidemo.section.friends.viewmodels.ContactBlackViewModel;
 import com.hyphenate.chatuidemo.section.friends.viewmodels.ContactDetailViewModel;
 import com.hyphenate.easeui.constants.EaseConstant;
 import com.hyphenate.easeui.domain.EaseUser;
@@ -41,11 +44,15 @@ public class ContactDetailActivity extends BaseInitActivity implements EaseTitle
     private TextView mBtnVoice;
     private TextView mBtnVideo;
     private TextView mBtnAddContact;
+    private TextView mBtnRemoveBlack;
     private Group mGroupFriend;
 
     private EaseUser mUser;
     private boolean mIsFriend;
+    private boolean mIsBlack;
     private ContactDetailViewModel viewModel;
+    private AddContactViewModel addContactViewModel;
+    private ContactBlackViewModel blackViewModel;
 
     public static void actionStart(Context context, EaseUser user) {
         Intent intent = new Intent(context, ContactDetailActivity.class);
@@ -67,7 +74,7 @@ public class ContactDetailActivity extends BaseInitActivity implements EaseTitle
 
     @Override
     public boolean onPrepareOptionsMenu(Menu menu) {
-        return mIsFriend;
+        return mIsFriend && !mIsBlack;
     }
 
     @Override
@@ -112,10 +119,19 @@ public class ContactDetailActivity extends BaseInitActivity implements EaseTitle
         mBtnVideo = findViewById(R.id.btn_video);
         mBtnAddContact = findViewById(R.id.btn_add_contact);
         mGroupFriend = findViewById(R.id.group_friend);
+        mBtnRemoveBlack = findViewById(R.id.btn_remove_black);
 
         if(mIsFriend) {
             mGroupFriend.setVisibility(View.VISIBLE);
             mBtnAddContact.setVisibility(View.GONE);
+            EaseUser user = DemoHelper.getInstance().getModel().getContactList().get(mUser.getUsername());
+            if(user != null && user.getContact() == 1) {
+                mIsBlack = true;
+                //如果在黑名单中
+                mGroupFriend.setVisibility(View.GONE);
+                mBtnRemoveBlack.setVisibility(View.VISIBLE);
+                invalidateOptionsMenu();
+            }
         }else {
             mGroupFriend.setVisibility(View.GONE);
             mBtnAddContact.setVisibility(View.VISIBLE);
@@ -131,6 +147,7 @@ public class ContactDetailActivity extends BaseInitActivity implements EaseTitle
         mBtnVoice.setOnClickListener(this);
         mBtnVideo.setOnClickListener(this);
         mBtnAddContact.setOnClickListener(this);
+        mBtnRemoveBlack.setOnClickListener(this);
     }
 
     @Override
@@ -151,6 +168,31 @@ public class ContactDetailActivity extends BaseInitActivity implements EaseTitle
             });
         });
         viewModel.deleteObservable().observe(this, response -> {
+            parseResource(response, new OnResourceParseCallback<Boolean>() {
+                @Override
+                public void onSuccess(Boolean data) {
+                    LiveDataBus.get().with(DemoConstant.CONTACT_CHANGE).postValue(EaseEvent.create(DemoConstant.CONTACT_CHANGE, EaseEvent.TYPE.CONTACT));
+                    finish();
+                }
+            });
+        });
+
+        addContactViewModel = new ViewModelProvider(mContext).get(AddContactViewModel.class);
+        addContactViewModel.getAddContact().observe(mContext, response -> {
+            parseResource(response, new OnResourceParseCallback<Boolean>() {
+                @Override
+                public void onSuccess(Boolean data) {
+                    if(data) {
+                        showToast(getResources().getString(R.string.em_add_contact_send_successful));
+                        mBtnAddContact.setEnabled(false);
+                    }
+                }
+            });
+        });
+
+        blackViewModel = new ViewModelProvider(this).get(ContactBlackViewModel.class);
+
+        blackViewModel.resultObservable().observe(this, response -> {
             parseResource(response, new OnResourceParseCallback<Boolean>() {
                 @Override
                 public void onSuccess(Boolean data) {
@@ -195,8 +237,24 @@ public class ContactDetailActivity extends BaseInitActivity implements EaseTitle
                 ChatVideoCallActivity.actionStart(mContext, mUser.getUsername());
                 break;
             case R.id.btn_add_contact :
-                showToast("添加为好友");
+                addContactViewModel.addContact(mUser.getUsername(), getResources().getString(R.string.em_add_contact_add_a_friend));
+                break;
+            case R.id.btn_remove_black://从黑名单中移除
+                removeBlack();
                 break;
         }
+    }
+
+    private void removeBlack() {
+        new SimpleDialogFragment.Builder(mContext)
+                .setTitle(R.string.em_friends_move_out_the_blacklist_hint)
+                .setOnConfirmClickListener(new DemoDialogFragment.OnConfirmClickListener() {
+                    @Override
+                    public void onConfirmClick(View view) {
+                        blackViewModel.removeUserFromBlackList(mUser.getUsername());
+                    }
+                })
+                .showCancelButton(true)
+                .show();
     }
 }

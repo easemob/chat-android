@@ -37,7 +37,6 @@ public class ChatRoomDetailActivity extends BaseInitActivity implements EaseTitl
     private TextView tvChatRoomRefund;
     private ChatRoomDetailViewModel viewModel;
     private EMChatRoom chatRoom;
-    private Group groupOwner;
 
     public static void actionStart(Context context, String roomId) {
         Intent intent = new Intent(context, ChatRoomDetailActivity.class);
@@ -67,11 +66,10 @@ public class ChatRoomDetailActivity extends BaseInitActivity implements EaseTitl
         itemChatRoomMembers = findViewById(R.id.item_chat_room_members);
         itemChatRoomAdmins = findViewById(R.id.item_chat_room_admins);
         tvChatRoomRefund = findViewById(R.id.tv_chat_room_refund);
-        groupOwner = findViewById(R.id.group_owner);
 
         chatRoom = DemoHelper.getInstance().getChatroomManager().getChatRoom(roomId);
 
-        groupOwner.setVisibility(isOwner() ? View.VISIBLE : View.GONE);
+        tvChatRoomRefund.setVisibility(isOwner() ? View.VISIBLE : View.GONE);
     }
 
     @Override

@@ -58,6 +58,16 @@ public class DemoModel {
         }
         return map;
     }
+
+    /**
+     * 判断是否是联系人
+     * @param userId
+     * @return
+     */
+    public boolean isContact(String userId) {
+        Map<String, EaseUser> contactList = getContactList();
+        return contactList.keySet().contains(userId);
+    }
     
     public void saveContact(EaseUser user){
         EmUserDao dao = DemoDbHelper.getInstance(context).getUserDao();

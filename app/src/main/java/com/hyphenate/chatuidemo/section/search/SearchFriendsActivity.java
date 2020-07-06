@@ -5,13 +5,11 @@ import android.content.Intent;
 import android.text.TextUtils;
 import android.view.View;
 
-import com.hyphenate.chat.EMChatRoom;
-import com.hyphenate.chatuidemo.DemoHelper;
 import com.hyphenate.chatuidemo.R;
 import com.hyphenate.chatuidemo.common.db.DemoDbHelper;
 import com.hyphenate.chatuidemo.common.utils.ThreadManager;
 import com.hyphenate.chatuidemo.section.friends.activity.ContactDetailActivity;
-import com.hyphenate.chatuidemo.section.friends.adapter.FriendsAdapter;
+import com.hyphenate.chatuidemo.section.friends.adapter.ContactListAdapter;
 import com.hyphenate.easeui.adapter.EaseBaseRecyclerViewAdapter;
 import com.hyphenate.easeui.domain.EaseUser;
 
@@ -66,7 +64,7 @@ public class SearchFriendsActivity extends SearchActivity {
         ContactDetailActivity.actionStart(mContext, item);
     }
 
-    public class SearchFriendAdapter extends FriendsAdapter {
+    public class SearchFriendAdapter extends ContactListAdapter {
         @Override
         public int getEmptyLayoutId() {
             return R.layout.ease_layout_default_no_data;

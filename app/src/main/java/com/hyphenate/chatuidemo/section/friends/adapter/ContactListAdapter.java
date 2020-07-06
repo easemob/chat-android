@@ -14,7 +14,7 @@ import com.hyphenate.easeui.adapter.EaseBaseRecyclerViewAdapter;
 import com.hyphenate.easeui.domain.EaseUser;
 import com.hyphenate.easeui.widget.EaseImageView;
 
-public class FriendsAdapter extends EaseBaseRecyclerViewAdapter<EaseUser> {
+public class ContactListAdapter extends EaseBaseRecyclerViewAdapter<EaseUser> {
 
     @Override
     public ViewHolder getViewHolder(ViewGroup parent, int viewType) {

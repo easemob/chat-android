@@ -1,12 +1,9 @@
 package com.hyphenate.chatuidemo.section.group.adapter;
 
-import android.util.Log;
-import android.view.ViewGroup;
-
 import com.hyphenate.chatuidemo.R;
-import com.hyphenate.chatuidemo.section.friends.adapter.FriendsAdapter;
+import com.hyphenate.chatuidemo.section.friends.adapter.ContactListAdapter;
 
-public class GroupMemberAuthorityAdapter extends FriendsAdapter {
+public class GroupMemberAuthorityAdapter extends ContactListAdapter {
 
     @Override
     public int getEmptyLayoutId() {

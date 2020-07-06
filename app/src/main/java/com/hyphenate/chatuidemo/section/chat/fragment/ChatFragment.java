@@ -93,11 +93,11 @@ public class ChatFragment extends EaseChatFragment implements EaseChatFragment.O
             }
         });
 
-        LiveDataBus.get().with(DemoConstant.CONVERSATION_DELETE, Boolean.class).observe(getViewLifecycleOwner(), event -> {
+        LiveDataBus.get().with(DemoConstant.CONVERSATION_DELETE, EaseEvent.class).observe(getViewLifecycleOwner(), event -> {
             if(event == null) {
                 return;
             }
-            if(event) {
+            if(event.isMessageChange()) {
                 chatMessageList.refreshMessages();
             }
         });
@@ -199,9 +199,11 @@ public class ChatFragment extends EaseChatFragment implements EaseChatFragment.O
     @Override
     public void onUserAvatarClick(String username) {
         super.onUserAvatarClick(username);
-        EaseUser user = new EaseUser();
-        user.setUsername(username);
-        ContactDetailActivity.actionStart(mContext, user);
+        if(!TextUtils.equals(username, DemoHelper.getInstance().getCurrentUser())) {
+            EaseUser user = new EaseUser();
+            user.setUsername(username);
+            ContactDetailActivity.actionStart(mContext, user);
+        }
     }
 
     @Override

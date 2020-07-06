@@ -20,6 +20,7 @@ import com.google.android.material.bottomnavigation.BottomNavigationMenuView;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.hyphenate.chatuidemo.common.DemoConstant;
 import com.hyphenate.chatuidemo.common.enums.SearchType;
+import com.hyphenate.chatuidemo.common.interfaceOrImplement.OnResourceParseCallback;
 import com.hyphenate.chatuidemo.common.permission.PermissionsManager;
 import com.hyphenate.chatuidemo.common.permission.PermissionsResultAction;
 import com.hyphenate.chatuidemo.section.MainViewModel;
@@ -29,13 +30,16 @@ import com.hyphenate.chatuidemo.section.conference.ConferenceActivity;
 import com.hyphenate.chatuidemo.section.conversation.ConversationListFragment;
 import com.hyphenate.chatuidemo.section.discover.DiscoverFragment;
 import com.hyphenate.chatuidemo.section.friends.activity.NewGroupActivity;
-import com.hyphenate.chatuidemo.section.friends.fragment.FriendsFragment;
+import com.hyphenate.chatuidemo.section.friends.fragment.ContactListFragment;
 import com.hyphenate.chatuidemo.section.friends.activity.AddContactActivity;
+import com.hyphenate.chatuidemo.section.friends.viewmodels.ContactsViewModel;
 import com.hyphenate.chatuidemo.section.me.AboutMeFragment;
+import com.hyphenate.easeui.domain.EaseUser;
 import com.hyphenate.easeui.model.EaseEvent;
 import com.hyphenate.easeui.widget.EaseTitleBar;
 
 import java.lang.reflect.Method;
+import java.util.List;
 
 
 public class MainActivity extends BaseInitActivity implements BottomNavigationView.OnNavigationItemSelectedListener {
@@ -163,6 +167,10 @@ public class MainActivity extends BaseInitActivity implements BottomNavigationVi
             }
         });
 
+        //加载联系人
+        ContactsViewModel contactsViewModel = new ViewModelProvider(mContext).get(ContactsViewModel.class);
+        contactsViewModel.loadContactList();
+
         viewModel.messageChangeObservable().with(DemoConstant.GROUP_CHANGE, EaseEvent.class).observe(this, this::checkUnReadMsg);
         viewModel.messageChangeObservable().with(DemoConstant.NOTIFY_CHANGE, EaseEvent.class).observe(this, this::checkUnReadMsg);
         viewModel.messageChangeObservable().with(DemoConstant.MESSAGE_CHANGE_CHANGE, EaseEvent.class).observe(this, this::checkUnReadMsg);
@@ -233,7 +241,7 @@ public class MainActivity extends BaseInitActivity implements BottomNavigationVi
 
     private void switchToFriends() {
         if(mFriendsFragment == null) {
-            mFriendsFragment = new FriendsFragment();
+            mFriendsFragment = new ContactListFragment();
         }
         replace(mFriendsFragment);
     }

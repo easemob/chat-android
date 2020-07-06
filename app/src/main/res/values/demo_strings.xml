@@ -104,6 +104,7 @@
     <string name="em_friends_delete_the_contact">删除联系人</string>
     <string name="em_friends_move_into_the_blacklist_new">移入到黑名单</string>
     <string name="em_friends_move_out_the_blacklist_new">移出黑名单</string>
+    <string name="em_friends_move_out_the_blacklist_hint">是否移出黑名单？</string>
     <string name="em_friends_delete_contact_hint">是否删除联系人？</string>
 
     <string name="em_friends_detail_note">设置备注</string>

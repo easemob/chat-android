@@ -5,10 +5,12 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
+import com.hyphenate.chatuidemo.DemoHelper;
 import com.hyphenate.chatuidemo.R;
 import com.hyphenate.chatuidemo.common.db.entity.InviteMessage;
 import com.hyphenate.easeui.adapter.EaseBaseRecyclerViewAdapter;
 import com.hyphenate.chatuidemo.common.db.entity.InviteMessage.InviteMessageStatus;
+import com.hyphenate.easeui.widget.EaseImageView;
 
 import androidx.annotation.NonNull;
 
@@ -37,6 +39,7 @@ public class InviteMsgDelegate extends NewFriendsMsgDelegate<InviteMessage, Invi
         private TextView message;
         private Button agree;
         private Button refuse;
+        private EaseImageView avatar;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -48,6 +51,8 @@ public class InviteMsgDelegate extends NewFriendsMsgDelegate<InviteMessage, Invi
             message = findViewById(R.id.message);
             agree = findViewById(R.id.agree);
             refuse = findViewById(R.id.refuse);
+            avatar = findViewById(R.id.avatar);
+            avatar.setShapeType(DemoHelper.getInstance().getEaseAvatarOptions().getAvatarShape());
         }
 
         @Override

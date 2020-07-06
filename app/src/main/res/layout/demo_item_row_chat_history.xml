@@ -89,7 +89,7 @@
         android:textSize="14sp"
         android:text="@string/were_mentioned"
         android:textColor="@color/em_conversation_color_item_mention"
-        android:visibility="visible" />
+        android:visibility="gone" />
     
     <TextView
         android:id="@+id/message"

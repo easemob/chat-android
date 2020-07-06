@@ -6,8 +6,8 @@
 
     <com.hyphenate.easeui.widget.EaseImageView
         android:id="@+id/avatar"
-        android:layout_width="65dp"
-        android:layout_height="65dp"
+        android:layout_width="55dp"
+        android:layout_height="55dp"
         android:layout_marginLeft="10dp"
         android:layout_marginTop="10dp"
         android:padding="5dp"

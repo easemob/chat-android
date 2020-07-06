@@ -129,6 +129,9 @@ public class PushAndMessageHelper {
             case AGREED:
                 messge = builder.append(msg.getFrom()).append("的好友请求").toString();
                 break;
+            case BEAGREED:
+                messge = msg.getFrom() + builder.toString();
+                break;
             case BEAPPLYED:
             case GROUPINVITATION:
                 messge = builder.append(msg.getGroupName()).toString();
@@ -156,6 +159,10 @@ public class PushAndMessageHelper {
             case MULTI_DEVICE_CONTACT_ACCEPT:
             case MULTI_DEVICE_CONTACT_DECLINE:
                 messge = String.format(builder.toString(), msg.getFrom());
+                break;
+            case REFUSED:
+            case MULTI_DEVICE_GROUP_APPLY:
+                messge = builder.toString();
                 break;
             default:
                 messge = "";

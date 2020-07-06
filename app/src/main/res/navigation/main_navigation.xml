@@ -13,7 +13,7 @@
 
     <fragment
         android:id="@+id/em_main_nav_friends"
-        android:name="com.hyphenate.chatuidemo.section.friends.fragment.FriendsFragment"
+        android:name="com.hyphenate.chatuidemo.section.friends.fragment.ContactListFragment"
         android:label="@string/em_main_title_friends"
         tools:layout="@layout/demo_fragment_friends" />
 
