@@ -262,7 +262,7 @@ public class GroupDetailActivity extends BaseInitActivity implements EaseTitleBa
                 showConfirmDialog();
                 break;
             case R.id.item_group_member_manage://群组管理
-
+                GroupManageIndexActivity.actionStart(mContext, groupId);
                 break;
         }
     }

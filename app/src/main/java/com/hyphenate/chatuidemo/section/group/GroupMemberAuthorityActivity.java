@@ -53,6 +53,7 @@ public class GroupMemberAuthorityActivity extends BaseInitActivity implements Ea
     protected static final int TYPE_MEMBER = 0;
     protected static final int TYPE_BLACK = 1;
     protected static final int TYPE_MUTE = 2;
+    protected static final int TYPE_TRANSFER = 3;
     protected EaseTitleBar titleBar;
     private SmartRefreshLayout srlRefresh;
     private EaseRecyclerView rvList;
@@ -467,7 +468,7 @@ public class GroupMemberAuthorityActivity extends BaseInitActivity implements Ea
      * @param menu
      * @param actionId
      */
-    private void setMenuItemVisible(Menu menu, @IdRes int actionId) {
+    protected void setMenuItemVisible(Menu menu, @IdRes int actionId) {
         menu.findItem(actionId).setVisible(true);
     }
 

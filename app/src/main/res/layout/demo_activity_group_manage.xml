@@ -37,6 +37,7 @@
         android:text="@string/em_chat_group_authority_transfer"
         android:textColor="@color/em_color_warning"
         android:textSize="@dimen/em_size_big_notify"
+        style="?android:attr/borderlessButtonStyle"
         android:foreground="@drawable/em_ripple_click_gray"/>
 
 </LinearLayout>
