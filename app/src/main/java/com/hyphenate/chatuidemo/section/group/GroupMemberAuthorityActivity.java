@@ -74,6 +74,13 @@ public class GroupMemberAuthorityActivity extends BaseInitActivity implements Ea
         context.startActivity(starter);
     }
 
+    public static void actionStart(Context context, String groupId, int type) {
+        Intent starter = new Intent(context, GroupMemberAuthorityActivity.class);
+        starter.putExtra("groupId", groupId);
+        starter.putExtra("type", type);
+        context.startActivity(starter);
+    }
+
     @Override
     protected int getLayoutId() {
         return R.layout.demo_activity_group_member_authority;
@@ -83,6 +90,7 @@ public class GroupMemberAuthorityActivity extends BaseInitActivity implements Ea
     protected void initIntent(Intent intent) {
         super.initIntent(intent);
         groupId = intent.getStringExtra("groupId");
+        flag = intent.getIntExtra("type", 0);
     }
 
     @Override
@@ -118,7 +126,7 @@ public class GroupMemberAuthorityActivity extends BaseInitActivity implements Ea
             menu.findItem(R.id.action_group_black).setVisible(true);
         }
         onSubPrepareOptionsMenu(menu);
-        return super.onPrepareOptionsMenu(menu);
+        return false/*super.onPrepareOptionsMenu(menu)*/;
     }
 
     protected void onSubPrepareOptionsMenu(Menu menu) {
@@ -193,8 +201,10 @@ public class GroupMemberAuthorityActivity extends BaseInitActivity implements Ea
         if(flag == TYPE_MEMBER) {
             viewModel.getMembers(groupId);
         }
-        viewModel.getBlackMembers(groupId);
-        viewModel.getMuteMembers(groupId);
+        if(isOwner() || isInAdminList(DemoHelper.getInstance().getCurrentUser())) {
+            viewModel.getBlackMembers(groupId);
+            viewModel.getMuteMembers(groupId);
+        }
         if(flag == TYPE_MEMBER) {
             titleBar.setTitle(getString(R.string.em_authority_menu_member_list));
         }else if(flag == TYPE_BLACK) {

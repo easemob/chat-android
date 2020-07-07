@@ -498,6 +498,8 @@
             android:screenOrientation="portrait"/>
         <!--公开群详情页-->
         <activity android:name=".section.friends.activity.GroupSimpleDetailActivity" />
+        <!--群组管理-->
+        <activity android:name=".section.group.GroupManageIndexActivity" />
 
         <!--捕获屏幕service-->
         <service android:name=".section.conference.SRForegroundService"

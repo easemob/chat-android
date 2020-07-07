@@ -191,6 +191,14 @@
                 app:layout_constraintRight_toRightOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/item_group_notice"
                 app:arrowItemTitle="@string/em_chat_group_detail_introduction"
+                style="@style/em_group_arrow_item"/>
+
+            <com.hyphenate.chatuidemo.common.widget.ArrowItemView
+                android:id="@+id/item_group_member_manage"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/item_group_notice"
+                app:arrowItemTitle="@string/em_chat_group_detail_member_manage"
                 app:arrowItemShowDivider="false"
                 style="@style/em_group_arrow_item"/>
 

@@ -46,6 +46,7 @@ public class GroupDetailActivity extends BaseInitActivity implements EaseTitleBa
     private ArrowItemView itemGroupShareFile;
     private ArrowItemView itemGroupNotice;
     private ArrowItemView itemGroupIntroduction;
+    private ArrowItemView itemGroupMemberManage;
     private ArrowItemView itemGroupHistory;
     private ArrowItemView itemGroupClearHistory;
     private SwitchItemView itemGroupNotDisturb;
@@ -94,6 +95,7 @@ public class GroupDetailActivity extends BaseInitActivity implements EaseTitleBa
         itemGroupOffPush = findViewById(R.id.item_group_off_push);
         itemGroupTop = findViewById(R.id.item_group_top);
         tvGroupRefund = findViewById(R.id.tv_group_refund);
+        itemGroupMemberManage = findViewById(R.id.item_group_member_manage);
 
         group = DemoHelper.getInstance().getGroupManager().getGroup(groupId);
         initGroupView();
@@ -116,6 +118,7 @@ public class GroupDetailActivity extends BaseInitActivity implements EaseTitleBa
         itemGroupOffPush.setOnCheckedChangeListener(this);
         itemGroupTop.setOnCheckedChangeListener(this);
         tvGroupRefund.setOnClickListener(this);
+        itemGroupMemberManage.setOnClickListener(this);
     }
 
     private void initGroupView() {
@@ -135,6 +138,7 @@ public class GroupDetailActivity extends BaseInitActivity implements EaseTitleBa
         tvGroupInvite.setVisibility(group.getMemberCount() <= 0 ? View.VISIBLE : View.GONE);
         tvGroupInvite.setVisibility(isCanInvite() ? View.VISIBLE : View.GONE);
         itemGroupNotDisturb.getSwitch().setChecked(group.isMsgBlocked());
+        itemGroupMemberManage.setVisibility((isOwner() || isAdmin()) ? View.VISIBLE : View.GONE);
 
         itemGroupIntroduction.getTvContent().setText(group.getDescription());
 
@@ -256,6 +260,9 @@ public class GroupDetailActivity extends BaseInitActivity implements EaseTitleBa
                 break;
             case R.id.tv_group_refund ://退出群组
                 showConfirmDialog();
+                break;
+            case R.id.item_group_member_manage://群组管理
+
                 break;
         }
     }
