@@ -6,6 +6,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 
 import androidx.annotation.Nullable;
@@ -92,7 +93,7 @@ public class DeveloperSetActivity extends BaseInitActivity implements EaseTitleB
         itemSwitchAutoDownloadThumbnail.getSwitch().setChecked(settingsModel.isSetAutodownloadThumbnail());
         itemMsgSort.getTvContent().setText(settingsModel.isSortMessageByServerTime() ? sortType[1] : sortType[0]);
 
-        setAppKey(settingsModel.getCutomAppkey());
+        setAppKey(options.getAppKey());
     }
 
     @Override
