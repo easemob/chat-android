@@ -278,6 +278,7 @@ public class GroupMemberAuthorityActivity extends BaseInitActivity implements Ea
                 @Override
                 public void onSuccess(Boolean data) {
                     refreshData();
+                    LiveDataBus.get().with(DemoConstant.GROUP_CHANGE).postValue(EaseEvent.create(DemoConstant.GROUP_CHANGE, EaseEvent.TYPE.GROUP));
                 }
             });
         });
@@ -333,9 +334,11 @@ public class GroupMemberAuthorityActivity extends BaseInitActivity implements Ea
         if(isInBlackList(username)) {
             setMenuItemVisible(menu.getMenu(), R.id.action_group_remove_black);
         }else if(isInMuteList(username)) {
-            menu.getMenu().findItem(R.id.action_group_add_admin).setVisible(isOwner());
-            setMenuItemVisible(menu.getMenu(), R.id.action_group_remove_member);
-            setMenuItemVisible(menu.getMenu(), R.id.action_group_add_black);
+            if(flag != TYPE_MUTE) {
+                menu.getMenu().findItem(R.id.action_group_add_admin).setVisible(isOwner());
+                setMenuItemVisible(menu.getMenu(), R.id.action_group_remove_member);
+                setMenuItemVisible(menu.getMenu(), R.id.action_group_add_black);
+            }
             setMenuItemVisible(menu.getMenu(), R.id.action_group_unmute);
         }else if(isInAdminList(username)) {
             setMenuItemVisible(menu.getMenu(), R.id.action_group_remove_admin);
@@ -395,32 +398,26 @@ public class GroupMemberAuthorityActivity extends BaseInitActivity implements Ea
 
     protected void addToAdmins(String username) {
         viewModel.addGroupAdmin(groupId, username);
-        LiveDataBus.get().with(DemoConstant.GROUP_CHANGE).postValue(EaseEvent.create(DemoConstant.GROUP_CHANGE, EaseEvent.TYPE.GROUP));
     }
 
     protected void removeFromAdmins(String username) {
         viewModel.removeGroupAdmin(groupId, username);
-        LiveDataBus.get().with(DemoConstant.GROUP_CHANGE).postValue(EaseEvent.create(DemoConstant.GROUP_CHANGE, EaseEvent.TYPE.GROUP));
     }
 
     protected void transferOwner(String username) {
         viewModel.changeOwner(groupId, username);
-        LiveDataBus.get().with(DemoConstant.GROUP_CHANGE).postValue(EaseEvent.create(DemoConstant.GROUP_CHANGE, EaseEvent.TYPE.GROUP));
     }
 
     protected void removeFromGroup(String username) {
-        LiveDataBus.get().with(DemoConstant.GROUP_CHANGE).postValue(EaseEvent.create(DemoConstant.GROUP_CHANGE, EaseEvent.TYPE.GROUP));
         viewModel.removeUserFromGroup(groupId, username);
     }
 
     protected void addToBlack(String username) {
         viewModel.blockUser(groupId, username);
-        LiveDataBus.get().with(DemoConstant.GROUP_CHANGE).postValue(EaseEvent.create(DemoConstant.GROUP_CHANGE, EaseEvent.TYPE.GROUP));
     }
 
     protected void removeFromBlacks(String username) {
         viewModel.unblockUser(groupId, username);
-        LiveDataBus.get().with(DemoConstant.GROUP_CHANGE).postValue(EaseEvent.create(DemoConstant.GROUP_CHANGE, EaseEvent.TYPE.GROUP));
     }
 
     protected void AddToMuteMembers(String username) {
