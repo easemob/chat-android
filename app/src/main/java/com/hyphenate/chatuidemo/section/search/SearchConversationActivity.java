@@ -15,7 +15,7 @@ import com.hyphenate.chatuidemo.common.interfaceOrImplement.OnResourceParseCallb
 import com.hyphenate.chatuidemo.common.utils.ThreadManager;
 import com.hyphenate.chatuidemo.section.chat.ChatActivity;
 import com.hyphenate.chatuidemo.section.conversation.adapter.HomeAdapter;
-import com.hyphenate.chatuidemo.section.conversation.viewmodel.HomeViewModel;
+import com.hyphenate.chatuidemo.section.conversation.viewmodel.ConversationListViewModel;
 import com.hyphenate.chatuidemo.section.message.NewFriendsMsgActivity;
 import com.hyphenate.easeui.adapter.EaseBaseRecyclerViewAdapter;
 import com.hyphenate.easeui.utils.EaseCommonUtils;
@@ -41,7 +41,7 @@ public class SearchConversationActivity extends SearchActivity {
     protected void initData() {
         super.initData();
         result = new ArrayList<>();
-        HomeViewModel viewModel = new ViewModelProvider(this).get(HomeViewModel.class);
+        ConversationListViewModel viewModel = new ViewModelProvider(this).get(ConversationListViewModel.class);
         viewModel.getConversationObservable().observe(this, response -> {
             parseResource(response, new OnResourceParseCallback<List<Object>>() {
                 @Override

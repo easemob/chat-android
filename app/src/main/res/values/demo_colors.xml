@@ -48,10 +48,7 @@
 
     <color name="em_empty_layout_color_text">#ffcccccc</color>
 
-    <color name="em_conversation_color_item_name">@color/em_color_common_text_black</color>
-    <color name="em_conversation_color_item_mention">#ffff2b2b</color>
-    <color name="em_conversation_color_item_message">#ff999999</color>
-    <color name="em_conversation_color_item_time">#ff999999</color>
+
 
     <color name="em_friends_contact_detail_text_normal">@color/em_color_common_text_black</color>
     <color name="em_friends_contact_detail_text_brand">@color/em_color_brand</color>

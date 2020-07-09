@@ -16,17 +16,19 @@ import com.hyphenate.chatuidemo.common.repositories.EMChatManagerRepository;
 
 import java.util.List;
 
-public class HomeViewModel extends AndroidViewModel {
+public class ConversationListViewModel extends AndroidViewModel {
     private EMChatManagerRepository mRepository;
 
     private SingleSourceLiveData<Resource<List<Object>>> conversationObservable;
     private SingleSourceLiveData<Resource<Boolean>> deleteConversationObservable;
+    private SingleSourceLiveData<Resource<Boolean>> readConversationObservable;
 
-    public HomeViewModel(@NonNull Application application) {
+    public ConversationListViewModel(@NonNull Application application) {
         super(application);
         mRepository = new EMChatManagerRepository();
         conversationObservable = new SingleSourceLiveData<>();
         deleteConversationObservable = new SingleSourceLiveData<>();
+        readConversationObservable = new SingleSourceLiveData<>();
     }
 
     /**
@@ -50,6 +52,18 @@ public class HomeViewModel extends AndroidViewModel {
 
     public LiveData<Resource<Boolean>> getDeleteObservable() {
         return deleteConversationObservable;
+    }
+
+    /**
+     * 将会话置为已读
+     * @param conversationId
+     */
+    public void makeConversationRead(String conversationId) {
+        readConversationObservable.setSource(mRepository.makeConversationRead(conversationId));
+    }
+
+    public LiveData<Resource<Boolean>> getReadObservable() {
+        return readConversationObservable;
     }
 
     /**

@@ -70,7 +70,7 @@ public class HomeAdapter extends EaseBaseRecyclerViewAdapter<Object> {
                 EMConversation item = (EMConversation)object;
                 String username = item.conversationId();
                 listIteaseLayout.setBackground(!TextUtils.isEmpty(item.getExtField())
-                                                ? ContextCompat.getDrawable(mContext, R.drawable.demo_conversation_top_bg)
+                                                ? ContextCompat.getDrawable(mContext, R.drawable.ease_conversation_top_bg)
                                                 : null);
                 mentioned.setVisibility(View.GONE);
                 if(item.getType() == EMConversation.EMConversationType.GroupChat) {
@@ -123,7 +123,7 @@ public class HomeAdapter extends EaseBaseRecyclerViewAdapter<Object> {
                     return;
                 }
                 listIteaseLayout.setBackground(!TextUtils.isEmpty(((MsgTypeManageEntity) object).getExtField())
-                        ? ContextCompat.getDrawable(mContext, R.drawable.demo_conversation_top_bg)
+                        ? ContextCompat.getDrawable(mContext, R.drawable.ease_conversation_top_bg)
                         : null);
                 if(TextUtils.equals(type, MsgTypeManageEntity.msgType.NOTIFICATION.name())) {
                     avatar.setImageResource(R.drawable.em_system_nofinication);

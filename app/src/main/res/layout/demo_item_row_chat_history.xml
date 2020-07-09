@@ -47,7 +47,7 @@
         android:layout_marginStart="11dp"
         android:layout_marginTop="12dp"
         android:textSize="16sp"
-        android:textColor="@color/em_conversation_color_item_name"
+        android:textColor="@color/ease_conversation_color_item_name"
         tools:text="聊天室"/>
 
     <TextView
@@ -58,7 +58,7 @@
         app:layout_constraintTop_toTopOf="parent"
         android:layout_marginRight="16dp"
         android:layout_marginTop="15dp"
-        android:textColor="@color/em_conversation_color_item_time"
+        android:textColor="@color/ease_conversation_color_item_time"
         android:textSize="13sp"
         android:text="09:51"/>
 
@@ -88,7 +88,7 @@
         android:paddingRight="2dp"
         android:textSize="14sp"
         android:text="@string/were_mentioned"
-        android:textColor="@color/em_conversation_color_item_mention"
+        android:textColor="@color/ease_conversation_color_item_mention"
         android:visibility="gone" />
     
     <TextView
@@ -109,7 +109,7 @@
         android:paddingTop="7dp"
         android:paddingBottom="7dp"
         android:paddingRight="7dp"
-        android:textColor="@color/em_conversation_color_item_message"
+        android:textColor="@color/ease_conversation_color_item_message"
         android:textSize="14sp"
         tools:text="环信成立于2013年4月，是国内领先的企业级软件服务提供商，于2016年荣膺"/>
 

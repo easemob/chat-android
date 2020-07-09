@@ -137,4 +137,24 @@ public class EMChatManagerRepository extends BaseEMRepository{
 
         }.asLiveData();
     }
+
+    /**
+     * 将会话置为已读
+     * @param conversationId
+     * @return
+     */
+    public LiveData<Resource<Boolean>> makeConversationRead(String conversationId) {
+        return new NetworkOnlyResource<Boolean>() {
+            @Override
+            protected void createCall(@NonNull ResultCallBack<LiveData<Boolean>> callBack) {
+                EMConversation conversation = getChatManager().getConversation(conversationId);
+                if(conversation == null) {
+                    callBack.onError(ErrorCode.EM_DELETE_CONVERSATION_ERROR);
+                }else {
+                    conversation.markAllMessagesAsRead();
+                    callBack.onSuccess(createLiveData(true));
+                }
+            }
+        }.asLiveData();
+    }
 }

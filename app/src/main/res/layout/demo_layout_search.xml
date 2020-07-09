@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <com.hyphenate.easeui.widget.EaseSearchTextView
+        android:id="@+id/tv_search"
+        android:layout_width="match_parent"
+        android:layout_height="36dp"
+        android:hint="@string/em_conversation_list_search_hint"
+        android:layout_marginLeft="16dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginRight="16dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="3dp"/>
+
+</FrameLayout>

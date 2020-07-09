@@ -20,11 +20,9 @@ import com.google.android.material.bottomnavigation.BottomNavigationMenuView;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.hyphenate.chatuidemo.common.DemoConstant;
 import com.hyphenate.chatuidemo.common.enums.SearchType;
-import com.hyphenate.chatuidemo.common.interfaceOrImplement.OnResourceParseCallback;
 import com.hyphenate.chatuidemo.common.permission.PermissionsManager;
 import com.hyphenate.chatuidemo.common.permission.PermissionsResultAction;
 import com.hyphenate.chatuidemo.section.MainViewModel;
-import com.hyphenate.chatuidemo.section.base.BaseFragment;
 import com.hyphenate.chatuidemo.section.base.BaseInitActivity;
 import com.hyphenate.chatuidemo.section.conference.ConferenceActivity;
 import com.hyphenate.chatuidemo.section.conversation.ConversationListFragment;
@@ -34,19 +32,18 @@ import com.hyphenate.chatuidemo.section.friends.fragment.ContactListFragment;
 import com.hyphenate.chatuidemo.section.friends.activity.AddContactActivity;
 import com.hyphenate.chatuidemo.section.friends.viewmodels.ContactsViewModel;
 import com.hyphenate.chatuidemo.section.me.AboutMeFragment;
-import com.hyphenate.easeui.domain.EaseUser;
 import com.hyphenate.easeui.model.EaseEvent;
+import com.hyphenate.easeui.ui.base.EaseBaseFragment;
 import com.hyphenate.easeui.widget.EaseTitleBar;
 
 import java.lang.reflect.Method;
-import java.util.List;
 
 
 public class MainActivity extends BaseInitActivity implements BottomNavigationView.OnNavigationItemSelectedListener {
     private BottomNavigationView navView;
     private EaseTitleBar mTitleBar;
-    private BaseFragment mConversationListFragment, mFriendsFragment, mDiscoverFragment, mAboutMeFragment;
-    private BaseFragment mCurrentFragment;
+    private EaseBaseFragment mConversationListFragment, mFriendsFragment, mDiscoverFragment, mAboutMeFragment;
+    private EaseBaseFragment mCurrentFragment;
     private TextView mTvMainHomeMsg, mTvMainFriendsMsg, mTvMainDiscoverMsg, mTvMainAboutMeMsg;
     private int[] badgeIds = {R.layout.demo_badge_home, R.layout.demo_badge_friends, R.layout.demo_badge_discover, R.layout.demo_badge_about_me};
     private int[] msgIds = {R.id.tv_main_home_msg, R.id.tv_main_friends_msg, R.id.tv_main_discover_msg, R.id.tv_main_about_me_msg};
@@ -260,7 +257,7 @@ public class MainActivity extends BaseInitActivity implements BottomNavigationVi
         replace(mAboutMeFragment);
     }
 
-    private void replace(BaseFragment fragment) {
+    private void replace(EaseBaseFragment fragment) {
         if(mCurrentFragment != fragment) {
             FragmentTransaction t = getSupportFragmentManager().beginTransaction();
             if(mCurrentFragment != null) {

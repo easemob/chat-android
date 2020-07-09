@@ -24,8 +24,9 @@ import com.hyphenate.chatuidemo.common.interfaceOrImplement.OnResourceParseCallb
 import com.hyphenate.chatuidemo.common.net.Resource;
 import com.hyphenate.chatuidemo.common.utils.ToastUtils;
 import com.hyphenate.chatuidemo.common.widget.EaseProgressDialog;
+import com.hyphenate.easeui.ui.base.EaseBaseFragment;
 
-public class BaseFragment extends Fragment {
+public class BaseFragment extends EaseBaseFragment {
     public BaseActivity mContext;
 
     @Override
@@ -47,13 +48,6 @@ public class BaseFragment extends Fragment {
                 mContext.getSupportActionBar().setHomeAsUpIndicator(leftArrow);
             }
         }
-    }
-
-    /**
-     * back
-     */
-    protected void onBackPress() {
-        mContext.onBackPressed();
     }
 
     /**

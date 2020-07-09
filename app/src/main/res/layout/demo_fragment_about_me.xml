@@ -74,7 +74,7 @@
                             android:layout_marginLeft="11dp"
                             android:layout_marginStart="11dp"
                             android:textSize="@dimen/em_size_big_notify"
-                            android:textColor="@color/em_conversation_color_item_name"
+                            android:textColor="@color/ease_conversation_color_item_name"
                             tools:text="ss"/>
 
                         <TextView
@@ -93,7 +93,7 @@
                             android:maxLines="1"
                             android:ellipsize="end"
                             android:padding="7dp"
-                            android:textColor="@color/em_conversation_color_item_message"
+                            android:textColor="@color/ease_conversation_color_item_message"
                             android:textSize="14sp"
                             android:visibility="gone"
                             tools:text="ssdd"/>

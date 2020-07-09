@@ -5,155 +5,124 @@ import android.text.TextUtils;
 import android.view.ContextMenu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.core.content.ContextCompat;
 import androidx.lifecycle.ViewModelProvider;
-import androidx.recyclerview.widget.DividerItemDecoration;
-import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.hyphenate.chat.EMConversation;
 import com.hyphenate.chatuidemo.DemoHelper;
 import com.hyphenate.chatuidemo.R;
 import com.hyphenate.chatuidemo.common.DemoConstant;
 import com.hyphenate.chatuidemo.common.db.entity.MsgTypeManageEntity;
+import com.hyphenate.chatuidemo.common.enums.Status;
 import com.hyphenate.chatuidemo.common.interfaceOrImplement.OnResourceParseCallback;
 import com.hyphenate.chatuidemo.common.livedatas.LiveDataBus;
-import com.hyphenate.chatuidemo.common.utils.ThreadManager;
-import com.hyphenate.chatuidemo.section.base.BaseInitFragment;
+import com.hyphenate.chatuidemo.common.net.Resource;
+import com.hyphenate.chatuidemo.common.utils.ToastUtils;
 import com.hyphenate.chatuidemo.section.chat.ChatActivity;
 import com.hyphenate.chatuidemo.section.chat.viewmodel.MessageViewModel;
-import com.hyphenate.chatuidemo.section.conversation.adapter.HomeAdapter;
-import com.hyphenate.chatuidemo.section.conversation.viewmodel.HomeViewModel;
+import com.hyphenate.chatuidemo.section.conversation.delegate.SystemMessageDelegate;
+import com.hyphenate.chatuidemo.section.conversation.viewmodel.ConversationListViewModel;
 import com.hyphenate.chatuidemo.section.message.NewFriendsMsgActivity;
-import com.hyphenate.chatuidemo.section.search.SearchActivity;
 import com.hyphenate.chatuidemo.section.search.SearchConversationActivity;
-import com.hyphenate.easeui.interfaces.OnItemClickListener;
 import com.hyphenate.easeui.model.EaseEvent;
+import com.hyphenate.easeui.ui.EaseConversationListFragment;
 import com.hyphenate.easeui.utils.EaseCommonUtils;
-import com.hyphenate.easeui.widget.EaseRecyclerView;
 import com.hyphenate.easeui.widget.EaseSearchTextView;
-import com.scwang.smartrefresh.layout.SmartRefreshLayout;
-import com.scwang.smartrefresh.layout.api.RefreshLayout;
-import com.scwang.smartrefresh.layout.listener.OnRefreshListener;
 
 import java.util.List;
 
-public class ConversationListFragment extends BaseInitFragment implements OnRefreshListener, View.OnClickListener, OnItemClickListener {
-    private EaseSearchTextView mTvSearch;
-    private EaseRecyclerView mRvHomeList;
-    private SmartRefreshLayout mRefreshLayout;
-    private HomeViewModel mViewModel;
-    private HomeAdapter mHomeAdapter;
+
+public class ConversationListFragment extends EaseConversationListFragment implements View.OnClickListener {
+    private EaseSearchTextView tvSearch;
+
+    private ConversationListViewModel mViewModel;
 
     @Override
-    protected int getLayoutId() {
-        return R.layout.demo_fragment_home;
-    }
-
-    @Override
-    protected void initView(Bundle savedInstanceState) {
+    public void initView(Bundle savedInstanceState) {
         super.initView(savedInstanceState);
-        mTvSearch = findViewById(R.id.tv_search);
-        mRvHomeList = findViewById(R.id.rv_home_list);
-        mRefreshLayout = findViewById(R.id.srl_refresh);
+        //添加搜索会话布局
+        viewStub.setLayoutResource(R.layout.demo_layout_search);
+        View view = viewStub.inflate();
+        ViewGroup.LayoutParams params = view.getLayoutParams();
+        params.width = ViewGroup.LayoutParams.MATCH_PARENT;
+        params.height = ViewGroup.LayoutParams.WRAP_CONTENT;
+        tvSearch = view.findViewById(R.id.tv_search);
 
-        // 注册快捷菜单
-        registerForContextMenu(mRvHomeList);
-
-        mRvHomeList.setLayoutManager(new LinearLayoutManager(mContext));
-        mHomeAdapter = new HomeAdapter();
-        mRvHomeList.setAdapter(mHomeAdapter);
-        DividerItemDecoration decoration = new DividerItemDecoration(mContext, DividerItemDecoration.VERTICAL);
-        decoration.setDrawable(ContextCompat.getDrawable(mContext, R.drawable.demo_home_divider_list));
-        mRvHomeList.addItemDecoration(decoration);
+        initViewModel();
     }
 
     @Override
-    public void onCreateContextMenu(@NonNull ContextMenu menu, @NonNull View v, @Nullable ContextMenu.ContextMenuInfo menuInfo) {
-        super.onCreateContextMenu(menu, v, menuInfo);
-        requireActivity().getMenuInflater().inflate(R.menu.demo_conversation_list_menu, menu);
-        if(menuInfo instanceof EaseRecyclerView.RecyclerViewContextMenuInfo) {
-            int position = ((EaseRecyclerView.RecyclerViewContextMenuInfo) menuInfo).position;
-            Object item = mHomeAdapter.getItem(position);
-            if(item instanceof EMConversation) {
-                String extField = ((EMConversation)item).getExtField();
-                if(!TextUtils.isEmpty(extField) && EaseCommonUtils.isTimestamp(extField)) {
-                    // 含有时间戳
-                    menu.findItem(R.id.action_cancel_top).setVisible(true);
-                    menu.findItem(R.id.action_make_top).setVisible(false);
-                }
-            }else if(item instanceof MsgTypeManageEntity) {
-                String ext = ((MsgTypeManageEntity) item).getExtField();
-                if(!TextUtils.isEmpty(ext) && EaseCommonUtils.isTimestamp(ext)) {
-                    // 含有时间戳
-                    menu.findItem(R.id.action_cancel_top).setVisible(true);
-                    menu.findItem(R.id.action_make_top).setVisible(false);
-                }
+    public void addDelegate() {
+        super.addDelegate();
+        listAdapter.addDelegate(new SystemMessageDelegate());
+    }
+
+    @Override
+    public void onChildCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo, Object item) {
+        super.onChildCreateContextMenu(menu, v, menuInfo, item);
+        if(item instanceof MsgTypeManageEntity) {
+            String ext = ((MsgTypeManageEntity) item).getExtField();
+            if(!TextUtils.isEmpty(ext) && EaseCommonUtils.isTimestamp(ext)) {
+                // 含有时间戳
+                menu.findItem(R.id.action_cancel_top).setVisible(true);
+                menu.findItem(R.id.action_make_top).setVisible(false);
             }
-
         }
-
     }
 
     @Override
-    public boolean onContextItemSelected(@NonNull MenuItem item) {
-        EaseRecyclerView.RecyclerViewContextMenuInfo info = (EaseRecyclerView.RecyclerViewContextMenuInfo) item.getMenuInfo();
-        int position = info.position;
-        Object object = null;
-        if(position >= 0) {
-            object = mHomeAdapter.getItem(position);
-        }
-        if(object != null) {
-            if(object instanceof EMConversation) {
-                EMConversation conversation = (EMConversation) object;
-                switch (item.getItemId()) {
-                    case R.id.action_make_top :
-                        conversation.setExtField(System.currentTimeMillis()+"");
-                        mViewModel.loadConversationList();
-                        break;
-                    case R.id.action_cancel_top:
-                        conversation.setExtField("");
-                        mViewModel.loadConversationList();
-                        break;
-                    case R.id.action_delete:
-                        mViewModel.deleteConversationById(conversation.conversationId());
-                        break;
-                }
-            }else if(object instanceof MsgTypeManageEntity) {
-                MsgTypeManageEntity msg = (MsgTypeManageEntity) object;
-                switch (item.getItemId()) {
-                    case R.id.action_make_top :
-                        msg.setExtField(System.currentTimeMillis()+"");
-                        DemoHelper.getInstance().update(msg);
-                        mViewModel.loadConversationList();
-                        break;
-                    case R.id.action_cancel_top:
-                        msg.setExtField("");
-                        DemoHelper.getInstance().update(msg);
-                        mViewModel.loadConversationList();
-                        break;
-                    case R.id.action_delete:
-                        mViewModel.deleteSystemMsg(msg);
-                        break;
-                }
+    public void onChildContextItemSelected(MenuItem menuItem, Object object) {
+        super.onChildContextItemSelected(menuItem, object);
+        if(object instanceof MsgTypeManageEntity) {
+            MsgTypeManageEntity msg = (MsgTypeManageEntity) object;
+            switch (menuItem.getItemId()) {
+                case R.id.action_make_top :
+                    msg.setExtField(System.currentTimeMillis()+"");
+                    DemoHelper.getInstance().update(msg);
+                    mViewModel.loadConversationList();
+                    break;
+                case R.id.action_cancel_top:
+                    msg.setExtField("");
+                    DemoHelper.getInstance().update(msg);
+                    mViewModel.loadConversationList();
+                    break;
+                case R.id.action_delete:
+                    mViewModel.deleteSystemMsg(msg);
+                    break;
             }
-
         }
-
-        return super.onContextItemSelected(item);
     }
 
     @Override
-    protected void initViewModel() {
-        super.initViewModel();
-        mViewModel = new ViewModelProvider(this).get(HomeViewModel.class);
+    public void initListener() {
+        super.initListener();
+        tvSearch.setOnClickListener(this);
+    }
+
+    @Override
+    public void refreshList() {
+        mViewModel.loadConversationList();
+    }
+
+    @Override
+    public void makeConversationRead(EMConversation conversation) {
+        mViewModel.makeConversationRead(conversation.conversationId());
+    }
+
+    @Override
+    public void deleteConversation(String conversationId) {
+        mViewModel.deleteConversationById(conversationId);
+    }
+
+    private void initViewModel() {
+        mViewModel = new ViewModelProvider(this).get(ConversationListViewModel.class);
         mViewModel.getConversationObservable().observe(getViewLifecycleOwner(), response -> {
             parseResource(response, new OnResourceParseCallback<List<Object>>() {
                 @Override
                 public void onSuccess(List<Object> data) {
-                    mHomeAdapter.setData(data);
+                    listAdapter.setData(data);
                 }
 
                 @Override
@@ -207,31 +176,36 @@ public class ConversationListFragment extends BaseInitFragment implements OnRefr
         }
     }
 
-    @Override
-    protected void initListener() {
-        super.initListener();
-        mTvSearch.setOnClickListener(this);
-        mRefreshLayout.setOnRefreshListener(this);
-        mHomeAdapter.setOnItemClickListener(this);
-    }
-
-    @Override
-    protected void initData() {
-        super.initData();
-        mViewModel.loadConversationList();
-    }
-
-    @Override
-    public void onRefresh(RefreshLayout refreshLayout) {
-        mViewModel.loadConversationList();
-    }
-
-    private void finishRefresh() {
-        if(mRefreshLayout != null) {
-            ThreadManager.getInstance().runOnMainThread(()-> {
-                mRefreshLayout.finishRefresh();
-            });
+    /**
+     * 解析Resource<T>
+     * @param response
+     * @param callback
+     * @param <T>
+     */
+    public <T> void parseResource(Resource<T> response, @NonNull OnResourceParseCallback<T> callback) {
+        if(response == null) {
+            return;
         }
+        if(response.status == Status.SUCCESS) {
+            callback.hideLoading();
+            callback.onSuccess(response.data);
+        }else if(response.status == Status.ERROR) {
+            callback.hideLoading();
+            if(!callback.hideErrorMsg) {
+                showToast(response.getMessage());
+            }
+            callback.onError(response.errorCode, response.getMessage());
+        }else if(response.status == Status.LOADING) {
+            callback.onLoading();
+        }
+    }
+
+    /**
+     * toast by string
+     * @param message
+     */
+    public void showToast(String message) {
+        ToastUtils.showToast(message);
     }
 
     @Override
@@ -245,7 +219,8 @@ public class ConversationListFragment extends BaseInitFragment implements OnRefr
 
     @Override
     public void onItemClick(View view, int position) {
-        Object item = mHomeAdapter.getItem(position);
+        super.onItemClick(view, position);
+        Object item = listAdapter.getItem(position);
         if(item instanceof EMConversation) {
             ChatActivity.actionStart(mContext, ((EMConversation)item).conversationId(), EaseCommonUtils.getChatType((EMConversation) item));
         }else if(item instanceof MsgTypeManageEntity) {

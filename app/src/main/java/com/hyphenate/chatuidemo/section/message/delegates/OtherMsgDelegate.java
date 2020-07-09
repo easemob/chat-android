@@ -7,13 +7,14 @@ import android.widget.TextView;
 import com.hyphenate.chatuidemo.DemoHelper;
 import com.hyphenate.chatuidemo.R;
 import com.hyphenate.chatuidemo.common.db.entity.InviteMessage;
+import com.hyphenate.easeui.adapter.EaseBaseDelegate;
 import com.hyphenate.easeui.adapter.EaseBaseRecyclerViewAdapter;
 import com.hyphenate.chatuidemo.common.db.entity.InviteMessage.InviteMessageStatus;
 import com.hyphenate.easeui.widget.EaseImageView;
 
 import androidx.annotation.NonNull;
 
-public class OtherMsgDelegate extends NewFriendsMsgDelegate<InviteMessage, OtherMsgDelegate.ViewHolder> {
+public class OtherMsgDelegate extends EaseBaseDelegate<InviteMessage, OtherMsgDelegate.ViewHolder> {
 
     @Override
     public boolean isForViewType(InviteMessage msg, int position) {

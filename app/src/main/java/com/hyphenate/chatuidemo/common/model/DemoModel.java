@@ -14,6 +14,7 @@ import com.hyphenate.chatuidemo.common.db.entity.MsgTypeManageEntity;
 import com.hyphenate.chatuidemo.common.manager.OptionsHelper;
 import com.hyphenate.chatuidemo.common.utils.PreferenceManager;
 import com.hyphenate.easeui.domain.EaseUser;
+import com.hyphenate.easeui.model.EasePreferenceManager;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -161,7 +162,7 @@ public class DemoModel {
         PreferenceManager.getInstance().setCurrentUserName(username);
     }
 
-    public String getCurrentUsernName(){
+    public String getCurrentUsername(){
         return PreferenceManager.getInstance().getCurrentUsername();
     }
 
@@ -609,11 +610,11 @@ public class DemoModel {
      * @param content
      */
     public void saveUnSendMsg(String toChatUsername, String content) {
-        PreferenceManager.getInstance().saveUnSendMsgInfo(toChatUsername, content);
+        EasePreferenceManager.getInstance().saveUnSendMsgInfo(toChatUsername, content);
     }
 
     public String getUnSendMsg(String toChatUsername) {
-        return PreferenceManager.getInstance().getUnSendMsgInfo(toChatUsername);
+        return EasePreferenceManager.getInstance().getUnSendMsgInfo(toChatUsername);
     }
 
     enum Key{

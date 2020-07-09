@@ -6,7 +6,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Process;
-import android.provider.Settings;
 import android.text.TextUtils;
 import android.util.Log;
 
@@ -565,7 +564,7 @@ public class DemoHelper {
     }
 
     public String getCurrentLoginUser() {
-        return getModel().getCurrentUsernName();
+        return getModel().getCurrentUsername();
     }
 
     /**
