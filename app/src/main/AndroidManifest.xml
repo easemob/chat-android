@@ -293,11 +293,11 @@
             android:windowSoftInputMode="adjustPan|stateHidden" />
         <activity android:name=".section.login.activity.TestActivity" />
         <!--添加好友-->
-        <activity android:name=".section.friends.activity.AddContactActivity"
+        <activity android:name=".section.contact.activity.AddContactActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.AddContactTheme"/>
         <!--好友资料-->
-        <activity android:name=".section.friends.activity.ContactDetailActivity"
+        <activity android:name=".section.contact.activity.ContactDetailActivity"
             android:screenOrientation="portrait"/>
         <!--聊天页面-->
         <activity
@@ -306,10 +306,10 @@
             android:screenOrientation="portrait"
             android:launchMode="singleTask"/>
         <!--群组列表-->
-        <activity android:name=".section.friends.activity.GroupContactManageActivity"
+        <activity android:name=".section.contact.activity.GroupContactManageActivity"
             android:screenOrientation="portrait"/>
         <!--聊天室列表-->
-        <activity android:name=".section.friends.activity.ChatRoomContactManageActivity"
+        <activity android:name=".section.contact.activity.ChatRoomContactManageActivity"
             android:screenOrientation="portrait"/>
         <!--展示大图-->
         <activity android:name="com.hyphenate.easeui.ui.EaseShowBigImageActivity"
@@ -368,7 +368,7 @@
         <activity android:name=".section.chat.PickAtUserActivity"
             android:screenOrientation="portrait"/>
         <!--转发好友列表-->
-        <activity android:name=".section.friends.activity.ForwardMessageActivity"
+        <activity android:name=".section.contact.activity.ForwardMessageActivity"
             android:screenOrientation="portrait"/>
         <!--群组详情-->
         <activity android:name=".section.group.GroupDetailActivity"
@@ -398,10 +398,10 @@
         <activity android:name=".section.group.ChatRoomAdminAuthorityActivity"
             android:screenOrientation="portrait"/>
         <!--新建群组-->
-        <activity android:name=".section.friends.activity.NewGroupActivity"
+        <activity android:name=".section.contact.activity.NewGroupActivity"
             android:screenOrientation="portrait"/>
         <!--新建聊天室-->
-        <activity android:name=".section.friends.activity.NewChatRoomActivity"
+        <activity android:name=".section.contact.activity.NewChatRoomActivity"
             android:screenOrientation="portrait"/>
         <!--系统通知-->
         <activity android:name=".section.message.NewFriendsMsgActivity"
@@ -410,7 +410,7 @@
         <activity android:name=".section.me.PrivacyIndexActivity"
             android:screenOrientation="portrait"/>
         <!--联系人黑名单-->
-        <activity android:name=".section.friends.activity.ContactBlackListActivity"
+        <activity android:name=".section.contact.activity.ContactBlackListActivity"
             android:screenOrientation="portrait"/>
         <!--下载并展示文件-->
         <activity android:name="com.hyphenate.easeui.ui.EaseShowNormalFileActivity"
@@ -497,7 +497,7 @@
         <activity android:name="com.hyphenate.easeui.ui.EaseDingAckUserListActivity"
             android:screenOrientation="portrait"/>
         <!--公开群详情页-->
-        <activity android:name=".section.friends.activity.GroupSimpleDetailActivity"
+        <activity android:name=".section.contact.activity.GroupSimpleDetailActivity"
             android:screenOrientation="portrait"/>
         <!--群组管理-->
         <activity android:name=".section.group.GroupManageIndexActivity"

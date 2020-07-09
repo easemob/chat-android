@@ -4,7 +4,7 @@
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    tools:context=".section.friends.activity.AddContactActivity">
+    tools:context=".section.contact.activity.AddContactActivity">
 
     <com.hyphenate.easeui.widget.EaseTitleBar
         android:id="@+id/title_bar_search"

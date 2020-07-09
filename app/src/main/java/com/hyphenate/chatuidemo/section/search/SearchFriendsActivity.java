@@ -8,8 +8,8 @@ import android.view.View;
 import com.hyphenate.chatuidemo.R;
 import com.hyphenate.chatuidemo.common.db.DemoDbHelper;
 import com.hyphenate.chatuidemo.common.utils.ThreadManager;
-import com.hyphenate.chatuidemo.section.friends.activity.ContactDetailActivity;
-import com.hyphenate.chatuidemo.section.friends.adapter.ContactListAdapter;
+import com.hyphenate.chatuidemo.section.contact.activity.ContactDetailActivity;
+import com.hyphenate.chatuidemo.section.contact.adapter.ContactListAdapter;
 import com.hyphenate.easeui.adapter.EaseBaseRecyclerViewAdapter;
 import com.hyphenate.easeui.domain.EaseUser;
 

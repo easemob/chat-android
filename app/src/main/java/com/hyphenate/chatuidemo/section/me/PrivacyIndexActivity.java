@@ -8,7 +8,7 @@ import android.view.View;
 import com.hyphenate.chatuidemo.R;
 import com.hyphenate.chatuidemo.common.widget.ArrowItemView;
 import com.hyphenate.chatuidemo.section.base.BaseInitActivity;
-import com.hyphenate.chatuidemo.section.friends.activity.ContactBlackListActivity;
+import com.hyphenate.chatuidemo.section.contact.activity.ContactBlackListActivity;
 import com.hyphenate.easeui.widget.EaseTitleBar;
 
 public class PrivacyIndexActivity extends BaseInitActivity implements View.OnClickListener, EaseTitleBar.OnBackPressListener {

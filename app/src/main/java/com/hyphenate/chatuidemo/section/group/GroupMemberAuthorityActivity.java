@@ -21,7 +21,7 @@ import com.hyphenate.chatuidemo.common.manager.SidebarPresenter;
 import com.hyphenate.chatuidemo.section.base.BaseInitActivity;
 import com.hyphenate.chatuidemo.section.dialog.DemoDialogFragment;
 import com.hyphenate.chatuidemo.section.dialog.SimpleDialogFragment;
-import com.hyphenate.chatuidemo.section.friends.activity.ContactDetailActivity;
+import com.hyphenate.chatuidemo.section.contact.activity.ContactDetailActivity;
 import com.hyphenate.chatuidemo.section.group.adapter.GroupMemberAuthorityAdapter;
 import com.hyphenate.chatuidemo.section.group.viewmodels.GroupMemberAuthorityViewModel;
 import com.hyphenate.easeui.domain.EaseUser;

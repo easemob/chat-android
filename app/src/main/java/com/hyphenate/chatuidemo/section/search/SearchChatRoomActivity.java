@@ -9,7 +9,7 @@ import com.hyphenate.chatuidemo.DemoHelper;
 import com.hyphenate.chatuidemo.common.DemoConstant;
 import com.hyphenate.chatuidemo.common.utils.ThreadManager;
 import com.hyphenate.chatuidemo.section.chat.ChatActivity;
-import com.hyphenate.chatuidemo.section.friends.adapter.ChatRoomContactAdapter;
+import com.hyphenate.chatuidemo.section.contact.adapter.ChatRoomContactAdapter;
 import com.hyphenate.easeui.adapter.EaseBaseRecyclerViewAdapter;
 
 import java.util.ArrayList;

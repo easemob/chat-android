@@ -10,8 +10,8 @@ import com.hyphenate.chat.EMGroup;
 import com.hyphenate.chatuidemo.common.DemoConstant;
 import com.hyphenate.chatuidemo.common.interfaceOrImplement.OnResourceParseCallback;
 import com.hyphenate.chatuidemo.section.chat.ChatActivity;
-import com.hyphenate.chatuidemo.section.friends.adapter.PublicGroupContactAdapter;
-import com.hyphenate.chatuidemo.section.friends.viewmodels.PublicGroupViewModel;
+import com.hyphenate.chatuidemo.section.contact.adapter.PublicGroupContactAdapter;
+import com.hyphenate.chatuidemo.section.contact.viewmodels.PublicGroupViewModel;
 import com.hyphenate.easeui.adapter.EaseBaseRecyclerViewAdapter;
 
 import androidx.lifecycle.ViewModelProvider;

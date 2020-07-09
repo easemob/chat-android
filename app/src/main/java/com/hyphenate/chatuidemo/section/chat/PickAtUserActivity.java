@@ -16,7 +16,7 @@ import com.hyphenate.chatuidemo.common.interfaceOrImplement.OnResourceParseCallb
 import com.hyphenate.chatuidemo.common.utils.ThreadManager;
 import com.hyphenate.chatuidemo.section.base.BaseInitActivity;
 import com.hyphenate.chatuidemo.section.chat.adapter.PickUserAdapter;
-import com.hyphenate.chatuidemo.section.friends.viewmodels.GroupContactViewModel;
+import com.hyphenate.chatuidemo.section.contact.viewmodels.GroupContactViewModel;
 import com.hyphenate.easeui.domain.EaseUser;
 import com.hyphenate.easeui.interfaces.OnItemClickListener;
 import com.hyphenate.easeui.utils.EaseCommonUtils;

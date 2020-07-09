@@ -4,13 +4,12 @@ import android.content.Context;
 import android.content.Intent;
 import android.view.View;
 
-import com.hyphenate.chat.EMChatRoom;
 import com.hyphenate.chat.EMClient;
 import com.hyphenate.chat.EMGroup;
 import com.hyphenate.chatuidemo.common.DemoConstant;
 import com.hyphenate.chatuidemo.common.utils.ThreadManager;
 import com.hyphenate.chatuidemo.section.chat.ChatActivity;
-import com.hyphenate.chatuidemo.section.friends.adapter.GroupContactAdapter;
+import com.hyphenate.chatuidemo.section.contact.adapter.GroupContactAdapter;
 import com.hyphenate.easeui.adapter.EaseBaseRecyclerViewAdapter;
 
 import java.util.ArrayList;
