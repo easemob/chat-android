@@ -21,6 +21,8 @@ android {
         versionCode 69
         versionName "3.6.9.1"
         multiDexEnabled true
+        //为了兼容5.0以下使用vector图标
+        vectorDrawables.useSupportLibrary = true
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
 
         //指定room.schemaLocation生成的文件路径  处理Room 警告 Schema export Error

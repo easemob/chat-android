@@ -2,8 +2,10 @@ package com.hyphenate.chatuidemo;
 
 import android.app.Application;
 import android.content.Context;
+import android.os.Build;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatDelegate;
 import androidx.multidex.MultiDex;
 
 import com.hyphenate.chatuidemo.common.interfaceOrImplement.UserActivityLifecycleCallbacks;
@@ -85,6 +87,15 @@ public class DemoApplication extends Application implements Thread.UncaughtExcep
                 return new ClassicsFooter(context).setSpinnerStyle(SpinnerStyle.Translate);
             }
         });
+    }
+
+    /**
+     * 为了兼容5.0以下使用vector图标
+     */
+    static {
+        if(Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
+            AppCompatDelegate.setCompatVectorFromResourcesEnabled(true);
+        }
     }
 
     @Override
