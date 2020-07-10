@@ -25,11 +25,10 @@ import com.hyphenate.chatuidemo.common.permission.PermissionsResultAction;
 import com.hyphenate.chatuidemo.section.MainViewModel;
 import com.hyphenate.chatuidemo.section.base.BaseInitActivity;
 import com.hyphenate.chatuidemo.section.conference.ConferenceActivity;
-import com.hyphenate.chatuidemo.section.contact.fragment.DemoContactListFragment;
+import com.hyphenate.chatuidemo.section.contact.fragment.ContactListFragment;
 import com.hyphenate.chatuidemo.section.conversation.ConversationListFragment;
 import com.hyphenate.chatuidemo.section.discover.DiscoverFragment;
 import com.hyphenate.chatuidemo.section.contact.activity.NewGroupActivity;
-import com.hyphenate.chatuidemo.section.contact.fragment.ContactListFragment;
 import com.hyphenate.chatuidemo.section.contact.activity.AddContactActivity;
 import com.hyphenate.chatuidemo.section.contact.viewmodels.ContactsViewModel;
 import com.hyphenate.chatuidemo.section.me.AboutMeFragment;
@@ -239,7 +238,7 @@ public class MainActivity extends BaseInitActivity implements BottomNavigationVi
 
     private void switchToFriends() {
         if(mFriendsFragment == null) {
-            mFriendsFragment = new DemoContactListFragment();
+            mFriendsFragment = new ContactListFragment();
         }
         replace(mFriendsFragment);
     }
