@@ -27,6 +27,7 @@ import com.scwang.smartrefresh.layout.SmartRefreshLayout;
 import com.scwang.smartrefresh.layout.api.RefreshLayout;
 import com.scwang.smartrefresh.layout.listener.OnRefreshListener;
 
+import java.util.Iterator;
 import java.util.List;
 
 import androidx.fragment.app.Fragment;
@@ -94,6 +95,7 @@ public class PickAtUserActivity extends BaseInitActivity implements OnRefreshLis
             parseResource(response, new OnResourceParseCallback<List<EaseUser>>() {
                 @Override
                 public void onSuccess(List<EaseUser> data) {
+                    removeSelf(data);
                     mAdapter.setData(data);
                 }
 
@@ -106,6 +108,19 @@ public class PickAtUserActivity extends BaseInitActivity implements OnRefreshLis
         });
 
         mViewModel.getGroupMembers(mGroupId);
+    }
+
+    private void removeSelf(List<EaseUser> data) {
+        if(data == null || data.isEmpty()) {
+            return;
+        }
+        Iterator<EaseUser> iterator = data.iterator();
+        while (iterator.hasNext()) {
+            EaseUser user = iterator.next();
+            if(TextUtils.equals(user.getUsername(), DemoHelper.getInstance().getCurrentUser())) {
+                iterator.remove();
+            }
+        }
     }
 
     private void checkIfAddHeader() {
