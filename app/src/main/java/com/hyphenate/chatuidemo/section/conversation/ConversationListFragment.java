@@ -20,6 +20,8 @@ import com.hyphenate.chatuidemo.common.interfaceOrImplement.OnResourceParseCallb
 import com.hyphenate.chatuidemo.common.livedatas.LiveDataBus;
 import com.hyphenate.chatuidemo.common.net.Resource;
 import com.hyphenate.chatuidemo.common.utils.ToastUtils;
+import com.hyphenate.chatuidemo.section.base.BaseActivity;
+import com.hyphenate.chatuidemo.section.base.BaseInitActivity;
 import com.hyphenate.chatuidemo.section.chat.ChatActivity;
 import com.hyphenate.chatuidemo.section.chat.viewmodel.MessageViewModel;
 import com.hyphenate.chatuidemo.section.conversation.delegate.SystemMessageDelegate;
@@ -183,20 +185,8 @@ public class ConversationListFragment extends EaseConversationListFragment imple
      * @param <T>
      */
     public <T> void parseResource(Resource<T> response, @NonNull OnResourceParseCallback<T> callback) {
-        if(response == null) {
-            return;
-        }
-        if(response.status == Status.SUCCESS) {
-            callback.hideLoading();
-            callback.onSuccess(response.data);
-        }else if(response.status == Status.ERROR) {
-            callback.hideLoading();
-            if(!callback.hideErrorMsg) {
-                showToast(response.getMessage());
-            }
-            callback.onError(response.errorCode, response.getMessage());
-        }else if(response.status == Status.LOADING) {
-            callback.onLoading();
+        if(mContext instanceof BaseActivity) {
+            ((BaseActivity) mContext).parseResource(response, callback);
         }
     }
 

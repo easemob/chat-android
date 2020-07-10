@@ -6,7 +6,7 @@
         android:id="@+id/action_friend_delete"
         android:orderInCategory="100"
         android:visible="true"
-        android:title="@string/em_friends_delete_the_contact"
+        android:title="@string/ease_friends_delete_the_contact"
         app:showAsAction="ifRoom"/>
 
     <item

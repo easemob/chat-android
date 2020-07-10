@@ -9,7 +9,7 @@ import android.widget.TextView;
 
 import com.hyphenate.chatuidemo.R;
 import com.hyphenate.chatuidemo.common.interfaceOrImplement.OnResourceParseCallback;
-import com.hyphenate.chatuidemo.common.manager.SidebarPresenter;
+import com.hyphenate.easeui.manager.SidebarPresenter;
 import com.hyphenate.chatuidemo.section.base.BaseInitActivity;
 import com.hyphenate.chatuidemo.section.group.adapter.GroupPickContactsAdapter;
 import com.hyphenate.chatuidemo.section.group.viewmodels.GroupPickContactsViewModel;

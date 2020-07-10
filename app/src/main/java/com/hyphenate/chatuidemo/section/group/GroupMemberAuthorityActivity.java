@@ -17,7 +17,7 @@ import com.hyphenate.chatuidemo.common.DemoConstant;
 import com.hyphenate.chatuidemo.common.db.entity.EmUserEntity;
 import com.hyphenate.chatuidemo.common.interfaceOrImplement.OnResourceParseCallback;
 import com.hyphenate.chatuidemo.common.livedatas.LiveDataBus;
-import com.hyphenate.chatuidemo.common.manager.SidebarPresenter;
+import com.hyphenate.easeui.manager.SidebarPresenter;
 import com.hyphenate.chatuidemo.section.base.BaseInitActivity;
 import com.hyphenate.chatuidemo.section.dialog.DemoDialogFragment;
 import com.hyphenate.chatuidemo.section.dialog.SimpleDialogFragment;

@@ -15,7 +15,7 @@ import com.hyphenate.chatuidemo.R;
 import com.hyphenate.chatuidemo.common.DemoConstant;
 import com.hyphenate.chatuidemo.common.enums.SearchType;
 import com.hyphenate.chatuidemo.common.interfaceOrImplement.OnResourceParseCallback;
-import com.hyphenate.chatuidemo.common.manager.SidebarPresenter;
+import com.hyphenate.easeui.manager.SidebarPresenter;
 import com.hyphenate.chatuidemo.common.widget.ContactItemView;
 import com.hyphenate.chatuidemo.section.base.BaseInitFragment;
 import com.hyphenate.chatuidemo.section.conference.ConferenceActivity;
@@ -107,7 +107,7 @@ public class ContactListFragment extends BaseInitFragment implements View.OnClic
 
     private void showDeleteDialog(EaseUser user) {
         new SimpleDialogFragment.Builder(mContext)
-                .setTitle(R.string.em_friends_delete_contact_hint)
+                .setTitle(R.string.ease_friends_delete_contact_hint)
                 .setOnConfirmClickListener(new DemoDialogFragment.OnConfirmClickListener() {
                     @Override
                     public void onConfirmClick(View view) {
