@@ -51,6 +51,8 @@ public class ContactListFragment extends EaseContactListFragment implements View
         super.initView(savedInstanceState);
         addSearchView();
         addHeader();
+        //设置无数据时空白页面
+        adapter.setEmptyLayoutResource(R.layout.demo_layout_friends_empty_list);
     }
 
     @Override
