@@ -3,6 +3,7 @@ package com.hyphenate.chatuidemo.common.model;
 import android.content.Context;
 
 import com.hyphenate.chat.EMChatRoom;
+import com.hyphenate.chat.EMClient;
 import com.hyphenate.chatuidemo.DemoApplication;
 import com.hyphenate.chatuidemo.common.db.DemoDbHelper;
 import com.hyphenate.chatuidemo.common.db.dao.AppKeyDao;
@@ -86,6 +87,7 @@ public class DemoModel {
         List<AppKeyEntity> keys = dao.loadAllAppKeys();
         if(keys == null || keys.isEmpty()) {
             dao.insert(new AppKeyEntity(OptionsHelper.getInstance().getDefAppkey()));
+            dao.insert(new AppKeyEntity(EMClient.getInstance().getOptions().getAppKey()));
         }
         keys = dao.loadAllAppKeys();
         return keys;

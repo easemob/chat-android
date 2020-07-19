@@ -213,7 +213,7 @@
     <string name="em_chat_room_new_profile_hint">聊天室简介</string>
     <string name="em_chat_room_new_name_cannot_be_empty">聊天室名称不能为空</string>
 
-    <string name="em_notify_title">申请与通知</string>
+    <string name="em_notify_title">系统消息</string>
     <string name="em_notify_agree">同意</string>
     <string name="em_notify_refuse">拒绝</string>
     <string name="em_notify_delete">删除</string>

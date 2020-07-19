@@ -12,6 +12,9 @@ import com.hyphenate.easeui.adapter.EaseBaseDelegate;
 import com.hyphenate.easeui.adapter.EaseBaseRecyclerViewAdapter;
 import com.hyphenate.chatuidemo.common.db.entity.InviteMessage.InviteMessageStatus;
 import com.hyphenate.easeui.widget.EaseImageView;
+import com.hyphenate.util.DateUtils;
+
+import java.util.Date;
 
 import androidx.annotation.NonNull;
 
@@ -41,6 +44,7 @@ public class InviteMsgDelegate extends EaseBaseDelegate<InviteMessage, InviteMsg
         private Button agree;
         private Button refuse;
         private EaseImageView avatar;
+        private TextView time;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -52,6 +56,7 @@ public class InviteMsgDelegate extends EaseBaseDelegate<InviteMessage, InviteMsg
             message = findViewById(R.id.message);
             agree = findViewById(R.id.agree);
             refuse = findViewById(R.id.refuse);
+            time = findViewById(R.id.time);
             avatar = findViewById(R.id.avatar);
             avatar.setShapeType(DemoHelper.getInstance().getEaseAvatarOptions().getAvatarShape());
         }
@@ -70,6 +75,7 @@ public class InviteMsgDelegate extends EaseBaseDelegate<InviteMessage, InviteMsg
                 }
             }
             message.setText(reason);
+            time.setText(DateUtils.getTimestampString(new Date(msg.getTime())));
 
             agree.setOnClickListener(view -> {
                 if(listener != null) {

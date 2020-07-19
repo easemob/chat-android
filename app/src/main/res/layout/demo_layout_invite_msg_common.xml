@@ -20,7 +20,6 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginLeft="8dp"
-        android:layout_marginTop="3dp"
         android:textColor="#000"
         android:textSize="16sp"
         tools:text="name"
@@ -39,4 +38,17 @@
         tools:text="content"
         app:layout_constraintBottom_toBottomOf="@id/avatar"
         app:layout_constraintLeft_toRightOf="@id/avatar" />
+
+
+    <TextView
+        android:id="@+id/time"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_marginRight="16dp"
+        android:layout_marginTop="15dp"
+        android:textColor="@color/ease_conversation_color_item_time"
+        android:textSize="13sp"
+        tools:text="09:51"/>
 </merge>
