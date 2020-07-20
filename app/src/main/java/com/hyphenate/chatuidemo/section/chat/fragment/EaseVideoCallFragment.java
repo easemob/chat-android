@@ -188,7 +188,7 @@ public class EaseVideoCallFragment extends EaseCallFragment implements View.OnCl
             }, 300);
         } else { // incoming call
 
-            callStateTextView.setText("Ringing");
+            callStateTextView.setText(R.string.em_call_video_request);
             if(EMClient.getInstance().callManager().getCallState() == EMCallStateChangeListener.CallState.IDLE
                     || EMClient.getInstance().callManager().getCallState() == EMCallStateChangeListener.CallState.DISCONNECTED) {
                 // the call has ended

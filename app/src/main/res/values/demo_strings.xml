@@ -217,6 +217,8 @@
     <string name="em_notify_agree">同意</string>
     <string name="em_notify_refuse">拒绝</string>
     <string name="em_notify_delete">删除</string>
+    <string name="em_call_video_request">正在邀请你进行视频通话...</string>
+    <string name="em_call_voice_request">正在邀请你进行语音通话...</string>
 
     <string name="em_about_me_set">设置</string>
     <string name="em_about_me_feedback">意见反馈</string>
