@@ -123,6 +123,7 @@ public class ServerSetFragment extends BaseInitFragment implements EaseTitleBar.
         mEtServerPort.setEnabled(!isInited);
         mEtServerRest.setEnabled(!isInited);
         mSwitchHttpsSet.setEnabled(!isInited);
+        checkButtonEnable();
     }
 
     /**
@@ -143,6 +144,7 @@ public class ServerSetFragment extends BaseInitFragment implements EaseTitleBar.
     public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
         switch (buttonView.getId()) {
             case R.id.switch_server :
+                DemoHelper.getInstance().getModel().enableCustomServer(isChecked);
                 mGroupServerSet.setVisibility(isChecked ? View.VISIBLE : View.GONE);
                 setResetButtonVisible(isChecked, DemoHelper.getInstance().isSDKInit());
                 break;
@@ -172,15 +174,16 @@ public class ServerSetFragment extends BaseInitFragment implements EaseTitleBar.
     public void afterTextChanged(Editable s) {
         mAppkey = mEtAppkey.getText().toString().trim();
         DemoHelper.getInstance().getModel().enableCustomAppkey(!TextUtils.isEmpty(mAppkey));
-        mServerAddress = mEtServerAddress.getText().toString().trim();
-        mServerPort = mEtServerPort.getText().toString().trim();
-        mRestServerAddress = mEtServerRest.getText().toString().trim();
         checkButtonEnable();
 
     }
 
     private void checkButtonEnable() {
         if(mCustomServerEnable) {
+            mAppkey = mEtAppkey.getText().toString().trim();
+            mServerAddress = mEtServerAddress.getText().toString().trim();
+            mServerPort = mEtServerPort.getText().toString().trim();
+            mRestServerAddress = mEtServerRest.getText().toString().trim();
             setButtonEnable(!TextUtils.isEmpty(mServerAddress)
                     && !TextUtils.isEmpty(mAppkey)
                     && !TextUtils.isEmpty(mServerPort)
