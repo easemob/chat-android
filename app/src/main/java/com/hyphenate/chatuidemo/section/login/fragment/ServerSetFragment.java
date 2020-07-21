@@ -96,10 +96,7 @@ public class ServerSetFragment extends BaseInitFragment implements EaseTitleBar.
      */
     private void checkServerSet() {
         boolean isInited = DemoHelper.getInstance().isSDKInit();
-        //如果sdk已经初始化完成，则应该显示初始化完成后的数据
-        if(isInited) {
-            mBtnServer.setEnabled(false);
-        }
+
         //判断是否显示设置数据，及是否可以自定义设置
         mCustomServerEnable = DemoHelper.getInstance().getModel().isCustomServerEnable();
         mSwitchServer.setChecked(mCustomServerEnable);
@@ -124,6 +121,10 @@ public class ServerSetFragment extends BaseInitFragment implements EaseTitleBar.
         mEtServerRest.setEnabled(!isInited);
         mSwitchHttpsSet.setEnabled(!isInited);
         checkButtonEnable();
+        //如果sdk已经初始化完成，则应该显示初始化完成后的数据
+        if(isInited) {
+            mBtnServer.setEnabled(false);
+        }
     }
 
     /**
