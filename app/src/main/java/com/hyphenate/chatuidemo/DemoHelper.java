@@ -379,12 +379,17 @@ public class DemoHelper {
                     }
                 }
             }
-
-            if (demoModel.isCustomServerEnable() && demoModel.isCustomAppkeyEnabled() && !TextUtils.isEmpty(demoModel.getCutomAppkey())) {
-                // 设置appkey
-                options.setAppKey(demoModel.getCutomAppkey());
-            }
         }
+        if (demoModel.isCustomAppkeyEnabled() && !TextUtils.isEmpty(demoModel.getCutomAppkey())) {
+            // 设置appkey
+            options.setAppKey(demoModel.getCutomAppkey());
+        }
+
+        String imServer = options.getImServer();
+        String restServer = options.getRestServer();
+        Log.e("TAG", "imServer = "+imServer);
+        Log.e("TAG", "restServer = "+restServer);
+        Log.e("TAG", "appkey = "+options.getAppKey());
 
 
         // 设置是否允许聊天室owner离开并删除会话记录，意味着owner再不会受到任何消息

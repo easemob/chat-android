@@ -138,6 +138,7 @@ public class ServerSetFragment extends BaseInitFragment implements EaseTitleBar.
             case R.id.switch_server :
                 mCustomSetEnable = isChecked;
                 DemoHelper.getInstance().getModel().enableCustomSet(isChecked);
+                DemoHelper.getInstance().getModel().enableCustomAppkey(!TextUtils.isEmpty(mEtAppkey.getText().toString().trim()) && isChecked);
                 mGroupServerSet.setVisibility(isChecked ? View.VISIBLE : View.GONE);
                 setResetButtonVisible(isChecked, DemoHelper.getInstance().isSDKInit());
                 break;
@@ -167,7 +168,7 @@ public class ServerSetFragment extends BaseInitFragment implements EaseTitleBar.
     @Override
     public void afterTextChanged(Editable s) {
         mAppkey = mEtAppkey.getText().toString().trim();
-        DemoHelper.getInstance().getModel().enableCustomAppkey(!TextUtils.isEmpty(mAppkey));
+        DemoHelper.getInstance().getModel().enableCustomAppkey(!TextUtils.isEmpty(mAppkey) && mSwitchServer.isChecked());
         checkButtonEnable();
 
     }
@@ -236,6 +237,7 @@ public class ServerSetFragment extends BaseInitFragment implements EaseTitleBar.
         }
         // 保存设置
         if(!TextUtils.isEmpty(mAppkey)) {
+            DemoHelper.getInstance().getModel().enableCustomAppkey(mSwitchServer.isChecked());
             DemoHelper.getInstance().getModel().setCustomAppkey(mAppkey);
         }
         if(!TextUtils.isEmpty(mServerAddress)) {
