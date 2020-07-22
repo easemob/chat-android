@@ -23,6 +23,7 @@ import com.hyphenate.chat.EMClient;
 import com.hyphenate.chat.EMGroup;
 import com.hyphenate.chat.EMMessage;
 import com.hyphenate.chat.EMTextMessageBody;
+import com.hyphenate.chat.adapter.EMAChatRoomManagerListener;
 import com.hyphenate.chatuidemo.DemoHelper;
 import com.hyphenate.chatuidemo.R;
 import com.hyphenate.chatuidemo.common.DemoConstant;
@@ -465,4 +466,35 @@ public class ChatFragment extends EaseChatFragment implements EaseChatFragment.O
         return DemoHelper.getInstance().getModel().getUnSendMsg(toChatUsername);
     }
 //================================== for store do not send input logic end ====================================
+
+    @Override
+    protected void onRemovedFromChatRoom(int reason, String roomId, String roomName, String participant) {
+        super.onRemovedFromChatRoom(reason, roomId, roomName, participant);
+        if(TextUtils.equals(roomId, toChatUsername)) {
+            if(reason == EMAChatRoomManagerListener.BE_KICKED) {
+                showMsgToast(R.string.quiting_the_chat_room);
+            }else {
+                showMsgToast(R.string.be_kicked_for_offline);
+            }
+        }
+
+    }
+
+    @Override
+    protected void onMemberJoined(String roomId, String participant) {
+        super.onMemberJoined(roomId, participant);
+        showMsgToast("member join:" + participant);
+    }
+
+    @Override
+    protected void onMemberExited(String roomId, String roomName, String participant) {
+        super.onMemberExited(roomId, roomName, participant);
+        showMsgToast("member exit:" + participant);
+    }
+
+    @Override
+    protected void onChatRoomDestroyed(String roomId, String roomName) {
+        super.onChatRoomDestroyed(roomId, roomName);
+        showMsgToast(R.string.the_current_chat_room_destroyed);
+    }
 }

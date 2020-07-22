@@ -7,6 +7,8 @@ import android.text.TextUtils;
 import android.util.Log;
 import android.widget.Toast;
 
+import androidx.annotation.StringRes;
+
 import com.hyphenate.EMChatRoomChangeListener;
 import com.hyphenate.EMConferenceListener;
 import com.hyphenate.EMConnectionListener;
@@ -102,6 +104,10 @@ public class ChatPresenter extends EaseChatPresenter {
         while (!msgQueue.isEmpty()) {
             showToast(msgQueue.remove());
         }
+    }
+
+    void showToast(@StringRes int mesId) {
+        showToast(context.getString(mesId));
     }
 
     void showToast(final String message) {
