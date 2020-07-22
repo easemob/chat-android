@@ -3,6 +3,7 @@ package com.hyphenate.chatuidemo;
 import android.app.Application;
 import android.content.Context;
 import android.os.Build;
+import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatDelegate;
@@ -47,6 +48,7 @@ public class DemoApplication extends Application implements Thread.UncaughtExcep
         // 初始化PreferenceManager
         PreferenceManager.init(this);
         // init hx sdk
+        Log.e("TAG", "application initHx");
         if(DemoHelper.getInstance().getAutoLogin()) {
             DemoHelper.getInstance().init(this);
         }

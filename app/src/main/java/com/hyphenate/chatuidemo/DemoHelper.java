@@ -66,7 +66,7 @@ import java.util.Map;
  * 作为hyphenate-sdk的入口控制类，获取sdk下的基础类均通过此类
  */
 public class DemoHelper {
-    private static final String TAG = "chathelper";
+    private static String TAG = "chathelper";
 
     public boolean isSDKInit;//SDK是否初始化
     private static DemoHelper mInstance;
@@ -90,33 +90,50 @@ public class DemoHelper {
 
     public void init(Context context) {
         //初始化IM SDK
-        initSDK(context);
-        // debug mode, you'd better set it to false, if you want release your App officially.
-        EMClient.getInstance().setDebugMode(true);
-        // set Call options
-        setCallOptions(context);
-        //初始化推送
-        initPush(context);
-        //注册call Receiver
-        initReceiver(context);
-        //初始化ease ui相关
-        initEaseUI(context);
-        //注册对话类型
-        registerConversationType();
+        if(initSDK(context)) {
+            // debug mode, you'd better set it to false, if you want release your App officially.
+            EMClient.getInstance().setDebugMode(true);
+            // set Call options
+            setCallOptions(context);
+            //初始化推送
+            initPush(context);
+            //注册call Receiver
+            initReceiver(context);
+            //初始化ease ui相关
+            initEaseUI(context);
+            //注册对话类型
+            registerConversationType();
+        }
+
     }
 
-    private void initSDK(Context context) {
+    /**
+     * 此处增加判断SDK是否初始化的标记，主要是防止SDK多次初始化
+     * 正常情况下，application只初始化一次，但是如果开启动图服务或者其他需要开启新的进程的服务
+     * 会对application进行初始化，这种情况下就会导致SDK使用异常
+     * @param context
+     * @return
+     */
+    private boolean initSDK(Context context) {
+        if(isSDKInit()) {
+            return true;
+        }
+        //防止出现多进程的情况
+        if(!DemoHelper.getInstance().isMainProcess(context)) {
+            EMLog.e(TAG, "enter the service process!");
+            return false;
+        }
         demoModel = new DemoModel(context);
         // 根据项目需求对SDK进行配置
         EMOptions options = initChatOptions(context);
 //        options.setRestServer("a1-hsb.easemob.com");
-//        options.setIMServer("39.107.54.56");
 //        options.setIMServer("116.85.43.118");
 //        options.setImPort(6717);
         // 初始化SDK
         EMClient.getInstance().init(context, options);
         // 记录本地标记，是否初始化过
         setSDKInit(true);
+        return isSDKInit();
     }
 
     private void initReceiver(Context context) {

@@ -19,6 +19,7 @@ import com.hyphenate.chatuidemo.section.me.activity.DeveloperSetActivity;
 import com.hyphenate.chatuidemo.section.me.activity.FeedbackActivity;
 import com.hyphenate.chatuidemo.section.me.activity.SetIndexActivity;
 import com.hyphenate.chatuidemo.section.me.activity.UserDetailActivity;
+import com.hyphenate.easeui.ui.EaseBaiduMapActivity;
 import com.hyphenate.easeui.utils.StatusBarCompat;
 
 import androidx.constraintlayout.widget.ConstraintLayout;
@@ -81,7 +82,8 @@ public class AboutMeFragment extends BaseInitFragment implements View.OnClickLis
                 AboutHxActivity.actionStart(mContext);
                 break;
             case R.id.item_developer_set:
-                DeveloperSetActivity.actionStart(mContext);
+                //DeveloperSetActivity.actionStart(mContext);
+                EaseBaiduMapActivity.actionStartForResult(this, 1);
                 break;
         }
     }

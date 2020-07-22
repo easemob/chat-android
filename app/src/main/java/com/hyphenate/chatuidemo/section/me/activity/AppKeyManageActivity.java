@@ -149,7 +149,7 @@ public class AppKeyManageActivity extends BaseInitActivity implements EaseTitleB
 
     private void showDeleteDialog(int position) {
         new AlertDialog.Builder(this)
-                    .setMessage(R.string.delete)
+                    .setMessage(R.string.em_developer_appkey_delete)
                     .setPositiveButton("确定", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
