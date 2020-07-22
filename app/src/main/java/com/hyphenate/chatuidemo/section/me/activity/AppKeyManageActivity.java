@@ -14,9 +14,11 @@ import android.widget.ImageView;
 import android.widget.RadioButton;
 import android.widget.TextView;
 
+import com.hyphenate.chat.EMClient;
 import com.hyphenate.chatuidemo.DemoHelper;
 import com.hyphenate.chatuidemo.R;
 import com.hyphenate.chatuidemo.common.db.entity.AppKeyEntity;
+import com.hyphenate.chatuidemo.common.manager.OptionsHelper;
 import com.hyphenate.chatuidemo.common.model.DemoModel;
 import com.hyphenate.chatuidemo.section.base.BaseInitActivity;
 import com.hyphenate.chatuidemo.section.dialog.DemoDialogFragment;
@@ -99,7 +101,10 @@ public class AppKeyManageActivity extends BaseInitActivity implements EaseTitleB
         adapter.setOnItemLongClickListener(new OnItemLongClickListener() {
             @Override
             public boolean onItemLongClick(View view, int position) {
-                if(position != 0) {
+                AppKeyEntity item = adapter.getItem(position);
+                String appKey = item.getAppKey();
+                if(!TextUtils.equals(appKey, OptionsHelper.getInstance().getDefAppkey())
+                        && !TextUtils.equals(appKey, EMClient.getInstance().getOptions().getAppKey())) {
                     showDeleteDialog(position);
                 }
                 return true;

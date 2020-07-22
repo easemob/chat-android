@@ -84,13 +84,17 @@ public class DemoModel {
         if(dao == null) {
             return new ArrayList<>();
         }
-        List<AppKeyEntity> keys = dao.loadAllAppKeys();
+        String defAppkey = OptionsHelper.getInstance().getDefAppkey();
+        List<AppKeyEntity> keys = dao.queryKey(defAppkey);
         if(keys == null || keys.isEmpty()) {
-            dao.insert(new AppKeyEntity(OptionsHelper.getInstance().getDefAppkey()));
-            dao.insert(new AppKeyEntity(EMClient.getInstance().getOptions().getAppKey()));
+            dao.insert(new AppKeyEntity(defAppkey));
         }
-        keys = dao.loadAllAppKeys();
-        return keys;
+        String appKey = EMClient.getInstance().getOptions().getAppKey();
+        List<AppKeyEntity> appKeys = dao.queryKey(appKey);
+        if(appKeys == null || appKeys.isEmpty()) {
+            dao.insert(new AppKeyEntity(appKey));
+        }
+        return dao.loadAllAppKeys();
     }
 
     /**
