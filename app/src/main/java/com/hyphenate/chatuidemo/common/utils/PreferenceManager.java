@@ -54,6 +54,7 @@ public class PreferenceManager {
 	private static String SHARED_KEY_IM_SERVER = "SHARED_KEY_IM_SERVER";
 	private static String SHARED_KEY_IM_SERVER_PORT = "SHARED_KEY_IM_SERVER_PORT";
 	private static String SHARED_KEY_ENABLE_CUSTOM_SERVER = "SHARED_KEY_ENABLE_CUSTOM_SERVER";
+	private static String SHARED_KEY_ENABLE_CUSTOM_SET = "SHARED_KEY_ENABLE_CUSTOM_SET";
 	private static String SHARED_KEY_ENABLE_CUSTOM_APPKEY = "SHARED_KEY_ENABLE_CUSTOM_APPKEY";
 	private static String SHARED_KEY_CUSTOM_APPKEY = "SHARED_KEY_CUSTOM_APPKEY";
 	private static String SHARED_KEY_MSG_ROAMING = "SHARED_KEY_MSG_ROAMING";
@@ -299,6 +300,15 @@ public class PreferenceManager {
 
 	public boolean isCustomServerEnable(){
 		return mSharedPreferences.getBoolean(SHARED_KEY_ENABLE_CUSTOM_SERVER, false);
+	}
+
+	public boolean isCustomSetEnable(){
+		return mSharedPreferences.getBoolean(SHARED_KEY_ENABLE_CUSTOM_SET, false);
+	}
+
+	public void enableCustomSet(boolean enable){
+		editor.putBoolean(SHARED_KEY_ENABLE_CUSTOM_SET, enable);
+		editor.apply();
 	}
 
 	public void enableCustomAppkey(boolean enable) {

@@ -361,28 +361,31 @@ public class DemoHelper {
         options.setPushConfig(builder.build());
 
         //set custom servers, commonly used in private deployment
-        if(demoModel.isCustomServerEnable() && demoModel.getRestServer() != null && demoModel.getIMServer() != null) {
-            // 设置rest server地址
-            options.setRestServer(demoModel.getRestServer());
-            // 设置im server地址
-            options.setIMServer(demoModel.getIMServer());
-            //如果im server地址中包含端口号
-            if(demoModel.getIMServer().contains(":")) {
-                options.setIMServer(demoModel.getIMServer().split(":")[0]);
-                // 设置im server 端口号，默认443
-                options.setImPort(Integer.valueOf(demoModel.getIMServer().split(":")[1]));
-            }else {
-                //如果不包含端口号
-                if(demoModel.getIMServerPort() != 0) {
-                    options.setImPort(demoModel.getIMServerPort());
+        if(demoModel.isCustomSetEnable()) {
+            if(demoModel.isCustomServerEnable() && demoModel.getRestServer() != null && demoModel.getIMServer() != null) {
+                // 设置rest server地址
+                options.setRestServer(demoModel.getRestServer());
+                // 设置im server地址
+                options.setIMServer(demoModel.getIMServer());
+                //如果im server地址中包含端口号
+                if(demoModel.getIMServer().contains(":")) {
+                    options.setIMServer(demoModel.getIMServer().split(":")[0]);
+                    // 设置im server 端口号，默认443
+                    options.setImPort(Integer.valueOf(demoModel.getIMServer().split(":")[1]));
+                }else {
+                    //如果不包含端口号
+                    if(demoModel.getIMServerPort() != 0) {
+                        options.setImPort(demoModel.getIMServerPort());
+                    }
                 }
+            }
+
+            if (demoModel.isCustomServerEnable() && demoModel.isCustomAppkeyEnabled() && !TextUtils.isEmpty(demoModel.getCutomAppkey())) {
+                // 设置appkey
+                options.setAppKey(demoModel.getCutomAppkey());
             }
         }
 
-        if (demoModel.isCustomServerEnable() && demoModel.isCustomAppkeyEnabled() && !TextUtils.isEmpty(demoModel.getCutomAppkey())) {
-            // 设置appkey
-            options.setAppKey(demoModel.getCutomAppkey());
-        }
 
         // 设置是否允许聊天室owner离开并删除会话记录，意味着owner再不会受到任何消息
         options.allowChatroomOwnerLeave(demoModel.isChatroomOwnerLeaveAllowed());

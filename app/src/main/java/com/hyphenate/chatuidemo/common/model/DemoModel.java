@@ -414,6 +414,22 @@ public class DemoModel {
     }
 
     /**
+     * 自定义配置是否可用
+     * @return
+     */
+    public boolean isCustomSetEnable() {
+        return OptionsHelper.getInstance().isCustomSetEnable();
+    }
+
+    /**
+     * 自定义配置是否可用
+     * @param enable
+     */
+    public void enableCustomSet(boolean enable){
+        OptionsHelper.getInstance().enableCustomSet(enable);
+    }
+
+    /**
      * 设置闲置服务器
      * @param restServer
      */

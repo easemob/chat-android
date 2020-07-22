@@ -25,6 +25,22 @@ public class OptionsHelper {
     }
 
     /**
+     * 自定义配置是否可用
+     * @return
+     */
+    public boolean isCustomSetEnable() {
+        return PreferenceManager.getInstance().isCustomSetEnable();
+    }
+
+    /**
+     * 自定义配置是否可用
+     * @param enable
+     */
+    public void enableCustomSet(boolean enable){
+        PreferenceManager.getInstance().enableCustomSet(enable);
+    }
+
+    /**
      * 自定义服务器是否可用
      * @return
      */
