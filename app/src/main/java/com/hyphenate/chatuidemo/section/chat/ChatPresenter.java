@@ -23,6 +23,7 @@ import com.hyphenate.chat.EMMessage;
 import com.hyphenate.chat.EMMucSharedFile;
 import com.hyphenate.chat.EMStreamStatistics;
 import com.hyphenate.chat.EMTextMessageBody;
+import com.hyphenate.chat.adapter.EMAChatRoomManagerListener;
 import com.hyphenate.chatuidemo.DemoApplication;
 import com.hyphenate.chatuidemo.DemoHelper;
 import com.hyphenate.chatuidemo.R;
@@ -37,6 +38,7 @@ import com.hyphenate.chatuidemo.common.livedatas.NetworkChangeLiveData;
 import com.hyphenate.chatuidemo.common.manager.PushAndMessageHelper;
 import com.hyphenate.chatuidemo.common.repositories.EMContactManagerRepository;
 import com.hyphenate.chatuidemo.common.repositories.EMGroupManagerRepository;
+import com.hyphenate.chatuidemo.section.group.GroupHelper;
 import com.hyphenate.easeui.EaseChatPresenter;
 import com.hyphenate.easeui.interfaces.EaseGroupListener;
 import com.hyphenate.easeui.model.EaseAtMessageHelper;
@@ -311,23 +313,13 @@ public class ChatPresenter extends EaseChatPresenter {
         public void onInvitationAccepted(String groupId, String invitee, String reason) {
             super.onInvitationAccepted(groupId, invitee, reason);
             //user accept your invitation
-            boolean hasGroup = false;
-            EMGroup _group = null;
-            for (EMGroup group : DemoHelper.getInstance().getGroupManager().getAllGroups()) {
-                if (group.getGroupId().equals(groupId)) {
-                    hasGroup = true;
-                    _group = group;
-                    break;
-                }
-            }
-            if (!hasGroup)
-                return;
+            String groupName = GroupHelper.getGroupName(groupId);
 
             InviteMessage msg = new InviteMessage();
             msg.setFrom(groupId);
             msg.setTime(System.currentTimeMillis());
             msg.setGroupId(groupId);
-            msg.setGroupName(_group == null ? groupId : _group.getGroupName());
+            msg.setGroupName(groupName);
             msg.setReason(reason);
             msg.setGroupInviter(invitee);
             msg.setStatus(InviteMessage.InviteMessageStatus.GROUPINVITATION_ACCEPTED);
@@ -336,28 +328,19 @@ public class ChatPresenter extends EaseChatPresenter {
             EaseEvent event = EaseEvent.create(DemoConstant.NOTIFY_GROUP_INVITE_ACCEPTED, EaseEvent.TYPE.NOTIFY);
             messageChangeLiveData.with(DemoConstant.NOTIFY_CHANGE).postValue(event);
 
-            showToast(invitee + "Accept to join the group：" + _group == null ? groupId : _group.getGroupName());
+            showToast(invitee + "Accept to join the group：" + groupName);
         }
 
         @Override
         public void onInvitationDeclined(String groupId, String invitee, String reason) {
             super.onInvitationDeclined(groupId, invitee, reason);
             //user declined your invitation
-            EMGroup group = null;
-            for (EMGroup _group : EMClient.getInstance().groupManager().getAllGroups()) {
-                if (_group.getGroupId().equals(groupId)) {
-                    group = _group;
-                    break;
-                }
-            }
-            if (group == null)
-                return;
-
+            String groupName = GroupHelper.getGroupName(groupId);
             InviteMessage msg = new InviteMessage();
             msg.setFrom(groupId);
             msg.setTime(System.currentTimeMillis());
             msg.setGroupId(groupId);
-            msg.setGroupName(group.getGroupName());
+            msg.setGroupName(groupName);
             msg.setReason(reason);
             msg.setGroupInviter(invitee);
             msg.setStatus(InviteMessage.InviteMessageStatus.GROUPINVITATION_DECLINED);
@@ -366,7 +349,7 @@ public class ChatPresenter extends EaseChatPresenter {
             EaseEvent event = EaseEvent.create(DemoConstant.NOTIFY_GROUP_INVITE_DECLINED, EaseEvent.TYPE.NOTIFY);
             messageChangeLiveData.with(DemoConstant.NOTIFY_CHANGE).postValue(event);
 
-            showToast(invitee + "Declined to join the group：" + group.getGroupName());
+            showToast(invitee + "Declined to join the group：" + groupName);
         }
 
         @Override
@@ -375,7 +358,7 @@ public class ChatPresenter extends EaseChatPresenter {
             easeEvent.message = groupId;
             messageChangeLiveData.with(DemoConstant.GROUP_CHANGE).postValue(easeEvent);
 
-            showToast("current user removed, groupId:" + groupId);
+            showToast("current user removed, group:" + GroupHelper.getGroupName(groupId));
         }
 
         @Override
@@ -384,7 +367,7 @@ public class ChatPresenter extends EaseChatPresenter {
             easeEvent.message = groupId;
             messageChangeLiveData.with(DemoConstant.GROUP_CHANGE).postValue(easeEvent);
 
-            showToast("group destroyed, groupId:" + groupId);
+            showToast("group destroyed, group:" + GroupHelper.getGroupName(groupId));
         }
 
         @Override
@@ -403,7 +386,7 @@ public class ChatPresenter extends EaseChatPresenter {
             EaseEvent event = EaseEvent.create(DemoConstant.NOTIFY_GROUP_JOIN_RECEIVE, EaseEvent.TYPE.NOTIFY);
             messageChangeLiveData.with(DemoConstant.NOTIFY_CHANGE).postValue(event);
 
-            showToast(applicant + " Apply to join group：" + groupId);
+            showToast(applicant + " Apply to join group：" + groupName);
         }
 
         @Override
@@ -426,13 +409,13 @@ public class ChatPresenter extends EaseChatPresenter {
             EaseEvent event = EaseEvent.create(DemoConstant.MESSAGE_GROUP_JOIN_ACCEPTED, EaseEvent.TYPE.MESSAGE);
             messageChangeLiveData.with(DemoConstant.MESSAGE_CHANGE_CHANGE).postValue(event);
 
-            showToast("request to join accepted, groupId:" + groupId);
+            showToast("request to join accepted, group:" + groupName);
         }
 
         @Override
         public void onRequestToJoinDeclined(String groupId, String groupName, String decliner, String reason) {
             super.onRequestToJoinDeclined(groupId, groupName, decliner, reason);
-            showToast("request to join declined, groupId:" + groupId);
+            showToast("request to join declined, group:" + groupName);
         }
 
         @Override
@@ -453,7 +436,7 @@ public class ChatPresenter extends EaseChatPresenter {
             EaseEvent event = EaseEvent.create(DemoConstant.MESSAGE_GROUP_AUTO_ACCEPT, EaseEvent.TYPE.MESSAGE);
             messageChangeLiveData.with(DemoConstant.MESSAGE_CHANGE_CHANGE).postValue(event);
 
-            showToast("auto accept invitation from groupId:" + groupId);
+            showToast("auto accept invitation from group:" + GroupHelper.getGroupName(groupId));
         }
 
         @Override
@@ -544,17 +527,19 @@ public class ChatPresenter extends EaseChatPresenter {
 
         @Override
         public void onAnnouncementChanged(String groupId, String announcement) {
-            showToast("onAnnouncementChanged, groupId" + groupId);
+            showToast("onAnnouncementChanged, group：" + GroupHelper.getGroupName(groupId));
         }
 
         @Override
         public void onSharedFileAdded(String groupId, EMMucSharedFile sharedFile) {
-            showToast("onSharedFileAdded, groupId" + groupId);
+            LiveDataBus.get().with(DemoConstant.GROUP_SHARE_FILE_CHANGE).postValue(EaseEvent.create(DemoConstant.GROUP_SHARE_FILE_CHANGE, EaseEvent.TYPE.GROUP));
+            showToast("onSharedFileAdded, group：" + GroupHelper.getGroupName(groupId));
         }
 
         @Override
         public void onSharedFileDeleted(String groupId, String fileId) {
-            showToast("onSharedFileDeleted, groupId" + groupId);
+            LiveDataBus.get().with(DemoConstant.GROUP_SHARE_FILE_CHANGE).postValue(EaseEvent.create(DemoConstant.GROUP_SHARE_FILE_CHANGE, EaseEvent.TYPE.GROUP));
+            showToast("onSharedFileDeleted, group：" + GroupHelper.getGroupName(groupId));
         }
     }
 
@@ -906,33 +891,53 @@ public class ChatPresenter extends EaseChatPresenter {
         @Override
         public void onChatRoomDestroyed(String roomId, String roomName) {
             setChatRoomEvent(roomId, EaseEvent.TYPE.CHAT_ROOM_LEAVE);
+            showToast("聊天室:" + roomId + "已被创建者解散");
         }
 
         @Override
         public void onMemberJoined(String roomId, String participant) {
             setChatRoomEvent(roomId, EaseEvent.TYPE.CHAT_ROOM);
+            showToast("聊天室:" + roomId + " member join:"+participant);
         }
 
         @Override
         public void onMemberExited(String roomId, String roomName, String participant) {
             setChatRoomEvent(roomId, EaseEvent.TYPE.CHAT_ROOM);
+            showToast("聊天室:" + roomId + " member exit:"+participant);
         }
 
         @Override
         public void onRemovedFromChatRoom(int reason, String roomId, String roomName, String participant) {
             if(TextUtils.equals(DemoHelper.getInstance().getCurrentUser(), participant)) {
                 setChatRoomEvent(roomId, EaseEvent.TYPE.CHAT_ROOM);
+                if(reason == EMAChatRoomManagerListener.BE_KICKED) {
+                    showToast(R.string.quiting_the_chat_room);
+                }else {
+                    showToast("聊天室:" + roomId + " User be kicked for offline");
+                }
+
             }
         }
 
         @Override
         public void onMuteListAdded(String chatRoomId, List<String> mutes, long expireTime) {
             setChatRoomEvent(chatRoomId, EaseEvent.TYPE.CHAT_ROOM);
+
+            StringBuilder sb = new StringBuilder();
+            for (String member : mutes) {
+                sb.append(member).append(",");
+            }
+            showToast("聊天室:"+ chatRoomId +" onMuterListAdded: " + sb.toString());
         }
 
         @Override
         public void onMuteListRemoved(String chatRoomId, List<String> mutes) {
             setChatRoomEvent(chatRoomId, EaseEvent.TYPE.CHAT_ROOM);
+            StringBuilder sb = new StringBuilder();
+            for (String member : mutes) {
+                sb.append(member).append(",");
+            }
+            showToast("聊天室:"+ chatRoomId +" onMuteListRemoved: " + sb.toString());
         }
 
         @Override
@@ -941,7 +946,7 @@ public class ChatPresenter extends EaseChatPresenter {
             for (String member : whitelist) {
                 sb.append(member).append(",");
             }
-            showToast("onWhiteListAdded: " + sb.toString());
+            showToast("聊天室:"+ chatRoomId +" onWhiteListAdded: " + sb.toString());
         }
 
         @Override
@@ -950,27 +955,33 @@ public class ChatPresenter extends EaseChatPresenter {
             for (String member : whitelist) {
                 sb.append(member).append(",");
             }
-            showToast("onWhiteListRemoved: " + sb.toString());
+            showToast("聊天室:"+ chatRoomId +" onWhiteListRemoved: " + sb.toString());
         }
 
         @Override
         public void onAllMemberMuteStateChanged(String chatRoomId, boolean isMuted) {
-            showToast("onAllMemberMuteStateChanged: " + isMuted);
+            showToast("聊天室:"+ chatRoomId +" onAllMemberMuteStateChanged: " + isMuted);
         }
 
         @Override
         public void onAdminAdded(String chatRoomId, String admin) {
             setChatRoomEvent(chatRoomId, EaseEvent.TYPE.CHAT_ROOM);
+
+            showToast("聊天室:"+ chatRoomId +" onAdminAdded: " + admin);
         }
 
         @Override
         public void onAdminRemoved(String chatRoomId, String admin) {
             setChatRoomEvent(chatRoomId, EaseEvent.TYPE.CHAT_ROOM);
+
+            showToast("聊天室:"+ chatRoomId +" onAdminRemoved: " + admin);
         }
 
         @Override
         public void onOwnerChanged(String chatRoomId, String newOwner, String oldOwner) {
             setChatRoomEvent(chatRoomId, EaseEvent.TYPE.CHAT_ROOM);
+
+            showToast("聊天室:"+ chatRoomId +" onOwnerChanged newOwner:" + newOwner + " oldOwner:"+oldOwner);
         }
 
         @Override

@@ -3,6 +3,7 @@ package com.hyphenate.chatuidemo.section.group;
 import android.text.TextUtils;
 
 import com.hyphenate.chat.EMChatRoom;
+import com.hyphenate.chat.EMClient;
 import com.hyphenate.chat.EMGroup;
 import com.hyphenate.chatuidemo.DemoHelper;
 
@@ -110,5 +111,18 @@ public class GroupHelper {
             }
         }
         return false;
+    }
+
+    /**
+     * 获取群名称
+     * @param groupId
+     * @return
+     */
+    public static String getGroupName(String groupId) {
+        EMGroup group = EMClient.getInstance().groupManager().getGroup(groupId);
+        if(group == null) {
+            return groupId;
+        }
+        return TextUtils.isEmpty(group.getGroupName()) ? groupId : group.getGroupName();
     }
 }
