@@ -69,7 +69,7 @@ public class ChatRoomDetailActivity extends BaseInitActivity implements EaseTitl
 
         chatRoom = DemoHelper.getInstance().getChatroomManager().getChatRoom(roomId);
 
-        tvChatRoomRefund.setVisibility(isOwner() ? View.VISIBLE : View.GONE);
+        updateContent(chatRoom);
     }
 
     @Override
@@ -140,6 +140,8 @@ public class ChatRoomDetailActivity extends BaseInitActivity implements EaseTitl
         itemChatRoomOwner.getTvContent().setText(chatRoom.getOwner());
         itemChatRoomAdmins.getTvContent().setText((chatRoom.getAdminList().size() + 1 ) + "人");
         itemChatRoomMembers.getTvContent().setText((chatRoom.getMemberCount() - chatRoom.getAdminList().size() - 1 ) + "人");
+
+        tvChatRoomRefund.setVisibility(isOwner() ? View.VISIBLE : View.GONE);
     }
 
     private void getChatRoom() {

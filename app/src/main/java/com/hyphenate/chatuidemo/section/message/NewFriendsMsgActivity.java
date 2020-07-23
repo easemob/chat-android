@@ -8,13 +8,16 @@ import android.view.MenuItem;
 import android.view.View;
 
 import com.hyphenate.chatuidemo.R;
+import com.hyphenate.chatuidemo.common.DemoConstant;
 import com.hyphenate.chatuidemo.common.db.entity.InviteMessage;
 import com.hyphenate.chatuidemo.common.interfaceOrImplement.OnResourceParseCallback;
+import com.hyphenate.chatuidemo.common.livedatas.LiveDataBus;
 import com.hyphenate.chatuidemo.section.base.BaseInitActivity;
 import com.hyphenate.chatuidemo.section.message.delegates.AgreeMsgDelegate;
 import com.hyphenate.chatuidemo.section.message.delegates.InviteMsgDelegate;
 import com.hyphenate.chatuidemo.section.message.delegates.OtherMsgDelegate;
 import com.hyphenate.chatuidemo.section.message.viewmodels.NewFriendsViewModel;
+import com.hyphenate.easeui.model.EaseEvent;
 import com.hyphenate.easeui.widget.EaseRecyclerView;
 import com.hyphenate.easeui.widget.EaseTitleBar;
 import com.scwang.smartrefresh.layout.SmartRefreshLayout;
@@ -131,6 +134,8 @@ public class NewFriendsMsgActivity extends BaseInitActivity implements OnRefresh
                 @Override
                 public void onSuccess(Boolean data) {
                     viewModel.loadMessages(limit);
+                    EaseEvent event = EaseEvent.create(DemoConstant.CONTACT_CHANGE, EaseEvent.TYPE.CONTACT);
+                    LiveDataBus.get().with(DemoConstant.CONTACT_CHANGE).postValue(event);
                 }
             });
         });

@@ -514,26 +514,31 @@ public class ChatPresenter extends EaseChatPresenter {
         @Override
         public void onAdminAdded(String groupId, String administrator) {
             super.onAdminAdded(groupId, administrator);
+            LiveDataBus.get().with(DemoConstant.GROUP_CHANGE).postValue(EaseEvent.create(DemoConstant.GROUP_CHANGE, EaseEvent.TYPE.GROUP));
             showToast("onAdminAdded: " + administrator);
         }
 
         @Override
         public void onAdminRemoved(String groupId, String administrator) {
+            LiveDataBus.get().with(DemoConstant.GROUP_CHANGE).postValue(EaseEvent.create(DemoConstant.GROUP_CHANGE, EaseEvent.TYPE.GROUP));
             showToast("onAdminRemoved: " + administrator);
         }
 
         @Override
         public void onOwnerChanged(String groupId, String newOwner, String oldOwner) {
+            LiveDataBus.get().with(DemoConstant.GROUP_CHANGE).postValue(EaseEvent.create(DemoConstant.GROUP_OWNER_TRANSFER, EaseEvent.TYPE.GROUP));
             showToast("onOwnerChanged new:" + newOwner + " old:" + oldOwner);
         }
 
         @Override
         public void onMemberJoined(String groupId, String member) {
+            LiveDataBus.get().with(DemoConstant.GROUP_CHANGE).postValue(EaseEvent.create(DemoConstant.GROUP_CHANGE, EaseEvent.TYPE.GROUP));
             showToast("onMemberJoined: " + member);
         }
 
         @Override
         public void onMemberExited(String groupId, String member) {
+            LiveDataBus.get().with(DemoConstant.GROUP_CHANGE).postValue(EaseEvent.create(DemoConstant.GROUP_CHANGE, EaseEvent.TYPE.GROUP));
             showToast("onMemberExited: " + member);
         }
 

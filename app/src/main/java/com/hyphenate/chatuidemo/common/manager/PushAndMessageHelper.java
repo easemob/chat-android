@@ -126,6 +126,9 @@ public class PushAndMessageHelper {
         Context context = DemoApplication.getInstance();
         StringBuilder builder = new StringBuilder(context.getString(status.getMsgContent()));
         switch (status) {
+            case BEINVITEED:
+                messge = builder.append(msg.getFrom()).toString();
+                break;
             case AGREED:
                 messge = builder.append(msg.getFrom()).append("的好友请求").toString();
                 break;

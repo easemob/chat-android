@@ -103,6 +103,10 @@ public class GroupManageIndexActivity extends BaseInitActivity implements View.O
             });
         });
         viewModel.getMessageChangeObservable().with(DemoConstant.GROUP_CHANGE, EaseEvent.class).observe(this, event -> {
+            if(TextUtils.equals(event.event, DemoConstant.GROUP_OWNER_TRANSFER)) {
+                finish();
+                return;
+            }
             if(event.isGroupChange()) {
                 viewModel.getBlackMembers(groupId);
                 viewModel.getMuteMembers(groupId);
