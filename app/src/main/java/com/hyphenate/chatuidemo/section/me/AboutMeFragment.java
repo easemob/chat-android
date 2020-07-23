@@ -82,8 +82,7 @@ public class AboutMeFragment extends BaseInitFragment implements View.OnClickLis
                 AboutHxActivity.actionStart(mContext);
                 break;
             case R.id.item_developer_set:
-                //DeveloperSetActivity.actionStart(mContext);
-                EaseBaiduMapActivity.actionStartForResult(this, 1);
+                DeveloperSetActivity.actionStart(mContext);
                 break;
         }
     }

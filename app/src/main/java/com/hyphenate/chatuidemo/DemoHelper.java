@@ -66,7 +66,7 @@ import java.util.Map;
  * 作为hyphenate-sdk的入口控制类，获取sdk下的基础类均通过此类
  */
 public class DemoHelper {
-    private static String TAG = "chathelper";
+    private static final String TAG = DemoHelper.class.getSimpleName();
 
     public boolean isSDKInit;//SDK是否初始化
     private static DemoHelper mInstance;
@@ -89,6 +89,7 @@ public class DemoHelper {
     }
 
     public void init(Context context) {
+        demoModel = new DemoModel(context);
         //初始化IM SDK
         if(initSDK(context)) {
             // debug mode, you'd better set it to false, if you want release your App officially.
@@ -108,31 +109,19 @@ public class DemoHelper {
     }
 
     /**
-     * 此处增加判断SDK是否初始化的标记，主要是防止SDK多次初始化
-     * 正常情况下，application只初始化一次，但是如果开启动图服务或者其他需要开启新的进程的服务
-     * 会对application进行初始化，这种情况下就会导致SDK使用异常
+     * 初始化SDK
      * @param context
      * @return
      */
     private boolean initSDK(Context context) {
-        if(isSDKInit()) {
-            return true;
-        }
-        //防止出现多进程的情况
-        if(!DemoHelper.getInstance().isMainProcess(context)) {
-            EMLog.e(TAG, "enter the service process!");
-            return false;
-        }
-        demoModel = new DemoModel(context);
         // 根据项目需求对SDK进行配置
         EMOptions options = initChatOptions(context);
-//        options.setRestServer("a1-hsb.easemob.com");
-//        options.setIMServer("116.85.43.118");
-//        options.setImPort(6717);
+        //配置自定义的rest server和im server
+        //options.setRestServer("a1-hsb.easemob.com");
+        //options.setIMServer("116.85.43.118");
+        //options.setImPort(6717);
         // 初始化SDK
-        EMClient.getInstance().init(context, options);
-        // 记录本地标记，是否初始化过
-        setSDKInit(true);
+        isSDKInit = EaseUI.getInstance().init(context, options);
         return isSDKInit();
     }
 
@@ -243,8 +232,12 @@ public class DemoHelper {
         return getEMClient().getCurrentUser();
     }
 
+    /**
+     * ChatPresenter中添加了网络连接状态监听，多端登录监听，群组监听，联系人监听，聊天室监听
+     * @param context
+     */
     private void initEaseUI(Context context) {
-        EaseUI.getInstance().init(context);
+        //添加ChatPresenter,ChatPresenter中添加了网络连接状态监听，
         EaseUI.getInstance().addChatPresenter(ChatPresenter.getInstance());
         EaseUI.getInstance()
                 .setSettingsProvider(new EaseSettingsProvider() {
@@ -404,10 +397,6 @@ public class DemoHelper {
 
         String imServer = options.getImServer();
         String restServer = options.getRestServer();
-        Log.e("TAG", "imServer = "+imServer);
-        Log.e("TAG", "restServer = "+restServer);
-        Log.e("TAG", "appkey = "+options.getAppKey());
-
 
         // 设置是否允许聊天室owner离开并删除会话记录，意味着owner再不会受到任何消息
         options.allowChatroomOwnerLeave(demoModel.isChatroomOwnerLeaveAllowed());
@@ -491,7 +480,7 @@ public class DemoHelper {
     }
 
     public void initPush(Context context) {
-        if(DemoHelper.getInstance().isMainProcess(context)) {
+        if(EaseUI.getInstance().isMainProcess(context)) {
             //HMSPushHelper.getInstance().initHMSAgent(DemoApplication.getInstance());
             EMPushHelper.getInstance().setPushListener(new PushListener() {
                 @Override
@@ -565,22 +554,6 @@ public class DemoHelper {
         } catch (Exception e) {
             e.printStackTrace();
         }
-    }
-
-    /**
-     * 判断是否在主进程
-     * @param context
-     * @return
-     */
-    public boolean isMainProcess(Context context) {
-        int pid = android.os.Process.myPid();
-        ActivityManager activityManager = (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
-        for (ActivityManager.RunningAppProcessInfo appProcess : activityManager.getRunningAppProcesses()) {
-            if (appProcess.pid == pid) {
-                return context.getApplicationInfo().packageName.equals(appProcess.processName);
-            }
-        }
-        return false;
     }
 
     public EaseAvatarOptions getEaseAvatarOptions() {
