@@ -253,7 +253,10 @@
     <string name="em_login_out_hint">是否退出？</string>
     <string name="em_developer_appkey_warning">当前appKey以及环境已经配置生效，更换当前appKey需重启客户端！</string>
     <string name="em_developer_appkey_confirm">重启</string>
-    
+
+    <string name="em_common_set_group_set">群组设置</string>
+    <string name="em_common_set_chat_room_set">聊天室设置</string>
+
     <string name="em_feedback_question_title">选择问题类型</string>
     <string name="em_feedback_question_bug">BUG反馈</string>
     <string name="em_feedback_et_hint">问题描述</string>

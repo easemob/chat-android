@@ -542,6 +542,22 @@ public class DemoModel {
     }
 
     /**
+     * 设置退出（主动和被动）聊天室时是否删除聊天信息
+     * @param value
+     */
+    public void setDeleteMessagesAsExitChatRoom(boolean value) {
+        OptionsHelper.getInstance().setDeleteMessagesAsExitChatRoom(value);
+    }
+
+    /**
+     * 获取退出(主动和被动退出)聊天室时是否删除聊天消息
+     * @return
+     */
+    public boolean isDeleteMessagesAsExitChatRoom() {
+        return OptionsHelper.getInstance().isDeleteMessagesAsExitChatRoom();
+    }
+
+    /**
      * 设置是否自动接受加群邀请
      * @param value
      */
