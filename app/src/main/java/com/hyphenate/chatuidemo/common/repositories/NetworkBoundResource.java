@@ -22,6 +22,7 @@ public abstract class NetworkBoundResource<ResultType, RequestType> {
     private static final String TAG = "NetworkBoundResource";
     private ThreadManager mThreadManager;
     private final MediatorLiveData<Resource<ResultType>> result = new MediatorLiveData<>();
+    private LiveData<ResultType> lastFailSource;
 
     public NetworkBoundResource() {
         mThreadManager = ThreadManager.getInstance();
@@ -123,7 +124,11 @@ public abstract class NetworkBoundResource<ResultType, RequestType> {
     @MainThread
     private void fetchFailed(int code, LiveData<ResultType> dbSource, String message) {
         onFetchFailed();
-        result.addSource(dbSource, newData -> setValue(Resource.error(code, message, newData)));
+        try {
+            result.addSource(dbSource, newData -> setValue(Resource.error(code, message, newData)));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     @MainThread

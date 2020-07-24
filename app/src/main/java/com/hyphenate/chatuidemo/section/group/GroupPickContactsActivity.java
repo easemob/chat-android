@@ -80,7 +80,7 @@ public class GroupPickContactsActivity extends BaseInitActivity implements EaseT
         rvList.setAdapter(adapter);
 
         presenter = new SidebarPresenter();
-        presenter.setupWithRecyclerView(rvList, floatingHeader);
+        presenter.setupWithRecyclerView(rvList, adapter, floatingHeader);
     }
 
     @Override

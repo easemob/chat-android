@@ -110,7 +110,7 @@ public class GroupMemberAuthorityActivity extends BaseInitActivity implements Ea
         rvList.setAdapter(adapter);
 
         presenter = new SidebarPresenter();
-        presenter.setupWithRecyclerView(rvList, floatingHeader);
+        presenter.setupWithRecyclerView(rvList, adapter, floatingHeader);
     }
 
     @Override
