@@ -90,6 +90,7 @@ dependencies {
     // Google firebase cloud messaging
     implementation 'com.google.android.gms:play-services-base:11.4.0'
     implementation 'com.google.firebase:firebase-messaging:11.4.0'
+    implementation 'com.google.firebase:firebase-core:11.4.0'
     //fresh and load more
     api 'com.scwang.smartrefresh:SmartRefreshLayout:1.0.5.1'
     api project(path: ':easeui')
