@@ -66,6 +66,9 @@ public class ToastUtils {
      * @param message
      */
     public static void showToast(String message) {
+        if(TextUtils.isEmpty(message)) {
+            return;
+        }
         showCenterToast(null, message, DEFAULT, TOAST_LAST_TIME);
     }
 
@@ -83,6 +86,9 @@ public class ToastUtils {
      * @param message
      */
     public static void showSuccessToast(String title, String message) {
+        if(TextUtils.isEmpty(message)) {
+            return;
+        }
         showCenterToast(title, message, SUCCESS, TOAST_LAST_TIME);
     }
 
@@ -101,6 +107,9 @@ public class ToastUtils {
      * @param message
      */
     public static void showFailToast(String title, String message) {
+        if(TextUtils.isEmpty(message)) {
+            return;
+        }
         showCenterToast(title, message, FAIL, TOAST_LAST_TIME);
     }
 
@@ -120,6 +129,9 @@ public class ToastUtils {
      * @param duration
      */
     public static void showSuccessToast(String title, String message, int duration) {
+        if(TextUtils.isEmpty(message)) {
+            return;
+        }
         showCenterToast(title, message, SUCCESS, duration);
     }
 
@@ -140,6 +152,9 @@ public class ToastUtils {
      * @param duration
      */
     public static void showFailToast(String title, String message, int duration) {
+        if(TextUtils.isEmpty(message)) {
+            return;
+        }
         showCenterToast(title, message, FAIL, duration);
     }
 
@@ -159,6 +174,9 @@ public class ToastUtils {
      * @param duration
      */
     public static void showToast(String message, int duration) {
+        if(TextUtils.isEmpty(message)) {
+            return;
+        }
         showCenterToast(null, message, DEFAULT, duration);
     }
 
@@ -179,6 +197,9 @@ public class ToastUtils {
      * @param duration
      */
     public static void showCenterToast(String title, String message, int type, int duration) {
+        if(TextUtils.isEmpty(message)) {
+            return;
+        }
         showToast(DemoApplication.getInstance(), title, message, type, duration, Gravity.CENTER);
     }
 
@@ -216,6 +237,9 @@ public class ToastUtils {
      * @param gravity
      */
     public static void showToast(Context context, String title, String message, int type, int duration, int gravity) {
+        if(TextUtils.isEmpty(message)) {
+            return;
+        }
         //保证在主线程中展示toast
         ThreadManager.getInstance().runOnMainThread(() -> {
             if(toast != null) {

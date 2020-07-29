@@ -334,14 +334,14 @@
         <!--播放视频-->
         <activity android:name="com.hyphenate.easeui.ui.EaseShowVideoActivity"
             android:screenOrientation="portrait"/>
-        <!--语音通话-->
+        <!--视频通话-->
         <activity
             android:name=".section.chat.ChatVideoCallActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:excludeFromRecents="true"
             android:launchMode="singleTask"
             android:screenOrientation="portrait"/>
-        <!--视频通话-->
+        <!--语音通话-->
         <activity
             android:name=".section.chat.ChatVoiceCallActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
@@ -508,6 +508,9 @@
             android:screenOrientation="portrait"/>
         <!--移交权限-->
         <activity android:name=".section.group.GroupTransferActivity"
+            android:screenOrientation="portrait"/>
+        <!--播放视频-->
+        <activity android:name="com.hyphenate.easeui.ui.EaseShowLocalVideoActivity"
             android:screenOrientation="portrait"/>
 
         <!--捕获屏幕service-->
