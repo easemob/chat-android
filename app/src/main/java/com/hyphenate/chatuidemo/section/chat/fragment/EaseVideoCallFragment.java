@@ -38,7 +38,7 @@ import com.hyphenate.chat.EMWaterMarkPosition;
 import com.hyphenate.chatuidemo.R;
 import com.hyphenate.chatuidemo.common.utils.PreferenceManager;
 import com.hyphenate.easeui.EaseUI;
-import com.hyphenate.easeui.utils.PhoneStateManager;
+import com.hyphenate.easeui.manager.PhoneStateManager;
 import com.hyphenate.exceptions.HyphenateException;
 import com.hyphenate.media.EMCallSurfaceView;
 import com.hyphenate.util.EMLog;

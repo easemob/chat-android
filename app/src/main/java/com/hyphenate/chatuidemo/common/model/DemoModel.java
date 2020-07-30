@@ -15,7 +15,7 @@ import com.hyphenate.chatuidemo.common.db.entity.MsgTypeManageEntity;
 import com.hyphenate.chatuidemo.common.manager.OptionsHelper;
 import com.hyphenate.chatuidemo.common.utils.PreferenceManager;
 import com.hyphenate.easeui.domain.EaseUser;
-import com.hyphenate.easeui.model.EasePreferenceManager;
+import com.hyphenate.easeui.manager.EasePreferenceManager;
 
 import java.util.ArrayList;
 import java.util.HashMap;

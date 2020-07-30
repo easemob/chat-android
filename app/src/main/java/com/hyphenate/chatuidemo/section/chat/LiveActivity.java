@@ -42,7 +42,7 @@ import com.hyphenate.chatuidemo.common.widget.conference.ConferenceMemberView;
 import com.hyphenate.chatuidemo.common.widget.conference.MemberViewGroup;
 import com.hyphenate.chatuidemo.section.base.BaseActivity;
 import com.hyphenate.easeui.domain.EaseUser;
-import com.hyphenate.easeui.utils.PhoneStateManager;
+import com.hyphenate.easeui.manager.PhoneStateManager;
 import com.hyphenate.easeui.widget.EaseAlertDialog;
 import com.hyphenate.exceptions.HyphenateException;
 import com.hyphenate.util.EMLog;

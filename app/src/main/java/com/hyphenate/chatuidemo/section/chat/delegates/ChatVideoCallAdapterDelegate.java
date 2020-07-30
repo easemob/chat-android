@@ -8,9 +8,9 @@ import com.hyphenate.chatuidemo.common.DemoConstant;
 import com.hyphenate.chatuidemo.section.chat.viewholder.ChatVideoCallViewHolder;
 import com.hyphenate.chatuidemo.section.chat.views.ChatRowVideoCall;
 import com.hyphenate.easeui.constants.EaseConstant;
+import com.hyphenate.easeui.delegate.EaseMessageAdapterDelegate;
 import com.hyphenate.easeui.interfaces.MessageListItemClickListener;
 import com.hyphenate.easeui.model.styles.EaseMessageListItemStyle;
-import com.hyphenate.easeui.ui.chat.delegates.EaseMessageAdapterDelegate;
 import com.hyphenate.easeui.viewholder.EaseChatRowViewHolder;
 import com.hyphenate.easeui.widget.chatrow.EaseChatRow;
 
