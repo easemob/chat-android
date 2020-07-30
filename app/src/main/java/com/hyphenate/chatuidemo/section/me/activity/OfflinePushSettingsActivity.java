@@ -196,13 +196,8 @@ public class OfflinePushSettingsActivity extends BaseInitActivity implements Com
 
     @Override
     public void onCheckedChanged(SwitchItemView buttonView, boolean isChecked) {
-        if (isChecked) {
-            settingsModel.setUseFCM(false);
-            EMClient.getInstance().getOptions().setUseFCM(false);
-        } else {
-            settingsModel.setUseFCM(true);
-            EMClient.getInstance().getOptions().setUseFCM(true);
-        }
+        settingsModel.setUseFCM(isChecked);
+        EMClient.getInstance().getOptions().setUseFCM(isChecked);
     }
 
     private enum Status {
