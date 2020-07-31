@@ -1,5 +1,6 @@
 package com.hyphenate.chatuidemo.section.me.activity;
 
+import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
@@ -9,14 +10,18 @@ import android.widget.Button;
 import android.widget.Toast;
 
 import com.hyphenate.EMCallBack;
+import com.hyphenate.chatuidemo.DemoApplication;
 import com.hyphenate.chatuidemo.DemoHelper;
 import com.hyphenate.chatuidemo.MainActivity;
 import com.hyphenate.chatuidemo.R;
+import com.hyphenate.chatuidemo.common.interfaceOrImplement.UserActivityLifecycleCallbacks;
 import com.hyphenate.chatuidemo.common.widget.ArrowItemView;
 import com.hyphenate.chatuidemo.section.base.BaseInitActivity;
 import com.hyphenate.chatuidemo.section.login.activity.LoginActivity;
 import com.hyphenate.chatuidemo.section.me.PrivacyIndexActivity;
 import com.hyphenate.easeui.widget.EaseTitleBar;
+
+import java.util.List;
 
 public class SetIndexActivity extends BaseInitActivity implements EaseTitleBar.OnBackPressListener, View.OnClickListener {
     private EaseTitleBar titleBar;
@@ -98,9 +103,9 @@ public class SetIndexActivity extends BaseInitActivity implements EaseTitleBar.O
                     public void run() {
                         pd.dismiss();
                         // show login screen
-                        finish();
+                        finishOtherActivities();
                         startActivity(new Intent(mContext, LoginActivity.class));
-
+                        finish();
                     }
                 });
             }
@@ -122,5 +127,15 @@ public class SetIndexActivity extends BaseInitActivity implements EaseTitleBar.O
                 });
             }
         });
+    }
+
+    private void finishOtherActivities() {
+        UserActivityLifecycleCallbacks lifecycleCallbacks = DemoApplication.getInstance().getLifecycleCallbacks();
+        List<Activity> activities = lifecycleCallbacks.getActivityList();
+        for(Activity activity : activities) {
+            if(activity != lifecycleCallbacks.current()) {
+                activity.finish();
+            }
+        }
     }
 }
