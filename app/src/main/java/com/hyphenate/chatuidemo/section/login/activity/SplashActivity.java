@@ -1,5 +1,6 @@
 package com.hyphenate.chatuidemo.section.login.activity;
 
+import android.animation.Animator;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.util.Log;
@@ -23,6 +24,7 @@ import com.hyphenate.chatuidemo.common.interfaceOrImplement.OnResourceParseCallb
 import com.hyphenate.chatuidemo.common.utils.DemoLog;
 import com.hyphenate.chatuidemo.section.base.BaseInitActivity;
 import com.hyphenate.chatuidemo.section.login.viewmodels.SplashViewModel;
+import com.hyphenate.util.EMLog;
 
 public class SplashActivity extends BaseInitActivity {
     private ImageView ivSplash;
@@ -48,26 +50,31 @@ public class SplashActivity extends BaseInitActivity {
     protected void initData() {
         super.initData();
         model = new ViewModelProvider(this).get(SplashViewModel.class);
-
-        Glide.with(mContext)
-                .load(R.drawable.em_splash_bg)
-                .diskCacheStrategy(DiskCacheStrategy.ALL)
-                .transition(DrawableTransitionOptions.with(new DrawableCrossFadeFactory.Builder(500).setCrossFadeEnabled(true).build()))
-                .addListener(new RequestListener<Drawable>() {
+        ivSplash.animate()
+                .alpha(1)
+                .setDuration(500)
+                .setListener(new Animator.AnimatorListener() {
                     @Override
-                    public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Drawable> target, boolean isFirstResource) {
-                        loginSDK();
-                        return false;
+                    public void onAnimationStart(Animator animation) {
+
                     }
 
                     @Override
-                    public boolean onResourceReady(Drawable resource, Object model, Target<Drawable> target, DataSource dataSource, boolean isFirstResource) {
+                    public void onAnimationEnd(Animator animation) {
                         loginSDK();
-                        return false;
+                    }
+
+                    @Override
+                    public void onAnimationCancel(Animator animation) {
+
+                    }
+
+                    @Override
+                    public void onAnimationRepeat(Animator animation) {
+
                     }
                 })
-                .into(ivSplash);
-
+                .start();
 
     }
 
@@ -83,7 +90,7 @@ public class SplashActivity extends BaseInitActivity {
                 @Override
                 public void onError(int code, String message) {
                     super.onError(code, message);
-                    DemoLog.i("TAG", "error message = "+response.getMessage());
+                    EMLog.i("TAG", "error message = "+response.getMessage());
                     LoginActivity.startAction(mContext);
                     finish();
                 }
