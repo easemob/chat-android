@@ -17,6 +17,7 @@ import com.hyphenate.chatuidemo.R;
 import com.hyphenate.chatuidemo.common.DemoConstant;
 import com.hyphenate.chatuidemo.common.db.entity.EmUserEntity;
 import com.hyphenate.chatuidemo.common.interfaceOrImplement.OnResourceParseCallback;
+import com.hyphenate.chatuidemo.common.livedatas.LiveDataBus;
 import com.hyphenate.chatuidemo.section.dialog.DemoDialogFragment;
 import com.hyphenate.chatuidemo.section.dialog.SimpleDialogFragment;
 import com.hyphenate.easeui.domain.EaseUser;
@@ -57,6 +58,24 @@ public class GroupTransferActivity extends GroupMemberAuthorityActivity {
                 public void hideLoading() {
                     super.hideLoading();
                     finishRefresh();
+                }
+            });
+        });
+        viewModel.getTransferOwnerObservable().observe(this, response -> {
+            parseResource(response, new OnResourceParseCallback<Boolean>() {
+                @Override
+                public void onSuccess(Boolean data) {
+                    LiveDataBus.get().with(DemoConstant.GROUP_CHANGE).postValue(EaseEvent.create(DemoConstant.GROUP_OWNER_TRANSFER, EaseEvent.TYPE.GROUP));
+                    finish();
+                }
+            });
+        });
+        viewModel.getRefreshObservable().observe(this, response -> {
+            parseResource(response, new OnResourceParseCallback<Boolean>() {
+                @Override
+                public void onSuccess(Boolean data) {
+                    refreshData();
+                    LiveDataBus.get().with(DemoConstant.GROUP_CHANGE).postValue(EaseEvent.create(DemoConstant.GROUP_CHANGE, EaseEvent.TYPE.GROUP));
                 }
             });
         });

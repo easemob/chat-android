@@ -69,7 +69,6 @@ public class ContactItemView extends RelativeLayout {
     @Override
     protected void onLayout(boolean changed, int l, int t, int r, int b) {
         super.onLayout(changed, l, t, r, b);
-        Log.e("TAG", "onLayout");
     }
 
     private void setBottomLine(View bottomLine) {

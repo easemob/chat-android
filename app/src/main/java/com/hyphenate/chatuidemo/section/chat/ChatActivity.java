@@ -26,7 +26,7 @@ import com.hyphenate.chatuidemo.section.group.GroupDetailActivity;
 import com.hyphenate.easeui.constants.EaseConstant;
 import com.hyphenate.easeui.domain.EaseUser;
 import com.hyphenate.easeui.model.EaseEvent;
-import com.hyphenate.easeui.ui.chat.EaseChatFragment;
+import com.hyphenate.easeui.ui.EaseChatFragment;
 import com.hyphenate.easeui.utils.EaseCommonUtils;
 import com.hyphenate.easeui.widget.EaseTitleBar;
 

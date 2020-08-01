@@ -3,6 +3,7 @@ package com.hyphenate.chatuidemo;
 import android.app.Application;
 import android.content.Context;
 import android.os.Build;
+import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatDelegate;
@@ -47,6 +48,7 @@ public class DemoApplication extends Application implements Thread.UncaughtExcep
         // 初始化PreferenceManager
         PreferenceManager.init(this);
         // init hx sdk
+        Log.e("TAG", "application initHx");
         if(DemoHelper.getInstance().getAutoLogin()) {
             DemoHelper.getInstance().init(this);
         }
@@ -109,23 +111,25 @@ public class DemoApplication extends Application implements Thread.UncaughtExcep
      * 弹窗内容“detected problems with api ”
      */
     private void closeAndroidPDialog(){
-        try {
-            Class aClass = Class.forName("android.content.pm.PackageParser$Package");
-            Constructor declaredConstructor = aClass.getDeclaredConstructor(String.class);
-            declaredConstructor.setAccessible(true);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        try {
-            Class cls = Class.forName("android.app.ActivityThread");
-            Method declaredMethod = cls.getDeclaredMethod("currentActivityThread");
-            declaredMethod.setAccessible(true);
-            Object activityThread = declaredMethod.invoke(null);
-            Field mHiddenApiWarningShown = cls.getDeclaredField("mHiddenApiWarningShown");
-            mHiddenApiWarningShown.setAccessible(true);
-            mHiddenApiWarningShown.setBoolean(activityThread, true);
-        } catch (Exception e) {
-            e.printStackTrace();
+        if(Build.VERSION.SDK_INT == Build.VERSION_CODES.P) {
+            try {
+                Class aClass = Class.forName("android.content.pm.PackageParser$Package");
+                Constructor declaredConstructor = aClass.getDeclaredConstructor(String.class);
+                declaredConstructor.setAccessible(true);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            try {
+                Class cls = Class.forName("android.app.ActivityThread");
+                Method declaredMethod = cls.getDeclaredMethod("currentActivityThread");
+                declaredMethod.setAccessible(true);
+                Object activityThread = declaredMethod.invoke(null);
+                Field mHiddenApiWarningShown = cls.getDeclaredField("mHiddenApiWarningShown");
+                mHiddenApiWarningShown.setAccessible(true);
+                mHiddenApiWarningShown.setBoolean(activityThread, true);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
     }
 }

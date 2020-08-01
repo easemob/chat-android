@@ -12,9 +12,11 @@ public class AppKeyEntity implements Serializable {
 
     @NonNull
     private String appKey;
+    private double timestamp;
 
     public AppKeyEntity(@NonNull String appKey) {
         this.appKey = appKey;
+        this.timestamp = System.currentTimeMillis();
     }
 
     public String getAppKey() {
@@ -23,5 +25,13 @@ public class AppKeyEntity implements Serializable {
 
     public void setAppKey(@NonNull String appKey) {
         this.appKey = appKey;
+    }
+
+    public double getTimestamp() {
+        return timestamp;
+    }
+
+    public void setTimestamp(double timestamp) {
+        this.timestamp = timestamp;
     }
 }

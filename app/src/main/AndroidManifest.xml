@@ -77,8 +77,12 @@
         android:supportsRtl="true"
         android:usesNonSdkApi="true"
         android:requestLegacyExternalStorage="false"
+        android:usesCleartextTraffic="true"
         android:name=".DemoApplication"
         android:theme="@style/AppTheme">
+
+        <!--针对屏幕纵横比超过1.86进行设置-->
+        <meta-data android:name="android.max_aspect" android:value="2.4" />
 
         <!--android 9.0要求-->
         <!--<uses-library android:name="org.apache.http.legacy" android:required="false"/>-->
@@ -105,6 +109,17 @@
                 <action android:name="android.intent.action.USER_PRESENT" />
             </intent-filter>
         </receiver>
+
+        <!-- 适配Android 7.0, 需要将下方的com.hyphenate.chatuidemo替换为你的app包名 -->
+        <provider
+            android:name="androidx.core.content.FileProvider"
+            android:authorities="${applicationId}.fileProvider"
+            android:grantUriPermissions="true"
+            android:exported="false">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/file_paths" />
+        </provider>
 
         <!-- FCM required start -->
         <service android:name=".common.fcm.EMFCMMSGService">
@@ -248,17 +263,6 @@
         </receiver>
         <!-- Mi推送配置 end-->
 
-        <!-- 适配Android 7.0, 需要将下方的com.hyphenate.chatuidemo替换为你的app包名 -->
-        <provider
-            android:name="androidx.core.content.FileProvider"
-            android:authorities="${applicationId}.fileProvider"
-            android:grantUriPermissions="true"
-            android:exported="false">
-            <meta-data
-                android:name="android.support.FILE_PROVIDER_PATHS"
-                android:resource="@xml/file_paths" />
-        </provider>
-
         <!-- 百度地图所需的service -->
         <service
             android:name="com.baidu.location.f"
@@ -320,24 +324,20 @@
         <!--视频列表-->
         <activity android:name=".section.chat.ImageGridActivity"
             android:screenOrientation="portrait"/>
-        <!--视频通话-->
-        <!--语音通话-->
-        <activity android:name=".section.chat.BaiduMapActivity"
-            android:screenOrientation="portrait"/>
         <!--录制视频-->
         <activity android:name=".section.chat.RecorderVideoActivity"
             android:screenOrientation="portrait"/>
         <!--播放视频-->
         <activity android:name="com.hyphenate.easeui.ui.EaseShowVideoActivity"
             android:screenOrientation="portrait"/>
-        <!--语音通话-->
+        <!--视频通话-->
         <activity
             android:name=".section.chat.ChatVideoCallActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:excludeFromRecents="true"
             android:launchMode="singleTask"
             android:screenOrientation="portrait"/>
-        <!--视频通话-->
+        <!--语音通话-->
         <activity
             android:name=".section.chat.ChatVoiceCallActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
@@ -504,6 +504,9 @@
             android:screenOrientation="portrait"/>
         <!--移交权限-->
         <activity android:name=".section.group.GroupTransferActivity"
+            android:screenOrientation="portrait"/>
+        <!--播放视频-->
+        <activity android:name="com.hyphenate.easeui.ui.EaseShowLocalVideoActivity"
             android:screenOrientation="portrait"/>
 
         <!--捕获屏幕service-->

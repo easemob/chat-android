@@ -15,7 +15,7 @@ import com.hyphenate.chatuidemo.common.db.entity.MsgTypeManageEntity;
 import com.hyphenate.chatuidemo.common.manager.OptionsHelper;
 import com.hyphenate.chatuidemo.common.utils.PreferenceManager;
 import com.hyphenate.easeui.domain.EaseUser;
-import com.hyphenate.easeui.model.EasePreferenceManager;
+import com.hyphenate.easeui.manager.EasePreferenceManager;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -84,13 +84,17 @@ public class DemoModel {
         if(dao == null) {
             return new ArrayList<>();
         }
-        List<AppKeyEntity> keys = dao.loadAllAppKeys();
+        String defAppkey = OptionsHelper.getInstance().getDefAppkey();
+        List<AppKeyEntity> keys = dao.queryKey(defAppkey);
         if(keys == null || keys.isEmpty()) {
-            dao.insert(new AppKeyEntity(OptionsHelper.getInstance().getDefAppkey()));
-            dao.insert(new AppKeyEntity(EMClient.getInstance().getOptions().getAppKey()));
+            dao.insert(new AppKeyEntity(defAppkey));
         }
-        keys = dao.loadAllAppKeys();
-        return keys;
+        String appKey = EMClient.getInstance().getOptions().getAppKey();
+        List<AppKeyEntity> appKeys = dao.queryKey(appKey);
+        if(appKeys == null || appKeys.isEmpty()) {
+            dao.insert(new AppKeyEntity(appKey));
+        }
+        return dao.loadAllAppKeys();
     }
 
     /**
@@ -414,6 +418,22 @@ public class DemoModel {
     }
 
     /**
+     * 自定义配置是否可用
+     * @return
+     */
+    public boolean isCustomSetEnable() {
+        return OptionsHelper.getInstance().isCustomSetEnable();
+    }
+
+    /**
+     * 自定义配置是否可用
+     * @param enable
+     */
+    public void enableCustomSet(boolean enable){
+        OptionsHelper.getInstance().enableCustomSet(enable);
+    }
+
+    /**
      * 设置闲置服务器
      * @param restServer
      */
@@ -519,6 +539,22 @@ public class DemoModel {
      */
     public boolean isDeleteMessagesAsExitGroup() {
         return OptionsHelper.getInstance().isDeleteMessagesAsExitGroup();
+    }
+
+    /**
+     * 设置退出（主动和被动）聊天室时是否删除聊天信息
+     * @param value
+     */
+    public void setDeleteMessagesAsExitChatRoom(boolean value) {
+        OptionsHelper.getInstance().setDeleteMessagesAsExitChatRoom(value);
+    }
+
+    /**
+     * 获取退出(主动和被动退出)聊天室时是否删除聊天消息
+     * @return
+     */
+    public boolean isDeleteMessagesAsExitChatRoom() {
+        return OptionsHelper.getInstance().isDeleteMessagesAsExitChatRoom();
     }
 
     /**

@@ -42,7 +42,7 @@ android {
         }
 
         debug {
-            applicationIdSuffix ".debug"
+            //applicationIdSuffix ".debug"
             signingConfig signingConfigs.debug
         }
     }

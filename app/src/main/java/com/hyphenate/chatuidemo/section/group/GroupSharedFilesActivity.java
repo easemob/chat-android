@@ -3,7 +3,6 @@ package com.hyphenate.chatuidemo.section.group;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.ContextMenu;
@@ -19,12 +18,15 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.hyphenate.chat.EMMucSharedFile;
 import com.hyphenate.chatuidemo.R;
+import com.hyphenate.chatuidemo.common.DemoConstant;
 import com.hyphenate.chatuidemo.common.interfaceOrImplement.OnResourceParseCallback;
+import com.hyphenate.chatuidemo.common.livedatas.LiveDataBus;
 import com.hyphenate.chatuidemo.section.base.BaseInitActivity;
 import com.hyphenate.chatuidemo.section.group.adapter.SharedFilesAdapter;
 import com.hyphenate.chatuidemo.section.group.viewmodels.SharedFilesViewModel;
 import com.hyphenate.easeui.interfaces.OnItemClickListener;
-import com.hyphenate.easeui.model.EaseCompat;
+import com.hyphenate.easeui.model.EaseEvent;
+import com.hyphenate.easeui.utils.EaseCompat;
 import com.hyphenate.easeui.widget.EaseRecyclerView;
 import com.hyphenate.easeui.widget.EaseTitleBar;
 import com.hyphenate.util.VersionUtils;
@@ -139,7 +141,27 @@ public class GroupSharedFilesActivity extends BaseInitActivity implements OnRefr
                 public void onSuccess(Boolean data) {
                     refresh();
                 }
+
+                @Override
+                public void onLoading() {
+                    super.onLoading();
+                    showLoading();
+                }
+
+                @Override
+                public void hideLoading() {
+                    super.hideLoading();
+                    dismissLoading();
+                }
             });
+        });
+        LiveDataBus.get().with(DemoConstant.GROUP_SHARE_FILE_CHANGE, EaseEvent.class).observe(this, event -> {
+            if(event == null) {
+                return;
+            }
+            if(TextUtils.equals(event.event, DemoConstant.GROUP_SHARE_FILE_CHANGE)) {
+                refresh();
+            }
         });
         refresh();
     }
@@ -221,10 +243,6 @@ public class GroupSharedFilesActivity extends BaseInitActivity implements OnRefr
                     }else {
                         sendByPath(uri);
                     }
-
-                }
-                if (uri != null) {
-                    viewModel.uploadFileByUri(groupId, uri);
                 }
             }
         }

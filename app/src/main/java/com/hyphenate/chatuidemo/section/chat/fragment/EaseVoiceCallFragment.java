@@ -28,7 +28,7 @@ import com.hyphenate.chat.EMCallStateChangeListener;
 import com.hyphenate.chat.EMClient;
 import com.hyphenate.chatuidemo.R;
 import com.hyphenate.easeui.EaseUI;
-import com.hyphenate.easeui.utils.PhoneStateManager;
+import com.hyphenate.easeui.manager.PhoneStateManager;
 import com.hyphenate.exceptions.HyphenateException;
 import com.hyphenate.util.EMLog;
 
@@ -291,7 +291,7 @@ public class EaseVoiceCallFragment extends EaseCallFragment implements View.OnCl
                             callStateTextView.setText(st1);
                             break;
                         case CONNECTED:
-                            String con = getResources().getString(R.string.have_connected_with);
+                            String con = getResources().getString(R.string.em_call_voice_request);
                             callStateTextView.setText(con);
                             break;
                         case ACCEPTED:

@@ -18,8 +18,8 @@
     <color name="em_color_common_text_black">#ff333333</color>
     <color name="em_color_common_text_gray">#ff999999</color>
 
-    <color name="em_base_color_primary">@color/white</color>
-    <color name="em_base_color_primary_dark">@color/white</color>
+    <color name="em_base_color_primary">#ffffff</color>
+    <color name="em_base_color_primary_dark">#ffffff</color>
     <color name="em_base_color_accent">@color/blue</color>
     <color name="em_base_color_window_bg">@color/white</color>
     <color name="em_base_color_text_hint">#ffcccccc</color>

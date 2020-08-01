@@ -53,7 +53,7 @@ import com.hyphenate.chatuidemo.common.widget.conference.ConferenceMemberView;
 import com.hyphenate.chatuidemo.common.widget.conference.IncomingCallView;
 import com.hyphenate.chatuidemo.common.widget.conference.MemberViewGroup;
 import com.hyphenate.chatuidemo.section.base.BaseActivity;
-import com.hyphenate.easeui.utils.PhoneStateManager;
+import com.hyphenate.easeui.manager.PhoneStateManager;
 import com.hyphenate.exceptions.HyphenateException;
 import com.hyphenate.util.EMLog;
 import com.hyphenate.util.EasyUtils;

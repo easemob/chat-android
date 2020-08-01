@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.Menu;
 
+import com.baidu.mapapi.map.Text;
 import com.hyphenate.chat.EMChatRoom;
 import com.hyphenate.chatuidemo.DemoHelper;
 import com.hyphenate.chatuidemo.R;
@@ -73,6 +74,7 @@ public class ChatRoomMemberAuthorityActivity extends GroupMemberAuthorityActivit
             parseResource(response, new OnResourceParseCallback<EMChatRoom>() {
                 @Override
                 public void onSuccess(EMChatRoom data) {
+                    chatRoom = data;
                     refreshData();
                 }
             });
@@ -158,6 +160,10 @@ public class ChatRoomMemberAuthorityActivity extends GroupMemberAuthorityActivit
             }
             if(event.isChatRoomLeave() && TextUtils.equals(roomId, event.message)) {
                 finish();
+                return;
+            }
+            if(TextUtils.equals(event.event, DemoConstant.CHAT_ROOM_CHANGE)) {
+                viewModel.getChatRoom(roomId);
             }
         });
 
@@ -169,8 +175,10 @@ public class ChatRoomMemberAuthorityActivity extends GroupMemberAuthorityActivit
         if(flag == TYPE_MEMBER) {
             viewModel.getMembersList(roomId);
         }
-        viewModel.getGroupBlackList(roomId);
-        viewModel.getGroupMuteMap(roomId);
+        if(!isMember()) {
+            viewModel.getGroupBlackList(roomId);
+            viewModel.getGroupMuteMap(roomId);
+        }
         if(flag == TYPE_MEMBER) {
             titleBar.setTitle(getString(R.string.em_authority_menu_member_list));
         }else if(flag == TYPE_BLACK) {

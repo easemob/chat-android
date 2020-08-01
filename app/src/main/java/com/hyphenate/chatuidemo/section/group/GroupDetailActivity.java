@@ -179,10 +179,12 @@ public class GroupDetailActivity extends BaseInitActivity implements EaseTitleBa
             });
         });
         viewModel.getMessageChangeObservable().with(DemoConstant.GROUP_CHANGE, EaseEvent.class).observe(this, event -> {
+            if(event.isGroupLeave() && TextUtils.equals(groupId, event.message)) {
+                finish();
+                return;
+            }
             if(event.isGroupChange()) {
                 loadGroup();
-            }else if(event.isGroupLeave() && TextUtils.equals(groupId, event.message)) {
-                finish();
             }
         });
         viewModel.getLeaveGroupObservable().observe(this, response -> {
@@ -190,7 +192,7 @@ public class GroupDetailActivity extends BaseInitActivity implements EaseTitleBa
                 @Override
                 public void onSuccess(Boolean data) {
                     finish();
-                    LiveDataBus.get().with(DemoConstant.GROUP_CHANGE).postValue(EaseEvent.create(DemoConstant.GROUP_CHANGE, EaseEvent.TYPE.GROUP_LEAVE));
+                    LiveDataBus.get().with(DemoConstant.GROUP_CHANGE).postValue(EaseEvent.create(DemoConstant.GROUP_LEAVE, EaseEvent.TYPE.GROUP, groupId));
                 }
             });
         });

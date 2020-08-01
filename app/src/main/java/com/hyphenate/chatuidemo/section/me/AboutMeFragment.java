@@ -19,6 +19,7 @@ import com.hyphenate.chatuidemo.section.me.activity.DeveloperSetActivity;
 import com.hyphenate.chatuidemo.section.me.activity.FeedbackActivity;
 import com.hyphenate.chatuidemo.section.me.activity.SetIndexActivity;
 import com.hyphenate.chatuidemo.section.me.activity.UserDetailActivity;
+import com.hyphenate.easeui.ui.EaseBaiduMapActivity;
 import com.hyphenate.easeui.utils.StatusBarCompat;
 
 import androidx.constraintlayout.widget.ConstraintLayout;

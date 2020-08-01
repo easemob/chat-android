@@ -34,6 +34,14 @@ import com.hyphenate.chatuidemo.section.chat.delegates.ChatVideoCallAdapterDeleg
 import com.hyphenate.chatuidemo.section.chat.delegates.ChatVoiceCallAdapterDelegate;
 import com.hyphenate.chatuidemo.section.chat.receiver.CallReceiver;
 import com.hyphenate.easeui.EaseUI;
+import com.hyphenate.easeui.delegate.EaseCustomAdapterDelegate;
+import com.hyphenate.easeui.delegate.EaseExpressionAdapterDelegate;
+import com.hyphenate.easeui.delegate.EaseFileAdapterDelegate;
+import com.hyphenate.easeui.delegate.EaseImageAdapterDelegate;
+import com.hyphenate.easeui.delegate.EaseLocationAdapterDelegate;
+import com.hyphenate.easeui.delegate.EaseTextAdapterDelegate;
+import com.hyphenate.easeui.delegate.EaseVideoAdapterDelegate;
+import com.hyphenate.easeui.delegate.EaseVoiceAdapterDelegate;
 import com.hyphenate.easeui.domain.EaseAvatarOptions;
 import com.hyphenate.easeui.domain.EaseEmojicon;
 import com.hyphenate.easeui.domain.EaseEmojiconGroupEntity;
@@ -43,14 +51,6 @@ import com.hyphenate.easeui.model.EaseNotifier;
 import com.hyphenate.easeui.provider.EaseEmojiconInfoProvider;
 import com.hyphenate.easeui.provider.EaseSettingsProvider;
 import com.hyphenate.easeui.provider.EaseUserProfileProvider;
-import com.hyphenate.easeui.ui.chat.delegates.EaseCustomAdapterDelegate;
-import com.hyphenate.easeui.ui.chat.delegates.EaseExpressionAdapterDelegate;
-import com.hyphenate.easeui.ui.chat.delegates.EaseFileAdapterDelegate;
-import com.hyphenate.easeui.ui.chat.delegates.EaseImageAdapterDelegate;
-import com.hyphenate.easeui.ui.chat.delegates.EaseLocationAdapterDelegate;
-import com.hyphenate.easeui.ui.chat.delegates.EaseTextAdapterDelegate;
-import com.hyphenate.easeui.ui.chat.delegates.EaseVideoAdapterDelegate;
-import com.hyphenate.easeui.ui.chat.delegates.EaseVoiceAdapterDelegate;
 import com.hyphenate.easeui.utils.EaseCommonUtils;
 import com.hyphenate.push.EMPushConfig;
 import com.hyphenate.push.EMPushHelper;
@@ -66,7 +66,7 @@ import java.util.Map;
  * 作为hyphenate-sdk的入口控制类，获取sdk下的基础类均通过此类
  */
 public class DemoHelper {
-    private static final String TAG = "chathelper";
+    private static final String TAG = DemoHelper.class.getSimpleName();
 
     public boolean isSDKInit;//SDK是否初始化
     private static DemoHelper mInstance;
@@ -89,34 +89,40 @@ public class DemoHelper {
     }
 
     public void init(Context context) {
+        demoModel = new DemoModel(context);
         //初始化IM SDK
-        initSDK(context);
-        // debug mode, you'd better set it to false, if you want release your App officially.
-        EMClient.getInstance().setDebugMode(true);
-        // set Call options
-        setCallOptions(context);
-        //初始化推送
-        initPush(context);
-        //注册call Receiver
-        initReceiver(context);
-        //初始化ease ui相关
-        initEaseUI(context);
-        //注册对话类型
-        registerConversationType();
+        if(initSDK(context)) {
+            // debug mode, you'd better set it to false, if you want release your App officially.
+            EMClient.getInstance().setDebugMode(true);
+            // set Call options
+            setCallOptions(context);
+            //初始化推送
+            initPush(context);
+            //注册call Receiver
+            initReceiver(context);
+            //初始化ease ui相关
+            initEaseUI(context);
+            //注册对话类型
+            registerConversationType();
+        }
+
     }
 
-    private void initSDK(Context context) {
-        demoModel = new DemoModel(context);
+    /**
+     * 初始化SDK
+     * @param context
+     * @return
+     */
+    private boolean initSDK(Context context) {
         // 根据项目需求对SDK进行配置
         EMOptions options = initChatOptions(context);
-//        options.setRestServer("a1-hsb.easemob.com");
-//        options.setIMServer("39.107.54.56");
-//        options.setIMServer("116.85.43.118");
-//        options.setImPort(6717);
+        //配置自定义的rest server和im server
+        //options.setRestServer("a1-hsb.easemob.com");
+        //options.setIMServer("116.85.43.118");
+        //options.setImPort(6717);
         // 初始化SDK
-        EMClient.getInstance().init(context, options);
-        // 记录本地标记，是否初始化过
-        setSDKInit(true);
+        isSDKInit = EaseUI.getInstance().init(context, options);
+        return isSDKInit();
     }
 
     private void initReceiver(Context context) {
@@ -226,8 +232,12 @@ public class DemoHelper {
         return getEMClient().getCurrentUser();
     }
 
+    /**
+     * ChatPresenter中添加了网络连接状态监听，多端登录监听，群组监听，联系人监听，聊天室监听
+     * @param context
+     */
     private void initEaseUI(Context context) {
-        EaseUI.getInstance().init(context);
+        //添加ChatPresenter,ChatPresenter中添加了网络连接状态监听，
         EaseUI.getInstance().addChatPresenter(ChatPresenter.getInstance());
         EaseUI.getInstance()
                 .setSettingsProvider(new EaseSettingsProvider() {
@@ -361,22 +371,32 @@ public class DemoHelper {
         options.setPushConfig(builder.build());
 
         //set custom servers, commonly used in private deployment
-        if(demoModel.isCustomServerEnable() && demoModel.getRestServer() != null && demoModel.getIMServer() != null) {
-            // 设置rest server地址
-            options.setRestServer(demoModel.getRestServer());
-            // 设置im server地址
-            options.setIMServer(demoModel.getIMServer());
-            if(demoModel.getIMServer().contains(":")) {
-                options.setIMServer(demoModel.getIMServer().split(":")[0]);
-                // 设置im server 端口号，默认443
-                options.setImPort(Integer.valueOf(demoModel.getIMServer().split(":")[1]));
+        if(demoModel.isCustomSetEnable()) {
+            if(demoModel.isCustomServerEnable() && demoModel.getRestServer() != null && demoModel.getIMServer() != null) {
+                // 设置rest server地址
+                options.setRestServer(demoModel.getRestServer());
+                // 设置im server地址
+                options.setIMServer(demoModel.getIMServer());
+                //如果im server地址中包含端口号
+                if(demoModel.getIMServer().contains(":")) {
+                    options.setIMServer(demoModel.getIMServer().split(":")[0]);
+                    // 设置im server 端口号，默认443
+                    options.setImPort(Integer.valueOf(demoModel.getIMServer().split(":")[1]));
+                }else {
+                    //如果不包含端口号
+                    if(demoModel.getIMServerPort() != 0) {
+                        options.setImPort(demoModel.getIMServerPort());
+                    }
+                }
             }
         }
-
         if (demoModel.isCustomAppkeyEnabled() && !TextUtils.isEmpty(demoModel.getCutomAppkey())) {
             // 设置appkey
             options.setAppKey(demoModel.getCutomAppkey());
         }
+
+        String imServer = options.getImServer();
+        String restServer = options.getRestServer();
 
         // 设置是否允许聊天室owner离开并删除会话记录，意味着owner再不会受到任何消息
         options.allowChatroomOwnerLeave(demoModel.isChatroomOwnerLeaveAllowed());
@@ -460,7 +480,7 @@ public class DemoHelper {
     }
 
     public void initPush(Context context) {
-        if(DemoHelper.getInstance().isMainProcess(context)) {
+        if(EaseUI.getInstance().isMainProcess(context)) {
             //HMSPushHelper.getInstance().initHMSAgent(DemoApplication.getInstance());
             EMPushHelper.getInstance().setPushListener(new PushListener() {
                 @Override
@@ -534,22 +554,6 @@ public class DemoHelper {
         } catch (Exception e) {
             e.printStackTrace();
         }
-    }
-
-    /**
-     * 判断是否在主进程
-     * @param context
-     * @return
-     */
-    public boolean isMainProcess(Context context) {
-        int pid = android.os.Process.myPid();
-        ActivityManager activityManager = (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
-        for (ActivityManager.RunningAppProcessInfo appProcess : activityManager.getRunningAppProcesses()) {
-            if (appProcess.pid == pid) {
-                return context.getApplicationInfo().packageName.equals(appProcess.processName);
-            }
-        }
-        return false;
     }
 
     public EaseAvatarOptions getEaseAvatarOptions() {

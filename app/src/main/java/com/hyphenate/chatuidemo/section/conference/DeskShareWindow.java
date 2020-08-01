@@ -11,7 +11,7 @@ import android.view.View;
 import android.view.WindowManager;
 
 import com.hyphenate.chatuidemo.R;
-import com.hyphenate.easeui.model.EaseCompat;
+import com.hyphenate.easeui.utils.EaseCompat;
 import com.hyphenate.util.EMLog;
 
 /**

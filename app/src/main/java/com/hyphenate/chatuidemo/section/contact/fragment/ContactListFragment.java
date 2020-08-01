@@ -1,6 +1,7 @@
 package com.hyphenate.chatuidemo.section.contact.fragment;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.ContextMenu;
 import android.view.MenuItem;
 import android.view.View;
@@ -10,11 +11,13 @@ import androidx.annotation.NonNull;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.constraintlayout.widget.ConstraintSet;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.recyclerview.widget.ConcatAdapter;
 
 import com.hyphenate.chatuidemo.R;
 import com.hyphenate.chatuidemo.common.DemoConstant;
 import com.hyphenate.chatuidemo.common.enums.SearchType;
 import com.hyphenate.chatuidemo.common.interfaceOrImplement.OnResourceParseCallback;
+import com.hyphenate.chatuidemo.common.model.ContactHeaderBean;
 import com.hyphenate.chatuidemo.common.net.Resource;
 import com.hyphenate.chatuidemo.common.utils.ToastUtils;
 import com.hyphenate.chatuidemo.common.widget.ContactItemView;
@@ -24,11 +27,13 @@ import com.hyphenate.chatuidemo.section.contact.activity.AddContactActivity;
 import com.hyphenate.chatuidemo.section.contact.activity.ChatRoomContactManageActivity;
 import com.hyphenate.chatuidemo.section.contact.activity.ContactDetailActivity;
 import com.hyphenate.chatuidemo.section.contact.activity.GroupContactManageActivity;
+import com.hyphenate.chatuidemo.section.contact.adapter.ContactHeaderAdapter;
 import com.hyphenate.chatuidemo.section.contact.viewmodels.ContactsViewModel;
 import com.hyphenate.chatuidemo.section.dialog.DemoDialogFragment;
 import com.hyphenate.chatuidemo.section.dialog.SimpleDialogFragment;
 import com.hyphenate.chatuidemo.section.search.SearchFriendsActivity;
 import com.hyphenate.easeui.domain.EaseUser;
+import com.hyphenate.easeui.interfaces.OnItemClickListener;
 import com.hyphenate.easeui.model.EaseEvent;
 import com.hyphenate.easeui.ui.EaseContactListFragment;
 import com.hyphenate.easeui.widget.EaseSearchTextView;
@@ -36,12 +41,6 @@ import com.hyphenate.easeui.widget.EaseSearchTextView;
 import java.util.List;
 
 public class ContactListFragment extends EaseContactListFragment implements View.OnClickListener {
-    private ContactItemView mCivNewChat;
-    private ContactItemView mCivGroupChat;
-    private ContactItemView mCivLabel;
-    private ContactItemView mCivChatRoom;
-    private ContactItemView mCivOfficialAccount;
-    private ContactItemView mCivAvConference;
     private EaseSearchTextView tvSearch;
 
     private ContactsViewModel mViewModel;
@@ -50,7 +49,6 @@ public class ContactListFragment extends EaseContactListFragment implements View
     public void initView(Bundle savedInstanceState) {
         super.initView(savedInstanceState);
         addSearchView();
-        addHeader();
         //设置无数据时空白页面
         adapter.setEmptyLayoutResource(R.layout.demo_layout_friends_empty_list);
     }
@@ -94,29 +92,38 @@ public class ContactListFragment extends EaseContactListFragment implements View
         tvSearch.setHint(R.string.em_friend_list_search_hint);
     }
 
-    private void addHeader() {
-        // 获取头布局，应该放在RecyclerView的setLayoutManager之后
-        View header = getLayoutInflater().inflate(R.layout.demo_header_friends_list, rvContactList, false);
-        rvContactList.addHeaderView(header);
-
-        mCivNewChat = header.findViewById(R.id.civ_new_chat);
-        mCivGroupChat = header.findViewById(R.id.civ_group_chat);
-        mCivLabel = header.findViewById(R.id.civ_label);
-        mCivChatRoom = header.findViewById(R.id.civ_chat_room);
-        mCivOfficialAccount = header.findViewById(R.id.civ_official_account);
-        mCivAvConference = header.findViewById(R.id.civ_av_conference);
+    /**
+     * 根据需要，可以将搜索框布局也通过concatAdapter.addAdapter(searchAdapter)添加到recyclerView中
+     * @param concatAdapter
+     */
+    @Override
+    public void addHeader(ConcatAdapter concatAdapter) {
+        super.addHeader(concatAdapter);
+        ContactHeaderAdapter headerAdapter = new ContactHeaderAdapter();
+        concatAdapter.addAdapter(headerAdapter);
+        headerAdapter.setOnItemClickListener(new OnItemClickListener() {
+            @Override
+            public void onItemClick(View view, int position) {
+                ContactHeaderBean item = headerAdapter.getItem(position);
+                switch (item.getName()) {
+                    case R.string.em_friends_new_chat :
+                        AddContactActivity.startAction(mContext, SearchType.CHAT);
+                        break;
+                    case R.string.em_friends_group_chat :
+                        GroupContactManageActivity.actionStart(mContext);
+                        break;
+                    case R.string.em_friends_chat_room :
+                        ChatRoomContactManageActivity.actionStart(mContext);
+                        break;
+                }
+            }
+        });
     }
 
     @Override
     public void initListener() {
         super.initListener();
         tvSearch.setOnClickListener(this);
-        mCivNewChat.setOnClickListener(this);
-        mCivGroupChat.setOnClickListener(this);
-        mCivLabel.setOnClickListener(this);
-        mCivChatRoom.setOnClickListener(this);
-        mCivOfficialAccount.setOnClickListener(this);
-        mCivAvConference.setOnClickListener(this);
     }
 
     @Override
@@ -179,24 +186,6 @@ public class ContactListFragment extends EaseContactListFragment implements View
         switch (v.getId()) {
             case R.id.tv_search :
                 SearchFriendsActivity.actionStart(mContext);
-                break;
-            case R.id.civ_new_chat :
-                AddContactActivity.startAction(mContext, SearchType.CHAT);
-                break;
-            case R.id.civ_group_chat :
-                GroupContactManageActivity.actionStart(mContext);
-                break;
-            case R.id.civ_label :
-                showToast("lable");
-                break;
-            case R.id.civ_chat_room :
-                ChatRoomContactManageActivity.actionStart(mContext);
-                break;
-            case R.id.civ_official_account :
-                showToast("official account");
-                break;
-            case R.id.civ_av_conference:
-                ConferenceActivity.startConferenceCall(getActivity(), null);
                 break;
         }
     }

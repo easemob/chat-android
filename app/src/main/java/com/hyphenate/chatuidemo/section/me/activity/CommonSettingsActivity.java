@@ -26,6 +26,7 @@ public class CommonSettingsActivity extends BaseInitActivity implements View.OnC
     private SwitchItemView itemAutoFile;
     private SwitchItemView itemAutoDownload;
     private SwitchItemView itemAutoAcceptGroup;
+    private SwitchItemView itemSwitchChatroomDeleteMsg;
 
     private DemoModel settingsModel;
     private EMOptions chatOptions;
@@ -53,6 +54,7 @@ public class CommonSettingsActivity extends BaseInitActivity implements View.OnC
         itemAutoFile = findViewById(R.id.item_switch_auto_file);
         itemAutoDownload = findViewById(R.id.item_switch_auto_download);
         itemAutoAcceptGroup = findViewById(R.id.item_switch_auto_accept_group);
+        itemSwitchChatroomDeleteMsg = findViewById(R.id.item_switch_chatroom_delete_msg);
     }
 
     @Override
@@ -68,6 +70,7 @@ public class CommonSettingsActivity extends BaseInitActivity implements View.OnC
         itemAutoFile.setOnCheckedChangeListener(this);
         itemAutoDownload.setOnCheckedChangeListener(this);
         itemAutoAcceptGroup.setOnCheckedChangeListener(this);
+        itemSwitchChatroomDeleteMsg.setOnCheckedChangeListener(this);
     }
 
     @Override
@@ -83,6 +86,7 @@ public class CommonSettingsActivity extends BaseInitActivity implements View.OnC
         itemAutoFile.getSwitch().setChecked(settingsModel.isSetTransferFileByUser());
         itemAutoDownload.getSwitch().setChecked(settingsModel.isSetAutodownloadThumbnail());
         itemAutoAcceptGroup.getSwitch().setChecked(settingsModel.isAutoAcceptGroupInvitation());
+        itemSwitchChatroomDeleteMsg.getSwitch().setChecked(settingsModel.isAutoAcceptGroupInvitation());
     }
 
     @Override
@@ -126,6 +130,10 @@ public class CommonSettingsActivity extends BaseInitActivity implements View.OnC
             case R.id.item_switch_auto_accept_group :
                 settingsModel.setAutoAcceptGroupInvitation(isChecked);
                 chatOptions.setAutoAcceptGroupInvitation(isChecked);
+                break;
+            case R.id.item_switch_chatroom_delete_msg:
+                settingsModel.setDeleteMessagesAsExitChatRoom(isChecked);
+                //chatOptions.setDeleteMessagesAsExitChatRoom(isChecked);
                 break;
         }
     }

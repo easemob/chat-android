@@ -70,18 +70,10 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="20dp"
                 android:layout_marginBottom="10dp"
-                android:text="群组设置"
+                android:text="@string/em_common_set_group_set"
                 android:layout_marginLeft="20dp"
                 android:textSize="14sp"
                 android:textColor="@color/gray_normal"/>
-
-            <com.hyphenate.chatuidemo.common.widget.SwitchItemView
-                android:id="@+id/item_switch_chatroom"
-                android:layout_width="match_parent"
-                android:layout_height="50dp"
-                app:switchItemTitle="@string/chatroom_allow_owner_leave"
-                app:switchItemShowDivider="true"
-                android:background="@color/white"/>
 
             <com.hyphenate.chatuidemo.common.widget.SwitchItemView
                 android:id="@+id/item_switch_delete_msg"
@@ -116,6 +108,32 @@
                 app:switchItemShowDivider="true"
                 android:visibility="gone"/>
 
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:layout_marginBottom="10dp"
+                android:text="@string/em_common_set_chat_room_set"
+                android:layout_marginLeft="20dp"
+                android:textSize="14sp"
+                android:textColor="@color/gray_normal"/>
+
+            <com.hyphenate.chatuidemo.common.widget.SwitchItemView
+                android:id="@+id/item_switch_chatroom"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                app:switchItemTitle="@string/chatroom_allow_owner_leave"
+                app:switchItemShowDivider="true"
+                android:background="@color/white"/>
+
+            <com.hyphenate.chatuidemo.common.widget.SwitchItemView
+                android:id="@+id/item_switch_chatroom_delete_msg"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                app:switchItemTitle="@string/chatroom_allow_owner_leave"
+                app:switchItemShowDivider="true"
+                android:background="@color/white"
+                android:visibility="gone"/>
 
         </LinearLayout>
 

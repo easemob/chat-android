@@ -27,7 +27,8 @@ public class GroupMemberAuthorityViewModel extends AndroidViewModel {
     private SingleSourceLiveData<Resource<List<EaseUser>>> membersObservable;
     private SingleSourceLiveData<Resource<Map<String, Long>>> muteMembersObservable;
     private SingleSourceLiveData<Resource<List<String>>> blackMembersObservable;
-    private MediatorLiveData<Resource<Boolean>> refreshObservable;
+    private SingleSourceLiveData<Resource<Boolean>> refreshObservable;
+    private SingleSourceLiveData<Resource<Boolean>> transferOwnerObservable;
     private LiveDataBus messageChangeLiveData = LiveDataBus.get();
 
     public GroupMemberAuthorityViewModel(@NonNull Application application) {
@@ -37,7 +38,8 @@ public class GroupMemberAuthorityViewModel extends AndroidViewModel {
         membersObservable = new SingleSourceLiveData<>();
         muteMembersObservable = new SingleSourceLiveData<>();
         blackMembersObservable = new SingleSourceLiveData<>();
-        refreshObservable = new MediatorLiveData<>();
+        refreshObservable = new SingleSourceLiveData<>();
+        transferOwnerObservable = new SingleSourceLiveData<>();
     }
 
     public LiveDataBus getMessageChangeObservable() {
@@ -80,44 +82,40 @@ public class GroupMemberAuthorityViewModel extends AndroidViewModel {
         return refreshObservable;
     }
 
+    public LiveData<Resource<Boolean>> getTransferOwnerObservable() {
+        return transferOwnerObservable;
+    }
+
     public void changeOwner(String groupId, String username) {
-        refreshObservable.addSource(repository.changeOwner(groupId, username),
-                value -> refreshObservable.postValue(value));
+        transferOwnerObservable.setSource(repository.changeOwner(groupId, username));
     }
 
     public void addGroupAdmin(String groupId, String username) {
-        refreshObservable.addSource(repository.addGroupAdmin(groupId, username),
-                value -> refreshObservable.postValue(value));
+        refreshObservable.setSource(repository.addGroupAdmin(groupId, username));
     }
 
     public void removeGroupAdmin(String groupId, String username) {
-        refreshObservable.addSource(repository.removeGroupAdmin(groupId, username),
-                value -> refreshObservable.postValue(value));
+        refreshObservable.setSource(repository.removeGroupAdmin(groupId, username));
     }
 
     public void removeUserFromGroup(String groupId, String username) {
-        refreshObservable.addSource(repository.removeUserFromGroup(groupId, username),
-                value -> refreshObservable.postValue(value));
+        refreshObservable.setSource(repository.removeUserFromGroup(groupId, username));
     }
 
     public void blockUser(String groupId, String username) {
-        refreshObservable.addSource(repository.blockUser(groupId, username),
-                value -> refreshObservable.postValue(value));
+        refreshObservable.setSource(repository.blockUser(groupId, username));
     }
 
     public void unblockUser(String groupId, String username) {
-        refreshObservable.addSource(repository.unblockUser(groupId, username),
-                value -> refreshObservable.postValue(value));
+        refreshObservable.setSource(repository.unblockUser(groupId, username));
     }
 
     public void muteGroupMembers(String groupId, List<String> usernames, long duration) {
-        refreshObservable.addSource(repository.muteGroupMembers(groupId, usernames, duration),
-                value -> refreshObservable.postValue(value));
+        refreshObservable.setSource(repository.muteGroupMembers(groupId, usernames, duration));
     }
 
     public void unMuteGroupMembers(String groupId, List<String> usernames) {
-        refreshObservable.addSource(repository.unMuteGroupMembers(groupId, usernames),
-                value -> refreshObservable.postValue(value));
+        refreshObservable.setSource(repository.unMuteGroupMembers(groupId, usernames));
     }
 
 }

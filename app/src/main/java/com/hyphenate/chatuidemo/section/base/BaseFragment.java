@@ -4,26 +4,18 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
-import android.os.Bundle;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.annotation.StringRes;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
-import androidx.fragment.app.Fragment;
 
 import com.hyphenate.chatuidemo.R;
-import com.hyphenate.chatuidemo.common.enums.Status;
 import com.hyphenate.chatuidemo.common.interfaceOrImplement.DialogCallBack;
 import com.hyphenate.chatuidemo.common.interfaceOrImplement.OnResourceParseCallback;
 import com.hyphenate.chatuidemo.common.net.Resource;
 import com.hyphenate.chatuidemo.common.utils.ToastUtils;
-import com.hyphenate.chatuidemo.common.widget.EaseProgressDialog;
 import com.hyphenate.easeui.ui.base.EaseBaseFragment;
 
 public class BaseFragment extends EaseBaseFragment {
@@ -120,7 +112,7 @@ public class BaseFragment extends EaseBaseFragment {
 
     public void hideLoading() {
         if(mContext != null) {
-            mContext.hideLoading();
+            mContext.dismissLoading();
         }
     }
 }

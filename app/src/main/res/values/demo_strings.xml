@@ -217,6 +217,8 @@
     <string name="em_notify_agree">同意</string>
     <string name="em_notify_refuse">拒绝</string>
     <string name="em_notify_delete">删除</string>
+    <string name="em_call_video_request">正在邀请你进行视频通话...</string>
+    <string name="em_call_voice_request">正在邀请你进行语音通话...</string>
 
     <string name="em_about_me_set">设置</string>
     <string name="em_about_me_feedback">意见反馈</string>
@@ -235,6 +237,7 @@
     <string name="em_developer_version">当前SDK版本</string>
     <string name="em_developer_appkey_self">自定义AppKey</string>
     <string name="em_developer_appkey_self_add">添加自定义AppKey</string>
+    <string name="em_developer_appkey_delete">删除自定义AppKey？</string>
     <string name="em_developer_allow_token">允许使用token登录</string>
     <string name="em_developer_from_server">优先从服务器获取消息</string>
     <string name="em_developer_upload_to_hx">消息附件上传到环信服务器</string>
@@ -250,7 +253,10 @@
     <string name="em_login_out_hint">是否退出？</string>
     <string name="em_developer_appkey_warning">当前appKey以及环境已经配置生效，更换当前appKey需重启客户端！</string>
     <string name="em_developer_appkey_confirm">重启</string>
-    
+
+    <string name="em_common_set_group_set">群组设置</string>
+    <string name="em_common_set_chat_room_set">聊天室设置</string>
+
     <string name="em_feedback_question_title">选择问题类型</string>
     <string name="em_feedback_question_bug">BUG反馈</string>
     <string name="em_feedback_et_hint">问题描述</string>
@@ -356,6 +362,10 @@
     <string name="Has_refused_to">已拒绝</string>
     <string name="accept_join_group">%s同意加入群</string>
     <string name="refuse_join_group">%s拒绝加入群</string>
+
+    <string name="the_current_chat_room_destroyed">当前聊天室已被创建者解散</string>
+    <string name="quiting_the_chat_room">正在退出聊天室……</string>
+    <string name="be_kicked_for_offline">离线被踢出聊天室</string>
 
     <string name="multi_device_contact_accept">接受%s的好友邀请[remote]</string>
     <string name="multi_device_contact_decline">拒绝%s的好友邀请[remote]</string>

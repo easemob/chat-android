@@ -110,7 +110,7 @@ public class GroupMemberAuthorityActivity extends BaseInitActivity implements Ea
         rvList.setAdapter(adapter);
 
         presenter = new SidebarPresenter();
-        presenter.setupWithRecyclerView(rvList, floatingHeader);
+        presenter.setupWithRecyclerView(rvList, adapter, floatingHeader);
     }
 
     @Override
@@ -279,6 +279,16 @@ public class GroupMemberAuthorityActivity extends BaseInitActivity implements Ea
                 public void onSuccess(Boolean data) {
                     refreshData();
                     LiveDataBus.get().with(DemoConstant.GROUP_CHANGE).postValue(EaseEvent.create(DemoConstant.GROUP_CHANGE, EaseEvent.TYPE.GROUP));
+                }
+            });
+        });
+
+        viewModel.getTransferOwnerObservable().observe(this, response -> {
+            parseResource(response, new OnResourceParseCallback<Boolean>() {
+                @Override
+                public void onSuccess(Boolean data) {
+                    LiveDataBus.get().with(DemoConstant.GROUP_CHANGE).postValue(EaseEvent.create(DemoConstant.GROUP_OWNER_TRANSFER, EaseEvent.TYPE.GROUP));
+                    finish();
                 }
             });
         });

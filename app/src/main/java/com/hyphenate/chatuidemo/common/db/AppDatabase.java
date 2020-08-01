@@ -18,7 +18,7 @@ import com.hyphenate.chatuidemo.common.db.entity.MsgTypeManageEntity;
         InviteMessage.class,
         MsgTypeManageEntity.class,
         AppKeyEntity.class},
-        version = 11)
+        version = 12)
 @TypeConverters(DateConverter.class)
 public abstract class AppDatabase extends RoomDatabase {
 

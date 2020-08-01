@@ -19,9 +19,12 @@ public interface AppKeyDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     List<Long> insert(List<AppKeyEntity> keys);
 
-    @Query("select * from app_key")
+    @Query("select * from app_key  order by timestamp asc")
     List<AppKeyEntity> loadAllAppKeys();
 
     @Query("delete from app_key where appKey = :appKey")
     void deleteAppKey(String appKey);
+
+    @Query("select * from app_key where appKey = :appKey")
+    List<AppKeyEntity> queryKey(String appKey);
 }

@@ -7,9 +7,9 @@ import com.hyphenate.chat.EMMessage;
 import com.hyphenate.chatuidemo.common.DemoConstant;
 import com.hyphenate.chatuidemo.section.chat.viewholder.ChatRecallViewHolder;
 import com.hyphenate.chatuidemo.section.chat.views.ChatRowRecall;
+import com.hyphenate.easeui.delegate.EaseMessageAdapterDelegate;
 import com.hyphenate.easeui.interfaces.MessageListItemClickListener;
 import com.hyphenate.easeui.model.styles.EaseMessageListItemStyle;
-import com.hyphenate.easeui.ui.chat.delegates.EaseMessageAdapterDelegate;
 import com.hyphenate.easeui.viewholder.EaseChatRowViewHolder;
 import com.hyphenate.easeui.widget.chatrow.EaseChatRow;
 

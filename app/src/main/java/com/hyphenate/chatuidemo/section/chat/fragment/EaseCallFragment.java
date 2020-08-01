@@ -32,7 +32,7 @@ import com.hyphenate.chatuidemo.common.livedatas.LiveDataBus;
 import com.hyphenate.chatuidemo.common.utils.PreferenceManager;
 import com.hyphenate.easeui.R;
 import com.hyphenate.easeui.constants.EaseConstant;
-import com.hyphenate.easeui.model.EasePreferenceManager;
+import com.hyphenate.easeui.manager.EasePreferenceManager;
 import com.hyphenate.easeui.ui.base.EaseBaseFragment;
 import com.hyphenate.exceptions.EMServiceNotReadyException;
 import com.hyphenate.util.EMLog;

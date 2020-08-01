@@ -45,6 +45,7 @@ public class ServerSetFragment extends BaseInitFragment implements EaseTitleBar.
     private String mRestServerAddress;
     private String mAppkey;
     private boolean mCustomServerEnable;
+    private boolean mCustomSetEnable;
 
     @Override
     protected int getLayoutId() {
@@ -71,13 +72,6 @@ public class ServerSetFragment extends BaseInitFragment implements EaseTitleBar.
     }
 
     @Override
-    protected void initViewModel() {
-        super.initViewModel();
-        LoginViewModel viewModel = new ViewModelProvider(mContext).get(LoginViewModel.class);
-
-    }
-
-    @Override
     protected void initListener() {
         super.initListener();
         mToolbarServer.setOnBackPressListener(this);
@@ -96,13 +90,11 @@ public class ServerSetFragment extends BaseInitFragment implements EaseTitleBar.
      */
     private void checkServerSet() {
         boolean isInited = DemoHelper.getInstance().isSDKInit();
-        //如果sdk已经初始化完成，则应该显示初始化完成后的数据
-        if(isInited) {
-            mBtnServer.setEnabled(false);
-        }
+
         //判断是否显示设置数据，及是否可以自定义设置
+        mCustomSetEnable = DemoHelper.getInstance().getModel().isCustomSetEnable();
         mCustomServerEnable = DemoHelper.getInstance().getModel().isCustomServerEnable();
-        mSwitchServer.setChecked(mCustomServerEnable);
+        mSwitchServer.setChecked(mCustomSetEnable);
         mSwitchSpecifyServer.setChecked(mCustomServerEnable);
         mSwitchHttpsSet.setChecked(DemoHelper.getInstance().getModel().getUsingHttpsOnly());
         String appkey = DemoHelper.getInstance().getModel().getCutomAppkey();
@@ -119,10 +111,11 @@ public class ServerSetFragment extends BaseInitFragment implements EaseTitleBar.
         mEtServerHint.setVisibility(isInited ? View.VISIBLE : View.GONE);
         mEtAppkey.setEnabled(!isInited);
         mSwitchSpecifyServer.setEnabled(!isInited);
-        mEtServerAddress.setEnabled(!isInited);
-        mEtServerPort.setEnabled(!isInited);
-        mEtServerRest.setEnabled(!isInited);
-        mSwitchHttpsSet.setEnabled(!isInited);
+        mEtServerAddress.setEnabled(!isInited && mCustomServerEnable);
+        mEtServerPort.setEnabled(!isInited && mCustomServerEnable);
+        mEtServerRest.setEnabled(!isInited && mCustomServerEnable);
+        mSwitchHttpsSet.setEnabled(!isInited && mCustomServerEnable);
+        checkButtonEnable();
     }
 
     /**
@@ -143,10 +136,14 @@ public class ServerSetFragment extends BaseInitFragment implements EaseTitleBar.
     public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
         switch (buttonView.getId()) {
             case R.id.switch_server :
+                mCustomSetEnable = isChecked;
+                DemoHelper.getInstance().getModel().enableCustomSet(isChecked);
+                DemoHelper.getInstance().getModel().enableCustomAppkey(!TextUtils.isEmpty(mEtAppkey.getText().toString().trim()) && isChecked);
                 mGroupServerSet.setVisibility(isChecked ? View.VISIBLE : View.GONE);
                 setResetButtonVisible(isChecked, DemoHelper.getInstance().isSDKInit());
                 break;
             case R.id.switch_specify_server :
+                DemoHelper.getInstance().getModel().enableCustomServer(isChecked);
                 mCustomServerEnable = isChecked;
                 mEtServerAddress.setEnabled(isChecked);
                 mEtServerPort.setEnabled(isChecked);
@@ -171,22 +168,28 @@ public class ServerSetFragment extends BaseInitFragment implements EaseTitleBar.
     @Override
     public void afterTextChanged(Editable s) {
         mAppkey = mEtAppkey.getText().toString().trim();
-        DemoHelper.getInstance().getModel().enableCustomAppkey(!TextUtils.isEmpty(mAppkey));
-        mServerAddress = mEtServerAddress.getText().toString().trim();
-        mServerPort = mEtServerPort.getText().toString().trim();
-        mRestServerAddress = mEtServerRest.getText().toString().trim();
+        DemoHelper.getInstance().getModel().enableCustomAppkey(!TextUtils.isEmpty(mAppkey) && mSwitchServer.isChecked());
         checkButtonEnable();
 
     }
 
     private void checkButtonEnable() {
+        mAppkey = mEtAppkey.getText().toString().trim();
         if(mCustomServerEnable) {
+            mServerAddress = mEtServerAddress.getText().toString().trim();
+            mServerPort = mEtServerPort.getText().toString().trim();
+            mRestServerAddress = mEtServerRest.getText().toString().trim();
             setButtonEnable(!TextUtils.isEmpty(mServerAddress)
                     && !TextUtils.isEmpty(mAppkey)
                     && !TextUtils.isEmpty(mServerPort)
                     && !TextUtils.isEmpty(mRestServerAddress));
         }else {
             setButtonEnable(!TextUtils.isEmpty(mAppkey));
+        }
+        boolean isInited = DemoHelper.getInstance().isSDKInit();
+        //如果sdk已经初始化完成，则应该显示初始化完成后的数据
+        if(isInited) {
+            mBtnServer.setEnabled(false);
         }
     }
 
@@ -234,6 +237,7 @@ public class ServerSetFragment extends BaseInitFragment implements EaseTitleBar.
         }
         // 保存设置
         if(!TextUtils.isEmpty(mAppkey)) {
+            DemoHelper.getInstance().getModel().enableCustomAppkey(mSwitchServer.isChecked());
             DemoHelper.getInstance().getModel().setCustomAppkey(mAppkey);
         }
         if(!TextUtils.isEmpty(mServerAddress)) {
