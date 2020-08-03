@@ -173,6 +173,9 @@ public class ContactListFragment extends EaseContactListFragment implements View
             }
         });
 
+        if(srlContactRefresh != null && !srlContactRefresh.isRefreshing()) {
+            srlContactRefresh.setRefreshing(true);
+        }
         mViewModel.loadContactList();
     }
 

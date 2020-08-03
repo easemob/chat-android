@@ -49,6 +49,7 @@ import com.hyphenate.easeui.domain.EaseUser;
 import com.hyphenate.easeui.model.EaseEvent;
 import com.hyphenate.easeui.ui.EaseChatFragment;
 import com.hyphenate.easeui.widget.EaseChatInputMenu;
+import com.hyphenate.easeui.widget.chatextend.EaseChatExtendMenu;
 import com.hyphenate.easeui.widget.emojicon.EaseEmojiconMenu;
 import com.hyphenate.exceptions.HyphenateException;
 import com.hyphenate.util.EMLog;
@@ -104,6 +105,9 @@ public class ChatFragment extends EaseChatFragment implements EaseChatFragment.O
         });
     }
 
+    /**
+     * 为了重排默认扩展功能顺序，需要重写此方法，并调用{@link EaseChatExtendMenu#init()}
+     */
     @Override
     protected void initExtendInputMenu() {
         inputMenu.init();
