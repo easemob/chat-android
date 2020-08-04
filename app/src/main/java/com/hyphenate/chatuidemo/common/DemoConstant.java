@@ -3,6 +3,13 @@ package com.hyphenate.chatuidemo.common;
 import com.hyphenate.easeui.constants.EaseConstant;
 
 public interface DemoConstant extends EaseConstant {
+    String ACCOUNT_CHANGE = "account_change";
+    String ACCOUNT_REMOVED = "account_removed";
+    String ACCOUNT_CONFLICT = "conflict";
+    String ACCOUNT_FORBIDDEN = "user_forbidden";
+    String ACCOUNT_KICKED_BY_CHANGE_PASSWORD = "kicked_by_change_password";
+    String ACCOUNT_KICKED_BY_OTHER_DEVICE = "kicked_by_another_device";
+
     String EXTRA_CONFERENCE_ID = "confId";
     String EXTRA_CONFERENCE_PASS = "password";
     String EXTRA_CONFERENCE_INVITER = "inviter";

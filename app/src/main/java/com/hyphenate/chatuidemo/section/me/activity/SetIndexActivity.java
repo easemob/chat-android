@@ -129,13 +129,4 @@ public class SetIndexActivity extends BaseInitActivity implements EaseTitleBar.O
         });
     }
 
-    private void finishOtherActivities() {
-        UserActivityLifecycleCallbacks lifecycleCallbacks = DemoApplication.getInstance().getLifecycleCallbacks();
-        List<Activity> activities = lifecycleCallbacks.getActivityList();
-        for(Activity activity : activities) {
-            if(activity != lifecycleCallbacks.current()) {
-                activity.finish();
-            }
-        }
-    }
 }

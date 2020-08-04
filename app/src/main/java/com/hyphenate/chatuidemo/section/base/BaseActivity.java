@@ -2,12 +2,15 @@ package com.hyphenate.chatuidemo.section.base;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.EventLog;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
@@ -20,22 +23,32 @@ import androidx.annotation.ColorRes;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.StringRes;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.content.ContextCompat;
 
+import com.hyphenate.EMCallBack;
 import com.hyphenate.chatuidemo.DemoApplication;
+import com.hyphenate.chatuidemo.DemoHelper;
+import com.hyphenate.chatuidemo.MainActivity;
 import com.hyphenate.chatuidemo.R;
+import com.hyphenate.chatuidemo.common.DemoConstant;
 import com.hyphenate.chatuidemo.common.enums.Status;
 import com.hyphenate.chatuidemo.common.interfaceOrImplement.OnResourceParseCallback;
 import com.hyphenate.chatuidemo.common.interfaceOrImplement.UserActivityLifecycleCallbacks;
+import com.hyphenate.chatuidemo.common.livedatas.LiveDataBus;
 import com.hyphenate.chatuidemo.common.net.Resource;
 import com.hyphenate.chatuidemo.common.utils.ToastUtils;
 import com.hyphenate.chatuidemo.common.widget.EaseProgressDialog;
 import com.hyphenate.chatuidemo.section.conference.CallFloatWindow;
 import com.hyphenate.chatuidemo.section.conference.ConferenceActivity;
 import com.hyphenate.chatuidemo.section.conference.ConferenceInviteActivity;
+import com.hyphenate.chatuidemo.section.dialog.SimpleDialogFragment;
+import com.hyphenate.chatuidemo.section.login.activity.LoginActivity;
+import com.hyphenate.easeui.model.EaseEvent;
 import com.hyphenate.easeui.utils.StatusBarCompat;
+import com.hyphenate.util.EMLog;
 
 import java.util.List;
 
@@ -45,12 +58,109 @@ import java.util.List;
 public class BaseActivity extends AppCompatActivity {
     public BaseActivity mContext;
     private EaseProgressDialog dialog;
+    private AlertDialog logoutDialog;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mContext = this;
+        registerAccountObservable();
         checkIfConferenceExit();
+    }
+
+    /**
+     * 添加账号异常监听
+     */
+    protected void registerAccountObservable() {
+        LiveDataBus.get().with(DemoConstant.ACCOUNT_CHANGE, EaseEvent.class).observe(this, event -> {
+            if(event == null) {
+                return;
+            }
+            if(!event.isAccountChange()) {
+                return;
+            }
+            String accountEvent = event.event;
+            if(TextUtils.equals(accountEvent, DemoConstant.ACCOUNT_REMOVED) ||
+                TextUtils.equals(accountEvent, DemoConstant.ACCOUNT_KICKED_BY_CHANGE_PASSWORD) ||
+                TextUtils.equals(accountEvent, DemoConstant.ACCOUNT_KICKED_BY_OTHER_DEVICE)) {
+                DemoHelper.getInstance().logout(false, new EMCallBack() {
+                    @Override
+                    public void onSuccess() {
+                        finishOtherActivities();
+                        startActivity(new Intent(mContext, LoginActivity.class));
+                        finish();
+                    }
+
+                    @Override
+                    public void onError(int code, String error) {
+                        EMLog.e("logout", "logout error: error code = "+code + " error message = "+error);
+                        showToast("logout error: error code = "+code + " error message = "+error);
+                    }
+
+                    @Override
+                    public void onProgress(int progress, String status) {
+
+                    }
+                });
+            }else if(TextUtils.equals(accountEvent, DemoConstant.ACCOUNT_CONFLICT)
+                    || TextUtils.equals(accountEvent, DemoConstant.ACCOUNT_REMOVED)
+                    || TextUtils.equals(accountEvent, DemoConstant.ACCOUNT_FORBIDDEN)) {
+                DemoHelper.getInstance().logout(false, null);
+                showExceptionDialog(accountEvent);
+            }
+        });
+    }
+
+    private void showExceptionDialog(String accountEvent) {
+        if(logoutDialog != null && logoutDialog.isShowing() && !mContext.isFinishing()) {
+            logoutDialog.dismiss();
+        }
+        logoutDialog = new AlertDialog.Builder(mContext)
+                .setTitle(R.string.em_account_logoff_notification)
+                .setMessage(getExceptionMessageId(accountEvent))
+                .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        finishOtherActivities();
+                        startActivity(new Intent(mContext, LoginActivity.class));
+                        finish();
+                    }
+                })
+                .setCancelable(false)
+                .create();
+        logoutDialog.show();
+    }
+
+    private int getExceptionMessageId(String exceptionType) {
+        if(exceptionType.equals(DemoConstant.ACCOUNT_CONFLICT)) {
+            return R.string.em_account_connect_conflict;
+        } else if (exceptionType.equals(DemoConstant.ACCOUNT_REMOVED)) {
+            return R.string.em_account_user_remove;
+        } else if (exceptionType.equals(DemoConstant.ACCOUNT_FORBIDDEN)) {
+            return R.string.em_account_user_forbidden;
+        }
+        return R.string.Network_error;
+    }
+
+    /**
+     * 结束除了当前Activity外的其他Activity
+     */
+    protected void finishOtherActivities() {
+        UserActivityLifecycleCallbacks lifecycleCallbacks = DemoApplication.getInstance().getLifecycleCallbacks();
+        if(lifecycleCallbacks == null) {
+            finish();
+            return;
+        }
+        List<Activity> activities = lifecycleCallbacks.getActivityList();
+        if(activities == null || activities.isEmpty()) {
+            finish();
+            return;
+        }
+        for(Activity activity : activities) {
+            if(activity != lifecycleCallbacks.current()) {
+                activity.finish();
+            }
+        }
     }
 
 

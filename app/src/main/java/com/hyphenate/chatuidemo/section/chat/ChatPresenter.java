@@ -8,11 +8,13 @@ import android.util.Log;
 import android.widget.Toast;
 
 import androidx.annotation.StringRes;
+import androidx.core.content.FileProvider;
 
 import com.hyphenate.EMChatRoomChangeListener;
 import com.hyphenate.EMConferenceListener;
 import com.hyphenate.EMConnectionListener;
 import com.hyphenate.EMContactListener;
+import com.hyphenate.EMError;
 import com.hyphenate.EMMultiDeviceListener;
 import com.hyphenate.chat.EMClient;
 import com.hyphenate.chat.EMConferenceManager;
@@ -39,6 +41,7 @@ import com.hyphenate.chatuidemo.common.manager.PushAndMessageHelper;
 import com.hyphenate.chatuidemo.common.repositories.EMContactManagerRepository;
 import com.hyphenate.chatuidemo.common.repositories.EMGroupManagerRepository;
 import com.hyphenate.chatuidemo.section.group.GroupHelper;
+import com.hyphenate.easeui.constants.EaseConstant;
 import com.hyphenate.easeui.interfaces.EaseGroupListener;
 import com.hyphenate.easeui.manager.EaseAtMessageHelper;
 import com.hyphenate.easeui.manager.EaseChatPresenter;
@@ -55,7 +58,6 @@ public class ChatPresenter extends EaseChatPresenter {
     private static final String TAG = ChatPresenter.class.getSimpleName();
     private static ChatPresenter instance;
     private LiveDataBus messageChangeLiveData;
-    private NetworkChangeLiveData networkChangeLiveData;
     private boolean isGroupsSyncedWithServer = false;
     private boolean isContactsSyncedWithServer = false;
     private boolean isBlackListSyncedWithServer = false;
@@ -68,7 +70,6 @@ public class ChatPresenter extends EaseChatPresenter {
         appContext = DemoApplication.getInstance();
         initHandler(appContext.getMainLooper());
         messageChangeLiveData = LiveDataBus.get();
-        networkChangeLiveData = NetworkChangeLiveData.getInstance();
         //添加网络连接状态监听
         DemoHelper.getInstance().getEMClient().addConnectionListener(new ChatConnectionListener());
         //添加多端登录监听
@@ -201,10 +202,29 @@ public class ChatPresenter extends EaseChatPresenter {
             }
         }
 
+        /**
+         * 用来监听账号异常
+         * @param error
+         */
         @Override
-        public void onDisconnected(int errorCode) {
-            EMLog.i("TAG", "onDisconnected ="+errorCode);
-            networkChangeLiveData.postValue(errorCode);
+        public void onDisconnected(int error) {
+            EMLog.i("TAG", "onDisconnected ="+error);
+            String event = null;
+            if (error == EMError.USER_REMOVED) {
+                event = DemoConstant.ACCOUNT_REMOVED;
+            } else if (error == EMError.USER_LOGIN_ANOTHER_DEVICE) {
+                event = DemoConstant.ACCOUNT_CONFLICT;
+            } else if (error == EMError.SERVER_SERVICE_RESTRICTED) {
+                event = DemoConstant.ACCOUNT_FORBIDDEN;
+            } else if (error == EMError.USER_KICKED_BY_CHANGE_PASSWORD) {
+                event = DemoConstant.ACCOUNT_KICKED_BY_CHANGE_PASSWORD;
+            } else if (error == EMError.USER_KICKED_BY_OTHER_DEVICE) {
+                event = DemoConstant.ACCOUNT_KICKED_BY_OTHER_DEVICE;
+            }
+            if(!TextUtils.isEmpty(event)) {
+                LiveDataBus.get().with(DemoConstant.ACCOUNT_CHANGE).postValue(new EaseEvent(event, EaseEvent.TYPE.ACCOUNT));
+                showToast(event);
+            }
         }
     }
 
