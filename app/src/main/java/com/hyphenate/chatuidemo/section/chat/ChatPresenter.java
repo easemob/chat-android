@@ -638,7 +638,8 @@ public class ChatPresenter extends EaseChatPresenter {
         @Override
         public void onFriendRequestDeclined(String username) {
             EMLog.i("ChatContactListener", "onFriendRequestDeclined");
-
+            EaseEvent event = EaseEvent.create(DemoConstant.CONTACT_CHANGE, EaseEvent.TYPE.CONTACT);
+            messageChangeLiveData.with(DemoConstant.CONTACT_CHANGE).postValue(event);
             showToast(username + " refused to be your friend");
         }
     }

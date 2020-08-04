@@ -202,7 +202,7 @@ public class EMContactManagerRepository extends BaseEMRepository{
         return new NetworkOnlyResource<Boolean>() {
             @Override
             protected void createCall(@NonNull ResultCallBack<LiveData<Boolean>> callBack) {
-                getContactManager().asyncDeclineInvitation(username, new EMCallBack() {
+                getContactManager().aysncDeleteContact(username, new EMCallBack() {
                     @Override
                     public void onSuccess() {
                         callBack.onSuccess(createLiveData(true));
