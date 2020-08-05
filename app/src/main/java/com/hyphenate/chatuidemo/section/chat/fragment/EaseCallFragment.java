@@ -80,6 +80,8 @@ public class EaseCallFragment extends EaseBaseFragment {
     protected static EMConferenceStream windowStream;
     //用于防止多次打开请求悬浮框页面
     protected boolean requestOverlayPermission;
+    //用于判断fragment是否执行过onBackPressed()方法
+    public boolean isBackPress;
 
     /**
      * 0：voice call，1：video call
@@ -182,6 +184,15 @@ public class EaseCallFragment extends EaseBaseFragment {
     }
 
     @Override
+    public void onStop() {
+        super.onStop();
+        // 用于判断app是否进入后台
+        if(mContext != null && !mContext.isFinishing() && !DemoApplication.getInstance().getLifecycleCallbacks().isOnForeground()) {
+            showFloatWindow();
+        }
+    }
+
+    @Override
     public void onDestroy() {
         super.onDestroy();
         if (soundPool != null)
@@ -204,6 +215,7 @@ public class EaseCallFragment extends EaseBaseFragment {
     @Override
     public void onBackPress() {
         EMLog.d(TAG, "onBackPressed");
+        isBackPress = true;
         handler.sendEmptyMessage(MSG_CALL_END);
         saveCallRecord();
         super.onBackPress();

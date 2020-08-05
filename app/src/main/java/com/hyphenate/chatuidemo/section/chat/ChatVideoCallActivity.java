@@ -64,8 +64,15 @@ public class ChatVideoCallActivity extends BaseInitActivity {
     }
 
     @Override
+    protected void onUserLeaveHint() {
+        if(fragment != null && fragment.isAdded()) {
+            fragment.onUserLeaveHint();
+        }
+    }
+
+    @Override
     public void onBackPressed() {
-        if(fragment != null) {
+        if(fragment != null && !fragment.isBackPress) {
             fragment.onBackPress();
         }else {
             super.onBackPressed();

@@ -11,6 +11,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.SystemClock;
+import android.os.Trace;
 import android.provider.Settings;
 import android.telephony.TelephonyManager;
 import android.view.LayoutInflater;
@@ -42,6 +43,7 @@ import com.hyphenate.chat.EMWaterMarkPosition;
 import com.hyphenate.chatuidemo.DemoApplication;
 import com.hyphenate.chatuidemo.R;
 import com.hyphenate.chatuidemo.common.utils.PreferenceManager;
+import com.hyphenate.chatuidemo.section.base.BaseActivity;
 import com.hyphenate.chatuidemo.section.chat.ChatVideoCallActivity;
 import com.hyphenate.chatuidemo.section.conference.CallFloatWindow;
 import com.hyphenate.easeui.EaseUI;
@@ -91,6 +93,8 @@ public class EaseVideoCallFragment extends EaseCallFragment implements View.OnCl
     private Button toggleVideoBtn;
     private Bitmap watermarkbitmap;
     private EMWaterMarkOption watermark;
+    private boolean isNewIntent;
+    private boolean isPauseVideo;//是否暂停视频推流
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -230,23 +234,29 @@ public class EaseVideoCallFragment extends EaseCallFragment implements View.OnCl
     @Override
     public void onResume() {
         super.onResume();
-        if(isInCalling){
+        if(isInCalling && isPauseVideo){
             try {
                 EMClient.getInstance().callManager().resumeVideoTransfer();
+                isPauseVideo = false;
             } catch (HyphenateException e) {
                 e.printStackTrace();
             }
         }
     }
 
-    @Override
-    public void onPause() {
-        super.onPause();
+    /**
+     * 按下home键，或者其他操作返回桌面的，会执行这个方法
+     */
+    public void onUserLeaveHint() {
         if(isInCalling){
-            try {
-                EMClient.getInstance().callManager().pauseVideoTransfer();
-            } catch (HyphenateException e) {
-                e.printStackTrace();
+            //如果没有悬浮框权限，则暂停视频推流
+            if(!isHaveOverlayPermission()) {
+                try {
+                    EMClient.getInstance().callManager().pauseVideoTransfer();
+                    isPauseVideo = true;
+                } catch (HyphenateException e) {
+                    e.printStackTrace();
+                }
             }
         }
     }
@@ -684,5 +694,16 @@ public class EaseVideoCallFragment extends EaseCallFragment implements View.OnCl
 
         // 防止activity在后台被start至前台导致window还存在
         CallFloatWindow.getInstance(DemoApplication.getInstance()).dismiss();
+    }
+
+    /**
+     * 检查是否有悬浮框权限
+     * @return
+     */
+    private boolean isHaveOverlayPermission() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            return Settings.canDrawOverlays(mContext);
+        }
+        return true;
     }
 }

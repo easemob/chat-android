@@ -65,7 +65,6 @@ public class BaseActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         mContext = this;
         registerAccountObservable();
-        checkIfConferenceExit();
     }
 
     /**
@@ -401,33 +400,6 @@ public class BaseActivity extends AppCompatActivity {
             return true;
         }
         return false;
-    }
-    /**
-     * 将此方法放置在基类，用于检查是否有正在进行的音视频会议
-     */
-    private void checkIfConferenceExit() {
-        // 如果当前的activity是否是ConferenceActivity
-        if(this instanceof ConferenceActivity || this instanceof ConferenceInviteActivity) {
-            return;
-        }
-        UserActivityLifecycleCallbacks lifecycleCallbacks = DemoApplication.getInstance().getLifecycleCallbacks();
-        if(lifecycleCallbacks == null) {
-            return;
-        }
-        List<Activity> activityList = lifecycleCallbacks.getActivityList();
-        if(activityList != null && activityList.size() > 0) {
-            for (Activity activity : activityList) {
-                if(activity instanceof ConferenceActivity) {
-                    //如果没有显示悬浮框，则启动ConferenceActivity
-                    if(activity.isFinishing()) {
-                        return;
-                    }
-                    if(!CallFloatWindow.getInstance(DemoApplication.getInstance()).isShowing()) {
-                        ConferenceActivity.startConferenceCall(this, null);
-                    }
-                }
-            }
-        }
     }
 
     public void showLoading() {

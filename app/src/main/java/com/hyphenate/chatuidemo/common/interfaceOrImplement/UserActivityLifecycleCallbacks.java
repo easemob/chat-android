@@ -7,6 +7,8 @@ import android.os.Bundle;
 import android.util.Log;
 
 
+import com.hyphenate.chatuidemo.section.conference.CallFloatWindow;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -27,6 +29,7 @@ public class UserActivityLifecycleCallbacks implements Application.ActivityLifec
     @Override
     public void onActivityStarted(Activity activity) {
         Log.e("ActivityLifecycle", "onActivityStarted "+activity.getLocalClassName());
+        restartSingleInstanceActivity(activity);
     }
 
     @Override
@@ -50,7 +53,7 @@ public class UserActivityLifecycleCallbacks implements Application.ActivityLifec
         Log.e("ActivityLifecycle", "onActivityStopped "+activity.getLocalClassName());
         resumeActivity.remove(activity);
         if(resumeActivity.isEmpty()) {
-            Log.e("TAG", "在后台了");
+            Log.e("ActivityLifecycle", "在后台了");
         }
     }
 
@@ -119,5 +122,20 @@ public class UserActivityLifecycleCallbacks implements Application.ActivityLifec
      */
     public boolean isOnForeground() {
         return resumeActivity != null && !resumeActivity.isEmpty();
+    }
+
+
+    /**
+     * 用于按下home键，点击图标，检查启动模式是singleInstance，且在activity列表中首位的Activity
+     * 下面的方法，专用于解决启动模式是singleInstance, 为开启悬浮框的情况
+     * @param activity
+     */
+    private void restartSingleInstanceActivity(Activity activity) {
+        if(resumeActivity.isEmpty() && !activityList.isEmpty()) {
+            Activity topActivity = activityList.get(0);
+            if(topActivity != activity && !CallFloatWindow.getInstance(topActivity).isShowing()) {
+                activity.startActivity(new Intent(activity, topActivity.getClass()));
+            }
+        }
     }
 }
