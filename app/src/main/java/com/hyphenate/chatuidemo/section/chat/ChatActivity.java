@@ -9,6 +9,7 @@ import android.view.View;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.ViewModelProvider;
 
+import com.google.android.material.snackbar.Snackbar;
 import com.hyphenate.chat.EMConversation;
 import com.hyphenate.chatuidemo.DemoHelper;
 import com.hyphenate.chatuidemo.R;
@@ -150,6 +151,18 @@ public class ChatActivity extends BaseInitActivity implements EaseTitleBar.OnBac
                 finish();
             }
         });
+        messageViewModel.getMessageChange().with(DemoConstant.MESSAGE_FORWARD, EaseEvent.class).observe(this, event -> {
+            if(event == null) {
+                return;
+            }
+            if(event.isMessageChange()) {
+                showSnackBar(event.event);
+            }
+        });
+    }
+
+    private void showSnackBar(String event) {
+        Snackbar.make(titleBarMessage, event, Snackbar.LENGTH_SHORT).show();
     }
 
     @Override

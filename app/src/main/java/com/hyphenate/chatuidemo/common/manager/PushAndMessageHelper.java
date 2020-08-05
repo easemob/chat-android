@@ -1,22 +1,33 @@
 package com.hyphenate.chatuidemo.common.manager;
 
 import android.content.Context;
+import android.net.Uri;
 import android.text.TextUtils;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.target.Target;
+import com.google.android.material.snackbar.Snackbar;
+import com.hyphenate.EMCallBack;
 import com.hyphenate.chat.EMClient;
 import com.hyphenate.chat.EMImageMessageBody;
 import com.hyphenate.chat.EMMessage;
 import com.hyphenate.chat.EMTextMessageBody;
 import com.hyphenate.chatuidemo.DemoApplication;
 import com.hyphenate.chatuidemo.DemoHelper;
+import com.hyphenate.chatuidemo.R;
 import com.hyphenate.chatuidemo.common.DemoConstant;
 import com.hyphenate.chatuidemo.common.db.entity.InviteMessage;
 import com.hyphenate.chatuidemo.common.interfaceOrImplement.UserActivityLifecycleCallbacks;
+import com.hyphenate.chatuidemo.common.livedatas.LiveDataBus;
+import com.hyphenate.chatuidemo.common.utils.ThreadManager;
+import com.hyphenate.chatuidemo.common.utils.ToastUtils;
 import com.hyphenate.chatuidemo.section.conference.ConferenceActivity;
 import com.hyphenate.chatuidemo.section.chat.LiveActivity;
 import com.hyphenate.easeui.constants.EaseConstant;
+import com.hyphenate.easeui.model.EaseEvent;
 import com.hyphenate.easeui.utils.EaseCommonUtils;
 import com.hyphenate.chatuidemo.common.db.entity.InviteMessage.InviteMessageStatus;
+import com.hyphenate.util.UriUtils;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -99,17 +110,31 @@ public class PushAndMessageHelper {
                 break;
             case IMAGE:
                 // send image
-                String filePath = ((EMImageMessageBody) message.getBody()).getLocalUrl();
-                if (filePath != null) {
-                    File file = new File(filePath);
-                    if (!file.exists()) {
-                        // send thumb nail if original image does not exist
-                        filePath = ((EMImageMessageBody) message.getBody()).thumbnailLocalPath();
-                    }
-                    sendImageMessage(toChatUsername, filePath);
+                Uri uri = getImageForwardUri((EMImageMessageBody) message.getBody());
+                if(uri != null) {
+                    sendImageMessage(toChatUsername, uri);
+                }else {
+                    LiveDataBus.get().with(DemoConstant.MESSAGE_FORWARD)
+                            .postValue(new EaseEvent("不存在图片资源", EaseEvent.TYPE.MESSAGE));
                 }
                 break;
         }
+    }
+
+    public static Uri getImageForwardUri(EMImageMessageBody body) {
+        if(body == null) {
+            return null;
+        }
+        Uri localUri = body.getLocalUri();
+        Context context = DemoApplication.getInstance().getApplicationContext();
+        if(UriUtils.isFileExistByUri(context, localUri)) {
+            return localUri;
+        }
+        localUri = body.thumbnailLocalUri();
+        if(UriUtils.isFileExistByUri(context, localUri)) {
+            return localUri;
+        }
+        return null;
     }
 
     /**
@@ -198,6 +223,16 @@ public class PushAndMessageHelper {
     /**
      * send image message
      * @param toChatUsername
+     * @param imageUri
+     */
+    private static void sendImageMessage(String toChatUsername, Uri imageUri) {
+        EMMessage message = EMMessage.createImageSendMessage(imageUri, false, toChatUsername);
+        sendMessage(message);
+    }
+
+    /**
+     * send image message
+     * @param toChatUsername
      * @param imagePath
      */
     private static void sendImageMessage(String toChatUsername, String imagePath) {
@@ -211,6 +246,23 @@ public class PushAndMessageHelper {
      * @param message
      */
     private static void sendMessage(EMMessage message) {
+        message.setMessageStatusCallback(new EMCallBack() {
+            @Override
+            public void onSuccess() {
+                LiveDataBus.get().with(DemoConstant.MESSAGE_FORWARD)
+                        .postValue(new EaseEvent(DemoApplication.getInstance().getString(R.string.has_been_send), EaseEvent.TYPE.MESSAGE));
+            }
+
+            @Override
+            public void onError(int code, String error) {
+
+            }
+
+            @Override
+            public void onProgress(int progress, String status) {
+
+            }
+        });
         // send message
         EMClient.getInstance().chatManager().sendMessage(message);
 
