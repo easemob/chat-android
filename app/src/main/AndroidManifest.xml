@@ -335,14 +335,14 @@
             android:name=".section.chat.ChatVideoCallActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:excludeFromRecents="true"
-            android:launchMode="singleTask"
+            android:launchMode="singleInstance"
             android:screenOrientation="portrait"/>
         <!--语音通话-->
         <activity
             android:name=".section.chat.ChatVoiceCallActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:excludeFromRecents="true"
-            android:launchMode="singleTask"
+            android:launchMode="singleInstance"
             android:screenOrientation="portrait"/>
         <!--直播模式-->
         <activity

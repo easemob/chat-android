@@ -1,15 +1,19 @@
 package com.hyphenate.chatuidemo.section.chat.fragment;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.media.AudioManager;
 import android.media.Ringtone;
 import android.media.SoundPool;
+import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.HandlerThread;
 import android.os.Message;
+import android.provider.Settings;
 import android.view.View;
 import android.widget.Toast;
 
@@ -21,15 +25,18 @@ import com.hyphenate.EMError;
 import com.hyphenate.chat.EMCallManager;
 import com.hyphenate.chat.EMCallStateChangeListener;
 import com.hyphenate.chat.EMClient;
+import com.hyphenate.chat.EMConferenceStream;
 import com.hyphenate.chat.EMConversation;
 import com.hyphenate.chat.EMMessage;
 import com.hyphenate.chat.EMMirror;
 import com.hyphenate.chat.EMTextMessageBody;
 import com.hyphenate.chat.EMWaterMarkOption;
 import com.hyphenate.chat.EMWaterMarkPosition;
+import com.hyphenate.chatuidemo.DemoApplication;
 import com.hyphenate.chatuidemo.common.DemoConstant;
 import com.hyphenate.chatuidemo.common.livedatas.LiveDataBus;
 import com.hyphenate.chatuidemo.common.utils.PreferenceManager;
+import com.hyphenate.chatuidemo.section.conference.CallFloatWindow;
 import com.hyphenate.easeui.R;
 import com.hyphenate.easeui.constants.EaseConstant;
 import com.hyphenate.easeui.manager.EasePreferenceManager;
@@ -48,6 +55,7 @@ public class EaseCallFragment extends EaseBaseFragment {
     protected final int MSG_CALL_END = 4;
     protected final int MSG_CALL_RELEASE_HANDLER = 5;
     protected final int MSG_CALL_SWITCH_CAMERA = 6;
+    protected final int REQUEST_CODE_OVERLAY_PERMISSION = 1006;
 
     protected boolean isInComingCall;
     protected boolean isRefused = false;
@@ -62,11 +70,16 @@ public class EaseCallFragment extends EaseBaseFragment {
     protected EMCallStateChangeListener callStateListener;
     protected boolean isAnswered = false;
     protected int streamID = -1;
+    protected int floatState;
 
     EMCallManager.EMCallPushProvider pushProvider;
 
     private Bitmap watermarkbitmap;
     private EMWaterMarkOption watermark;
+    // 正在显示音视频Window的stream
+    protected static EMConferenceStream windowStream;
+    //用于防止多次打开请求悬浮框页面
+    protected boolean requestOverlayPermission;
 
     /**
      * 0：voice call，1：video call
@@ -463,6 +476,56 @@ public class EaseCallFragment extends EaseBaseFragment {
 
         LiveDataBus.get().with(DemoConstant.MESSAGE_CALL_SAVE).postValue(true);
     }
+
+
+    protected void showFloatWindow() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            if (Settings.canDrawOverlays(mContext)) {
+                doShowFloatWindow();
+            } else { // To reqire the window permission.
+                if(!requestOverlayPermission) {
+                    try {
+                        Intent intent = new Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION);
+                        // Add this to open the management GUI specific to this app.
+                        intent.setData(Uri.parse("package:" + mContext.getPackageName()));
+                        startActivityForResult(intent, REQUEST_CODE_OVERLAY_PERMISSION);
+                        requestOverlayPermission = true;
+                        // Handle the permission require result in #onActivityResult();
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+        } else {
+            doShowFloatWindow();
+        }
+    }
+
+    protected void doShowFloatWindow() {
+        CallFloatWindow.getInstance(DemoApplication.getInstance()).show();
+
+        windowStream = new EMConferenceStream();
+        windowStream.setUsername(EMClient.getInstance().getCurrentUser());
+
+        CallFloatWindow.getInstance(DemoApplication.getInstance()).updateCallWindow(floatState);
+        mContext.moveTaskToBack(false);
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        EMLog.i(TAG, "onActivityResult: " + requestCode + ", result code: " + resultCode);
+        if (requestCode == REQUEST_CODE_OVERLAY_PERMISSION && Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            requestOverlayPermission = false;
+            // Result of window permission request, resultCode = RESULT_CANCELED
+            if (Settings.canDrawOverlays(mContext)) {
+                doShowFloatWindow();
+            } else {
+                Toast.makeText(mContext, getString(com.hyphenate.chatuidemo.R.string.alert_window_permission_denied), Toast.LENGTH_SHORT).show();
+            }
+        }
+    }
+
 
     enum CallingState {
         CANCELLED, NORMAL, REFUSED, BEREFUSED, UNANSWERED, OFFLINE, NO_RESPONSE, BUSY, VERSION_NOT_SAME, SERVICE_ARREARAGES, SERVICE_NOT_ENABLE

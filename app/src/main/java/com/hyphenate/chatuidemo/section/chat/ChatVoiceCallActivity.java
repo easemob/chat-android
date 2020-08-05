@@ -50,6 +50,14 @@ public class ChatVoiceCallActivity extends BaseInitActivity {
     }
 
     @Override
+    protected void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
+        if(fragment != null && fragment.isAdded()) {
+            fragment.onNewIntent(intent);
+        }
+    }
+
+    @Override
     public void onBackPressed() {
         if(fragment != null) {
             fragment.onBackPress();

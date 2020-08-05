@@ -368,6 +368,8 @@
     <string name="accept_join_group">%s同意加入群</string>
     <string name="refuse_join_group">%s拒绝加入群</string>
 
+    <string name="has_been_send">已发送</string>
+
     <string name="the_current_chat_room_destroyed">当前聊天室已被创建者解散</string>
     <string name="quiting_the_chat_room">正在退出聊天室……</string>
     <string name="be_kicked_for_offline">离线被踢出聊天室</string>

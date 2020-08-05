@@ -1,14 +1,17 @@
 package com.hyphenate.chatuidemo.section.chat.fragment;
 
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.media.AudioManager;
 import android.media.RingtoneManager;
 import android.media.SoundPool;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.SystemClock;
+import android.provider.Settings;
 import android.telephony.TelephonyManager;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -31,12 +34,16 @@ import androidx.constraintlayout.widget.Group;
 import com.hyphenate.chat.EMCallSession;
 import com.hyphenate.chat.EMCallStateChangeListener;
 import com.hyphenate.chat.EMClient;
+import com.hyphenate.chat.EMConferenceStream;
 import com.hyphenate.chat.EMMirror;
 import com.hyphenate.chat.EMVideoCallHelper;
 import com.hyphenate.chat.EMWaterMarkOption;
 import com.hyphenate.chat.EMWaterMarkPosition;
+import com.hyphenate.chatuidemo.DemoApplication;
 import com.hyphenate.chatuidemo.R;
 import com.hyphenate.chatuidemo.common.utils.PreferenceManager;
+import com.hyphenate.chatuidemo.section.chat.ChatVideoCallActivity;
+import com.hyphenate.chatuidemo.section.conference.CallFloatWindow;
 import com.hyphenate.easeui.EaseUI;
 import com.hyphenate.easeui.manager.PhoneStateManager;
 import com.hyphenate.exceptions.HyphenateException;
@@ -64,6 +71,7 @@ public class EaseVideoCallFragment extends EaseCallFragment implements View.OnCl
     private TextView monitorTextView;
     private TextView netwrokStatusVeiw;
     private Button switchCameraBtn;
+    private ImageButton closeBtn;
     // 视频通话画面显示控件，这里在新版中使用同一类型的控件，方便本地和远端视图切换
     protected EMCallSurfaceView localSurface;
     protected EMCallSurfaceView oppositeSurface;
@@ -119,6 +127,7 @@ public class EaseVideoCallFragment extends EaseCallFragment implements View.OnCl
         refuseBtn = findViewById(R.id.btn_refuse_call);
         answerBtn = findViewById(R.id.btn_answer_call);
         hangupBtn = findViewById(R.id.btn_hangup_call);
+        closeBtn = (ImageButton)findViewById(R.id.btn_close_call);
         muteImage = (ImageView) findViewById(R.id.iv_mute);
         handsFreeImage = (ImageView) findViewById(R.id.iv_handsfree);
         callStateTextView = (TextView) findViewById(R.id.tv_call_state);
@@ -150,6 +159,7 @@ public class EaseVideoCallFragment extends EaseCallFragment implements View.OnCl
         refuseBtn.setOnClickListener(this);
         answerBtn.setOnClickListener(this);
         hangupBtn.setOnClickListener(this);
+        closeBtn.setOnClickListener(this);
         muteImage.setOnClickListener(this);
         handsFreeImage.setOnClickListener(this);
         rootContainer.setOnClickListener(this);
@@ -212,6 +222,9 @@ public class EaseVideoCallFragment extends EaseCallFragment implements View.OnCl
 
         // get instance of call helper, should be called after setSurfaceView was called
         callHelper = EMClient.getInstance().callManager().getVideoCallHelper();
+
+        //设置小窗口悬浮类型
+        CallFloatWindow.getInstance(DemoApplication.getInstance()).setCallType(CallFloatWindow.CallWindowType.VIDEOCALL);
     }
 
     @Override
@@ -288,6 +301,9 @@ public class EaseVideoCallFragment extends EaseCallFragment implements View.OnCl
             callStateTextView.setText(getResources().getString(R.string.hanging_up));
             EMLog.d(TAG, "btn_hangup_call");
             handler.sendEmptyMessage(MSG_CALL_END);
+        }else if(id == R.id.btn_close_call) {
+            floatState = surfaceState;
+            showFloatWindow();
         } else if (id == R.id.iv_mute) { // mute
             if (isMuteState) {
                 // resume voice transfer
@@ -542,6 +558,7 @@ public class EaseVideoCallFragment extends EaseCallFragment implements View.OnCl
                                 }
                             }
                             Toast.makeText(mContext, callStateTextView.getText(), Toast.LENGTH_SHORT).show();
+                            CallFloatWindow.getInstance(DemoApplication.getInstance()).dismiss();
                             postDelayedCloseMsg();
                             break;
                     }
@@ -657,4 +674,15 @@ public class EaseVideoCallFragment extends EaseCallFragment implements View.OnCl
             }
         }
     };
+
+    public void onNewIntent(Intent intent) {
+        if(surfaceState == 0 ){
+            EMClient.getInstance().callManager().setSurfaceView(localSurface,oppositeSurface);
+        }else{
+            EMClient.getInstance().callManager().setSurfaceView(oppositeSurface,localSurface);
+        }
+
+        // 防止activity在后台被start至前台导致window还存在
+        CallFloatWindow.getInstance(DemoApplication.getInstance()).dismiss();
+    }
 }
