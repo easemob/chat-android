@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 
+import com.hyphenate.chatuidemo.DemoApplication;
 import com.hyphenate.chatuidemo.R;
 import com.hyphenate.chatuidemo.section.base.BaseInitActivity;
 import com.hyphenate.chatuidemo.section.chat.fragment.EaseVoiceCallFragment;
@@ -52,9 +53,21 @@ public class ChatVoiceCallActivity extends BaseInitActivity {
     @Override
     protected void onNewIntent(Intent intent) {
         super.onNewIntent(intent);
+        /**
+         * 为了在{@link com.hyphenate.chatuidemo.common.interfaceOrImplement.UserActivityLifecycleCallbacks#restartSingleInstanceActivity(Activity)}
+         * 中获取到是否是点击悬浮框事件，此处需要进行传递
+         */
+        boolean isClickByFloat = intent.getBooleanExtra("isClickByFloat", false);
+        getIntent().putExtra("isClickByFloat", isClickByFloat);
         if(fragment != null && fragment.isAdded()) {
             fragment.onNewIntent(intent);
         }
+    }
+
+    @Override
+    public void finish() {
+        super.finish();
+        DemoApplication.getInstance().getLifecycleCallbacks().makeMainTaskToFront(this);
     }
 
     @Override

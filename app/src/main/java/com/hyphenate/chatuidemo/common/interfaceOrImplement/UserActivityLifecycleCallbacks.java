@@ -1,8 +1,12 @@
 package com.hyphenate.chatuidemo.common.interfaceOrImplement;
 
 import android.app.Activity;
+import android.app.ActivityManager;
 import android.app.Application;
+import android.content.ComponentName;
+import android.content.Context;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 
@@ -29,7 +33,6 @@ public class UserActivityLifecycleCallbacks implements Application.ActivityLifec
     @Override
     public void onActivityStarted(Activity activity) {
         Log.e("ActivityLifecycle", "onActivityStarted "+activity.getLocalClassName());
-        restartSingleInstanceActivity(activity);
     }
 
     @Override
@@ -40,6 +43,7 @@ public class UserActivityLifecycleCallbacks implements Application.ActivityLifec
             if(resumeActivity.size() == 1) {
                 //do nothing
             }
+            restartSingleInstanceActivity(activity);
         }
     }
 
@@ -131,10 +135,49 @@ public class UserActivityLifecycleCallbacks implements Application.ActivityLifec
      * @param activity
      */
     private void restartSingleInstanceActivity(Activity activity) {
-        if(resumeActivity.isEmpty() && !activityList.isEmpty()) {
+        boolean isClickByFloat = activity.getIntent().getBooleanExtra("isClickByFloat", false);
+        if(isClickByFloat) {
+            return;
+        }
+        //刚启动，或者从桌面返回app
+        //至少需要activityList中至少两个activity
+        if(resumeActivity.size() == 1 && activityList.size() > 1) {
             Activity topActivity = activityList.get(0);
             if(topActivity != activity && !CallFloatWindow.getInstance(topActivity).isShowing()) {
+                Log.e("ActivityLifecycle", "启动了activity = "+topActivity.getClass().getName());
                 activity.startActivity(new Intent(activity, topActivity.getClass()));
+            }
+        }
+    }
+
+    /**
+     * 此方法用于设置启动模式为singleInstance的activity调用
+     * 用于解决点击悬浮框后，然后finish当前的activity，app回到桌面的问题
+     * 需要如下两个权限：
+     *     <uses-permission android:name="android.permission.GET_TASKS" />
+     *     <uses-permission android:name="android.permission.REORDER_TASKS"/>
+     * @param activity
+     */
+    public void makeMainTaskToFront(Activity activity) {
+        //当前activity正在finish，且可见的activity列表中只有这个正在finish的activity,且没有销毁的activity个数大于等于2
+        if(activity.isFinishing() && resumeActivity.size() == 1 && resumeActivity.get(0) == activity && activityList.size() > 1) {
+            ActivityManager manager = (ActivityManager) activity.getSystemService(Context.ACTIVITY_SERVICE);
+            List<ActivityManager.RunningTaskInfo> runningTasks = manager.getRunningTasks(20);
+            for(int i = 0; i < runningTasks.size(); i++) {
+                ActivityManager.RunningTaskInfo taskInfo = runningTasks.get(i);
+                ComponentName topActivity = taskInfo.topActivity;
+                //判断是否是相同的包名
+                if(topActivity != null && topActivity.getPackageName().equals(activity.getPackageName())) {
+                    int taskId;
+                    if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                        taskId = taskInfo.taskId;
+                    }else {
+                        taskId = taskInfo.id;
+                    }
+                    //将任务栈置于前台
+                    Log.e("ActivityLifecycle", "执行moveTaskToFront，current activity:"+activity.getClass().getName());
+                    manager.moveTaskToFront(taskId, ActivityManager.MOVE_TASK_WITH_HOME);
+                }
             }
         }
     }

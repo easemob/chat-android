@@ -250,6 +250,12 @@ public class ConferenceActivity extends BaseActivity implements EMConferenceList
     @Override
     protected void onNewIntent(Intent intent) {
         super.onNewIntent(intent);
+        /**
+         * 为了在{@link com.hyphenate.chatuidemo.common.interfaceOrImplement.UserActivityLifecycleCallbacks#restartSingleInstanceActivity(Activity)}
+         * 中获取到是否是点击悬浮框事件，此处需要进行传递
+         */
+        boolean isClickByFloat = intent.getBooleanExtra("isClickByFloat", false);
+        getIntent().putExtra("isClickByFloat", isClickByFloat);
         // NOTE: 下方逻辑必须放在当前方法中,放到onStart()或onResume()中当在Android 6.0以上设备中显示悬浮窗时会有问题
 
         // 当前Activity的launch mode为SingleTask,且有独立的activity任务栈,start当前activity时如果当前activity已经存在
@@ -832,20 +838,6 @@ public class ConferenceActivity extends BaseActivity implements EMConferenceList
                     ExternalAudioInputRecord.getInstance().stopRecording();
                 }
                 finish();
-
-                //start MainActivity
-                if(DemoApplication.getInstance().getLifecycleCallbacks().isFront()){
-                    Activity activity =  DemoApplication.getInstance().getLifecycleCallbacks().getActivityList().get(0);
-                    if(activity instanceof ConferenceActivity){
-                        EMLog.i(TAG, "ConferenceActivity exit: " + "start MainActivity by ConferenceActivity");
-                        activity =  DemoApplication.getInstance().getLifecycleCallbacks().getActivityList().get(1);
-                        startActivity(new Intent(ConferenceActivity.this, activity.getClass()));
-
-                    }else{
-                        EMLog.i(TAG, "ConferenceActivity exit: " + "start MainActivity by DemoApplication.applicationContext");
-                        startActivity(new Intent(DemoApplication.getInstance(), activity.getClass()));
-                    }
-                }
             }
             @Override
             public void onError(int error, String errorMsg) {
@@ -1149,6 +1141,12 @@ public class ConferenceActivity extends BaseActivity implements EMConferenceList
         if(!isFinishing() && !DemoApplication.getInstance().getLifecycleCallbacks().isOnForeground()) {
             showFloatWindow();
         }
+    }
+
+    @Override
+    public void finish() {
+        super.finish();
+        DemoApplication.getInstance().getLifecycleCallbacks().makeMainTaskToFront(this);
     }
 
     @Override

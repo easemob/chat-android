@@ -1,11 +1,14 @@
 package com.hyphenate.chatuidemo.section.chat;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
 
+import com.hyphenate.chatuidemo.DemoApplication;
 import com.hyphenate.chatuidemo.R;
 import com.hyphenate.chatuidemo.section.base.BaseInitActivity;
 import com.hyphenate.chatuidemo.section.chat.fragment.EaseVideoCallFragment;
@@ -58,6 +61,12 @@ public class ChatVideoCallActivity extends BaseInitActivity {
     @Override
     protected void onNewIntent(Intent intent) {
         super.onNewIntent(intent);
+        /**
+         * 为了在{@link com.hyphenate.chatuidemo.common.interfaceOrImplement.UserActivityLifecycleCallbacks#restartSingleInstanceActivity(Activity)}
+         * 中获取到是否是点击悬浮框事件，此处需要进行传递
+         */
+        boolean isClickByFloat = intent.getBooleanExtra("isClickByFloat", false);
+        getIntent().putExtra("isClickByFloat", isClickByFloat);
         if(fragment != null && fragment.isAdded()) {
             fragment.onNewIntent(intent);
         }
@@ -68,6 +77,12 @@ public class ChatVideoCallActivity extends BaseInitActivity {
         if(fragment != null && fragment.isAdded()) {
             fragment.onUserLeaveHint();
         }
+    }
+
+    @Override
+    public void finish() {
+        super.finish();
+        DemoApplication.getInstance().getLifecycleCallbacks().makeMainTaskToFront(this);
     }
 
     @Override

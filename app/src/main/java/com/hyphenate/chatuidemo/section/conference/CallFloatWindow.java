@@ -1,10 +1,13 @@
 package com.hyphenate.chatuidemo.section.conference;
 
 import android.animation.ValueAnimator;
+import android.app.ActivityManager;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.PixelFormat;
 import android.graphics.Point;
+import android.os.Build;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -24,6 +27,8 @@ import com.hyphenate.easeui.utils.EaseCompat;
 import com.hyphenate.media.EMCallSurfaceView;
 import com.hyphenate.util.EMLog;
 import com.superrtc.sdk.VideoView;
+
+import java.util.List;
 
 /**
  * Created by lzan13 on 2017/3/27.
@@ -113,7 +118,7 @@ public class CallFloatWindow {
                 }else{
                     intent = new Intent(context, ChatVoiceCallActivity.class);
                 }
-
+                intent.putExtra("isClickByFloat", true);
                 intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 context.startActivity(intent);
 
