@@ -16,7 +16,7 @@ import com.hyphenate.chatuidemo.common.utils.ThreadManager;
 import com.hyphenate.chatuidemo.section.chat.ChatActivity;
 import com.hyphenate.chatuidemo.section.conversation.adapter.HomeAdapter;
 import com.hyphenate.chatuidemo.section.conversation.viewmodel.ConversationListViewModel;
-import com.hyphenate.chatuidemo.section.message.NewFriendsMsgActivity;
+import com.hyphenate.chatuidemo.section.message.SystemMsgsActivity;
 import com.hyphenate.easeui.adapter.EaseBaseRecyclerViewAdapter;
 import com.hyphenate.easeui.utils.EaseCommonUtils;
 
@@ -107,7 +107,7 @@ public class SearchConversationActivity extends SearchActivity {
         if(item instanceof EMConversation) {
             ChatActivity.actionStart(mContext, ((EMConversation)item).conversationId(), EaseCommonUtils.getChatType((EMConversation) item));
         }else if(item instanceof MsgTypeManageEntity) {
-            NewFriendsMsgActivity.actionStart(mContext);
+            SystemMsgsActivity.actionStart(mContext);
         }
     }
 }

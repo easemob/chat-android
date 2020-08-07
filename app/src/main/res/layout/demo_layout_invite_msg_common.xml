@@ -6,8 +6,8 @@
 
     <com.hyphenate.easeui.widget.EaseImageView
         android:id="@+id/avatar"
-        android:layout_width="55dp"
-        android:layout_height="55dp"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
         android:layout_marginLeft="10dp"
         android:layout_marginTop="10dp"
         android:padding="5dp"
@@ -20,7 +20,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginLeft="8dp"
-        android:textColor="#000"
+        android:layout_marginTop="2dp"
+        android:textColor="#ff333333"
         android:textSize="16sp"
         tools:text="name"
         app:layout_constraintTop_toTopOf="@id/avatar"
@@ -32,12 +33,14 @@
         android:layout_height="wrap_content"
         android:ellipsize="end"
         android:maxLines="2"
-        android:padding="8dp"
-        android:textColor="#888888"
+        android:textColor="#ffa3a3a3"
         android:textSize="14sp"
+        android:layout_marginBottom="2dp"
+        android:layout_marginLeft="2dp"
         tools:text="content"
         app:layout_constraintBottom_toBottomOf="@id/avatar"
-        app:layout_constraintLeft_toRightOf="@id/avatar" />
+        app:layout_constraintLeft_toRightOf="@id/avatar"
+        app:layout_constraintLeft_toLeftOf="@id/name"/>
 
 
     <TextView

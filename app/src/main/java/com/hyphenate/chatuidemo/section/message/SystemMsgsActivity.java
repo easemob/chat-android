@@ -30,7 +30,7 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
-public class NewFriendsMsgActivity extends BaseInitActivity implements OnRefreshLoadMoreListener, InviteMsgDelegate.OnInviteListener, EaseTitleBar.OnBackPressListener {
+public class SystemMsgsActivity extends BaseInitActivity implements OnRefreshLoadMoreListener, InviteMsgDelegate.OnInviteListener, EaseTitleBar.OnBackPressListener {
     private EaseTitleBar titleBar;
     private SmartRefreshLayout srlRefresh;
     private EaseRecyclerView rvList;
@@ -41,13 +41,13 @@ public class NewFriendsMsgActivity extends BaseInitActivity implements OnRefresh
     private InviteMsgDelegate msgDelegate;
 
     public static void actionStart(Context context) {
-        Intent starter = new Intent(context, NewFriendsMsgActivity.class);
+        Intent starter = new Intent(context, SystemMsgsActivity.class);
         context.startActivity(starter);
     }
 
     @Override
     protected int getLayoutId() {
-        return R.layout.demo_activity_new_friends_msg;
+        return R.layout.demo_activity_system_msgs;
     }
 
     @Override
