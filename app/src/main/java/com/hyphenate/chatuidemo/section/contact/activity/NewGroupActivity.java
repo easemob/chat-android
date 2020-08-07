@@ -17,6 +17,7 @@ import com.hyphenate.chatuidemo.common.livedatas.LiveDataBus;
 import com.hyphenate.chatuidemo.common.widget.ArrowItemView;
 import com.hyphenate.chatuidemo.common.widget.SwitchItemView;
 import com.hyphenate.chatuidemo.section.base.BaseInitActivity;
+import com.hyphenate.chatuidemo.section.chat.ChatActivity;
 import com.hyphenate.chatuidemo.section.dialog.EditTextDialogFragment;
 import com.hyphenate.chatuidemo.section.dialog.SimpleDialogFragment;
 import com.hyphenate.chatuidemo.section.contact.viewmodels.NewGroupViewModel;
@@ -100,6 +101,8 @@ public class NewGroupActivity extends BaseInitActivity implements EaseTitleBar.O
                 @Override
                 public void onSuccess(EMGroup data) {
                     LiveDataBus.get().with(DemoConstant.GROUP_CHANGE).postValue(EaseEvent.create(DemoConstant.GROUP_CHANGE, EaseEvent.TYPE.GROUP));
+                    //跳转到群组聊天页面
+                    ChatActivity.actionStart(mContext, data.getGroupId(), DemoConstant.CHATTYPE_GROUP);
                     finish();
                 }
             });
