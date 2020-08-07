@@ -41,6 +41,11 @@ public class GroupPickContactsAdapter extends EaseBaseRecyclerViewAdapter<EaseUs
         return new ContactViewHolder(LayoutInflater.from(mContext).inflate(R.layout.demo_layout_item_pick_contact_with_checkbox, parent, false));
     }
 
+    @Override
+    public void itemClickAction(View v, int position) {
+        //屏蔽条目点击事件
+    }
+
     public void setExistMember(List<String> existMembers) {
         this.existMembers = existMembers;
         if(isCreateGroup) {
@@ -94,21 +99,23 @@ public class GroupPickContactsAdapter extends EaseBaseRecyclerViewAdapter<EaseUs
                 checkbox.setChecked(true);
                 if(isCreateGroup) {
                     checkbox.setButtonDrawable(R.drawable.demo_checkbox_bg_selector);
-                    checkbox.setEnabled(true);
+                    itemView.setEnabled(true);
                 }else {
                     checkbox.setButtonDrawable(R.drawable.demo_checkbox_bg_gray_selector);
-                    checkbox.setEnabled(false);
+                    itemView.setEnabled(false);
                 }
             }else{
                 checkbox.setButtonDrawable(R.drawable.demo_checkbox_bg_selector);
                 checkbox.setChecked(false);
-                checkbox.setEnabled(true);
+                itemView.setEnabled(true);
             }
-            checkbox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
-                public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                public void onClick(View v) {
+                    checkbox.setChecked(!checkbox.isChecked());
+                    boolean checked = checkbox.isChecked();
                     if(isCreateGroup || !checkIfContains(username)) {
-                        if(isChecked) {
+                        if(checked) {
                             if(!selectedMembers.contains(username)) {
                                 selectedMembers.add(username);
                             }
@@ -120,8 +127,6 @@ public class GroupPickContactsAdapter extends EaseBaseRecyclerViewAdapter<EaseUs
                     }
                 }
             });
-
-
         }
     }
 

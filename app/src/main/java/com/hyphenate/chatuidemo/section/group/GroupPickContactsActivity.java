@@ -34,7 +34,7 @@ public class GroupPickContactsActivity extends BaseInitActivity implements EaseT
     private EaseSidebar sidebar;
     private TextView floatingHeader;
     private SidebarPresenter presenter;
-    private GroupPickContactsAdapter adapter;
+    protected GroupPickContactsAdapter adapter;
     private GroupPickContactsViewModel viewModel;
     private String groupId;
     private boolean isOwner;
@@ -134,6 +134,9 @@ public class GroupPickContactsActivity extends BaseInitActivity implements EaseT
                 }
             });
         });
+        if(srlRefresh != null) {
+            srlRefresh.autoRefresh();
+        }
         viewModel.getAllContacts();
     }
 

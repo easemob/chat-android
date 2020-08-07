@@ -31,6 +31,7 @@ import com.hyphenate.chatuidemo.section.discover.DiscoverFragment;
 import com.hyphenate.chatuidemo.section.contact.activity.NewGroupActivity;
 import com.hyphenate.chatuidemo.section.contact.activity.AddContactActivity;
 import com.hyphenate.chatuidemo.section.contact.viewmodels.ContactsViewModel;
+import com.hyphenate.chatuidemo.section.group.GroupPrePickActivity;
 import com.hyphenate.chatuidemo.section.me.AboutMeFragment;
 import com.hyphenate.easeui.model.EaseEvent;
 import com.hyphenate.easeui.ui.base.EaseBaseFragment;
@@ -72,7 +73,7 @@ public class MainActivity extends BaseInitActivity implements BottomNavigationVi
                 ConferenceActivity.startConferenceCall(mContext, null);
                 break;
             case R.id.action_group :
-                NewGroupActivity.actionStart(mContext);
+                GroupPrePickActivity.actionStart(mContext);
                 break;
             case R.id.action_friend :
                 AddContactActivity.startAction(mContext, SearchType.CHAT);

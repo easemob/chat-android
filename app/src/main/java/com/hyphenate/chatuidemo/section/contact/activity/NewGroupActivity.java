@@ -47,9 +47,21 @@ public class NewGroupActivity extends BaseInitActivity implements EaseTitleBar.O
         context.startActivity(starter);
     }
 
+    public static void actionStart(Context context, String[] newmembers) {
+        Intent intent = new Intent(context, NewGroupActivity.class);
+        intent.putExtra("newmembers", newmembers);
+        context.startActivity(intent);
+    }
+
     @Override
     protected int getLayoutId() {
         return R.layout.demo_activity_new_group;
+    }
+
+    @Override
+    protected void initIntent(Intent intent) {
+        super.initIntent(intent);
+        newmembers = intent.getStringArrayExtra("newmembers");
     }
 
     @Override
@@ -92,6 +104,12 @@ public class NewGroupActivity extends BaseInitActivity implements EaseTitleBar.O
                 }
             });
         });
+
+        if(newmembers != null) {
+            setGroupMembersNum(newmembers.length+"");
+        }else {
+            setGroupMembersNum("0");
+        }
     }
 
     @Override
@@ -131,14 +149,21 @@ public class NewGroupActivity extends BaseInitActivity implements EaseTitleBar.O
         if(resultCode == RESULT_OK) {
             if(requestCode == ADD_NEW_CONTACTS) {
                 if(data == null) {
+                    setGroupMembersNum("0");
                     return;
                 }
                 newmembers = data.getStringArrayExtra("newmembers");
                 if(newmembers != null) {
-                    itemGroupMembers.getTvContent().setText(newmembers.length+"");
+                    setGroupMembersNum(newmembers.length+"");
+                }else {
+                    setGroupMembersNum("0");
                 }
             }
         }
+    }
+
+    private void setGroupMembersNum(String num) {
+        itemGroupMembers.getTvContent().setText(num);
     }
 
     @Override

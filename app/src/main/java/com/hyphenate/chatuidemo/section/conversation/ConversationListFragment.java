@@ -15,18 +15,16 @@ import com.hyphenate.chatuidemo.DemoHelper;
 import com.hyphenate.chatuidemo.R;
 import com.hyphenate.chatuidemo.common.DemoConstant;
 import com.hyphenate.chatuidemo.common.db.entity.MsgTypeManageEntity;
-import com.hyphenate.chatuidemo.common.enums.Status;
 import com.hyphenate.chatuidemo.common.interfaceOrImplement.OnResourceParseCallback;
 import com.hyphenate.chatuidemo.common.livedatas.LiveDataBus;
 import com.hyphenate.chatuidemo.common.net.Resource;
 import com.hyphenate.chatuidemo.common.utils.ToastUtils;
 import com.hyphenate.chatuidemo.section.base.BaseActivity;
-import com.hyphenate.chatuidemo.section.base.BaseInitActivity;
 import com.hyphenate.chatuidemo.section.chat.ChatActivity;
 import com.hyphenate.chatuidemo.section.chat.viewmodel.MessageViewModel;
 import com.hyphenate.chatuidemo.section.conversation.delegate.SystemMessageDelegate;
 import com.hyphenate.chatuidemo.section.conversation.viewmodel.ConversationListViewModel;
-import com.hyphenate.chatuidemo.section.message.NewFriendsMsgActivity;
+import com.hyphenate.chatuidemo.section.message.SystemMsgsActivity;
 import com.hyphenate.chatuidemo.section.search.SearchConversationActivity;
 import com.hyphenate.easeui.model.EaseEvent;
 import com.hyphenate.easeui.ui.EaseConversationListFragment;
@@ -225,7 +223,7 @@ public class ConversationListFragment extends EaseConversationListFragment imple
         if(item instanceof EMConversation) {
             ChatActivity.actionStart(mContext, ((EMConversation)item).conversationId(), EaseCommonUtils.getChatType((EMConversation) item));
         }else if(item instanceof MsgTypeManageEntity) {
-            NewFriendsMsgActivity.actionStart(mContext);
+            SystemMsgsActivity.actionStart(mContext);
         }
     }
 }
