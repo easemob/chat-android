@@ -52,7 +52,7 @@ public class ChatRoomContactManageFragment extends BaseInitFragment implements O
         mAdapter = new ChatRoomContactAdapter();
         mRvCommonList.setAdapter(mAdapter);
 
-        addHeaderView();
+        //addHeaderView();
     }
 
     @Override

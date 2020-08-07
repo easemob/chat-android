@@ -46,6 +46,7 @@ public class GroupContactAdapter extends EaseBaseRecyclerViewAdapter<EMGroup> {
             String header = EaseCommonUtils.getLetter(item.getGroupName());
             Log.e("TAG", "GroupContactAdapter header = "+header);
             mHeader.setVisibility(View.GONE);
+            mSignature.setVisibility(View.VISIBLE);
             // 是否显示字母
             if(position == 0 || (header != null && !header.equals(EaseCommonUtils.getLetter(getItem(position - 1).getGroupName())))) {
                 if(!TextUtils.isEmpty(header)) {
@@ -54,6 +55,7 @@ public class GroupContactAdapter extends EaseBaseRecyclerViewAdapter<EMGroup> {
                 }
             }
             mName.setText(item.getGroupName());
+            mSignature.setText(item.getGroupId()+"");
         }
     }
 }

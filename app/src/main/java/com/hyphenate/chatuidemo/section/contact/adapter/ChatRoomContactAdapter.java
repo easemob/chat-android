@@ -42,6 +42,8 @@ public class ChatRoomContactAdapter extends EaseBaseRecyclerViewAdapter<EMChatRo
         public void setData(EMChatRoom item, int position) {
             mName.setText(item.getName());
             mAvatar.setImageResource(R.drawable.em_group_icon);
+            mSignature.setVisibility(View.VISIBLE);
+            mSignature.setText(item.getId()+"");
         }
     }
 }

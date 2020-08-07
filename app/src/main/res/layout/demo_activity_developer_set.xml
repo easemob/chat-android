@@ -102,6 +102,7 @@
                 android:layout_marginBottom="20dp"
                 app:arrowItemTitle="@string/em_about_me_service_set"
                 android:background="@color/white"
+                android:visibility="gone"
                 android:foreground="@drawable/demo_ripple_click_gray"/>
 
         </LinearLayout>
