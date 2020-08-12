@@ -143,7 +143,10 @@ public class UserActivityLifecycleCallbacks implements Application.ActivityLifec
         //至少需要activityList中至少两个activity
         if(resumeActivity.size() == 1 && activityList.size() > 1) {
             Activity topActivity = activityList.get(0);
-            if(topActivity != activity && !CallFloatWindow.getInstance(topActivity).isShowing()) {
+            if(!topActivity.isFinishing() //没有正在finish
+                    && topActivity != activity //当前activity和列表中首个activity不相同
+                    && topActivity.getTaskId() != activity.getTaskId() //分属不同的任务栈 且 没有展示悬浮框
+                    && !CallFloatWindow.getInstance(topActivity).isShowing()) {
                 Log.e("ActivityLifecycle", "启动了activity = "+topActivity.getClass().getName());
                 activity.startActivity(new Intent(activity, topActivity.getClass()));
             }
