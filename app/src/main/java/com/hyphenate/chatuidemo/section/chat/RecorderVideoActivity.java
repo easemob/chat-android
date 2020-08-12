@@ -153,28 +153,6 @@ public class RecorderVideoActivity extends EaseBaseActivity implements
 			finish();
 			return;
 		}
-		boolean hasSupportRate = false;
-		List<Integer> supportedPreviewFrameRates = mCamera.getParameters()
-				.getSupportedPreviewFrameRates();
-		if (supportedPreviewFrameRates != null
-				&& supportedPreviewFrameRates.size() > 0) {
-			Collections.sort(supportedPreviewFrameRates);
-			for (int i = 0; i < supportedPreviewFrameRates.size(); i++) {
-				int supportRate = supportedPreviewFrameRates.get(i);
-
-				if (supportRate == 15) {
-					hasSupportRate = true;
-				}
-
-			}
-			if (hasSupportRate) {
-				defaultVideoFrameRate = 15;
-			} else {
-				defaultVideoFrameRate = supportedPreviewFrameRates.get(0);
-			}
-
-		}
-
 		// get all resolutions which camera provide
 		List<Size> resolutionList = Utils.getResolutionList(mCamera);
 		if (resolutionList != null && resolutionList.size() > 0) {
@@ -298,12 +276,47 @@ public class RecorderVideoActivity extends EaseBaseActivity implements
 		}
 		try {
 			mCamera.setPreviewDisplay(mSurfaceHolder);
+			setCameraParameter(mCamera);
 			mCamera.startPreview();
 			handleSurfaceChanged();
 		} catch (Exception e1) {
 			EMLog.e("video", "start preview fail " + e1.getMessage());
 			showFailDialog();
 		}
+	}
+
+	private void setCameraParameter(Camera camera) {
+		if (camera == null) return;
+		Camera.Parameters parameters = camera.getParameters();
+		//获取相机支持的>=20fps的帧率，用于设置给MediaRecorder
+		//因为获取的数值是*1000的，所以要除以1000
+		List<int[]> previewFpsRange = parameters.getSupportedPreviewFpsRange();
+		for (int[] ints : previewFpsRange) {
+			if (ints[0] >= 20000) {
+				defaultVideoFrameRate = ints[0] / 1000;
+				break;
+			}
+		}
+		//设置聚焦模式
+		List<String> focusModes = parameters.getSupportedFocusModes();
+		if (focusModes.contains(Camera.Parameters.FOCUS_MODE_CONTINUOUS_VIDEO)) {
+			parameters.setFocusMode(Camera.Parameters.FOCUS_MODE_CONTINUOUS_VIDEO);
+		} else if (focusModes.contains(Camera.Parameters.FOCUS_MODE_CONTINUOUS_PICTURE)) {
+			parameters.setFocusMode(Camera.Parameters.FOCUS_MODE_CONTINUOUS_PICTURE);
+		} else {
+			parameters.setFocusMode(Camera.Parameters.FOCUS_MODE_AUTO);
+		}
+
+		//设置预览尺寸,因为预览的尺寸和最终是录制视频的尺寸无关，所以我们选取最大的数值
+		//通常最大的是手机的分辨率，这样可以让预览画面尽可能清晰并且尺寸不变形，前提是TextureView的尺寸是全屏或者接近全屏
+		List<Camera.Size> supportedPreviewSizes = parameters.getSupportedPreviewSizes();
+		parameters.setPreviewSize(supportedPreviewSizes.get(0).width, supportedPreviewSizes.get(0).height);
+		//缩短Recording启动时间
+		parameters.setRecordingHint(true);
+		//是否支持影像稳定能力，支持则开启
+		if (parameters.isVideoStabilizationSupported())
+			parameters.setVideoStabilization(true);
+		camera.setParameters(parameters);
 	}
 
 	@Override

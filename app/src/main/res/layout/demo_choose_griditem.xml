@@ -9,16 +9,41 @@
         android:layout_height="fill_parent"
         android:background="#fff">
 
-		 <com.hyphenate.chatuidemo.common.widget.RecyclingImageView
+		<com.hyphenate.chatuidemo.common.widget.RecyclingImageView
 			android:id="@+id/imageView"
 			android:layout_width="fill_parent"
 			android:layout_height="fill_parent" />
 
+		<LinearLayout
+			android:id="@+id/ll_take_video"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:orientation="vertical"
+			android:gravity="center"
+			android:visibility="gone"
+			android:layout_centerInParent="true">
+
+			<ImageView
+				android:layout_width="60dp"
+				android:layout_height="50dp"
+				android:scaleType="centerCrop"
+				android:src="@drawable/em_actionbar_camera_icon"/>
+
+			<TextView
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:textSize="@dimen/em_size_normal"
+				android:textColor="@color/white"
+				android:text="@string/demo_take_video_capture"/>
+
+		</LinearLayout>
+
 		 <ImageView
 			android:id="@+id/video_icon"
-			android:layout_width="fill_parent"
-			android:layout_height="fill_parent"
-			android:scaleType="center"
+			android:layout_width="50dp"
+			android:layout_height="50dp"
+			android:layout_centerInParent="true"
+			android:scaleType="fitXY"
 			android:clickable="false"
 			android:src="@drawable/ease_video_download_btn_nor"
 			android:visibility="gone" />

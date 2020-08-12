@@ -509,7 +509,8 @@
             android:screenOrientation="portrait"/>
         <!--播放视频-->
         <activity android:name="com.hyphenate.easeui.ui.EaseShowLocalVideoActivity"
-            android:screenOrientation="portrait"/>
+            android:screenOrientation="portrait"
+            android:launchMode="singleTask"/>
         <!--创群预选成员-->
         <activity android:name=".section.group.GroupPrePickActivity"
             android:screenOrientation="portrait"/>
