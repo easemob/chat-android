@@ -1,6 +1,5 @@
 package com.hyphenate.chatuidemo.section.chat.fragment;
 
-import android.annotation.TargetApi;
 import android.app.Activity;
 import android.content.ContentResolver;
 import android.content.Context;
@@ -8,7 +7,6 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.media.MediaPlayer;
 import android.net.Uri;
-import android.os.Build.VERSION_CODES;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.util.Log;
@@ -16,28 +14,33 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
-import android.widget.AbsListView;
 import android.widget.AbsListView.LayoutParams;
-import android.widget.AdapterView;
 import android.widget.BaseAdapter;
-import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
+import androidx.lifecycle.ViewModelProvider;
+import androidx.recyclerview.widget.DividerItemDecoration;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.hyphenate.chatuidemo.BuildConfig;
 import com.hyphenate.chatuidemo.R;
+import com.hyphenate.chatuidemo.common.interfaceOrImplement.OnResourceParseCallback;
 import com.hyphenate.chatuidemo.common.utils.ThreadManager;
 import com.hyphenate.chatuidemo.common.utils.video.ImageCache;
 import com.hyphenate.chatuidemo.common.utils.video.ImageResizer;
 import com.hyphenate.chatuidemo.common.utils.video.Utils;
+import com.hyphenate.chatuidemo.common.widget.DividerGridItemDecoration;
 import com.hyphenate.chatuidemo.common.widget.RecyclingImageView;
 import com.hyphenate.chatuidemo.section.base.BaseFragment;
-import com.hyphenate.chatuidemo.section.chat.RecorderVideoActivity;
+import com.hyphenate.chatuidemo.section.chat.viewmodel.VideoListViewModel;
+import com.hyphenate.easeui.interfaces.OnItemClickListener;
 import com.hyphenate.easeui.model.VideoEntity;
 import com.hyphenate.easeui.utils.EaseCompat;
 import com.hyphenate.easeui.widget.EaseTitleBar;
@@ -53,12 +56,12 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
-public class ImageGridFragment extends BaseFragment implements AdapterView.OnItemClickListener {
+public class ImageGridFragment extends BaseFragment implements OnItemClickListener {
 
 	private static final String TAG = "ImageGridFragment";
 	private int mImageThumbSize;
 	private int mImageThumbSpacing;
-	private ImageAdapter mAdapter;
+	private ImageAdapter2 mAdapter;
 	private ImageResizer mImageResizer;
 	List<VideoEntity> mList;
 	private File videoFile;
@@ -77,8 +80,7 @@ public class ImageGridFragment extends BaseFragment implements AdapterView.OnIte
 		mImageThumbSpacing = getResources().getDimensionPixelSize(
 				R.dimen.image_thumbnail_spacing);
 		mList=new ArrayList<VideoEntity>();
-		getVideoFile();
-		mAdapter = new ImageAdapter(getActivity());
+		mAdapter = new ImageAdapter2();
 		
 		ImageCache.ImageCacheParams cacheParams=new ImageCache.ImageCacheParams();
 
@@ -105,28 +107,25 @@ public class ImageGridFragment extends BaseFragment implements AdapterView.OnIte
 				mContext.onBackPressed();
 			}
 		});
-		final GridView mGridView = (GridView) v.findViewById(R.id.gridView);
-		mGridView.setAdapter(mAdapter);
-		mGridView.setOnItemClickListener(this);
-		mGridView.setOnScrollListener(new AbsListView.OnScrollListener() {
+		final RecyclerView rvVideoGrid = v.findViewById(R.id.rv_video_grid);
+		rvVideoGrid.setAdapter(mAdapter);
+		DividerGridItemDecoration itemDecoration = new DividerGridItemDecoration(mContext, R.drawable.demo_divider_video_list, false);
+		rvVideoGrid.addItemDecoration(itemDecoration);
+		mAdapter.setOnItemClickListener(this);
+		rvVideoGrid.addOnScrollListener(new RecyclerView.OnScrollListener() {
 			@Override
-			public void onScrollStateChanged(AbsListView absListView,
-											 int scrollState) {
+			public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
+				super.onScrollStateChanged(recyclerView, newState);
 				// Pause fetcher to ensure smoother scrolling when flinging
-				if (scrollState == AbsListView.OnScrollListener.SCROLL_STATE_FLING) {
+				if(newState == RecyclerView.SCROLL_STATE_DRAGGING) {
 					// Before Honeycomb pause image loading on scroll to help
 					// with performance
 					if (!Utils.hasHoneycomb()) {
 						mImageResizer.setPauseWork(true);
 					}
-				} else {
+				}else {
 					mImageResizer.setPauseWork(false);
 				}
-			}
-
-			@Override
-			public void onScroll(AbsListView absListView, int firstVisibleItem,
-								 int visibleItemCount, int totalItemCount) {
 			}
 		});
 
@@ -137,16 +136,16 @@ public class ImageGridFragment extends BaseFragment implements AdapterView.OnIte
 		// as the GridView has stretchMode=columnWidth. The column width is used
 		// to set the height
 		// of each view so we get nice square thumbnails.
-		mGridView.getViewTreeObserver().addOnGlobalLayoutListener(
+		rvVideoGrid.getViewTreeObserver().addOnGlobalLayoutListener(
 				new ViewTreeObserver.OnGlobalLayoutListener() {
-					@TargetApi(VERSION_CODES.JELLY_BEAN)
 					@Override
 					public void onGlobalLayout() {
-						final int numColumns = (int) Math.floor(mGridView
+						Log.e("TAG", "current Thread  = "+Thread.currentThread().getName());
+						final int numColumns = (int) Math.floor(rvVideoGrid
 								.getWidth()
 								/ (mImageThumbSize + mImageThumbSpacing));
 						if (numColumns > 0) {
-							final int columnWidth = (mGridView.getWidth() / numColumns)
+							final int columnWidth = (rvVideoGrid.getWidth() / numColumns)
 									- mImageThumbSpacing;
 							mAdapter.setItemHeight(columnWidth);
 							if (BuildConfig.DEBUG) {
@@ -154,13 +153,18 @@ public class ImageGridFragment extends BaseFragment implements AdapterView.OnIte
 										"onCreateView - numColumns set to "
 												+ numColumns);
 							}
-							mGridView.getViewTreeObserver()
+							rvVideoGrid.getViewTreeObserver()
 									.removeOnGlobalLayoutListener(this);
 						}
 					}
 				});
 		return v;
+	}
 
+	@Override
+	public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+		super.onViewCreated(view, savedInstanceState);
+		getVideoFile();
 	}
 
 	@Override
@@ -185,8 +189,7 @@ public class ImageGridFragment extends BaseFragment implements AdapterView.OnIte
 	}
 
 	@Override
-	public void onItemClick(AdapterView<?> parent, View v, final int position, long id) {
-
+	public void onItemClick(View view, int position) {
 		mImageResizer.setPauseWork(true);
 
 		if(position==0)
@@ -205,95 +208,69 @@ public class ImageGridFragment extends BaseFragment implements AdapterView.OnIte
 		}
 	}
 
-	private class ImageAdapter extends BaseAdapter {
+	private class ImageAdapter2 extends RecyclerView.Adapter<ImageAdapter2.ViewHolder> {
+		private int mItemHeight;
+		private ViewGroup.LayoutParams mImageViewLayoutParams;
+		private List<VideoEntity> mData;
+		private OnItemClickListener mListener;
 
-		private final Context mContext;
-		private int mItemHeight = 0;
-		private RelativeLayout.LayoutParams mImageViewLayoutParams;
-
-		public ImageAdapter(Context context) {
-			super();
-			mContext = context;
-			mImageViewLayoutParams = new RelativeLayout.LayoutParams(
+		public ImageAdapter2() {
+			mImageViewLayoutParams = new ViewGroup.LayoutParams(
 					LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT);
 		}
 
+		@NonNull
 		@Override
-		public int getCount() {
-			return mList.size()+1;
+		public ImageAdapter2.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+			return new ViewHolder(LayoutInflater.from(mContext).inflate(R.layout.demo_choose_griditem, parent,false));
 		}
 
 		@Override
-		public Object getItem(int position) {
-			return (position==0)?null:mList.get(position-1);
-		}
-
-		@Override
-		public long getItemId(int position) {
-			return position ;
-		}
-
-
-		@Override
-		public View getView(int position, View convertView, ViewGroup container) {
-			ViewHolder holder=null;
-			if(convertView==null)
-			{
-				holder=new ViewHolder();
-				convertView=LayoutInflater.from(mContext).inflate(R.layout.demo_choose_griditem, container,false);
-				holder.imageView=(RecyclingImageView) convertView.findViewById(R.id.imageView);
-				holder.icon = (ImageView) convertView.findViewById(R.id.video_icon);
-				holder.llTakeVideo = convertView.findViewById(R.id.ll_take_video);
-				holder.videoDataArea = convertView.findViewById(R.id.video_data_area);
-				holder.tvDur=(TextView)convertView.findViewById(R.id.chatting_length_iv);
-				holder.tvSize=(TextView)convertView.findViewById(R.id.chatting_size_iv);
-				holder.imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
-				holder.imageView.setLayoutParams(mImageViewLayoutParams);
-				convertView.setTag(holder);
-			}else{
-				holder=(ViewHolder) convertView.getTag();
-			}
-
+		public void onBindViewHolder(@NonNull ImageAdapter2.ViewHolder holder, int position) {
+			holder.itemView.setOnClickListener(new View.OnClickListener() {
+				@Override
+				public void onClick(View v) {
+					if(mListener != null) {
+					    mListener.onItemClick(v, position);
+					}
+				}
+			});
 			// Check the height matches our calculated column width
-			if (holder.imageView.getLayoutParams().height != mItemHeight) {
-				holder.imageView.setLayoutParams(mImageViewLayoutParams);
+			if (holder.itemView.getLayoutParams().height != mItemHeight) {
+				holder.itemView.setLayoutParams(mImageViewLayoutParams);
 			}
-
-			// Finally load the image asynchronously into the ImageView, this
-			// also takes care of
-			// setting a placeholder image while the background thread runs
-			String st1 = getResources().getString(R.string.Video_footage);
-			if(position==0)
-			{
+			if(position==0) {
 				holder.icon.setVisibility(View.GONE);
 				holder.tvDur.setVisibility(View.GONE);
 				holder.llTakeVideo.setVisibility(View.VISIBLE);
 				holder.imageView.setImageDrawable(null);
 				holder.imageView.setBackground(ContextCompat.getDrawable(mContext, R.drawable.demo_bg_take_video));
 				holder.videoDataArea.setVisibility(View.GONE);
-			}else{
-				holder.icon.setVisibility(View.VISIBLE);
-				holder.llTakeVideo.setVisibility(View.GONE);
-				holder.videoDataArea.setVisibility(View.VISIBLE);
-				VideoEntity entty=mList.get(position-1);
-				holder.tvDur.setVisibility(View.VISIBLE);
-
-				holder.tvDur.setText(DateUtils.toTime(entty.duration));
-				holder.tvSize.setText(TextFormater.getDataSize(entty.size));
-				holder.imageView.setBackground(null);
-				holder.imageView.setImageResource(R.drawable.em_empty_photo);
-				mImageResizer.loadImage(entty.filePath, holder.imageView);
+				return;
 			}
-			return convertView;
-			// END_INCLUDE(load_gridview_item)
+			VideoEntity entity = mData.get(position - 1);
+			holder.icon.setVisibility(View.VISIBLE);
+			holder.llTakeVideo.setVisibility(View.GONE);
+			holder.videoDataArea.setVisibility(View.VISIBLE);
+			holder.tvDur.setVisibility(View.VISIBLE);
+
+			holder.tvDur.setText(DateUtils.toTime(entity.duration));
+			holder.tvSize.setText(TextFormater.getDataSize(entity.size));
+			holder.imageView.setBackground(null);
+			holder.imageView.setImageResource(R.drawable.em_empty_photo);
+			mImageResizer.loadImage(entity.filePath, holder.imageView);
 		}
 
-		/**
-		 * Sets the item height. Useful for when we know the column width so the
-		 * height can be set to match.
-		 *
-		 * @param height
-		 */
+		@Override
+		public int getItemCount() {
+			return (mData == null || mData.isEmpty()) ? 1 : mData.size() + 1;
+		}
+
+		public void setData(List<VideoEntity> data) {
+			this.mData = data;
+			notifyDataSetChanged();
+		}
+
 		public void setItemHeight(int height) {
 			if (height == mItemHeight) {
 				return;
@@ -305,116 +282,44 @@ public class ImageGridFragment extends BaseFragment implements AdapterView.OnIte
 			notifyDataSetChanged();
 		}
 
-		class ViewHolder{
+		public void setOnItemClickListener(OnItemClickListener listener) {
+			this.mListener = listener;
+		}
+
+		public class ViewHolder extends RecyclerView.ViewHolder {
 			LinearLayout llTakeVideo;
 			LinearLayout videoDataArea;
 			RecyclingImageView imageView;
 			ImageView icon;
 			TextView tvDur;
 			TextView tvSize;
+
+			public ViewHolder(@NonNull View itemView) {
+				super(itemView);
+				itemView.setLayoutParams(mImageViewLayoutParams);
+				imageView = itemView.findViewById(R.id.imageView);
+				icon = itemView.findViewById(R.id.video_icon);
+				llTakeVideo = itemView.findViewById(R.id.ll_take_video);
+				videoDataArea = itemView.findViewById(R.id.video_data_area);
+				tvDur = itemView.findViewById(R.id.chatting_length_iv);
+				tvSize = itemView.findViewById(R.id.chatting_size_iv);
+				imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
+			}
 		}
 	}
 
 	private void getVideoFile() {
-		ThreadManager.getInstance().runOnIOThread(() -> {
-			ContentResolver mContentResolver = mContext.getContentResolver();
-			Cursor cursor = mContentResolver.query(MediaStore.Video.Media.EXTERNAL_CONTENT_URI
-					, null, null, null, null);
-			if (cursor != null && cursor.moveToFirst()) {
-				do {
-					// ID:MediaStore.Audio.Media._ID
-					int id = cursor.getInt(cursor
-							.getColumnIndexOrThrow(MediaStore.Video.Media._ID));
-
-					// title：MediaStore.Audio.Media.TITLE
-					String title = cursor.getString(cursor
-							.getColumnIndexOrThrow(MediaStore.Video.Media.TITLE));
-					// path：MediaStore.Audio.Media.DATA
-					String url = null;
-					if(!VersionUtils.isTargetQ(getContext())) {
-						url = cursor.getString(cursor
-								.getColumnIndexOrThrow(MediaStore.Video.Media.DATA));
-					}
-
-					// duration：MediaStore.Audio.Media.DURATION
-					int duration = cursor
-							.getInt(cursor
-									.getColumnIndexOrThrow(MediaStore.Video.Media.DURATION));
-
-					// 大小：MediaStore.Audio.Media.SIZE
-					int size = (int) cursor.getLong(cursor
-							.getColumnIndexOrThrow(MediaStore.Video.Media.SIZE));
-
-					// 最近一次修改时间：MediaStore.Audio.DATE_MODIFIED
-					long lastModified = cursor.getLong(cursor
-							.getColumnIndexOrThrow(MediaStore.Video.Media.DATE_MODIFIED));
-
-					Uri uri = Uri.parse(MediaStore.Video.Media.EXTERNAL_CONTENT_URI.toString() + File.separator + id);
-
-					VideoEntity entty = new VideoEntity();
-					entty.ID = id;
-					entty.title = title;
-					entty.filePath = url;
-					entty.duration = duration;
-					entty.size = size;
-					entty.uri = uri;
-					entty.lastModified = lastModified;
-					mList.add(entty);
-				} while (cursor.moveToNext());
-
-			}
-			if (cursor != null) {
-				cursor.close();
-				cursor = null;
-			}
-
-			getSelfVideoFiles();
-
-			if(mList != null && !mList.isEmpty()) {
-				sortVideoEntities();
-				mAdapter.notifyDataSetChanged();
-			}
-		});
-	}
-
-	private void getSelfVideoFiles() {
-		File videoFolder = PathUtil.getInstance().getVideoPath();
-		if(videoFolder.exists() && videoFolder.isDirectory()) {
-			File[] files = videoFolder.listFiles();
-			if(files != null && files.length > 0) {
-				VideoEntity entty;
-				for(int i = 0; i < files.length; i++) {
-					entty = new VideoEntity();
-					File file = files[i];
-					if(!EaseCompat.isVideoFile(mContext, file.getName())) {
-						continue;
-					}
-					entty.filePath = file.getAbsolutePath();
-					entty.size = (int) file.length();
-					entty.title = file.getName();
-					entty.lastModified = file.lastModified();
-					MediaPlayer player = new MediaPlayer();
-					try {
-						player.setDataSource(file.getPath());
-						player.prepare();
-						entty.duration = player.getDuration();
-					} catch (IOException e) {
-						e.printStackTrace();
-					}
-					mList.add(entty);
+		VideoListViewModel viewModel = new ViewModelProvider(mContext).get(VideoListViewModel.class);
+		viewModel.getVideoListObservable().observe(getViewLifecycleOwner(), response -> {
+			parseResource(response, new OnResourceParseCallback<List<VideoEntity>>() {
+				@Override
+				public void onSuccess(List<VideoEntity> data) {
+					mAdapter.setData(data);
+					mImageResizer.setPauseWork(false);
 				}
-			}
-		}
-
-	}
-
-	private void sortVideoEntities() {
-		Collections.sort(mList, new Comparator<VideoEntity>() {
-			@Override
-			public int compare(VideoEntity o1, VideoEntity o2) {
-				return (int) (o2.lastModified - o1.lastModified);
-			}
+			});
 		});
+		viewModel.getVideoList(mContext);
 	}
 
 	@Override
