@@ -9,7 +9,8 @@
         android:layout_width="50dp"
         android:layout_height="50dp"
         android:layout_marginLeft="10dp"
-        android:layout_marginTop="10dp"
+        android:layout_marginTop="36dp"
+        android:layout_marginBottom="33dp"
         android:padding="5dp"
         android:src="@drawable/em_default_avatar"
         app:layout_constraintTop_toTopOf="parent"
@@ -36,7 +37,6 @@
         android:textColor="#ffa3a3a3"
         android:textSize="14sp"
         android:layout_marginBottom="2dp"
-        android:layout_marginLeft="2dp"
         tools:text="content"
         app:layout_constraintBottom_toBottomOf="@id/avatar"
         app:layout_constraintLeft_toRightOf="@id/avatar"
@@ -53,5 +53,6 @@
         android:layout_marginTop="15dp"
         android:textColor="@color/ease_conversation_color_item_time"
         android:textSize="13sp"
+        android:visibility="gone"
         tools:text="09:51"/>
 </merge>

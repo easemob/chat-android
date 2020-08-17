@@ -64,7 +64,6 @@ public class SystemMsgsActivity extends BaseInitActivity implements OnRefreshLoa
                 .addDelegate(msgDelegate)
                 .addDelegate(new OtherMsgDelegate());
         rvList.setAdapter(adapter);
-        rvList.addItemDecoration(new DividerItemDecoration(mContext, DividerItemDecoration.VERTICAL));
 
         registerForContextMenu(rvList);
     }
