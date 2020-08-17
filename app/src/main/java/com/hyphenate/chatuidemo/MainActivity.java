@@ -49,6 +49,7 @@ public class MainActivity extends BaseInitActivity implements BottomNavigationVi
     private int[] badgeIds = {R.layout.demo_badge_home, R.layout.demo_badge_friends, R.layout.demo_badge_discover, R.layout.demo_badge_about_me};
     private int[] msgIds = {R.id.tv_main_home_msg, R.id.tv_main_friends_msg, R.id.tv_main_discover_msg, R.id.tv_main_about_me_msg};
     private MainViewModel viewModel;
+    private boolean showMenu = true;//是否显示菜单项
 
     public static void startAction(Context context) {
         Intent starter = new Intent(context, MainActivity.class);
@@ -58,6 +59,11 @@ public class MainActivity extends BaseInitActivity implements BottomNavigationVi
     @Override
     protected int getLayoutId() {
         return R.layout.demo_activity_main;
+    }
+
+    @Override
+    public boolean onPrepareOptionsMenu(Menu menu) {
+        return showMenu;
     }
 
     @Override
@@ -279,25 +285,33 @@ public class MainActivity extends BaseInitActivity implements BottomNavigationVi
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
         mTitleBar.setVisibility(View.VISIBLE);
+        showMenu = true;
+        boolean showNavigation = false;
         switch (menuItem.getItemId()) {
             case R.id.em_main_nav_home :
                 switchToHome();
                 mTitleBar.setTitle(getResources().getString(R.string.em_main_title_home));
-                return true;
+                showNavigation = true;
+                break;
             case R.id.em_main_nav_friends :
                 switchToFriends();
                 mTitleBar.setTitle(getResources().getString(R.string.em_main_title_friends));
-                return true;
+                showNavigation = true;
+                break;
             case R.id.em_main_nav_discover :
                 switchToDiscover();
                 mTitleBar.setTitle(getResources().getString(R.string.em_main_title_discover));
-                return true;
+                showNavigation = true;
+                break;
             case R.id.em_main_nav_me :
                 switchToAboutMe();
-                mTitleBar.setVisibility(View.GONE);
-                return true;
+                mTitleBar.setTitle(getResources().getString(R.string.em_main_title_me));
+                showMenu = false;
+                showNavigation = true;
+                break;
         }
-        return false;
+        invalidateOptionsMenu();
+        return showNavigation;
     }
 
     private void checkUnreadMsg() {

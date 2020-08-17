@@ -87,23 +87,6 @@ public class AboutMeFragment extends BaseInitFragment implements View.OnClickLis
         }
     }
 
-
-    @Override
-    public void onResume() {
-        super.onResume();
-        StatusBarCompat.compat(mContext, ContextCompat.getColor(mContext, R.color.transparent));
-    }
-
-    @Override
-    public void onHiddenChanged(boolean hidden) {
-        super.onHiddenChanged(hidden);
-        if(hidden) {
-            StatusBarCompat.compat(mContext, ContextCompat.getColor(mContext, R.color.white));
-        }else {
-            StatusBarCompat.compat(mContext, ContextCompat.getColor(mContext, R.color.transparent));
-        }
-    }
-
     private void logout() {
         new SimpleDialogFragment.Builder(mContext)
                 .setTitle(R.string.em_login_out_hint)
