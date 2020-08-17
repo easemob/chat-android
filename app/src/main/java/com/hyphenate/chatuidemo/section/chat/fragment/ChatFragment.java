@@ -182,8 +182,9 @@ public class ChatFragment extends EaseChatFragment implements EaseChatFragment.O
 
     private void showSelectDialog() {
         new DemoListDialogFragment.Builder((BaseActivity) mContext)
-                .setTitle(R.string.em_single_call_type)
+                //.setTitle(R.string.em_single_call_type)
                 .setData(calls)
+                .setCancelColorRes(R.color.black)
                 .setWindowAnimations(R.style.animate_dialog)
                 .setOnItemClickListener(new DemoListDialogFragment.OnDialogItemClickListener() {
                     @Override

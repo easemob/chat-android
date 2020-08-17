@@ -8,9 +8,13 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
 
+import androidx.annotation.ColorInt;
+import androidx.annotation.ColorRes;
+import androidx.annotation.IntegerRes;
 import androidx.annotation.NonNull;
 import androidx.annotation.StringRes;
 import androidx.annotation.StyleRes;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -34,6 +38,7 @@ public class DemoListDialogFragment extends BaseDialogFragment {
 
     private String title;
     private String cancel;
+    private int cancelColor;
     private OnDialogItemClickListener itemClickListener;
     private List<String> data;
     private OnDialogCancelClickListener cancelClickListener;
@@ -80,6 +85,10 @@ public class DemoListDialogFragment extends BaseDialogFragment {
             btnCancel.setText(getString(R.string.cancel));
         }else {
             btnCancel.setText(cancel);
+        }
+
+        if(cancelColor != 0) {
+            btnCancel.setTextColor(cancelColor);
         }
     }
 
@@ -129,6 +138,7 @@ public class DemoListDialogFragment extends BaseDialogFragment {
         private List<String> data;
         private OnDialogItemClickListener clickListener;
         private String cancel;
+        private int cancelColor;
         private OnDialogCancelClickListener cancelClickListener;
         private Bundle bundle;
         private int animations;//进出动画
@@ -179,6 +189,16 @@ public class DemoListDialogFragment extends BaseDialogFragment {
             return this;
         }
 
+        public Builder setCancelColorRes(@ColorRes int color) {
+            this.cancelColor = ContextCompat.getColor(context, color);
+            return this;
+        }
+
+        public Builder setCancelColor(@ColorInt int color) {
+            this.cancelColor = color;
+            return this;
+        }
+
         public Builder setArgument(Bundle bundle) {
             this.bundle = bundle;
             return this;
@@ -196,6 +216,7 @@ public class DemoListDialogFragment extends BaseDialogFragment {
             fragment.setData(data);
             fragment.setOnItemClickListener(this.clickListener);
             fragment.setCancel(cancel);
+            fragment.setCancelColor(cancelColor);
             fragment.setOnCancelClickListener(this.cancelClickListener);
             fragment.setArguments(this.bundle);
             fragment.setWindowAnimations(animations);
@@ -209,6 +230,10 @@ public class DemoListDialogFragment extends BaseDialogFragment {
             return fragment;
         }
 
+    }
+
+    private void setCancelColor(int cancelColor) {
+        this.cancelColor = cancelColor;
     }
 
     private void setWindowAnimations(int animations) {
