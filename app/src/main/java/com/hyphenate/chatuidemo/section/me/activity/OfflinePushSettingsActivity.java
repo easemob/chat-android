@@ -5,18 +5,23 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.Toast;
+
+import androidx.lifecycle.ViewModelProvider;
 
 import com.hyphenate.chat.EMClient;
 import com.hyphenate.chat.EMPushConfigs;
 import com.hyphenate.chatuidemo.DemoHelper;
 import com.hyphenate.chatuidemo.R;
+import com.hyphenate.chatuidemo.common.interfaceOrImplement.OnResourceParseCallback;
 import com.hyphenate.chatuidemo.common.model.DemoModel;
+import com.hyphenate.chatuidemo.common.widget.ArrowItemView;
 import com.hyphenate.chatuidemo.common.widget.SwitchItemView;
 import com.hyphenate.chatuidemo.section.base.BaseInitActivity;
+import com.hyphenate.chatuidemo.section.dialog.TimePickerDialogFragment;
+import com.hyphenate.chatuidemo.section.me.viewmodels.OfflinePushSetViewModel;
 import com.hyphenate.easeui.widget.EaseTitleBar;
 import com.hyphenate.exceptions.HyphenateException;
 
@@ -24,14 +29,16 @@ import com.hyphenate.exceptions.HyphenateException;
  * Created by wei on 2016/12/6.
  */
 
-public class OfflinePushSettingsActivity extends BaseInitActivity implements CompoundButton.OnCheckedChangeListener, EaseTitleBar.OnRightClickListener, EaseTitleBar.OnBackPressListener, SwitchItemView.OnCheckedChangeListener {
-    private CheckBox noDisturbOn, noDisturbOff, noDisturbInNight;
-    private Status status = Status.OFF;
-
+public class OfflinePushSettingsActivity extends BaseInitActivity implements EaseTitleBar.OnBackPressListener, SwitchItemView.OnCheckedChangeListener, View.OnClickListener {
     EMPushConfigs mPushConfigs;
     DemoModel settingsModel;
     private EaseTitleBar titleBar;
     private SwitchItemView rlCustomServer;
+    private SwitchItemView switchPushNoDisturb;
+    private ArrowItemView itemPushTimeRange;
+    private OfflinePushSetViewModel viewModel;
+    private int startTime;
+    private int endTime;
 
     public static void actionStart(Context context) {
         Intent intent = new Intent(context, OfflinePushSettingsActivity.class);
@@ -48,9 +55,8 @@ public class OfflinePushSettingsActivity extends BaseInitActivity implements Com
     protected void initView(Bundle savedInstanceState) {
         super.initView(savedInstanceState);
         titleBar = (EaseTitleBar) findViewById(R.id.title_bar);
-        noDisturbOn = (CheckBox) findViewById(R.id.cb_no_disturb_on);
-        noDisturbOff = (CheckBox) findViewById(R.id.cb_no_disturb_off);
-        noDisturbInNight = (CheckBox) findViewById(R.id.cb_no_disturb_only_night);
+        switchPushNoDisturb = findViewById(R.id.switch_push_no_disturb);
+        itemPushTimeRange = findViewById(R.id.item_push_time_range);
         rlCustomServer = findViewById(R.id.rl_custom_server);
     }
 
@@ -58,11 +64,9 @@ public class OfflinePushSettingsActivity extends BaseInitActivity implements Com
     protected void initListener() {
         super.initListener();
         titleBar.setOnBackPressListener(this);
-        titleBar.setOnRightClickListener(this);
-        noDisturbOn.setOnCheckedChangeListener(this);
-        noDisturbOff.setOnCheckedChangeListener(this);
-        noDisturbInNight.setOnCheckedChangeListener(this);
+        switchPushNoDisturb.setOnCheckedChangeListener(this);
         rlCustomServer.setOnCheckedChangeListener(this);
+        itemPushTimeRange.setOnClickListener(this);
     }
 
     @Override
@@ -71,122 +75,91 @@ public class OfflinePushSettingsActivity extends BaseInitActivity implements Com
         settingsModel = DemoHelper.getInstance().getModel();
         rlCustomServer.getSwitch().setChecked(settingsModel.isUseFCM());
 
-        loadSettings();
-    }
-
-    private void loadSettings() {
-        mPushConfigs = EMClient.getInstance().pushManager().getPushConfigs();
-        if(mPushConfigs == null){
-            final ProgressDialog loadingPd = new ProgressDialog(this);
-            loadingPd.setMessage("loading");
-            loadingPd.setCanceledOnTouchOutside(false);
-            loadingPd.show();
-            new Thread(new Runnable() {
+        viewModel = new ViewModelProvider(this).get(OfflinePushSetViewModel.class);
+        viewModel.getConfigsObservable().observe(this, response -> {
+            parseResource(response, new OnResourceParseCallback<EMPushConfigs>() {
                 @Override
-                public void run() {
-                    try {
-                        mPushConfigs = EMClient.getInstance().pushManager().getPushConfigsFromServer();
-                        runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                loadingPd.dismiss();
-                                processPushConfigs();
-                            }
-                        });
-                    } catch (HyphenateException e) {
-                        e.printStackTrace();
-                        runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                loadingPd.dismiss();
-                                Toast.makeText(OfflinePushSettingsActivity.this, "loading failed", Toast.LENGTH_SHORT).show();
-                            }
-                        });
-                    }
+                public void onSuccess(EMPushConfigs data) {
+                    mPushConfigs = data;
+                    processPushConfigs();
                 }
-            }).start();
-        }else{
-            processPushConfigs();
-        }
-    }
 
-    private void saveSettings() {
-        final ProgressDialog savingPd = new ProgressDialog(OfflinePushSettingsActivity.this);
-        savingPd.setMessage(getString(R.string.push_saving_settings));
-        savingPd.setCanceledOnTouchOutside(false);
-        savingPd.show();
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    if(status == Status.ON){
-                        EMClient.getInstance().pushManager().disableOfflinePush(0, 24);
-                    }else if(status == Status.OFF){
-                        EMClient.getInstance().pushManager().enableOfflinePush();
-                    }else{
-                        EMClient.getInstance().pushManager().disableOfflinePush(22, 7);
-                    }
-                    finish();
-                } catch (HyphenateException e) {
-                    e.printStackTrace();
-                    runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            savingPd.dismiss();
-                            Toast.makeText(OfflinePushSettingsActivity.this, R.string.push_save_failed, Toast.LENGTH_SHORT).show();
-                        }
-                    });
+                @Override
+                public void onLoading() {
+                    super.onLoading();
+                    showLoading();
                 }
-            }
-        }).start();
-    }
 
-    @Override
-    public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-        switch (buttonView.getId()) {
-            case R.id.cb_no_disturb_on:
-                if(isChecked){
-                    noDisturbOff.setChecked(false);
-                    noDisturbInNight.setChecked(false);
-                    status = Status.ON;
+                @Override
+                public void hideLoading() {
+                    super.hideLoading();
+                    dismissLoading();
                 }
-                break;
-            case R.id.cb_no_disturb_off:
-                if(isChecked){
-                    noDisturbOn.setChecked(false);
-                    noDisturbInNight.setChecked(false);
-                    status = Status.OFF;
+            });
+        });
+
+        viewModel.getDisableObservable().observe(this, response -> {
+            parseResource(response, new OnResourceParseCallback<Boolean>() {
+                @Override
+                public void onSuccess(Boolean data) {
+                    itemPushTimeRange.getTvContent().setText(getTimeRange(startTime, endTime));
                 }
-                break;
-            case R.id.cb_no_disturb_only_night:
-                if(isChecked){
-                    noDisturbOn.setChecked(false);
-                    noDisturbOff.setChecked(false);
-                    status = Status.ON_IN_NIGHT;
+
+                @Override
+                public void onLoading() {
+                    super.onLoading();
+                    showLoading();
                 }
-                break;
-        }
+
+                @Override
+                public void hideLoading() {
+                    super.hideLoading();
+                    dismissLoading();
+                }
+            });
+        });
+
+        viewModel.getEnableObservable().observe(this, response -> {
+            parseResource(response, new OnResourceParseCallback<Boolean>() {
+                @Override
+                public void onSuccess(Boolean data) {
+
+                }
+
+                @Override
+                public void onLoading() {
+                    super.onLoading();
+                    showLoading();
+                }
+
+                @Override
+                public void hideLoading() {
+                    super.hideLoading();
+                    dismissLoading();
+                }
+            });
+        });
+
+        viewModel.getPushConfigs();
     }
 
     private void processPushConfigs(){
         if(mPushConfigs == null)
             return;
-        if(mPushConfigs.isNoDisturbOn()){
-            status = status.ON;
-            noDisturbOn.setChecked(true);
-            if(mPushConfigs.getNoDisturbStartHour() > 0){
-                status = Status.ON_IN_NIGHT;
-                noDisturbInNight.setChecked(true);
-            }
-        }else{
-            status = Status.OFF;
-            noDisturbOff.setChecked(true);
+        switchPushNoDisturb.getSwitch().setChecked(mPushConfigs.isNoDisturbOn());
+        if(mPushConfigs.isNoDisturbOn()) {
+            startTime = mPushConfigs.getNoDisturbStartHour();
+            endTime = mPushConfigs.getNoDisturbEndHour();
+            itemPushTimeRange.getTvContent().setText(getTimeRange(startTime, endTime));
         }
     }
 
-    @Override
-    public void onRightClick(View view) {
-        saveSettings();
+    private String getTimeRange(int start, int end) {
+        return getDoubleDigit(start) + ":00" + "~" + getDoubleDigit(end) + ":00";
+    }
+
+    private String getDoubleDigit(int num) {
+        return num > 10 ? String.valueOf(num) : "0" + num;
     }
 
     @Override
@@ -196,14 +169,59 @@ public class OfflinePushSettingsActivity extends BaseInitActivity implements Com
 
     @Override
     public void onCheckedChanged(SwitchItemView buttonView, boolean isChecked) {
-        settingsModel.setUseFCM(isChecked);
-        EMClient.getInstance().getOptions().setUseFCM(isChecked);
+        switch (buttonView.getId()) {
+            case R.id.switch_push_no_disturb :
+                if(isChecked) {
+                    viewModel.disableOfflinePush(startTime, endTime);
+                    itemPushTimeRange.setVisibility(View.VISIBLE);
+                    rlCustomServer.setVisibility(View.VISIBLE);
+                }else {
+                    itemPushTimeRange.setVisibility(View.GONE);
+                    rlCustomServer.setVisibility(View.GONE);
+                    viewModel.enableOfflinePush();
+                }
+                break;
+            case R.id.rl_custom_server :
+                settingsModel.setUseFCM(isChecked);
+                EMClient.getInstance().getOptions().setUseFCM(isChecked);
+                break;
+        }
+
     }
 
-    private enum Status {
-        ON,
-        OFF,
-        ON_IN_NIGHT
+    @Override
+    public void onClick(View v) {
+        showTimePicker();
     }
 
+    private void showTimePicker() {
+        new TimePickerDialogFragment.Builder(mContext)
+                .setTitle(R.string.demo_no_disturb_time)
+                .setConfirmColor(R.color.em_color_brand)
+                .showCancelButton(true)
+                .showMinute(false)
+                .setOnTimePickCancelListener(R.string.cancel, new TimePickerDialogFragment.OnTimePickCancelListener() {
+                        @Override
+                        public void onClickCancel(View view) {
+
+                        }
+                    })
+                .setOnTimePickSubmitListener(R.string.confirm, new TimePickerDialogFragment.OnTimePickSubmitListener() {
+                        @Override
+                        public void onClickSubmit(View view, String start, String end) {
+                            try {
+                                startTime = Integer.parseInt(getHour(start));
+                                endTime = Integer.parseInt(getHour(end));
+                                viewModel.disableOfflinePush(startTime, endTime);
+                            } catch (NumberFormatException e) {
+                                e.printStackTrace();
+                            }
+                        }
+                    })
+                .show();
+    }
+
+    private String getHour(String time) {
+        return time.contains(":") ? time.substring(0, time.indexOf(":")) : time;
+    }
 }

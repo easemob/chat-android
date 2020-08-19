@@ -8,6 +8,7 @@
     <string name="required">必填</string>
     <string name="submit">提交</string>
     <string name="cancel">取消</string>
+    <string name="confirm">确定</string>
     <string name="loading">加载中&#8230;</string>
 
     <string name="em_main_title_home">会话</string>
@@ -290,11 +291,13 @@
     <string name="em_account_user_forbidden">用户被服务器限制连接</string>
 
     <string name="demo_take_video_capture">拍摄录像</string>
+    
+    <string name="demo_no_disturb_time">设置时间段</string>
 
     <string name="newnotify">接收新消息通知</string>
     <string name="voice">声音</string>
     <string name="shake">震动</string>
-    <string name="push_settings">消息推送设置</string>
+    <string name="push_settings">消息免打扰</string>
     <string name="push_use_fcm">消息推送使用 FCM</string>
     <string name="push_no_disturb">推送消息免打扰(针对GCM、小米、华为等推送)</string>
     <string name="push_no_disturb_on">开启</string>
@@ -308,6 +311,8 @@
     <string name="yangshengqi">使用扬声器播放语音</string>
     <string name="call_option">通话设置</string>
     <string name="offline_call_push">通话离线推送</string>
+    <string name="offline_push_no_disturb">推送消息免打扰</string>
+    <string name="offline_default_time_range">22:00~07:00</string>
 
     <string name="title_msg_typing">显示输入状态</string>
     <string name="chatroom_allow_owner_leave"> 允许聊天室群主离开</string>

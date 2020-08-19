@@ -26,6 +26,7 @@
         app:arrowItemAvatarHeight="@dimen/em_about_me_avatar_size"
         app:arrowItemAvatarWidth="@dimen/em_about_me_avatar_size"
         app:arrowItemTitle="@string/em_set_security"
+        app:arrowItemTitleSize="@dimen/em_size_normal"
         android:foreground="@drawable/demo_ripple_click_gray"
         android:background="@color/white"/>
 
@@ -39,6 +40,7 @@
         app:arrowItemAvatarHeight="@dimen/em_about_me_avatar_size"
         app:arrowItemAvatarWidth="@dimen/em_about_me_avatar_size"
         app:arrowItemTitle="@string/em_set_message_set"
+        app:arrowItemTitleSize="@dimen/em_size_normal"
         android:foreground="@drawable/demo_ripple_click_gray"
         android:background="@color/white"/>
 
@@ -53,6 +55,7 @@
         app:arrowItemAvatarHeight="@dimen/em_about_me_avatar_size"
         app:arrowItemAvatarWidth="@dimen/em_about_me_avatar_size"
         app:arrowItemTitle="@string/em_set_common_set"
+        app:arrowItemTitleSize="@dimen/em_size_normal"
         android:foreground="@drawable/demo_ripple_click_gray"
         android:background="@color/white"/>
 
@@ -66,6 +69,7 @@
         app:arrowItemAvatarHeight="@dimen/em_about_me_avatar_size"
         app:arrowItemAvatarWidth="@dimen/em_about_me_avatar_size"
         app:arrowItemTitle="@string/em_set_privacy"
+        app:arrowItemTitleSize="@dimen/em_size_normal"
         android:foreground="@drawable/demo_ripple_click_gray"
         android:background="@color/white"/>
 

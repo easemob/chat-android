@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:tools="http://schemas.android.com/tools"
+    app:cardCornerRadius="@dimen/em_margin_10"
+    android:background="@color/white"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingTop="@dimen/em_margin_15"
+        android:paddingBottom="@dimen/em_margin_15">
+
+        <TextView
+            android:id="@+id/tv_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="设置推送时间"
+            android:textColor="@android:color/black"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent"/>
+
+        <TimePicker
+            android:id="@+id/picker_start"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:theme="@android:style/Theme.Holo.InputMethod"
+            app:layout_constraintTop_toBottomOf="@id/tv_title"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toLeftOf="@id/tv_divider"
+            app:layout_constraintBottom_toTopOf="@id/btn_cancel"
+            app:layout_constraintHorizontal_weight="1" />
+
+        <TextView
+            android:id="@+id/tv_divider"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintLeft_toRightOf="@id/picker_start"
+            app:layout_constraintRight_toLeftOf="@id/picker_end"
+            app:layout_constraintTop_toTopOf="@id/picker_start"
+            app:layout_constraintBottom_toTopOf="@id/btn_cancel"
+            android:layout_marginLeft="@dimen/em_margin_10"
+            android:layout_marginRight="@dimen/em_margin_10"
+            android:gravity="center"
+            android:text="~"
+            android:textColor="@android:color/black"
+            android:textSize="16sp" />
+
+        <TimePicker
+            android:id="@+id/picker_end"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:theme="@android:style/Theme.Holo.InputMethod"
+            app:layout_constraintTop_toTopOf="@id/picker_start"
+            app:layout_constraintLeft_toRightOf="@id/tv_divider"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintHorizontal_weight="1"/>
+
+        <TextView
+            android:id="@+id/btn_cancel"
+            android:layout_width="0dp"
+            android:layout_height="50dp"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toLeftOf="@id/btn_submit"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/picker_start"
+            android:gravity="center"
+            android:text="取消"
+            android:textColor="@color/black" />
+
+        <TextView
+            android:id="@+id/btn_submit"
+            android:layout_width="0dp"
+            android:layout_height="50dp"
+            app:layout_constraintLeft_toRightOf="@id/btn_cancel"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="@id/btn_cancel"
+            android:gravity="center"
+            android:text="确定"
+            android:textColor="@color/em_color_brand" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</androidx.cardview.widget.CardView>

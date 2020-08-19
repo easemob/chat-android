@@ -13,8 +13,6 @@
         android:layout_height="@dimen/em_common_title_bar_height"
         app:titleBarTitle="@string/push_settings"
         app:titleBarDisplayHomeAsUpEnabled="true"
-        app:titleBarRightVisible="true"
-        app:titleBarRightTitle="@string/save"
         android:background="@color/white"/>
 
     <LinearLayout
@@ -35,110 +33,34 @@
         <View
             android:layout_width="match_parent"
             android:layout_height="1dip"
-            android:background="@color/btn_gray_normal" />
+            android:background="@drawable/demo_default_divider_list" />
     </LinearLayout>
 
-    <RelativeLayout
-        android:id="@+id/rl_no_disturb"
+    <com.hyphenate.chatuidemo.common.widget.SwitchItemView
+        android:id="@+id/switch_push_no_disturb"
         android:layout_width="match_parent"
-        android:layout_height="50dip"
-        android:padding="10dip"
-        android:background="@color/white">
+        android:layout_height="@dimen/em_common_item_height"
+        app:switchItemTitle="@string/offline_push_no_disturb"
+        app:switchItemTitleSize="14sp"
+        android:background="@color/white"/>
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerVertical="true"
-            android:paddingLeft="10dip"
-            android:text="@string/push_no_disturb_on"
-            android:textColor="@android:color/black"
-            android:textSize="14sp"
-            android:typeface="serif" />
-
-        <CheckBox
-            android:id="@+id/cb_no_disturb_on"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentRight="true"
-            />
-    </RelativeLayout>
-    <View
+    <com.hyphenate.chatuidemo.common.widget.ArrowItemView
+        android:id="@+id/item_push_time_range"
         android:layout_width="match_parent"
-        android:layout_height="1dip"
-        android:layout_marginLeft="10dip"
-        android:layout_marginRight="10dip"
-        android:background="#E6E6E6" />
-    <RelativeLayout
-        android:id="@+id/rl_no_disturb_only_night"
-        android:layout_width="match_parent"
-        android:layout_height="50dip"
-        android:padding="10dip"
-        android:background="@color/white">
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerVertical="true"
-            android:paddingLeft="10dip"
-            android:text="@string/push_only_on"
-            android:textColor="@android:color/black"
-            android:textSize="14sp"
-            android:typeface="serif" />
-
-        <CheckBox
-            android:id="@+id/cb_no_disturb_only_night"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentRight="true" />
-    </RelativeLayout>
-
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="1dip"
-        android:layout_marginLeft="10dip"
-        android:layout_marginRight="10dip"
-        android:background="#E6E6E6" />
-
-    <RelativeLayout
-        android:id="@+id/rl_no_disturb_off"
-        android:layout_width="match_parent"
-        android:layout_height="50dip"
-        android:padding="10dip"
-        android:background="@color/white">
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerVertical="true"
-            android:paddingLeft="10dip"
-            android:text="@string/push_no_disturb_off"
-            android:textColor="@android:color/black"
-            android:textSize="14sp"
-            android:typeface="serif" />
-
-        <CheckBox
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentTop="true"
-            android:layout_alignParentRight="true"
-            android:layout_alignParentEnd="true"
-            android:id="@+id/cb_no_disturb_off" />
-
-    </RelativeLayout>
-
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="1dip"
-        android:layout_marginLeft="10dip"
-        android:layout_marginRight="10dip"
-        android:background="#E6E6E6" />
+        android:layout_height="@dimen/em_common_item_height"
+        app:arrowItemTitle="@string/demo_no_disturb_time"
+        app:arrowItemContent="@string/offline_default_time_range"
+        app:arrowItemTitleSize="14sp"
+        android:visibility="gone"
+        android:background="@color/white"/>
 
     <com.hyphenate.chatuidemo.common.widget.SwitchItemView
         android:id="@+id/rl_custom_server"
         android:layout_width="match_parent"
-        android:layout_height="50dp"
+        android:layout_height="@dimen/em_common_item_height"
         app:switchItemTitle="@string/push_use_fcm"
         app:switchItemTitleSize="14sp"
+        android:visibility="gone"
         android:background="@color/white"/>
 
 </LinearLayout>

@@ -26,43 +26,47 @@
             <com.hyphenate.chatuidemo.common.widget.ArrowItemView
                 android:id="@+id/item_notification"
                 android:layout_width="match_parent"
-                android:layout_height="50dp"
+                android:layout_height="@dimen/em_common_item_height"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toRightOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/item_security"
                 app:arrowItemAvatarHeight="@dimen/em_about_me_avatar_size"
                 app:arrowItemAvatarWidth="@dimen/em_about_me_avatar_size"
                 app:arrowItemTitle="@string/push_settings"
+                app:arrowItemTitleSize="@dimen/em_size_normal"
                 android:foreground="@drawable/demo_ripple_click_gray"
                 android:background="@color/white"/>
 
             <com.hyphenate.chatuidemo.common.widget.ArrowItemView
                 android:id="@+id/item_call_option"
                 android:layout_width="match_parent"
-                android:layout_height="50dp"
+                android:layout_height="@dimen/em_common_item_height"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toRightOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/item_security"
                 app:arrowItemAvatarHeight="@dimen/em_about_me_avatar_size"
                 app:arrowItemAvatarWidth="@dimen/em_about_me_avatar_size"
                 app:arrowItemTitle="@string/call_option"
+                app:arrowItemTitleSize="@dimen/em_size_normal"
                 android:foreground="@drawable/demo_ripple_click_gray"
                 android:background="@color/white"/>
 
             <com.hyphenate.chatuidemo.common.widget.SwitchItemView
                 android:id="@+id/item_switch_typing"
                 android:layout_width="match_parent"
-                android:layout_height="50dp"
+                android:layout_height="@dimen/em_common_item_height"
                 app:switchItemTitle="@string/title_msg_typing"
                 app:switchItemShowDivider="true"
+                app:switchItemTitleSize="@dimen/em_size_normal"
                 android:background="@color/white"/>
 
             <com.hyphenate.chatuidemo.common.widget.SwitchItemView
                 android:id="@+id/item_switch_speaker"
                 android:layout_width="match_parent"
-                android:layout_height="50dp"
+                android:layout_height="@dimen/em_common_item_height"
                 app:switchItemTitle="@string/yangshengqi"
                 app:switchItemShowDivider="true"
+                app:switchItemTitleSize="@dimen/em_size_normal"
                 android:background="@color/white"/>
 
             <TextView
@@ -78,17 +82,19 @@
             <com.hyphenate.chatuidemo.common.widget.SwitchItemView
                 android:id="@+id/item_switch_delete_msg"
                 android:layout_width="match_parent"
-                android:layout_height="50dp"
+                android:layout_height="@dimen/em_common_item_height"
                 app:switchItemTitle="@string/delete_msg_when_exit_group"
                 app:switchItemShowDivider="true"
+                app:switchItemTitleSize="@dimen/em_size_normal"
                 android:background="@color/white"/>
 
             <com.hyphenate.chatuidemo.common.widget.SwitchItemView
                 android:id="@+id/item_switch_auto_accept_group"
                 android:layout_width="match_parent"
-                android:layout_height="50dp"
+                android:layout_height="@dimen/em_common_item_height"
                 app:switchItemTitle="@string/auto_accept_group_invitation"
                 app:switchItemShowDivider="true"
+                app:switchItemTitleSize="@dimen/em_size_normal"
                 android:background="@color/white"/>
 
             <com.hyphenate.chatuidemo.common.widget.SwitchItemView
@@ -121,18 +127,20 @@
             <com.hyphenate.chatuidemo.common.widget.SwitchItemView
                 android:id="@+id/item_switch_chatroom"
                 android:layout_width="match_parent"
-                android:layout_height="50dp"
+                android:layout_height="@dimen/em_common_item_height"
                 app:switchItemTitle="@string/chatroom_allow_owner_leave"
                 app:switchItemShowDivider="true"
+                app:switchItemTitleSize="@dimen/em_size_normal"
                 android:background="@color/white"/>
 
             <com.hyphenate.chatuidemo.common.widget.SwitchItemView
                 android:id="@+id/item_switch_chatroom_delete_msg"
                 android:layout_width="match_parent"
-                android:layout_height="50dp"
+                android:layout_height="@dimen/em_common_item_height"
                 app:switchItemTitle="@string/chatroom_allow_owner_leave"
                 app:switchItemShowDivider="true"
                 android:background="@color/white"
+                app:switchItemTitleSize="@dimen/em_size_normal"
                 android:visibility="gone"/>
 
         </LinearLayout>
