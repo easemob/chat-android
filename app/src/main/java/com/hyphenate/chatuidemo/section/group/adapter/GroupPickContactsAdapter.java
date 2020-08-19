@@ -25,6 +25,7 @@ public class GroupPickContactsAdapter extends EaseBaseRecyclerViewAdapter<EaseUs
     private List<String> existMembers;
     private List<String> selectedMembers;
     private boolean isCreateGroup;
+    private OnSelectListener listener;
 
     public GroupPickContactsAdapter() {
         this.isCreateGroup = false;
@@ -41,9 +42,13 @@ public class GroupPickContactsAdapter extends EaseBaseRecyclerViewAdapter<EaseUs
         return new ContactViewHolder(LayoutInflater.from(mContext).inflate(R.layout.demo_layout_item_pick_contact_with_checkbox, parent, false));
     }
 
+    /**
+     * 不设置条目点击事件
+     * @return
+     */
     @Override
-    public void itemClickAction(View v, int position) {
-        //屏蔽条目点击事件
+    public boolean isItemClickEnable() {
+        return false;
     }
 
     public void setExistMember(List<String> existMembers) {
@@ -95,17 +100,17 @@ public class GroupPickContactsAdapter extends EaseBaseRecyclerViewAdapter<EaseUs
             } else {
                 headerView.setVisibility(View.GONE);
             }
-            if(checkIfContains(username)){
+            if(checkIfContains(username) || (!selectedMembers.isEmpty() && selectedMembers.contains(username))){
                 checkbox.setChecked(true);
                 if(isCreateGroup) {
-                    checkbox.setButtonDrawable(R.drawable.demo_checkbox_bg_selector);
+                    checkbox.setBackgroundResource(R.drawable.demo_selector_bg_check);
                     itemView.setEnabled(true);
                 }else {
-                    checkbox.setButtonDrawable(R.drawable.demo_checkbox_bg_gray_selector);
+                    checkbox.setBackgroundResource(R.drawable.demo_selector_bg_gray_check);
                     itemView.setEnabled(false);
                 }
             }else{
-                checkbox.setButtonDrawable(R.drawable.demo_checkbox_bg_selector);
+                checkbox.setBackgroundResource(R.drawable.demo_selector_bg_check);
                 checkbox.setChecked(false);
                 itemView.setEnabled(true);
             }
@@ -124,6 +129,9 @@ public class GroupPickContactsAdapter extends EaseBaseRecyclerViewAdapter<EaseUs
                                 selectedMembers.remove(username);
                             }
                         }
+                    }
+                    if(listener != null) {
+                        listener.onSelected(v, selectedMembers);
                     }
                 }
             });
@@ -153,5 +161,13 @@ public class GroupPickContactsAdapter extends EaseBaseRecyclerViewAdapter<EaseUs
         }
         String[] multipleUser = username.split("/");
         return multipleUser[0];
+    }
+
+    public void setOnSelectListener(OnSelectListener listener) {
+        this.listener = listener;
+    }
+
+    public interface OnSelectListener {
+        void onSelected(View v, List<String> selectedMembers);
     }
 }

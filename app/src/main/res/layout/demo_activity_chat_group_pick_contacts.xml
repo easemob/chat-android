@@ -12,9 +12,45 @@
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:titleBarTitle="@string/em_chat_group_select_contact"
-        app:titleBarRightTitle="@string/em_chat_group_select_contact_save"
+        app:titleBarRightTitle="@string/finish"
         app:titleBarRightVisible="true"
         app:titleBarDisplayHomeAsUpEnabled="true"/>
+
+    <EditText
+        android:id="@+id/query"
+        android:layout_width="0dp"
+        android:layout_height="36dp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/title_bar"
+        android:layout_centerVertical="true"
+        android:layout_marginLeft="@dimen/em_margin_20"
+        android:layout_marginRight="@dimen/em_margin_20"
+        android:background="@drawable/demo_dialog_edit_bg_shape"
+        android:drawablePadding="@dimen/em_margin_10"
+        android:hint="@string/search"
+        android:paddingBottom="5dp"
+        android:paddingLeft="15dp"
+        android:paddingRight="15dp"
+        android:paddingTop="5dp"
+        android:focusable="true"
+        android:focusableInTouchMode="true"
+        android:singleLine="true"
+        android:imeOptions="actionSearch"
+        android:textSize="16sp"/>
+
+    <ImageButton
+        android:id="@+id/search_clear"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toTopOf="@id/query"
+        app:layout_constraintBottom_toBottomOf="@id/query"
+        app:layout_constraintRight_toRightOf="@id/query"
+        android:layout_marginRight="5dp"
+        android:background="@android:color/transparent"
+        android:padding="6dp"
+        android:src="@drawable/ease_search_clear"
+        android:visibility="invisible" />
 
     <com.scwang.smartrefresh.layout.SmartRefreshLayout
         android:id="@+id/srl_refresh"
@@ -23,7 +59,7 @@
         app:srlEnableLoadMore="false"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/title_bar"
+        app:layout_constraintTop_toBottomOf="@id/query"
         app:layout_constraintBottom_toBottomOf="parent">
 
         <androidx.recyclerview.widget.RecyclerView
@@ -37,7 +73,7 @@
         android:id="@+id/sidebar"
         android:layout_width="@dimen/em_common_side_bar_width"
         android:layout_height="0dp"
-        app:layout_constraintTop_toBottomOf="@id/title_bar"
+        app:layout_constraintTop_toTopOf="@id/srl_refresh"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         android:layout_marginTop="@dimen/em_margin_20"
@@ -50,7 +86,7 @@
         android:layout_height="wrap_content"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintTop_toTopOf="@id/srl_refresh"
         app:layout_constraintBottom_toBottomOf="parent"
         android:background="@drawable/em_show_head_toast_bg"
         android:gravity="center"

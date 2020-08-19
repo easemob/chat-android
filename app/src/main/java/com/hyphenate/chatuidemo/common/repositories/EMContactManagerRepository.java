@@ -1,5 +1,6 @@
 package com.hyphenate.chatuidemo.common.repositories;
 
+import android.text.TextUtils;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
@@ -12,6 +13,7 @@ import com.hyphenate.chatuidemo.common.db.entity.EmUserEntity;
 import com.hyphenate.chatuidemo.common.interfaceOrImplement.ResultCallBack;
 import com.hyphenate.chatuidemo.common.net.ErrorCode;
 import com.hyphenate.chatuidemo.common.net.Resource;
+import com.hyphenate.chatuidemo.common.utils.ThreadManager;
 import com.hyphenate.easeui.domain.EaseUser;
 import com.hyphenate.exceptions.HyphenateException;
 
@@ -278,6 +280,25 @@ public class EMContactManagerRepository extends BaseEMRepository{
 
                     }
                 });
+            }
+        }.asLiveData();
+    }
+
+    public LiveData<Resource<List<EaseUser>>> getSearchContacts(String keyword) {
+        return new NetworkOnlyResource<List<EaseUser>>() {
+            @Override
+            protected void createCall(@NonNull ResultCallBack<LiveData<List<EaseUser>>> callBack) {
+                ThreadManager.getInstance().runOnIOThread(()-> {
+                    List<EaseUser> easeUsers = getUserDao().loadContacts();
+                    List<EaseUser> list = new ArrayList<>();
+                    for (EaseUser user : easeUsers) {
+                        if(user.getUsername().contains(keyword) || (!TextUtils.isEmpty(user.getNickname()) && user.getNickname().contains(keyword))) {
+                            list.add(user);
+                        }
+                    }
+                    callBack.onSuccess(createLiveData(list));
+                });
+
             }
         }.asLiveData();
     }

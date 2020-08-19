@@ -3,8 +3,12 @@ package com.hyphenate.chatuidemo.section.group;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.Editable;
 import android.text.TextUtils;
+import android.text.TextWatcher;
 import android.view.View;
+import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.TextView;
 
 import com.hyphenate.chatuidemo.R;
@@ -23,22 +27,27 @@ import com.scwang.smartrefresh.layout.listener.OnRefreshListener;
 import java.util.Arrays;
 import java.util.List;
 
+import androidx.core.content.ContextCompat;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-public class GroupPickContactsActivity extends BaseInitActivity implements EaseTitleBar.OnRightClickListener, EaseTitleBar.OnBackPressListener, OnRefreshListener {
+public class GroupPickContactsActivity extends BaseInitActivity implements EaseTitleBar.OnRightClickListener, EaseTitleBar.OnBackPressListener, OnRefreshListener, GroupPickContactsAdapter.OnSelectListener {
     private EaseTitleBar titleBar;
     private SmartRefreshLayout srlRefresh;
     private RecyclerView rvList;
     private EaseSidebar sidebar;
     private TextView floatingHeader;
+    private EditText query;
+    private ImageButton searchClear;
     private SidebarPresenter presenter;
     protected GroupPickContactsAdapter adapter;
     private GroupPickContactsViewModel viewModel;
     private String groupId;
     private boolean isOwner;
     private String[] newmembers;
+    private String keyword;
+    private List<EaseUser> contacts;
 
     public static void actionStartForResult(Activity context, String[] newmembers, int requestCode) {
         Intent starter = new Intent(context, GroupPickContactsActivity.class);
@@ -71,9 +80,12 @@ public class GroupPickContactsActivity extends BaseInitActivity implements EaseT
         super.initView(savedInstanceState);
         titleBar = findViewById(R.id.title_bar);
         srlRefresh = findViewById(R.id.srl_refresh);
+        query = findViewById(R.id.query);
+        searchClear = findViewById(R.id.search_clear);
         rvList = findViewById(R.id.rv_list);
         sidebar = findViewById(R.id.sidebar);
         floatingHeader = findViewById(R.id.floating_header);
+        titleBar.getRightText().setTextColor(ContextCompat.getColor(mContext, R.color.em_color_brand));
 
         rvList.setLayoutManager(new LinearLayoutManager(mContext));
         adapter = new GroupPickContactsAdapter(TextUtils.isEmpty(groupId));
@@ -90,6 +102,37 @@ public class GroupPickContactsActivity extends BaseInitActivity implements EaseT
         titleBar.setOnRightClickListener(this);
         srlRefresh.setOnRefreshListener(this);
         sidebar.setOnTouchEventListener(presenter);
+        adapter.setOnSelectListener(this);
+        query.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                keyword = s.toString();
+                if(!TextUtils.isEmpty(keyword)) {
+                    searchClear.setVisibility(View.VISIBLE);
+                    viewModel.getSearchContacts(keyword);
+                }else {
+                    searchClear.setVisibility(View.INVISIBLE);
+                    adapter.setData(contacts);
+                }
+            }
+        });
+        searchClear.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                query.getText().clear();
+                adapter.setData(contacts);
+            }
+        });
     }
 
     @Override
@@ -100,6 +143,7 @@ public class GroupPickContactsActivity extends BaseInitActivity implements EaseT
             parseResource(response, new OnResourceParseCallback<List<EaseUser>>() {
                 @Override
                 public void onSuccess(List<EaseUser> data) {
+                    contacts = data;
                     adapter.setData(data);
                     if(!TextUtils.isEmpty(groupId)) {
                         viewModel.getGroupMembers(groupId);
@@ -131,6 +175,14 @@ public class GroupPickContactsActivity extends BaseInitActivity implements EaseT
                 public void onSuccess(Boolean data) {
                     setResult(RESULT_OK);
                     finish();
+                }
+            });
+        });
+        viewModel.getSearchContactsObservable().observe(this, response -> {
+            parseResource(response, new OnResourceParseCallback<List<EaseUser>>() {
+                @Override
+                public void onSuccess(List<EaseUser> data) {
+                    adapter.setData(data);
                 }
             });
         });
@@ -172,5 +224,10 @@ public class GroupPickContactsActivity extends BaseInitActivity implements EaseT
     @Override
     public void onBackPress(View view) {
         onBackPressed();
+    }
+
+    @Override
+    public void onSelected(View v, List<String> selectedMembers) {
+        titleBar.getRightText().setText(getString(R.string.finish) + "(" + selectedMembers.size() +")");
     }
 }

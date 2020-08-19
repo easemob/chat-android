@@ -10,6 +10,7 @@
     <string name="cancel">取消</string>
     <string name="confirm">确定</string>
     <string name="loading">加载中&#8230;</string>
+    <string name="finish">完成</string>
 
     <string name="em_main_title_home">会话</string>
     <string name="em_main_title_friends">通讯录</string>

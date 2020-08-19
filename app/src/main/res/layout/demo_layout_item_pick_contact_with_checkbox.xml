@@ -2,39 +2,33 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    xmlns:tools="http://schemas.android.com/tools"
     android:background="@android:color/transparent"
-    android:orientation="vertical" >
+    android:orientation="vertical">
 
     <TextView
         android:id="@+id/header"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@color/em_base_color_divider"
+        android:layout_height="40dp"
         android:paddingLeft="10dp"
         android:textColor="@android:color/black"
         android:textSize="15sp"
+        android:gravity="center_vertical"
+        tools:text="A"
         android:visibility="visible" />
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="60dp"
+        android:layout_height="@dimen/em_common_item_height"
         android:background="@drawable/ease_mm_listitem"
         android:gravity="center_vertical"
         android:orientation="horizontal" >
 
-        <CheckBox
-            android:id="@+id/checkbox"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical"
-            android:enabled="false"
-            android:clickable="false"
-            android:button="@drawable/demo_checkbox_bg_selector" />
-
         <com.hyphenate.easeui.widget.EaseImageView
             android:id="@+id/avatar"
-            android:layout_width="45dp"
-            android:layout_height="45dp"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_marginLeft="@dimen/em_margin_20"
             android:layout_gravity="center_vertical"
             android:scaleType="fitXY"
             android:src="@drawable/em_default_avatar" />
@@ -42,14 +36,27 @@
         <TextView
             android:id="@+id/name"
             android:maxWidth="110dp"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
+            android:layout_weight="1"
             android:layout_height="wrap_content"
             android:paddingLeft="10dp"
-            android:layout_marginRight="16dp"
             android:singleLine="true"
             android:ellipsize="end"
+            android:text="小明"
             android:textColor="@android:color/black"
-            android:textSize="20sp" />
+            android:textSize="@dimen/em_size_big_notify" />
+
+        <CheckBox
+            android:id="@+id/checkbox"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="16dp"
+            android:layout_marginLeft="@dimen/em_margin_10"
+            android:layout_gravity="center_vertical"
+            android:enabled="false"
+            android:clickable="false"
+            android:background="@drawable/demo_selector_bg_check"
+            android:button="@null" />
 
     </LinearLayout>
 
