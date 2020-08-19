@@ -1,5 +1,6 @@
 package com.hyphenate.chatuidemo.section.search.adapter;
 
+import android.text.SpannableStringBuilder;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,6 +11,7 @@ import androidx.annotation.NonNull;
 
 import com.hyphenate.chat.EMMessage;
 import com.hyphenate.chatuidemo.R;
+import com.hyphenate.chatuidemo.common.utils.EditTextUtils;
 import com.hyphenate.easeui.adapter.EaseBaseRecyclerViewAdapter;
 import com.hyphenate.easeui.utils.EaseCommonUtils;
 import com.hyphenate.easeui.utils.EaseSmileUtils;
@@ -19,10 +21,16 @@ import com.hyphenate.util.DateUtils;
 import java.util.Date;
 
 public class SearchMessageAdapter extends EaseBaseRecyclerViewAdapter<EMMessage> {
+    private String keyword;
+
     @Override
     public ViewHolder getViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(mContext).inflate(R.layout.demo_item_row_chat_history, parent, false);
         return new MessageViewHolder(view);
+    }
+
+    public void setKeyword(String keyword) {
+        this.keyword = keyword;
     }
 
     private class MessageViewHolder extends ViewHolder<EMMessage> {
@@ -65,7 +73,15 @@ public class SearchMessageAdapter extends EaseBaseRecyclerViewAdapter<EMMessage>
             } else {
                 msg_state.setVisibility(View.GONE);
             }
+            String content = EaseSmileUtils.getSmiledText(mContext, EaseCommonUtils.getMessageDigest(item, mContext)).toString();
             message.setText(EaseSmileUtils.getSmiledText(mContext, EaseCommonUtils.getMessageDigest(item, mContext)));
+            message.post(()-> {
+                String subContent = EditTextUtils.ellipsizeString(message, content, keyword, message.getWidth());
+                SpannableStringBuilder builder = EditTextUtils.highLightKeyword(mContext, subContent, keyword);
+                if(builder != null) {
+                    message.setText(builder);
+                }
+            });
         }
     }
 }

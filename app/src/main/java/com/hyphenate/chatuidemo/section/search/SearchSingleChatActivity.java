@@ -45,6 +45,7 @@ public class SearchSingleChatActivity extends SearchActivity {
     @Override
     public void searchMessages(String search) {
         List<EMMessage> mData = conversation.searchMsgFromDB(search, System.currentTimeMillis(), 100, null, EMConversation.EMSearchDirection.UP);
+        ((SearchMessageAdapter)adapter).setKeyword(search);
         adapter.setData(mData);
     }
 
