@@ -4,19 +4,18 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
 
 import com.hyphenate.chatuidemo.DemoApplication;
 import com.hyphenate.chatuidemo.R;
 import com.hyphenate.chatuidemo.section.base.BaseInitActivity;
-import com.hyphenate.chatuidemo.section.chat.fragment.EaseVideoCallFragment;
+import com.hyphenate.chatuidemo.section.chat.fragment.VideoCallFragment;
 import com.hyphenate.easeui.widget.EaseTitleBar;
 
 public class ChatVideoCallActivity extends BaseInitActivity {
     EaseTitleBar titleBar;
-    private EaseVideoCallFragment fragment;
+    private VideoCallFragment fragment;
 
     public static void actionStart(Context context, String toChatName) {
         Intent intent = new Intent(context, ChatVideoCallActivity.class);
@@ -50,7 +49,7 @@ public class ChatVideoCallActivity extends BaseInitActivity {
     @Override
     protected void initData() {
         super.initData();
-        fragment = new EaseVideoCallFragment();
+        fragment = new VideoCallFragment();
         Bundle bundle = new Bundle();
         bundle.putString("username", getIntent().getStringExtra("username"));
         bundle.putBoolean("isComingCall", getIntent().getBooleanExtra("isComingCall", false));

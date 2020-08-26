@@ -56,7 +56,7 @@ import com.superrtc.sdk.VideoView;
 import java.io.InputStream;
 import java.util.UUID;
 
-public class EaseVideoCallFragment extends EaseCallFragment implements View.OnClickListener {
+public class VideoCallFragment extends EaseCallFragment implements View.OnClickListener {
     private TextView callStateTextView;
     private Group comingBtnContainer;
     private ImageButton refuseBtn;

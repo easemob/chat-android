@@ -8,12 +8,12 @@ import android.view.View;
 import com.hyphenate.chatuidemo.DemoApplication;
 import com.hyphenate.chatuidemo.R;
 import com.hyphenate.chatuidemo.section.base.BaseInitActivity;
-import com.hyphenate.chatuidemo.section.chat.fragment.EaseVoiceCallFragment;
+import com.hyphenate.chatuidemo.section.chat.fragment.VoiceCallFragment;
 import com.hyphenate.easeui.widget.EaseTitleBar;
 
 public class ChatVoiceCallActivity extends BaseInitActivity {
     EaseTitleBar titleBar;
-    private EaseVoiceCallFragment fragment;
+    private VoiceCallFragment fragment;
 
     public static void actionStart(Context context, String toChatName) {
         Intent intent = new Intent(context, ChatVoiceCallActivity.class);
@@ -29,7 +29,7 @@ public class ChatVoiceCallActivity extends BaseInitActivity {
     @Override
     protected void initSystemFit() {
         setFitSystemForTheme(true, R.color.ease_chat_voice_bg);
-        setStatusBarTextColor(true);
+        setStatusBarTextColor(false);
     }
 
     @Override
@@ -42,7 +42,7 @@ public class ChatVoiceCallActivity extends BaseInitActivity {
     @Override
     protected void initData() {
         super.initData();
-        fragment = new EaseVoiceCallFragment();
+        fragment = new VoiceCallFragment();
         Bundle bundle = new Bundle();
         bundle.putString("username", getIntent().getStringExtra("username"));
         bundle.putBoolean("isComingCall", getIntent().getBooleanExtra("isComingCall", false));

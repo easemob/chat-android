@@ -1,51 +1,35 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:background="#252C39"
+    android:background="@drawable/demo_bg_voice_call"
     android:orientation="vertical"
     android:id="@+id/root_layout"
     android:paddingLeft="20dp"
     android:paddingRight="20dp">
 
    <LinearLayout
-        android:id="@+id/topLayout"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_marginTop="5dp"
-        android:layout_weight="1"
-        android:gravity="center_horizontal"
-        android:orientation="vertical" >
+       android:id="@+id/topLayout"
+       android:layout_width="0dp"
+       android:layout_height="wrap_content"
+       app:layout_constraintLeft_toLeftOf="parent"
+       app:layout_constraintRight_toRightOf="parent"
+       app:layout_constraintTop_toTopOf="parent"
+       android:layout_marginTop="5dp"
+       android:gravity="center_horizontal"
+       android:orientation="vertical" >
 
        <ImageButton
            android:id="@+id/btn_small_call"
            style="@style/style_call_tools_panel_button"
            android:layout_alignParentEnd="true"
-           android:layout_gravity="bottom|right"
+           android:layout_gravity="left"
            android:layout_marginTop="16dp"
            android:layout_marginEnd="4dp"
-           android:src="@drawable/em_call_close" />
+           android:src="@drawable/demo_float_icon" />
 
-        <TextView
-            android:id="@+id/tv_call_state"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textColor="@color/voip_interface_text_color"
-            android:textSize="22sp"
-            android:paddingLeft="12dp"
-            android:paddingRight="12dp"
-            android:visibility="visible" />
-
-        <com.hyphenate.easeui.widget.MyChronometer
-            android:visibility="invisible"
-            android:id="@+id/chronometer"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textColor="#fff"
-            android:text="Chronometer" />
-        
         <TextView 
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -56,48 +40,91 @@
         <TextView
             android:id="@+id/tv_calling_duration"
             android:layout_width="wrap_content"
-            android:layout_height="25dp"
+            android:layout_height="wrap_content"
             android:textColor="@color/voip_interface_text_color"
             android:textSize="15sp"
             android:visibility="visible" />
     </LinearLayout>
 
-    <LinearLayout
-        android:layout_width="match_parent"
+    <TextView
+        android:id="@+id/tv_network_status"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_marginTop="20dp"
+        android:textColor="@android:color/white" />
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="0dp"
         android:layout_height="0dp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/topLayout"
+        app:layout_constraintBottom_toTopOf="@id/ll_bottom_container"
         android:gravity="center_horizontal"
         android:orientation="vertical"
         android:layout_weight="2" >
+        
+        <View
+            android:id="@+id/view_ring"
+            android:layout_width="240dp"
+            android:layout_height="240dp"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            android:background="@drawable/demo_bg_ring_voice"/>
 
-        <ImageView
+        <com.hyphenate.easeui.widget.EaseImageView
             android:id="@+id/swing_card"
-            android:layout_width="60dp"
-            android:layout_height="60dp"
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            app:layout_constraintCircle="@id/view_ring"
+            app:layout_constraintCircleAngle="0"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
             android:scaleType="fitXY"
-            android:layout_marginTop="10dp"
+            app:ease_shape_type="round"
+            android:layout_marginTop="50dp"
             android:src="@drawable/em_default_avatar" />
         
         <TextView
             android:id="@+id/tv_nick"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/view_ring"
             android:layout_marginTop="10dp"
-              android:textColor="@android:color/white"
-              android:textSize="20sp"
-              android:text="张三"
+            android:textColor="@android:color/white"
+            android:textSize="20sp"
+            android:text="张三"
             tools:ignore="HardcodedText" />
+
         <TextView
-            android:id="@+id/tv_network_status"
+            android:id="@+id/tv_call_state"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            android:textColor="@android:color/white" />
-    </LinearLayout>
+            android:textColor="@color/voip_interface_text_color"
+            android:textSize="@dimen/em_size_big"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tv_nick"
+            android:layout_marginTop="@dimen/em_margin_10"
+            android:paddingLeft="12dp"
+            android:paddingRight="12dp"
+            android:visibility="visible" />
+        
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/ll_bottom_container"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
         android:orientation="vertical"
         android:paddingTop="8dp" >
 
@@ -105,9 +132,13 @@
             android:id="@+id/iv_mute"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toLeftOf="@id/iv_handsfree"
+            app:layout_constraintRight_toLeftOf="@id/btn_hangup_call"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintHorizontal_chainStyle="spread_inside"
+            android:layout_marginBottom="40dp"
+            android:layout_marginLeft="17dp"
+            android:layout_marginStart="17dp"
             android:scaleType="fitCenter"
             android:src="@drawable/em_icon_mute_normal" />
 
@@ -118,7 +149,7 @@
             android:layout_marginTop="3dp"
             android:gravity="center"
             android:text="@string/mute"
-            android:textColor="#666167"
+            android:textColor="@color/white"
             app:layout_constraintLeft_toLeftOf="@id/iv_mute"
             app:layout_constraintRight_toRightOf="@id/iv_mute"
             app:layout_constraintTop_toBottomOf="@id/iv_mute"/>
@@ -127,9 +158,11 @@
             android:id="@+id/iv_handsfree"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintTop_toTopOf="@id/iv_mute"
             app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintLeft_toRightOf="@id/iv_mute"
+            app:layout_constraintLeft_toRightOf="@id/btn_hangup_call"
+            android:layout_marginRight="17dp"
+            android:layout_marginEnd="17dp"
             android:scaleType="fitCenter"
             android:src="@drawable/em_icon_speaker_normal" />
 
@@ -140,7 +173,7 @@
             android:layout_marginTop="3dp"
             android:gravity="center"
             android:text="@string/Hands_free"
-            android:textColor="#666167"
+            android:textColor="@color/white"
             app:layout_constraintLeft_toLeftOf="@id/iv_handsfree"
             app:layout_constraintRight_toRightOf="@id/iv_handsfree"
             app:layout_constraintTop_toBottomOf="@id/iv_handsfree"/>
@@ -149,12 +182,9 @@
             android:id="@+id/btn_hangup_call"
             android:layout_width="65dp"
             android:layout_height="65dp"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/iv_mute"
-            app:layout_constraintBottom_toBottomOf="parent"
-            android:layout_marginTop="40dp"
-            android:layout_marginBottom="40dp"
+            app:layout_constraintLeft_toRightOf="@id/iv_mute"
+            app:layout_constraintRight_toLeftOf="@id/iv_handsfree"
+            app:layout_constraintTop_toTopOf="@id/iv_mute"
             android:background="@drawable/call_end"/>
 
         <TextView
@@ -170,22 +200,36 @@
             app:layout_constraintRight_toRightOf="@id/btn_hangup_call"
             app:layout_constraintTop_toBottomOf="@id/btn_hangup_call"/>
 
+        <com.hyphenate.easeui.widget.MyChronometer
+            android:visibility="invisible"
+            android:id="@+id/chronometer"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintBottom_toTopOf="@id/btn_hangup_call"
+            app:layout_constraintLeft_toLeftOf="@id/btn_hangup_call"
+            app:layout_constraintRight_toRightOf="@id/btn_hangup_call"
+            android:layout_marginBottom="@dimen/em_margin_15"
+            android:textColor="#fff"
+            android:text="Chronometer" />
+
         <androidx.constraintlayout.widget.Group
             android:id="@+id/group_hang_up"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:visibility="invisible"
-            app:constraint_referenced_ids="btn_hangup_call,tv_hangup"/>
+            android:visibility="visible"
+            app:constraint_referenced_ids="iv_mute,tv_mute,iv_handsfree,tv_handsfree,btn_hangup_call,tv_hangup"/>
 
         <ImageButton
             android:id="@+id/btn_refuse_call"
             android:layout_width="65dp"
             android:layout_height="65dp"
-            android:layout_marginLeft="@dimen/em_margin_20"
+            android:layout_marginLeft="17dp"
+            android:layout_marginStart="17dp"
             android:background="@drawable/call_end"
-            app:layout_constraintTop_toTopOf="@id/btn_hangup_call"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toLeftOf="@id/btn_answer_call"
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:layout_marginBottom="40dp"
             app:layout_constraintHorizontal_chainStyle="spread_inside"/>
 
         <TextView
@@ -195,7 +239,7 @@
             android:layout_marginTop="3dp"
             android:gravity="center"
             android:text="@string/hang_up"
-            android:textColor="@android:color/white"
+            android:textColor="@color/white"
             android:textSize="14sp"
             app:layout_constraintLeft_toLeftOf="@id/btn_refuse_call"
             app:layout_constraintRight_toRightOf="@id/btn_refuse_call"
@@ -205,11 +249,12 @@
             android:id="@+id/btn_answer_call"
             android:layout_width="65dp"
             android:layout_height="65dp"
-            android:layout_marginRight="@dimen/em_margin_20"
+            android:layout_marginRight="17dp"
+            android:layout_marginEnd="17dp"
             android:background="@drawable/call_answer"
-            app:layout_constraintTop_toTopOf="@id/btn_hangup_call"
             app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintLeft_toRightOf="@id/btn_refuse_call"/>
+            app:layout_constraintLeft_toRightOf="@id/btn_refuse_call"
+            app:layout_constraintBottom_toBottomOf="@id/btn_refuse_call"/>
 
         <TextView
             android:id="@+id/tv_answer"
@@ -225,19 +270,12 @@
             app:layout_constraintTop_toBottomOf="@id/btn_answer_call"/>
 
         <androidx.constraintlayout.widget.Group
-            android:id="@+id/ll_voice_control"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:visibility="visible"
-            app:constraint_referenced_ids="iv_mute,iv_handsfree,tv_mute,tv_handsfree"/>
-
-        <androidx.constraintlayout.widget.Group
             android:id="@+id/ll_coming_call"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:visibility="visible"
+            android:visibility="invisible"
             app:constraint_referenced_ids="btn_refuse_call,btn_answer_call,tv_refuse,tv_answer"/>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
-</LinearLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -37,7 +37,7 @@ import com.hyphenate.util.EMLog;
 
 import java.util.UUID;
 
-public class EaseVoiceCallFragment extends EaseCallFragment implements View.OnClickListener {
+public class VoiceCallFragment extends EaseCallFragment implements View.OnClickListener {
     private Group comingBtnContainer;
     private ImageButton hangupBtn;
     private ImageButton refuseBtn;
@@ -46,7 +46,6 @@ public class EaseVoiceCallFragment extends EaseCallFragment implements View.OnCl
     private ImageView muteImage;
     private ImageView handsFreeImage;
     private TextView callStateTextView;
-    private Group voiceContronlLayout;
     private TextView netwrokStatusVeiw;
     private Group groupHangUp;
 
@@ -100,7 +99,6 @@ public class EaseVoiceCallFragment extends EaseCallFragment implements View.OnCl
         callStateTextView = (TextView) findViewById(R.id.tv_call_state);
         TextView nickTextView = (TextView) findViewById(R.id.tv_nick);
         chronometer = (Chronometer) findViewById(R.id.chronometer);
-        voiceContronlLayout = findViewById(R.id.ll_voice_control);
         netwrokStatusVeiw = (TextView) findViewById(R.id.tv_network_status);
         groupHangUp = findViewById(R.id.group_hang_up);
 
@@ -128,7 +126,6 @@ public class EaseVoiceCallFragment extends EaseCallFragment implements View.OnCl
 
             comingBtnContainer.setVisibility(View.INVISIBLE);
             groupHangUp.setVisibility(View.VISIBLE);
-            groupRequestLayout();
             st1 = getResources().getString(R.string.Are_connected_to_each_other);
             callStateTextView.setText(st1);
             handler.sendEmptyMessage(MSG_CALL_MAKE_VOICE);
@@ -138,8 +135,8 @@ public class EaseVoiceCallFragment extends EaseCallFragment implements View.OnCl
                 }
             }, 300);
         } else { // incoming call
-            voiceContronlLayout.setVisibility(View.INVISIBLE);
-            groupRequestLayout();
+            groupHangUp.setVisibility(View.INVISIBLE);
+            comingBtnContainer.setVisibility(View.VISIBLE);
             Uri ringUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_RINGTONE);
             audioManager.setMode(AudioManager.MODE_RINGTONE);
             audioManager.setSpeakerphoneOn(true);
@@ -152,11 +149,6 @@ public class EaseVoiceCallFragment extends EaseCallFragment implements View.OnCl
 
         //设置小窗口悬浮类型
         CallFloatWindow.getInstance(DemoApplication.getInstance()).setCallType(CallFloatWindow.CallWindowType.VOICECALL);
-    }
-
-    private void groupRequestLayout() {
-        comingBtnContainer.requestLayout();
-        voiceContronlLayout.requestLayout();
     }
 
     @Override
@@ -197,8 +189,8 @@ public class EaseVoiceCallFragment extends EaseCallFragment implements View.OnCl
             callStateTextView.setText("正在接听...");
             comingBtnContainer.setVisibility(View.INVISIBLE);
             groupHangUp.setVisibility(View.VISIBLE);
-            voiceContronlLayout.setVisibility(View.VISIBLE);
-            groupRequestLayout();
+            comingBtnContainer.requestLayout();
+            groupHangUp.requestLayout();
             handler.sendEmptyMessage(MSG_CALL_ANSWER);
         } else if (id == R.id.btn_hangup_call) {
             hangupBtn.setEnabled(false);
