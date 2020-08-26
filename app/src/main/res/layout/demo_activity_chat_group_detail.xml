@@ -31,13 +31,12 @@
             android:paddingBottom="@dimen/em_margin_30">
 
             <androidx.constraintlayout.widget.ConstraintLayout
-                android:id="@+id/cl_user_info"
+                android:id="@+id/cl_group_info"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toRightOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintBottom_toTopOf="cl_member"
                 android:paddingBottom="@dimen/em_margin_15"
                 android:background="@color/white">
 
@@ -95,7 +94,7 @@
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toRightOf="parent"
                 android:background="@color/white"
-                app:layout_constraintTop_toBottomOf="@id/cl_user_info">
+                app:layout_constraintTop_toBottomOf="@id/cl_group_info">
 
                 <TextView
                     android:id="@+id/tv_group_member_title"
@@ -160,7 +159,7 @@
                 android:layout_height="1dp"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/cl_user_info"
+                app:layout_constraintTop_toBottomOf="@id/cl_group_info"
                 android:layout_marginLeft="@dimen/em_margin_15"
                 android:layout_marginRight="@dimen/em_margin_15"
                 android:layout_marginStart="@dimen/em_margin_15"
