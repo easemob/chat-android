@@ -4,6 +4,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
+import android.text.TextUtils;
+import android.util.Log;
 import android.view.ContextMenu;
 import android.view.LayoutInflater;
 import android.view.MenuInflater;
@@ -12,6 +14,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -162,10 +165,33 @@ public class MultiDeviceActivity extends BaseInitActivity {
                 convertView = inflater.inflate(R.layout.demo_multi_dev_item, parent, false);
             }
             ((TextView) convertView.findViewById(R.id.multi_device_name)).setText(getItem(position).getDeviceName());
+            ImageView icon = convertView.findViewById(R.id.iv_device_icon);
+            int deviceTypeIcon = getDeviceTypeIcon(getItem(position).getResource());
+            if(deviceTypeIcon != 0) {
+                icon.setImageResource(deviceTypeIcon);
+            }
             convertView.setTag(getItem(position).getDeviceName());
             return convertView;
         }
     }
 
+    private int getDeviceTypeIcon(String deviceResource) {
+        if(TextUtils.isEmpty(deviceResource) || !deviceResource.contains("_")) {
+            return 0;
+        }
+        String deviceType = deviceResource.substring(0, deviceResource.indexOf("_"));
+        if(deviceType.equalsIgnoreCase("ios")) {
+            return R.drawable.demo_device_ios;
+        }else if(deviceType.equalsIgnoreCase("android")) {
+            return R.drawable.demo_device_android;
+        }else if(deviceType.equalsIgnoreCase("web")) {
+            return R.drawable.demo_device_web;
+        }else if(deviceType.equalsIgnoreCase("win")) {
+            return R.drawable.demo_device_win;
+        }else if(deviceType.equalsIgnoreCase("iMac")) {
+            return R.drawable.demo_device_imac;
+        }
+        return 0;
+    }
 
 }

@@ -67,7 +67,7 @@ public class SwitchItemView extends ConstraintLayout {
         tvTitle.setTextColor(titleColor);
 
         int titleSizeId = a.getResourceId(R.styleable.SwitchItemView_switchItemTitleSize, -1);
-        titleSize = a.getDimension(R.styleable.SwitchItemView_switchItemTitleSize, sp2px(getContext(), 16));
+        titleSize = a.getDimension(R.styleable.SwitchItemView_switchItemTitleSize, sp2px(getContext(), 14));
 
         if(titleSizeId != -1) {
             titleSize = getResources().getDimension(titleSizeId);

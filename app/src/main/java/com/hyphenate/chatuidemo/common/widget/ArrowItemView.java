@@ -67,7 +67,7 @@ public class ArrowItemView extends ConstraintLayout {
         tvTitle.setTextColor(titleColor);
 
         int titleSizeId = a.getResourceId(R.styleable.ArrowItemView_arrowItemTitleSize, -1);
-        titleSize = a.getDimension(R.styleable.ArrowItemView_arrowItemTitleSize, sp2px(getContext(), 16));
+        titleSize = a.getDimension(R.styleable.ArrowItemView_arrowItemTitleSize, sp2px(getContext(), 14));
         if(titleSizeId != -1) {
             titleSize = getResources().getDimension(titleSizeId);
         }
