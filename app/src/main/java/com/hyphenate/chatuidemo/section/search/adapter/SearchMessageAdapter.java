@@ -74,12 +74,13 @@ public class SearchMessageAdapter extends EaseBaseRecyclerViewAdapter<EMMessage>
                 msg_state.setVisibility(View.GONE);
             }
             String content = EaseSmileUtils.getSmiledText(mContext, EaseCommonUtils.getMessageDigest(item, mContext)).toString();
-            message.setText(EaseSmileUtils.getSmiledText(mContext, EaseCommonUtils.getMessageDigest(item, mContext)));
             message.post(()-> {
                 String subContent = EditTextUtils.ellipsizeString(message, content, keyword, message.getWidth());
                 SpannableStringBuilder builder = EditTextUtils.highLightKeyword(mContext, subContent, keyword);
                 if(builder != null) {
                     message.setText(builder);
+                }else {
+                    message.setText(content);
                 }
             });
         }
