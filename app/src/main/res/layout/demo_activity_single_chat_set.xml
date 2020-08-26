@@ -65,6 +65,7 @@
         android:layout_marginTop="@dimen/em_margin_20"
         app:arrowItemTitle="@string/em_single_clear_history"
         app:arrowItemShowDivider="false"
+        app:arrowItemShowArrow="false"
         android:background="@color/white"
         android:foreground="@drawable/demo_ripple_click_gray"/>
 
