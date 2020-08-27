@@ -11,7 +11,6 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.SystemClock;
-import android.os.Trace;
 import android.provider.Settings;
 import android.telephony.TelephonyManager;
 import android.view.LayoutInflater;
@@ -35,7 +34,6 @@ import androidx.constraintlayout.widget.Group;
 import com.hyphenate.chat.EMCallSession;
 import com.hyphenate.chat.EMCallStateChangeListener;
 import com.hyphenate.chat.EMClient;
-import com.hyphenate.chat.EMConferenceStream;
 import com.hyphenate.chat.EMMirror;
 import com.hyphenate.chat.EMVideoCallHelper;
 import com.hyphenate.chat.EMWaterMarkOption;
@@ -43,8 +41,6 @@ import com.hyphenate.chat.EMWaterMarkPosition;
 import com.hyphenate.chatuidemo.DemoApplication;
 import com.hyphenate.chatuidemo.R;
 import com.hyphenate.chatuidemo.common.utils.PreferenceManager;
-import com.hyphenate.chatuidemo.section.base.BaseActivity;
-import com.hyphenate.chatuidemo.section.chat.ChatVideoCallActivity;
 import com.hyphenate.chatuidemo.section.conference.CallFloatWindow;
 import com.hyphenate.easeui.EaseUI;
 import com.hyphenate.easeui.manager.PhoneStateManager;
@@ -69,7 +65,7 @@ public class VideoCallFragment extends EaseCallFragment implements View.OnClickL
     private Group voiceContronlLayout;
     private ConstraintLayout rootContainer;
     private LinearLayout topContainer;
-    private ConstraintLayout bottomContainer;
+    private Group bottomContainer;
     private TextView monitorTextView;
     private TextView netwrokStatusVeiw;
     private Button switchCameraBtn;
@@ -78,6 +74,8 @@ public class VideoCallFragment extends EaseCallFragment implements View.OnClickL
     protected EMCallSurfaceView localSurface;
     protected EMCallSurfaceView oppositeSurface;
     private Group groupHangUp;
+    private Group groupUseInfo;
+    private Group groupOngoingSettings;
 
     private EMVideoCallHelper callHelper;
     private int surfaceState = -1;
@@ -148,6 +146,8 @@ public class VideoCallFragment extends EaseCallFragment implements View.OnClickL
         // remote surfaceview
         oppositeSurface = (EMCallSurfaceView) findViewById(R.id.opposite_surface);
         groupHangUp = findViewById(R.id.group_hang_up);
+        groupUseInfo = findViewById(R.id.group_use_info);
+        groupOngoingSettings = findViewById(R.id.group_ongoing_settings);
 
         nickTextView.setText(username);
 
@@ -188,12 +188,10 @@ public class VideoCallFragment extends EaseCallFragment implements View.OnClickL
             soundPool = new SoundPool(1, AudioManager.STREAM_RING, 0);
             outgoing = soundPool.load(mContext, R.raw.em_outgoing, 1);
 
-            comingBtnContainer.setVisibility(View.INVISIBLE);
-            groupHangUp.setVisibility(View.VISIBLE);
-            groupRequestLayout();
+            makeCallStatus();
             String st = getResources().getString(R.string.Are_connected_to_each_other);
             callStateTextView.setText(st);
-            EMClient.getInstance().callManager().setSurfaceView(localSurface, oppositeSurface);
+            switchLocalToBig();
             handler.sendEmptyMessage(MSG_CALL_MAKE_VIDEO);
             handler.postDelayed(new Runnable() {
                 public void run() {
@@ -209,15 +207,14 @@ public class VideoCallFragment extends EaseCallFragment implements View.OnClickL
                 mContext.finish();
                 return;
             }
-            voiceContronlLayout.setVisibility(View.INVISIBLE);
-            groupRequestLayout();
+            makeComingStatus();
             localSurface.setVisibility(View.INVISIBLE);
             Uri ringUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_RINGTONE);
             audioManager.setMode(AudioManager.MODE_RINGTONE);
             audioManager.setSpeakerphoneOn(true);
             ringtone = RingtoneManager.getRingtone(mContext, ringUri);
             ringtone.play();
-            EMClient.getInstance().callManager().setSurfaceView(localSurface, oppositeSurface);
+            switchLocalToBig();
         }
 
         final int MAKE_CALL_TIMEOUT = 50 * 1000;
@@ -299,11 +296,9 @@ public class VideoCallFragment extends EaseCallFragment implements View.OnClickL
             handsFreeImage.setImageResource(R.drawable.em_icon_speaker_on);
             isAnswered = true;
             isHandsfreeState = true;
-            comingBtnContainer.setVisibility(View.INVISIBLE);
-            groupHangUp.setVisibility(View.VISIBLE);
-            voiceContronlLayout.setVisibility(View.VISIBLE);
             localSurface.setVisibility(View.VISIBLE);
-            groupRequestLayout();
+            makeOngoingStatus();
+            switchLocalToSmall();
         } else if (id == R.id.btn_hangup_call) { // hangup
             hangupBtn.setEnabled(false);
             chronometer.stop();
@@ -379,10 +374,48 @@ public class VideoCallFragment extends EaseCallFragment implements View.OnClickL
         }
     }
 
+    /**
+     * 来电话的状态
+     */
+    private void makeComingStatus() {
+        voiceContronlLayout.setVisibility(View.INVISIBLE);
+        comingBtnContainer.setVisibility(View.VISIBLE);
+        groupUseInfo.setVisibility(View.VISIBLE);
+        groupOngoingSettings.setVisibility(View.INVISIBLE);
+        groupHangUp.setVisibility(View.INVISIBLE);
+        groupRequestLayout();
+    }
+
+    /**
+     * 通话中的状态
+     */
+    private void makeOngoingStatus() {
+        voiceContronlLayout.setVisibility(View.INVISIBLE);
+        comingBtnContainer.setVisibility(View.INVISIBLE);
+        groupUseInfo.setVisibility(View.INVISIBLE);
+        groupOngoingSettings.setVisibility(View.VISIBLE);
+        groupHangUp.setVisibility(View.VISIBLE);
+        groupRequestLayout();
+    }
+
+    /**
+     * 拨打电话的状态
+     */
+    private void makeCallStatus() {
+        voiceContronlLayout.setVisibility(View.INVISIBLE);
+        comingBtnContainer.setVisibility(View.INVISIBLE);
+        groupUseInfo.setVisibility(View.VISIBLE);
+        groupOngoingSettings.setVisibility(View.INVISIBLE);
+        groupHangUp.setVisibility(View.VISIBLE);
+        groupRequestLayout();
+    }
+
     private void groupRequestLayout() {
         comingBtnContainer.requestLayout();
         voiceContronlLayout.requestLayout();
         groupHangUp.requestLayout();
+        groupUseInfo.requestLayout();
+        groupOngoingSettings.requestLayout();
     }
 
     /**
@@ -390,12 +423,26 @@ public class VideoCallFragment extends EaseCallFragment implements View.OnClickL
      */
     private void changeCallView() {
         if (surfaceState == 0) {
-            surfaceState = 1;
-            EMClient.getInstance().callManager().setSurfaceView(oppositeSurface, localSurface);
+            switchLocalToBig();
         } else {
-            surfaceState = 0;
-            EMClient.getInstance().callManager().setSurfaceView(localSurface, oppositeSurface);
+            switchLocalToSmall();
         }
+    }
+
+    /**
+     * 切换本地视频到小屏幕
+     */
+    private void switchLocalToSmall() {
+        surfaceState = 0;
+        EMClient.getInstance().callManager().setSurfaceView(localSurface, oppositeSurface);
+    }
+
+    /**
+     * 切换本地视频到主屏幕
+     */
+    private void switchLocalToBig() {
+        surfaceState = 1;
+        EMClient.getInstance().callManager().setSurfaceView(oppositeSurface, localSurface);
     }
 
     void stopMonitor(){
@@ -461,6 +508,8 @@ public class VideoCallFragment extends EaseCallFragment implements View.OnClickL
 //                            recordBtn.setVisibility(View.VISIBLE);
                             callingState = CallingState.NORMAL;
                             startMonitor();
+                            makeOngoingStatus();
+                            switchLocalToSmall();
                             // Start to watch the phone call state.
                             PhoneStateManager.get(mContext).addStateCallback(phoneStateCallback);
 
