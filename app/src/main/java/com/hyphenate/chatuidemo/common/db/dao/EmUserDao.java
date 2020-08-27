@@ -21,8 +21,8 @@ public interface EmUserDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     List<Long> insert(List<EmUserEntity> users);
 
-    @Query("select * from em_users where username = :username")
-    LiveData<List<EaseUser>> loadUserById(String username);
+    @Query("select * from em_users where username = :arg0")
+    LiveData<List<EaseUser>> loadUserById(String arg0);
 
     @Query("select * from em_users where contact = 0")
     LiveData<List<EaseUser>> loadUsers();
@@ -48,6 +48,6 @@ public interface EmUserDao {
     @Query("delete from em_users where contact = 1")
     int clearBlackUsers();
 
-    @Query("delete from em_users where username = :username")
-    void deleteUser(String username);
+    @Query("delete from em_users where username = :arg0")
+    void deleteUser(String arg0);
 }

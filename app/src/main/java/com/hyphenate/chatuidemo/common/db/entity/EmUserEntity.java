@@ -1,5 +1,6 @@
 package com.hyphenate.chatuidemo.common.db.entity;
 
+import androidx.annotation.NonNull;
 import androidx.room.Entity;
 import androidx.room.Ignore;
 import androidx.room.Index;
@@ -13,6 +14,14 @@ import java.util.List;
 @Entity(tableName = "em_users", primaryKeys = {"username"},
         indices = {@Index(value = {"username"}, unique = true)})
 public class EmUserEntity extends EaseUser {
+    public EmUserEntity() {
+        super();
+    }
+
+    @Ignore
+    public EmUserEntity(@NonNull String username) {
+        super(username);
+    }
 
     @Ignore
     public static List<EmUserEntity> parseList(List<EaseUser> users) {
