@@ -123,7 +123,7 @@ public class ChatFragment extends EaseChatFragment implements EaseChatFragment.O
         //添加扩展槽
         if(chatType == EaseConstant.CHATTYPE_SINGLE){
             //inputMenu.registerExtendMenuItem(R.string.attach_voice_call, R.drawable.em_chat_voice_call_selector, EaseChatInputMenu.ITEM_VOICE_CALL, this);
-            inputMenu.registerExtendMenuItem(R.string.attach_video_call, R.drawable.em_chat_video_call_selector, EaseChatInputMenu.ITEM_VIDEO_CALL, this);
+            inputMenu.registerExtendMenuItem(R.string.attach_media_call, R.drawable.em_chat_video_call_selector, EaseChatInputMenu.ITEM_VIDEO_CALL, this);
         }
         if (chatType == EaseConstant.CHATTYPE_GROUP) { // 音视频会议
             inputMenu.registerExtendMenuItem(R.string.voice_and_video_conference, R.drawable.em_chat_video_call_selector, EaseChatInputMenu.ITEM_CONFERENCE_CALL, this);

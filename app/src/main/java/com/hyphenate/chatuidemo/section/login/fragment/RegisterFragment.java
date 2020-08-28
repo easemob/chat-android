@@ -45,6 +45,7 @@ public class RegisterFragment extends BaseInitFragment implements TextWatcher, V
     private LoginViewModel mViewModel;
     private Drawable clear;
     private Drawable eyeOpen;
+    private Drawable eyeClose;
 
     @Override
     protected int getLayoutId() {
@@ -109,11 +110,11 @@ public class RegisterFragment extends BaseInitFragment implements TextWatcher, V
 
         });
         //切换密码可见不可见的两张图片
-        Drawable eyeClose = getResources().getDrawable(R.drawable.d_pwd_hide);
+        eyeClose = getResources().getDrawable(R.drawable.d_pwd_hide);
         eyeOpen = getResources().getDrawable(R.drawable.d_pwd_show);
         clear = getResources().getDrawable(R.drawable.d_clear);
-        EditTextUtils.changePwdDrawableRight(mEtLoginPwd, eyeOpen, eyeClose, null, null, null);
-        EditTextUtils.changePwdDrawableRight(mEtLoginPwdConfirm, eyeOpen, eyeClose, null, null, null);
+        EditTextUtils.changePwdDrawableRight(mEtLoginPwd, eyeClose, eyeOpen, null, null, null);
+        EditTextUtils.changePwdDrawableRight(mEtLoginPwdConfirm, eyeClose, eyeOpen, null, null, null);
     }
 
     @Override
@@ -136,8 +137,8 @@ public class RegisterFragment extends BaseInitFragment implements TextWatcher, V
         mPwd = mEtLoginPwd.getText().toString().trim();
         mPwdConfirm = mEtLoginPwdConfirm.getText().toString().trim();
         EditTextUtils.showRightDrawable(mEtLoginName, clear);
-        EditTextUtils.showRightDrawable(mEtLoginPwd, eyeOpen);
-        EditTextUtils.showRightDrawable(mEtLoginPwdConfirm, eyeOpen);
+        EditTextUtils.showRightDrawable(mEtLoginPwd, eyeClose);
+        EditTextUtils.showRightDrawable(mEtLoginPwdConfirm, eyeClose);
         setButtonEnable(!TextUtils.isEmpty(mUserName) && !TextUtils.isEmpty(mPwd) && !TextUtils.isEmpty(mPwdConfirm) && cbSelect.isChecked());
     }
 

@@ -53,6 +53,7 @@ public class LoginFragment extends BaseInitFragment implements View.OnClickListe
     private LoginFragmentViewModel mFragmentViewModel;
     private Drawable clear;
     private Drawable eyeOpen;
+    private Drawable eyeClose;
 
     @Override
     protected int getLayoutId() {
@@ -153,10 +154,10 @@ public class LoginFragment extends BaseInitFragment implements View.OnClickListe
         tvAgreement.setText(getSpannable());
         tvAgreement.setMovementMethod(LinkMovementMethod.getInstance());
         //切换密码可见不可见的两张图片
-        Drawable eyeClose = getResources().getDrawable(R.drawable.d_pwd_hide);
+        eyeClose = getResources().getDrawable(R.drawable.d_pwd_hide);
         eyeOpen = getResources().getDrawable(R.drawable.d_pwd_show);
         clear = getResources().getDrawable(R.drawable.d_clear);
-        EditTextUtils.changePwdDrawableRight(mEtLoginPwd, eyeOpen, eyeClose, null, null, null);
+        EditTextUtils.changePwdDrawableRight(mEtLoginPwd, eyeClose, eyeOpen, null, null, null);
     }
 
     @Override
@@ -219,7 +220,7 @@ public class LoginFragment extends BaseInitFragment implements View.OnClickListe
         mUserName = mEtLoginName.getText().toString().trim();
         mPwd = mEtLoginPwd.getText().toString().trim();
         EditTextUtils.showRightDrawable(mEtLoginName, clear);
-        EditTextUtils.showRightDrawable(mEtLoginPwd, isTokenFlag ? null : eyeOpen);
+        EditTextUtils.showRightDrawable(mEtLoginPwd, isTokenFlag ? null : eyeClose);
         setButtonEnable(!TextUtils.isEmpty(mUserName) && !TextUtils.isEmpty(mPwd) && cbSelect.isChecked());
     }
 
