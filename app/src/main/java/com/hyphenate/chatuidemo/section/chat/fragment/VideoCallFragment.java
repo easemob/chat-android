@@ -23,6 +23,7 @@ import android.widget.Chronometer;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -41,6 +42,7 @@ import com.hyphenate.chat.EMWaterMarkPosition;
 import com.hyphenate.chatuidemo.DemoApplication;
 import com.hyphenate.chatuidemo.R;
 import com.hyphenate.chatuidemo.common.utils.PreferenceManager;
+import com.hyphenate.chatuidemo.common.utils.ViewScrollHelper;
 import com.hyphenate.chatuidemo.section.conference.CallFloatWindow;
 import com.hyphenate.easeui.EaseUI;
 import com.hyphenate.easeui.manager.PhoneStateManager;
@@ -64,8 +66,6 @@ public class VideoCallFragment extends EaseCallFragment implements View.OnClickL
     private Chronometer chronometer;
     private Group voiceContronlLayout;
     private ConstraintLayout rootContainer;
-    private LinearLayout topContainer;
-    private Group bottomContainer;
     private TextView monitorTextView;
     private TextView netwrokStatusVeiw;
     private Button switchCameraBtn;
@@ -136,8 +136,6 @@ public class VideoCallFragment extends EaseCallFragment implements View.OnClickL
         nickTextView = (TextView) findViewById(R.id.tv_nick);
         chronometer = (Chronometer) findViewById(R.id.chronometer);
         voiceContronlLayout = findViewById(R.id.ll_voice_control);
-        topContainer = (LinearLayout) findViewById(R.id.ll_top_container);
-        bottomContainer = findViewById(R.id.ll_bottom_container);
         monitorTextView = (TextView) findViewById(R.id.tv_call_monitor);
         netwrokStatusVeiw = (TextView) findViewById(R.id.tv_network_status);
         switchCameraBtn = (Button) findViewById(R.id.btn_switch_camera);
@@ -170,6 +168,7 @@ public class VideoCallFragment extends EaseCallFragment implements View.OnClickL
         switchCameraBtn.setOnClickListener(this);
         // set call state listener
         addCallStateListener();
+        ViewScrollHelper.getInstance(mContext).makeViewCanScroll(localSurface);
     }
 
     @Override
@@ -358,14 +357,12 @@ public class VideoCallFragment extends EaseCallFragment implements View.OnClickL
         */
         } else if (id == R.id.root_layout) {
             if (callingState == CallingState.NORMAL) {
-                if (bottomContainer.getVisibility() == View.VISIBLE) {
-                    bottomContainer.setVisibility(View.INVISIBLE);
-                    topContainer.setVisibility(View.INVISIBLE);
+                if (groupOngoingSettings.getVisibility() == View.VISIBLE) {
+                    hideIconsStatus();
                     oppositeSurface.setScaleMode(VideoView.EMCallViewScaleMode.EMCallViewScaleModeAspectFill);
 
                 } else {
-                    bottomContainer.setVisibility(View.VISIBLE);
-                    topContainer.setVisibility(View.VISIBLE);
+                    showIconsStatus();
                     oppositeSurface.setScaleMode(VideoView.EMCallViewScaleMode.EMCallViewScaleModeAspectFit);
                 }
             }
@@ -382,6 +379,7 @@ public class VideoCallFragment extends EaseCallFragment implements View.OnClickL
         comingBtnContainer.setVisibility(View.VISIBLE);
         groupUseInfo.setVisibility(View.VISIBLE);
         groupOngoingSettings.setVisibility(View.INVISIBLE);
+        localSurface.setVisibility(View.INVISIBLE);
         groupHangUp.setVisibility(View.INVISIBLE);
         groupRequestLayout();
     }
@@ -390,10 +388,11 @@ public class VideoCallFragment extends EaseCallFragment implements View.OnClickL
      * 通话中的状态
      */
     private void makeOngoingStatus() {
-        voiceContronlLayout.setVisibility(View.INVISIBLE);
+        voiceContronlLayout.setVisibility(View.VISIBLE);
         comingBtnContainer.setVisibility(View.INVISIBLE);
         groupUseInfo.setVisibility(View.INVISIBLE);
         groupOngoingSettings.setVisibility(View.VISIBLE);
+        localSurface.setVisibility(View.VISIBLE);
         groupHangUp.setVisibility(View.VISIBLE);
         groupRequestLayout();
     }
@@ -406,8 +405,31 @@ public class VideoCallFragment extends EaseCallFragment implements View.OnClickL
         comingBtnContainer.setVisibility(View.INVISIBLE);
         groupUseInfo.setVisibility(View.VISIBLE);
         groupOngoingSettings.setVisibility(View.INVISIBLE);
+        localSurface.setVisibility(View.INVISIBLE);
         groupHangUp.setVisibility(View.VISIBLE);
         groupRequestLayout();
+    }
+
+    private void hideIconsStatus() {
+        voiceContronlLayout.setVisibility(View.INVISIBLE);
+        groupOngoingSettings.setVisibility(View.INVISIBLE);
+        groupHangUp.setVisibility(View.INVISIBLE);
+        netwrokStatusVeiw.setVisibility(View.INVISIBLE);
+        monitorTextView.setVisibility(View.INVISIBLE);
+        voiceContronlLayout.requestLayout();
+        groupOngoingSettings.requestLayout();
+        groupHangUp.requestLayout();
+    }
+
+    private void showIconsStatus() {
+        voiceContronlLayout.setVisibility(View.VISIBLE);
+        groupOngoingSettings.setVisibility(View.VISIBLE);
+        groupHangUp.setVisibility(View.VISIBLE);
+        netwrokStatusVeiw.setVisibility(View.VISIBLE);
+        monitorTextView.setVisibility(View.VISIBLE);
+        voiceContronlLayout.requestLayout();
+        groupOngoingSettings.requestLayout();
+        groupHangUp.requestLayout();
     }
 
     private void groupRequestLayout() {
