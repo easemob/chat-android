@@ -682,7 +682,11 @@ public class VideoCallFragment extends EaseCallFragment implements View.OnClickL
         if (isRecord) {
             EMLog.e(TAG, "server record id: " + serverRecordId);
         }
-        final String recordString = " record? " + isRecord + " id: " + serverRecordId;
+        String recordString = " record? " + isRecord + " id: " + serverRecordId;
+        if(isRecord) {
+            recordString += " id: " + serverRecordId;
+        }
+        String recordStr = recordString;
         new Thread(new Runnable() {
             public void run() {
                 while(monitor){
@@ -697,7 +701,7 @@ public class VideoCallFragment extends EaseCallFragment implements View.OnClickL
                                     + "\nLost：" + callHelper.getVideoLostRate()
                                     + "\nLocalBitrate：" + callHelper.getLocalBitrate()
                                     + "\nRemoteBitrate：" + callHelper.getRemoteBitrate()
-                                    + "\n" + recordString);
+                                    + "\n" + recordStr);
 
                             ((TextView)findViewById(R.id.tv_is_p2p)).setText(EMClient.getInstance().callManager().isDirectCall()
                                     ? R.string.direct_call : R.string.relay_call);
