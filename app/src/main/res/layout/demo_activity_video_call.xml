@@ -208,7 +208,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:visibility="gone"
-        app:constraint_referenced_ids="chronometer,btn_switch_camera,local_surface"/>
+        app:constraint_referenced_ids="chronometer,btn_switch_camera"/>
 
     <ImageButton
         android:id="@+id/btn_refuse_call"
