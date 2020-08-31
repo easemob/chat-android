@@ -512,6 +512,8 @@
         <!--创群预选成员-->
         <activity android:name=".section.group.GroupPrePickActivity"
             android:screenOrientation="portrait"/>
+        <!--推送消息显示样式-->
+        <activity android:name=".section.me.activity.MessagePushStyleActivity" />
 
         <!--捕获屏幕service-->
         <service android:name=".section.conference.SRForegroundService"

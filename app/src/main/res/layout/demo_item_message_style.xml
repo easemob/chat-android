@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="horizontal"
+    android:layout_width="match_parent"
+    android:layout_height="@dimen/em_common_item_height"
+    android:gravity="center_vertical">
+
+    <TextView
+        android:id="@+id/tv_name"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        tools:text="仅通知"
+        android:layout_marginLeft="@dimen/em_margin_20"
+        android:layout_marginStart="@dimen/em_margin_20"
+        android:textSize="@dimen/em_size_normal"
+        android:textColor="@color/black"/>
+
+    <CheckBox
+        android:id="@+id/cb_style"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:button="@null"
+        android:clickable="false"
+        android:layout_marginRight="@dimen/em_margin_20"
+        android:layout_marginEnd="@dimen/em_margin_20"
+        android:background="@drawable/demo_radio_select"/>
+
+</LinearLayout>

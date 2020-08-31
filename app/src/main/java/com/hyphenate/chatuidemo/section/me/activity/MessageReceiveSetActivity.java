@@ -5,19 +5,30 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 
+import androidx.annotation.Nullable;
+import androidx.lifecycle.ViewModelProvider;
+
+import com.hyphenate.chat.EMPushConfigs;
+import com.hyphenate.chat.EMPushManager;
 import com.hyphenate.chatuidemo.DemoHelper;
 import com.hyphenate.chatuidemo.R;
+import com.hyphenate.chatuidemo.common.interfaceOrImplement.OnResourceParseCallback;
 import com.hyphenate.chatuidemo.common.model.DemoModel;
+import com.hyphenate.chatuidemo.common.widget.ArrowItemView;
 import com.hyphenate.chatuidemo.common.widget.SwitchItemView;
 import com.hyphenate.chatuidemo.section.base.BaseInitActivity;
+import com.hyphenate.chatuidemo.section.me.viewmodels.OfflinePushSetViewModel;
 import com.hyphenate.easeui.widget.EaseTitleBar;
 
-public class MessageReceiveSetActivity extends BaseInitActivity implements SwitchItemView.OnCheckedChangeListener, EaseTitleBar.OnBackPressListener {
+public class MessageReceiveSetActivity extends BaseInitActivity implements SwitchItemView.OnCheckedChangeListener, EaseTitleBar.OnBackPressListener, View.OnClickListener {
     private EaseTitleBar titleBar;
     private SwitchItemView rlSwitchNotification;
     private SwitchItemView rlSwitchSound;
     private SwitchItemView rlSwitchVibrate;
+    private ArrowItemView itemPushMessageStyle;
     private DemoModel model;
+    private EMPushManager.DisplayStyle displayStyle;
+    private OfflinePushSetViewModel viewModel;
 
     public static void actionStart(Context context) {
         Intent intent = new Intent(context, MessageReceiveSetActivity.class);
@@ -36,6 +47,7 @@ public class MessageReceiveSetActivity extends BaseInitActivity implements Switc
         rlSwitchNotification = findViewById(R.id.rl_switch_notification);
         rlSwitchSound = findViewById(R.id.rl_switch_sound);
         rlSwitchVibrate = findViewById(R.id.rl_switch_vibrate);
+        itemPushMessageStyle = findViewById(R.id.item_push_message_style);
     }
 
     @Override
@@ -45,6 +57,7 @@ public class MessageReceiveSetActivity extends BaseInitActivity implements Switc
         rlSwitchNotification.setOnCheckedChangeListener(this);
         rlSwitchSound.setOnCheckedChangeListener(this);
         rlSwitchVibrate.setOnCheckedChangeListener(this);
+        itemPushMessageStyle.setOnClickListener(this);
     }
 
     @Override
@@ -56,6 +69,24 @@ public class MessageReceiveSetActivity extends BaseInitActivity implements Switc
 
         rlSwitchSound.getSwitch().setChecked(model.getSettingMsgSound());
         rlSwitchVibrate.getSwitch().setChecked(model.getSettingMsgVibrate());
+
+        viewModel = new ViewModelProvider(this).get(OfflinePushSetViewModel.class);
+        viewModel.getConfigsObservable().observe(this, response -> {
+            parseResource(response, new OnResourceParseCallback<EMPushConfigs>() {
+                @Override
+                public void onSuccess(EMPushConfigs data) {
+                    if(data != null) {
+                        displayStyle = data.getDisplayStyle();
+                        if(displayStyle == EMPushManager.DisplayStyle.SimpleBanner) {
+                            itemPushMessageStyle.getTvContent().setText(R.string.push_message_style_simple);
+                        }else {
+                            itemPushMessageStyle.getTvContent().setText(R.string.push_message_style_summary);
+                        }
+                    }
+                }
+            });
+        });
+        viewModel.getPushConfigs();
     }
 
     @Override
@@ -90,6 +121,23 @@ public class MessageReceiveSetActivity extends BaseInitActivity implements Switc
         }else {
             rlSwitchSound.setVisibility(View.GONE);
             rlSwitchVibrate.setVisibility(View.GONE);
+        }
+    }
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.item_push_message_style :
+                MessagePushStyleActivity.actionStartForResult(mContext, displayStyle.ordinal(), 100);
+                break;
+        }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if(resultCode == RESULT_OK && requestCode == 100) {
+            viewModel.getPushConfigs();
         }
     }
 }

@@ -13,11 +13,19 @@
         app:titleBarTitle="@string/em_set_message_set"
         android:background="@color/white"
         app:titleBarDisplayHomeAsUpEnabled="true"/>
+    
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="46dp"
+        android:text="@string/new_message_notify"
+        android:textSize="@dimen/em_size_normal"
+        android:paddingLeft="20dp"
+        android:gravity="center_vertical"/>
 
     <com.hyphenate.chatuidemo.common.widget.SwitchItemView
         android:id="@+id/rl_switch_notification"
         android:layout_width="match_parent"
-        android:layout_height="50dp"
+        android:layout_height="@dimen/em_common_item_height"
         app:switchItemTitle="@string/newnotify"
         app:switchItemShowDivider="true"
         android:background="@color/white"/>
@@ -25,7 +33,7 @@
     <com.hyphenate.chatuidemo.common.widget.SwitchItemView
         android:id="@+id/rl_switch_sound"
         android:layout_width="match_parent"
-        android:layout_height="50dp"
+        android:layout_height="@dimen/em_common_item_height"
         app:switchItemTitle="@string/voice"
         app:switchItemShowDivider="true"
         android:background="@color/white"/>
@@ -33,9 +41,16 @@
     <com.hyphenate.chatuidemo.common.widget.SwitchItemView
         android:id="@+id/rl_switch_vibrate"
         android:layout_width="match_parent"
-        android:layout_height="50dp"
+        android:layout_height="@dimen/em_common_item_height"
         app:switchItemTitle="@string/shake"
         app:switchItemShowDivider="true"
+        android:background="@color/white"/>
+    
+    <com.hyphenate.chatuidemo.common.widget.ArrowItemView
+        android:id="@+id/item_push_message_style"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/em_common_item_height"
+        app:arrowItemTitle="@string/push_message_show_detail"
         android:background="@color/white"/>
 
 </LinearLayout>

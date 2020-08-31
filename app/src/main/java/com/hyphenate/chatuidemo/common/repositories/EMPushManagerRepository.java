@@ -3,6 +3,7 @@ package com.hyphenate.chatuidemo.common.repositories;
 import com.hyphenate.EMCallBack;
 import com.hyphenate.chat.EMClient;
 import com.hyphenate.chat.EMPushConfigs;
+import com.hyphenate.chat.EMPushManager;
 import com.hyphenate.chatuidemo.common.interfaceOrImplement.ResultCallBack;
 import com.hyphenate.chatuidemo.common.net.Resource;
 import com.hyphenate.chatuidemo.common.utils.ThreadManager;
@@ -107,6 +108,35 @@ public class EMPushManagerRepository extends BaseEMRepository {
             @Override
             protected void createCall(@NonNull ResultCallBack<LiveData<Boolean>> callBack) {
                 getPushManager().asyncUpdatePushNickname(nickname, new EMCallBack() {
+                    @Override
+                    public void onSuccess() {
+                        callBack.onSuccess(createLiveData(true));
+                    }
+
+                    @Override
+                    public void onError(int code, String error) {
+                        callBack.onError(code, error);
+                    }
+
+                    @Override
+                    public void onProgress(int progress, String status) {
+
+                    }
+                });
+            }
+        }.asLiveData();
+    }
+
+    /**
+     * 设置推送消息样式
+     * @param style
+     * @return
+     */
+    public LiveData<Resource<Boolean>> updatePushStyle(EMPushManager.DisplayStyle style) {
+        return new NetworkOnlyResource<Boolean>() {
+            @Override
+            protected void createCall(@NonNull ResultCallBack<LiveData<Boolean>> callBack) {
+                getPushManager().asyncUpdatePushDisplayStyle(style, new EMCallBack() {
                     @Override
                     public void onSuccess() {
                         callBack.onSuccess(createLiveData(true));

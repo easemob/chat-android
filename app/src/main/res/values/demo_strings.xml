@@ -230,7 +230,7 @@
     <string name="em_about_me_developer">开发者服务</string>
     <string name="em_set_security">账号与安全</string>
     <string name="em_set_privacy">隐私</string>
-    <string name="em_set_message_set">新消息设置</string>
+    <string name="em_set_message_set">新消息提醒</string>
     <string name="em_set_common_set">通用</string>
     <string name="em_about_me_service_set">诊断</string>
     <string name="em_privacy_black">黑名单</string>
@@ -295,6 +295,10 @@
     
     <string name="demo_no_disturb_time">设置时间段</string>
 
+    <string name="push_message_style_simple">仅通知</string>
+    <string name="push_message_style_summary">详细信息</string>
+    <string name="push_message_show_detail">显示消息详情</string>
+    <string name="new_message_notify">新消息通知</string>
     <string name="newnotify">接收新消息通知</string>
     <string name="voice">声音</string>
     <string name="shake">震动</string>
