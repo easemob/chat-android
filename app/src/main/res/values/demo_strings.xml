@@ -295,6 +295,7 @@
     
     <string name="demo_no_disturb_time">设置时间段</string>
 
+    <string name="push_incoming_call">您有新的通话消息</string>
     <string name="push_message_style_simple">仅通知</string>
     <string name="push_message_style_summary">详细信息</string>
     <string name="push_message_show_detail">显示消息详情</string>
