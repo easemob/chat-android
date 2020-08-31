@@ -16,6 +16,7 @@ public class OfflinePushSetViewModel extends AndroidViewModel {
     private SingleSourceLiveData<Resource<EMPushConfigs>> configsObservable;
     private SingleSourceLiveData<Resource<Boolean>> disableObservable;
     private SingleSourceLiveData<Resource<Boolean>> enableObservable;
+    private SingleSourceLiveData<Resource<Boolean>> updatePushNicknameObservable;
 
     public OfflinePushSetViewModel(@NonNull Application application) {
         super(application);
@@ -23,6 +24,7 @@ public class OfflinePushSetViewModel extends AndroidViewModel {
         configsObservable = new SingleSourceLiveData<>();
         disableObservable = new SingleSourceLiveData<>();
         enableObservable = new SingleSourceLiveData<>();
+        updatePushNicknameObservable = new SingleSourceLiveData<>();
     }
 
     public LiveData<Resource<EMPushConfigs>> getConfigsObservable() {
@@ -47,6 +49,14 @@ public class OfflinePushSetViewModel extends AndroidViewModel {
 
     public void enableOfflinePush() {
         enableObservable.setSource(repository.enableOfflinePush());
+    }
+
+    public LiveData<Resource<Boolean>> getUpdatePushNicknameObservable() {
+        return updatePushNicknameObservable;
+    }
+
+    public void updatePushNickname(String nickname) {
+        updatePushNicknameObservable.setSource(repository.updatePushNickname(nickname));
     }
 }
 

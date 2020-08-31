@@ -82,9 +82,6 @@
         android:name=".DemoApplication"
         android:theme="@style/AppTheme">
 
-        <!--针对屏幕纵横比超过1.86进行设置-->
-        <meta-data android:name="android.max_aspect" android:value="2.4" />
-
         <!--android 9.0要求-->
         <!--<uses-library android:name="org.apache.http.legacy" android:required="false"/>-->
 

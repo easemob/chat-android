@@ -1,5 +1,6 @@
 package com.hyphenate.chatuidemo.common.repositories;
 
+import com.hyphenate.EMCallBack;
 import com.hyphenate.chat.EMClient;
 import com.hyphenate.chat.EMPushConfigs;
 import com.hyphenate.chatuidemo.common.interfaceOrImplement.ResultCallBack;
@@ -90,6 +91,35 @@ public class EMPushManagerRepository extends BaseEMRepository {
                     } catch (HyphenateException e) {
                         e.printStackTrace();
                         callBack.onError(e.getErrorCode(), e.getDescription());
+                    }
+                });
+            }
+        }.asLiveData();
+    }
+
+    /**
+     * 更新推送昵称
+     * @param nickname
+     * @return
+     */
+    public LiveData<Resource<Boolean>> updatePushNickname(String nickname) {
+        return new NetworkOnlyResource<Boolean>() {
+            @Override
+            protected void createCall(@NonNull ResultCallBack<LiveData<Boolean>> callBack) {
+                getPushManager().asyncUpdatePushNickname(nickname, new EMCallBack() {
+                    @Override
+                    public void onSuccess() {
+                        callBack.onSuccess(createLiveData(true));
+                    }
+
+                    @Override
+                    public void onError(int code, String error) {
+                        callBack.onError(code, error);
+                    }
+
+                    @Override
+                    public void onProgress(int progress, String status) {
+
                     }
                 });
             }

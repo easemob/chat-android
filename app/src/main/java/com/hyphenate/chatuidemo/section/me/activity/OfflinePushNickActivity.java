@@ -15,13 +15,17 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.lifecycle.ViewModelProvider;
+
 import com.hyphenate.chat.EMClient;
 import com.hyphenate.chat.EMPushConfigs;
 import com.hyphenate.chatuidemo.DemoHelper;
 import com.hyphenate.chatuidemo.R;
 import com.hyphenate.chatuidemo.common.DemoConstant;
+import com.hyphenate.chatuidemo.common.interfaceOrImplement.OnResourceParseCallback;
 import com.hyphenate.chatuidemo.common.livedatas.LiveDataBus;
 import com.hyphenate.chatuidemo.section.base.BaseInitActivity;
+import com.hyphenate.chatuidemo.section.me.viewmodels.OfflinePushSetViewModel;
 import com.hyphenate.easeui.widget.EaseTitleBar;
 import com.hyphenate.exceptions.HyphenateException;
 
@@ -29,8 +33,8 @@ public class OfflinePushNickActivity extends BaseInitActivity implements OnClick
 	private EaseTitleBar titleBar;
 	private EditText inputNickName;
 	private TextView nicknameDescription;
-	private ProgressDialog dialog;
 	private Button saveNickName;
+	private OfflinePushSetViewModel viewModel;
 
 	public static void actionStart(Context context) {
 	    Intent intent = new Intent(context, OfflinePushNickActivity.class);
@@ -66,40 +70,38 @@ public class OfflinePushNickActivity extends BaseInitActivity implements OnClick
 
 	@Override
 	public void onClick(View v) {
-		dialog = ProgressDialog.show(OfflinePushNickActivity.this, "update nickname...", "waiting...");
-		new Thread(new Runnable() {
+		viewModel.updatePushNickname(inputNickName.getText().toString());
+	}
 
-			@Override
-			public void run() {
-				boolean updatenick = false;
-				try {
-					updatenick = EMClient.getInstance().pushManager().updatePushNickname(
-							inputNickName.getText().toString());
-				} catch (HyphenateException e) {
-					e.printStackTrace();
+	@Override
+	protected void initData() {
+		super.initData();
+		viewModel = new ViewModelProvider(this).get(OfflinePushSetViewModel.class);
+		viewModel.getConfigsObservable().observe(this, response -> {
+			parseResource(response, new OnResourceParseCallback<EMPushConfigs>() {
+				@Override
+				public void onSuccess(EMPushConfigs data) {
+					if(data != null && !TextUtils.isEmpty(data.getDisplayNickname())) {
+						inputNickName.setText(data.getDisplayNickname());
+					}
 				}
-				if (!updatenick) {
-					runOnUiThread(new Runnable() {
-						public void run() {
-							Toast.makeText(OfflinePushNickActivity.this, "update nickname failed!",
-									Toast.LENGTH_SHORT).show();
-							dialog.dismiss();
-						}
-					});
-				} else {
+			});
+		});
+		viewModel.getUpdatePushNicknameObservable().observe(this, response -> {
+			parseResource(response, new OnResourceParseCallback<Boolean>() {
+				@Override
+				public void onSuccess(Boolean data) {
 					boolean updateOK= DemoHelper.getInstance().getUserProfileManager().updateCurrentUserNickName(inputNickName.getText().toString());
 					if (!updateOK) {
 						runOnUiThread(new Runnable() {
 							public void run() {
 								Toast.makeText(OfflinePushNickActivity.this, "update nickname failed!",
 										Toast.LENGTH_SHORT).show();
-								dialog.dismiss();
 							}
 						});
 					} else {
 						runOnUiThread(new Runnable() {
 							public void run() {
-								dialog.dismiss();
 								Toast.makeText(OfflinePushNickActivity.this, "update nickname success!",
 										Toast.LENGTH_SHORT).show();
 							}
@@ -108,23 +110,21 @@ public class OfflinePushNickActivity extends BaseInitActivity implements OnClick
 					LiveDataBus.get().with(DemoConstant.REFRESH_NICKNAME).postValue(true);
 					finish();
 				}
-			}
-		}).start();
-	}
 
-	@Override
-	protected void initData() {
-		super.initData();
-		EMPushConfigs configs = null;
-		try {
-			configs = EMClient.getInstance().pushManager().getPushConfigsFromServer();
-			String nickname = configs.getDisplayNickname();
-			if(!TextUtils.isEmpty(nickname)) {
-				inputNickName.setText(nickname);
-			}
-		} catch (HyphenateException e) {
-			e.printStackTrace();
-		}
+				@Override
+				public void onLoading() {
+					super.onLoading();
+					showLoading();
+				}
+
+				@Override
+				public void hideLoading() {
+					super.hideLoading();
+					dismissLoading();
+				}
+			});
+		});
+		viewModel.getPushConfigs();
 	}
 
 	@Override
