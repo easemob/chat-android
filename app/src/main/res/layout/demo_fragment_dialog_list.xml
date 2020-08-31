@@ -10,7 +10,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:gravity="center_horizontal">
+        android:gravity="center_horizontal"
+        android:background="@drawable/demo_bg_dialog_list">
 
         <TextView
             android:id="@+id/tv_title"
@@ -35,14 +36,18 @@
 
     </LinearLayout>
 
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="10dp"
+        android:background="#f9f9f9"/>
+
     <Button
         android:id="@+id/btn_cancel"
         android:layout_width="match_parent"
         android:layout_height="50dp"
-        android:layout_marginTop="10dp"
         tools:text="取消"
         android:textSize="@dimen/em_size_big"
         android:textColor="@color/red"
-        android:background="@color/white"/>
+        android:background="@drawable/demo_bg_dialog_list_button"/>
 
 </LinearLayout>
