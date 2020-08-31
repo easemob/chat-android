@@ -137,11 +137,11 @@
                 android:id="@+id/item_switch_chatroom_delete_msg"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/em_common_item_height"
-                app:switchItemTitle="@string/chatroom_allow_owner_leave"
+                app:switchItemTitle="@string/delete_msg_when_exit_chat_room"
                 app:switchItemShowDivider="true"
                 android:background="@color/white"
                 app:switchItemTitleSize="@dimen/em_size_normal"
-                android:visibility="gone"/>
+                android:visibility="visible"/>
 
         </LinearLayout>
 

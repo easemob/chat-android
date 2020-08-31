@@ -86,7 +86,7 @@ public class CommonSettingsActivity extends BaseInitActivity implements View.OnC
         itemAutoFile.getSwitch().setChecked(settingsModel.isSetTransferFileByUser());
         itemAutoDownload.getSwitch().setChecked(settingsModel.isSetAutodownloadThumbnail());
         itemAutoAcceptGroup.getSwitch().setChecked(settingsModel.isAutoAcceptGroupInvitation());
-        itemSwitchChatroomDeleteMsg.getSwitch().setChecked(settingsModel.isAutoAcceptGroupInvitation());
+        itemSwitchChatroomDeleteMsg.getSwitch().setChecked(settingsModel.isDeleteMessagesAsExitChatRoom());
     }
 
     @Override
@@ -133,7 +133,7 @@ public class CommonSettingsActivity extends BaseInitActivity implements View.OnC
                 break;
             case R.id.item_switch_chatroom_delete_msg:
                 settingsModel.setDeleteMessagesAsExitChatRoom(isChecked);
-                //chatOptions.setDeleteMessagesAsExitChatRoom(isChecked);
+                chatOptions.setDeleteMessagesAsExitChatRoom(isChecked);
                 break;
         }
     }

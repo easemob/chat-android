@@ -326,6 +326,7 @@
     <string name="set_transfer_file_by_userself">无需用户实现上传下载</string>
     <string name="set_autodownload_thumbnail">自动下载图片缩略图</string>
     <string name="auto_accept_group_invitation">自动同意群组加群邀请</string>
+    <string name="delete_msg_when_exit_chat_room">退出聊天室时删除聊天数据</string>
 
     <string name="confirm_forward_to">确定转发到：%1$s ?</string>
 
