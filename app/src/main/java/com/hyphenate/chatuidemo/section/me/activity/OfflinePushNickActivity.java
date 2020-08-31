@@ -71,8 +71,13 @@ public class OfflinePushNickActivity extends BaseInitActivity implements OnClick
 
 			@Override
 			public void run() {
-				boolean updatenick = EMClient.getInstance().pushManager().updatePushNickname(
-						inputNickName.getText().toString());
+				boolean updatenick = false;
+				try {
+					updatenick = EMClient.getInstance().pushManager().updatePushNickname(
+							inputNickName.getText().toString());
+				} catch (HyphenateException e) {
+					e.printStackTrace();
+				}
 				if (!updatenick) {
 					runOnUiThread(new Runnable() {
 						public void run() {
