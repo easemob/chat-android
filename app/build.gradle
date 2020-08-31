@@ -16,7 +16,7 @@ android {
         applicationId "com.hyphenate.chatuidemo"
         //测试oppo离线消息，需修改包名如下，如果配置了FCM推送，同时替换google-services.json 中的 package_name 字段
         //applicationId "com.hyphenate.chatuidemo.push"
-        minSdkVersion 17
+        minSdkVersion 19
         targetSdkVersion 29
         versionCode 70
         versionName "3.7.0"
@@ -87,6 +87,8 @@ dependencies {
     implementation 'com.huawei.hms:push:4.0.2.300'
     // meizu push
     implementation 'com.meizu.flyme.internet:push-internal:3.7.0@aar'//配置集成sdk
+    //oppo push
+    implementation (name:'oppo_push_v2.1.0',ext:'aar')
     // Google firebase cloud messaging
     implementation 'com.google.android.gms:play-services-base:11.4.0'
     implementation 'com.google.firebase:firebase-messaging:11.4.0'
@@ -104,4 +106,7 @@ dependencies {
 apply plugin: 'com.google.gms.google-services'
 repositories {
     mavenCentral()
+    flatDir{
+        dirs 'libs'
+    }
 }
