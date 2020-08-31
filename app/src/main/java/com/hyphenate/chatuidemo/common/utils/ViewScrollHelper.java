@@ -1,5 +1,6 @@
 package com.hyphenate.chatuidemo.common.utils;
 
+import android.animation.Animator;
 import android.animation.ValueAnimator;
 import android.content.Context;
 import android.util.Log;
@@ -10,12 +11,20 @@ import android.view.ViewGroup;
 import com.hyphenate.easeui.utils.EaseCommonUtils;
 import com.hyphenate.util.EMLog;
 
+/**
+ * 用来帮助view控件，实现滑动
+ */
 public class ViewScrollHelper {
     private static final String TAG = ViewScrollHelper.class.getSimpleName();
     private static ViewScrollHelper instance;
 
     private int screenWidth;
     private int viewWidth;
+    private int viewLeft;
+    private int viewTop;
+    private int viewRight;
+    private int viewBottom;
+    private int lastLeft, lastTop, lastRight, lastBottom;
 
     private ViewScrollHelper(Context context) {
         screenWidth = (int) EaseCommonUtils.getScreenInfo(context)[0];
@@ -52,10 +61,12 @@ public class ViewScrollHelper {
                         startX = event.getRawX();
                         startY = event.getRawY();
 
-                        this.left = view.getLeft();
-                        top = startY - view.getTop();
+                        viewLeft = view.getLeft();
+                        viewTop = view.getTop();
+                        viewRight = view.getRight();
+                        viewBottom = view.getBottom();
 
-                        EMLog.i(TAG, "startX: " + startX + ", startY: " + startY + ", left: " + this.left + ", top: " + top);
+                        EMLog.i(TAG, "startX: " + startX + ", startY: " + startY + ", left: " + viewLeft + ", top: " + viewTop);
                         break;
                     case MotionEvent.ACTION_MOVE:
                         if (Math.abs(event.getRawX() - startX) > 20 || Math.abs(event.getRawY() - startY) > 20) {
@@ -65,43 +76,36 @@ public class ViewScrollHelper {
                         int deltaX = (int) (event.getRawX() - startX);
                         int deltaY = (int) (event.getRawY() - startY);
 
+                        lastLeft = viewLeft + deltaX;
+                        lastTop = viewTop + deltaY;
+                        lastRight = viewRight + deltaX;
+                        lastBottom = viewBottom + deltaY;
                         EMLog.i("TAG", "action move dx = "+deltaX + " dy = "+ deltaY);
-                        view.offsetLeftAndRight(deltaX);
-                        checkTopAndBottom(deltaY, view);
-                        startX = event.getRawX();
-                        startY = event.getRawY();
+                        view.layout(lastLeft, lastTop, lastRight, lastBottom);
                         break;
                     case MotionEvent.ACTION_UP:
                         smoothScrollToBorder(view);
                         break;
                 }
-                return true;
+                return result;
             }
         });
-    }
-
-    private void checkTopAndBottom(int deltaY, View view) {
-        int top = view.getTop();
-        int bottom = view.getBottom();
-        EMLog.i(TAG, "top = "+top + " bottom = "+bottom);
-        ViewGroup parent = (ViewGroup) view.getParent();
-        if(top  + deltaY < 0 || bottom  + deltaY > parent.getHeight()) {
-            if(top + deltaY < 0) {
-                view.offsetTopAndBottom(-top);
+        view.addOnLayoutChangeListener(new View.OnLayoutChangeListener() {
+            @Override
+            public void onLayoutChange(View v, int left, int top, int right, int bottom, int oldLeft, int oldTop, int oldRight, int oldBottom) {
+                if(viewRight != 0) {
+                    view.layout(lastLeft, lastTop, lastRight, lastBottom);
+                }
             }
-            if(bottom + deltaY> parent.getHeight()) {
-                view.offsetTopAndBottom(parent.getHeight() - bottom);
-            }
-        }else {
-            view.offsetTopAndBottom(deltaY);
-        }
+        });
     }
 
     private void smoothScrollToBorder(View view) {
         EMLog.i(TAG, "screenWidth: " + screenWidth + ", viewWidth: " + viewWidth);
         int splitLine = screenWidth / 2 - viewWidth / 2;
         final int left = view.getLeft();
-        final int top = view.getTop();
+        int top = view.getTop();
+        int bottom = view.getBottom();
         int targetX;
 
         if (left < splitLine) {
@@ -111,6 +115,17 @@ public class ViewScrollHelper {
             // 滑动到最右边
             targetX = screenWidth - viewWidth;
         }
+
+        ViewGroup parent = (ViewGroup) view.getParent();
+        if(top < 0) {
+            lastBottom = lastBottom - lastTop;
+            lastTop = 0;
+        }
+        if(bottom > parent.getHeight()) {
+            lastTop = parent.getHeight() - (lastBottom - lastTop);
+            lastBottom = parent.getHeight();
+        }
+
 
         ValueAnimator animator = ValueAnimator.ofInt(left, targetX);
         animator.setDuration(100)
@@ -124,6 +139,29 @@ public class ViewScrollHelper {
                         view.offsetLeftAndRight(value - view.getLeft());
                     }
                 });
+        animator.addListener(new Animator.AnimatorListener() {
+            @Override
+            public void onAnimationStart(Animator animation) {
+
+            }
+
+            @Override
+            public void onAnimationEnd(Animator animation) {
+                lastRight = lastRight - lastLeft + targetX;
+                lastLeft = targetX;
+                view.requestLayout();
+            }
+
+            @Override
+            public void onAnimationCancel(Animator animation) {
+
+            }
+
+            @Override
+            public void onAnimationRepeat(Animator animation) {
+
+            }
+        });
         animator.start();
     }
 }
