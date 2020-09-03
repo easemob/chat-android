@@ -23,7 +23,7 @@ import com.hyphenate.easeui.widget.EaseRecyclerView;
 import com.hyphenate.easeui.widget.EaseTitleBar;
 
 public abstract class SearchActivity extends BaseInitActivity {
-    private EaseTitleBar titleBar;
+    protected EaseTitleBar titleBar;
     protected EditText query;
     private ImageButton searchClear;
     protected EaseRecyclerView rvList;

@@ -2,10 +2,12 @@ package com.hyphenate.chatuidemo.section.search;
 
 import android.content.Context;
 import android.content.Intent;
+import android.os.Bundle;
 import android.view.View;
 
 import com.hyphenate.chat.EMClient;
 import com.hyphenate.chat.EMGroup;
+import com.hyphenate.chatuidemo.R;
 import com.hyphenate.chatuidemo.common.DemoConstant;
 import com.hyphenate.chatuidemo.common.utils.ThreadManager;
 import com.hyphenate.chatuidemo.section.chat.ChatActivity;
@@ -22,6 +24,12 @@ public class SearchGroupActivity extends SearchActivity {
     public static void actionStart(Context context) {
         Intent intent = new Intent(context, SearchGroupActivity.class);
         context.startActivity(intent);
+    }
+
+    @Override
+    protected void initView(Bundle savedInstanceState) {
+        super.initView(savedInstanceState);
+        titleBar.setTitle(getString(R.string.em_search_group));
     }
 
     @Override

@@ -274,6 +274,14 @@
     <string name="em_group_list_search_hint">搜索群组</string>
     <string name="em_chat_room_list_search_hint">搜索聊天室</string>
     <string name="em_black_list_search_hint">搜索黑名单</string>
+    <string name="em_search_group">群组</string>
+    <string name="em_search_group_public">公开群</string>
+    <string name="em_search_group_chat">群聊</string>
+    <string name="em_search_chat">聊天详情</string>
+    <string name="em_search_chat_room">聊天室</string>
+    <string name="em_search_black">黑名单</string>
+    <string name="em_search_conversation">会话</string>
+    <string name="em_search_contact">联系人</string>
 
     <string name="em_public_group_information">公开群资料</string>
     <string name="group_name">群名称</string>

@@ -16,13 +16,14 @@
     <EditText
         android:id="@+id/query"
         android:layout_width="0dp"
-        android:layout_height="@dimen/em_common_title_bar_height"
+        android:layout_height="@dimen/em_common_search_height"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/title_bar"
         android:layout_centerVertical="true"
-        android:layout_marginLeft="60dp"
-        android:layout_marginRight="@dimen/em_margin_20"
+        android:layout_marginLeft="@dimen/em_margin_15"
+        android:layout_marginRight="@dimen/em_margin_15"
+        android:layout_marginTop="5dp"
         android:background="@drawable/demo_dialog_edit_bg_shape"
         android:drawableLeft="@drawable/ease_search_icon"
         android:drawablePadding="@dimen/em_margin_10"
@@ -56,7 +57,7 @@
         android:layout_marginTop="@dimen/em_margin_10"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/title_bar"
+        app:layout_constraintTop_toBottomOf="@id/query"
         app:layout_constraintBottom_toBottomOf="parent"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

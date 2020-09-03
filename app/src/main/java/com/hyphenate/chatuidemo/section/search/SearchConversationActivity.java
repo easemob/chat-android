@@ -2,6 +2,7 @@ package com.hyphenate.chatuidemo.section.search;
 
 import android.content.Context;
 import android.content.Intent;
+import android.os.Bundle;
 import android.view.View;
 
 import androidx.lifecycle.ViewModelProvider;
@@ -10,6 +11,7 @@ import com.hyphenate.chat.EMChatRoom;
 import com.hyphenate.chat.EMConversation;
 import com.hyphenate.chat.EMGroup;
 import com.hyphenate.chatuidemo.DemoHelper;
+import com.hyphenate.chatuidemo.R;
 import com.hyphenate.chatuidemo.common.db.entity.MsgTypeManageEntity;
 import com.hyphenate.chatuidemo.common.interfaceOrImplement.OnResourceParseCallback;
 import com.hyphenate.chatuidemo.common.utils.ThreadManager;
@@ -30,6 +32,12 @@ public class SearchConversationActivity extends SearchActivity {
     public static void actionStart(Context context) {
         Intent intent = new Intent(context, SearchConversationActivity.class);
         context.startActivity(intent);
+    }
+
+    @Override
+    protected void initView(Bundle savedInstanceState) {
+        super.initView(savedInstanceState);
+        titleBar.setTitle(getString(R.string.em_search_conversation));
     }
 
     @Override

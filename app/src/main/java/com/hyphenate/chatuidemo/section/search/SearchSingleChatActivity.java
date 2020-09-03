@@ -2,11 +2,13 @@ package com.hyphenate.chatuidemo.section.search;
 
 import android.content.Context;
 import android.content.Intent;
+import android.os.Bundle;
 import android.view.View;
 
 import com.hyphenate.chat.EMClient;
 import com.hyphenate.chat.EMConversation;
 import com.hyphenate.chat.EMMessage;
+import com.hyphenate.chatuidemo.R;
 import com.hyphenate.chatuidemo.section.chat.ChatActivity;
 import com.hyphenate.chatuidemo.section.chat.ChatHistoryActivity;
 import com.hyphenate.chatuidemo.section.search.adapter.SearchMessageAdapter;
@@ -29,6 +31,12 @@ public class SearchSingleChatActivity extends SearchActivity {
     protected void initIntent(Intent intent) {
         super.initIntent(intent);
         toUsername = getIntent().getStringExtra("toUsername");
+    }
+
+    @Override
+    protected void initView(Bundle savedInstanceState) {
+        super.initView(savedInstanceState);
+        titleBar.setTitle(getString(R.string.em_search_chat));
     }
 
     @Override

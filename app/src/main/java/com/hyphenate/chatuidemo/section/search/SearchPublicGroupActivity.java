@@ -7,6 +7,7 @@ import android.text.TextUtils;
 import android.view.View;
 
 import com.hyphenate.chat.EMGroup;
+import com.hyphenate.chatuidemo.R;
 import com.hyphenate.chatuidemo.common.DemoConstant;
 import com.hyphenate.chatuidemo.common.interfaceOrImplement.OnResourceParseCallback;
 import com.hyphenate.chatuidemo.section.chat.ChatActivity;
@@ -28,6 +29,7 @@ public class SearchPublicGroupActivity extends SearchActivity {
     @Override
     protected void initView(Bundle savedInstanceState) {
         super.initView(savedInstanceState);
+        titleBar.setTitle(getString(R.string.em_search_group_public));
         query.setHint("请输入公开群id进行搜索");
     }
 

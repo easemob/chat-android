@@ -2,6 +2,7 @@ package com.hyphenate.chatuidemo.section.search;
 
 import android.content.Context;
 import android.content.Intent;
+import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
 
@@ -23,6 +24,12 @@ public class SearchFriendsActivity extends SearchActivity {
     public static void actionStart(Context context) {
         Intent intent = new Intent(context, SearchFriendsActivity.class);
         context.startActivity(intent);
+    }
+
+    @Override
+    protected void initView(Bundle savedInstanceState) {
+        super.initView(savedInstanceState);
+        titleBar.setTitle(getString(R.string.em_search_contact));
     }
 
     @Override

@@ -33,6 +33,7 @@ public class SearchBlackActivity extends SearchFriendsActivity {
     @Override
     protected void initView(Bundle savedInstanceState) {
         super.initView(savedInstanceState);
+        titleBar.setTitle(getString(R.string.em_search_black));
         registerForContextMenu(rvList);
     }
 
