@@ -1,21 +1,15 @@
 package com.hyphenate.chatuidemo.section.chat.fragment;
 
 import android.app.Activity;
-import android.content.ContentResolver;
-import android.content.Context;
 import android.content.Intent;
-import android.database.Cursor;
 import android.media.MediaPlayer;
-import android.net.Uri;
 import android.os.Bundle;
-import android.provider.MediaStore;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
 import android.widget.AbsListView.LayoutParams;
-import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -26,13 +20,11 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
 import androidx.lifecycle.ViewModelProvider;
-import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.hyphenate.chatuidemo.BuildConfig;
 import com.hyphenate.chatuidemo.R;
 import com.hyphenate.chatuidemo.common.interfaceOrImplement.OnResourceParseCallback;
-import com.hyphenate.chatuidemo.common.utils.ThreadManager;
 import com.hyphenate.chatuidemo.common.utils.video.ImageCache;
 import com.hyphenate.chatuidemo.common.utils.video.ImageResizer;
 import com.hyphenate.chatuidemo.common.utils.video.Utils;
@@ -45,15 +37,11 @@ import com.hyphenate.easeui.model.VideoEntity;
 import com.hyphenate.easeui.utils.EaseCompat;
 import com.hyphenate.easeui.widget.EaseTitleBar;
 import com.hyphenate.util.DateUtils;
-import com.hyphenate.util.PathUtil;
 import com.hyphenate.util.TextFormater;
 import com.hyphenate.util.VersionUtils;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
 
 public class ImageGridFragment extends BaseFragment implements OnItemClickListener {
@@ -61,9 +49,8 @@ public class ImageGridFragment extends BaseFragment implements OnItemClickListen
 	private static final String TAG = "ImageGridFragment";
 	private int mImageThumbSize;
 	private int mImageThumbSpacing;
-	private ImageAdapter2 mAdapter;
+	private ImageAdapter mAdapter;
 	private ImageResizer mImageResizer;
-	List<VideoEntity> mList;
 	private File videoFile;
 
 	/**
@@ -79,8 +66,7 @@ public class ImageGridFragment extends BaseFragment implements OnItemClickListen
 				R.dimen.image_thumbnail_size);
 		mImageThumbSpacing = getResources().getDimensionPixelSize(
 				R.dimen.image_thumbnail_spacing);
-		mList=new ArrayList<VideoEntity>();
-		mAdapter = new ImageAdapter2();
+		mAdapter = new ImageAdapter();
 		
 		ImageCache.ImageCacheParams cacheParams=new ImageCache.ImageCacheParams();
 
@@ -196,7 +182,7 @@ public class ImageGridFragment extends BaseFragment implements OnItemClickListen
 		{
 			videoFile = EaseCompat.takeVideo(this, 100);
 		}else{
-			VideoEntity vEntty=mList.get(position-1);
+			VideoEntity vEntty=mAdapter.getData().get(position-1);
 			Intent intent;
 			if(VersionUtils.isTargetQ(getContext())) {
 				intent=getActivity().getIntent().putExtra("uri", vEntty.uri.toString()).putExtra("dur", vEntty.duration);
@@ -208,25 +194,25 @@ public class ImageGridFragment extends BaseFragment implements OnItemClickListen
 		}
 	}
 
-	private class ImageAdapter2 extends RecyclerView.Adapter<ImageAdapter2.ViewHolder> {
+	private class ImageAdapter extends RecyclerView.Adapter<ImageAdapter.ViewHolder> {
 		private int mItemHeight;
 		private ViewGroup.LayoutParams mImageViewLayoutParams;
 		private List<VideoEntity> mData;
 		private OnItemClickListener mListener;
 
-		public ImageAdapter2() {
+		public ImageAdapter() {
 			mImageViewLayoutParams = new ViewGroup.LayoutParams(
 					LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT);
 		}
 
 		@NonNull
 		@Override
-		public ImageAdapter2.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+		public ImageAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
 			return new ViewHolder(LayoutInflater.from(mContext).inflate(R.layout.demo_choose_griditem, parent,false));
 		}
 
 		@Override
-		public void onBindViewHolder(@NonNull ImageAdapter2.ViewHolder holder, int position) {
+		public void onBindViewHolder(@NonNull ImageAdapter.ViewHolder holder, int position) {
 			holder.itemView.setOnClickListener(new View.OnClickListener() {
 				@Override
 				public void onClick(View v) {
@@ -269,6 +255,10 @@ public class ImageGridFragment extends BaseFragment implements OnItemClickListen
 		public void setData(List<VideoEntity> data) {
 			this.mData = data;
 			notifyDataSetChanged();
+		}
+
+		public List<VideoEntity> getData() {
+			return mData;
 		}
 
 		public void setItemHeight(int height) {

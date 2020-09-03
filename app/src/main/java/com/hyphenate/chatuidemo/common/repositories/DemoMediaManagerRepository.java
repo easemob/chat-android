@@ -69,6 +69,9 @@ public class DemoMediaManagerRepository extends BaseEMRepository {
                             long lastModified = cursor.getLong(cursor
                                     .getColumnIndexOrThrow(MediaStore.Video.Media.DATE_TAKEN));
 
+                            if(size <= 0) {
+                                continue;
+                            }
                             Uri uri = Uri.parse(MediaStore.Video.Media.EXTERNAL_CONTENT_URI.toString() + File.separator + id);
 
                             VideoEntity entty = new VideoEntity();
@@ -109,7 +112,7 @@ public class DemoMediaManagerRepository extends BaseEMRepository {
                 for(int i = 0; i < files.length; i++) {
                     entty = new VideoEntity();
                     File file = files[i];
-                    if(!EaseCompat.isVideoFile(context, file.getName())) {
+                    if(!EaseCompat.isVideoFile(context, file.getName()) || file.length() <= 0) {
                         continue;
                     }
                     entty.filePath = file.getAbsolutePath();
@@ -123,6 +126,9 @@ public class DemoMediaManagerRepository extends BaseEMRepository {
                         entty.duration = player.getDuration();
                     } catch (IOException e) {
                         e.printStackTrace();
+                    }
+                    if(entty.size <= 0 || entty.duration <= 0) {
+                        continue;
                     }
                     mList.add(entty);
                 }
