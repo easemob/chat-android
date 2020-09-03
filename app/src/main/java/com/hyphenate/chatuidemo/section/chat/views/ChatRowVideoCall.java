@@ -27,11 +27,6 @@ public class ChatRowVideoCall extends EaseChatRow {
     }
 
     @Override
-    protected void onViewUpdate(EMMessage msg) {
-
-    }
-
-    @Override
     protected void onSetUpView() {
         EMTextMessageBody txtBody = (EMTextMessageBody) message.getBody();
         contentView.setText(txtBody.getMessage());

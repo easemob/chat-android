@@ -25,11 +25,6 @@ public class ChatRowRecall extends EaseChatRow {
     }
 
     @Override
-    protected void onViewUpdate(EMMessage msg) {
-
-    }
-
-    @Override
     protected void onSetUpView() {
         // 设置显示内容
         String messageStr = null;

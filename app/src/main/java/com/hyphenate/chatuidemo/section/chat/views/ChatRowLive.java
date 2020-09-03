@@ -31,8 +31,4 @@ public class ChatRowLive extends EaseChatRow {
         EMTextMessageBody txtBody = (EMTextMessageBody) message.getBody();
         contentView.setText(txtBody.getMessage());
     }
-
-    @Override
-    protected void onViewUpdate(EMMessage msg) {
-    }
 }
