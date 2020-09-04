@@ -34,7 +34,7 @@ public class SearchGroupActivity extends SearchActivity {
 
     @Override
     protected EaseBaseRecyclerViewAdapter getAdapter() {
-        return new GroupContactAdapter();
+        return new SearchGroupContactAdapter();
     }
 
     @Override
@@ -71,5 +71,12 @@ public class SearchGroupActivity extends SearchActivity {
         //跳转到群聊页面
         EMGroup group = ((GroupContactAdapter)adapter).getItem(position);
         ChatActivity.actionStart(mContext, group.getGroupId(), DemoConstant.CHATTYPE_GROUP);
+    }
+
+    private class SearchGroupContactAdapter extends GroupContactAdapter {
+        @Override
+        public int getEmptyLayoutId() {
+            return R.layout.demo_layout_no_data_show_nothing;
+        }
     }
 }

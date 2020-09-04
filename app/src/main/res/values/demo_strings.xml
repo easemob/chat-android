@@ -269,19 +269,22 @@
     <string name="em_feedback_qq_title">您的QQ</string>
     <string name="em_feedback_qq_hint">请输入QQ号</string>
 
-    <string name="em_conversation_list_search_hint">搜索会话</string>
-    <string name="em_friend_list_search_hint">搜索好友</string>
-    <string name="em_group_list_search_hint">搜索群组</string>
-    <string name="em_chat_room_list_search_hint">搜索聊天室</string>
-    <string name="em_black_list_search_hint">搜索黑名单</string>
+    <string name="em_conversation_list_search_hint">搜索</string>
+    <string name="em_friend_list_search_hint">搜索</string>
+    <string name="em_group_list_search_hint">搜索</string>
+    <string name="em_chat_room_list_search_hint">搜索</string>
+    <string name="em_black_list_search_hint">搜索</string>
     <string name="em_search_group">群组</string>
     <string name="em_search_group_public">公开群</string>
+    <string name="em_search_group_public_hint">请输入公开群id进行搜索</string>
     <string name="em_search_group_chat">群聊</string>
     <string name="em_search_chat">聊天详情</string>
     <string name="em_search_chat_room">聊天室</string>
     <string name="em_search_black">黑名单</string>
     <string name="em_search_conversation">会话</string>
     <string name="em_search_contact">联系人</string>
+    <string name="em_search_add_contact">添加好友</string>
+    <string name="em_search_add_contact_hint">请输入用户ID</string>
 
     <string name="em_public_group_information">公开群资料</string>
     <string name="group_name">群名称</string>

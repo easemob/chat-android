@@ -30,7 +30,7 @@ public class SearchPublicGroupActivity extends SearchActivity {
     protected void initView(Bundle savedInstanceState) {
         super.initView(savedInstanceState);
         titleBar.setTitle(getString(R.string.em_search_group_public));
-        query.setHint("请输入公开群id进行搜索");
+        query.setHint(getString(R.string.em_search_group_public_hint));
     }
 
     @Override
@@ -49,7 +49,7 @@ public class SearchPublicGroupActivity extends SearchActivity {
 
     @Override
     protected EaseBaseRecyclerViewAdapter getAdapter() {
-        return new PublicGroupContactAdapter();
+        return new SearchPublicGroupContactAdapter();
     }
 
     @Override
@@ -63,5 +63,12 @@ public class SearchPublicGroupActivity extends SearchActivity {
     protected void onChildItemClick(View view, int position) {
         EMGroup group = (EMGroup) adapter.getItem(position);
         ChatActivity.actionStart(mContext, group.getGroupId(), DemoConstant.CHATTYPE_GROUP);
+    }
+
+    private class SearchPublicGroupContactAdapter extends PublicGroupContactAdapter {
+        @Override
+        public int getEmptyLayoutId() {
+            return R.layout.demo_layout_no_data_show_nothing;
+        }
     }
 }

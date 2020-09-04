@@ -34,7 +34,7 @@ public class SearchChatRoomActivity extends SearchActivity {
 
     @Override
     protected EaseBaseRecyclerViewAdapter getAdapter() {
-        return new ChatRoomContactAdapter();
+        return new SearchChatRoomContactAdapter();
     }
 
     @Override
@@ -69,5 +69,12 @@ public class SearchChatRoomActivity extends SearchActivity {
     protected void onChildItemClick(View view, int position) {
         EMChatRoom item = ((ChatRoomContactAdapter) adapter).getItem(position);
         ChatActivity.actionStart(mContext, item.getId(), DemoConstant.CHATTYPE_CHATROOM);
+    }
+
+    private class SearchChatRoomContactAdapter extends ChatRoomContactAdapter {
+        @Override
+        public int getEmptyLayoutId() {
+            return R.layout.demo_layout_no_data_show_nothing;
+        }
     }
 }

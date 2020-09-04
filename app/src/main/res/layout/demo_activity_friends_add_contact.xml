@@ -18,13 +18,23 @@
         android:layout_marginEnd="16dp"
         app:titleBarDisplayHomeAsUpEnabled="true"/>
 
+    <EditText
+        android:id="@+id/query"
+        android:layout_width="0dp"
+        android:layout_height="@dimen/em_common_search_height"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/title_bar_search"
+        android:hint="@string/search"
+        style="@style/demo_search_et_style" />
+
     <com.scwang.smartrefresh.layout.SmartRefreshLayout
         android:id="@+id/srl_search"
         android:layout_width="0dp"
         android:layout_height="0dp"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/title_bar_search"
+        app:layout_constraintTop_toBottomOf="@id/query"
         app:layout_constraintBottom_toBottomOf="parent"
         app:srlEnableLoadMore="false"
         android:layout_marginTop="5dp">

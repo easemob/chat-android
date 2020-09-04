@@ -74,7 +74,7 @@ public class SearchFriendsActivity extends SearchActivity {
     public class SearchFriendAdapter extends ContactListAdapter {
         @Override
         public int getEmptyLayoutId() {
-            return R.layout.ease_layout_default_no_data;
+            return R.layout.demo_layout_no_data_show_nothing;
         }
     }
 }

@@ -179,4 +179,22 @@
         <item name="android:background">@color/white</item>
     </style>
 
+    <style name="demo_search_et_style">
+        <item name="android:layout_centerVertical">true</item>
+        <item name="android:layout_marginLeft">@dimen/em_margin_15</item>
+        <item name="android:layout_marginRight">@dimen/em_margin_15</item>
+        <item name="android:layout_marginTop">5dp</item>
+        <item name="android:background">@drawable/demo_dialog_edit_bg_shape</item>
+        <item name="android:drawableLeft">@drawable/ease_search_icon</item>
+        <item name="android:drawablePadding">@dimen/em_margin_10</item>
+        <item name="android:paddingBottom">5dp</item>
+        <item name="android:paddingLeft">10dp</item>
+        <item name="android:paddingTop">5dp</item>
+        <item name="android:focusable">true</item>
+        <item name="android:focusableInTouchMode">true</item>
+        <item name="android:singleLine">true</item>
+        <item name="android:imeOptions">actionSearch</item>
+        <item name="android:textSize">16sp</item>
+    </style>
+
 </resources>

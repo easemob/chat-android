@@ -70,6 +70,7 @@ public abstract class SearchActivity extends BaseInitActivity {
                     searchClear.setVisibility(View.VISIBLE);
                 } else {
                     searchClear.setVisibility(View.INVISIBLE);
+                    adapter.clearData();
                 }
             }
         });

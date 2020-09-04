@@ -186,9 +186,6 @@ public class GroupPickContactsActivity extends BaseInitActivity implements EaseT
                 }
             });
         });
-        if(srlRefresh != null) {
-            srlRefresh.autoRefresh();
-        }
         viewModel.getAllContacts();
     }
 

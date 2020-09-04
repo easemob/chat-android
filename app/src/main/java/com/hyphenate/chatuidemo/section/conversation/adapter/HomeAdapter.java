@@ -37,6 +37,11 @@ public class HomeAdapter extends EaseBaseRecyclerViewAdapter<Object> {
         return new MyViewHolder(LayoutInflater.from(mContext).inflate(R.layout.demo_item_row_chat_history, parent, false));
     }
 
+    @Override
+    public int getEmptyLayoutId() {
+        return R.layout.demo_layout_no_data_show_nothing;
+    }
+
     private class MyViewHolder extends ViewHolder<Object> {
         private ConstraintLayout listIteaseLayout;
         private EaseImageView avatar;

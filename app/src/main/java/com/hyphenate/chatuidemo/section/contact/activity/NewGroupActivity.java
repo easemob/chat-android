@@ -40,6 +40,7 @@ public class NewGroupActivity extends BaseInitActivity implements EaseTitleBar.O
     private SwitchItemView itemSwitchInvite;
     private ArrowItemView itemGroupMembers;
     private int maxUsers = 200;
+    private static final int MAX_GROUP_USERS = 2000;
     private NewGroupViewModel viewModel;
     private String[] newmembers;
 
@@ -78,6 +79,7 @@ public class NewGroupActivity extends BaseInitActivity implements EaseTitleBar.O
 
         itemGroupName.getTvContent().setHint(getString(R.string.em_group_new_name_hint));
         itemGroupProfile.getTvContent().setHint(getString(R.string.em_group_new_profile_hint));
+        itemGroupMaxUsers.getTvContent().setText(String.valueOf(maxUsers));
     }
 
     @Override
@@ -227,7 +229,7 @@ public class NewGroupActivity extends BaseInitActivity implements EaseTitleBar.O
                     public void onConfirmClick(View view, String content) {
                         if(!TextUtils.isEmpty(content)) {
                             maxUsers = Integer.valueOf(content);
-                            if(maxUsers > 2000) {
+                            if(maxUsers > MAX_GROUP_USERS) {
                                 maxUsers = Integer.valueOf(itemGroupMaxUsers.getTvContent().getText().toString().trim());
                                 showToast("建群最大人数不能超过2000！");
                                 return;
