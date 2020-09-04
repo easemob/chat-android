@@ -20,6 +20,7 @@
         android:text="@string/new_message_notify"
         android:textSize="@dimen/em_size_normal"
         android:paddingLeft="20dp"
+        android:textColor="@color/black"
         android:gravity="center_vertical"/>
 
     <com.hyphenate.chatuidemo.common.widget.SwitchItemView
