@@ -6,6 +6,7 @@ import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.view.KeyEvent;
 import android.view.View;
+import android.view.WindowManager;
 import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -41,6 +42,10 @@ public abstract class SearchActivity extends BaseInitActivity {
         query = findViewById(R.id.query);
         searchClear = findViewById(R.id.search_clear);
         rvList = findViewById(R.id.rv_list);
+
+        //让EditText获取焦点并弹出软键盘
+        query.requestFocus();
+        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE);
     }
 
     @Override
