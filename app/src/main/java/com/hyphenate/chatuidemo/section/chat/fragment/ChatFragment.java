@@ -111,7 +111,7 @@ public class ChatFragment extends EaseChatFragment implements EaseChatFragment.O
     @Override
     protected void initExtendInputMenu() {
         inputMenu.init();
-        inputMenu.setHint(R.string.em_chat_et_hint);
+        //inputMenu.setHint(R.string.em_chat_et_hint);
     }
 
     @Override

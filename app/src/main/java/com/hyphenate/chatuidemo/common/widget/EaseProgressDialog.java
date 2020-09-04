@@ -60,7 +60,7 @@ public class EaseProgressDialog extends ProgressDialog {
         }
 
         public EaseProgressDialog build() {
-            EaseProgressDialog dialog = new EaseProgressDialog(mContext);
+            EaseProgressDialog dialog = new EaseProgressDialog(mContext, R.style.Dialog_Light);
             dialog.setCancelable(cancelable);
             dialog.setCanceledOnTouchOutside(canceledOnTouchOutside);
             dialog.setMessage(message);

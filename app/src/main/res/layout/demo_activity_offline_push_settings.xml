@@ -42,6 +42,7 @@
         android:layout_height="@dimen/em_common_item_height"
         app:switchItemTitle="@string/offline_push_no_disturb"
         app:switchItemTitleSize="14sp"
+        app:switchItemClickable="false"
         android:background="@color/white"/>
 
     <com.hyphenate.chatuidemo.common.widget.ArrowItemView

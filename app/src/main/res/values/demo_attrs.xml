@@ -28,6 +28,8 @@
         <attr name="switchItemTitleSize" format="dimension|reference"/>
         <attr name="switchItemShowDivider" format="boolean"/>
         <attr name="switchItemHint" format="string|reference"/>
+        <attr name="switchItemCheckEnable" format="boolean"/>
+        <attr name="switchItemClickable" format="boolean"/>
     </declare-styleable>
 
 </resources>

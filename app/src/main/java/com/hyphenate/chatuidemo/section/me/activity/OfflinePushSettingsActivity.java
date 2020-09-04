@@ -39,6 +39,7 @@ public class OfflinePushSettingsActivity extends BaseInitActivity implements Eas
     private OfflinePushSetViewModel viewModel;
     private int startTime;
     private int endTime;
+    private boolean shouldUpdateToServer;
 
     public static void actionStart(Context context) {
         Intent intent = new Intent(context, OfflinePushSettingsActivity.class);
@@ -64,7 +65,7 @@ public class OfflinePushSettingsActivity extends BaseInitActivity implements Eas
     protected void initListener() {
         super.initListener();
         titleBar.setOnBackPressListener(this);
-        switchPushNoDisturb.setOnCheckedChangeListener(this);
+        switchPushNoDisturb.setOnClickListener(this);
         rlCustomServer.setOnCheckedChangeListener(this);
         itemPushTimeRange.setOnClickListener(this);
     }
@@ -83,18 +84,6 @@ public class OfflinePushSettingsActivity extends BaseInitActivity implements Eas
                     mPushConfigs = data;
                     processPushConfigs();
                 }
-
-                @Override
-                public void onLoading() {
-                    super.onLoading();
-                    showLoading();
-                }
-
-                @Override
-                public void hideLoading() {
-                    super.hideLoading();
-                    dismissLoading();
-                }
             });
         });
 
@@ -103,18 +92,7 @@ public class OfflinePushSettingsActivity extends BaseInitActivity implements Eas
                 @Override
                 public void onSuccess(Boolean data) {
                     itemPushTimeRange.getTvContent().setText(getTimeRange(startTime, endTime));
-                }
-
-                @Override
-                public void onLoading() {
-                    super.onLoading();
-                    showLoading();
-                }
-
-                @Override
-                public void hideLoading() {
-                    super.hideLoading();
-                    dismissLoading();
+                    shouldUpdateToServer = false;
                 }
             });
         });
@@ -125,18 +103,6 @@ public class OfflinePushSettingsActivity extends BaseInitActivity implements Eas
                 public void onSuccess(Boolean data) {
 
                 }
-
-                @Override
-                public void onLoading() {
-                    super.onLoading();
-                    showLoading();
-                }
-
-                @Override
-                public void hideLoading() {
-                    super.hideLoading();
-                    dismissLoading();
-                }
             });
         });
 
@@ -146,16 +112,30 @@ public class OfflinePushSettingsActivity extends BaseInitActivity implements Eas
     private void processPushConfigs(){
         if(mPushConfigs == null)
             return;
-        switchPushNoDisturb.getSwitch().setChecked(mPushConfigs.isNoDisturbOn());
+        startTime = mPushConfigs.getNoDisturbStartHour();
+        endTime = mPushConfigs.getNoDisturbEndHour();
+        if(startTime < 0) {
+            startTime = 0;
+        }
+        if(endTime < 0) {
+            endTime = 0;
+        }
+        itemPushTimeRange.getTvContent().setText(getTimeRange(startTime, endTime));
         if(mPushConfigs.isNoDisturbOn()) {
-            startTime = mPushConfigs.getNoDisturbStartHour();
-            endTime = mPushConfigs.getNoDisturbEndHour();
-            itemPushTimeRange.getTvContent().setText(getTimeRange(startTime, endTime));
+            switchPushNoDisturb.getSwitch().setChecked(mPushConfigs.isNoDisturbOn());
+            setOptionsVisible(true);
+            if(shouldUpdateToServer) {
+                viewModel.disableOfflinePush(startTime, endTime);
+            }
         }
     }
 
     private String getTimeRange(int start, int end) {
-        return getDoubleDigit(start) + ":00" + "~" + getDoubleDigit(end) + ":00";
+        return getTimeToString(start) + "~" + getTimeToString(end);
+    }
+
+    private String getTimeToString(int hour) {
+        return getDoubleDigit(hour) + ":00";
     }
 
     private String getDoubleDigit(int num) {
@@ -170,17 +150,6 @@ public class OfflinePushSettingsActivity extends BaseInitActivity implements Eas
     @Override
     public void onCheckedChanged(SwitchItemView buttonView, boolean isChecked) {
         switch (buttonView.getId()) {
-            case R.id.switch_push_no_disturb :
-                if(isChecked) {
-                    viewModel.disableOfflinePush(startTime, endTime);
-                    itemPushTimeRange.setVisibility(View.VISIBLE);
-                    rlCustomServer.setVisibility(View.VISIBLE);
-                }else {
-                    itemPushTimeRange.setVisibility(View.GONE);
-                    rlCustomServer.setVisibility(View.GONE);
-                    viewModel.enableOfflinePush();
-                }
-                break;
             case R.id.rl_custom_server :
                 settingsModel.setUseFCM(isChecked);
                 EMClient.getInstance().getOptions().setUseFCM(isChecked);
@@ -191,7 +160,29 @@ public class OfflinePushSettingsActivity extends BaseInitActivity implements Eas
 
     @Override
     public void onClick(View v) {
-        showTimePicker();
+        switch (v.getId()) {
+            case R.id.switch_push_no_disturb :
+                boolean checked = switchPushNoDisturb.getSwitch().isChecked();
+                switchPushNoDisturb.getSwitch().setChecked(!checked);
+                if(switchPushNoDisturb.getSwitch().isChecked()) {
+                    viewModel.getPushConfigs();
+                    shouldUpdateToServer = true;
+                    setOptionsVisible(true);
+                }else {
+                    setOptionsVisible(false);
+                    viewModel.enableOfflinePush();
+                }
+                break;
+            case R.id.item_push_time_range :
+                showTimePicker();
+                break;
+        }
+
+    }
+
+    private void setOptionsVisible(boolean visible) {
+        itemPushTimeRange.setVisibility(visible ? View.VISIBLE : View.GONE);
+        rlCustomServer.setVisibility(visible ? View.VISIBLE : View.GONE);
     }
 
     private void showTimePicker() {
@@ -200,6 +191,8 @@ public class OfflinePushSettingsActivity extends BaseInitActivity implements Eas
                 .setConfirmColor(R.color.em_color_brand)
                 .showCancelButton(true)
                 .showMinute(false)
+                .setStartTime(getTimeToString(startTime))
+                .setEndTime(getTimeToString(endTime))
                 .setOnTimePickCancelListener(R.string.cancel, new TimePickerDialogFragment.OnTimePickCancelListener() {
                         @Override
                         public void onClickCancel(View view) {
@@ -210,9 +203,16 @@ public class OfflinePushSettingsActivity extends BaseInitActivity implements Eas
                         @Override
                         public void onClickSubmit(View view, String start, String end) {
                             try {
-                                startTime = Integer.parseInt(getHour(start));
-                                endTime = Integer.parseInt(getHour(end));
-                                viewModel.disableOfflinePush(startTime, endTime);
+                                int startHour = Integer.parseInt(getHour(start));
+                                int endHour = Integer.parseInt(getHour(end));
+                                if(startHour != endHour) {
+                                    startTime = startHour;
+                                    endTime = endHour;
+                                    viewModel.disableOfflinePush(startTime, endTime);
+                                }else {
+                                    showToast(R.string.offline_time_rang_error);
+                                }
+
                             } catch (NumberFormatException e) {
                                 e.printStackTrace();
                             }

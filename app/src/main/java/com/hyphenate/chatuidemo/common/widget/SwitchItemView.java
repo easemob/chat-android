@@ -84,6 +84,12 @@ public class SwitchItemView extends ConstraintLayout {
         }
         tvHint.setText(hint);
 
+        boolean checkEnable = a.getBoolean(R.styleable.SwitchItemView_switchItemCheckEnable, true);
+        switchItem.setEnabled(checkEnable);
+
+        boolean clickable = a.getBoolean(R.styleable.SwitchItemView_switchItemClickable, true);
+        switchItem.setClickable(clickable);
+
         a.recycle();
 
         setListener();

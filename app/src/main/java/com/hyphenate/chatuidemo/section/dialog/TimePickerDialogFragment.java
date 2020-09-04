@@ -42,6 +42,7 @@ public class TimePickerDialogFragment extends BaseDialogFragment {
     private TextView btnCancel;
     private TextView btnSubmit;
 
+    private String preStartTime, preEndTime;
     private String startTime;
     private String endTime;
     private String divider;
@@ -130,7 +131,7 @@ public class TimePickerDialogFragment extends BaseDialogFragment {
     private String getTime(int hour, int minute) {
         String h = getDoubleDigit(hour);
         String m = getDoubleDigit(minute);
-        return showMinute ?  h + ":" + m : h;
+        return showMinute ?  h + ":" + m : h+":00";
     }
 
     private String getDoubleDigit(int time) {
@@ -189,19 +190,19 @@ public class TimePickerDialogFragment extends BaseDialogFragment {
             pickerEnd.setCurrentMinute(calendar.get(Calendar.MINUTE));
         }
 
-        if(!TextUtils.isEmpty(startTime) && !TextUtils.isEmpty(endTime)) {
+        if(!TextUtils.isEmpty(preStartTime) && !TextUtils.isEmpty(preEndTime)) {
             if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                pickerStart.setHour(Integer.parseInt(startTime.substring(0, startTime.indexOf(":"))));
-                pickerStart.setMinute(Integer.parseInt(startTime.substring(startTime.indexOf(":") + 1)));
+                pickerStart.setHour(Integer.parseInt(preStartTime.substring(0, preStartTime.indexOf(":"))));
+                pickerStart.setMinute(Integer.parseInt(preStartTime.substring(preStartTime.indexOf(":") + 1)));
 
-                pickerEnd.setHour(Integer.parseInt(endTime.substring(0, endTime.indexOf(":"))));
-                pickerEnd.setMinute(Integer.parseInt(endTime.substring(endTime.indexOf(":") + 1)));
+                pickerEnd.setHour(Integer.parseInt(preEndTime.substring(0, preEndTime.indexOf(":"))));
+                pickerEnd.setMinute(Integer.parseInt(preEndTime.substring(preEndTime.indexOf(":") + 1)));
             } else {
-                pickerStart.setCurrentHour(Integer.parseInt(startTime.substring(0, startTime.indexOf(":"))));
-                pickerStart.setCurrentMinute(Integer.parseInt(startTime.substring(startTime.indexOf(":") + 1)));
+                pickerStart.setCurrentHour(Integer.parseInt(preStartTime.substring(0, preStartTime.indexOf(":"))));
+                pickerStart.setCurrentMinute(Integer.parseInt(preStartTime.substring(preStartTime.indexOf(":") + 1)));
 
-                pickerEnd.setCurrentHour(Integer.parseInt(endTime.substring(0, endTime.indexOf(":"))));
-                pickerEnd.setCurrentMinute(Integer.parseInt(endTime.substring(endTime.indexOf(":") + 1)));
+                pickerEnd.setCurrentHour(Integer.parseInt(preEndTime.substring(0, preEndTime.indexOf(":"))));
+                pickerEnd.setCurrentMinute(Integer.parseInt(preEndTime.substring(preEndTime.indexOf(":") + 1)));
             }
         }
 
@@ -467,11 +468,11 @@ public class TimePickerDialogFragment extends BaseDialogFragment {
     }
 
     private void setStartTime(String startTime) {
-        this.startTime = startTime;
+        this.preStartTime = startTime;
     }
 
     private void setEndTime(String endTime) {
-        this.endTime = endTime;
+        this.preEndTime = endTime;
     }
 
     private void showMinute(boolean showMinute) {

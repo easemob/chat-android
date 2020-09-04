@@ -123,7 +123,7 @@
 
     <string name="em_chat_pick_user_title">选择联系人</string>
 
-    <string name="em_single_set_title">聊天信息</string>
+    <string name="em_single_set_title">聊天详情</string>
     <string name="em_single_search_history">查找聊天记录</string>
     <string name="em_single_clear_history">清空聊天记录</string>
     <string name="em_single_conversation_top">会话置顶</string>
@@ -330,6 +330,7 @@
     <string name="offline_call_push">通话离线推送</string>
     <string name="offline_push_no_disturb">推送消息免打扰</string>
     <string name="offline_default_time_range">22:00~07:00</string>
+    <string name="offline_time_rang_error">起止时间不能相同</string>
 
     <string name="title_msg_typing">显示输入状态</string>
     <string name="chatroom_allow_owner_leave"> 允许聊天室群主离开</string>
