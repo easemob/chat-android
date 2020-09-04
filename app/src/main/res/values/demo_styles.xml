@@ -1,14 +1,21 @@
 <resources>
 
     <!-- Base application theme. -->
-    <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
+    <style name="AppTheme" parent="Theme.AppCompat.NoActionBar">
         <!-- Customize your theme here. -->
         <item name="colorPrimary">@color/em_base_color_primary</item>
         <item name="colorPrimaryDark">@color/em_base_color_primary_dark</item>
         <item name="colorAccent">@color/em_base_color_accent</item>
+        <!-- Customize EditText text color -->
+        <item name="android:editTextColor">@color/black</item>
+        <!-- Customize text cursor -->
+        <item name="android:textCursorDrawable">@drawable/demo_text_cursor_drawable</item>
+        <!-- Customize text color hint -->
         <item name="android:textColorHint">@color/em_base_color_text_hint</item>
         <item name="android:windowBackground">@color/em_base_color_window_bg</item>
+        <item name="android:dialogTheme">@style/Dialog.Light</item>
         <item name="android:divider">@drawable/demo_default_divider_list</item>
+        <item name="android:colorBackground">@color/black</item>
     </style>
 
     <style name="NoActionBar.Dark" parent="Theme.AppCompat.NoActionBar">
@@ -23,6 +30,11 @@
         <item name="android:windowSoftInputMode">adjustResize</item>
         <!--<item name="android:windowIsTranslucent">true</item>-->
         <item name="android:windowActionBar">false</item>
+    </style>
+
+    <!--指定Dialog的主题-->
+    <style name="Dialog.Light" parent="Theme.AppCompat.Light.Dialog">
+
     </style>
 
     <style name="AppTheme.AddContactTheme" parent="AppTheme">
@@ -46,6 +58,16 @@
 
     <style name="AppTheme.TabLayout" parent="AppTheme">
         <item name="android:textSize">@dimen/em_size_big</item>
+    </style>
+
+    <!-- 覆盖easeui中对于toolbar的设置,将主题设置为Dark模式 -->
+    <style name="Toolbar.PopupTheme" parent="ThemeOverlay.AppCompat.Dark">
+        <!--设置背景色-->
+<!--        <item name="android:background">@color/black</item>-->
+        <!--设置字体颜色-->
+<!--        <item name="android:textColor">@color/white</item>-->
+        <!--设置不覆盖锚点，即不覆盖三个点-->
+        <item name="overlapAnchor">false</item>
     </style>
 
     <style name="main_bottom_view_normal">
@@ -190,8 +212,6 @@
         <item name="android:paddingBottom">5dp</item>
         <item name="android:paddingLeft">10dp</item>
         <item name="android:paddingTop">5dp</item>
-        <item name="android:focusable">true</item>
-        <item name="android:focusableInTouchMode">true</item>
         <item name="android:singleLine">true</item>
         <item name="android:imeOptions">actionSearch</item>
         <item name="android:textSize">16sp</item>

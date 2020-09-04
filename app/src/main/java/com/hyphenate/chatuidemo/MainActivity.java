@@ -99,7 +99,7 @@ public class MainActivity extends BaseInitActivity implements BottomNavigationVi
      */
     @Override
     public boolean onMenuOpened(int featureId, Menu menu) {
-        if(menu != null) {
+        /*if(menu != null) {
             if(menu.getClass().getSimpleName().equalsIgnoreCase("MenuBuilder")) {
                 try {
                     Method method = menu.getClass().getDeclaredMethod("setOptionalIconsVisible", Boolean.TYPE);
@@ -110,7 +110,7 @@ public class MainActivity extends BaseInitActivity implements BottomNavigationVi
                 }
 
             }
-        }
+        }*/
         return super.onMenuOpened(featureId, menu);
     }
 
