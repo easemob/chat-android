@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 
@@ -24,6 +25,8 @@ import com.hyphenate.easeui.widget.EaseTitleBar;
 
 import androidx.constraintlayout.widget.Group;
 import androidx.lifecycle.ViewModelProvider;
+
+import java.util.List;
 
 public class ChatRoomDetailActivity extends BaseInitActivity implements EaseTitleBar.OnBackPressListener, View.OnClickListener {
     private String roomId;
@@ -130,6 +133,15 @@ public class ChatRoomDetailActivity extends BaseInitActivity implements EaseTitl
             }
         });
 
+        viewModel.memberObservable().observe(this, response -> {
+            parseResource(response, new OnResourceParseCallback<List<String>>() {
+                @Override
+                public void onSuccess(List<String> data) {
+                    itemChatRoomMembers.getTvContent().setText(data.size() + "人");
+                }
+            });
+        });
+
         getChatRoom();
     }
 
@@ -139,9 +151,13 @@ public class ChatRoomDetailActivity extends BaseInitActivity implements EaseTitl
         itemChatRoomName.getTvContent().setText(chatRoom.getName());
         itemChatRoomOwner.getTvContent().setText(chatRoom.getOwner());
         itemChatRoomAdmins.getTvContent().setText((chatRoom.getAdminList().size() + 1 ) + "人");
-        itemChatRoomMembers.getTvContent().setText((chatRoom.getMemberCount() - chatRoom.getAdminList().size() - 1 ) + "人");
+        itemChatRoomMembers.getTvContent().setText(chatRoom.getMemberList().size() + "人");
 
         tvChatRoomRefund.setVisibility(isOwner() ? View.VISIBLE : View.GONE);
+
+        if(viewModel != null) {
+            viewModel.getChatRoomMembers(chatRoom.getId());
+        }
     }
 
     private void getChatRoom() {
