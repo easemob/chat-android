@@ -46,6 +46,7 @@
         app:layout_constraintLeft_toLeftOf="parent"
         android:button="@drawable/demo_cb_agreement_select"
         android:textSize="12sp"
+        android:visibility="invisible"
         android:textColor="@color/white"
         android:layout_marginLeft="50dp"/>
 
@@ -57,6 +58,7 @@
         app:layout_constraintTop_toTopOf="@id/cb_select"
         app:layout_constraintBottom_toBottomOf="@id/cb_select"
         android:layout_marginLeft="5dp"
+        android:visibility="invisible"
         android:text="@string/em_login_agreement"
         android:textSize="12sp"/>
 
@@ -73,7 +75,7 @@
         android:id="@+id/tv_login_register"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintRight_toLeftOf="@id/tv_login_token"
+        app:layout_constraintRight_toLeftOf="@id/tv_login_server_set"
         app:layout_constraintHorizontal_chainStyle="spread_inside"
         android:layout_marginLeft="33dp"
         android:layout_marginStart="33dp"
@@ -81,21 +83,24 @@
         style="@style/em_login_tv_other" />
 
     <TextView
-        android:id="@+id/tv_login_token"
+        android:id="@+id/tv_login_server_set"
         app:layout_constraintLeft_toRightOf="@id/tv_login_register"
+        app:layout_constraintRight_toLeftOf="@id/tv_login_token"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintRight_toLeftOf="@id/tv_login_server_set"
-        android:text="@string/em_login_tv_token"
+        android:text="@string/em_login_tv_server_set"
+        app:layout_goneMarginRight="33dp"
+        app:layout_goneMarginEnd="33dp"
         style="@style/em_login_tv_other"/>
 
     <TextView
-        android:id="@+id/tv_login_server_set"
-        app:layout_constraintLeft_toRightOf="@id/tv_login_token"
-        app:layout_constraintRight_toRightOf="parent"
+        android:id="@+id/tv_login_token"
+        app:layout_constraintLeft_toRightOf="@id/tv_login_server_set"
         app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
         android:layout_marginRight="33dp"
         android:layout_marginEnd="33dp"
-        android:text="@string/em_login_tv_server_set"
+        android:text="@string/em_login_tv_token"
+        android:visibility="gone"
         style="@style/em_login_tv_other"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

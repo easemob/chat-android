@@ -1,7 +1,7 @@
 <resources>
 
     <!-- Base application theme. -->
-    <style name="AppTheme" parent="Theme.AppCompat.NoActionBar">
+    <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
         <!-- Customize your theme here. -->
         <item name="colorPrimary">@color/em_base_color_primary</item>
         <item name="colorPrimaryDark">@color/em_base_color_primary_dark</item>
@@ -13,9 +13,7 @@
         <!-- Customize text color hint -->
         <item name="android:textColorHint">@color/em_base_color_text_hint</item>
         <item name="android:windowBackground">@color/em_base_color_window_bg</item>
-        <item name="android:dialogTheme">@style/Dialog.Light</item>
         <item name="android:divider">@drawable/demo_default_divider_list</item>
-        <item name="android:colorBackground">@color/black</item>
     </style>
 
     <style name="NoActionBar.Dark" parent="Theme.AppCompat.NoActionBar">
@@ -61,14 +59,14 @@
     </style>
 
     <!-- 覆盖easeui中对于toolbar的设置,将主题设置为Dark模式 -->
-    <style name="Toolbar.PopupTheme" parent="ThemeOverlay.AppCompat.Dark">
-        <!--设置背景色-->
-<!--        <item name="android:background">@color/black</item>-->
-        <!--设置字体颜色-->
-        <item name="android:textColor">@color/white</item>
-        <!--设置不覆盖锚点，即不覆盖三个点-->
-        <item name="overlapAnchor">false</item>
-    </style>
+<!--    <style name="Toolbar.PopupTheme" parent="ThemeOverlay.AppCompat.Dark">-->
+<!--        &lt;!&ndash;设置背景色&ndash;&gt;-->
+<!--&lt;!&ndash;        <item name="android:background">@color/black</item>&ndash;&gt;-->
+<!--        &lt;!&ndash;设置字体颜色&ndash;&gt;-->
+<!--        <item name="android:textColor">@color/white</item>-->
+<!--        &lt;!&ndash;设置不覆盖锚点，即不覆盖三个点&ndash;&gt;-->
+<!--        <item name="overlapAnchor">false</item>-->
+<!--    </style>-->
 
     <style name="main_bottom_view_normal">
         <item name="android:textColor">@color/em_main_color_tab_normal</item>
@@ -141,11 +139,11 @@
         <item name="android:textColor">@color/demo_login_btn_text_color</item>
         <item name="android:enabled">false</item>
         <item name="android:textSize">16sp</item>
-        <item name="android:drawableRight">@drawable/demo_login_btn_right_unable</item>
+<!--        <item name="android:drawableRight">@drawable/demo_login_btn_right_unable</item>-->
         <item name="android:paddingRight">5dp</item>
         <item name="android:paddingEnd">5dp</item>
-        <item name="android:paddingLeft">45dp</item>
-        <item name="android:paddingStart">45dp</item>
+        <item name="android:paddingLeft">5dp</item>
+        <item name="android:paddingStart">5dp</item>
     </style>
 
     <style name="em_main_badge_tv">

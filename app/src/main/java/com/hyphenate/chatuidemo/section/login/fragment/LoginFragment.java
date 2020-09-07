@@ -14,7 +14,9 @@ import android.text.method.LinkMovementMethod;
 import android.text.style.ClickableSpan;
 import android.text.style.UnderlineSpan;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.View;
+import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
@@ -37,7 +39,7 @@ import com.hyphenate.chatuidemo.section.login.viewmodels.LoginFragmentViewModel;
 import com.hyphenate.chatuidemo.section.login.viewmodels.LoginViewModel;
 import com.hyphenate.easeui.domain.EaseUser;
 
-public class LoginFragment extends BaseInitFragment implements View.OnClickListener, TextWatcher, CompoundButton.OnCheckedChangeListener {
+public class LoginFragment extends BaseInitFragment implements View.OnClickListener, TextWatcher, CompoundButton.OnCheckedChangeListener, TextView.OnEditorActionListener {
     private EditText mEtLoginName;
     private EditText mEtLoginPwd;
     private TextView mTvLoginRegister;
@@ -92,6 +94,7 @@ public class LoginFragment extends BaseInitFragment implements View.OnClickListe
         mTvLoginServerSet.setOnClickListener(this);
         mBtnLogin.setOnClickListener(this);
         cbSelect.setOnCheckedChangeListener(this);
+        mEtLoginPwd.setOnEditorActionListener(this);
         EditTextUtils.clearEditTextListener(mEtLoginName);
     }
 
@@ -157,6 +160,7 @@ public class LoginFragment extends BaseInitFragment implements View.OnClickListe
         eyeClose = getResources().getDrawable(R.drawable.d_pwd_hide);
         eyeOpen = getResources().getDrawable(R.drawable.d_pwd_show);
         clear = getResources().getDrawable(R.drawable.d_clear);
+        EditTextUtils.showRightDrawable(mEtLoginName, clear);
         EditTextUtils.changePwdDrawableRight(mEtLoginPwd, eyeClose, eyeOpen, null, null, null);
     }
 
@@ -221,7 +225,7 @@ public class LoginFragment extends BaseInitFragment implements View.OnClickListe
         mPwd = mEtLoginPwd.getText().toString().trim();
         EditTextUtils.showRightDrawable(mEtLoginName, clear);
         EditTextUtils.showRightDrawable(mEtLoginPwd, isTokenFlag ? null : eyeClose);
-        setButtonEnable(!TextUtils.isEmpty(mUserName) && !TextUtils.isEmpty(mPwd) && cbSelect.isChecked());
+        setButtonEnable(!TextUtils.isEmpty(mUserName) && !TextUtils.isEmpty(mPwd));
     }
 
     @Override
@@ -235,14 +239,20 @@ public class LoginFragment extends BaseInitFragment implements View.OnClickListe
 
     private void setButtonEnable(boolean enable) {
         mBtnLogin.setEnabled(enable);
-        //同时需要修改右侧drawalbeRight对应的资源
-        Drawable rightDrawable;
-        if(enable) {
-            rightDrawable = ContextCompat.getDrawable(mContext, R.drawable.demo_login_btn_right_enable);
-        }else {
-            rightDrawable = ContextCompat.getDrawable(mContext, R.drawable.demo_login_btn_right_unable);
+        if(mEtLoginPwd.hasFocus()) {
+            mEtLoginPwd.setImeOptions(enable ? EditorInfo.IME_ACTION_DONE : EditorInfo.IME_ACTION_PREVIOUS);
+        }else if(mEtLoginName.hasFocus()) {
+            mEtLoginPwd.setImeOptions(enable ? EditorInfo.IME_ACTION_DONE : EditorInfo.IME_ACTION_NEXT);
         }
-        mBtnLogin.setCompoundDrawablesWithIntrinsicBounds(null, null, rightDrawable, null);
+
+        //同时需要修改右侧drawalbeRight对应的资源
+//        Drawable rightDrawable;
+//        if(enable) {
+//            rightDrawable = ContextCompat.getDrawable(mContext, R.drawable.demo_login_btn_right_enable);
+//        }else {
+//            rightDrawable = ContextCompat.getDrawable(mContext, R.drawable.demo_login_btn_right_unable);
+//        }
+//        mBtnLogin.setCompoundDrawablesWithIntrinsicBounds(null, null, rightDrawable, null);
     }
 
     private SpannableString getSpannable() {
@@ -254,7 +264,7 @@ public class LoginFragment extends BaseInitFragment implements View.OnClickListe
             public void onClick(@NonNull View widget) {
                 showToast("跳转到服务条款");
             }
-        }, 3, 7, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+        }, 2, 10, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
 
         //spanStr.setSpan(new UnderlineSpan(), 10, 14, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
         spanStr.setSpan(new MyClickableSpan() {
@@ -262,8 +272,20 @@ public class LoginFragment extends BaseInitFragment implements View.OnClickListe
             public void onClick(@NonNull View widget) {
                 showToast("跳转到隐私协议");
             }
-        }, 10, 14, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+        }, 11, spanStr.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
         return spanStr;
+    }
+
+    @Override
+    public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+        if(actionId == EditorInfo.IME_ACTION_DONE) {
+            if(!TextUtils.isEmpty(mUserName) && !TextUtils.isEmpty(mPwd)) {
+                hideKeyboard();
+                loginToServer();
+                return true;
+            }
+        }
+        return false;
     }
 
     private abstract class MyClickableSpan extends ClickableSpan {

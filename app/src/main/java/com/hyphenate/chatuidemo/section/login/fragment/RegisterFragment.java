@@ -196,7 +196,7 @@ public class RegisterFragment extends BaseInitFragment implements TextWatcher, V
             public void onClick(@NonNull View widget) {
                 showToast("跳转到服务条款");
             }
-        }, 3, 7, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+        }, 2, 10, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
 
         //spanStr.setSpan(new UnderlineSpan(), 10, 14, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
         spanStr.setSpan(new MyClickableSpan() {
@@ -204,7 +204,7 @@ public class RegisterFragment extends BaseInitFragment implements TextWatcher, V
             public void onClick(@NonNull View widget) {
                 showToast("跳转到隐私协议");
             }
-        }, 10, 14, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+        }, 11, spanStr.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
         return spanStr;
     }
 

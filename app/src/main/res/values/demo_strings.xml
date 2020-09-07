@@ -35,7 +35,7 @@
     <string name="em_login_tv_server_set">服务器配置</string>
     <string name="em_login_btn_info_incomplete">用户名或者密码不能为空</string>
     <string name="em_login_failed">登录失败</string>
-    <string name="em_login_agreement">同意 服务条款 与 隐私协议</string>
+    <string name="em_login_agreement">同意《环信服务条款》与《环信隐私协议》</string>
     
     <string name="em_register_btn">注\u0020册</string>
     <string name="em_register_password_confirm_hint">确认密码</string>
