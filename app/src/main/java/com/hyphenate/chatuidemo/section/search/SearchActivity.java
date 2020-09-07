@@ -14,7 +14,6 @@ import android.widget.TextView;
 
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 
 import com.hyphenate.chatuidemo.R;
 import com.hyphenate.chatuidemo.section.base.BaseInitActivity;
@@ -26,6 +25,7 @@ import com.hyphenate.easeui.widget.EaseTitleBar;
 public abstract class SearchActivity extends BaseInitActivity {
     protected EaseTitleBar titleBar;
     protected EditText query;
+    protected TextView tvCancel;
     private ImageButton searchClear;
     protected EaseRecyclerView rvList;
     protected EaseBaseRecyclerViewAdapter adapter;
@@ -42,6 +42,7 @@ public abstract class SearchActivity extends BaseInitActivity {
         query = findViewById(R.id.query);
         searchClear = findViewById(R.id.search_clear);
         rvList = findViewById(R.id.rv_list);
+        tvCancel = findViewById(R.id.tv_cancel);
 
         //让EditText获取焦点并弹出软键盘
         query.requestFocus();
@@ -100,6 +101,13 @@ public abstract class SearchActivity extends BaseInitActivity {
             public void onClick(View v) {
                 query.getText().clear();
                 adapter.clearData();
+            }
+        });
+
+        tvCancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onBackPressed();
             }
         });
     }

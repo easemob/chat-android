@@ -202,7 +202,6 @@
     <style name="demo_search_et_style">
         <item name="android:layout_centerVertical">true</item>
         <item name="android:layout_marginLeft">@dimen/em_margin_15</item>
-        <item name="android:layout_marginRight">@dimen/em_margin_15</item>
         <item name="android:layout_marginTop">5dp</item>
         <item name="android:background">@drawable/demo_dialog_edit_bg_shape</item>
         <item name="android:drawableLeft">@drawable/ease_search_icon</item>
