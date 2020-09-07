@@ -11,7 +11,7 @@
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:titleBarTitle="消息样式"/>
+        app:titleBarTitle="@string/push_message_style_title"/>
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rv_list"

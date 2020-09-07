@@ -107,6 +107,7 @@ public class EMClientRepository extends BaseEMRepository{
             protected void createCall(@NonNull ResultCallBack<LiveData<EaseUser>> callBack) {
                 DemoHelper.getInstance().init(DemoApplication.getInstance());
                 DemoHelper.getInstance().getModel().setCurrentUserName(userName);
+                DemoHelper.getInstance().getModel().setCurrentUserPwd(pwd);
                 if(isTokenFlag) {
                     EMClient.getInstance().loginWithToken(userName, pwd, new DemoEmCallBack() {
                         @Override

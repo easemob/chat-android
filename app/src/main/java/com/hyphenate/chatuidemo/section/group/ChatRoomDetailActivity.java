@@ -18,6 +18,7 @@ import com.hyphenate.chatuidemo.common.widget.ArrowItemView;
 import com.hyphenate.chatuidemo.section.base.BaseInitActivity;
 import com.hyphenate.chatuidemo.section.dialog.DemoDialogFragment;
 import com.hyphenate.chatuidemo.section.dialog.EditTextDialogFragment;
+import com.hyphenate.chatuidemo.section.dialog.FullEditDialogFragment;
 import com.hyphenate.chatuidemo.section.dialog.SimpleDialogFragment;
 import com.hyphenate.chatuidemo.section.group.viewmodels.ChatRoomDetailViewModel;
 import com.hyphenate.easeui.model.EaseEvent;
@@ -214,20 +215,19 @@ public class ChatRoomDetailActivity extends BaseInitActivity implements EaseTitl
     }
 
     private void showDescriptionDialog() {
-        if(!isOwner()) {
-            return;
-        }
-        new EditTextDialogFragment.Builder(mContext)
+        new FullEditDialogFragment.Builder(mContext)
+                .setTitle(R.string.em_chat_room_detail_description)
                 .setContent(chatRoom.getDescription())
-                .setConfirmClickListener(new EditTextDialogFragment.ConfirmClickListener() {
+                .setHint(R.string.em_chat_room_detail_description_hint)
+                .enableEdit(isOwner())
+                .setOnConfirmClickListener(new FullEditDialogFragment.OnSaveClickListener() {
                     @Override
-                    public void onConfirmClick(View view, String content) {
+                    public void onSaveClick(View view, String content) {
                         if(!TextUtils.isEmpty(content)) {
                             viewModel.changeChatroomDescription(roomId, content);
                         }
                     }
                 })
-                .setTitle(R.string.em_chat_room_detail_description)
                 .show();
     }
 

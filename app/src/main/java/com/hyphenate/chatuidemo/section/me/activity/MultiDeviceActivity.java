@@ -24,7 +24,9 @@ import androidx.annotation.NonNull;
 
 import com.hyphenate.chat.EMClient;
 import com.hyphenate.chat.EMDeviceInfo;
+import com.hyphenate.chatuidemo.DemoHelper;
 import com.hyphenate.chatuidemo.R;
+import com.hyphenate.chatuidemo.common.model.DemoModel;
 import com.hyphenate.chatuidemo.section.base.BaseInitActivity;
 import com.hyphenate.easeui.widget.EaseTitleBar;
 import com.hyphenate.exceptions.HyphenateException;
@@ -75,8 +77,11 @@ public class MultiDeviceActivity extends BaseInitActivity {
         super.initData();
         registerForContextMenu(listView);
         listView.setAdapter(new MultiDeviceAdapter(this, 0, new ArrayList<EMDeviceInfo>()));
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+        DemoModel model = DemoHelper.getInstance().getModel();
+        if(TextUtils.isEmpty(model.getCurrentUserPwd())) {
             startActivityForResult(new Intent(this, NamePasswordActivity.class), REQUEST_CODE_USERNAME_PASSWORD);
+        }else {
+            updateList(model.getCurrentUsername(), model.getCurrentUserPwd());
         }
     }
 
@@ -84,7 +89,7 @@ public class MultiDeviceActivity extends BaseInitActivity {
     public void onCreateContextMenu(ContextMenu menu, View v,
                                     ContextMenu.ContextMenuInfo menuInfo) {
         MenuInflater inflater = getMenuInflater();
-        menu.setHeaderTitle("Multi-device context menu");
+        //menu.setHeaderTitle("Multi-device context menu");
         inflater.inflate(R.menu.demo_multi_device_menu_item, menu);
 
         super.onCreateContextMenu(menu, v, menuInfo);

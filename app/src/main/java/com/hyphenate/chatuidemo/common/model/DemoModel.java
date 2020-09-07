@@ -173,6 +173,20 @@ public class DemoModel {
     }
 
     /**
+     * 保存当前用户密码
+     * 此处保存密码是为了查看多端设备登录是，调用接口不再输入用户名及密码，实际开发中，不可在本地保存密码！
+     * 注：实际开发中不可进行此操作！！！
+     * @param pwd
+     */
+    public void setCurrentUserPwd(String pwd) {
+        PreferenceManager.getInstance().setCurrentUserPwd(pwd);
+    }
+
+    public String getCurrentUserPwd(){
+        return PreferenceManager.getInstance().getCurrentUserPwd();
+    }
+
+    /**
      * 设置昵称
      * @param nickname
      */

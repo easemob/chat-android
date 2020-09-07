@@ -29,6 +29,7 @@ public class FullEditDialogFragment extends BaseDialogFragment implements EaseTi
     private int titleColor;
     private String titleRight;
     private int titleRightColor;
+    private boolean enableEdit;//是否可以进行编辑
 
     public static void showDialog(BaseActivity activity, String title, String content, String hint, OnSaveClickListener listener) {
         FullEditDialogFragment fragment = new FullEditDialogFragment();
@@ -99,7 +100,10 @@ public class FullEditDialogFragment extends BaseDialogFragment implements EaseTi
         if(titleRightColor != 0) {
             titleBar.getRightText().setTextColor(titleRightColor);
         }
-
+        if(!enableEdit) {
+            titleBar.setRightLayoutVisibility(View.GONE);
+            etContent.setEnabled(false);
+        }
     }
 
     @Override
@@ -141,6 +145,7 @@ public class FullEditDialogFragment extends BaseDialogFragment implements EaseTi
         private String confirmText;
         private OnSaveClickListener listener;
         private int confirmColor;
+        private boolean enableEdit;
         private Bundle bundle;
 
         public Builder(BaseActivity context) {
@@ -214,6 +219,11 @@ public class FullEditDialogFragment extends BaseDialogFragment implements EaseTi
             return this;
         }
 
+        public Builder enableEdit(boolean enableEdit) {
+            this.enableEdit = enableEdit;
+            return this;
+        }
+
         public Builder setArgument(Bundle bundle) {
             this.bundle = bundle;
             return this;
@@ -229,6 +239,7 @@ public class FullEditDialogFragment extends BaseDialogFragment implements EaseTi
             fragment.setConfirmColor(confirmColor);
             fragment.setHint(hint);
             fragment.setContent(content);
+            fragment.setEnableEdit(enableEdit);
             fragment.setArguments(bundle);
             return fragment;
         }
@@ -240,6 +251,10 @@ public class FullEditDialogFragment extends BaseDialogFragment implements EaseTi
             fragment.show(transaction, null);
             return fragment;
         }
+    }
+
+    private void setEnableEdit(boolean enableEdit) {
+        this.enableEdit = enableEdit;
     }
 
     private void setContent(String content) {

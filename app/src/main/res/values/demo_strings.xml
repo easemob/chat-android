@@ -105,10 +105,11 @@
     <string name="em_friends_move_out_the_blacklist_new">移出黑名单</string>
     <string name="em_friends_move_out_the_blacklist_hint">是否移出黑名单？</string>
 
+    <string name="em_friends_detail_title">个人资料</string>
     <string name="em_friends_detail_note">设置备注</string>
-    <string name="em_friends_detail_chat">发起聊天</string>
+    <string name="em_friends_detail_chat">发消息</string>
     <string name="em_friends_detail_voice">语音通话</string>
-    <string name="em_friends_detail_video">视频聊天</string>
+    <string name="em_friends_detail_video">视频通话</string>
     <string name="em_friends_detail_add_contact">添加到通讯录</string>
     <string name="em_friends_detail_add_black">加入黑名单</string>
     
@@ -129,7 +130,7 @@
     <string name="em_single_conversation_top">会话置顶</string>
     <string name="em_single_call_type">选择通话类型</string>
 
-    <string name="em_chat_delete_conversation">是否删除会话？</string>
+    <string name="em_chat_delete_conversation">确认清空聊天记录？</string>
     <string name="em_chat_group_detail_title">群组信息</string>
     <string name="em_chat_group_detail_group_member">群成员</string>
     <string name="em_chat_group_detail_member_num">%1$d人</string>
@@ -204,6 +205,7 @@
     <string name="em_chat_room_detail_id">聊天室ID</string>
     <string name="em_chat_room_detail_room_name">名称</string>
     <string name="em_chat_room_detail_description">描述</string>
+    <string name="em_chat_room_detail_description_hint">暂无描述内容</string>
     <string name="em_chat_room_detail_owner">创建者</string>
     <string name="em_chat_room_detail_members">聊天室成员</string>
     <string name="em_chat_room_detail_admins">管理员</string>
@@ -217,7 +219,7 @@
     <string name="em_chat_room_new_profile_hint">聊天室简介</string>
     <string name="em_chat_room_new_name_cannot_be_empty">聊天室名称不能为空</string>
 
-    <string name="em_notify_title">系统消息</string>
+    <string name="em_notify_title">系统通知</string>
     <string name="em_notify_agree">同意</string>
     <string name="em_notify_refuse">拒绝</string>
     <string name="em_notify_delete">删除</string>
@@ -306,9 +308,10 @@
     
     <string name="demo_no_disturb_time">设置时间段</string>
 
+    <string name="push_message_style_title">消息详情</string>
     <string name="push_incoming_call">您有新的通话消息</string>
-    <string name="push_message_style_simple">仅通知</string>
-    <string name="push_message_style_summary">详细信息</string>
+    <string name="push_message_style_simple">仅未读提示</string>
+    <string name="push_message_style_summary">显示消息详情</string>
     <string name="push_message_show_detail">显示消息详情</string>
     <string name="new_message_notify">新消息通知</string>
     <string name="newnotify">接收新消息通知</string>

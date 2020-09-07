@@ -173,7 +173,6 @@
                 app:layout_constraintTop_toBottomOf="@id/cl_member"
                 android:layout_marginTop="@dimen/em_margin_20"
                 app:arrowItemTitle="@string/em_chat_group_detail_name"
-                app:arrowItemShowArrow="false"
                 style="@style/em_group_arrow_item" />
 
             <com.hyphenate.chatuidemo.common.widget.ArrowItemView
