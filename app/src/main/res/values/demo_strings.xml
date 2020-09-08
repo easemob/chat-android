@@ -177,10 +177,14 @@
     <string name="em_group_set_max_users">设置群组最大人数</string>
     <string name="em_group_members">群组成员</string>
     <string name="em_group_new_if_public">是否公开群组</string>
-    <string name="em_group_new_if_public_hint">其他用户不能查找到此群</string>
+    <string name="em_group_new_if_public_uncheck_hint">其他用户不能查找到此群</string>
+    <string name="em_group_new_if_public_check_hint">其他用户可以查找到此群</string>
     <string name="em_group_new_open_invite">群成员是否有邀请权限</string>
-    <string name="em_group_new_open_invite_hint">只允许群主邀请用户进群</string>
-    <string name="em_group_new_need_owner_approval">入群需要群主同意</string>
+    <string name="em_group_new_open_invite_uncheck_hint">只允许群主邀请用户进群</string>
+    <string name="em_group_new_open_invite_check_hint">允许群成员邀请用户进群</string>
+    <string name="em_group_new_need_owner_approval_public">加入是否需要验证</string>
+    <string name="em_group_new_need_owner_approval_uncheck_hint">用户可以直接加入群组</string>
+    <string name="em_group_new_need_owner_approval_check_hint">用户加入群组需要群主同意</string>
     <string name="em_group_new_name_cannot_be_empty">群组名称不能为空</string>
     <string name="em_group_new_invite_join_group">%1$s邀请加入群：%2$s</string>
 

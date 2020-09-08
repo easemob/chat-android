@@ -57,7 +57,7 @@
         app:layout_constraintTop_toBottomOf="@id/item_group_max_users"
         android:layout_marginTop="@dimen/em_margin_15"
         app:switchItemTitle="@string/em_group_new_if_public"
-        app:switchItemHint="@string/em_group_new_if_public_hint"
+        app:switchItemHint="@string/em_group_new_if_public_uncheck_hint"
         android:background="@color/white"/>
 
     <com.hyphenate.chatuidemo.common.widget.SwitchItemView
@@ -68,7 +68,7 @@
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toBottomOf="@id/item_switch_public"
         app:switchItemTitle="@string/em_group_new_open_invite"
-        app:switchItemHint="@string/em_group_new_open_invite_hint"
+        app:switchItemHint="@string/em_group_new_open_invite_uncheck_hint"
         android:background="@color/white"/>
 
 

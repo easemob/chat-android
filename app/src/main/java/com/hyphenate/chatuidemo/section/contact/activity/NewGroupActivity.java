@@ -28,6 +28,7 @@ import com.hyphenate.easeui.widget.EaseTitleBar;
 import com.hyphenate.chat.EMGroupManager.EMGroupStyle;
 
 import androidx.annotation.Nullable;
+import androidx.core.content.ContextCompat;
 import androidx.lifecycle.ViewModelProvider;
 
 public class NewGroupActivity extends BaseInitActivity implements EaseTitleBar.OnBackPressListener, EaseTitleBar.OnRightClickListener, View.OnClickListener, SwitchItemView.OnCheckedChangeListener {
@@ -80,6 +81,7 @@ public class NewGroupActivity extends BaseInitActivity implements EaseTitleBar.O
         itemGroupName.getTvContent().setHint(getString(R.string.em_group_new_name_hint));
         itemGroupProfile.getTvContent().setHint(getString(R.string.em_group_new_profile_hint));
         itemGroupMaxUsers.getTvContent().setText(String.valueOf(maxUsers));
+        titleBar.getRightText().setTextColor(ContextCompat.getColor(mContext, R.color.em_color_brand));
     }
 
     @Override
@@ -92,6 +94,7 @@ public class NewGroupActivity extends BaseInitActivity implements EaseTitleBar.O
         itemGroupMaxUsers.setOnClickListener(this);
         itemGroupMembers.setOnClickListener(this);
         itemSwitchPublic.setOnCheckedChangeListener(this);
+        itemSwitchInvite.setOnCheckedChangeListener(this);
     }
 
     @Override
@@ -246,15 +249,29 @@ public class NewGroupActivity extends BaseInitActivity implements EaseTitleBar.O
     public void onCheckedChanged(SwitchItemView buttonView, boolean isChecked) {
         switch (buttonView.getId()) {
             case R.id.item_switch_public :
+                //操作则将switch_invite按钮还原
+                itemSwitchInvite.getSwitch().setChecked(false);
                 if(isChecked){
-                    itemSwitchInvite.getTvTitle().setText(R.string.em_group_new_need_owner_approval);
-                    itemSwitchInvite.getTvHint().setText("");
-                    itemSwitchInvite.getTvHint().setVisibility(View.GONE);
+                    itemSwitchPublic.getTvHint().setText(R.string.em_group_new_if_public_check_hint);
+                    itemSwitchInvite.getTvTitle().setText(R.string.em_group_new_need_owner_approval_public);
+                    itemSwitchInvite.getTvHint().setText(R.string.em_group_new_need_owner_approval_uncheck_hint);
                 }else{
+                    itemSwitchPublic.getTvHint().setText(R.string.em_group_new_if_public_uncheck_hint);
                     itemSwitchInvite.getTvTitle().setText(R.string.em_group_new_open_invite);
-                    itemSwitchInvite.getTvHint().setText(R.string.em_group_new_open_invite_hint);
-                    itemSwitchInvite.getTvHint().setVisibility(View.VISIBLE);
+                    itemSwitchInvite.getTvHint().setText(R.string.em_group_new_open_invite_uncheck_hint);
                 }
+                break;
+            case R.id.item_switch_invite:
+                if(itemSwitchPublic.getSwitch().isChecked()) {
+                    itemSwitchInvite.getTvHint().setText(isChecked
+                            ? R.string.em_group_new_need_owner_approval_check_hint
+                            : R.string.em_group_new_need_owner_approval_uncheck_hint);
+                }else {
+                    itemSwitchInvite.getTvHint().setText(isChecked
+                            ? R.string.em_group_new_open_invite_check_hint
+                            : R.string.em_group_new_open_invite_uncheck_hint);
+                }
+
                 break;
         }
     }
