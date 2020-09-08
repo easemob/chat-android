@@ -164,13 +164,13 @@ public class RegisterFragment extends BaseInitFragment implements TextWatcher, V
     private void setButtonEnable(boolean enable) {
         mBtnLogin.setEnabled(enable);
         //同时需要修改右侧drawalbeRight对应的资源
-        Drawable rightDrawable;
-        if(enable) {
-            rightDrawable = ContextCompat.getDrawable(mContext, R.drawable.demo_login_btn_right_enable);
-        }else {
-            rightDrawable = ContextCompat.getDrawable(mContext, R.drawable.demo_login_btn_right_unable);
-        }
-        mBtnLogin.setCompoundDrawablesWithIntrinsicBounds(null, null, rightDrawable, null);
+//        Drawable rightDrawable;
+//        if(enable) {
+//            rightDrawable = ContextCompat.getDrawable(mContext, R.drawable.demo_login_btn_right_enable);
+//        }else {
+//            rightDrawable = ContextCompat.getDrawable(mContext, R.drawable.demo_login_btn_right_unable);
+//        }
+//        mBtnLogin.setCompoundDrawablesWithIntrinsicBounds(null, null, rightDrawable, null);
     }
 
     @Override
