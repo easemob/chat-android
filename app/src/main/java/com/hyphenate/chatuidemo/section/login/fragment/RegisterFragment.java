@@ -214,6 +214,7 @@ public class RegisterFragment extends BaseInitFragment implements TextWatcher, V
         public void updateDrawState(@NonNull TextPaint ds) {
             super.updateDrawState(ds);
             ds.bgColor = Color.TRANSPARENT;
+            ds.setColor(ContextCompat.getColor(mContext, R.color.white));
         }
     }
 }
