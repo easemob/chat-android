@@ -362,6 +362,8 @@
     <string name="tips_desk_share">你正在共享当前桌面</string>
     <string name="tips_invite_to_join">%1$s 邀请您加入视频 …</string>
     <string name="alert_window_permission_denied">当前App未被授予悬浮窗权限 :(</string>
+    <string name="call_no_float_permission">没有悬浮窗权限</string>
+    <string name="call_open_float_permission">是否前往打开悬浮窗权限?</string>
 
     <string name="button_start_video_conference">开始视频会议 (%1$d)</string>
     <string name="search">搜索</string>
