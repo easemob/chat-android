@@ -174,7 +174,7 @@
     <string name="em_group_new_profile">简介</string>
     <string name="em_group_new_profile_hint">请输入群组简介</string>
     <string name="em_group_max_users">群组人数</string>
-    <string name="em_group_set_max_users">设置群组最大人数</string>
+    <string name="em_group_set_max_users">群组人数</string>
     <string name="em_group_members">群组成员</string>
     <string name="em_group_new_if_public">是否公开群组</string>
     <string name="em_group_new_if_public_uncheck_hint">其他用户不能查找到此群</string>
