@@ -140,7 +140,7 @@
     <string name="em_chat_group_detail_announcement_hint">请输入群公告</string>
     <string name="em_chat_group_detail_history">查找聊天记录</string>
     <string name="em_chat_group_detail_clear_history">清空聊天记录</string>
-    <string name="em_chat_group_detail_clear_history_warning">是否清空聊天记录？</string>
+    <string name="em_chat_group_detail_clear_history_warning">确认清空聊天记录？</string>
     <string name="em_chat_group_detail_member_manage">群组管理</string>
     <string name="em_chat_group_detail_introduction">群介绍</string>
     <string name="em_chat_group_detail_introduction_hint">请输入群介绍</string>
@@ -442,4 +442,18 @@
     <string name="alert_request_voice">%1$s发来语音请求</string>
 
     <string name="share_screen_ongoing">共享屏幕运行中...</string>
+
+    <string name="demo_call_options_min_video_kbps">最低视频码率（kbps）</string>
+    <string name="demo_call_options_not_set">未设置</string>
+    <string name="demo_call_options_max_video_kbps">最高视频码率（kbps）</string>
+    <string name="demo_call_options_max_frame_rate">最大帧率</string>
+    <string name="demo_call_options_external_audio_input">外部音频输入</string>
+    <string name="demo_call_options_audio_sample_rate">音频采样率</string>
+    <string name="demo_call_options_back_camera">后置摄像头</string>
+    <string name="demo_call_options_front_camera">前置摄像头</string>
+    <string name="demo_call_options_fix_video_resolution">修复视频分辨率</string>
+    <string name="demo_call_options_record_on_server">远程录制</string>
+    <string name="demo_call_options_merge_stream">合并流</string>
+    <string name="demo_call_options_watermark">水印</string>
+    <string name="demo_call_options_set_video_resolution">设置视频分辨率：%1$s</string>
 </resources>

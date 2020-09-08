@@ -65,7 +65,7 @@ public class AboutHxActivity extends BaseInitActivity implements View.OnClickLis
     }
 
     private void jumpToIMIntroduction() {
-        Uri uri = Uri.parse("http://docs-im.easemob.com/");
+        Uri uri = Uri.parse("http://www.easemob.com/product/im");
         Intent it = new Intent(Intent.ACTION_VIEW, uri);
         startActivity(it);
     }

@@ -27,6 +27,7 @@
         android:layout_marginLeft="@dimen/em_margin_20"
         android:layout_marginRight="@dimen/em_margin_20"
         android:background="@drawable/demo_dialog_edit_bg_shape"
+        android:drawableLeft="@drawable/ease_search_icon"
         android:drawablePadding="@dimen/em_margin_10"
         android:hint="@string/search"
         android:paddingBottom="5dp"

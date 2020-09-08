@@ -155,7 +155,7 @@ public class CallOptionActivity extends BaseInitActivity implements SwitchItemVi
 
             final List<Camera.Size> sizes = parameters.getSupportedPreviewSizes();
             List<String> strSizes = new ArrayList<String>();
-            strSizes.add("Not Set");
+            strSizes.add(getString(R.string.demo_call_options_not_set));
 
             for (Camera.Size size : sizes) {
                 String str = "" + size.width + "x" + size.height;
@@ -172,7 +172,7 @@ public class CallOptionActivity extends BaseInitActivity implements SwitchItemVi
             String resolution = cameraId == Camera.CameraInfo.CAMERA_FACING_BACK ?
                     PreferenceManager.getInstance().getCallBackCameraResolution() :
                     PreferenceManager.getInstance().getCallFrontCameraResolution();
-            if (resolution.equals("") || resolution.equals("Not Set")) {
+            if (resolution.equals("") || resolution.equals(getString(R.string.demo_call_options_not_set))) {
                 selection = 0;
             } else {
                 for (int i = 1; i < strSizes.size(); i++) {
@@ -210,7 +210,7 @@ public class CallOptionActivity extends BaseInitActivity implements SwitchItemVi
 
                     if (position == 0) {
                         TextView textVideoResolution = (TextView)findViewById(R.id.text_video_resolution);
-                        textVideoResolution.setText("Set video resolution:" + " Not Set");
+                        textVideoResolution.setText(getString(R.string.demo_call_options_set_video_resolution, getString(R.string.demo_call_options_not_set)));
 
                         PreferenceManager.getInstance().setCallBackCameraResolution("");
                         PreferenceManager.getInstance().setCallFrontCameraResolution("");
@@ -220,7 +220,7 @@ public class CallOptionActivity extends BaseInitActivity implements SwitchItemVi
                     if (size != null) {
                         EMClient.getInstance().callManager().getCallOptions().setVideoResolution(size.width, size.height);
                         TextView textVideoResolution = (TextView)findViewById(R.id.text_video_resolution);
-                        textVideoResolution.setText("Set video resolution:" + size.width + "x" + size.height);
+                        textVideoResolution.setText(getString(R.string.demo_call_options_set_video_resolution, size.width + "x" + size.height));
 
                         if (cameraId == Camera.CameraInfo.CAMERA_FACING_BACK) {
                             PreferenceManager.getInstance().setCallBackCameraResolution(size.width + "x" + size.height);
@@ -261,7 +261,7 @@ public class CallOptionActivity extends BaseInitActivity implements SwitchItemVi
     void initAudioSampleRateSpinner(int spinnerId) {
         final List<String> sampleRateList = new ArrayList<String>();
         // Notice: some of devices may not support 48KHz, but 16KHz is widely accepted
-        sampleRateList.add("Not set(prefer 16KHz)");
+        sampleRateList.add(getString(R.string.demo_call_options_not_set) + "(默认16KHz)");
         sampleRateList.add("8000Hz");
         sampleRateList.add("11025Hz");
         sampleRateList.add("22050Hz");
