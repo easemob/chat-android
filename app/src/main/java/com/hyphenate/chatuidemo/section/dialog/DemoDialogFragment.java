@@ -41,6 +41,7 @@ public class DemoDialogFragment extends BaseDialogFragment implements View.OnCli
     private int titleColor;
     private String cancel;
     private float titleSize;
+    public String content;
 
     @Override
     public int getLayoutId() {
@@ -205,6 +206,7 @@ public class DemoDialogFragment extends BaseDialogFragment implements View.OnCli
         private int confirmColor;
         private Bundle bundle;
         private String cancel;
+        private String content;
 
         public Builder(BaseActivity context) {
             this.context = context;
@@ -232,6 +234,16 @@ public class DemoDialogFragment extends BaseDialogFragment implements View.OnCli
 
         public Builder setTitleSize(float size) {
             this.titleSize = size;
+            return this;
+        }
+
+        public Builder setContent(@StringRes int content) {
+            this.content = context.getString(content);
+            return this;
+        }
+
+        public Builder setContent(String content) {
+            this.content = content;
             return this;
         }
 
@@ -294,6 +306,7 @@ public class DemoDialogFragment extends BaseDialogFragment implements View.OnCli
             fragment.setTitle(title);
             fragment.setTitleColor(titleColor);
             fragment.setTitleSize(titleSize);
+            fragment.setContent(content);
             fragment.showCancelButton(showCancel);
             fragment.setConfirmText(confirmText);
             fragment.setOnConfirmClickListener(this.listener);
@@ -343,5 +356,9 @@ public class DemoDialogFragment extends BaseDialogFragment implements View.OnCli
 
     private void setTitle(String title) {
         this.title = title;
+    }
+
+    private void setContent(String content) {
+        this.content = content;
     }
 }

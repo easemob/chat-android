@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <TextView
+        android:id="@+id/tv_content"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/em_margin_30"
+        android:layout_marginRight="@dimen/em_margin_30"
+        android:padding="@dimen/em_margin_10"
+        android:textSize="@dimen/em_size_big"
+        tools:text="是否同意呢？"
+        android:textColor="@color/em_color_common_text_black"
+        android:background="@drawable/demo_bg_dialog_middle"/>
+
+</RelativeLayout>

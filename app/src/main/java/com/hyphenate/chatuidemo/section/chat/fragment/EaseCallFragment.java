@@ -35,8 +35,12 @@ import com.hyphenate.chat.EMWaterMarkPosition;
 import com.hyphenate.chatuidemo.DemoApplication;
 import com.hyphenate.chatuidemo.common.DemoConstant;
 import com.hyphenate.chatuidemo.common.livedatas.LiveDataBus;
+import com.hyphenate.chatuidemo.common.manager.FloatWindowManager;
 import com.hyphenate.chatuidemo.common.utils.PreferenceManager;
+import com.hyphenate.chatuidemo.section.base.BaseFragment;
 import com.hyphenate.chatuidemo.section.conference.CallFloatWindow;
+import com.hyphenate.chatuidemo.section.dialog.CompleteDialogFragment;
+import com.hyphenate.chatuidemo.section.dialog.DemoDialogFragment;
 import com.hyphenate.easeui.R;
 import com.hyphenate.easeui.constants.EaseConstant;
 import com.hyphenate.easeui.manager.EasePreferenceManager;
@@ -49,7 +53,7 @@ import org.json.JSONObject;
 
 import java.io.InputStream;
 
-public class EaseCallFragment extends EaseBaseFragment {
+public class EaseCallFragment extends BaseFragment {
     public final static String TAG = "CallActivity";
     protected final int MSG_CALL_MAKE_VIDEO = 0;
     protected final int MSG_CALL_MAKE_VOICE = 1;
@@ -218,6 +222,19 @@ public class EaseCallFragment extends EaseBaseFragment {
 
     protected void initData() {
 
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        //如果去申请悬浮框权限，则在页面可见时检查是否授予权限了
+        if(requestOverlayPermission) {
+            requestOverlayPermission = false;
+            // Result of window permission request, resultCode = RESULT_CANCELED
+            if (FloatWindowManager.checkPermission(mContext)) {
+                doShowFloatWindow();
+            }
+        }
     }
 
     @Override
@@ -528,26 +545,32 @@ public class EaseCallFragment extends EaseBaseFragment {
 
 
     protected void showFloatWindow() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            if (Settings.canDrawOverlays(mContext)) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+            if (FloatWindowManager.checkPermission(mContext)) {
                 doShowFloatWindow();
             } else { // To reqire the window permission.
                 if(!requestOverlayPermission) {
-                    try {
-                        Intent intent = new Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION);
-                        // Add this to open the management GUI specific to this app.
-                        intent.setData(Uri.parse("package:" + mContext.getPackageName()));
-                        startActivityForResult(intent, REQUEST_CODE_OVERLAY_PERMISSION);
-                        requestOverlayPermission = true;
-                        // Handle the permission require result in #onActivityResult();
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
+                    showDialog();
                 }
             }
         } else {
             doShowFloatWindow();
         }
+    }
+
+    private void showDialog() {
+        new CompleteDialogFragment.Builder(mContext)
+                .setTitle(R.string.call_no_float_permission)
+                .setContent(R.string.call_open_float_permission)
+                .setOnConfirmClickListener(new DemoDialogFragment.OnConfirmClickListener() {
+                    @Override
+                    public void onConfirmClick(View view) {
+                        FloatWindowManager.tryJumpToPermissionPage(mContext);
+                        requestOverlayPermission = true;
+                    }
+                })
+                .show();
+
     }
 
     protected void doShowFloatWindow() {
@@ -564,10 +587,10 @@ public class EaseCallFragment extends EaseBaseFragment {
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         EMLog.i(TAG, "onActivityResult: " + requestCode + ", result code: " + resultCode);
-        if (requestCode == REQUEST_CODE_OVERLAY_PERMISSION && Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+        if (requestCode == REQUEST_CODE_OVERLAY_PERMISSION && Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
             requestOverlayPermission = false;
             // Result of window permission request, resultCode = RESULT_CANCELED
-            if (Settings.canDrawOverlays(mContext)) {
+            if (FloatWindowManager.checkPermission(mContext)) {
                 doShowFloatWindow();
             } else {
                 Toast.makeText(mContext, getString(com.hyphenate.chatuidemo.R.string.alert_window_permission_denied), Toast.LENGTH_SHORT).show();
