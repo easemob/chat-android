@@ -11,7 +11,6 @@ import com.hyphenate.chat.EMClient;
 import com.hyphenate.chatuidemo.DemoApplication;
 import com.hyphenate.chatuidemo.DemoHelper;
 import com.hyphenate.chatuidemo.common.interfaceOrImplement.DemoEmCallBack;
-import com.hyphenate.chatuidemo.common.livedatas.UserInstanceLiveData;
 import com.hyphenate.chatuidemo.common.net.ErrorCode;
 import com.hyphenate.chatuidemo.common.net.Resource;
 import com.hyphenate.chatuidemo.common.interfaceOrImplement.ResultCallBack;
@@ -196,7 +195,6 @@ public class EMClientRepository extends BaseEMRepository{
         // get current user id
         String currentUser = EMClient.getInstance().getCurrentUser();
         EaseUser user = new EaseUser(currentUser);
-        UserInstanceLiveData.getInstance().postValue(user);
         callBack.onSuccess(new MutableLiveData<>(user));
     }
 }

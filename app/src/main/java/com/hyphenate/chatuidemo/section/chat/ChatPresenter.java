@@ -36,7 +36,6 @@ import com.hyphenate.chatuidemo.common.db.entity.EmUserEntity;
 import com.hyphenate.chatuidemo.common.db.entity.InviteMessage;
 import com.hyphenate.chatuidemo.common.db.entity.MsgTypeManageEntity;
 import com.hyphenate.chatuidemo.common.livedatas.LiveDataBus;
-import com.hyphenate.chatuidemo.common.livedatas.NetworkChangeLiveData;
 import com.hyphenate.chatuidemo.common.manager.PushAndMessageHelper;
 import com.hyphenate.chatuidemo.common.repositories.EMContactManagerRepository;
 import com.hyphenate.chatuidemo.common.repositories.EMGroupManagerRepository;
