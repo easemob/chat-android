@@ -54,7 +54,7 @@ android {
         }
     }
 
-    //use legacy for android 6.0
+    //use legacy for android 6.0，SDK3.6.8后移除
     //useLibrary 'org.apache.http.legacy'
     //自3.6.0开始需要java8的支持
     compileOptions {
@@ -68,21 +68,18 @@ android {
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
-
-    implementation 'androidx.appcompat:appcompat:1.1.0'
-    implementation 'com.google.android.material:material:1.1.0'
-    implementation 'androidx.constraintlayout:constraintlayout:1.1.3'
-    implementation 'androidx.vectordrawable:vectordrawable:1.1.0'
-    implementation 'androidx.navigation:navigation-fragment:2.3.0'
-    implementation 'androidx.navigation:navigation-ui:2.3.0'
+    implementation 'androidx.appcompat:appcompat:1.2.0'
+    implementation 'com.google.android.material:material:1.2.1'
+    implementation 'androidx.constraintlayout:constraintlayout:2.0.1'
+    //ViewModel and LiveData
     implementation 'androidx.lifecycle:lifecycle-extensions:2.2.0'
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'androidx.test.ext:junit:1.1.1'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
-
+    // google bottom navigation bar
     implementation 'com.ashokvarma.android:bottom-navigation-bar:2.1.0'
+    // resolve 64k limit
     implementation 'com.android.support:multidex:1.0.3'
-
     // hms push
     implementation 'com.huawei.hms:push:4.0.2.300'
     // meizu push
@@ -92,14 +89,15 @@ dependencies {
     // Google firebase cloud messaging
     implementation 'com.google.android.gms:play-services-base:11.4.0'
     implementation 'com.google.firebase:firebase-messaging:11.4.0'
-    //fresh and load more
+    // fresh and load more
     api 'com.scwang.smartrefresh:SmartRefreshLayout:1.0.5.1'
+    // easeui
     api project(path: ':easeui')
     // room
     implementation "androidx.room:room-runtime:2.2.5"
     annotationProcessor "androidx.room:room-compiler:2.2.5"
+    // parse
     implementation 'com.parse:parse-android:1.13.1'
-
 }
 
 // ADD THIS AT THE BOTTOM
