@@ -103,17 +103,25 @@
 
 #二、需要我们不混淆的代码
 #实体类
-#-keep class com.hyphenate.easeui.model.** { *; }
+#easeui
+-keep class com.hyphenate.easeui.model.** { *; }
+#app
+-keep class com.hyphenate.chatuidemo.common.model.** { *; }
+-keep class com.hyphenate.chatuidemo.common.db.entity.** { *; }
 
 #jar包
--libraryjars ..\..\app\src\main\jniLibs\mi_push_v3.6.12.jar
--libraryjars ..\..\app\src\main\jniLibs\oppo_push_v1.0.1.jar
--libraryjars ..\..\app\src\main\jniLibs\vivo_push_v2.3.1.jar
+-libraryjars libs/mi_push_v3.6.12.jar
+-libraryjars libs/vivo_push_v2.3.1.jar
+
+#OPPO推送
+-keep public class * extends android.app.Service
+-keep class com.heytap.msp.** { *;}
 
 #环信
 -keep class com.hyphenate.** {*;}
 -dontwarn  com.hyphenate.**
--keep class internal.org.apache.http.entity.** {*;}
+#如果使用apache库
+#-keep class internal.org.apache.http.entity.** {*;}
 #如果使用了实时音视频功能
 -keep class com.superrtc.** {*;}
 -dontwarn  com.superrtc.**
