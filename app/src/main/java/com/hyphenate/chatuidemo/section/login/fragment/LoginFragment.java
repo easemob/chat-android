@@ -22,6 +22,7 @@ import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -116,7 +117,7 @@ public class LoginFragment extends BaseInitFragment implements View.OnClickListe
                 @Override
                 public void onError(int code, String message) {
                     super.onError(code, message);
-                    ToastUtils.showFailToast(getResources().getString(R.string.em_login_failed), message);
+                    ToastUtils.showToast(message);
                 }
 
                 @Override

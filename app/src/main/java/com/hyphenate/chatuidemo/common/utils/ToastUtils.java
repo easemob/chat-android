@@ -16,6 +16,7 @@ import androidx.annotation.StringRes;
 
 import com.hyphenate.chatuidemo.DemoApplication;
 import com.hyphenate.chatuidemo.R;
+import com.hyphenate.easeui.utils.EaseCommonUtils;
 
 import java.lang.reflect.Field;
 
@@ -62,22 +63,22 @@ public class ToastUtils {
     }
 
     /**
-     * 弹出失败的toast
+     * 弹出默认的toast
      * @param message
      */
     public static void showToast(String message) {
         if(TextUtils.isEmpty(message)) {
             return;
         }
-        showCenterToast(null, message, DEFAULT, TOAST_LAST_TIME);
+        showBottomToast(null, message, DEFAULT, TOAST_LAST_TIME);
     }
 
     /**
-     * 弹出失败的toast
+     * 弹出默认的toast
      * @param message
      */
     public static void showToast(@StringRes int message) {
-        showCenterToast(0, message, DEFAULT, TOAST_LAST_TIME);
+        showBottomToast(0, message, DEFAULT, TOAST_LAST_TIME);
     }
 
     /**
@@ -215,6 +216,31 @@ public class ToastUtils {
     }
 
     /**
+     * 在屏幕底部显示，在此处传入application
+     * @param title
+     * @param message
+     * @param type
+     * @param duration
+     */
+    public static void showBottomToast(String title, String message, int type, int duration) {
+        if(TextUtils.isEmpty(message)) {
+            return;
+        }
+        showToast(DemoApplication.getInstance(), title, message, type, duration, Gravity.BOTTOM);
+    }
+
+    /**
+     * 在屏幕底部显示，在此处传入application
+     * @param title
+     * @param message
+     * @param type
+     * @param duration
+     */
+    public static void showBottomToast(@StringRes int title, @StringRes int message, int type, int duration) {
+        showToast(DemoApplication.getInstance(), title, message, type, duration, Gravity.BOTTOM);
+    }
+
+    /**
      * 此处判断toast不为空，选择cancel，是因为toast因为类型不同（是否显示图片）或者是否有标题，会导致不同的toast展示
      * @param context
      * @param title
@@ -277,8 +303,12 @@ public class ToastUtils {
         }else {
             ivToast.setVisibility(View.GONE);
         }
+        int yOffset = 0;
+        if(gravity == Gravity.BOTTOM || gravity == Gravity.TOP) {
+            yOffset = (int) EaseCommonUtils.dip2px(context, 50);
+        }
         toast.setDuration(duration);
-        toast.setGravity(gravity, 0, 0);
+        toast.setGravity(gravity, 0, yOffset);
         hookToast(toast);
         return toast;
     }

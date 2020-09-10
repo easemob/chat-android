@@ -86,13 +86,13 @@ public class RegisterFragment extends BaseInitFragment implements TextWatcher, V
             parseResource(response, new OnResourceParseCallback<String>(true) {
                 @Override
                 public void onSuccess(String data) {
-                    ToastUtils.showSuccessToast(getResources().getString(R.string.em_register_success));
+                    ToastUtils.showToast(getResources().getString(R.string.em_register_success));
                     onBackPress();
                 }
 
                 @Override
                 public void onError(int code, String message) {
-                    ToastUtils.showFailToast(getResources().getString(R.string.em_register_failed), message);
+                    ToastUtils.showToast(message);
                 }
 
                 @Override
