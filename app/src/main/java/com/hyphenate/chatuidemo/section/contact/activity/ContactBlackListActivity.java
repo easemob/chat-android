@@ -9,7 +9,7 @@ import android.view.View;
 
 import com.hyphenate.chatuidemo.DemoHelper;
 import com.hyphenate.chatuidemo.R;
-import com.hyphenate.chatuidemo.common.DemoConstant;
+import com.hyphenate.chatuidemo.common.constant.DemoConstant;
 import com.hyphenate.chatuidemo.common.interfaceOrImplement.OnResourceParseCallback;
 import com.hyphenate.chatuidemo.common.livedatas.LiveDataBus;
 import com.hyphenate.chatuidemo.section.base.BaseInitActivity;

@@ -1,7 +1,6 @@
 package com.hyphenate.chatuidemo.section.contact.fragment;
 
 import android.os.Bundle;
-import android.util.Log;
 import android.view.ContextMenu;
 import android.view.MenuItem;
 import android.view.View;
@@ -14,15 +13,13 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.ConcatAdapter;
 
 import com.hyphenate.chatuidemo.R;
-import com.hyphenate.chatuidemo.common.DemoConstant;
+import com.hyphenate.chatuidemo.common.constant.DemoConstant;
 import com.hyphenate.chatuidemo.common.enums.SearchType;
 import com.hyphenate.chatuidemo.common.interfaceOrImplement.OnResourceParseCallback;
 import com.hyphenate.chatuidemo.common.model.ContactHeaderBean;
 import com.hyphenate.chatuidemo.common.net.Resource;
 import com.hyphenate.chatuidemo.common.utils.ToastUtils;
-import com.hyphenate.chatuidemo.common.widget.ContactItemView;
 import com.hyphenate.chatuidemo.section.base.BaseActivity;
-import com.hyphenate.chatuidemo.section.conference.ConferenceActivity;
 import com.hyphenate.chatuidemo.section.contact.activity.AddContactActivity;
 import com.hyphenate.chatuidemo.section.contact.activity.ChatRoomContactManageActivity;
 import com.hyphenate.chatuidemo.section.contact.activity.ContactDetailActivity;

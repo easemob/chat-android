@@ -1,4 +1,4 @@
-package com.hyphenate.chatuidemo.section.contact.activity;
+package com.hyphenate.chatuidemo.section.group.activity;
 
 import android.content.Context;
 import android.content.Intent;
@@ -11,17 +11,16 @@ import com.hyphenate.chat.EMGroup;
 import com.hyphenate.chat.EMGroupOptions;
 import com.hyphenate.chatuidemo.DemoHelper;
 import com.hyphenate.chatuidemo.R;
-import com.hyphenate.chatuidemo.common.DemoConstant;
+import com.hyphenate.chatuidemo.common.constant.DemoConstant;
 import com.hyphenate.chatuidemo.common.interfaceOrImplement.OnResourceParseCallback;
 import com.hyphenate.chatuidemo.common.livedatas.LiveDataBus;
 import com.hyphenate.chatuidemo.common.widget.ArrowItemView;
 import com.hyphenate.chatuidemo.common.widget.SwitchItemView;
 import com.hyphenate.chatuidemo.section.base.BaseInitActivity;
-import com.hyphenate.chatuidemo.section.chat.ChatActivity;
+import com.hyphenate.chatuidemo.section.chat.activity.ChatActivity;
 import com.hyphenate.chatuidemo.section.dialog.EditTextDialogFragment;
 import com.hyphenate.chatuidemo.section.dialog.SimpleDialogFragment;
 import com.hyphenate.chatuidemo.section.contact.viewmodels.NewGroupViewModel;
-import com.hyphenate.chatuidemo.section.group.GroupPickContactsActivity;
 import com.hyphenate.chatuidemo.section.group.fragment.GroupEditFragment;
 import com.hyphenate.easeui.model.EaseEvent;
 import com.hyphenate.easeui.widget.EaseTitleBar;

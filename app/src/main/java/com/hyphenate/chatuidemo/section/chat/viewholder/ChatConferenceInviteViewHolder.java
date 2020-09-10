@@ -4,11 +4,9 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
-import androidx.recyclerview.widget.PagerSnapHelper;
 
 import com.hyphenate.chat.EMMessage;
-import com.hyphenate.chatuidemo.DemoHelper;
-import com.hyphenate.chatuidemo.common.DemoConstant;
+import com.hyphenate.chatuidemo.common.constant.DemoConstant;
 import com.hyphenate.chatuidemo.common.manager.PushAndMessageHelper;
 import com.hyphenate.chatuidemo.section.chat.views.ChatRowConferenceInvite;
 import com.hyphenate.easeui.interfaces.MessageListItemClickListener;

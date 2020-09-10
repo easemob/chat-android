@@ -8,9 +8,9 @@ import android.view.View;
 
 import com.hyphenate.chat.EMGroup;
 import com.hyphenate.chatuidemo.R;
-import com.hyphenate.chatuidemo.common.DemoConstant;
+import com.hyphenate.chatuidemo.common.constant.DemoConstant;
 import com.hyphenate.chatuidemo.common.interfaceOrImplement.OnResourceParseCallback;
-import com.hyphenate.chatuidemo.section.chat.ChatActivity;
+import com.hyphenate.chatuidemo.section.chat.activity.ChatActivity;
 import com.hyphenate.chatuidemo.section.contact.adapter.PublicGroupContactAdapter;
 import com.hyphenate.chatuidemo.section.contact.viewmodels.PublicGroupViewModel;
 import com.hyphenate.easeui.adapter.EaseBaseRecyclerViewAdapter;

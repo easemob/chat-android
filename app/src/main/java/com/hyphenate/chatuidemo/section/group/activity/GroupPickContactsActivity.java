@@ -1,4 +1,4 @@
-package com.hyphenate.chatuidemo.section.group;
+package com.hyphenate.chatuidemo.section.group.activity;
 
 import android.app.Activity;
 import android.content.Intent;

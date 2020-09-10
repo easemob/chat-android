@@ -1,4 +1,4 @@
-package com.hyphenate.chatuidemo.section.group;
+package com.hyphenate.chatuidemo.section.group.activity;
 
 import android.content.Context;
 import android.content.Intent;
@@ -6,19 +6,17 @@ import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.Menu;
 
-import com.baidu.mapapi.map.Text;
 import com.hyphenate.chat.EMChatRoom;
 import com.hyphenate.chatuidemo.DemoHelper;
 import com.hyphenate.chatuidemo.R;
-import com.hyphenate.chatuidemo.common.DemoConstant;
+import com.hyphenate.chatuidemo.common.constant.DemoConstant;
 import com.hyphenate.chatuidemo.common.db.entity.EmUserEntity;
 import com.hyphenate.chatuidemo.common.interfaceOrImplement.OnResourceParseCallback;
 import com.hyphenate.chatuidemo.common.livedatas.LiveDataBus;
-import com.hyphenate.chatuidemo.section.group.viewmodels.ChatRoomDetailViewModel;
+import com.hyphenate.chatuidemo.section.group.GroupHelper;
 import com.hyphenate.chatuidemo.section.group.viewmodels.ChatRoomMemberViewModel;
 import com.hyphenate.easeui.domain.EaseUser;
 import com.hyphenate.easeui.model.EaseEvent;
-import com.scwang.smartrefresh.layout.api.RefreshLayout;
 
 import java.util.ArrayList;
 import java.util.Collections;

@@ -1,13 +1,10 @@
 package com.hyphenate.chatuidemo.section.conference;
 
 import android.animation.ValueAnimator;
-import android.app.ActivityManager;
-import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.PixelFormat;
 import android.graphics.Point;
-import android.os.Build;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -21,14 +18,12 @@ import android.widget.RelativeLayout;
 import com.hyphenate.chat.EMClient;
 import com.hyphenate.chat.EMConferenceStream;
 import com.hyphenate.chatuidemo.R;
-import com.hyphenate.chatuidemo.section.chat.ChatVideoCallActivity;
-import com.hyphenate.chatuidemo.section.chat.ChatVoiceCallActivity;
+import com.hyphenate.chatuidemo.section.chat.activity.ChatVideoCallActivity;
+import com.hyphenate.chatuidemo.section.chat.activity.ChatVoiceCallActivity;
 import com.hyphenate.easeui.utils.EaseCompat;
 import com.hyphenate.media.EMCallSurfaceView;
 import com.hyphenate.util.EMLog;
 import com.superrtc.sdk.VideoView;
-
-import java.util.List;
 
 /**
  * Created by lzan13 on 2017/3/27.

@@ -6,9 +6,7 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 
 import com.hyphenate.chat.EMMessage;
-import com.hyphenate.chatuidemo.section.chat.ChatVideoCallActivity;
-import com.hyphenate.chatuidemo.section.chat.ChatVoiceCallActivity;
-import com.hyphenate.chatuidemo.section.chat.views.ChatRowConferenceInvite;
+import com.hyphenate.chatuidemo.section.chat.activity.ChatVoiceCallActivity;
 import com.hyphenate.chatuidemo.section.chat.views.ChatRowVoiceCall;
 import com.hyphenate.easeui.interfaces.MessageListItemClickListener;
 import com.hyphenate.easeui.model.styles.EaseMessageListItemStyle;

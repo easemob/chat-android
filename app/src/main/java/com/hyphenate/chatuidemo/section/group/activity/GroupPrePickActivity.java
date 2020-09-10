@@ -1,10 +1,8 @@
-package com.hyphenate.chatuidemo.section.group;
+package com.hyphenate.chatuidemo.section.group.activity;
 
 import android.content.Context;
 import android.content.Intent;
 import android.view.View;
-
-import com.hyphenate.chatuidemo.section.contact.activity.NewGroupActivity;
 
 import java.util.List;
 

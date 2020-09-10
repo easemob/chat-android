@@ -1,4 +1,4 @@
-package com.hyphenate.chatuidemo.section.chat;
+package com.hyphenate.chatuidemo.section.chat.activity;
 
 import android.content.Context;
 import android.content.Intent;
@@ -33,9 +33,8 @@ import com.hyphenate.chat.EMConversation;
 import com.hyphenate.chat.EMMessage;
 import com.hyphenate.chat.EMStreamParam;
 import com.hyphenate.chat.EMStreamStatistics;
-import com.hyphenate.chatuidemo.DemoHelper;
 import com.hyphenate.chatuidemo.R;
-import com.hyphenate.chatuidemo.common.DemoConstant;
+import com.hyphenate.chatuidemo.common.constant.DemoConstant;
 import com.hyphenate.chatuidemo.common.db.DemoDbHelper;
 import com.hyphenate.chatuidemo.common.widget.EasePageIndicator;
 import com.hyphenate.chatuidemo.common.widget.conference.ConferenceMemberView;
@@ -53,7 +52,6 @@ import com.superrtc.sdk.VideoView;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 import java.util.TimeZone;
 

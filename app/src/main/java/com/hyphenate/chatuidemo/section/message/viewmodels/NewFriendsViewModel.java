@@ -3,8 +3,7 @@ package com.hyphenate.chatuidemo.section.message.viewmodels;
 import android.app.Application;
 
 import com.hyphenate.chat.EMClient;
-import com.hyphenate.chatuidemo.DemoHelper;
-import com.hyphenate.chatuidemo.common.DemoConstant;
+import com.hyphenate.chatuidemo.common.constant.DemoConstant;
 import com.hyphenate.chatuidemo.common.db.DemoDbHelper;
 import com.hyphenate.chatuidemo.common.db.dao.InviteMessageDao;
 import com.hyphenate.chatuidemo.common.db.entity.InviteMessage;
@@ -21,7 +20,6 @@ import java.util.List;
 import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
-import androidx.lifecycle.MediatorLiveData;
 import androidx.lifecycle.MutableLiveData;
 
 public class NewFriendsViewModel extends AndroidViewModel {

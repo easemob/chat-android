@@ -8,9 +8,9 @@ import android.view.View;
 import com.hyphenate.chat.EMClient;
 import com.hyphenate.chat.EMGroup;
 import com.hyphenate.chatuidemo.R;
-import com.hyphenate.chatuidemo.common.DemoConstant;
+import com.hyphenate.chatuidemo.common.constant.DemoConstant;
 import com.hyphenate.chatuidemo.common.utils.ThreadManager;
-import com.hyphenate.chatuidemo.section.chat.ChatActivity;
+import com.hyphenate.chatuidemo.section.chat.activity.ChatActivity;
 import com.hyphenate.chatuidemo.section.contact.adapter.GroupContactAdapter;
 import com.hyphenate.easeui.adapter.EaseBaseRecyclerViewAdapter;
 

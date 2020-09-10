@@ -12,7 +12,7 @@ import com.hyphenate.chat.EMGroupInfo;
 import com.hyphenate.chatuidemo.R;
 import com.hyphenate.chatuidemo.common.interfaceOrImplement.OnResourceParseCallback;
 import com.hyphenate.chatuidemo.section.base.BaseInitFragment;
-import com.hyphenate.chatuidemo.section.contact.activity.GroupSimpleDetailActivity;
+import com.hyphenate.chatuidemo.section.group.activity.GroupSimpleDetailActivity;
 import com.hyphenate.chatuidemo.section.contact.adapter.PublicGroupContactAdapter;
 import com.hyphenate.chatuidemo.section.contact.viewmodels.GroupContactViewModel;
 import com.hyphenate.easeui.interfaces.OnItemClickListener;

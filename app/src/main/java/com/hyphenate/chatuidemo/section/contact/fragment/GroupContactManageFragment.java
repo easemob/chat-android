@@ -5,11 +5,8 @@ import android.os.Bundle;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.hyphenate.chat.EMGroup;
-import com.hyphenate.chatuidemo.common.DemoConstant;
 import com.hyphenate.chatuidemo.common.interfaceOrImplement.OnResourceParseCallback;
-import com.hyphenate.chatuidemo.common.livedatas.LiveDataBus;
 import com.hyphenate.chatuidemo.section.contact.viewmodels.GroupContactViewModel;
-import com.hyphenate.easeui.model.EaseEvent;
 import com.hyphenate.easeui.widget.EaseSidebar;
 
 import java.util.List;

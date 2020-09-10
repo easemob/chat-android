@@ -1,4 +1,4 @@
-package com.hyphenate.chatuidemo.section.group;
+package com.hyphenate.chatuidemo.section.group.activity;
 
 import android.content.Context;
 import android.content.Intent;
@@ -14,12 +14,10 @@ import androidx.appcompat.widget.PopupMenu;
 
 import com.hyphenate.chat.EMGroup;
 import com.hyphenate.chatuidemo.R;
-import com.hyphenate.chatuidemo.common.DemoConstant;
+import com.hyphenate.chatuidemo.common.constant.DemoConstant;
 import com.hyphenate.chatuidemo.common.db.entity.EmUserEntity;
 import com.hyphenate.chatuidemo.common.interfaceOrImplement.OnResourceParseCallback;
 import com.hyphenate.chatuidemo.common.livedatas.LiveDataBus;
-import com.hyphenate.chatuidemo.section.dialog.DemoDialogFragment;
-import com.hyphenate.chatuidemo.section.dialog.SimpleDialogFragment;
 import com.hyphenate.easeui.domain.EaseUser;
 import com.hyphenate.easeui.model.EaseEvent;
 

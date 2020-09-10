@@ -1,4 +1,4 @@
-package com.hyphenate.chatuidemo.section.contact.activity;
+package com.hyphenate.chatuidemo.section.chat.activity;
 
 import android.content.Context;
 import android.content.Intent;
@@ -13,7 +13,6 @@ import com.hyphenate.chatuidemo.R;
 import com.hyphenate.chatuidemo.common.interfaceOrImplement.OnResourceParseCallback;
 import com.hyphenate.chatuidemo.common.manager.PushAndMessageHelper;
 import com.hyphenate.chatuidemo.section.base.BaseInitActivity;
-import com.hyphenate.chatuidemo.section.chat.ChatActivity;
 import com.hyphenate.chatuidemo.section.chat.adapter.PickUserAdapter;
 import com.hyphenate.chatuidemo.section.dialog.DemoDialogFragment;
 import com.hyphenate.chatuidemo.section.dialog.SimpleDialogFragment;

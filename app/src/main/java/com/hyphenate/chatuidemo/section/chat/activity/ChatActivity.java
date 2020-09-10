@@ -1,4 +1,4 @@
-package com.hyphenate.chatuidemo.section.chat;
+package com.hyphenate.chatuidemo.section.chat.activity;
 
 import android.content.Context;
 import android.content.Intent;
@@ -10,25 +10,21 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.google.android.material.snackbar.Snackbar;
-import com.hyphenate.chat.EMConversation;
 import com.hyphenate.chatuidemo.DemoHelper;
 import com.hyphenate.chatuidemo.R;
-import com.hyphenate.chatuidemo.common.DemoConstant;
+import com.hyphenate.chatuidemo.common.constant.DemoConstant;
 import com.hyphenate.chatuidemo.common.db.DemoDbHelper;
 import com.hyphenate.chatuidemo.common.interfaceOrImplement.OnResourceParseCallback;
 import com.hyphenate.chatuidemo.section.base.BaseInitActivity;
 import com.hyphenate.chatuidemo.section.chat.fragment.ChatFragment;
 import com.hyphenate.chatuidemo.section.chat.viewmodel.ChatViewModel;
 import com.hyphenate.chatuidemo.section.chat.viewmodel.MessageViewModel;
-import com.hyphenate.chatuidemo.section.dialog.DemoDialogFragment;
-import com.hyphenate.chatuidemo.section.dialog.SimpleDialogFragment;
-import com.hyphenate.chatuidemo.section.group.ChatRoomDetailActivity;
-import com.hyphenate.chatuidemo.section.group.GroupDetailActivity;
+import com.hyphenate.chatuidemo.section.group.activity.ChatRoomDetailActivity;
+import com.hyphenate.chatuidemo.section.group.activity.GroupDetailActivity;
 import com.hyphenate.easeui.constants.EaseConstant;
 import com.hyphenate.easeui.domain.EaseUser;
 import com.hyphenate.easeui.model.EaseEvent;
 import com.hyphenate.easeui.ui.EaseChatFragment;
-import com.hyphenate.easeui.utils.EaseCommonUtils;
 import com.hyphenate.easeui.widget.EaseTitleBar;
 
 import java.util.List;

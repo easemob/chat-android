@@ -55,7 +55,7 @@
         android:paddingBottom="5dp"
         android:textSize="@dimen/em_size_big"
         android:textColor="@color/em_color_common_text_black"
-        android:background="@drawable/demo_button_normal_shape"
+        android:background="@drawable/demo_et_normal_shape"
         android:hint="@string/em_public_group_introduce_hint"/>
 
     <TextView
@@ -76,7 +76,7 @@
         android:layout_marginLeft="11dp"
         android:layout_marginRight="11dp"
         android:layout_marginTop="6dp"
-        android:background="@drawable/demo_button_normal_shape"
+        android:background="@drawable/demo_et_normal_shape"
         android:gravity="start"
         android:hint="@string/em_public_group_request_to_join"
         android:lines="3"

@@ -10,9 +10,9 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.hyphenate.chat.EMGroup;
 import com.hyphenate.chatuidemo.R;
-import com.hyphenate.chatuidemo.common.DemoConstant;
+import com.hyphenate.chatuidemo.common.constant.DemoConstant;
 import com.hyphenate.chatuidemo.section.base.BaseInitFragment;
-import com.hyphenate.chatuidemo.section.chat.ChatActivity;
+import com.hyphenate.chatuidemo.section.chat.activity.ChatActivity;
 import com.hyphenate.chatuidemo.section.contact.adapter.GroupContactAdapter;
 import com.hyphenate.easeui.interfaces.OnItemClickListener;
 import com.hyphenate.easeui.utils.EaseCommonUtils;

@@ -15,7 +15,7 @@ import com.hyphenate.chatuidemo.R;
 import com.hyphenate.chatuidemo.common.db.entity.MsgTypeManageEntity;
 import com.hyphenate.chatuidemo.common.interfaceOrImplement.OnResourceParseCallback;
 import com.hyphenate.chatuidemo.common.utils.ThreadManager;
-import com.hyphenate.chatuidemo.section.chat.ChatActivity;
+import com.hyphenate.chatuidemo.section.chat.activity.ChatActivity;
 import com.hyphenate.chatuidemo.section.conversation.adapter.HomeAdapter;
 import com.hyphenate.chatuidemo.section.conversation.viewmodel.ConversationListViewModel;
 import com.hyphenate.chatuidemo.section.message.SystemMsgsActivity;

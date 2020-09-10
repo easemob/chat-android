@@ -4,9 +4,6 @@ import android.content.Context;
 import android.net.Uri;
 import android.text.TextUtils;
 
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.request.target.Target;
-import com.google.android.material.snackbar.Snackbar;
 import com.hyphenate.EMCallBack;
 import com.hyphenate.chat.EMClient;
 import com.hyphenate.chat.EMImageMessageBody;
@@ -15,14 +12,12 @@ import com.hyphenate.chat.EMTextMessageBody;
 import com.hyphenate.chatuidemo.DemoApplication;
 import com.hyphenate.chatuidemo.DemoHelper;
 import com.hyphenate.chatuidemo.R;
-import com.hyphenate.chatuidemo.common.DemoConstant;
+import com.hyphenate.chatuidemo.common.constant.DemoConstant;
 import com.hyphenate.chatuidemo.common.db.entity.InviteMessage;
 import com.hyphenate.chatuidemo.common.interfaceOrImplement.UserActivityLifecycleCallbacks;
 import com.hyphenate.chatuidemo.common.livedatas.LiveDataBus;
-import com.hyphenate.chatuidemo.common.utils.ThreadManager;
-import com.hyphenate.chatuidemo.common.utils.ToastUtils;
 import com.hyphenate.chatuidemo.section.conference.ConferenceActivity;
-import com.hyphenate.chatuidemo.section.chat.LiveActivity;
+import com.hyphenate.chatuidemo.section.chat.activity.LiveActivity;
 import com.hyphenate.easeui.constants.EaseConstant;
 import com.hyphenate.easeui.model.EaseEvent;
 import com.hyphenate.easeui.utils.EaseCommonUtils;
@@ -31,8 +26,6 @@ import com.hyphenate.util.UriUtils;
 
 import org.json.JSONException;
 import org.json.JSONObject;
-
-import java.io.File;
 
 /**
  * 用于处理推送及消息相关

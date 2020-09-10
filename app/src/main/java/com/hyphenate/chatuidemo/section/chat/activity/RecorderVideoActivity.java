@@ -9,7 +9,7 @@
  * is strictly forbidden unless prior written permission is obtained
  * from EaseMob Technologies.
  */
-package com.hyphenate.chatuidemo.section.chat;
+package com.hyphenate.chatuidemo.section.chat.activity;
 
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;

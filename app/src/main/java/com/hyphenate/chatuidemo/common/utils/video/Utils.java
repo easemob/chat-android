@@ -9,7 +9,7 @@ import android.os.Build.VERSION_CODES;
 import android.os.StrictMode;
 
 
-import com.hyphenate.chatuidemo.section.chat.ImageGridActivity;
+import com.hyphenate.chatuidemo.section.chat.activity.ImageGridActivity;
 
 import java.util.Comparator;
 import java.util.List;

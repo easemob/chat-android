@@ -4,7 +4,6 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.hyphenate.chat.EMMessage;
-import com.hyphenate.chatuidemo.common.DemoConstant;
 import com.hyphenate.chatuidemo.section.chat.viewholder.ChatVideoCallViewHolder;
 import com.hyphenate.chatuidemo.section.chat.views.ChatRowVideoCall;
 import com.hyphenate.easeui.constants.EaseConstant;

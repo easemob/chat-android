@@ -6,11 +6,8 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 
 import com.hyphenate.chat.EMMessage;
-import com.hyphenate.chatuidemo.DemoHelper;
-import com.hyphenate.chatuidemo.common.DemoConstant;
+import com.hyphenate.chatuidemo.common.constant.DemoConstant;
 import com.hyphenate.chatuidemo.common.manager.PushAndMessageHelper;
-import com.hyphenate.chatuidemo.section.chat.LiveActivity;
-import com.hyphenate.chatuidemo.section.chat.views.ChatRowConferenceInvite;
 import com.hyphenate.chatuidemo.section.chat.views.ChatRowLive;
 import com.hyphenate.easeui.interfaces.MessageListItemClickListener;
 import com.hyphenate.easeui.model.styles.EaseMessageListItemStyle;

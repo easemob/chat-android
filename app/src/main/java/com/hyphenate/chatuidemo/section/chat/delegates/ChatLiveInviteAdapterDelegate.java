@@ -4,7 +4,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.hyphenate.chat.EMMessage;
-import com.hyphenate.chatuidemo.common.DemoConstant;
+import com.hyphenate.chatuidemo.common.constant.DemoConstant;
 import com.hyphenate.chatuidemo.section.chat.viewholder.ChatLiveInviteViewHolder;
 import com.hyphenate.chatuidemo.section.chat.views.ChatRowLive;
 import com.hyphenate.easeui.delegate.EaseMessageAdapterDelegate;

@@ -21,8 +21,8 @@ import android.os.Build;
 
 import com.hyphenate.chatuidemo.DemoHelper;
 import com.hyphenate.chatuidemo.R;
-import com.hyphenate.chatuidemo.section.chat.ChatVideoCallActivity;
-import com.hyphenate.chatuidemo.section.chat.ChatVoiceCallActivity;
+import com.hyphenate.chatuidemo.section.chat.activity.ChatVideoCallActivity;
+import com.hyphenate.chatuidemo.section.chat.activity.ChatVoiceCallActivity;
 import com.hyphenate.util.EMLog;
 import com.hyphenate.util.EasyUtils;
 

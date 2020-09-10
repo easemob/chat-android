@@ -7,7 +7,7 @@ import androidx.lifecycle.LiveData;
 
 import com.hyphenate.chat.EMConferenceMember;
 import com.hyphenate.chatuidemo.DemoApplication;
-import com.hyphenate.chatuidemo.common.DemoConstant;
+import com.hyphenate.chatuidemo.common.constant.DemoConstant;
 import com.hyphenate.chatuidemo.common.db.DemoDbHelper;
 import com.hyphenate.chatuidemo.common.interfaceOrImplement.ResultCallBack;
 import com.hyphenate.chatuidemo.common.net.Resource;

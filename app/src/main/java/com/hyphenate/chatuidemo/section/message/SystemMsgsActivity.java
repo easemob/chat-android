@@ -8,7 +8,7 @@ import android.view.MenuItem;
 import android.view.View;
 
 import com.hyphenate.chatuidemo.R;
-import com.hyphenate.chatuidemo.common.DemoConstant;
+import com.hyphenate.chatuidemo.common.constant.DemoConstant;
 import com.hyphenate.chatuidemo.common.db.entity.InviteMessage;
 import com.hyphenate.chatuidemo.common.interfaceOrImplement.OnResourceParseCallback;
 import com.hyphenate.chatuidemo.common.livedatas.LiveDataBus;
@@ -27,7 +27,6 @@ import com.hyphenate.chatuidemo.common.db.entity.InviteMessage.InviteMessageStat
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.ViewModelProvider;
-import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 public class SystemMsgsActivity extends BaseInitActivity implements OnRefreshLoadMoreListener, InviteMsgDelegate.OnInviteListener, EaseTitleBar.OnBackPressListener {

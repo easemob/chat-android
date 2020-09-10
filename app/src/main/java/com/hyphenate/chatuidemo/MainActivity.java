@@ -18,7 +18,7 @@ import androidx.lifecycle.ViewModelProvider;
 import com.google.android.material.bottomnavigation.BottomNavigationItemView;
 import com.google.android.material.bottomnavigation.BottomNavigationMenuView;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
-import com.hyphenate.chatuidemo.common.DemoConstant;
+import com.hyphenate.chatuidemo.common.constant.DemoConstant;
 import com.hyphenate.chatuidemo.common.enums.SearchType;
 import com.hyphenate.chatuidemo.common.permission.PermissionsManager;
 import com.hyphenate.chatuidemo.common.permission.PermissionsResultAction;
@@ -28,16 +28,13 @@ import com.hyphenate.chatuidemo.section.conference.ConferenceActivity;
 import com.hyphenate.chatuidemo.section.contact.fragment.ContactListFragment;
 import com.hyphenate.chatuidemo.section.conversation.ConversationListFragment;
 import com.hyphenate.chatuidemo.section.discover.DiscoverFragment;
-import com.hyphenate.chatuidemo.section.contact.activity.NewGroupActivity;
 import com.hyphenate.chatuidemo.section.contact.activity.AddContactActivity;
 import com.hyphenate.chatuidemo.section.contact.viewmodels.ContactsViewModel;
-import com.hyphenate.chatuidemo.section.group.GroupPrePickActivity;
+import com.hyphenate.chatuidemo.section.group.activity.GroupPrePickActivity;
 import com.hyphenate.chatuidemo.section.me.AboutMeFragment;
 import com.hyphenate.easeui.model.EaseEvent;
 import com.hyphenate.easeui.ui.base.EaseBaseFragment;
 import com.hyphenate.easeui.widget.EaseTitleBar;
-
-import java.lang.reflect.Method;
 
 
 public class MainActivity extends BaseInitActivity implements BottomNavigationView.OnNavigationItemSelectedListener {

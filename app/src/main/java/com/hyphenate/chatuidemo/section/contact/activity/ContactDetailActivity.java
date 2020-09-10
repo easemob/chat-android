@@ -14,14 +14,14 @@ import androidx.lifecycle.ViewModelProvider;
 
 import com.hyphenate.chatuidemo.DemoHelper;
 import com.hyphenate.chatuidemo.R;
-import com.hyphenate.chatuidemo.common.DemoConstant;
+import com.hyphenate.chatuidemo.common.constant.DemoConstant;
 import com.hyphenate.chatuidemo.common.db.DemoDbHelper;
 import com.hyphenate.chatuidemo.common.interfaceOrImplement.OnResourceParseCallback;
 import com.hyphenate.chatuidemo.common.livedatas.LiveDataBus;
 import com.hyphenate.chatuidemo.section.base.BaseInitActivity;
-import com.hyphenate.chatuidemo.section.chat.ChatActivity;
-import com.hyphenate.chatuidemo.section.chat.ChatVideoCallActivity;
-import com.hyphenate.chatuidemo.section.chat.ChatVoiceCallActivity;
+import com.hyphenate.chatuidemo.section.chat.activity.ChatActivity;
+import com.hyphenate.chatuidemo.section.chat.activity.ChatVideoCallActivity;
+import com.hyphenate.chatuidemo.section.chat.activity.ChatVoiceCallActivity;
 import com.hyphenate.chatuidemo.section.dialog.DemoDialogFragment;
 import com.hyphenate.chatuidemo.section.dialog.SimpleDialogFragment;
 import com.hyphenate.chatuidemo.section.contact.viewmodels.AddContactViewModel;
