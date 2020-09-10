@@ -514,6 +514,8 @@
             android:screenOrientation="portrait"/>
         <!--推送消息显示样式-->
         <activity android:name=".section.me.activity.MessagePushStyleActivity" />
+        <!--WebView加载网页-->
+        <activity android:name=".section.base.WebViewActivity" />
 
         <!--捕获屏幕service-->
         <service android:name=".section.conference.SRForegroundService"
