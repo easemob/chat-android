@@ -14,6 +14,8 @@
         <item name="android:textColorHint">@color/em_base_color_text_hint</item>
         <item name="android:windowBackground">@color/em_base_color_window_bg</item>
         <item name="android:divider">@drawable/demo_default_divider_list</item>
+        <!-- remove button default shadow effect -->
+        <item name="android:buttonStyle">@style/Button.BorderLess</item>
     </style>
 
     <style name="NoActionBar.Dark" parent="Theme.AppCompat.NoActionBar">
@@ -67,6 +69,10 @@
 <!--        &lt;!&ndash;设置不覆盖锚点，即不覆盖三个点&ndash;&gt;-->
 <!--        <item name="overlapAnchor">false</item>-->
 <!--    </style>-->
+
+    <style name="Button.BorderLess" parent="@style/Widget.AppCompat.Button.Borderless">
+        <item name="android:foreground">?android:attr/selectableItemBackground</item>
+    </style>
 
     <style name="main_bottom_view_normal">
         <item name="android:textColor">@color/em_main_color_tab_normal</item>
