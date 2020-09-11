@@ -14,7 +14,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:scaleType="centerCrop"
-        android:src="@drawable/em_default_avatar" />
+        android:src="@drawable/ease_default_avatar" />
 
     <RelativeLayout
         android:layout_width="match_parent"

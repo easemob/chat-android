@@ -87,7 +87,7 @@
             android:scaleType="fitXY"
             app:ease_shape_type="round"
             android:layout_marginTop="50dp"
-            android:src="@drawable/em_default_avatar" />
+            android:src="@drawable/ease_default_avatar" />
         
         <TextView
             android:id="@+id/tv_nick"

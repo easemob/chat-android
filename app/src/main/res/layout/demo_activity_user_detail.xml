@@ -36,7 +36,7 @@
             android:layout_width="36dp"
             android:layout_height="36dp"
             android:layout_marginRight="42dp"
-            android:src="@drawable/em_default_avatar"
+            android:src="@drawable/ease_default_avatar"
             app:ease_shape_type="round"/>
 
     </LinearLayout>

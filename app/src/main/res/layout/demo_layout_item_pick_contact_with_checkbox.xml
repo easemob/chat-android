@@ -31,7 +31,7 @@
             android:layout_marginLeft="@dimen/em_margin_20"
             android:layout_gravity="center_vertical"
             android:scaleType="fitXY"
-            android:src="@drawable/em_default_avatar" />
+            android:src="@drawable/ease_default_avatar" />
 
         <TextView
             android:id="@+id/name"
