@@ -10,4 +10,15 @@
         android:scaleType="centerCrop"
         android:src="@drawable/em_splash_bg"/>
 
+    <TextView
+        android:id="@+id/tv_product"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/demo_app_product_name"
+        android:layout_gravity="bottom|center"
+        android:layout_marginBottom="80dp"
+        android:textSize="@dimen/em_size_big"
+        android:textColor="@color/white"
+        android:letterSpacing="0.2"/>
+
 </FrameLayout>

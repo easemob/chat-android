@@ -1,33 +1,22 @@
 package com.hyphenate.chatuidemo.section.login.activity;
 
 import android.animation.Animator;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
-import android.util.Log;
-import android.view.ViewPropertyAnimator;
 import android.widget.ImageView;
+import android.widget.TextView;
 
-import androidx.annotation.Nullable;
 import androidx.lifecycle.ViewModelProvider;
 
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.DataSource;
-import com.bumptech.glide.load.engine.DiskCacheStrategy;
-import com.bumptech.glide.load.engine.GlideException;
-import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions;
-import com.bumptech.glide.request.RequestListener;
-import com.bumptech.glide.request.target.Target;
-import com.bumptech.glide.request.transition.DrawableCrossFadeFactory;
 import com.hyphenate.chatuidemo.MainActivity;
 import com.hyphenate.chatuidemo.R;
 import com.hyphenate.chatuidemo.common.interfaceOrImplement.OnResourceParseCallback;
-import com.hyphenate.chatuidemo.common.utils.DemoLog;
 import com.hyphenate.chatuidemo.section.base.BaseInitActivity;
 import com.hyphenate.chatuidemo.section.login.viewmodels.SplashViewModel;
 import com.hyphenate.util.EMLog;
 
 public class SplashActivity extends BaseInitActivity {
     private ImageView ivSplash;
+    private TextView tvProduct;
     private SplashViewModel model;
 
     @Override
@@ -44,6 +33,7 @@ public class SplashActivity extends BaseInitActivity {
     protected void initView(Bundle savedInstanceState) {
         super.initView(savedInstanceState);
         ivSplash = findViewById(R.id.iv_splash);
+        tvProduct = findViewById(R.id.tv_product);
     }
 
     @Override
@@ -74,6 +64,11 @@ public class SplashActivity extends BaseInitActivity {
 
                     }
                 })
+                .start();
+
+        tvProduct.animate()
+                .alpha(1)
+                .setDuration(500)
                 .start();
 
     }
