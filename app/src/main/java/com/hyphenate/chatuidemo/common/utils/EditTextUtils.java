@@ -9,6 +9,7 @@ import android.text.SpannableStringBuilder;
 import android.text.TextPaint;
 import android.text.TextUtils;
 import android.text.style.ForegroundColorSpan;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -130,5 +131,32 @@ public class EditTextUtils {
         SpannableStringBuilder builder = new SpannableStringBuilder(str);
         builder.setSpan(new ForegroundColorSpan(ContextCompat.getColor(context, R.color.em_color_brand)), str.indexOf(keyword), str.indexOf(keyword) + keyword.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
         return builder;
+    }
+
+    public static String ellipsizeMiddleString(TextView textView, String str, int width) {
+        Paint paint = textView.getPaint();
+        if(paint.measureText(str) < width) {
+            return str;
+        }
+        int count = paint.breakText(str, 0, str.length(), true, width, null);
+        //如果不满两行
+        if(str.length() < count * 2) {
+            return str;
+        }
+        //如果文件
+        if(str.contains(".")) {
+            int lastIndex = str.lastIndexOf(".");
+            String suffix = "..." + str.substring(lastIndex - 3);
+            float requestWidth = paint.measureText(suffix);
+            int takeUpCount = paint.breakText(str, 0, count * 2, true, requestWidth, null);
+            float measureWidth = paint.measureText(str.substring(count * 2 - takeUpCount, count * 2));
+            if(measureWidth < requestWidth) {
+
+            }
+            Log.e("TAG", "suffix = "+suffix);
+            str = str.substring(0, count * 2 - takeUpCount) + suffix;
+            Log.e("TAG", "last str = "+str);
+        }
+        return str;
     }
 }
