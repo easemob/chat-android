@@ -5,7 +5,9 @@ import android.text.TextUtils;
 import androidx.annotation.NonNull;
 import androidx.lifecycle.LiveData;
 
+import com.hyphenate.chat.EMClient;
 import com.hyphenate.chat.EMConferenceMember;
+import com.hyphenate.chat.EMGroup;
 import com.hyphenate.chatuidemo.DemoApplication;
 import com.hyphenate.chatuidemo.common.constant.DemoConstant;
 import com.hyphenate.chatuidemo.common.db.DemoDbHelper;
@@ -13,6 +15,7 @@ import com.hyphenate.chatuidemo.common.interfaceOrImplement.ResultCallBack;
 import com.hyphenate.chatuidemo.common.net.Resource;
 import com.hyphenate.chatuidemo.common.utils.ThreadManager;
 import com.hyphenate.chatuidemo.section.chat.model.KV;
+import com.hyphenate.exceptions.HyphenateException;
 import com.hyphenate.util.EasyUtils;
 
 import java.util.ArrayList;
@@ -34,6 +37,19 @@ public class EMConferenceManagerRepository extends BaseEMRepository {
                     }else {
                         // 根据groupId获取群组中所有成员
                         contactList = new EMGroupManagerRepository().getAllGroupMemberByServer(groupId);
+                    }
+                    //获取管理员列表
+                    try {
+                        EMGroup group = EMClient.getInstance().groupManager().getGroupFromServer(groupId, true);
+                        if(group != null) {
+                            if(group.getAdminList() != null) {
+                                contactList.addAll(group.getAdminList());
+                            }
+                            contactList.add(group.getOwner());
+                        }
+
+                    } catch (HyphenateException e) {
+                        e.printStackTrace();
                     }
                     List<KV<String, Integer>> contacts = new ArrayList<>();
                     for (String it : contactList) {
