@@ -28,7 +28,8 @@
             android:layout_height="wrap_content"
             android:layout_marginRight="@dimen/margin_chat_activity"
             android:layout_toLeftOf="@id/iv_userhead"
-            android:background="@drawable/ease_chatto_bg" >
+            android:padding="8dp"
+            android:background="@drawable/ease_chat_bubble_send_bg" >
 
             <TextView
                 android:id="@+id/tv_chatcontent"

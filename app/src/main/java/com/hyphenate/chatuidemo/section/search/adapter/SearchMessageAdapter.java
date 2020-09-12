@@ -11,7 +11,7 @@ import androidx.annotation.NonNull;
 
 import com.hyphenate.chat.EMMessage;
 import com.hyphenate.chatuidemo.R;
-import com.hyphenate.chatuidemo.common.utils.EditTextUtils;
+import com.hyphenate.easeui.utils.EaseEditTextUtils;
 import com.hyphenate.easeui.adapter.EaseBaseRecyclerViewAdapter;
 import com.hyphenate.easeui.utils.EaseCommonUtils;
 import com.hyphenate.easeui.utils.EaseSmileUtils;
@@ -75,8 +75,8 @@ public class SearchMessageAdapter extends EaseBaseRecyclerViewAdapter<EMMessage>
             }
             String content = EaseSmileUtils.getSmiledText(mContext, EaseCommonUtils.getMessageDigest(item, mContext)).toString();
             message.post(()-> {
-                String subContent = EditTextUtils.ellipsizeString(message, content, keyword, message.getWidth());
-                SpannableStringBuilder builder = EditTextUtils.highLightKeyword(mContext, subContent, keyword);
+                String subContent = EaseEditTextUtils.ellipsizeString(message, content, keyword, message.getWidth());
+                SpannableStringBuilder builder = EaseEditTextUtils.highLightKeyword(mContext, subContent, keyword);
                 if(builder != null) {
                     message.setText(builder);
                 }else {

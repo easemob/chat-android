@@ -29,7 +29,8 @@
             android:layout_marginLeft="@dimen/margin_chat_activity"
             android:layout_toRightOf="@id/iv_userhead"
             android:layout_below="@+id/tv_userid"
-            android:background="@drawable/ease_chatfrom_bg" >
+            android:padding="8dp"
+            android:background="@drawable/ease_chat_bubble_receive_bg" >
 
             <TextView
                 android:id="@+id/tv_chatcontent"

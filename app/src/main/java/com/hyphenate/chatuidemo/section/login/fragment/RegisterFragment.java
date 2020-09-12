@@ -24,7 +24,7 @@ import androidx.lifecycle.ViewModelProvider;
 
 import com.hyphenate.chatuidemo.R;
 import com.hyphenate.chatuidemo.common.interfaceOrImplement.OnResourceParseCallback;
-import com.hyphenate.chatuidemo.common.utils.EditTextUtils;
+import com.hyphenate.easeui.utils.EaseEditTextUtils;
 import com.hyphenate.chatuidemo.common.utils.ToastUtils;
 import com.hyphenate.easeui.widget.EaseTitleBar;
 import com.hyphenate.chatuidemo.section.base.BaseInitFragment;
@@ -73,7 +73,7 @@ public class RegisterFragment extends BaseInitFragment implements TextWatcher, V
         mBtnLogin.setOnClickListener(this);
         mToolbarRegister.setOnBackPressListener(this);
         cbSelect.setOnCheckedChangeListener(this);
-        EditTextUtils.clearEditTextListener(mEtLoginName);
+        EaseEditTextUtils.clearEditTextListener(mEtLoginName);
     }
 
     @Override
@@ -113,8 +113,8 @@ public class RegisterFragment extends BaseInitFragment implements TextWatcher, V
         eyeClose = getResources().getDrawable(R.drawable.d_pwd_hide);
         eyeOpen = getResources().getDrawable(R.drawable.d_pwd_show);
         clear = getResources().getDrawable(R.drawable.d_clear);
-        EditTextUtils.changePwdDrawableRight(mEtLoginPwd, eyeClose, eyeOpen, null, null, null);
-        EditTextUtils.changePwdDrawableRight(mEtLoginPwdConfirm, eyeClose, eyeOpen, null, null, null);
+        EaseEditTextUtils.changePwdDrawableRight(mEtLoginPwd, eyeClose, eyeOpen, null, null, null);
+        EaseEditTextUtils.changePwdDrawableRight(mEtLoginPwdConfirm, eyeClose, eyeOpen, null, null, null);
     }
 
     @Override
@@ -136,9 +136,9 @@ public class RegisterFragment extends BaseInitFragment implements TextWatcher, V
         mUserName = mEtLoginName.getText().toString().trim();
         mPwd = mEtLoginPwd.getText().toString().trim();
         mPwdConfirm = mEtLoginPwdConfirm.getText().toString().trim();
-        EditTextUtils.showRightDrawable(mEtLoginName, clear);
-        EditTextUtils.showRightDrawable(mEtLoginPwd, eyeClose);
-        EditTextUtils.showRightDrawable(mEtLoginPwdConfirm, eyeClose);
+        EaseEditTextUtils.showRightDrawable(mEtLoginName, clear);
+        EaseEditTextUtils.showRightDrawable(mEtLoginPwd, eyeClose);
+        EaseEditTextUtils.showRightDrawable(mEtLoginPwdConfirm, eyeClose);
         setButtonEnable(!TextUtils.isEmpty(mUserName) && !TextUtils.isEmpty(mPwd) && !TextUtils.isEmpty(mPwdConfirm) && cbSelect.isChecked());
     }
 

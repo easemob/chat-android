@@ -12,8 +12,6 @@ import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.text.method.LinkMovementMethod;
 import android.text.style.ClickableSpan;
-import android.text.style.UnderlineSpan;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
@@ -22,18 +20,16 @@ import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.core.content.ContextCompat;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.hyphenate.chatuidemo.DemoHelper;
 import com.hyphenate.chatuidemo.MainActivity;
 import com.hyphenate.chatuidemo.R;
 import com.hyphenate.chatuidemo.common.interfaceOrImplement.OnResourceParseCallback;
-import com.hyphenate.chatuidemo.common.utils.EditTextUtils;
+import com.hyphenate.easeui.utils.EaseEditTextUtils;
 import com.hyphenate.chatuidemo.common.utils.ToastUtils;
 import com.hyphenate.chatuidemo.section.base.BaseInitFragment;
 import com.hyphenate.chatuidemo.section.login.viewmodels.LoginFragmentViewModel;
@@ -96,7 +92,7 @@ public class LoginFragment extends BaseInitFragment implements View.OnClickListe
         mBtnLogin.setOnClickListener(this);
         cbSelect.setOnCheckedChangeListener(this);
         mEtLoginPwd.setOnEditorActionListener(this);
-        EditTextUtils.clearEditTextListener(mEtLoginName);
+        EaseEditTextUtils.clearEditTextListener(mEtLoginName);
     }
 
     @Override
@@ -161,8 +157,8 @@ public class LoginFragment extends BaseInitFragment implements View.OnClickListe
         eyeClose = getResources().getDrawable(R.drawable.d_pwd_hide);
         eyeOpen = getResources().getDrawable(R.drawable.d_pwd_show);
         clear = getResources().getDrawable(R.drawable.d_clear);
-        EditTextUtils.showRightDrawable(mEtLoginName, clear);
-        EditTextUtils.changePwdDrawableRight(mEtLoginPwd, eyeClose, eyeOpen, null, null, null);
+        EaseEditTextUtils.showRightDrawable(mEtLoginName, clear);
+        EaseEditTextUtils.changePwdDrawableRight(mEtLoginPwd, eyeClose, eyeOpen, null, null, null);
     }
 
     @Override
@@ -224,8 +220,8 @@ public class LoginFragment extends BaseInitFragment implements View.OnClickListe
     public void afterTextChanged(Editable s) {
         mUserName = mEtLoginName.getText().toString().trim();
         mPwd = mEtLoginPwd.getText().toString().trim();
-        EditTextUtils.showRightDrawable(mEtLoginName, clear);
-        EditTextUtils.showRightDrawable(mEtLoginPwd, isTokenFlag ? null : eyeClose);
+        EaseEditTextUtils.showRightDrawable(mEtLoginName, clear);
+        EaseEditTextUtils.showRightDrawable(mEtLoginPwd, isTokenFlag ? null : eyeClose);
         setButtonEnable(!TextUtils.isEmpty(mUserName) && !TextUtils.isEmpty(mPwd));
     }
 
