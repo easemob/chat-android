@@ -43,17 +43,8 @@ public class GroupContactAdapter extends EaseBaseRecyclerViewAdapter<EMGroup> {
 
         @Override
         public void setData(EMGroup item, int position) {
-            String header = EaseCommonUtils.getLetter(item.getGroupName());
-            Log.e("TAG", "GroupContactAdapter header = "+header);
-            mHeader.setVisibility(View.GONE);
+            mAvatar.setImageResource(R.drawable.ease_group_icon);
             mSignature.setVisibility(View.VISIBLE);
-            // 是否显示字母
-            if(position == 0 || (header != null && !header.equals(EaseCommonUtils.getLetter(getItem(position - 1).getGroupName())))) {
-                if(!TextUtils.isEmpty(header)) {
-                    mHeader.setVisibility(View.VISIBLE);
-                    mHeader.setText(header);
-                }
-            }
             mName.setText(item.getGroupName());
             mSignature.setText(item.getGroupId()+"");
         }

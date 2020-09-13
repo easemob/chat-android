@@ -25,6 +25,8 @@ public class GroupContactViewModel extends AndroidViewModel {
     private SingleSourceLiveData<Resource<List<EaseUser>>> groupMemberObservable;
     private SingleSourceLiveData<Resource<EMCursorResult<EMGroupInfo>>> publicGroupObservable;
     private SingleSourceLiveData<Resource<EMCursorResult<EMGroupInfo>>> morePublicGroupObservable;
+    private SingleSourceLiveData<Resource<List<EMGroup>>> groupObservable;
+    private SingleSourceLiveData<Resource<List<EMGroup>>> moreGroupObservable;
 
     public GroupContactViewModel(@NonNull Application application) {
         super(application);
@@ -34,6 +36,8 @@ public class GroupContactViewModel extends AndroidViewModel {
         groupMemberObservable = new SingleSourceLiveData<>();
         publicGroupObservable = new SingleSourceLiveData<>();
         morePublicGroupObservable = new SingleSourceLiveData<>();
+        groupObservable = new SingleSourceLiveData<>();
+        moreGroupObservable = new SingleSourceLiveData<>();
     }
 
     public LiveDataBus getMessageObservable() {
@@ -78,5 +82,21 @@ public class GroupContactViewModel extends AndroidViewModel {
 
     public void getMorePublicGroups(int pageSize, String cursor) {
         morePublicGroupObservable.setSource(mRepository.getPublicGroupFromServer(pageSize, cursor));
+    }
+
+    public LiveData<Resource<List<EMGroup>>> getGroupObservable() {
+        return groupObservable;
+    }
+
+    public void loadGroupListFromServer(int pageIndex, int pageSize) {
+        groupObservable.setSource(mRepository.getGroupListFromServer(pageIndex, pageSize));
+    }
+
+    public LiveData<Resource<List<EMGroup>>> getMoreGroupObservable() {
+        return moreGroupObservable;
+    }
+
+    public void loadMoreGroupListFromServer(int pageIndex, int pageSize) {
+        moreGroupObservable.setSource(mRepository.getGroupListFromServer(pageIndex, pageSize));
     }
 }

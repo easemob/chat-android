@@ -69,6 +69,7 @@
         android:id="@+id/group_join"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:visibility="gone"
         app:constraint_referenced_ids="tl_group_contact,vp_group_contact"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

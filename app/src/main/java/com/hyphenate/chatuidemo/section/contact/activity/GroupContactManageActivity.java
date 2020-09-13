@@ -18,6 +18,7 @@ import com.hyphenate.chatuidemo.R;
 import com.hyphenate.chatuidemo.common.constant.DemoConstant;
 import com.hyphenate.chatuidemo.section.base.BaseInitActivity;
 import com.hyphenate.chatuidemo.section.contact.adapter.GroupContactFragmentAdapter;
+import com.hyphenate.chatuidemo.section.contact.fragment.GroupContactManageFragment;
 import com.hyphenate.chatuidemo.section.contact.fragment.GroupPublicContactManageFragment;
 import com.hyphenate.chatuidemo.section.contact.viewmodels.GroupContactViewModel;
 import com.hyphenate.chatuidemo.section.search.SearchGroupActivity;
@@ -33,6 +34,8 @@ public class GroupContactManageActivity extends BaseInitActivity implements Ease
     private ViewPager mVpGroupContact;
     private FrameLayout flFragment;
     private Group groupJoin;
+    private Fragment joinGroupFragment;
+    private Fragment publicGroupFragment;
 
     public static void actionStart(Context context) {
         Intent intent = new Intent(context, GroupContactManageActivity.class);
@@ -53,26 +56,6 @@ public class GroupContactManageActivity extends BaseInitActivity implements Ease
         mVpGroupContact = findViewById(R.id.vp_group_contact);
         flFragment = findViewById(R.id.fl_fragment);
         groupJoin = findViewById(R.id.group_join);
-
-        mTlGroupContact.setupWithViewPager(mVpGroupContact);
-
-        //设置公开群fragment
-        Fragment fragment = getSupportFragmentManager().findFragmentByTag("public-contact");
-        if(fragment != null && fragment.isAdded()) {
-            getSupportFragmentManager().beginTransaction().show(fragment);
-        }else {
-            fragment = new GroupPublicContactManageFragment();
-            getSupportFragmentManager().beginTransaction().replace(R.id.fl_fragment, fragment, "public-contact").commit();
-        }
-
-        //默认显示已加入的群
-        if(isShowPublic()) {
-            groupJoin.setVisibility(View.VISIBLE);
-            flFragment.setVisibility(View.GONE);
-        }else {
-            groupJoin.setVisibility(View.GONE);
-            flFragment.setVisibility(View.VISIBLE);
-        }
     }
 
     @Override
@@ -86,19 +69,7 @@ public class GroupContactManageActivity extends BaseInitActivity implements Ease
     @Override
     protected void initData() {
         super.initData();
-        GroupContactFragmentAdapter adapter = new GroupContactFragmentAdapter(mContext, getSupportFragmentManager(), FragmentPagerAdapter.BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT);
-        mVpGroupContact.setAdapter(adapter);
-
-        GroupContactViewModel viewModel = new ViewModelProvider(mContext).get(GroupContactViewModel.class);
-        viewModel.getMessageObservable().with(DemoConstant.GROUP_CHANGE, EaseEvent.class).observe(this, event -> {
-            if(event == null) {
-                return;
-            }
-            if(event.isGroupChange() || event.isGroupLeave()) {
-                viewModel.loadAllGroups();
-            }
-        });
-        viewModel.loadAllGroups();
+        showJoinGroup();
     }
 
     @Override
@@ -130,13 +101,13 @@ public class GroupContactManageActivity extends BaseInitActivity implements Ease
         if(isShowPublic()) {
             //公开群
             mTitleBarGroupContact.getRightText().setText(R.string.em_friends_group_join);
-            groupJoin.setVisibility(View.GONE);
-            flFragment.setVisibility(View.VISIBLE);
+            mTitleBarGroupContact.setTitle(getString(R.string.em_friends_group_public));
+            showPublicGroup();
         }else {
             //已加入的群
             mTitleBarGroupContact.getRightText().setText(R.string.em_friends_group_public);
-            groupJoin.setVisibility(View.VISIBLE);
-            flFragment.setVisibility(View.GONE);
+            mTitleBarGroupContact.setTitle(getString(R.string.em_friends_group_join));
+            showJoinGroup();
         }
     }
 
@@ -147,5 +118,26 @@ public class GroupContactManageActivity extends BaseInitActivity implements Ease
     private boolean isShowPublic() {
         String rightContent = mTitleBarGroupContact.getRightText().getText().toString().trim();
         return TextUtils.equals(rightContent, getString(R.string.em_friends_group_public));
+    }
+
+    private void showJoinGroup() {
+        joinGroupFragment = getSupportFragmentManager().findFragmentByTag("join-group");
+        if(joinGroupFragment != null && joinGroupFragment.isAdded()) {
+            getSupportFragmentManager().beginTransaction().show(joinGroupFragment);
+        }else {
+            joinGroupFragment = new GroupContactManageFragment();
+            getSupportFragmentManager().beginTransaction().replace(R.id.fl_fragment, joinGroupFragment, "join-group").commit();
+        }
+    }
+
+    private void showPublicGroup() {
+        //设置公开群fragment
+        publicGroupFragment = getSupportFragmentManager().findFragmentByTag("public-group");
+        if(publicGroupFragment != null && publicGroupFragment.isAdded()) {
+            getSupportFragmentManager().beginTransaction().show(publicGroupFragment);
+        }else {
+            publicGroupFragment = new GroupPublicContactManageFragment();
+            getSupportFragmentManager().beginTransaction().replace(R.id.fl_fragment, publicGroupFragment, "public-group").commit();
+        }
     }
 }

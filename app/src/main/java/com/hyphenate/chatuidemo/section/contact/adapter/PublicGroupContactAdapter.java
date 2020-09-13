@@ -41,6 +41,7 @@ public class PublicGroupContactAdapter extends EaseBaseRecyclerViewAdapter<EMGro
 
         @Override
         public void setData(EMGroupInfo item, int position) {
+            mAvatar.setImageResource(R.drawable.ease_group_icon);
             mName.setText(item.getGroupName());
             mSignature.setVisibility(View.VISIBLE);
             mSignature.setText(item.getGroupId()+"");

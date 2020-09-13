@@ -22,7 +22,7 @@ public class GroupContactFragmentAdapter extends FragmentPagerAdapter {
     @NonNull
     @Override
     public Fragment getItem(int position) {
-        return GroupContactManageFragment.create(position);
+        return new GroupContactManageFragment();
     }
 
     @Override

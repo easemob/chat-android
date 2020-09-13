@@ -23,9 +23,9 @@ import com.scwang.smartrefresh.layout.listener.OnRefreshLoadMoreListener;
 import java.util.List;
 
 public class GroupPublicContactManageFragment extends BaseInitFragment implements OnRefreshLoadMoreListener, OnItemClickListener {
-    private SmartRefreshLayout srlRefresh;
-    private RecyclerView rvList;
-    private PublicGroupContactAdapter mAdapter;
+    public SmartRefreshLayout srlRefresh;
+    public RecyclerView rvList;
+    public PublicGroupContactAdapter mAdapter;
     private int page_size = 20;
     private String cursor;
     private GroupContactViewModel viewModel;
@@ -49,13 +49,7 @@ public class GroupPublicContactManageFragment extends BaseInitFragment implement
     }
 
     @Override
-    protected void initData() {
-        super.initData();
-        rvList.setLayoutManager(new LinearLayoutManager(mContext));
-        mAdapter = new PublicGroupContactAdapter();
-        rvList.setAdapter(mAdapter);
-        mAdapter.setOnItemClickListener(this);
-
+    protected void initViewModel() {
         viewModel = new ViewModelProvider(this).get(GroupContactViewModel.class);
         viewModel.getPublicGroupObservable().observe(getViewLifecycleOwner(), response -> {
             parseResource(response, new OnResourceParseCallback<EMCursorResult<EMGroupInfo>>() {
@@ -95,6 +89,20 @@ public class GroupPublicContactManageFragment extends BaseInitFragment implement
             });
         });
 
+    }
+
+    @Override
+    protected void initData() {
+        super.initData();
+        rvList.setLayoutManager(new LinearLayoutManager(mContext));
+        mAdapter = new PublicGroupContactAdapter();
+        rvList.setAdapter(mAdapter);
+        mAdapter.setOnItemClickListener(this);
+
+        getData();
+    }
+
+    public void getData() {
         viewModel.getPublicGroups(page_size);
     }
 
@@ -107,7 +115,7 @@ public class GroupPublicContactManageFragment extends BaseInitFragment implement
 
     @Override
     public void onRefresh(RefreshLayout refreshLayout) {
-        viewModel.getPublicGroups(page_size);
+        getData();
     }
 
     @Override

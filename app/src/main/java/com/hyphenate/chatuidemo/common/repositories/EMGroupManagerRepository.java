@@ -80,6 +80,31 @@ public class EMGroupManagerRepository extends BaseEMRepository{
     }
 
     /**
+     * 从服务器分页获取加入的群组
+     * @param pageIndex
+     * @param pageSize
+     * @return
+     */
+    public LiveData<Resource<List<EMGroup>>> getGroupListFromServer(int pageIndex, int pageSize) {
+        return new NetworkOnlyResource<List<EMGroup>>() {
+            @Override
+            protected void createCall(@NonNull ResultCallBack<LiveData<List<EMGroup>>> callBack) {
+                getGroupManager().asyncGetJoinedGroupsFromServer(pageIndex, pageSize, new EMValueCallBack<List<EMGroup>>() {
+                    @Override
+                    public void onSuccess(List<EMGroup> value) {
+                        callBack.onSuccess(createLiveData(value));
+                    }
+
+                    @Override
+                    public void onError(int error, String errorMsg) {
+                        callBack.onError(error, errorMsg);
+                    }
+                });
+            }
+        }.asLiveData();
+    }
+
+    /**
      * 获取公开群
      * @param pageSize
      * @param cursor
