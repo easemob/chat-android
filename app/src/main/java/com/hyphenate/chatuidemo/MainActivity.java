@@ -12,6 +12,7 @@ import android.view.View;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.ViewModelProvider;
 
@@ -25,6 +26,7 @@ import com.hyphenate.chatuidemo.common.permission.PermissionsResultAction;
 import com.hyphenate.chatuidemo.section.MainViewModel;
 import com.hyphenate.chatuidemo.section.base.BaseInitActivity;
 import com.hyphenate.chatuidemo.section.conference.ConferenceActivity;
+import com.hyphenate.chatuidemo.section.contact.activity.GroupContactManageActivity;
 import com.hyphenate.chatuidemo.section.contact.fragment.ContactListFragment;
 import com.hyphenate.chatuidemo.section.conversation.ConversationListFragment;
 import com.hyphenate.chatuidemo.section.discover.DiscoverFragment;
@@ -62,6 +64,19 @@ public class MainActivity extends BaseInitActivity implements BottomNavigationVi
 
     @Override
     public boolean onPrepareOptionsMenu(Menu menu) {
+        if(mCurrentFragment != null) {
+            if(mCurrentFragment instanceof ContactListFragment) {
+                menu.findItem(R.id.action_group).setVisible(false);
+                menu.findItem(R.id.action_friend).setVisible(false);
+                menu.findItem(R.id.action_search_friend).setVisible(true);
+                menu.findItem(R.id.action_search_group).setVisible(true);
+            }else {
+                menu.findItem(R.id.action_group).setVisible(true);
+                menu.findItem(R.id.action_friend).setVisible(true);
+                menu.findItem(R.id.action_search_friend).setVisible(false);
+                menu.findItem(R.id.action_search_group).setVisible(false);
+            }
+        }
         return showMenu;
     }
 
@@ -81,7 +96,11 @@ public class MainActivity extends BaseInitActivity implements BottomNavigationVi
                 GroupPrePickActivity.actionStart(mContext);
                 break;
             case R.id.action_friend :
+            case R.id.action_search_friend :
                 AddContactActivity.startAction(mContext, SearchType.CHAT);
+                break;
+            case R.id.action_search_group :
+                GroupContactManageActivity.actionStart(mContext, true);
                 break;
             case R.id.action_scan :
                 showToast("扫一扫");
@@ -127,6 +146,7 @@ public class MainActivity extends BaseInitActivity implements BottomNavigationVi
         // 可以动态显示隐藏相应tab
         //navView.getMenu().findItem(R.id.em_main_nav_me).setVisible(false);
         switchToHome();
+        checkIfShowSavedFragment(savedInstanceState);
         addTabBadge();
     }
 
@@ -220,6 +240,22 @@ public class MainActivity extends BaseInitActivity implements BottomNavigationVi
     }
 
     /**
+     * 用于展示是否已经存在的Fragment
+     * @param savedInstanceState
+     */
+    private void checkIfShowSavedFragment(Bundle savedInstanceState) {
+        if(savedInstanceState != null) {
+            String tag = savedInstanceState.getString("tag");
+            if(!TextUtils.isEmpty(tag)) {
+                Fragment fragment = getSupportFragmentManager().findFragmentByTag(tag);
+                if(fragment instanceof EaseBaseFragment) {
+                    replace((EaseBaseFragment) fragment, tag);
+                }
+            }
+        }
+    }
+
+    /**
      * 申请权限
      */
     // TODO: 2019/12/19 0019 有必要修改一下
@@ -242,31 +278,31 @@ public class MainActivity extends BaseInitActivity implements BottomNavigationVi
         if(mConversationListFragment == null) {
             mConversationListFragment = new ConversationListFragment();
         }
-        replace(mConversationListFragment);
+        replace(mConversationListFragment, "conversation");
     }
 
     private void switchToFriends() {
         if(mFriendsFragment == null) {
             mFriendsFragment = new ContactListFragment();
         }
-        replace(mFriendsFragment);
+        replace(mFriendsFragment, "contact");
     }
 
     private void switchToDiscover() {
         if(mDiscoverFragment == null) {
             mDiscoverFragment = new DiscoverFragment();
         }
-        replace(mDiscoverFragment);
+        replace(mDiscoverFragment, "discover");
     }
 
     private void switchToAboutMe() {
         if(mAboutMeFragment == null) {
             mAboutMeFragment = new AboutMeFragment();
         }
-        replace(mAboutMeFragment);
+        replace(mAboutMeFragment, "me");
     }
 
-    private void replace(EaseBaseFragment fragment) {
+    private void replace(EaseBaseFragment fragment, String tag) {
         if(mCurrentFragment != fragment) {
             FragmentTransaction t = getSupportFragmentManager().beginTransaction();
             if(mCurrentFragment != null) {
@@ -274,7 +310,7 @@ public class MainActivity extends BaseInitActivity implements BottomNavigationVi
             }
             mCurrentFragment = fragment;
             if(!fragment.isAdded()) {
-                t.add(R.id.fl_main_fragment, fragment).show(fragment).commit();
+                t.add(R.id.fl_main_fragment, fragment, tag).show(fragment).commit();
             }else {
                 t.show(fragment).commit();
             }
@@ -296,6 +332,7 @@ public class MainActivity extends BaseInitActivity implements BottomNavigationVi
                 switchToFriends();
                 mTitleBar.setTitle(getResources().getString(R.string.em_main_title_friends));
                 showNavigation = true;
+                invalidateOptionsMenu();
                 break;
             case R.id.em_main_nav_discover :
                 switchToDiscover();
@@ -321,5 +358,13 @@ public class MainActivity extends BaseInitActivity implements BottomNavigationVi
     protected void onResume() {
         super.onResume();
         DemoHelper.getInstance().showNotificationPermissionDialog();
+    }
+
+    @Override
+    protected void onSaveInstanceState(@NonNull Bundle outState) {
+        super.onSaveInstanceState(outState);
+        if(mCurrentFragment != null) {
+            outState.putString("tag", mCurrentFragment.getTag());
+        }
     }
 }

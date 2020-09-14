@@ -103,6 +103,7 @@
             app:arrowItemTitle="@string/em_about_me_feedback"
             app:arrowItemTitleSize="14sp"
             android:background="@color/white"
+            android:visibility="gone"
             android:foreground="@drawable/demo_ripple_click_gray"/>
 
         <com.hyphenate.chatuidemo.common.widget.ArrowItemView

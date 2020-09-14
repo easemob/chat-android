@@ -36,15 +36,28 @@ public class GroupContactManageActivity extends BaseInitActivity implements Ease
     private Group groupJoin;
     private Fragment joinGroupFragment;
     private Fragment publicGroupFragment;
+    private boolean showPublic;
 
     public static void actionStart(Context context) {
         Intent intent = new Intent(context, GroupContactManageActivity.class);
         context.startActivity(intent);
     }
 
+    public static void actionStart(Context context, boolean showPublic) {
+        Intent intent = new Intent(context, GroupContactManageActivity.class);
+        intent.putExtra("showPublic", showPublic);
+        context.startActivity(intent);
+    }
+
     @Override
     protected int getLayoutId() {
         return R.layout.demo_activity_friends_group_contact_manage;
+    }
+
+    @Override
+    protected void initIntent(Intent intent) {
+        super.initIntent(intent);
+        showPublic = intent.getBooleanExtra("showPublic", false);
     }
 
     @Override
@@ -69,7 +82,11 @@ public class GroupContactManageActivity extends BaseInitActivity implements Ease
     @Override
     protected void initData() {
         super.initData();
-        showJoinGroup();
+        if(showPublic) {
+            showPublicGroup();
+        }else {
+            showJoinGroup();
+        }
     }
 
     @Override
@@ -100,13 +117,9 @@ public class GroupContactManageActivity extends BaseInitActivity implements Ease
     private void switchTab() {
         if(isShowPublic()) {
             //公开群
-            mTitleBarGroupContact.getRightText().setText(R.string.em_friends_group_join);
-            mTitleBarGroupContact.setTitle(getString(R.string.em_friends_group_public));
             showPublicGroup();
         }else {
             //已加入的群
-            mTitleBarGroupContact.getRightText().setText(R.string.em_friends_group_public);
-            mTitleBarGroupContact.setTitle(getString(R.string.em_friends_group_join));
             showJoinGroup();
         }
     }
@@ -121,6 +134,8 @@ public class GroupContactManageActivity extends BaseInitActivity implements Ease
     }
 
     private void showJoinGroup() {
+        mTitleBarGroupContact.getRightText().setText(R.string.em_friends_group_public);
+        mTitleBarGroupContact.setTitle(getString(R.string.em_friends_group_join));
         joinGroupFragment = getSupportFragmentManager().findFragmentByTag("join-group");
         if(joinGroupFragment != null && joinGroupFragment.isAdded()) {
             getSupportFragmentManager().beginTransaction().show(joinGroupFragment);
@@ -131,6 +146,8 @@ public class GroupContactManageActivity extends BaseInitActivity implements Ease
     }
 
     private void showPublicGroup() {
+        mTitleBarGroupContact.getRightText().setText(R.string.em_friends_group_join);
+        mTitleBarGroupContact.setTitle(getString(R.string.em_friends_group_public));
         //设置公开群fragment
         publicGroupFragment = getSupportFragmentManager().findFragmentByTag("public-group");
         if(publicGroupFragment != null && publicGroupFragment.isAdded()) {
