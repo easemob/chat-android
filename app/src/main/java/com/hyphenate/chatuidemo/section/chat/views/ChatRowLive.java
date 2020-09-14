@@ -3,7 +3,6 @@ package com.hyphenate.chatuidemo.section.chat.views;
 import android.content.Context;
 import android.widget.TextView;
 
-import com.hyphenate.chat.EMMessage;
 import com.hyphenate.chat.EMTextMessageBody;
 import com.hyphenate.chatuidemo.R;
 import com.hyphenate.easeui.widget.chatrow.EaseChatRow;
@@ -18,7 +17,7 @@ public class ChatRowLive extends EaseChatRow {
 
     @Override
     protected void onInflateView() {
-        inflater.inflate(R.layout.demo_row_conference_invite, this);
+        inflater.inflate(R.layout.demo_row_sent_conference_invite, this);
     }
 
     @Override
