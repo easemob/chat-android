@@ -50,7 +50,7 @@
                     android:layout_marginBottom="10dp"
                     android:layout_marginLeft="@dimen/em_margin_20"
                     android:layout_marginStart="@dimen/em_margin_20"
-                    android:src="@drawable/em_group_icon"
+                    android:src="@drawable/ease_group_icon"
                     app:ease_shape_type="round"/>
 
                 <TextView

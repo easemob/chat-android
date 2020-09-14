@@ -36,6 +36,8 @@ import com.hyphenate.easeui.model.EaseEvent;
 import com.hyphenate.easeui.ui.base.EaseBaseFragment;
 import com.hyphenate.easeui.widget.EaseTitleBar;
 
+import java.lang.reflect.Method;
+
 
 public class MainActivity extends BaseInitActivity implements BottomNavigationView.OnNavigationItemSelectedListener {
     private BottomNavigationView navView;
@@ -96,7 +98,7 @@ public class MainActivity extends BaseInitActivity implements BottomNavigationVi
      */
     @Override
     public boolean onMenuOpened(int featureId, Menu menu) {
-        /*if(menu != null) {
+        if(menu != null) {
             if(menu.getClass().getSimpleName().equalsIgnoreCase("MenuBuilder")) {
                 try {
                     Method method = menu.getClass().getDeclaredMethod("setOptionalIconsVisible", Boolean.TYPE);
@@ -107,7 +109,7 @@ public class MainActivity extends BaseInitActivity implements BottomNavigationVi
                 }
 
             }
-        }*/
+        }
         return super.onMenuOpened(featureId, menu);
     }
 
