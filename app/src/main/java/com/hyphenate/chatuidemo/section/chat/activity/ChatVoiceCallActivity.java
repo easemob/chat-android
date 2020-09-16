@@ -72,7 +72,7 @@ public class ChatVoiceCallActivity extends BaseInitActivity {
 
     @Override
     public void onBackPressed() {
-        if(fragment != null) {
+        if(fragment != null && !fragment.onClickBackPress) {
             fragment.onBackPress();
         }else {
             super.onBackPressed();

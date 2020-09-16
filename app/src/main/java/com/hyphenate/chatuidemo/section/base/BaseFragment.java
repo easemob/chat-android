@@ -110,7 +110,7 @@ public class BaseFragment extends EaseBaseFragment {
         }
     }
 
-    public void hideLoading() {
+    public void dismissLoading() {
         if(mContext != null) {
             mContext.dismissLoading();
         }

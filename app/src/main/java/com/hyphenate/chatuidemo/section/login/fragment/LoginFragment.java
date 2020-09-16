@@ -125,7 +125,7 @@ public class LoginFragment extends BaseInitFragment implements View.OnClickListe
                 @Override
                 public void hideLoading() {
                     super.hideLoading();
-                    LoginFragment.this.hideLoading();
+                    LoginFragment.this.dismissLoading();
                 }
             });
 

@@ -2,8 +2,10 @@
 <selector xmlns:android="http://schemas.android.com/apk/res/android">
     <item android:state_enabled="true">
         <shape android:shape="rectangle">
-            <gradient android:startColor="@color/em_login_color_btn_enable_left"
-                android:endColor="@color/em_login_color_btn_enable_right" />
+            <gradient
+                android:startColor="@color/em_login_color_btn_enable_left"
+                android:endColor="@color/em_login_color_btn_enable_right"
+                android:angle="0"/>
             <corners android:radius="@dimen/em_login_bg_radius"/>
         </shape>
     </item>
