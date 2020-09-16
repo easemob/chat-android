@@ -9,6 +9,12 @@
         android:layout_width="match_parent"
         android:layout_height="@dimen/em_common_title_bar_height"/>
 
+    <ProgressBar
+        android:id="@+id/progress_bar"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        style="@style/Widget.AppCompat.ProgressBar.Horizontal"/>
+
     <WebView
         android:id="@+id/webview"
         android:layout_width="match_parent"

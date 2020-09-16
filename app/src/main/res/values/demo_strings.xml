@@ -37,11 +37,13 @@
     <string name="em_login_btn_info_incomplete">用户名或者密码不能为空</string>
     <string name="em_login_failed">登录失败</string>
     <string name="em_login_agreement">同意《环信服务条款》与《环信隐私协议》</string>
-    
+
     <string name="em_register_btn">注\u0020册</string>
     <string name="em_register_password_confirm_hint">确认密码</string>
     <string name="em_register_failed">注册失败</string>
     <string name="em_register_success">注册成功</string>
+    <string name="em_register_privacy_agreement_url">http://www.easemob.com/protocol</string>
+    <string name="em_register_service_agreement_url">http://www.easemob.com/protocol</string>
 
     <string name="em_password_confirm_error">两次输入的密码不一致，请重新输入!</string>
 

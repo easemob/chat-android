@@ -24,6 +24,7 @@ import androidx.lifecycle.ViewModelProvider;
 
 import com.hyphenate.chatuidemo.R;
 import com.hyphenate.chatuidemo.common.interfaceOrImplement.OnResourceParseCallback;
+import com.hyphenate.chatuidemo.section.base.WebViewActivity;
 import com.hyphenate.easeui.utils.EaseEditTextUtils;
 import com.hyphenate.chatuidemo.common.utils.ToastUtils;
 import com.hyphenate.easeui.widget.EaseTitleBar;
@@ -104,7 +105,7 @@ public class RegisterFragment extends BaseInitFragment implements TextWatcher, V
                 @Override
                 public void hideLoading() {
                     super.hideLoading();
-                    RegisterFragment.this.hideLoading();
+                    dismissLoading();
                 }
             });
 
@@ -194,7 +195,7 @@ public class RegisterFragment extends BaseInitFragment implements TextWatcher, V
         spanStr.setSpan(new MyClickableSpan() {
             @Override
             public void onClick(@NonNull View widget) {
-                showToast("跳转到服务条款");
+                WebViewActivity.actionStart(mContext, getString(R.string.em_register_service_agreement_url));
             }
         }, 2, 10, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
 
@@ -202,7 +203,7 @@ public class RegisterFragment extends BaseInitFragment implements TextWatcher, V
         spanStr.setSpan(new MyClickableSpan() {
             @Override
             public void onClick(@NonNull View widget) {
-                showToast("跳转到隐私协议");
+                WebViewActivity.actionStart(mContext, getString(R.string.em_register_privacy_agreement_url));
             }
         }, 11, spanStr.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
         return spanStr;

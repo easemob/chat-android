@@ -5,22 +5,20 @@ import android.content.Intent;
 import android.net.http.SslError;
 import android.os.Bundle;
 import android.text.TextUtils;
-import android.view.KeyEvent;
 import android.view.View;
 import android.webkit.SslErrorHandler;
 import android.webkit.WebChromeClient;
-import android.webkit.WebResourceRequest;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
+import android.widget.ProgressBar;
 
-import com.huawei.hms.framework.common.NetworkUtil;
-import com.huawei.hms.utils.NetWorkUtil;
 import com.hyphenate.chatuidemo.R;
 import com.hyphenate.easeui.widget.EaseTitleBar;
 
 public class WebViewActivity extends BaseInitActivity {
     private EaseTitleBar titleBar;
+    private ProgressBar progressBar;
     private WebView webview;
     private String url;
     private boolean showTitle;
@@ -55,6 +53,7 @@ public class WebViewActivity extends BaseInitActivity {
         super.initView(savedInstanceState);
         titleBar = findViewById(R.id.title_bar);
         webview = findViewById(R.id.webview);
+        progressBar = findViewById(R.id.progress_bar);
 
         if(!showTitle) {
             titleBar.setVisibility(View.GONE);
@@ -126,6 +125,16 @@ public class WebViewActivity extends BaseInitActivity {
             @Override
             public void onReceivedTitle(WebView view, String title) {
                 titleBar.setTitle(title);
+            }
+
+            @Override
+            public void onProgressChanged(WebView view, int newProgress) {
+                if(newProgress < 100) {
+                    progressBar.setVisibility(View.VISIBLE);
+                    progressBar.setProgress(newProgress);
+                }else {
+                    progressBar.setVisibility(View.INVISIBLE);
+                }
             }
         });
     }
