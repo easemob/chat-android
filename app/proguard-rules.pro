@@ -86,6 +86,18 @@
     void *(**On*Event);
 }
 
+#3.webview
+-keepclassmembers class fqcn.of.javascript.interface.for.webview {
+   public *;
+}
+-keepclassmembers class * extends android.webkit.webViewClient {
+    public void *(android.webkit.WebView, java.lang.String, android.graphics.Bitmap);
+    public boolean *(android.webkit.WebView, java.lang.String);
+}
+-keepclassmembers class * extends android.webkit.webViewClient {
+    public void *(android.webkit.webView, jav.lang.String);
+}
+
 #assume no side effects:删除android.util.Log输出的日志
 -assumenosideeffects class android.util.Log {
     public static *** v(...);
@@ -113,9 +125,39 @@
 -libraryjars libs/mi_push_v3.6.12.jar
 -libraryjars libs/vivo_push_v2.3.1.jar
 
+#百度地图
+-keep class com.baidu.** {*;}
+-keep class vi.com.** {*;}
+-keep class com.baidu.vi.** {*;}
+-dontwarn com.baidu.**
+
+#小米推送
+#下面可以不需要，环信SDK混淆逻辑中已包含相关
+#-keep class com.hyphenate.push.platform.mi.EMMiMsgReceiver {*;}
+#可以防止一个误报的 warning 导致无法成功编译，如果编译使用的 Android 版本是 23。
+-dontwarn com.xiaomi.push.**
+
+#Vivo推送
+-dontwarn com.vivo.push.**
+-keep class com.vivo.push.**{*;   }
+-keep class com.vivo.vms.**{*; }
+#环信SDK已添加相应的规则
+#-keep class com.hyphenate.push.platform.vivo.EMVivoMsgReceiver{*;}
+
 #OPPO推送
 -keep public class * extends android.app.Service
 -keep class com.heytap.msp.** { *;}
+
+#华为推送
+-ignorewarnings
+-keepattributes *Annotation*
+-keepattributes Exceptions
+-keepattributes InnerClasses
+-keepattributes Signature
+-keepattributes SourceFile,LineNumberTable
+-keep class com.hianalytics.android.**{*;}
+-keep class com.huawei.updatesdk.**{*;}
+-keep class com.huawei.hms.**{*;}
 
 #环信
 -keep class com.hyphenate.** {*;}
