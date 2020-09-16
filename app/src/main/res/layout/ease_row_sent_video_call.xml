@@ -62,7 +62,7 @@
             android:layout_marginRight="@dimen/ease_chat_ack_margin_bubble"
             android:clickable="true"
             android:src="@drawable/ease_msg_state_failed_resend"
-            android:visibility="visible" />
+            android:visibility="invisible" />
 
         <TextView
             android:id="@+id/tv_ack"
