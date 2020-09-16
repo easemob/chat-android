@@ -34,7 +34,7 @@
 
     <!--指定Dialog的主题-->
     <style name="Dialog.Light" parent="Theme.AppCompat.Light.Dialog">
-
+        <item name="colorAccent">@color/em_base_color_accent</item>
     </style>
 
     <style name="AppTheme.AddContactTheme" parent="AppTheme">
