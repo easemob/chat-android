@@ -12,7 +12,7 @@ import androidx.lifecycle.LiveData;
 
 import com.hyphenate.chatuidemo.common.interfaceOrImplement.ResultCallBack;
 import com.hyphenate.chatuidemo.common.net.Resource;
-import com.hyphenate.chatuidemo.common.utils.ThreadManager;
+import com.hyphenate.easeui.manager.EaseThreadManager;
 import com.hyphenate.easeui.model.VideoEntity;
 import com.hyphenate.easeui.utils.EaseCompat;
 import com.hyphenate.util.PathUtil;
@@ -35,7 +35,7 @@ public class DemoMediaManagerRepository extends BaseEMRepository {
         return new NetworkOnlyResource<List<VideoEntity>>() {
             @Override
             protected void createCall(@NonNull ResultCallBack<LiveData<List<VideoEntity>>> callBack) {
-                ThreadManager.getInstance().runOnIOThread(() -> {
+                EaseThreadManager.getInstance().runOnIOThread(() -> {
                     List<VideoEntity> mList = new ArrayList<>();
                     ContentResolver mContentResolver = context.getContentResolver();
                     Cursor cursor = mContentResolver.query(MediaStore.Video.Media.EXTERNAL_CONTENT_URI

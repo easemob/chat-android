@@ -9,7 +9,7 @@ import com.hyphenate.chat.EMChatRoom;
 import com.hyphenate.chatuidemo.DemoHelper;
 import com.hyphenate.chatuidemo.R;
 import com.hyphenate.chatuidemo.common.constant.DemoConstant;
-import com.hyphenate.chatuidemo.common.utils.ThreadManager;
+import com.hyphenate.easeui.manager.EaseThreadManager;
 import com.hyphenate.chatuidemo.section.chat.activity.ChatActivity;
 import com.hyphenate.chatuidemo.section.contact.adapter.ChatRoomContactAdapter;
 import com.hyphenate.easeui.adapter.EaseBaseRecyclerViewAdapter;
@@ -54,7 +54,7 @@ public class SearchChatRoomActivity extends SearchActivity {
             return;
         }
 
-        ThreadManager.getInstance().runOnIOThread(()-> {
+        EaseThreadManager.getInstance().runOnIOThread(()-> {
             result.clear();
             for (EMChatRoom room : mData) {
                 if(room.getName().contains(search) || room.getId().contains(search)) {

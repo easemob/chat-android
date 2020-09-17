@@ -11,7 +11,7 @@ import com.hyphenate.chatuidemo.common.livedatas.LiveDataBus;
 import com.hyphenate.chatuidemo.common.livedatas.SingleSourceLiveData;
 import com.hyphenate.chatuidemo.common.db.entity.InviteMessage.InviteMessageStatus;
 import com.hyphenate.chatuidemo.common.net.Resource;
-import com.hyphenate.chatuidemo.common.utils.ThreadManager;
+import com.hyphenate.easeui.manager.EaseThreadManager;
 import com.hyphenate.easeui.model.EaseEvent;
 import com.hyphenate.exceptions.HyphenateException;
 
@@ -62,7 +62,7 @@ public class NewFriendsViewModel extends AndroidViewModel {
     }
 
     public void agreeInvite(InviteMessage msg) {
-        ThreadManager.getInstance().runOnIOThread(() -> {
+        EaseThreadManager.getInstance().runOnIOThread(() -> {
             try {
                 if (msg.getStatusEnum() == InviteMessageStatus.BEINVITEED) {//accept be friends
                     EMClient.getInstance().contactManager().acceptInvitation(msg.getFrom());
@@ -83,7 +83,7 @@ public class NewFriendsViewModel extends AndroidViewModel {
     }
 
     public void refuseInvite(InviteMessage msg) {
-        ThreadManager.getInstance().runOnIOThread(() -> {
+        EaseThreadManager.getInstance().runOnIOThread(() -> {
             try {
                 if (msg.getStatusEnum() == InviteMessageStatus.BEINVITEED) {//decline the invitation
                     EMClient.getInstance().contactManager().declineInvitation(msg.getFrom());

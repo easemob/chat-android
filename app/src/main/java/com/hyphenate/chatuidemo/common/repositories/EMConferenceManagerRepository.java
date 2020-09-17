@@ -13,7 +13,7 @@ import com.hyphenate.chatuidemo.common.constant.DemoConstant;
 import com.hyphenate.chatuidemo.common.db.DemoDbHelper;
 import com.hyphenate.chatuidemo.common.interfaceOrImplement.ResultCallBack;
 import com.hyphenate.chatuidemo.common.net.Resource;
-import com.hyphenate.chatuidemo.common.utils.ThreadManager;
+import com.hyphenate.easeui.manager.EaseThreadManager;
 import com.hyphenate.chatuidemo.section.chat.model.KV;
 import com.hyphenate.exceptions.HyphenateException;
 import com.hyphenate.util.EasyUtils;
@@ -28,7 +28,7 @@ public class EMConferenceManagerRepository extends BaseEMRepository {
 
             @Override
             protected void createCall(@NonNull ResultCallBack<LiveData<List<KV<String, Integer>>>> callBack) {
-                ThreadManager.getInstance().runOnIOThread(() -> {
+                EaseThreadManager.getInstance().runOnIOThread(() -> {
                     List<EMConferenceMember> existMembers = getConferenceManager().getConferenceMemberList();
                     List<String> contactList = new ArrayList<>();
                     if(TextUtils.isEmpty(groupId)) {

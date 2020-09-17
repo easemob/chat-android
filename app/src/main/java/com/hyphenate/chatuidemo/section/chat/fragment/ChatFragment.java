@@ -28,7 +28,7 @@ import com.hyphenate.chatuidemo.R;
 import com.hyphenate.chatuidemo.common.constant.DemoConstant;
 import com.hyphenate.chatuidemo.common.livedatas.LiveDataBus;
 import com.hyphenate.chatuidemo.common.model.EmojiconExampleGroupData;
-import com.hyphenate.chatuidemo.common.utils.ThreadManager;
+import com.hyphenate.easeui.manager.EaseThreadManager;
 import com.hyphenate.chatuidemo.common.utils.ToastUtils;
 import com.hyphenate.chatuidemo.section.base.BaseActivity;
 import com.hyphenate.chatuidemo.section.chat.activity.ChatVideoCallActivity;
@@ -234,7 +234,7 @@ public class ChatFragment extends EaseChatFragment implements EaseChatFragment.O
                             messageChangeListener.onMessageChange(event);
                         }
                         conversation.removeMessage(message.getMsgId());
-                        refreshMessages();
+                        removeMessage(message);
                         break;
                     case R.id.action_chat_forward ://分享
                         ForwardMessageActivity.actionStart(mContext, message.getMsgId());
@@ -253,7 +253,7 @@ public class ChatFragment extends EaseChatFragment implements EaseChatFragment.O
     }
 
     private void recallMessage(EMMessage message) {
-        ThreadManager.getInstance().runOnIOThread(()-> {
+        EaseThreadManager.getInstance().runOnIOThread(()-> {
             try {
                 EMMessage msgNotification = EMMessage.createTxtSendMessage(" ",message.getTo());
                 EMTextMessageBody txtBody = new EMTextMessageBody(getResources().getString(R.string.msg_recall_by_self));

@@ -1,7 +1,6 @@
 package com.hyphenate.chatuidemo.common.repositories;
 
 import android.text.TextUtils;
-import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.LiveData;
@@ -13,7 +12,7 @@ import com.hyphenate.chatuidemo.common.db.entity.EmUserEntity;
 import com.hyphenate.chatuidemo.common.interfaceOrImplement.ResultCallBack;
 import com.hyphenate.chatuidemo.common.net.ErrorCode;
 import com.hyphenate.chatuidemo.common.net.Resource;
-import com.hyphenate.chatuidemo.common.utils.ThreadManager;
+import com.hyphenate.easeui.manager.EaseThreadManager;
 import com.hyphenate.easeui.domain.EaseUser;
 import com.hyphenate.exceptions.HyphenateException;
 
@@ -288,7 +287,7 @@ public class EMContactManagerRepository extends BaseEMRepository{
         return new NetworkOnlyResource<List<EaseUser>>() {
             @Override
             protected void createCall(@NonNull ResultCallBack<LiveData<List<EaseUser>>> callBack) {
-                ThreadManager.getInstance().runOnIOThread(()-> {
+                EaseThreadManager.getInstance().runOnIOThread(()-> {
                     List<EaseUser> easeUsers = getUserDao().loadContacts();
                     List<EaseUser> list = new ArrayList<>();
                     for (EaseUser user : easeUsers) {

@@ -15,12 +15,11 @@ import com.hyphenate.chat.EMGroupInfo;
 import com.hyphenate.chat.EMGroupOptions;
 import com.hyphenate.chat.EMMucSharedFile;
 import com.hyphenate.chatuidemo.DemoHelper;
-import com.hyphenate.chatuidemo.common.db.DemoDbHelper;
 import com.hyphenate.chatuidemo.common.db.entity.EmUserEntity;
 import com.hyphenate.chatuidemo.common.interfaceOrImplement.ResultCallBack;
 import com.hyphenate.chatuidemo.common.net.ErrorCode;
 import com.hyphenate.chatuidemo.common.net.Resource;
-import com.hyphenate.chatuidemo.common.utils.ThreadManager;
+import com.hyphenate.easeui.manager.EaseThreadManager;
 import com.hyphenate.easeui.domain.EaseUser;
 import com.hyphenate.easeui.utils.EaseCommonUtils;
 import com.hyphenate.exceptions.HyphenateException;
@@ -334,7 +333,7 @@ public class EMGroupManagerRepository extends BaseEMRepository{
 
             @Override
             protected void createCall(@NonNull ResultCallBack<LiveData<Map<String, Long>>> callBack) {
-                ThreadManager.getInstance().runOnIOThread(() -> {
+                EaseThreadManager.getInstance().runOnIOThread(() -> {
                     Map<String, Long> map = null;
                     Map<String, Long> result = new HashMap<>();
                     int pageSize = 200;
@@ -368,7 +367,7 @@ public class EMGroupManagerRepository extends BaseEMRepository{
 
             @Override
             protected void createCall(@NonNull ResultCallBack<LiveData<List<String>>> callBack) {
-                ThreadManager.getInstance().runOnIOThread(() -> {
+                EaseThreadManager.getInstance().runOnIOThread(() -> {
                     List<String> list = null;
                     List<String> result = new ArrayList<>();
                     int pageSize = 200;

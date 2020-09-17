@@ -8,7 +8,7 @@ import android.widget.TextView;
 import com.hyphenate.EMCallBack;
 import com.hyphenate.chatuidemo.DemoHelper;
 import com.hyphenate.chatuidemo.R;
-import com.hyphenate.chatuidemo.common.utils.ThreadManager;
+import com.hyphenate.easeui.manager.EaseThreadManager;
 import com.hyphenate.chatuidemo.common.widget.ArrowItemView;
 import com.hyphenate.chatuidemo.section.base.BaseInitFragment;
 import com.hyphenate.chatuidemo.section.dialog.DemoDialogFragment;
@@ -19,11 +19,8 @@ import com.hyphenate.chatuidemo.section.me.activity.DeveloperSetActivity;
 import com.hyphenate.chatuidemo.section.me.activity.FeedbackActivity;
 import com.hyphenate.chatuidemo.section.me.activity.SetIndexActivity;
 import com.hyphenate.chatuidemo.section.me.activity.UserDetailActivity;
-import com.hyphenate.easeui.ui.EaseBaiduMapActivity;
-import com.hyphenate.easeui.utils.StatusBarCompat;
 
 import androidx.constraintlayout.widget.ConstraintLayout;
-import androidx.core.content.ContextCompat;
 
 public class AboutMeFragment extends BaseInitFragment implements View.OnClickListener {
     private ConstraintLayout clUser;
@@ -103,7 +100,7 @@ public class AboutMeFragment extends BaseInitFragment implements View.OnClickLis
 
                             @Override
                             public void onError(int code, String error) {
-                                ThreadManager.getInstance().runOnMainThread(()-> showToast(error));
+                                EaseThreadManager.getInstance().runOnMainThread(()-> showToast(error));
                             }
 
                             @Override

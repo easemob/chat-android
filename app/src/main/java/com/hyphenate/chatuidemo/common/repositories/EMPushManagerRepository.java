@@ -6,10 +6,8 @@ import com.hyphenate.chat.EMPushConfigs;
 import com.hyphenate.chat.EMPushManager;
 import com.hyphenate.chatuidemo.common.interfaceOrImplement.ResultCallBack;
 import com.hyphenate.chatuidemo.common.net.Resource;
-import com.hyphenate.chatuidemo.common.utils.ThreadManager;
+import com.hyphenate.easeui.manager.EaseThreadManager;
 import com.hyphenate.exceptions.HyphenateException;
-
-import java.util.List;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.LiveData;
@@ -34,7 +32,7 @@ public class EMPushManagerRepository extends BaseEMRepository {
 
             @Override
             protected void createCall(ResultCallBack<LiveData<EMPushConfigs>> callBack) {
-                ThreadManager.getInstance().runOnIOThread(()-> {
+                EaseThreadManager.getInstance().runOnIOThread(()-> {
                     EMPushConfigs configs = null;
                     try {
                         configs = getPushManager().getPushConfigsFromServer();
@@ -64,7 +62,7 @@ public class EMPushManagerRepository extends BaseEMRepository {
         return new NetworkOnlyResource<Boolean>() {
             @Override
             protected void createCall(@NonNull ResultCallBack<LiveData<Boolean>> callBack) {
-                ThreadManager.getInstance().runOnIOThread(()-> {
+                EaseThreadManager.getInstance().runOnIOThread(()-> {
                     try {
                         EMClient.getInstance().pushManager().disableOfflinePush(start, end);
                         callBack.onSuccess(createLiveData(true));
@@ -85,7 +83,7 @@ public class EMPushManagerRepository extends BaseEMRepository {
         return new NetworkOnlyResource<Boolean>() {
             @Override
             protected void createCall(@NonNull ResultCallBack<LiveData<Boolean>> callBack) {
-                ThreadManager.getInstance().runOnIOThread(()-> {
+                EaseThreadManager.getInstance().runOnIOThread(()-> {
                     try {
                         EMClient.getInstance().pushManager().enableOfflinePush();
                         callBack.onSuccess(createLiveData(true));

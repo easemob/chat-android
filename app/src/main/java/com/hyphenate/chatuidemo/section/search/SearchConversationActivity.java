@@ -14,7 +14,7 @@ import com.hyphenate.chatuidemo.DemoHelper;
 import com.hyphenate.chatuidemo.R;
 import com.hyphenate.chatuidemo.common.db.entity.MsgTypeManageEntity;
 import com.hyphenate.chatuidemo.common.interfaceOrImplement.OnResourceParseCallback;
-import com.hyphenate.chatuidemo.common.utils.ThreadManager;
+import com.hyphenate.easeui.manager.EaseThreadManager;
 import com.hyphenate.chatuidemo.section.chat.activity.ChatActivity;
 import com.hyphenate.chatuidemo.section.conversation.adapter.HomeAdapter;
 import com.hyphenate.chatuidemo.section.conversation.viewmodel.ConversationListViewModel;
@@ -70,7 +70,7 @@ public class SearchConversationActivity extends SearchActivity {
         if(mData == null || mData.isEmpty()) {
             return;
         }
-        ThreadManager.getInstance().runOnIOThread(()-> {
+        EaseThreadManager.getInstance().runOnIOThread(()-> {
             result.clear();
             for (Object obj : mData) {
                 if(obj instanceof EMConversation) {

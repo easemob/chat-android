@@ -15,7 +15,7 @@ import com.hyphenate.chatuidemo.DemoHelper;
 import com.hyphenate.chatuidemo.common.db.DemoDbHelper;
 import com.hyphenate.chatuidemo.common.db.dao.EmUserDao;
 import com.hyphenate.chatuidemo.common.db.dao.MsgTypeManageDao;
-import com.hyphenate.chatuidemo.common.utils.ThreadManager;
+import com.hyphenate.easeui.manager.EaseThreadManager;
 
 public class BaseEMRepository {
 
@@ -129,7 +129,7 @@ public class BaseEMRepository {
      * @param runnable
      */
     public void runOnMainThread(Runnable runnable) {
-        ThreadManager.getInstance().runOnMainThread(runnable);
+        EaseThreadManager.getInstance().runOnMainThread(runnable);
     }
 
     /**
@@ -137,7 +137,7 @@ public class BaseEMRepository {
      * @param runnable
      */
     public void runOnIOThread(Runnable runnable) {
-        ThreadManager.getInstance().runOnIOThread(runnable);
+        EaseThreadManager.getInstance().runOnIOThread(runnable);
     }
 
 }

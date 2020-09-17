@@ -9,7 +9,7 @@ import androidx.lifecycle.MediatorLiveData;
 import com.hyphenate.chatuidemo.common.net.ErrorCode;
 import com.hyphenate.chatuidemo.common.net.Result;
 import com.hyphenate.chatuidemo.common.net.Resource;
-import com.hyphenate.chatuidemo.common.utils.ThreadManager;
+import com.hyphenate.easeui.manager.EaseThreadManager;
 import com.hyphenate.chatuidemo.common.interfaceOrImplement.ResultCallBack;
 import com.hyphenate.chatuidemo.common.utils.DemoLog;
 
@@ -19,11 +19,11 @@ import com.hyphenate.chatuidemo.common.utils.DemoLog;
  */
 public abstract class NetworkOnlyResource<ResultType> {
     private static final String TAG = "NetworkBoundResource";
-    private ThreadManager mThreadManager;
+    private EaseThreadManager mThreadManager;
     private final MediatorLiveData<Resource<ResultType>> result = new MediatorLiveData<>();
 
     public NetworkOnlyResource() {
-        mThreadManager = ThreadManager.getInstance();
+        mThreadManager = EaseThreadManager.getInstance();
         if(mThreadManager.isMainThread()) {
             init();
         }else {

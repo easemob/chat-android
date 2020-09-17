@@ -14,8 +14,7 @@ import com.hyphenate.chatuidemo.common.net.Resource;
 import com.hyphenate.chatuidemo.common.repositories.EMChatManagerRepository;
 import com.hyphenate.chatuidemo.common.repositories.EMGroupManagerRepository;
 import com.hyphenate.chatuidemo.common.repositories.EMPushManagerRepository;
-import com.hyphenate.chatuidemo.common.utils.ThreadManager;
-import com.hyphenate.easeui.model.EaseEvent;
+import com.hyphenate.easeui.manager.EaseThreadManager;
 import com.hyphenate.exceptions.HyphenateException;
 
 import java.util.ArrayList;
@@ -118,7 +117,7 @@ public class GroupDetailViewModel extends AndroidViewModel {
     }
 
     public void updatePushServiceForGroup(String groupId, boolean noPush) {
-        ThreadManager.getInstance().runOnIOThread(()-> {
+        EaseThreadManager.getInstance().runOnIOThread(()-> {
             List<String> onPushList = new ArrayList<>();
             onPushList.add(groupId);
             try {

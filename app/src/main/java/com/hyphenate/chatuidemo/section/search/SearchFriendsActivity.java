@@ -8,7 +8,7 @@ import android.view.View;
 
 import com.hyphenate.chatuidemo.R;
 import com.hyphenate.chatuidemo.common.db.DemoDbHelper;
-import com.hyphenate.chatuidemo.common.utils.ThreadManager;
+import com.hyphenate.easeui.manager.EaseThreadManager;
 import com.hyphenate.chatuidemo.section.contact.activity.ContactDetailActivity;
 import com.hyphenate.chatuidemo.section.contact.adapter.ContactListAdapter;
 import com.hyphenate.easeui.adapter.EaseBaseRecyclerViewAdapter;
@@ -54,7 +54,7 @@ public class SearchFriendsActivity extends SearchActivity {
             return;
         }
 
-        ThreadManager.getInstance().runOnIOThread(()-> {
+        EaseThreadManager.getInstance().runOnIOThread(()-> {
             result.clear();
             for (EaseUser user : mData) {
                 if(user.getUsername().contains(search) || user.getNickname().contains(search)) {

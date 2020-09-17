@@ -16,6 +16,7 @@ import androidx.annotation.StringRes;
 
 import com.hyphenate.chatuidemo.DemoApplication;
 import com.hyphenate.chatuidemo.R;
+import com.hyphenate.easeui.manager.EaseThreadManager;
 import com.hyphenate.easeui.utils.EaseCommonUtils;
 
 import java.lang.reflect.Field;
@@ -267,7 +268,7 @@ public class ToastUtils {
             return;
         }
         //保证在主线程中展示toast
-        ThreadManager.getInstance().runOnMainThread(() -> {
+        EaseThreadManager.getInstance().runOnMainThread(() -> {
             if(toast != null) {
                 toast.cancel();
             }

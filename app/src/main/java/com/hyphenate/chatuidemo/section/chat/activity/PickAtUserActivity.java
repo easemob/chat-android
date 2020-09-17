@@ -13,7 +13,7 @@ import com.hyphenate.chat.EMGroup;
 import com.hyphenate.chatuidemo.DemoHelper;
 import com.hyphenate.chatuidemo.R;
 import com.hyphenate.chatuidemo.common.interfaceOrImplement.OnResourceParseCallback;
-import com.hyphenate.chatuidemo.common.utils.ThreadManager;
+import com.hyphenate.easeui.manager.EaseThreadManager;
 import com.hyphenate.chatuidemo.section.base.BaseInitActivity;
 import com.hyphenate.chatuidemo.section.chat.adapter.PickUserAdapter;
 import com.hyphenate.chatuidemo.section.contact.viewmodels.GroupContactViewModel;
@@ -160,7 +160,7 @@ public class PickAtUserActivity extends BaseInitActivity implements OnRefreshLis
 
     private void finishRefresh() {
         if(mSrlRefresh != null) {
-            ThreadManager.getInstance().runOnMainThread(() -> {
+            EaseThreadManager.getInstance().runOnMainThread(() -> {
                 mSrlRefresh.finishRefresh();
             });
 

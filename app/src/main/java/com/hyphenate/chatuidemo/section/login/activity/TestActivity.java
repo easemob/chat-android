@@ -8,7 +8,7 @@ import android.widget.Button;
 import android.widget.Toast;
 
 import com.hyphenate.chatuidemo.R;
-import com.hyphenate.chatuidemo.common.utils.ThreadManager;
+import com.hyphenate.easeui.manager.EaseThreadManager;
 import com.hyphenate.chatuidemo.common.utils.ToastUtils;
 import com.hyphenate.chatuidemo.section.base.BaseInitActivity;
 
@@ -88,7 +88,7 @@ public class TestActivity extends BaseInitActivity implements View.OnClickListen
                 ToastUtils.showToast("上了飞机数量急死了都放假数量的房间数量肯定放假");
                 break;
             case R.id.btn_default_thread:
-                ThreadManager.getInstance().runOnIOThread(()->{
+                EaseThreadManager.getInstance().runOnIOThread(()->{
                     ToastUtils.showToast("上了飞机数量急死了都放假数量的房间数量肯定放假");
                 });
                 break;

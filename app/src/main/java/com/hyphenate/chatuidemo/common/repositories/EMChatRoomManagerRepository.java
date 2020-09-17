@@ -11,12 +11,11 @@ import com.hyphenate.EMValueCallBack;
 import com.hyphenate.chat.EMChatRoom;
 import com.hyphenate.chat.EMClient;
 import com.hyphenate.chat.EMCursorResult;
-import com.hyphenate.chat.EMGroup;
 import com.hyphenate.chat.EMPageResult;
 import com.hyphenate.chatuidemo.common.interfaceOrImplement.ResultCallBack;
 import com.hyphenate.chatuidemo.common.net.ErrorCode;
 import com.hyphenate.chatuidemo.common.net.Resource;
-import com.hyphenate.chatuidemo.common.utils.ThreadManager;
+import com.hyphenate.easeui.manager.EaseThreadManager;
 import com.hyphenate.exceptions.HyphenateException;
 
 import java.util.ArrayList;
@@ -96,7 +95,7 @@ public class EMChatRoomManagerRepository extends BaseEMRepository{
         return new NetworkOnlyResource<List<String>>() {
             @Override
             protected void createCall(@NonNull ResultCallBack<LiveData<List<String>>> callBack) {
-                ThreadManager.getInstance().runOnIOThread(()-> {
+                EaseThreadManager.getInstance().runOnIOThread(()-> {
                     List<String> memberList = new ArrayList<>();
                     try {
                         EMChatRoom chatRoom = getChatRoomManager().fetchChatRoomFromServer(roomId);
@@ -280,7 +279,7 @@ public class EMChatRoomManagerRepository extends BaseEMRepository{
 
             @Override
             protected void createCall(@NonNull ResultCallBack<LiveData<Map<String, Long>>> callBack) {
-                ThreadManager.getInstance().runOnIOThread(() -> {
+                EaseThreadManager.getInstance().runOnIOThread(() -> {
                     Map<String, Long> map = null;
                     Map<String, Long> result = new HashMap<>();
                     int pageSize = 200;
@@ -314,7 +313,7 @@ public class EMChatRoomManagerRepository extends BaseEMRepository{
 
             @Override
             protected void createCall(@NonNull ResultCallBack<LiveData<List<String>>> callBack) {
-                ThreadManager.getInstance().runOnIOThread(() -> {
+                EaseThreadManager.getInstance().runOnIOThread(() -> {
                     List<String> list = null;
                     List<String> result = new ArrayList<>();
                     int pageSize = 200;
