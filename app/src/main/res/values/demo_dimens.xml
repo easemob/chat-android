@@ -56,6 +56,8 @@
     <dimen name="recall_size_12">12sp</dimen>
     <dimen name="recall_size_8">8sp</dimen>
 
+    <dimen name="activity_animation_duration">5000</dimen>
+
 
     <dimen name="adaptive_1dp">1dp</dimen>
     <dimen name="adaptive_2dp">2dp</dimen>

@@ -73,7 +73,7 @@ public class PushAndMessageHelper {
     private static boolean isDuringMediaCommunication() {
         UserActivityLifecycleCallbacks lifecycle = DemoApplication.getInstance().getLifecycleCallbacks();
         String topClassName = lifecycle.current().getClass().getSimpleName();
-        if (lifecycle.count() > 0 && ("LiveActivity".equals(topClassName) || "ConferenceActivity".equals(topClassName))) {
+        if (lifecycle.count() > 0 && (LiveActivity.class.getSimpleName().equals(topClassName) || ConferenceActivity.class.getSimpleName().equals(topClassName))) {
             return true;
         }
         return false;

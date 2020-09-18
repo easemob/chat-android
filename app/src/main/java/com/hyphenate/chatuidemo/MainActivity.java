@@ -25,6 +25,7 @@ import com.hyphenate.chatuidemo.common.permission.PermissionsManager;
 import com.hyphenate.chatuidemo.common.permission.PermissionsResultAction;
 import com.hyphenate.chatuidemo.section.MainViewModel;
 import com.hyphenate.chatuidemo.section.base.BaseInitActivity;
+import com.hyphenate.chatuidemo.section.chat.ChatPresenter;
 import com.hyphenate.chatuidemo.section.conference.ConferenceActivity;
 import com.hyphenate.chatuidemo.section.contact.activity.GroupContactManageActivity;
 import com.hyphenate.chatuidemo.section.contact.fragment.ContactListFragment;
@@ -162,7 +163,7 @@ public class MainActivity extends BaseInitActivity implements BottomNavigationVi
         initViewModel();
         requestPermissions();
         checkUnreadMsg();
-
+        ChatPresenter.getInstance().init();
         // 获取华为 HMS 推送 token
         HMSPushHelper.getInstance().getHMSToken(this);
     }

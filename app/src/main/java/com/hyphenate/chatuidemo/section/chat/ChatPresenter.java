@@ -1,6 +1,8 @@
 package com.hyphenate.chatuidemo.section.chat;
 
+import android.app.Activity;
 import android.content.Context;
+import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
 import android.text.TextUtils;
@@ -26,6 +28,7 @@ import com.hyphenate.chat.EMTextMessageBody;
 import com.hyphenate.chat.adapter.EMAChatRoomManagerListener;
 import com.hyphenate.chatuidemo.DemoApplication;
 import com.hyphenate.chatuidemo.DemoHelper;
+import com.hyphenate.chatuidemo.MainActivity;
 import com.hyphenate.chatuidemo.R;
 import com.hyphenate.chatuidemo.common.constant.DemoConstant;
 import com.hyphenate.chatuidemo.common.db.DemoDbHelper;
@@ -50,15 +53,20 @@ import java.util.Queue;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
+/**
+ * 主要用于chat过程中的全局监听，并对相应的事件进行处理
+ */
 public class ChatPresenter extends EaseChatPresenter {
     private static final String TAG = ChatPresenter.class.getSimpleName();
+    private static final int HANDLER_SHOW_TOAST = 0;
+    private static final int HANDLER_START_CONFERENCE = 1;
     private static ChatPresenter instance;
     private LiveDataBus messageChangeLiveData;
     private boolean isGroupsSyncedWithServer = false;
     private boolean isContactsSyncedWithServer = false;
     private boolean isBlackListSyncedWithServer = false;
     private Context appContext;
-    protected android.os.Handler handler;
+    protected Handler handler;
 
     Queue<String> msgQueue = new ConcurrentLinkedQueue<>();
 
@@ -74,11 +82,10 @@ public class ChatPresenter extends EaseChatPresenter {
         DemoHelper.getInstance().getGroupManager().addGroupChangeListener(new ChatGroupListener());
         //添加联系人监听
         DemoHelper.getInstance().getContactManager().setContactListener(new ChatContactListener());
-        //添加会议监听
-        DemoHelper.getInstance().getConferenceManager().addConferenceListener(new ChatConferenceListener());
         //添加聊天室监听
         DemoHelper.getInstance().getChatroomManager().addChatRoomChangeListener(new ChatRoomListener());
-
+        //添加会议监听
+        DemoHelper.getInstance().getConferenceManager().addConferenceListener(new ChatConferenceListener());
     }
 
     public static ChatPresenter getInstance() {
@@ -92,12 +99,44 @@ public class ChatPresenter extends EaseChatPresenter {
         return instance;
     }
 
+    /**
+     * 将需要登录成功进入MainActivity中初始化的逻辑，放到此处进行处理
+     */
+    public void init() {
+
+    }
+
     public void initHandler(Looper looper) {
-        handler = new android.os.Handler(looper) {
+        handler = new Handler(looper) {
             @Override
             public void handleMessage(Message msg) {
-                String str = (String)msg.obj;
-                Toast.makeText(appContext, str, Toast.LENGTH_LONG).show();
+                Object obj = msg.obj;
+                switch (msg.what) {
+                    case HANDLER_SHOW_TOAST :
+                        if(obj instanceof String) {
+                            String str = (String) obj;
+                            Toast.makeText(appContext, str, Toast.LENGTH_LONG).show();
+                        }
+                        break;
+                    case HANDLER_START_CONFERENCE:
+                        if(!isAppLaunchMain()) {
+                            Message message = Message.obtain(handler, HANDLER_START_CONFERENCE, obj);
+                            handler.sendMessageDelayed(message, 500);
+                            return;
+                        }
+                        if(obj instanceof EMMessage) {
+                            startConference((EMMessage) obj);
+                            // in background, do not refresh UI, notify it in notification bar
+                            if(!DemoApplication.getInstance().getLifecycleCallbacks().isFront()){
+                                getNotifier().notify((EMMessage) obj);
+                            }
+                            //notify new message
+                            getNotifier().vibrateAndPlayTone((EMMessage) obj);
+                        }
+                        break;
+                }
+
+
             }
         };
         while (!msgQueue.isEmpty()) {
@@ -112,7 +151,7 @@ public class ChatPresenter extends EaseChatPresenter {
     void showToast(final String message) {
         Log.d(TAG, "receive invitation to join the group：" + message);
         if (handler != null) {
-            Message msg = Message.obtain(handler, 0, message);
+            Message msg = Message.obtain(handler, HANDLER_SHOW_TOAST, message);
             handler.sendMessage(msg);
         } else {
             msgQueue.add(message);
@@ -129,10 +168,13 @@ public class ChatPresenter extends EaseChatPresenter {
             EMLog.d(TAG, "onMessageReceived: " + message.getType());
             // 判断一下是否是会议邀请
             String confId = message.getStringAttribute(DemoConstant.MSG_ATTR_CONF_ID, "");
-            if(!"".equals(confId)){
-                String password = message.getStringAttribute(DemoConstant.MSG_ATTR_CONF_PASS, "");
-                String extension = message.getStringAttribute(DemoConstant.MSG_ATTR_EXTENSION, "");
-                PushAndMessageHelper.goConference(context, confId, password, extension);
+            if(!TextUtils.isEmpty(confId)){
+                if(!isAppLaunchMain()) {
+                    Message obtain = Message.obtain(handler, HANDLER_START_CONFERENCE, message);
+                    handler.sendMessageDelayed(obtain, 500);
+                    return;
+                }
+                startConference(message);
             }
             // in background, do not refresh UI, notify it in notification bar
             if(!DemoApplication.getInstance().getLifecycleCallbacks().isFront()){
@@ -141,6 +183,29 @@ public class ChatPresenter extends EaseChatPresenter {
             //notify new message
             getNotifier().vibrateAndPlayTone(message);
         }
+    }
+
+    private void startConference(EMMessage message) {
+        String confId = message.getStringAttribute(DemoConstant.MSG_ATTR_CONF_ID, "");
+        String password = message.getStringAttribute(DemoConstant.MSG_ATTR_CONF_PASS, "");
+        String extension = message.getStringAttribute(DemoConstant.MSG_ATTR_EXTENSION, "");
+        PushAndMessageHelper.goConference(context, confId, password, extension);
+    }
+
+    /**
+     * 判断是否已经启动了MainActivity
+     * @return
+     */
+    private synchronized boolean isAppLaunchMain() {
+        List<Activity> activities = DemoApplication.getInstance().getLifecycleCallbacks().getActivityList();
+        if(activities != null && !activities.isEmpty()) {
+            for(int i = activities.size() - 1; i >= 0 ; i--) {
+                if(activities.get(i) instanceof MainActivity) {
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 
     @Override
@@ -177,22 +242,22 @@ public class ChatPresenter extends EaseChatPresenter {
 
         @Override
         public void onConnected() {
-            EMLog.i("TAG", "onConnected");
+            EMLog.i(TAG, "onConnected");
             if(!DemoHelper.getInstance().isLoggedIn()) {
                 return;
             }
             if(!isGroupsSyncedWithServer) {
-                Log.i(TAG, "isGroupsSyncedWithServer");
+                EMLog.i(TAG, "isGroupsSyncedWithServer");
                 new EMGroupManagerRepository().getAllGroups();
                 isGroupsSyncedWithServer = true;
             }
             if(!isContactsSyncedWithServer) {
-                Log.i(TAG, "isContactsSyncedWithServer");
+                EMLog.i(TAG, "isContactsSyncedWithServer");
                 new EMContactManagerRepository().getContactList();
                 isContactsSyncedWithServer = true;
             }
             if(!isBlackListSyncedWithServer) {
-                Log.i(TAG, "isBlackListSyncedWithServer");
+                EMLog.i(TAG, "isBlackListSyncedWithServer");
                 new EMContactManagerRepository().getBlackContactList();
                 isBlackListSyncedWithServer = true;
             }
@@ -204,7 +269,7 @@ public class ChatPresenter extends EaseChatPresenter {
          */
         @Override
         public void onDisconnected(int error) {
-            EMLog.i("TAG", "onDisconnected ="+error);
+            EMLog.i(TAG, "onDisconnected ="+error);
             String event = null;
             if (error == EMError.USER_REMOVED) {
                 event = DemoConstant.ACCOUNT_REMOVED;

@@ -145,7 +145,7 @@ public class FullEditDialogFragment extends BaseDialogFragment implements EaseTi
         private String confirmText;
         private OnSaveClickListener listener;
         private int confirmColor;
-        private boolean enableEdit;
+        private boolean enableEdit = true;//默认可以编辑
         private Bundle bundle;
 
         public Builder(BaseActivity context) {
