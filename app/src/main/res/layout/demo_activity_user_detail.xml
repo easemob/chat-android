@@ -53,7 +53,7 @@
         android:layout_marginEnd="@dimen/em_margin_15"
         android:background="@drawable/demo_default_divider_list"/>
 
-    <com.hyphenate.chatuidemo.common.widget.ArrowItemView
+    <com.hyphenate.easeim.common.widget.ArrowItemView
         android:id="@+id/item_hx_id"
         android:layout_width="match_parent"
         android:layout_height="@dimen/em_common_item_height"
@@ -61,7 +61,7 @@
         android:background="@color/white"
         app:arrowItemShowArrow="false"/>
 
-    <com.hyphenate.chatuidemo.common.widget.ArrowItemView
+    <com.hyphenate.easeim.common.widget.ArrowItemView
         android:id="@+id/item_nickname"
         android:layout_width="match_parent"
         android:layout_height="@dimen/em_common_item_height"

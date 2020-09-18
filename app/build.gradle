@@ -2,6 +2,11 @@ apply plugin: 'com.android.application'
 apply plugin: 'com.huawei.agconnect'
 
 android {
+    //加载资源
+    Properties properties = new Properties()
+    InputStream inputStream = project.rootProject.file('local.properties').newDataInputStream() ;
+    properties.load( inputStream )
+
     signingConfigs {
         debug {
             storeFile file('/keystore/sdkdemo.jks')
@@ -13,9 +18,7 @@ android {
     compileSdkVersion 29
     buildToolsVersion "29.0.3"
     defaultConfig {
-        applicationId "com.hyphenate.chatuidemo"
-        //测试oppo离线消息，需修改包名如下，如果配置了FCM推送，同时替换google-services.json 中的 package_name 字段
-        //applicationId "com.hyphenate.chatuidemo.push"
+        applicationId "com.hyphenate.easeim"
         minSdkVersion 19
         targetSdkVersion 29
         versionCode 71
@@ -34,6 +37,19 @@ android {
                         "room.expandProjection":"true"]
             }
         }
+
+        manifestPlaceholders = [EASEMOB_APPKEY: properties.getProperty("EASEMOB_APPKEY"),
+                                VIVO_PUSH_APPKEY: properties.getProperty("VIVO_PUSH_APPKEY"),
+                                VIVO_PUSH_APPID: properties.getProperty("VIVO_PUSH_APPID"),
+                                MEIZU_PUSH_APPKEY: properties.getProperty("MEIZU_PUSH_APPKEY"),
+                                MEIZU_PUSH_APPID: properties.getProperty("MEIZU_PUSH_APPID"),
+                                MI_PUSH_APPKEY: properties.getProperty("MI_PUSH_APPKEY"),
+                                MI_PUSH_APPID: properties.getProperty("MI_PUSH_APPID"),
+                                OPPO_PUSH_APPKEY: properties.getProperty("OPPO_PUSH_APPKEY"),
+                                OPPO_PUSH_APPSECRET: properties.getProperty("OPPO_PUSH_APPSECRET"),
+                                FCM_SENDERID: properties.getProperty("FCM_SENDERID"),
+                                BAIDU_LOCATION_APPKEY: properties.getProperty("BAIDU_LOCATION_APPKEY"),
+        ]
     }
     buildTypes {
         release {
@@ -44,6 +60,19 @@ android {
         debug {
             //applicationIdSuffix ".debug"
             signingConfig signingConfigs.debug
+        }
+    }
+
+    flavorDimensions "min"
+    productFlavors {
+        dev {
+            minSdkVersion 21
+            dimension "min"
+        }
+
+        prod {
+            minSdkVersion 19
+            dimension "min"
         }
     }
 

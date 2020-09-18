@@ -16,7 +16,7 @@
         app:titleBarRightTitle="@string/submit"
         android:background="@color/white"/>
 
-    <com.hyphenate.chatuidemo.common.widget.ArrowItemView
+    <com.hyphenate.easeim.common.widget.ArrowItemView
         android:id="@+id/item_question_type"
         android:layout_width="match_parent"
         android:layout_height="@dimen/em_common_item_height"
@@ -39,7 +39,7 @@
         android:gravity="left"
         android:textSize="14sp"/>
 
-    <com.hyphenate.chatuidemo.common.widget.ArrowItemView
+    <com.hyphenate.easeim.common.widget.ArrowItemView
         android:id="@+id/item_email"
         android:layout_width="match_parent"
         android:layout_height="@dimen/em_common_item_height"
@@ -48,7 +48,7 @@
         app:arrowItemContent="@string/em_feedback_email_hint"
         android:background="@color/white"/>
 
-    <com.hyphenate.chatuidemo.common.widget.ArrowItemView
+    <com.hyphenate.easeim.common.widget.ArrowItemView
         android:id="@+id/item_qq"
         android:layout_width="match_parent"
         android:layout_height="@dimen/em_common_item_height"

@@ -23,7 +23,7 @@
         android:textColor="@color/black"
         android:gravity="center_vertical"/>
 
-    <com.hyphenate.chatuidemo.common.widget.SwitchItemView
+    <com.hyphenate.easeim.common.widget.SwitchItemView
         android:id="@+id/rl_switch_notification"
         android:layout_width="match_parent"
         android:layout_height="@dimen/em_common_item_height"
@@ -31,7 +31,7 @@
         app:switchItemShowDivider="true"
         android:background="@color/white"/>
 
-    <com.hyphenate.chatuidemo.common.widget.SwitchItemView
+    <com.hyphenate.easeim.common.widget.SwitchItemView
         android:id="@+id/rl_switch_sound"
         android:layout_width="match_parent"
         android:layout_height="@dimen/em_common_item_height"
@@ -39,7 +39,7 @@
         app:switchItemShowDivider="true"
         android:background="@color/white"/>
 
-    <com.hyphenate.chatuidemo.common.widget.SwitchItemView
+    <com.hyphenate.easeim.common.widget.SwitchItemView
         android:id="@+id/rl_switch_vibrate"
         android:layout_width="match_parent"
         android:layout_height="@dimen/em_common_item_height"
@@ -47,7 +47,7 @@
         app:switchItemShowDivider="true"
         android:background="@color/white"/>
     
-    <com.hyphenate.chatuidemo.common.widget.ArrowItemView
+    <com.hyphenate.easeim.common.widget.ArrowItemView
         android:id="@+id/item_push_message_style"
         android:layout_width="match_parent"
         android:layout_height="@dimen/em_common_item_height"

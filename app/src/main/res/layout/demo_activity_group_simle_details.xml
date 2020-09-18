@@ -14,7 +14,7 @@
         app:titleBarTitle="@string/em_public_group_information"
         android:background="@color/white"/>
 
-    <com.hyphenate.chatuidemo.common.widget.ArrowItemView
+    <com.hyphenate.easeim.common.widget.ArrowItemView
         android:id="@+id/item_group_name"
         android:layout_width="match_parent"
         android:layout_height="@dimen/em_common_item_height"
@@ -22,7 +22,7 @@
         app:arrowItemTitle="@string/group_name"
         android:background="@color/white"/>
 
-    <com.hyphenate.chatuidemo.common.widget.ArrowItemView
+    <com.hyphenate.easeim.common.widget.ArrowItemView
         android:id="@+id/item_group_owner"
         android:layout_width="match_parent"
         android:layout_height="@dimen/em_common_item_height"

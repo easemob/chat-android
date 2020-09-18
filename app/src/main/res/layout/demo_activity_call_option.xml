@@ -111,7 +111,7 @@
                 android:layout_marginRight="10dp"
                 android:background="@color/btn_gray_normal" />
 
-            <com.hyphenate.chatuidemo.common.widget.SwitchItemView
+            <com.hyphenate.easeim.common.widget.SwitchItemView
                 android:id="@+id/rl_switch_external_audioInput_resolution"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/em_common_item_height"
@@ -214,35 +214,35 @@
 
             </LinearLayout>
 
-            <com.hyphenate.chatuidemo.common.widget.SwitchItemView
+            <com.hyphenate.easeim.common.widget.SwitchItemView
                 android:id="@+id/rl_switch_fix_video_resolution"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/em_common_item_height"
                 app:switchItemTitle="@string/demo_call_options_fix_video_resolution"
                 app:switchItemTitleSize="14sp"/>
 
-            <com.hyphenate.chatuidemo.common.widget.SwitchItemView
+            <com.hyphenate.easeim.common.widget.SwitchItemView
                 android:id="@+id/rl_switch_offline_call_push"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/em_common_item_height"
                 app:switchItemTitle="@string/offline_call_push"
                 app:switchItemTitleSize="14sp"/>
 
-            <com.hyphenate.chatuidemo.common.widget.SwitchItemView
+            <com.hyphenate.easeim.common.widget.SwitchItemView
                 android:id="@+id/rl_switch_record_on_server"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/em_common_item_height"
                 app:switchItemTitle="@string/demo_call_options_record_on_server"
                 app:switchItemTitleSize="14sp"/>
 
-            <com.hyphenate.chatuidemo.common.widget.SwitchItemView
+            <com.hyphenate.easeim.common.widget.SwitchItemView
                 android:id="@+id/rl_switch_merge_stream"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/em_common_item_height"
                 app:switchItemTitle="@string/demo_call_options_merge_stream"
                 app:switchItemTitleSize="14sp"/>
 
-            <com.hyphenate.chatuidemo.common.widget.SwitchItemView
+            <com.hyphenate.easeim.common.widget.SwitchItemView
                 android:id="@+id/rl_switch_water_mark"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/em_common_item_height"

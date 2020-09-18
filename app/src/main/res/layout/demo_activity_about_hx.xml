@@ -41,7 +41,7 @@
 
     </LinearLayout>
 
-    <com.hyphenate.chatuidemo.common.widget.ArrowItemView
+    <com.hyphenate.easeim.common.widget.ArrowItemView
         android:id="@+id/item_product"
         android:layout_width="match_parent"
         android:layout_height="@dimen/em_common_item_height"
@@ -55,7 +55,7 @@
         android:foreground="@drawable/demo_ripple_click_gray"
         android:background="@color/white"/>
 
-    <com.hyphenate.chatuidemo.common.widget.ArrowItemView
+    <com.hyphenate.easeim.common.widget.ArrowItemView
         android:id="@+id/item_company"
         android:layout_width="match_parent"
         android:layout_height="@dimen/em_common_item_height"

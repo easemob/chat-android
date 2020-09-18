@@ -18,7 +18,7 @@
         app:layout_constraintRight_toRightOf="parent"
         android:background="@color/white"/>
     
-    <com.hyphenate.chatuidemo.common.widget.ArrowItemView
+    <com.hyphenate.easeim.common.widget.ArrowItemView
         android:id="@+id/item_group_name"
         android:layout_width="0dp"
         android:layout_height="@dimen/em_common_item_height"
@@ -28,7 +28,7 @@
         app:arrowItemTitle="@string/em_group_new_name"
         android:background="@color/white"/>
 
-    <com.hyphenate.chatuidemo.common.widget.ArrowItemView
+    <com.hyphenate.easeim.common.widget.ArrowItemView
         android:id="@+id/item_group_profile"
         android:layout_width="0dp"
         android:layout_height="@dimen/em_common_item_height"
@@ -38,7 +38,7 @@
         app:arrowItemTitle="@string/em_group_new_profile"
         android:background="@color/white"/>
 
-    <com.hyphenate.chatuidemo.common.widget.ArrowItemView
+    <com.hyphenate.easeim.common.widget.ArrowItemView
         android:id="@+id/item_group_max_users"
         android:layout_width="0dp"
         android:layout_height="@dimen/em_common_item_height"
@@ -48,7 +48,7 @@
         app:arrowItemTitle="@string/em_group_max_users"
         android:background="@color/white"/>
 
-    <com.hyphenate.chatuidemo.common.widget.SwitchItemView
+    <com.hyphenate.easeim.common.widget.SwitchItemView
         android:id="@+id/item_switch_public"
         android:layout_width="0dp"
         android:layout_height="@dimen/em_common_item_height"
@@ -60,7 +60,7 @@
         app:switchItemHint="@string/em_group_new_if_public_uncheck_hint"
         android:background="@color/white"/>
 
-    <com.hyphenate.chatuidemo.common.widget.SwitchItemView
+    <com.hyphenate.easeim.common.widget.SwitchItemView
         android:id="@+id/item_switch_invite"
         android:layout_width="0dp"
         android:layout_height="@dimen/em_common_item_height"
@@ -72,7 +72,7 @@
         android:background="@color/white"/>
 
 
-    <com.hyphenate.chatuidemo.common.widget.ArrowItemView
+    <com.hyphenate.easeim.common.widget.ArrowItemView
         android:id="@+id/item_group_members"
         android:layout_width="0dp"
         android:layout_height="@dimen/em_common_item_height"

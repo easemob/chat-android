@@ -8,7 +8,7 @@
     android:fitsSystemWindows="false">
 
     <!--多人会议时显示成员画面控件容器-->
-    <com.hyphenate.chatuidemo.common.widget.conference.MemberViewGroup
+    <com.hyphenate.easeim.common.widget.conference.MemberViewGroup
         android:id="@+id/surface_view_group"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -20,7 +20,7 @@
         android:layout_height="match_parent"
         android:orientation="vertical">
 
-        <com.hyphenate.chatuidemo.common.widget.SquareRelativeLayout
+        <com.hyphenate.easeim.common.widget.SquareRelativeLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
@@ -118,7 +118,7 @@
                         android:textStyle="bold" />
                 </RelativeLayout>
             </RelativeLayout>
-        </com.hyphenate.chatuidemo.common.widget.SquareRelativeLayout>
+        </com.hyphenate.easeim.common.widget.SquareRelativeLayout>
 
         <RelativeLayout
             android:layout_width="match_parent"
@@ -130,7 +130,7 @@
                 android:layout_height="match_parent"
                 android:background="@color/bg_tools_panel">
 
-                <com.hyphenate.chatuidemo.common.widget.EasePageIndicator
+                <com.hyphenate.easeim.common.widget.EasePageIndicator
                     android:id="@+id/indicator"
                     android:layout_width="match_parent"
                     android:layout_height="10dip"
@@ -145,7 +145,7 @@
                     android:layout_centerInParent="true" />
             </RelativeLayout>
 
-            <com.hyphenate.chatuidemo.common.widget.DebugPanelView
+            <com.hyphenate.easeim.common.widget.DebugPanelView
                 android:id="@+id/layout_debug_panel"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
@@ -153,7 +153,7 @@
         </RelativeLayout>
     </LinearLayout>
 
-    <com.hyphenate.chatuidemo.common.widget.conference.IncomingCallView
+    <com.hyphenate.easeim.common.widget.conference.IncomingCallView
         android:id="@+id/incoming_call_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.hyphenate.chatuidemo">
+    package="com.hyphenate.easeim">
 
     <!-- 允许程序改变网络连接状态 -->
     <uses-permission android:name="android.permission.CHANGE_NETWORK_STATE" />
@@ -105,7 +105,7 @@
         <!--<uses-library android:name="org.apache.http.legacy" android:required="false"/>-->
 
         <!-- 设置环信应用的AppKey -->
-        <meta-data android:name="EASEMOB_APPKEY"  android:value="easemob-demo#chatdemoui" />
+        <meta-data android:name="EASEMOB_APPKEY"  android:value="${EASEMOB_APPKEY}" />
         <!-- 声明SDK所需的service SDK核心功能-->
         <service
             android:name="com.hyphenate.chat.EMChatService"
@@ -127,7 +127,7 @@
             </intent-filter>
         </receiver>
 
-        <!-- 适配Android 7.0, 需要将下方的com.hyphenate.chatuidemo替换为你的app包名 -->
+        <!-- 适配Android 7.0, 需要将下方的com.hyphenate.easeim替换为你的app包名 -->
         <provider
             android:name="androidx.core.content.FileProvider"
             android:authorities="${applicationId}.fileProvider"
@@ -173,10 +173,10 @@
         <!--推送配置项-->
         <meta-data
             android:name="com.vivo.push.api_key"
-            android:value="9b74dbfc-55c4-4441-9d0a-561ff21addc7" />
+            android:value="${VIVO_PUSH_APPKEY}" />
         <meta-data
             android:name="com.vivo.push.app_id"
-            android:value="11025" />
+            android:value="${VIVO_PUSH_APPID}" />
 
         <receiver android:name="com.hyphenate.push.platform.vivo.EMVivoMsgReceiver" >
             <intent-filter>
@@ -288,7 +288,7 @@
             android:process=":remote" />
         <meta-data
             android:name="com.baidu.lbsapi.API_KEY"
-            android:value="3ecea51f560650b1ed8a4b99808f52e8" />
+            android:value="${BAIDU_LOCATION_APPKEY}" />
         <!--主页-->
         <activity
             android:name=".MainActivity"

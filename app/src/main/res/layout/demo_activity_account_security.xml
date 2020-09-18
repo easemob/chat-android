@@ -17,7 +17,7 @@
         app:titleBarDisplayHomeAsUpEnabled="true"/>
 
 
-    <com.hyphenate.chatuidemo.common.widget.ArrowItemView
+    <com.hyphenate.easeim.common.widget.ArrowItemView
         android:id="@+id/item_equipments"
         android:layout_width="0dp"
         android:layout_height="@dimen/em_common_item_height"

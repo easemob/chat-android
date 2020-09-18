@@ -36,7 +36,7 @@
             android:background="@drawable/demo_default_divider_list" />
     </LinearLayout>
 
-    <com.hyphenate.chatuidemo.common.widget.SwitchItemView
+    <com.hyphenate.easeim.common.widget.SwitchItemView
         android:id="@+id/switch_push_no_disturb"
         android:layout_width="match_parent"
         android:layout_height="@dimen/em_common_item_height"
@@ -45,7 +45,7 @@
         app:switchItemClickable="false"
         android:background="@color/white"/>
 
-    <com.hyphenate.chatuidemo.common.widget.ArrowItemView
+    <com.hyphenate.easeim.common.widget.ArrowItemView
         android:id="@+id/item_push_time_range"
         android:layout_width="match_parent"
         android:layout_height="@dimen/em_common_item_height"
@@ -55,7 +55,7 @@
         android:visibility="gone"
         android:background="@color/white"/>
 
-    <com.hyphenate.chatuidemo.common.widget.SwitchItemView
+    <com.hyphenate.easeim.common.widget.SwitchItemView
         android:id="@+id/rl_custom_server"
         android:layout_width="match_parent"
         android:layout_height="@dimen/em_common_item_height"
