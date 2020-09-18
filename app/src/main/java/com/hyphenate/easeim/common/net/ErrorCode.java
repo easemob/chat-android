@@ -78,6 +78,7 @@ public class ErrorCode extends EMError {
         EM_ERR_GROUP_NO_MEMBERS(ErrorCode.EM_ERR_GROUP_NO_MEMBERS, R.string.em_error_group_no_members),
         EM_DELETE_CONVERSATION_ERROR(ErrorCode.EM_DELETE_CONVERSATION_ERROR, R.string.ease_delete_conversation_error),
         EM_DELETE_SYS_MSG_ERROR(ErrorCode.EM_DELETE_SYS_MSG_ERROR, R.string.em_delete_sys_msg_error),
+        USER_ALREADY_EXIST(ErrorCode.USER_ALREADY_EXIST, R.string.em_error_user_already_exist),
         UNKNOWN_ERROR(-9999, 0);
 
 

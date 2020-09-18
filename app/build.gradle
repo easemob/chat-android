@@ -41,14 +41,7 @@ android {
         manifestPlaceholders = [EASEMOB_APPKEY: properties.getProperty("EASEMOB_APPKEY"),
                                 VIVO_PUSH_APPKEY: properties.getProperty("VIVO_PUSH_APPKEY"),
                                 VIVO_PUSH_APPID: properties.getProperty("VIVO_PUSH_APPID"),
-                                MEIZU_PUSH_APPKEY: properties.getProperty("MEIZU_PUSH_APPKEY"),
-                                MEIZU_PUSH_APPID: properties.getProperty("MEIZU_PUSH_APPID"),
-                                MI_PUSH_APPKEY: properties.getProperty("MI_PUSH_APPKEY"),
-                                MI_PUSH_APPID: properties.getProperty("MI_PUSH_APPID"),
-                                OPPO_PUSH_APPKEY: properties.getProperty("OPPO_PUSH_APPKEY"),
-                                OPPO_PUSH_APPSECRET: properties.getProperty("OPPO_PUSH_APPSECRET"),
-                                FCM_SENDERID: properties.getProperty("FCM_SENDERID"),
-                                BAIDU_LOCATION_APPKEY: properties.getProperty("BAIDU_LOCATION_APPKEY"),
+                                BAIDU_LOCATION_APPKEY: properties.getProperty("BAIDU_LOCATION_APPKEY")
         ]
     }
     buildTypes {

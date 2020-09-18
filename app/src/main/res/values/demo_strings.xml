@@ -58,6 +58,7 @@
     <string name="em_friend_black_error">此用户已是你好友(被拉黑状态)，从黑名单列表中移出即可</string>
     <string name="em_delete_sys_msg_error">删除失败或不存在该消息</string>
     <string name="em_error_group_no_members">没有群组成员</string>
+    <string name="em_error_user_already_exist">注册用户名已存在，请重新输入</string>
 
     <string name="em_server_set_title">使用自定义服务器？</string>
     <string name="em_server_set_server_hint">demo已经绑定以下环境设置，如果需要修改，请重启App进行设置。</string>

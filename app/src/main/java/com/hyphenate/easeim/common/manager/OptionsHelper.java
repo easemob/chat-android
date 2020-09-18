@@ -1,17 +1,25 @@
 package com.hyphenate.easeim.common.manager;
 
+import android.content.Context;
+import android.content.pm.ApplicationInfo;
+import android.content.pm.PackageManager;
+import android.os.Bundle;
+import android.util.Log;
+
+import com.hyphenate.easeim.DemoApplication;
 import com.hyphenate.easeim.common.model.DemoServerSetBean;
+import com.hyphenate.easeim.common.utils.AppMetaDataHelper;
 import com.hyphenate.easeim.common.utils.PreferenceManager;
 
 public class OptionsHelper {
-    private static final String DEF_APPKEY = "easemob-demo#chatdemoui";
+    private String DEF_APPKEY = "";
     private static final String DEF_IM_SERVER = "msync-im1.sandbox.easemob.com";
     private static final int DEF_IM_PORT = 6717;
     private static final String DEF_REST_SERVER = "a1.sdb.easemob.com";
 
     private static OptionsHelper instance;
 
-    private OptionsHelper(){}
+    private OptionsHelper(){getDefaultAppkey();}
 
     public static OptionsHelper getInstance() {
         if(instance == null) {
@@ -23,6 +31,11 @@ public class OptionsHelper {
         }
         return instance;
     }
+
+    private void getDefaultAppkey() {
+        DEF_APPKEY = AppMetaDataHelper.getInstance().getPlaceholderValue("EASEMOB_APPKEY");
+    }
+
 
     /**
      * 自定义配置是否可用

@@ -362,10 +362,10 @@ public class DemoHelper {
         EMPushConfig.Builder builder = new EMPushConfig.Builder(context);
 
         builder.enableVivoPush() // 需要在AndroidManifest.xml中配置appId和appKey
-                .enableMeiZuPush("118654", "eaf530ff717f479cab93714d45972ff6")
+                .enableMeiZuPush("134952", "f00e7e8499a549e09731a60a4da399e3")
                 .enableMiPush("2882303761517426801", "5381742660801")
-                .enableOppoPush("65872dc4c26a446a8f29014f758c8272",
-                        "9385ae4308d64b36bf82bc4d73c4369d")
+                .enableOppoPush("0bb597c5e9234f3ab9f821adbeceecdb",
+                        "cd93056d03e1418eaa6c3faf10fd7537")
                 .enableHWPush() // 需要在AndroidManifest.xml中配置appId
                 .enableFCM("921300338324");
         options.setPushConfig(builder.build());
