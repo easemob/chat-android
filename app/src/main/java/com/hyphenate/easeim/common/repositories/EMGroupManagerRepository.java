@@ -14,7 +14,9 @@ import com.hyphenate.chat.EMGroup;
 import com.hyphenate.chat.EMGroupInfo;
 import com.hyphenate.chat.EMGroupOptions;
 import com.hyphenate.chat.EMMucSharedFile;
+import com.hyphenate.easeim.DemoApplication;
 import com.hyphenate.easeim.DemoHelper;
+import com.hyphenate.easeim.R;
 import com.hyphenate.easeim.common.db.entity.EmUserEntity;
 import com.hyphenate.easeim.common.interfaceOrImplement.ResultCallBack;
 import com.hyphenate.easeim.common.net.ErrorCode;
@@ -821,14 +823,14 @@ public class EMGroupManagerRepository extends BaseEMRepository{
      * @param username
      * @return
      */
-    public LiveData<Resource<Boolean>> addGroupAdmin(String groupId, String username) {
-        return new NetworkOnlyResource<Boolean>() {
+    public LiveData<Resource<String>> addGroupAdmin(String groupId, String username) {
+        return new NetworkOnlyResource<String>() {
             @Override
-            protected void createCall(@NonNull ResultCallBack<LiveData<Boolean>> callBack) {
+            protected void createCall(@NonNull ResultCallBack<LiveData<String>> callBack) {
                 getGroupManager().asyncAddGroupAdmin(groupId, username, new EMValueCallBack<EMGroup>() {
                     @Override
                     public void onSuccess(EMGroup value) {
-                        callBack.onSuccess(createLiveData(true));
+                        callBack.onSuccess(createLiveData(getContext().getString(R.string.demo_group_member_add_admin, username)));
                     }
 
                     @Override
@@ -846,14 +848,14 @@ public class EMGroupManagerRepository extends BaseEMRepository{
      * @param username
      * @return
      */
-    public LiveData<Resource<Boolean>> removeGroupAdmin(String groupId, String username) {
-        return new NetworkOnlyResource<Boolean>() {
+    public LiveData<Resource<String>> removeGroupAdmin(String groupId, String username) {
+        return new NetworkOnlyResource<String>() {
             @Override
-            protected void createCall(@NonNull ResultCallBack<LiveData<Boolean>> callBack) {
+            protected void createCall(@NonNull ResultCallBack<LiveData<String>> callBack) {
                 getGroupManager().asyncRemoveGroupAdmin(groupId, username, new EMValueCallBack<EMGroup>() {
                     @Override
                     public void onSuccess(EMGroup value) {
-                        callBack.onSuccess(createLiveData(true));
+                        callBack.onSuccess(createLiveData(getContext().getString(R.string.demo_group_member_remove_admin, username)));
                     }
 
                     @Override
@@ -871,14 +873,14 @@ public class EMGroupManagerRepository extends BaseEMRepository{
      * @param username
      * @return
      */
-    public LiveData<Resource<Boolean>> removeUserFromGroup(String groupId, String username) {
-        return new NetworkOnlyResource<Boolean>() {
+    public LiveData<Resource<String>> removeUserFromGroup(String groupId, String username) {
+        return new NetworkOnlyResource<String>() {
             @Override
-            protected void createCall(@NonNull ResultCallBack<LiveData<Boolean>> callBack) {
+            protected void createCall(@NonNull ResultCallBack<LiveData<String>> callBack) {
                 getGroupManager().asyncRemoveUserFromGroup(groupId, username, new EMCallBack() {
                     @Override
                     public void onSuccess() {
-                        callBack.onSuccess(createLiveData(true));
+                        callBack.onSuccess(createLiveData(getContext().getString(R.string.demo_group_member_remove, username)));
                     }
 
                     @Override
@@ -901,14 +903,14 @@ public class EMGroupManagerRepository extends BaseEMRepository{
      * @param username
      * @return
      */
-    public LiveData<Resource<Boolean>> blockUser(String groupId, String username) {
-        return new NetworkOnlyResource<Boolean>() {
+    public LiveData<Resource<String>> blockUser(String groupId, String username) {
+        return new NetworkOnlyResource<String>() {
             @Override
-            protected void createCall(@NonNull ResultCallBack<LiveData<Boolean>> callBack) {
+            protected void createCall(@NonNull ResultCallBack<LiveData<String>> callBack) {
                 getGroupManager().asyncBlockUser(groupId, username, new EMCallBack() {
                     @Override
                     public void onSuccess() {
-                        callBack.onSuccess(createLiveData(true));
+                        callBack.onSuccess(createLiveData(getContext().getString(R.string.demo_group_member_add_black, username)));
                     }
 
                     @Override
@@ -931,14 +933,14 @@ public class EMGroupManagerRepository extends BaseEMRepository{
      * @param username
      * @return
      */
-    public LiveData<Resource<Boolean>> unblockUser(String groupId, String username) {
-        return new NetworkOnlyResource<Boolean>() {
+    public LiveData<Resource<String>> unblockUser(String groupId, String username) {
+        return new NetworkOnlyResource<String>() {
             @Override
-            protected void createCall(@NonNull ResultCallBack<LiveData<Boolean>> callBack) {
+            protected void createCall(@NonNull ResultCallBack<LiveData<String>> callBack) {
                 getGroupManager().asyncUnblockUser(groupId, username, new EMCallBack() {
                     @Override
                     public void onSuccess() {
-                        callBack.onSuccess(createLiveData(true));
+                        callBack.onSuccess(createLiveData(getContext().getString(R.string.demo_group_member_remove_black, username)));
                     }
 
                     @Override
@@ -961,14 +963,14 @@ public class EMGroupManagerRepository extends BaseEMRepository{
      * @param usernames
      * @return
      */
-    public LiveData<Resource<Boolean>> muteGroupMembers(String groupId, List<String> usernames, long duration) {
-        return new NetworkOnlyResource<Boolean>() {
+    public LiveData<Resource<String>> muteGroupMembers(String groupId, List<String> usernames, long duration) {
+        return new NetworkOnlyResource<String>() {
             @Override
-            protected void createCall(@NonNull ResultCallBack<LiveData<Boolean>> callBack) {
+            protected void createCall(@NonNull ResultCallBack<LiveData<String>> callBack) {
                 getGroupManager().aysncMuteGroupMembers(groupId, usernames, duration, new EMValueCallBack<EMGroup>() {
                     @Override
                     public void onSuccess(EMGroup value) {
-                        callBack.onSuccess(createLiveData(true));
+                        callBack.onSuccess(createLiveData(getContext().getString(R.string.demo_group_member_mute, usernames.get(0))));
                     }
 
                     @Override
@@ -986,14 +988,14 @@ public class EMGroupManagerRepository extends BaseEMRepository{
      * @param usernames
      * @return
      */
-    public LiveData<Resource<Boolean>> unMuteGroupMembers(String groupId, List<String> usernames) {
-        return new NetworkOnlyResource<Boolean>() {
+    public LiveData<Resource<String>> unMuteGroupMembers(String groupId, List<String> usernames) {
+        return new NetworkOnlyResource<String>() {
             @Override
-            protected void createCall(@NonNull ResultCallBack<LiveData<Boolean>> callBack) {
+            protected void createCall(@NonNull ResultCallBack<LiveData<String>> callBack) {
                 getGroupManager().asyncUnMuteGroupMembers(groupId, usernames, new EMValueCallBack<EMGroup>() {
                     @Override
                     public void onSuccess(EMGroup value) {
-                        callBack.onSuccess(createLiveData(true));
+                        callBack.onSuccess(createLiveData(getContext().getString(R.string.demo_group_member_remove_mute, usernames.get(0))));
                     }
 
                     @Override

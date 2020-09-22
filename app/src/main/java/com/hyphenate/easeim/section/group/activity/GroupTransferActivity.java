@@ -69,9 +69,9 @@ public class GroupTransferActivity extends GroupMemberAuthorityActivity {
             });
         });
         viewModel.getRefreshObservable().observe(this, response -> {
-            parseResource(response, new OnResourceParseCallback<Boolean>() {
+            parseResource(response, new OnResourceParseCallback<String>() {
                 @Override
-                public void onSuccess(Boolean data) {
+                public void onSuccess(String message) {
                     refreshData();
                     LiveDataBus.get().with(DemoConstant.GROUP_CHANGE).postValue(EaseEvent.create(DemoConstant.GROUP_CHANGE, EaseEvent.TYPE.GROUP));
                 }

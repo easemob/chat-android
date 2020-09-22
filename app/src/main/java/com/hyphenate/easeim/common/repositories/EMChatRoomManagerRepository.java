@@ -241,7 +241,7 @@ public class EMChatRoomManagerRepository extends BaseEMRepository{
     }
 
     /**
-     * 移交群主权限
+     * 移交聊天室群主权限
      * @param groupId
      * @param username
      * @return
@@ -274,7 +274,7 @@ public class EMChatRoomManagerRepository extends BaseEMRepository{
      * @param groupId
      * @return
      */
-    public LiveData<Resource<Map<String, Long>>> getGroupMuteMap(String groupId) {
+    public LiveData<Resource<Map<String, Long>>> getChatRoomMuteMap(String groupId) {
         return new NetworkOnlyResource<Map<String, Long>>() {
 
             @Override
@@ -308,7 +308,7 @@ public class EMChatRoomManagerRepository extends BaseEMRepository{
      * @param groupId
      * @return
      */
-    public LiveData<Resource<List<String>>> getGroupBlackList(String groupId) {
+    public LiveData<Resource<List<String>>> getChatRoomBlackList(String groupId) {
         return new NetworkOnlyResource<List<String>>() {
 
             @Override
@@ -338,12 +338,12 @@ public class EMChatRoomManagerRepository extends BaseEMRepository{
     }
 
     /**
-     * 设为群管理员
+     * 设为聊天室管理员
      * @param groupId
      * @param username
      * @return
      */
-    public LiveData<Resource<EMChatRoom>> addGroupAdmin(String groupId, String username) {
+    public LiveData<Resource<EMChatRoom>> addChatRoomAdmin(String groupId, String username) {
         return new NetworkOnlyResource<EMChatRoom>() {
             @Override
             protected void createCall(@NonNull ResultCallBack<LiveData<EMChatRoom>> callBack) {
@@ -363,12 +363,12 @@ public class EMChatRoomManagerRepository extends BaseEMRepository{
     }
 
     /**
-     * 移除群管理员
+     * 移除聊天室管理员
      * @param groupId
      * @param username
      * @return
      */
-    public LiveData<Resource<EMChatRoom>> removeGroupAdmin(String groupId, String username) {
+    public LiveData<Resource<EMChatRoom>> removeChatRoomAdmin(String groupId, String username) {
         return new NetworkOnlyResource<EMChatRoom>() {
             @Override
             protected void createCall(@NonNull ResultCallBack<LiveData<EMChatRoom>> callBack) {
@@ -388,12 +388,12 @@ public class EMChatRoomManagerRepository extends BaseEMRepository{
     }
 
     /**
-     * 移出群
+     * 移出聊天室
      * @param groupId
      * @param usernames
      * @return
      */
-    public LiveData<Resource<EMChatRoom>> removeUserFromGroup(String groupId, List<String> usernames) {
+    public LiveData<Resource<EMChatRoom>> removeUserFromChatRoom(String groupId, List<String> usernames) {
         return new NetworkOnlyResource<EMChatRoom>() {
             @Override
             protected void createCall(@NonNull ResultCallBack<LiveData<EMChatRoom>> callBack) {
@@ -413,7 +413,7 @@ public class EMChatRoomManagerRepository extends BaseEMRepository{
     }
 
     /**
-     * 添加到群黑名单
+     * 添加到聊天室黑名单
      * 需要拥有者或者管理员权限
      * @param groupId
      * @param username
@@ -439,7 +439,7 @@ public class EMChatRoomManagerRepository extends BaseEMRepository{
     }
 
     /**
-     * 移出群黑名单
+     * 移出聊天室黑名单
      * @param groupId
      * @param username
      * @return
@@ -470,7 +470,7 @@ public class EMChatRoomManagerRepository extends BaseEMRepository{
      * @param usernames
      * @return
      */
-    public LiveData<Resource<EMChatRoom>> muteGroupMembers(String groupId, List<String> usernames, long duration) {
+    public LiveData<Resource<EMChatRoom>> muteChatRoomMembers(String groupId, List<String> usernames, long duration) {
         return new NetworkOnlyResource<EMChatRoom>() {
             @Override
             protected void createCall(@NonNull ResultCallBack<LiveData<EMChatRoom>> callBack) {
@@ -495,7 +495,7 @@ public class EMChatRoomManagerRepository extends BaseEMRepository{
      * @param usernames
      * @return
      */
-    public LiveData<Resource<EMChatRoom>> unMuteGroupMembers(String groupId, List<String> usernames) {
+    public LiveData<Resource<EMChatRoom>> unMuteChatRoomMembers(String groupId, List<String> usernames) {
         return new NetworkOnlyResource<EMChatRoom>() {
             @Override
             protected void createCall(@NonNull ResultCallBack<LiveData<EMChatRoom>> callBack) {
@@ -519,7 +519,7 @@ public class EMChatRoomManagerRepository extends BaseEMRepository{
      * @param groupId
      * @return
      */
-    public LiveData<Resource<Boolean>> leaveGroup(String groupId) {
+    public LiveData<Resource<Boolean>> leaveChatRoom(String groupId) {
         return new NetworkOnlyResource<Boolean>() {
             @Override
             protected void createCall(@NonNull ResultCallBack<LiveData<Boolean>> callBack) {
@@ -534,7 +534,7 @@ public class EMChatRoomManagerRepository extends BaseEMRepository{
      * @param groupId
      * @return
      */
-    public LiveData<Resource<Boolean>> destroyGroup(String groupId) {
+    public LiveData<Resource<Boolean>> destroyChatRoom(String groupId) {
         return new NetworkOnlyResource<Boolean>() {
             @Override
             protected void createCall(@NonNull ResultCallBack<LiveData<Boolean>> callBack) {

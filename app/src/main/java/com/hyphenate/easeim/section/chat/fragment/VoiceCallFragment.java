@@ -186,7 +186,7 @@ public class VoiceCallFragment extends EaseCallFragment implements View.OnClickL
         } else if (id == R.id.btn_answer_call) {
             answerBtn.setEnabled(false);
             closeSpeakerOn();
-            callStateTextView.setText("正在接听...");
+            callStateTextView.setText(R.string.answering);
             comingBtnContainer.setVisibility(View.INVISIBLE);
             groupHangUp.setVisibility(View.VISIBLE);
             comingBtnContainer.requestLayout();
@@ -296,7 +296,7 @@ public class VoiceCallFragment extends EaseCallFragment implements View.OnClickL
                             callStateTextView.setText(st1);
                             break;
                         case CONNECTED:
-                            String con = getResources().getString(R.string.em_call_voice_request);
+                            String con = getString(R.string.em_call_voice_request, username);
                             callStateTextView.setText(con);
                             break;
                         case ACCEPTED:

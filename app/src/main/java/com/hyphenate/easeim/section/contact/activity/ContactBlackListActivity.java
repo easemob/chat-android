@@ -113,6 +113,7 @@ public class ContactBlackListActivity extends BaseInitActivity implements OnRefr
             parseResource(response, new OnResourceParseCallback<Boolean>() {
                 @Override
                 public void onSuccess(Boolean data) {
+                    showToast(R.string.em_friends_move_out_blacklist_success);
                     LiveDataBus.get().with(DemoConstant.CONTACT_CHANGE).postValue(EaseEvent.create(DemoConstant.CONTACT_CHANGE, EaseEvent.TYPE.CONTACT));
                 }
             });

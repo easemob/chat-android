@@ -7,6 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.StringRes;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.constraintlayout.widget.ConstraintSet;
 import androidx.lifecycle.ViewModelProvider;
@@ -147,6 +148,7 @@ public class ContactListFragment extends EaseContactListFragment implements View
             parseResource(response, new OnResourceParseCallback<Boolean>() {
                 @Override
                 public void onSuccess(Boolean data) {
+                    showToast(R.string.em_friends_move_into_blacklist_success);
                     mViewModel.loadContactList();
                 }
             });
@@ -229,5 +231,13 @@ public class ContactListFragment extends EaseContactListFragment implements View
      */
     private void showToast(String message) {
         ToastUtils.showToast(message);
+    }
+
+    /**
+     * toast by string res
+     * @param messageId
+     */
+    public void showToast(@StringRes int messageId) {
+        ToastUtils.showToast(messageId);
     }
 }

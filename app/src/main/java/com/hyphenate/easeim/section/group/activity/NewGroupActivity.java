@@ -41,6 +41,7 @@ public class NewGroupActivity extends BaseInitActivity implements EaseTitleBar.O
     private ArrowItemView itemGroupMembers;
     private int maxUsers = 200;
     private static final int MAX_GROUP_USERS = 2000;
+    private static final int MIN_GROUP_USERS = 3;
     private NewGroupViewModel viewModel;
     private String[] newmembers;
 
@@ -104,6 +105,7 @@ public class NewGroupActivity extends BaseInitActivity implements EaseTitleBar.O
             parseResource(response, new OnResourceParseCallback<EMGroup>() {
                 @Override
                 public void onSuccess(EMGroup data) {
+                    showToast(R.string.em_group_new_success);
                     LiveDataBus.get().with(DemoConstant.GROUP_CHANGE).postValue(EaseEvent.create(DemoConstant.GROUP_CHANGE, EaseEvent.TYPE.GROUP));
                     //跳转到群组聊天页面
                     ChatActivity.actionStart(mContext, data.getGroupId(), DemoConstant.CHATTYPE_GROUP);
@@ -135,6 +137,10 @@ public class NewGroupActivity extends BaseInitActivity implements EaseTitleBar.O
             new SimpleDialogFragment.Builder(mContext)
                     .setTitle(R.string.em_group_new_name_cannot_be_empty)
                     .show();
+            return;
+        }
+        if(maxUsers < MIN_GROUP_USERS || maxUsers > MAX_GROUP_USERS) {
+            showToast(R.string.em_group_new_member_limit);
             return;
         }
         String desc = itemGroupProfile.getTvContent().getText().toString();

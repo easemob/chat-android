@@ -22,7 +22,7 @@ public class GroupMemberAuthorityViewModel extends AndroidViewModel {
     private SingleSourceLiveData<Resource<List<EaseUser>>> membersObservable;
     private SingleSourceLiveData<Resource<Map<String, Long>>> muteMembersObservable;
     private SingleSourceLiveData<Resource<List<String>>> blackMembersObservable;
-    private SingleSourceLiveData<Resource<Boolean>> refreshObservable;
+    private SingleSourceLiveData<Resource<String>> refreshObservable;
     private SingleSourceLiveData<Resource<Boolean>> transferOwnerObservable;
     private LiveDataBus messageChangeLiveData = LiveDataBus.get();
 
@@ -73,7 +73,7 @@ public class GroupMemberAuthorityViewModel extends AndroidViewModel {
         blackMembersObservable.setSource(repository.getGroupBlackList(groupId));
     }
 
-    public LiveData<Resource<Boolean>> getRefreshObservable() {
+    public LiveData<Resource<String>> getRefreshObservable() {
         return refreshObservable;
     }
 

@@ -197,7 +197,7 @@ public class VideoCallFragment extends EaseCallFragment implements View.OnClickL
             }, 300);
         } else { // incoming call
 
-            callStateTextView.setText(R.string.em_call_video_request);
+            callStateTextView.setText(getString(R.string.em_call_video_request, username));
             if(EMClient.getInstance().callManager().getCallState() == EMCallStateChangeListener.CallState.IDLE
                     || EMClient.getInstance().callManager().getCallState() == EMCallStateChangeListener.CallState.DISCONNECTED) {
                 // the call has ended
@@ -288,7 +288,7 @@ public class VideoCallFragment extends EaseCallFragment implements View.OnClickL
             if (ringtone != null)
                 ringtone.stop();
 
-            callStateTextView.setText("answering...");
+            callStateTextView.setText(R.string.answering);
             handler.sendEmptyMessage(MSG_CALL_ANSWER);
             handsFreeImage.setImageResource(R.drawable.em_icon_speaker_on);
             isAnswered = true;

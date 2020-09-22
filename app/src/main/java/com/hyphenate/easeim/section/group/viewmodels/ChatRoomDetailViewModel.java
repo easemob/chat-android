@@ -73,7 +73,7 @@ public class ChatRoomDetailViewModel extends AndroidViewModel {
     }
 
     public void destroyGroup(String roomId) {
-        destroyGroupObservable.setSource(repository.destroyGroup(roomId));
+        destroyGroupObservable.setSource(repository.destroyChatRoom(roomId));
     }
 
 }

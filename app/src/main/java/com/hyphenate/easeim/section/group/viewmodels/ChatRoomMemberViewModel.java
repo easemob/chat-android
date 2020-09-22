@@ -60,11 +60,11 @@ public class ChatRoomMemberViewModel extends AndroidViewModel {
     }
 
     public void getGroupMuteMap(String roomId) {
-        muteMapObservable.setSource(repository.getGroupMuteMap(roomId));
+        muteMapObservable.setSource(repository.getChatRoomMuteMap(roomId));
     }
 
     public void getGroupBlackList(String roomId) {
-        blackObservable.setSource(repository.getGroupBlackList(roomId));
+        blackObservable.setSource(repository.getChatRoomBlackList(roomId));
     }
 
     public void getMembersList(String roomId) {
@@ -76,11 +76,11 @@ public class ChatRoomMemberViewModel extends AndroidViewModel {
     }
 
     public void addGroupAdmin(String roomId, String username) {
-        chatRoomObservable.setSource(repository.addGroupAdmin(roomId, username));
+        chatRoomObservable.setSource(repository.addChatRoomAdmin(roomId, username));
     }
 
     public void removeGroupAdmin(String roomId, String username) {
-        chatRoomObservable.setSource(repository.removeGroupAdmin(roomId, username));
+        chatRoomObservable.setSource(repository.removeChatRoomAdmin(roomId, username));
     }
 
     public void changeOwner(String roomId, String username) {
@@ -88,7 +88,7 @@ public class ChatRoomMemberViewModel extends AndroidViewModel {
     }
 
     public void removeUserFromGroup(String roomId, List<String> usernames) {
-        chatRoomObservable.setSource(repository.removeUserFromGroup(roomId, usernames));
+        chatRoomObservable.setSource(repository.removeUserFromChatRoom(roomId, usernames));
     }
 
     public void blockUser(String roomId, List<String> username) {
@@ -100,14 +100,14 @@ public class ChatRoomMemberViewModel extends AndroidViewModel {
     }
 
     public void muteGroupMembers(String roomId, List<String> usernames, long duration) {
-        chatRoomObservable.setSource(repository.muteGroupMembers(roomId, usernames, duration));
+        chatRoomObservable.setSource(repository.muteChatRoomMembers(roomId, usernames, duration));
     }
 
     public void unMuteGroupMembers(String roomId, List<String> usernames) {
-        chatRoomObservable.setSource(repository.unMuteGroupMembers(roomId, usernames));
+        chatRoomObservable.setSource(repository.unMuteChatRoomMembers(roomId, usernames));
     }
 
     public void destroyGroup(String roomId) {
-        destroyGroupObservable.setSource(repository.destroyGroup(roomId));
+        destroyGroupObservable.setSource(repository.destroyChatRoom(roomId));
     }
 }

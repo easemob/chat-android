@@ -43,7 +43,7 @@
     <string name="em_register_failed">注册失败</string>
     <string name="em_register_success">注册成功</string>
     <string name="em_register_privacy_agreement_url">http://www.easemob.com/protocol</string>
-    <string name="em_register_service_agreement_url">http://www.easemob.com/protocol</string>
+    <string name="em_register_service_agreement_url">http://www.easemob.com/agreement</string>
 
     <string name="em_password_confirm_error">两次输入的密码不一致，请重新输入!</string>
 
@@ -93,13 +93,23 @@
     <string name="em_conversation_menu_scan">扫一扫</string>
     <string name="em_conversation_system_notification">系统通知</string>
 
+    <string name="demo_system_agree_invite">您已同意%1$s的好友请求</string>
+    <string name="demo_system_agree_remote_user_apply_to_join_group">您已同意%1$s的入群申请</string>
+    <string name="demo_system_agree_received_remote_user_invitation">您已同意%1$s的入群邀请</string>
+    <string name="demo_system_decline_invite">您已拒绝%1$s的好友请求</string>
+    <string name="demo_system_decline_remote_user_apply_to_join_group">您已拒绝%1$s的入群申请</string>
+    <string name="demo_system_decline_received_remote_user_invitation">您已拒绝%1$s的入群邀请</string>
+    <string name="demo_system_other_decline_invite">%1$s拒绝了您的好友请求</string>
+    <string name="demo_system_other_decline_remote_user_apply_to_join_group">%1$s拒绝了您的入群申请</string>
+    <string name="demo_system_other_decline_received_remote_user_invitation">%1$s拒绝了您的入群邀请</string>
+
     <string name="em_add_contact_item_button_text">添加好友</string>
     <string name="em_add_contact_item_button_text_added">已添加</string>
     <string name="em_add_contact_not_add_myself">不能添加自己</string>
     <string name="em_add_contact_user_already_in_contactlist">此用户已是你好友(被拉黑状态)，从黑名单列表中移出即可</string>
     <string name="em_add_contact_this_user_is_already_your_friend">此用户已是你的好友</string>
     <string name="em_add_contact_add_a_friend">加个好友呗</string>
-    <string name="em_add_contact_send_successful">发送请求成功,等待对方验证</string>
+    <string name="em_add_contact_send_successful">已发送好友邀请</string>
 
     <string name="em_friends_new_chat">新的好友</string>
     <string name="em_friends_group_chat">群聊</string>
@@ -110,6 +120,8 @@
     <string name="em_friends_move_into_the_blacklist_new">移入到黑名单</string>
     <string name="em_friends_move_out_the_blacklist_new">移出黑名单</string>
     <string name="em_friends_move_out_the_blacklist_hint">是否移出黑名单？</string>
+    <string name="em_friends_move_into_blacklist_success">已将用户加入黑名单</string>
+    <string name="em_friends_move_out_blacklist_success">已将用户移出黑名单</string>
 
     <string name="em_friends_detail_title">个人资料</string>
     <string name="em_friends_detail_note">设置备注</string>
@@ -128,6 +140,8 @@
     <string name="em_friends_chat_room_contact_title">聊天室列表</string>
     <string name="em_friends_chat_room_create">创建聊天室</string>
 
+    <string name="demo_contact_add_black">%1$s已添加至黑名单</string>
+
     <string name="em_chat_pick_user_title">选择联系人</string>
 
     <string name="em_single_set_title">聊天详情</string>
@@ -136,7 +150,7 @@
     <string name="em_single_conversation_top">会话置顶</string>
     <string name="em_single_call_type">选择通话类型</string>
 
-    <string name="em_chat_delete_conversation">确认清空聊天记录？</string>
+    <string name="em_chat_delete_conversation">您确认要清空所有聊天记录吗？</string>
     <string name="em_chat_group_detail_title">群组信息</string>
     <string name="em_chat_group_detail_group_member">群成员</string>
     <string name="em_chat_group_detail_member_num">%1$d人</string>
@@ -146,7 +160,7 @@
     <string name="em_chat_group_detail_announcement_hint">请输入群公告</string>
     <string name="em_chat_group_detail_history">查找聊天记录</string>
     <string name="em_chat_group_detail_clear_history">清空聊天记录</string>
-    <string name="em_chat_group_detail_clear_history_warning">确认清空聊天记录？</string>
+    <string name="em_chat_group_detail_clear_history_warning">您确认要清空所有聊天记录吗？</string>
     <string name="em_chat_group_detail_member_manage">群组管理</string>
     <string name="em_chat_group_detail_introduction">群介绍</string>
     <string name="em_chat_group_detail_introduction_hint">请输入群介绍</string>
@@ -173,6 +187,23 @@
     <string name="em_group_member_type_member">群成员</string>
     <string name="em_group_member_type_member_num">共%1$d人</string>
 
+    <string name="demo_group_member_add_admin">%1$s已成为新的管理员</string>
+    <string name="demo_group_member_remove_admin">%1$s已被移出管理员</string>
+    <string name="demo_group_member_add_black">%1$s已被添加至黑名单</string>
+    <string name="demo_group_member_remove_black">%1$s已被移出黑名单</string>
+    <string name="demo_group_member_mute">%1$s已被禁言</string>
+    <string name="demo_group_member_remove_mute">%1$s已被解除禁言</string>
+
+    <string name="demo_group_member_remove">%1$s已被移除</string>
+    <string name="demo_group_member_invite">已向%1$s发出入群邀请</string>
+    <string name="demo_group_destroy">群组已删除</string>
+
+    <string name="demo_chat_room_destroy">聊天室已删除</string>
+    <string name="demo_chat_room_add_member">%1$s已被添加至聊天室</string>
+    <string name="demo_chat_room_remove_member">%1$s已被移除</string>
+    <string name="demo_chat_room_modify_name">聊天室名称已被修改</string>
+    <string name="demo_chat_room_modify_description">聊天室描述已被修改</string>
+
     <string name="em_group_new_title">创建群组</string>
     <string name="em_group_new_save">完成</string>
     <string name="em_group_new_name">名称</string>
@@ -191,7 +222,9 @@
     <string name="em_group_new_need_owner_approval_public">加入是否需要验证</string>
     <string name="em_group_new_need_owner_approval_uncheck_hint">用户可以直接加入群组</string>
     <string name="em_group_new_need_owner_approval_check_hint">用户加入群组需要群主同意</string>
-    <string name="em_group_new_name_cannot_be_empty">群组名称不能为空</string>
+    <string name="em_group_new_name_cannot_be_empty">请完善请群信息</string>
+    <string name="em_group_new_member_limit">群组人数范围3-3000人</string>
+    <string name="em_group_new_success">群组创建成功</string>
     <string name="em_group_new_invite_join_group">%1$s邀请加入群：%2$s</string>
 
     <string name="em_authority_menu_add_admin">设为管理员</string>
@@ -233,8 +266,8 @@
     <string name="em_notify_agree">同意</string>
     <string name="em_notify_refuse">拒绝</string>
     <string name="em_notify_delete">删除</string>
-    <string name="em_call_video_request">正在邀请你进行视频通话...</string>
-    <string name="em_call_voice_request">正在邀请你进行语音通话...</string>
+    <string name="em_call_video_request">%1$s邀请您进行视频通话</string>
+    <string name="em_call_voice_request">%1$s邀请您进行语音通话</string>
 
     <string name="em_about_me_set">设置</string>
     <string name="em_about_me_feedback">意见反馈</string>
@@ -344,6 +377,7 @@
     <string name="offline_push_no_disturb">推送消息免打扰</string>
     <string name="offline_default_time_range">22:00~07:00</string>
     <string name="offline_time_rang_error">起止时间不能相同</string>
+    <string name="demo_offline_nickname_update_success">推送昵称已更新</string>
 
     <string name="title_msg_typing">显示输入状态</string>
     <string name="chatroom_allow_owner_leave"> 允许聊天室群主离开</string>
@@ -417,6 +451,30 @@
     <string name="quiting_the_chat_room">正在退出聊天室……</string>
     <string name="be_kicked_for_offline">离线被踢出聊天室</string>
 
+    <string name="demo_group_listener_onInvitationReceived">%1$s邀请您加入「%2$s」</string>
+    <string name="demo_group_listener_onRequestToJoinReceived">%1$s请求加入「%2$s」</string>
+    <string name="demo_group_listener_onRequestToJoinAccepted">%1$s已同意您加入「%2$s」</string>
+    <string name="demo_group_listener_onRequestToJoinDeclined">%1$s已拒绝您加入「%2$s」的申请</string>
+    <string name="demo_group_listener_onInvitationAccepted">您的加群邀请已经被%1$s接受</string>
+    <string name="demo_group_listener_onInvitationDeclined">%1$s已拒绝您的加群邀请</string>
+    <string name="demo_group_listener_onUserRemoved">您已被群管理员移出「%1$s」</string>
+    <string name="demo_group_listener_onGroupDestroyed">群「%1$s」已被解散</string>
+    <string name="demo_group_listener_onAutoAcceptInvitationFromGroup">您已加入「%1$s」</string>
+    <string name="demo_group_listener_onMuteListAdded">%1$s已被群主禁言</string>
+    <string name="demo_group_listener_onMuteListRemoved">%1$s已被群主恢复发言</string>
+    <string name="demo_group_listener_onWhiteListAdded">%1$s已被群主添加进白名单</string>
+    <string name="demo_group_listener_onWhiteListRemoved">%1$s已被群主移出白名单</string>
+    <string name="demo_group_listener_onAllMemberMuteStateChanged_mute">群主已开启全员禁言</string>
+    <string name="demo_group_listener_onAllMemberMuteStateChanged_not_mute">群主已关闭全员禁言</string>
+    <string name="demo_group_listener_onAdminAdded">%1$s已被群主指定为群管理员</string>
+    <string name="demo_group_listener_onAdminRemoved">%1$s已被群主取消群管理员权限</string>
+    <string name="demo_group_listener_onOwnerChanged">%1$s已将群主转移给%2$s</string>
+    <string name="demo_group_listener_onMemberJoined">%1$s已经加入群组</string>
+    <string name="demo_group_listener_onMemberExited">%1$s已退出群组</string>
+    <string name="demo_group_listener_onAnnouncementChanged">群公告内容已更新，请查看</string>
+    <string name="demo_group_listener_onSharedFileAdded">群文件%1$s已上传，请查看</string>
+    <string name="demo_group_listener_onSharedFileDeleted">群文件%1$s已被删除</string>
+
     <string name="multi_device_contact_accept">接受%s的好友邀请[remote]</string>
     <string name="multi_device_contact_decline">拒绝%s的好友邀请[remote]</string>
     <string name="multi_device_contact_add">发送好友邀请给%s[remote]</string>
@@ -445,6 +503,27 @@
     <string name="multi_device_group_remove_mute">将%s在群组中解除禁言[remote]</string>
 
     <string name="multi_device_logged_in_device_kick_item">将设备移除</string>
+
+    <string name="demo_chat_room_listener_onChatRoomDestroyed">聊天室%1$s已经解散</string>
+    <string name="demo_chat_room_listener_onMemberJoined">%1$s已加入聊天室</string>
+    <string name="demo_chat_room_listener_onMemberExited">%1$s已退出聊天室</string>
+    <string name="demo_chat_room_listener_onRemovedFromChatRoom">%1$s已退出聊天室；</string>
+    <string name="demo_chat_room_listener_onMuteListAdded">%1$s已被禁言</string>
+    <string name="demo_chat_room_listener_onMuteListRemoved">%1$s已被解除禁言</string>
+    <string name="demo_chat_room_listener_onWhiteListAdded">%1$s已被加入白名单</string>
+    <string name="demo_chat_room_listener_onWhiteListRemoved">%1$s已被移出白名单</string>
+    <string name="demo_chat_room_listener_onAllMemberMuteStateChanged_mute">全员禁言已开启</string>
+    <string name="demo_chat_room_listener_onAllMemberMuteStateChanged_note_mute">全员禁言已关闭</string>
+    <string name="demo_chat_room_listener_onAdminAdded">%1$s已成为管理员</string>
+    <string name="demo_chat_room_listener_onAdminRemoved">%1$s已被移出管理员</string>
+    <string name="demo_chat_room_listener_onOwnerChanged">%1$s已将聊天室转移给%2$s</string>
+    <string name="demo_chat_room_listener_onAnnouncementChanged">聊天室公告内容已更新，请查看</string>
+
+    <string name="demo_contact_listener_onContactAdded">您已经添加%1$s为好友</string>
+    <string name="demo_contact_listener_onContactDeleted">您已删除好友%1$s</string>
+    <string name="demo_contact_listener_onContactInvited">%1$s希望和您成为好友，请通过</string>
+    <string name="demo_contact_listener_onFriendRequestAccepted">您的好友申请已经通过</string>
+    <string name="demo_contact_listener_onFriendRequestDeclined">%1$s已拒绝您的好友申请</string>
 
     <string name="alert_request_video">%1$s发来视频请求</string>
     <string name="alert_request_voice">%1$s发来语音请求</string>

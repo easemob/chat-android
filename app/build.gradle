@@ -38,10 +38,10 @@ android {
             }
         }
 
-        manifestPlaceholders = [EASEMOB_APPKEY: properties.getProperty("EASEMOB_APPKEY"),
-                                VIVO_PUSH_APPKEY: properties.getProperty("VIVO_PUSH_APPKEY"),
-                                VIVO_PUSH_APPID: properties.getProperty("VIVO_PUSH_APPID"),
-                                BAIDU_LOCATION_APPKEY: properties.getProperty("BAIDU_LOCATION_APPKEY")
+        manifestPlaceholders = [EASEMOB_APPKEY: properties.getProperty("EASEMOB_APPKEY", "******"),
+                                VIVO_PUSH_APPKEY: properties.getProperty("VIVO_PUSH_APPKEY", "******"),
+                                VIVO_PUSH_APPID: properties.getProperty("VIVO_PUSH_APPID", "******"),
+                                BAIDU_LOCATION_APPKEY: properties.getProperty("BAIDU_LOCATION_APPKEY", "******")
         ]
     }
     buildTypes {

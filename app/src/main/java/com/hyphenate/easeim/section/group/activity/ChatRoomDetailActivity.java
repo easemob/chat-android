@@ -112,6 +112,7 @@ public class ChatRoomDetailActivity extends BaseInitActivity implements EaseTitl
             parseResource(response, new OnResourceParseCallback<Boolean>() {
                 @Override
                 public void onSuccess(Boolean data) {
+                    showToast(R.string.demo_chat_room_destroy);
                     EaseEvent easeEvent = new EaseEvent(DemoConstant.CHAT_ROOM_CHANGE, EaseEvent.TYPE.CHAT_ROOM_LEAVE);
                     easeEvent.message = roomId;
                     LiveDataBus.get().with(DemoConstant.CHAT_ROOM_CHANGE).postValue(easeEvent);

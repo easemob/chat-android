@@ -88,22 +88,7 @@ public class OfflinePushNickActivity extends BaseInitActivity implements OnClick
 			parseResource(response, new OnResourceParseCallback<Boolean>() {
 				@Override
 				public void onSuccess(Boolean data) {
-					boolean updateOK= DemoHelper.getInstance().getUserProfileManager().updateCurrentUserNickName(inputNickName.getText().toString());
-					if (!updateOK) {
-						runOnUiThread(new Runnable() {
-							public void run() {
-								Toast.makeText(OfflinePushNickActivity.this, "update nickname failed!",
-										Toast.LENGTH_SHORT).show();
-							}
-						});
-					} else {
-						runOnUiThread(new Runnable() {
-							public void run() {
-								Toast.makeText(OfflinePushNickActivity.this, "update nickname success!",
-										Toast.LENGTH_SHORT).show();
-							}
-						});
-					}
+					showToast(R.string.demo_offline_nickname_update_success);
 					LiveDataBus.get().with(DemoConstant.REFRESH_NICKNAME).postValue(true);
 					finish();
 				}

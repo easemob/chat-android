@@ -1,5 +1,7 @@
 package com.hyphenate.easeim.common.repositories;
 
+import android.content.Context;
+
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
@@ -138,6 +140,10 @@ public class BaseEMRepository {
      */
     public void runOnIOThread(Runnable runnable) {
         EaseThreadManager.getInstance().runOnIOThread(runnable);
+    }
+
+    public Context getContext() {
+        return DemoApplication.getInstance().getApplicationContext();
     }
 
 }

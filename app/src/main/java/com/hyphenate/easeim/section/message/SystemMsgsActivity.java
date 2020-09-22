@@ -3,6 +3,7 @@ package com.hyphenate.easeim.section.message;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.ContextMenu;
 import android.view.MenuItem;
 import android.view.View;
@@ -137,8 +138,36 @@ public class SystemMsgsActivity extends BaseInitActivity implements OnRefreshLoa
                 }
             });
         });
+        viewModel.agreeObservable().observe(this, response -> {
+            parseResource(response, new OnResourceParseCallback<String>() {
+                @Override
+                public void onSuccess(String message) {
+                    showMessage(message);
+                    viewModel.loadMessages(limit);
+                    EaseEvent event = EaseEvent.create(DemoConstant.CONTACT_CHANGE, EaseEvent.TYPE.CONTACT);
+                    LiveDataBus.get().with(DemoConstant.CONTACT_CHANGE).postValue(event);
+                }
+            });
+        });
+        viewModel.refuseObservable().observe(this, response -> {
+            parseResource(response, new OnResourceParseCallback<String>() {
+                @Override
+                public void onSuccess(String message) {
+                    showMessage(message);
+                    viewModel.loadMessages(limit);
+                    EaseEvent event = EaseEvent.create(DemoConstant.CONTACT_CHANGE, EaseEvent.TYPE.CONTACT);
+                    LiveDataBus.get().with(DemoConstant.CONTACT_CHANGE).postValue(event);
+                }
+            });
+        });
         viewModel.makeAllMsgRead();
         viewModel.loadMessages(limit);
+    }
+
+    private void showMessage(String message) {
+        if(!TextUtils.isEmpty(message)) {
+            showToast(message);
+        }
     }
 
     @Override
