@@ -41,11 +41,11 @@
     <string name="em_register_btn">注\u0020册</string>
     <string name="em_register_password_confirm_hint">确认密码</string>
     <string name="em_register_failed">注册失败</string>
-    <string name="em_register_success">注册成功</string>
+    <string name="em_register_success">注册成功，请登录</string>
     <string name="em_register_privacy_agreement_url">http://www.easemob.com/protocol</string>
     <string name="em_register_service_agreement_url">http://www.easemob.com/agreement</string>
 
-    <string name="em_password_confirm_error">两次输入的密码不一致，请重新输入!</string>
+    <string name="em_password_confirm_error">您输入的密码不一致，请重新输入</string>
 
     <string name="em_error_network_error">当前网络不可用</string>
     <string name="em_error_not_login">未登录过环信</string>
@@ -59,6 +59,10 @@
     <string name="em_delete_sys_msg_error">删除失败或不存在该消息</string>
     <string name="em_error_group_no_members">没有群组成员</string>
     <string name="em_error_user_already_exist">注册用户名已存在，请重新输入</string>
+
+    <string name="demo_error_user_authentication_failed">您输入的用户名或密码不正确</string>
+    <string name="demo_error_user_already_exist">注册用户名已存在，请重新输入</string>
+    <string name="demo_error_file_too_large">附件大小不能超过10M</string>
 
     <string name="em_server_set_title">使用自定义服务器？</string>
     <string name="em_server_set_server_hint">demo已经绑定以下环境设置，如果需要修改，请重启App进行设置。</string>

@@ -22,6 +22,7 @@ import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
 import androidx.lifecycle.ViewModelProvider;
 
+import com.hyphenate.EMError;
 import com.hyphenate.easeim.R;
 import com.hyphenate.easeim.common.interfaceOrImplement.OnResourceParseCallback;
 import com.hyphenate.easeim.section.base.WebViewActivity;
@@ -93,7 +94,11 @@ public class RegisterFragment extends BaseInitFragment implements TextWatcher, V
 
                 @Override
                 public void onError(int code, String message) {
-                    ToastUtils.showToast(message);
+                    if(code == EMError.USER_ALREADY_EXIST) {
+                        ToastUtils.showToast(R.string.demo_error_user_already_exist);
+                    }else {
+                        ToastUtils.showToast(message);
+                    }
                 }
 
                 @Override

@@ -19,6 +19,7 @@ import androidx.appcompat.view.menu.MenuPopupHelper;
 import androidx.appcompat.widget.PopupMenu;
 import androidx.lifecycle.ViewModelProvider;
 
+import com.hyphenate.EMError;
 import com.hyphenate.chat.EMClient;
 import com.hyphenate.chat.EMGroup;
 import com.hyphenate.chat.EMMessage;
@@ -336,6 +337,15 @@ public class ChatFragment extends EaseChatFragment implements EaseChatFragment.O
         super.selectVideoFromLocal();
         Intent intent = new Intent(getActivity(), ImageGridActivity.class);
         startActivityForResult(intent, REQUEST_CODE_SELECT_VIDEO);
+    }
+
+    @Override
+    protected void showMessageError(int code, String error) {
+        if(code == EMError.FILE_TOO_LARGE) {
+            ToastUtils.showToast(R.string.demo_error_file_too_large);
+        }else {
+            ToastUtils.showToast("onError: " + code + ", error: " + error);
+        }
     }
 
     @Override

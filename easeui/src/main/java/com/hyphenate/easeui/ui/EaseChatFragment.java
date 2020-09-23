@@ -24,6 +24,7 @@ import androidx.annotation.StringRes;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.hyphenate.EMError;
 import com.hyphenate.EMMessageListener;
 import com.hyphenate.EMValueCallBack;
 import com.hyphenate.chat.EMChatRoom;
@@ -446,7 +447,7 @@ public class EaseChatFragment extends EaseBaseFragment implements View.OnClickLi
             getActivity().runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
-                    Toast.makeText(getActivity(), "onError: " + code + ", error: " + error, Toast.LENGTH_SHORT).show();
+                    showMessageError(code, error);
                 }
             });
         }
@@ -725,6 +726,15 @@ public class EaseChatFragment extends EaseBaseFragment implements View.OnClickLi
      */
     protected RecyclerView.LayoutManager provideLayoutManager() {
         return new LinearLayoutManager(mContext);
+    }
+
+    /**
+     * 展示发送消息失败的错误信息
+     * @param code
+     * @param error
+     */
+    protected void showMessageError(int code, String error) {
+        Toast.makeText(getActivity(), "onError: " + code + ", error: " + error, Toast.LENGTH_SHORT).show();
     }
 
     /**

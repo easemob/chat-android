@@ -47,6 +47,7 @@
                 android:layout_height="@dimen/em_common_item_height"
                 app:switchItemTitle="@string/em_developer_allow_token"
                 app:switchItemShowDivider="true"
+                android:visibility="gone"
                 android:background="@color/white"/>
 
             <com.hyphenate.easeim.common.widget.SwitchItemView

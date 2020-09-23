@@ -25,6 +25,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.lifecycle.ViewModelProvider;
 
+import com.hyphenate.EMError;
 import com.hyphenate.easeim.DemoHelper;
 import com.hyphenate.easeim.MainActivity;
 import com.hyphenate.easeim.R;
@@ -113,7 +114,11 @@ public class LoginFragment extends BaseInitFragment implements View.OnClickListe
                 @Override
                 public void onError(int code, String message) {
                     super.onError(code, message);
-                    ToastUtils.showToast(message);
+                    if(code == EMError.USER_AUTHENTICATION_FAILED) {
+                        ToastUtils.showToast(R.string.demo_error_user_authentication_failed);
+                    }else {
+                        ToastUtils.showToast(message);
+                    }
                 }
 
                 @Override
