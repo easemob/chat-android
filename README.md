@@ -50,10 +50,10 @@
 >ConversationListFragment：会话列表类，继承自EaseConversationListFragment。ConversationListFragment展示了对EaseConversationListFragment类的扩展；</br>
 >ContactListFragment：联系人列表类，继承自EaseContactListFragment。ContactListFragment展示了对EaseContactListFragment类的扩展。</br>
 ## 部分页面展示
-![](https://github.com/jinanzhuan/sdkdemoapp3.0_android/blob/sdk3.0_new/image/conversation.jpg)
-![](https://github.com/jinanzhuan/sdkdemoapp3.0_android/blob/sdk3.0_new/image/contact.jpg)
-![](https://github.com/jinanzhuan/sdkdemoapp3.0_android/blob/sdk3.0_new/image/chat_1.jpg)
-![](https://github.com/jinanzhuan/sdkdemoapp3.0_android/blob/sdk3.0_new/image/chat_2.jpg)
+![](https://github.com/easemob/chat-android/blob/master/image/conversation.jpg)
+![](https://github.com/easemob/chat-android/blob/master/image/contact.jpg)
+![](https://github.com/easemob/chat-android/blob/master/image/chat_1.jpg)
+![](https://github.com/easemob/chat-android/blob/master/image/chat_2.jpg)
 ## 可能会遇到的问题
 1、如果遇到Error: Default interface methods are only supported starting with Android N (--min-api 24)问题</br>
 需要指定JDK版本</br>
