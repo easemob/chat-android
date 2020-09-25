@@ -297,6 +297,9 @@ public class VoiceCallFragment extends EaseCallFragment implements View.OnClickL
                             break;
                         case CONNECTED:
                             String con = getString(R.string.em_call_voice_request, username);
+                            if(!isInComingCall) {
+                                con = getString(R.string.em_call_voice_calling);
+                            }
                             callStateTextView.setText(con);
                             break;
                         case ACCEPTED:

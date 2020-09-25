@@ -273,6 +273,7 @@
     <string name="em_notify_delete">删除</string>
     <string name="em_call_video_request">%1$s邀请您进行视频通话</string>
     <string name="em_call_voice_request">%1$s邀请您进行语音通话</string>
+    <string name="em_call_voice_calling">正在等待对方接听</string>
 
     <string name="em_about_me_set">设置</string>
     <string name="em_about_me_feedback">意见反馈</string>
