@@ -534,23 +534,17 @@ public class ChatPresenter extends EaseChatPresenter {
         @Override
         public void onMuteListAdded(String groupId, List<String> mutes, long muteExpire) {
             super.onMuteListAdded(groupId, mutes, muteExpire);
-            StringBuilder sb = new StringBuilder();
-            for (String member : mutes) {
-                sb.append(member).append(",");
-            }
-            showToast(context.getString(R.string.demo_group_listener_onMuteListAdded, sb.toString()));
-            EMLog.i(TAG, context.getString(R.string.demo_group_listener_onMuteListAdded, sb.toString()));
+            String content = getContentFromList(mutes);
+            showToast(context.getString(R.string.demo_group_listener_onMuteListAdded, content));
+            EMLog.i(TAG, context.getString(R.string.demo_group_listener_onMuteListAdded, content));
         }
 
         @Override
         public void onMuteListRemoved(String groupId, List<String> mutes) {
             super.onMuteListRemoved(groupId, mutes);
-            StringBuilder sb = new StringBuilder();
-            for (String member : mutes) {
-                sb.append(member).append(",");
-            }
-            showToast(context.getString(R.string.demo_group_listener_onMuteListRemoved, sb.toString()));
-            EMLog.i(TAG, context.getString(R.string.demo_group_listener_onMuteListRemoved, sb.toString()));
+            String content = getContentFromList(mutes);
+            showToast(context.getString(R.string.demo_group_listener_onMuteListRemoved, content));
+            EMLog.i(TAG, context.getString(R.string.demo_group_listener_onMuteListRemoved, content));
         }
 
         @Override
@@ -559,12 +553,9 @@ public class ChatPresenter extends EaseChatPresenter {
             easeEvent.message = groupId;
             messageChangeLiveData.with(DemoConstant.GROUP_CHANGE).postValue(easeEvent);
 
-            StringBuilder sb = new StringBuilder();
-            for (String member : whitelist) {
-                sb.append(member).append(",");
-            }
-            showToast(context.getString(R.string.demo_group_listener_onWhiteListAdded, sb.toString()));
-            EMLog.i(TAG, context.getString(R.string.demo_group_listener_onWhiteListAdded, sb.toString()));
+            String content = getContentFromList(whitelist);
+            showToast(context.getString(R.string.demo_group_listener_onWhiteListAdded, content));
+            EMLog.i(TAG, context.getString(R.string.demo_group_listener_onWhiteListAdded, content));
         }
 
         @Override
@@ -573,12 +564,9 @@ public class ChatPresenter extends EaseChatPresenter {
             easeEvent.message = groupId;
             messageChangeLiveData.with(DemoConstant.GROUP_CHANGE).postValue(easeEvent);
 
-            StringBuilder sb = new StringBuilder();
-            for (String member : whitelist) {
-                sb.append(member).append(",");
-            }
-            showToast(context.getString(R.string.demo_group_listener_onWhiteListRemoved, sb.toString()));
-            EMLog.i(TAG, context.getString(R.string.demo_group_listener_onWhiteListRemoved, sb.toString()));
+            String content = getContentFromList(whitelist);
+            showToast(context.getString(R.string.demo_group_listener_onWhiteListRemoved, content));
+            EMLog.i(TAG, context.getString(R.string.demo_group_listener_onWhiteListRemoved, content));
         }
 
         @Override
@@ -1043,43 +1031,31 @@ public class ChatPresenter extends EaseChatPresenter {
         public void onMuteListAdded(String chatRoomId, List<String> mutes, long expireTime) {
             setChatRoomEvent(chatRoomId, EaseEvent.TYPE.CHAT_ROOM);
 
-            StringBuilder sb = new StringBuilder();
-            for (String member : mutes) {
-                sb.append(member).append(",");
-            }
-            showToast(context.getString(R.string.demo_chat_room_listener_onMuteListAdded, sb.toString()));
-            EMLog.i(TAG, context.getString(R.string.demo_chat_room_listener_onMuteListAdded, sb.toString()));
+            String content = getContentFromList(mutes);
+            showToast(context.getString(R.string.demo_chat_room_listener_onMuteListAdded, content));
+            EMLog.i(TAG, context.getString(R.string.demo_chat_room_listener_onMuteListAdded, content));
         }
 
         @Override
         public void onMuteListRemoved(String chatRoomId, List<String> mutes) {
             setChatRoomEvent(chatRoomId, EaseEvent.TYPE.CHAT_ROOM);
-            StringBuilder sb = new StringBuilder();
-            for (String member : mutes) {
-                sb.append(member).append(",");
-            }
-            showToast(context.getString(R.string.demo_chat_room_listener_onMuteListRemoved, sb.toString()));
-            EMLog.i(TAG, context.getString(R.string.demo_chat_room_listener_onMuteListRemoved, sb.toString()));
+            String content = getContentFromList(mutes);
+            showToast(context.getString(R.string.demo_chat_room_listener_onMuteListRemoved, content));
+            EMLog.i(TAG, context.getString(R.string.demo_chat_room_listener_onMuteListRemoved, content));
         }
 
         @Override
         public void onWhiteListAdded(String chatRoomId, List<String> whitelist) {
-            StringBuilder sb = new StringBuilder();
-            for (String member : whitelist) {
-                sb.append(member).append(",");
-            }
-            showToast(context.getString(R.string.demo_chat_room_listener_onWhiteListAdded, sb.toString()));
-            EMLog.i(TAG, context.getString(R.string.demo_chat_room_listener_onWhiteListAdded, sb.toString()));
+            String content = getContentFromList(whitelist);
+            showToast(context.getString(R.string.demo_chat_room_listener_onWhiteListAdded, content));
+            EMLog.i(TAG, context.getString(R.string.demo_chat_room_listener_onWhiteListAdded, content));
         }
 
         @Override
         public void onWhiteListRemoved(String chatRoomId, List<String> whitelist) {
-            StringBuilder sb = new StringBuilder();
-            for (String member : whitelist) {
-                sb.append(member).append(",");
-            }
-            showToast(context.getString(R.string.demo_chat_room_listener_onWhiteListRemoved, sb.toString()));
-            EMLog.i(TAG, context.getString(R.string.demo_chat_room_listener_onWhiteListRemoved, sb.toString()));
+            String content = getContentFromList(whitelist);
+            showToast(context.getString(R.string.demo_chat_room_listener_onWhiteListRemoved, content));
+            EMLog.i(TAG, context.getString(R.string.demo_chat_room_listener_onWhiteListRemoved, content));
         }
 
         @Override
@@ -1126,5 +1102,20 @@ public class ChatPresenter extends EaseChatPresenter {
         EaseEvent easeEvent = new EaseEvent(DemoConstant.CHAT_ROOM_CHANGE, type);
         easeEvent.message = roomId;
         messageChangeLiveData.with(DemoConstant.CHAT_ROOM_CHANGE).postValue(easeEvent);
+    }
+
+    private String getContentFromList(List<String> members) {
+        StringBuilder sb = new StringBuilder();
+        for (String member : members) {
+            if(!TextUtils.isEmpty(sb.toString().trim())) {
+                sb.append(",");
+            }
+            sb.append(member);
+        }
+        String content = sb.toString();
+        if(content.contains(EMClient.getInstance().getCurrentUser())) {
+            content = "您";
+        }
+        return content;
     }
 }
