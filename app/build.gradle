@@ -9,10 +9,10 @@ android {
 
     signingConfigs {
         debug {
-            storeFile file('/keystore/sdkdemo.jks')
-            storePassword '123456'
-            keyAlias = 'easemob'
-            keyPassword '123456'
+            storeFile file(properties.getProperty('DEBUG_STORE_FILE_PATH', '/keystore/sdkdemo.jks'))
+            storePassword properties.getProperty('DEBUG_STORE_PASSWORD', '123456')
+            keyAlias = properties.getProperty('DEBUG_KEY_ALIAS', 'easemob')
+            keyPassword properties.getProperty('DEBUG_KEY_PASSWORD', '123456')
         }
     }
     compileSdkVersion 29

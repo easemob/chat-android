@@ -11,6 +11,7 @@
     <string name="cancel">取消</string>
     <string name="confirm">确定</string>
     <string name="loading">加载中&#8230;</string>
+    <string name="request">请求中&#8230;</string>
     <string name="finish">完成</string>
 
     <string name="em_main_title_home">会话</string>
@@ -511,7 +512,7 @@
     <string name="demo_chat_room_listener_onChatRoomDestroyed">聊天室%1$s已经解散</string>
     <string name="demo_chat_room_listener_onMemberJoined">%1$s已加入聊天室</string>
     <string name="demo_chat_room_listener_onMemberExited">%1$s已退出聊天室</string>
-    <string name="demo_chat_room_listener_onRemovedFromChatRoom">%1$s已退出聊天室；</string>
+    <string name="demo_chat_room_listener_onRemovedFromChatRoom">%1$s已退出聊天室</string>
     <string name="demo_chat_room_listener_onMuteListAdded">%1$s已被禁言</string>
     <string name="demo_chat_room_listener_onMuteListRemoved">%1$s已被解除禁言</string>
     <string name="demo_chat_room_listener_onWhiteListAdded">%1$s已被加入白名单</string>

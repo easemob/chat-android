@@ -15,8 +15,8 @@
         app:layout_constraintTop_toTopOf="parent"
         app:titleBarTitle="@string/em_friends_group_contact_title"
         app:titleBarDisplayHomeAsUpEnabled="true"
-        app:titleBarRightTitle="@string/em_friends_group_public"
-        app:titleBarRightVisible="false"/>
+        app:titleBarRightImage="@drawable/em_home_menu_add"
+        app:titleBarRightVisible="true"/>
 
     <com.hyphenate.easeui.widget.EaseSearchTextView
         android:id="@+id/search_group"
