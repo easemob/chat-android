@@ -65,18 +65,16 @@ public class OtherMsgDelegate extends EaseBaseDelegate<InviteMessage, OtherMsgDe
             InviteMessage.InviteMessageStatus status = msg.getStatusEnum();
             switch (status) {
                 case AGREED:
-                    str = context.getResources().getString(R.string.Has_agreed_to);
+                    str = context.getString(R.string.demo_contact_listener_onFriendRequestAccepted);
                     break;
                 case REFUSED:
                     str = context.getResources().getString(R.string.Has_refused_to);
                     break;
                 case GROUPINVITATION_ACCEPTED:
-                    str = context.getResources().getString(R.string.accept_join_group);
-                    str = String.format(str, msg.getGroupInviter());
+                    str = context.getString(R.string.demo_group_listener_onInvitationAccepted, msg.getGroupInviter());
                     break;
                 case GROUPINVITATION_DECLINED:
-                    str = context.getResources().getString(R.string.refuse_join_group);
-                    str = String.format(str, msg.getGroupInviter());
+                    str = context.getString(R.string.demo_system_other_decline_received_remote_user_invitation, msg.getGroupInviter());
                     break;
                 case MULTI_DEVICE_CONTACT_ADD:
                     str = context.getResources().getString(R.string.multi_device_contact_add);

@@ -92,9 +92,8 @@ public class GroupSimpleDetailActivity extends BaseInitActivity implements View.
                         }else {
                             showToast(R.string.Join_the_group_chat);
                             ChatActivity.actionStart(mContext, group.getGroupId(), DemoConstant.CHATTYPE_GROUP);
-                            finish();
                         }
-
+                        finish();
                     }
                 }
             });

@@ -55,7 +55,7 @@ public class AgreeMsgDelegate extends EaseBaseDelegate<InviteMessage, AgreeMsgDe
         @Override
         public void setData(InviteMessage msg, int position) {
             name.setText(msg.getFrom());
-            message.setText(name.getContext().getResources().getString(R.string.Has_agreed_to_your_friend_request));
+            message.setText(R.string.demo_contact_listener_onFriendRequestAccepted);
             time.setText(DateUtils.getTimestampString(new Date(msg.getTime())));
         }
     }

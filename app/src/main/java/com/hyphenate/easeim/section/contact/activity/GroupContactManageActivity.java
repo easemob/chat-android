@@ -145,7 +145,8 @@ public class GroupContactManageActivity extends BaseInitActivity implements Ease
     }
 
     private void showPublicGroup() {
-        mTitleBarGroupContact.getRightText().setText(R.string.em_friends_group_join);
+        //mTitleBarGroupContact.getRightText().setText(R.string.em_friends_group_join);
+        mTitleBarGroupContact.setRightLayoutVisibility(View.GONE);
         mTitleBarGroupContact.setTitle(getString(R.string.em_friends_group_public));
         //设置公开群fragment
         publicGroupFragment = getSupportFragmentManager().findFragmentByTag("public-group");

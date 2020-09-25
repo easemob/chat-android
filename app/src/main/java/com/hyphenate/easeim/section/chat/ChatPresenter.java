@@ -380,6 +380,7 @@ public class ChatPresenter extends EaseChatPresenter {
             msg.setTime(System.currentTimeMillis());
             msg.setGroupId(groupId);
             msg.setReason(reason);
+            msg.setGroupName(groupName);
             msg.setGroupInviter(inviter);
             msg.setStatus(InviteMessage.InviteMessageStatus.GROUPINVITATION);
             msg.setType(MsgTypeManageEntity.msgType.NOTIFICATION);
@@ -388,6 +389,7 @@ public class ChatPresenter extends EaseChatPresenter {
             messageChangeLiveData.with(DemoConstant.NOTIFY_CHANGE).postValue(event);
 
             showToast(context.getString(R.string.demo_group_listener_onInvitationReceived, inviter, groupName));
+            EMLog.i(TAG, context.getString(R.string.demo_group_listener_onInvitationReceived, inviter, groupName));
         }
 
         @Override
@@ -410,6 +412,7 @@ public class ChatPresenter extends EaseChatPresenter {
             messageChangeLiveData.with(DemoConstant.NOTIFY_CHANGE).postValue(event);
 
             showToast(context.getString(R.string.demo_group_listener_onInvitationAccepted, invitee));
+            EMLog.i(TAG, context.getString(R.string.demo_group_listener_onInvitationAccepted, invitee));
         }
 
         @Override
@@ -431,6 +434,7 @@ public class ChatPresenter extends EaseChatPresenter {
             messageChangeLiveData.with(DemoConstant.NOTIFY_CHANGE).postValue(event);
 
             showToast(context.getString(R.string.demo_system_other_decline_received_remote_user_invitation, invitee));
+            EMLog.i(TAG, context.getString(R.string.demo_system_other_decline_received_remote_user_invitation, invitee));
         }
 
         @Override
@@ -440,6 +444,7 @@ public class ChatPresenter extends EaseChatPresenter {
             messageChangeLiveData.with(DemoConstant.GROUP_CHANGE).postValue(easeEvent);
 
             showToast(context.getString(R.string.demo_group_listener_onUserRemoved, groupName));
+            EMLog.i(TAG, context.getString(R.string.demo_group_listener_onUserRemoved, groupName));
         }
 
         @Override
@@ -449,6 +454,7 @@ public class ChatPresenter extends EaseChatPresenter {
             messageChangeLiveData.with(DemoConstant.GROUP_CHANGE).postValue(easeEvent);
 
             showToast(context.getString(R.string.demo_group_listener_onGroupDestroyed, groupName));
+            EMLog.i(TAG, context.getString(R.string.demo_group_listener_onGroupDestroyed, groupName));
         }
 
         @Override
@@ -468,19 +474,19 @@ public class ChatPresenter extends EaseChatPresenter {
             messageChangeLiveData.with(DemoConstant.NOTIFY_CHANGE).postValue(event);
 
             showToast(context.getString(R.string.demo_group_listener_onRequestToJoinReceived, applicant, groupName));
+            EMLog.i(TAG, context.getString(R.string.demo_group_listener_onRequestToJoinReceived, applicant, groupName));
         }
 
         @Override
         public void onRequestToJoinAccepted(String groupId, String groupName, String accepter) {
             super.onRequestToJoinAccepted(groupId, groupName, accepter);
-            String st4 = context.getString(R.string.Agreed_to_your_group_chat_application);
             // your application was accepted
             EMMessage msg = EMMessage.createReceiveMessage(EMMessage.Type.TXT);
             msg.setChatType(EMMessage.ChatType.GroupChat);
             msg.setFrom(accepter);
             msg.setTo(groupId);
             msg.setMsgId(UUID.randomUUID().toString());
-            msg.addBody(new EMTextMessageBody(accepter + " " +st4));
+            msg.addBody(new EMTextMessageBody(context.getString(R.string.demo_group_listener_onRequestToJoinAccepted, accepter, groupName)));
             msg.setStatus(EMMessage.Status.SUCCESS);
             // save accept message
             EMClient.getInstance().chatManager().saveMessage(msg);
@@ -491,24 +497,26 @@ public class ChatPresenter extends EaseChatPresenter {
             messageChangeLiveData.with(DemoConstant.MESSAGE_CHANGE_CHANGE).postValue(event);
 
             showToast(context.getString(R.string.demo_group_listener_onRequestToJoinAccepted, accepter, groupName));
+            EMLog.i(TAG, context.getString(R.string.demo_group_listener_onRequestToJoinAccepted, accepter, groupName));
         }
 
         @Override
         public void onRequestToJoinDeclined(String groupId, String groupName, String decliner, String reason) {
             super.onRequestToJoinDeclined(groupId, groupName, decliner, reason);
             showToast(context.getString(R.string.demo_group_listener_onRequestToJoinDeclined, decliner, groupName));
+            EMLog.i(TAG, context.getString(R.string.demo_group_listener_onRequestToJoinDeclined, decliner, groupName));
         }
 
         @Override
         public void onAutoAcceptInvitationFromGroup(String groupId, String inviter, String inviteMessage) {
             super.onAutoAcceptInvitationFromGroup(groupId, inviter, inviteMessage);
-            String st3 = context.getString(R.string.Invite_you_to_join_a_group_chat);
+            String groupName = GroupHelper.getGroupName(groupId);
             EMMessage msg = EMMessage.createReceiveMessage(EMMessage.Type.TXT);
             msg.setChatType(EMMessage.ChatType.GroupChat);
             msg.setFrom(inviter);
             msg.setTo(groupId);
             msg.setMsgId(UUID.randomUUID().toString());
-            msg.addBody(new EMTextMessageBody(inviter + " " +st3));
+            msg.addBody(new EMTextMessageBody(context.getString(R.string.demo_group_listener_onAutoAcceptInvitationFromGroup, groupName)));
             msg.setStatus(EMMessage.Status.SUCCESS);
             // save invitation as messages
             EMClient.getInstance().chatManager().saveMessage(msg);
@@ -517,8 +525,8 @@ public class ChatPresenter extends EaseChatPresenter {
             EaseEvent event = EaseEvent.create(DemoConstant.MESSAGE_GROUP_AUTO_ACCEPT, EaseEvent.TYPE.MESSAGE);
             messageChangeLiveData.with(DemoConstant.MESSAGE_CHANGE_CHANGE).postValue(event);
 
-            String groupName = GroupHelper.getGroupName(groupId);
             showToast(context.getString(R.string.demo_group_listener_onAutoAcceptInvitationFromGroup, groupName));
+            EMLog.i(TAG, context.getString(R.string.demo_group_listener_onAutoAcceptInvitationFromGroup, groupName));
         }
 
         @Override
@@ -529,6 +537,7 @@ public class ChatPresenter extends EaseChatPresenter {
                 sb.append(member).append(",");
             }
             showToast(context.getString(R.string.demo_group_listener_onMuteListAdded, sb.toString()));
+            EMLog.i(TAG, context.getString(R.string.demo_group_listener_onMuteListAdded, sb.toString()));
         }
 
         @Override
@@ -539,6 +548,7 @@ public class ChatPresenter extends EaseChatPresenter {
                 sb.append(member).append(",");
             }
             showToast(context.getString(R.string.demo_group_listener_onMuteListRemoved, sb.toString()));
+            EMLog.i(TAG, context.getString(R.string.demo_group_listener_onMuteListRemoved, sb.toString()));
         }
 
         @Override
@@ -552,6 +562,7 @@ public class ChatPresenter extends EaseChatPresenter {
                 sb.append(member).append(",");
             }
             showToast(context.getString(R.string.demo_group_listener_onWhiteListAdded, sb.toString()));
+            EMLog.i(TAG, context.getString(R.string.demo_group_listener_onWhiteListAdded, sb.toString()));
         }
 
         @Override
@@ -565,6 +576,7 @@ public class ChatPresenter extends EaseChatPresenter {
                 sb.append(member).append(",");
             }
             showToast(context.getString(R.string.demo_group_listener_onWhiteListRemoved, sb.toString()));
+            EMLog.i(TAG, context.getString(R.string.demo_group_listener_onWhiteListRemoved, sb.toString()));
         }
 
         @Override
@@ -575,6 +587,9 @@ public class ChatPresenter extends EaseChatPresenter {
 
             showToast(context.getString(isMuted ? R.string.demo_group_listener_onAllMemberMuteStateChanged_mute
                     : R.string.demo_group_listener_onAllMemberMuteStateChanged_not_mute));
+
+            EMLog.i(TAG, context.getString(isMuted ? R.string.demo_group_listener_onAllMemberMuteStateChanged_mute
+                    : R.string.demo_group_listener_onAllMemberMuteStateChanged_not_mute));
         }
 
         @Override
@@ -582,47 +597,55 @@ public class ChatPresenter extends EaseChatPresenter {
             super.onAdminAdded(groupId, administrator);
             LiveDataBus.get().with(DemoConstant.GROUP_CHANGE).postValue(EaseEvent.create(DemoConstant.GROUP_CHANGE, EaseEvent.TYPE.GROUP));
             showToast(context.getString(R.string.demo_group_listener_onAdminAdded, administrator));
+            EMLog.i(TAG, context.getString(R.string.demo_group_listener_onAdminAdded, administrator));
         }
 
         @Override
         public void onAdminRemoved(String groupId, String administrator) {
             LiveDataBus.get().with(DemoConstant.GROUP_CHANGE).postValue(EaseEvent.create(DemoConstant.GROUP_CHANGE, EaseEvent.TYPE.GROUP));
             showToast(context.getString(R.string.demo_group_listener_onAdminRemoved, administrator));
+            EMLog.i(TAG, context.getString(R.string.demo_group_listener_onAdminRemoved, administrator));
         }
 
         @Override
         public void onOwnerChanged(String groupId, String newOwner, String oldOwner) {
             LiveDataBus.get().with(DemoConstant.GROUP_CHANGE).postValue(EaseEvent.create(DemoConstant.GROUP_OWNER_TRANSFER, EaseEvent.TYPE.GROUP));
             showToast(context.getString(R.string.demo_group_listener_onOwnerChanged, oldOwner, newOwner));
+            EMLog.i(TAG, context.getString(R.string.demo_group_listener_onOwnerChanged, oldOwner, newOwner));
         }
 
         @Override
         public void onMemberJoined(String groupId, String member) {
             LiveDataBus.get().with(DemoConstant.GROUP_CHANGE).postValue(EaseEvent.create(DemoConstant.GROUP_CHANGE, EaseEvent.TYPE.GROUP));
             showToast(context.getString(R.string.demo_group_listener_onMemberJoined, member));
+            EMLog.i(TAG, context.getString(R.string.demo_group_listener_onMemberJoined, member));
         }
 
         @Override
         public void onMemberExited(String groupId, String member) {
             LiveDataBus.get().with(DemoConstant.GROUP_CHANGE).postValue(EaseEvent.create(DemoConstant.GROUP_CHANGE, EaseEvent.TYPE.GROUP));
             showToast(context.getString(R.string.demo_group_listener_onMemberExited, member));
+            EMLog.i(TAG, context.getString(R.string.demo_group_listener_onMemberExited, member));
         }
 
         @Override
         public void onAnnouncementChanged(String groupId, String announcement) {
             showToast(context.getString(R.string.demo_group_listener_onAnnouncementChanged));
+            EMLog.i(TAG, context.getString(R.string.demo_group_listener_onAnnouncementChanged));
         }
 
         @Override
         public void onSharedFileAdded(String groupId, EMMucSharedFile sharedFile) {
             LiveDataBus.get().with(DemoConstant.GROUP_SHARE_FILE_CHANGE).postValue(EaseEvent.create(DemoConstant.GROUP_SHARE_FILE_CHANGE, EaseEvent.TYPE.GROUP));
             showToast(context.getString(R.string.demo_group_listener_onSharedFileAdded, sharedFile.getFileName()));
+            EMLog.i(TAG, context.getString(R.string.demo_group_listener_onSharedFileAdded, sharedFile.getFileName()));
         }
 
         @Override
         public void onSharedFileDeleted(String groupId, String fileId) {
             LiveDataBus.get().with(DemoConstant.GROUP_SHARE_FILE_CHANGE).postValue(EaseEvent.create(DemoConstant.GROUP_SHARE_FILE_CHANGE, EaseEvent.TYPE.GROUP));
             showToast(context.getString(R.string.demo_group_listener_onSharedFileDeleted, fileId));
+            EMLog.i(TAG, context.getString(R.string.demo_group_listener_onSharedFileDeleted, fileId));
         }
     }
 
@@ -638,6 +661,7 @@ public class ChatPresenter extends EaseChatPresenter {
             messageChangeLiveData.with(DemoConstant.CONTACT_CHANGE).postValue(event);
 
             showToast(context.getString(R.string.demo_contact_listener_onContactAdded, username));
+            EMLog.i(TAG, context.getString(R.string.demo_contact_listener_onContactAdded, username));
         }
 
         @Override
@@ -651,6 +675,7 @@ public class ChatPresenter extends EaseChatPresenter {
             messageChangeLiveData.with(DemoConstant.CONTACT_CHANGE).postValue(event);
 
             showToast(context.getString(R.string.demo_contact_listener_onContactDeleted, username));
+            EMLog.i(TAG, context.getString(R.string.demo_contact_listener_onContactDeleted, username));
         }
 
         @Override
@@ -676,6 +701,7 @@ public class ChatPresenter extends EaseChatPresenter {
             messageChangeLiveData.with(DemoConstant.CONTACT_CHANGE).postValue(event);
 
             showToast(context.getString(R.string.demo_contact_listener_onContactInvited, username));
+            EMLog.i(TAG, context.getString(R.string.demo_contact_listener_onContactInvited, username));
         }
 
         @Override
@@ -696,6 +722,7 @@ public class ChatPresenter extends EaseChatPresenter {
             messageChangeLiveData.with(DemoConstant.CONTACT_CHANGE).postValue(event);
 
             showToast(context.getString(R.string.demo_contact_listener_onFriendRequestAccepted));
+            EMLog.i(TAG, context.getString(R.string.demo_contact_listener_onFriendRequestAccepted));
         }
 
         @Override
@@ -704,6 +731,7 @@ public class ChatPresenter extends EaseChatPresenter {
             EaseEvent event = EaseEvent.create(DemoConstant.CONTACT_CHANGE, EaseEvent.TYPE.CONTACT);
             messageChangeLiveData.with(DemoConstant.CONTACT_CHANGE).postValue(event);
             showToast(context.getString(R.string.demo_contact_listener_onFriendRequestDeclined, username));
+            EMLog.i(TAG, context.getString(R.string.demo_contact_listener_onFriendRequestDeclined, username));
         }
     }
 
@@ -976,18 +1004,21 @@ public class ChatPresenter extends EaseChatPresenter {
         public void onChatRoomDestroyed(String roomId, String roomName) {
             setChatRoomEvent(roomId, EaseEvent.TYPE.CHAT_ROOM_LEAVE);
             showToast(context.getString(R.string.demo_chat_room_listener_onChatRoomDestroyed, roomName));
+            EMLog.i(TAG, context.getString(R.string.demo_chat_room_listener_onChatRoomDestroyed, roomName));
         }
 
         @Override
         public void onMemberJoined(String roomId, String participant) {
             setChatRoomEvent(roomId, EaseEvent.TYPE.CHAT_ROOM);
             showToast(context.getString(R.string.demo_chat_room_listener_onMemberJoined, participant));
+            EMLog.i(TAG, context.getString(R.string.demo_chat_room_listener_onMemberJoined, participant));
         }
 
         @Override
         public void onMemberExited(String roomId, String roomName, String participant) {
             setChatRoomEvent(roomId, EaseEvent.TYPE.CHAT_ROOM);
             showToast(context.getString(R.string.demo_chat_room_listener_onMemberExited, participant));
+            EMLog.i(TAG, context.getString(R.string.demo_chat_room_listener_onMemberExited, participant));
         }
 
         @Override
@@ -996,8 +1027,10 @@ public class ChatPresenter extends EaseChatPresenter {
                 setChatRoomEvent(roomId, EaseEvent.TYPE.CHAT_ROOM);
                 if(reason == EMAChatRoomManagerListener.BE_KICKED) {
                     showToast(R.string.quiting_the_chat_room);
+                    showToast(R.string.quiting_the_chat_room);
                 }else {
                     showToast(context.getString(R.string.demo_chat_room_listener_onRemovedFromChatRoom, participant));
+                    EMLog.i(TAG, context.getString(R.string.demo_chat_room_listener_onRemovedFromChatRoom, participant));
                 }
 
             }
@@ -1012,6 +1045,7 @@ public class ChatPresenter extends EaseChatPresenter {
                 sb.append(member).append(",");
             }
             showToast(context.getString(R.string.demo_chat_room_listener_onMuteListAdded, sb.toString()));
+            EMLog.i(TAG, context.getString(R.string.demo_chat_room_listener_onMuteListAdded, sb.toString()));
         }
 
         @Override
@@ -1022,6 +1056,7 @@ public class ChatPresenter extends EaseChatPresenter {
                 sb.append(member).append(",");
             }
             showToast(context.getString(R.string.demo_chat_room_listener_onMuteListRemoved, sb.toString()));
+            EMLog.i(TAG, context.getString(R.string.demo_chat_room_listener_onMuteListRemoved, sb.toString()));
         }
 
         @Override
@@ -1031,6 +1066,7 @@ public class ChatPresenter extends EaseChatPresenter {
                 sb.append(member).append(",");
             }
             showToast(context.getString(R.string.demo_chat_room_listener_onWhiteListAdded, sb.toString()));
+            EMLog.i(TAG, context.getString(R.string.demo_chat_room_listener_onWhiteListAdded, sb.toString()));
         }
 
         @Override
@@ -1040,11 +1076,14 @@ public class ChatPresenter extends EaseChatPresenter {
                 sb.append(member).append(",");
             }
             showToast(context.getString(R.string.demo_chat_room_listener_onWhiteListRemoved, sb.toString()));
+            EMLog.i(TAG, context.getString(R.string.demo_chat_room_listener_onWhiteListRemoved, sb.toString()));
         }
 
         @Override
         public void onAllMemberMuteStateChanged(String chatRoomId, boolean isMuted) {
             showToast(context.getString(isMuted ? R.string.demo_chat_room_listener_onAllMemberMuteStateChanged_mute
+                    : R.string.demo_chat_room_listener_onAllMemberMuteStateChanged_note_mute));
+            EMLog.i(TAG, context.getString(isMuted ? R.string.demo_chat_room_listener_onAllMemberMuteStateChanged_mute
                     : R.string.demo_chat_room_listener_onAllMemberMuteStateChanged_note_mute));
         }
 
@@ -1053,6 +1092,7 @@ public class ChatPresenter extends EaseChatPresenter {
             setChatRoomEvent(chatRoomId, EaseEvent.TYPE.CHAT_ROOM);
 
             showToast(context.getString(R.string.demo_chat_room_listener_onAdminAdded, admin));
+            EMLog.i(TAG, context.getString(R.string.demo_chat_room_listener_onAdminAdded, admin));
         }
 
         @Override
@@ -1060,6 +1100,7 @@ public class ChatPresenter extends EaseChatPresenter {
             setChatRoomEvent(chatRoomId, EaseEvent.TYPE.CHAT_ROOM);
 
             showToast(context.getString(R.string.demo_chat_room_listener_onAdminRemoved, admin));
+            EMLog.i(TAG, context.getString(R.string.demo_chat_room_listener_onAdminRemoved, admin));
         }
 
         @Override
@@ -1067,12 +1108,14 @@ public class ChatPresenter extends EaseChatPresenter {
             setChatRoomEvent(chatRoomId, EaseEvent.TYPE.CHAT_ROOM);
 
             showToast(context.getString(R.string.demo_chat_room_listener_onOwnerChanged, oldOwner, newOwner));
+            EMLog.i(TAG, context.getString(R.string.demo_chat_room_listener_onOwnerChanged, oldOwner, newOwner));
         }
 
         @Override
         public void onAnnouncementChanged(String chatRoomId, String announcement) {
             setChatRoomEvent(chatRoomId, EaseEvent.TYPE.CHAT_ROOM);
             showToast(context.getString(R.string.demo_chat_room_listener_onAnnouncementChanged));
+            EMLog.i(TAG, context.getString(R.string.demo_chat_room_listener_onAnnouncementChanged));
         }
     }
 
