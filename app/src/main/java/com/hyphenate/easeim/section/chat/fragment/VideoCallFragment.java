@@ -576,7 +576,7 @@ public class VideoCallFragment extends EaseCallFragment implements View.OnClickL
                             String s4 = getResources().getString(R.string.The_other_is_on_the_phone_please);
                             String s5 = getResources().getString(R.string.The_other_party_did_not_answer);
 
-                            String s6 = getResources().getString(R.string.hang_up);
+                            String s6 = getResources().getString(R.string.has_been_hang_up);
                             String s7 = getResources().getString(R.string.The_other_is_hang_up);
                             String s8 = getResources().getString(R.string.did_not_answer);
                             String s9 = getResources().getString(R.string.Has_been_cancelled);
