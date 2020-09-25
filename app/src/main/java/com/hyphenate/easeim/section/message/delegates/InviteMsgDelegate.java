@@ -64,19 +64,14 @@ public class InviteMsgDelegate extends EaseBaseDelegate<InviteMessage, InviteMsg
         @Override
         public void setData(InviteMessage msg, int position) {
             name.setText(msg.getFrom());
-            String reason = "";
-            if(msg.getStatusEnum() == InviteMessageStatus.BEINVITEED){
-                reason = name.getContext().getString(R.string.demo_contact_listener_onContactInvited, msg.getFrom());
-            }else if (msg.getStatusEnum() == InviteMessageStatus.BEAPPLYED) { //application to join group
-                reason = name.getContext().getString(R.string.demo_group_listener_onRequestToJoinReceived, msg.getFrom(), msg.getGroupName());
-            } else if (msg.getStatusEnum() == InviteMessageStatus.GROUPINVITATION) {
-                reason = name.getContext().getString(R.string.demo_group_listener_onInvitationReceived, msg.getGroupInviter(), msg.getGroupName());
-            }
+            String reason = msg.getReason();
             if(TextUtils.isEmpty(reason)) {
-                reason = msg.getReason();
-            }else {
-                if(!TextUtils.isEmpty(msg.getReason())) {
-                    reason = reason + ":" + msg.getReason();
+                if(msg.getStatusEnum() == InviteMessageStatus.BEINVITEED){
+                    reason = name.getContext().getString(R.string.demo_contact_listener_onContactInvited, msg.getFrom());
+                }else if (msg.getStatusEnum() == InviteMessageStatus.BEAPPLYED) { //application to join group
+                    reason = name.getContext().getString(R.string.demo_group_listener_onRequestToJoinReceived, msg.getFrom(), msg.getGroupName());
+                } else if (msg.getStatusEnum() == InviteMessageStatus.GROUPINVITATION) {
+                    reason = name.getContext().getString(R.string.demo_group_listener_onInvitationReceived, msg.getGroupInviter(), msg.getGroupName());
                 }
             }
             message.setText(reason);
