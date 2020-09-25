@@ -486,6 +486,7 @@ public class ChatPresenter extends EaseChatPresenter {
             msg.setFrom(accepter);
             msg.setTo(groupId);
             msg.setMsgId(UUID.randomUUID().toString());
+            msg.setAttribute(DemoConstant.EM_NOTIFICATION_TYPE, true);
             msg.addBody(new EMTextMessageBody(context.getString(R.string.demo_group_listener_onRequestToJoinAccepted, accepter, groupName)));
             msg.setStatus(EMMessage.Status.SUCCESS);
             // save accept message
@@ -516,6 +517,7 @@ public class ChatPresenter extends EaseChatPresenter {
             msg.setFrom(inviter);
             msg.setTo(groupId);
             msg.setMsgId(UUID.randomUUID().toString());
+            msg.setAttribute(DemoConstant.EM_NOTIFICATION_TYPE, true);
             msg.addBody(new EMTextMessageBody(context.getString(R.string.demo_group_listener_onAutoAcceptInvitationFromGroup, groupName)));
             msg.setStatus(EMMessage.Status.SUCCESS);
             // save invitation as messages
@@ -862,6 +864,7 @@ public class ChatPresenter extends EaseChatPresenter {
                     }
                     msg.setTo(groupId);
                     msg.setMsgId(UUID.randomUUID().toString());
+                    msg.setAttribute(DemoConstant.EM_NOTIFICATION_TYPE, true);
                     msg.addBody(new EMTextMessageBody(msg.getFrom() + " " +st3));
                     msg.setStatus(EMMessage.Status.SUCCESS);
                     // save invitation as messages

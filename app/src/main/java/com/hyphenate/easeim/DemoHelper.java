@@ -28,6 +28,7 @@ import com.hyphenate.easeim.common.utils.PreferenceManager;
 import com.hyphenate.easeim.section.chat.ChatPresenter;
 import com.hyphenate.easeim.section.chat.delegates.ChatConferenceInviteAdapterDelegate;
 import com.hyphenate.easeim.section.chat.delegates.ChatLiveInviteAdapterDelegate;
+import com.hyphenate.easeim.section.chat.delegates.ChatNotificationAdapterDelegate;
 import com.hyphenate.easeim.section.chat.delegates.ChatRecallAdapterDelegate;
 import com.hyphenate.easeim.section.chat.delegates.ChatVideoCallAdapterDelegate;
 import com.hyphenate.easeim.section.chat.delegates.ChatVoiceCallAdapterDelegate;
@@ -149,6 +150,7 @@ public class DemoHelper {
                 .addConversationType(ChatVideoCallAdapterDelegate.class)        //视频通话
                 .addConversationType(ChatVoiceCallAdapterDelegate.class)        //语音通话
                 .addConversationType(EaseCustomAdapterDelegate.class)           //自定义消息
+                .addConversationType(ChatNotificationAdapterDelegate.class)     //入群等通知消息
                 .setDefaultConversionType(EaseTextAdapterDelegate.class);       //文本
     }
 
