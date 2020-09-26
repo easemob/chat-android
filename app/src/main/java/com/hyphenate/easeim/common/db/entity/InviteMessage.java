@@ -141,15 +141,15 @@ public class InviteMessage implements Serializable {
 
         //==contact
         /**being invited*/
-        BEINVITEED(R.string.Request_to_add_you_as_a_friend),
+        BEINVITEED(R.string.demo_contact_listener_onContactInvited),
         /**being refused*/
-        BEREFUSED(0),
+        BEREFUSED(R.string.demo_contact_listener_onFriendRequestDeclined),
         /**remote user already agreed*/
-        BEAGREED(R.string.Has_agreed_to_your_friend_request),
+        BEAGREED(R.string.demo_contact_listener_onFriendRequestAccepted),
 
         //==group application
         /**remote user apply to join*/
-        BEAPPLYED(R.string.Apply_to_the_group_of),
+        BEAPPLYED(R.string.demo_group_listener_onRequestToJoinReceived),
         /**you have agreed to join*/
         AGREED(R.string.Has_agreed_to),
         /**you refused the join request*/
@@ -157,11 +157,11 @@ public class InviteMessage implements Serializable {
 
         //==group invitation
         /**received remote user's invitation**/
-        GROUPINVITATION(R.string.invite_join_group),
+        GROUPINVITATION(R.string.demo_group_listener_onInvitationReceived),
         /**remote user accept your invitation**/
-        GROUPINVITATION_ACCEPTED(R.string.accept_join_group),
+        GROUPINVITATION_ACCEPTED(R.string.demo_group_listener_onInvitationAccepted),
         /**remote user declined your invitation**/
-        GROUPINVITATION_DECLINED(R.string.refuse_join_group),
+        GROUPINVITATION_DECLINED(R.string.demo_system_other_decline_received_remote_user_invitation),
 
         //==multi-device
         /**current user accept contact invitation in other device**/

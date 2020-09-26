@@ -446,7 +446,7 @@
     <string name="Request_to_add_you_as_a_friend">请求加你为好友</string>
     <string name="Apply_to_the_group_of">申请加入群：</string>
     <string name="invite_join_group">邀请加入群：</string>
-    <string name="Has_agreed_to">已同意</string>
+    <string name="Has_agreed_to">已同意%1$s的请求</string>
     <string name="Has_refused_to">已拒绝</string>
     <string name="accept_join_group">%s同意加入群</string>
     <string name="refuse_join_group">%s拒绝加入群</string>
@@ -527,6 +527,7 @@
 
     <string name="demo_contact_listener_onContactAdded">您已经添加%1$s为好友</string>
     <string name="demo_contact_listener_onContactDeleted">您已删除好友%1$s</string>
+    <string name="demo_contact_listener_onContactDeleted_by_other">%1$s已与您解除好友关系</string>
     <string name="demo_contact_listener_onContactInvited">%1$s希望和您成为好友，请通过</string>
     <string name="demo_contact_listener_onFriendRequestAccepted">您的好友申请已经通过</string>
     <string name="demo_contact_listener_onFriendRequestDeclined">%1$s已拒绝您的好友申请</string>

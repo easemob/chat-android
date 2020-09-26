@@ -1,5 +1,6 @@
 package com.hyphenate.easeim.section.message.delegates;
 
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.TextView;
 
@@ -20,7 +21,8 @@ public class AgreeMsgDelegate extends EaseBaseDelegate<InviteMessage, AgreeMsgDe
 
     @Override
     public boolean isForViewType(InviteMessage msg, int position) {
-        return msg.getStatusEnum() == InviteMessageStatus.BEAGREED;
+        return msg.getStatusEnum() == InviteMessageStatus.BEAGREED
+                || msg.getStatusEnum() == InviteMessageStatus.AGREED;
     }
 
     @Override
@@ -55,7 +57,16 @@ public class AgreeMsgDelegate extends EaseBaseDelegate<InviteMessage, AgreeMsgDe
         @Override
         public void setData(InviteMessage msg, int position) {
             name.setText(msg.getFrom());
-            message.setText(R.string.demo_contact_listener_onFriendRequestAccepted);
+
+            String reason = msg.getReason();
+            if(TextUtils.isEmpty(reason)) {
+                if(msg.getStatusEnum() == InviteMessageStatus.AGREED) {
+                    reason = name.getContext().getString(InviteMessageStatus.AGREED.getMsgContent(), msg.getFrom());
+                }else if(msg.getStatusEnum() == InviteMessageStatus.BEAGREED) {
+                    reason = name.getContext().getString(InviteMessageStatus.BEAGREED.getMsgContent());
+                }
+            }
+            message.setText(reason);
             time.setText(DateUtils.getTimestampString(new Date(msg.getTime())));
         }
     }

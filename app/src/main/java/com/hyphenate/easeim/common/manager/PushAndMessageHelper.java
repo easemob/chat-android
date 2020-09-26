@@ -145,17 +145,15 @@ public class PushAndMessageHelper {
         StringBuilder builder = new StringBuilder(context.getString(status.getMsgContent()));
         switch (status) {
             case BEINVITEED:
-                messge = builder.append(msg.getFrom()).toString();
-                break;
             case AGREED:
-                messge = builder.append(msg.getFrom()).append("的好友请求").toString();
+                messge = String.format(builder.toString(), msg.getFrom());
                 break;
             case BEAGREED:
-                messge = msg.getFrom() + builder.toString();
+                messge = builder.toString();
                 break;
             case BEAPPLYED:
             case GROUPINVITATION:
-                messge = builder.append(msg.getGroupName()).toString();
+                messge = String.format(builder.toString(), msg.getFrom(), msg.getGroupName());
                 break;
             case GROUPINVITATION_ACCEPTED:
             case GROUPINVITATION_DECLINED:

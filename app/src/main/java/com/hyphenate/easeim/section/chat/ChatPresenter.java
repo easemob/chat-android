@@ -375,6 +375,7 @@ public class ChatPresenter extends EaseChatPresenter {
         @Override
         public void onInvitationReceived(String groupId, String groupName, String inviter, String reason) {
             super.onInvitationReceived(groupId, groupName, inviter, reason);
+            groupName = TextUtils.isEmpty(groupName) ? groupId : groupName;
             InviteMessage msg = new InviteMessage();
             msg.setFrom(groupId);
             msg.setTime(System.currentTimeMillis());
@@ -388,8 +389,8 @@ public class ChatPresenter extends EaseChatPresenter {
             EaseEvent event = EaseEvent.create(DemoConstant.NOTIFY_GROUP_INVITE_RECEIVE, EaseEvent.TYPE.NOTIFY);
             messageChangeLiveData.with(DemoConstant.NOTIFY_CHANGE).postValue(event);
 
-            showToast(context.getString(R.string.demo_group_listener_onInvitationReceived, inviter, groupName));
-            EMLog.i(TAG, context.getString(R.string.demo_group_listener_onInvitationReceived, inviter, groupName));
+            showToast(context.getString(InviteMessageStatus.GROUPINVITATION.getMsgContent(), inviter, groupName));
+            EMLog.i(TAG, context.getString(InviteMessageStatus.GROUPINVITATION.getMsgContent(), inviter, groupName));
         }
 
         @Override
@@ -411,8 +412,8 @@ public class ChatPresenter extends EaseChatPresenter {
             EaseEvent event = EaseEvent.create(DemoConstant.NOTIFY_GROUP_INVITE_ACCEPTED, EaseEvent.TYPE.NOTIFY);
             messageChangeLiveData.with(DemoConstant.NOTIFY_CHANGE).postValue(event);
 
-            showToast(context.getString(R.string.demo_group_listener_onInvitationAccepted, invitee));
-            EMLog.i(TAG, context.getString(R.string.demo_group_listener_onInvitationAccepted, invitee));
+            showToast(context.getString(InviteMessageStatus.GROUPINVITATION_ACCEPTED.getMsgContent(), invitee));
+            EMLog.i(TAG, context.getString(InviteMessageStatus.GROUPINVITATION_ACCEPTED.getMsgContent(), invitee));
         }
 
         @Override
@@ -433,8 +434,8 @@ public class ChatPresenter extends EaseChatPresenter {
             EaseEvent event = EaseEvent.create(DemoConstant.NOTIFY_GROUP_INVITE_DECLINED, EaseEvent.TYPE.NOTIFY);
             messageChangeLiveData.with(DemoConstant.NOTIFY_CHANGE).postValue(event);
 
-            showToast(context.getString(R.string.demo_system_other_decline_received_remote_user_invitation, invitee));
-            EMLog.i(TAG, context.getString(R.string.demo_system_other_decline_received_remote_user_invitation, invitee));
+            showToast(context.getString(InviteMessageStatus.GROUPINVITATION_DECLINED.getMsgContent(), invitee));
+            EMLog.i(TAG, context.getString(InviteMessageStatus.GROUPINVITATION_DECLINED.getMsgContent(), invitee));
         }
 
         @Override
@@ -473,8 +474,8 @@ public class ChatPresenter extends EaseChatPresenter {
             EaseEvent event = EaseEvent.create(DemoConstant.NOTIFY_GROUP_JOIN_RECEIVE, EaseEvent.TYPE.NOTIFY);
             messageChangeLiveData.with(DemoConstant.NOTIFY_CHANGE).postValue(event);
 
-            showToast(context.getString(R.string.demo_group_listener_onRequestToJoinReceived, applicant, groupName));
-            EMLog.i(TAG, context.getString(R.string.demo_group_listener_onRequestToJoinReceived, applicant, groupName));
+            showToast(context.getString(InviteMessageStatus.BEAPPLYED.getMsgContent(), applicant, groupName));
+            EMLog.i(TAG, context.getString(InviteMessageStatus.BEAPPLYED.getMsgContent(), applicant, groupName));
         }
 
         @Override
@@ -657,15 +658,18 @@ public class ChatPresenter extends EaseChatPresenter {
         @Override
         public void onContactDeleted(String username) {
             EMLog.i("ChatContactListener", "onContactDeleted");
-            DemoDbHelper helper = DemoDbHelper.getInstance(DemoApplication.getInstance());
-            helper.getUserDao().deleteUser(username);
-            helper.getInviteMessageDao().deleteByFrom(username);
-            EMClient.getInstance().chatManager().deleteConversation(username, false);
+            boolean deleteUsername = DemoHelper.getInstance().getModel().isDeleteUsername(username);
+            int num = DemoHelper.getInstance().deleteContact(username);
             EaseEvent event = EaseEvent.create(DemoConstant.CONTACT_CHANGE, EaseEvent.TYPE.CONTACT);
             messageChangeLiveData.with(DemoConstant.CONTACT_CHANGE).postValue(event);
 
-            showToast(context.getString(R.string.demo_contact_listener_onContactDeleted, username));
-            EMLog.i(TAG, context.getString(R.string.demo_contact_listener_onContactDeleted, username));
+            if(deleteUsername || num == 0) {
+                showToast(context.getString(R.string.demo_contact_listener_onContactDeleted, username));
+                EMLog.i(TAG, context.getString(R.string.demo_contact_listener_onContactDeleted, username));
+            }else {
+                showToast(context.getString(R.string.demo_contact_listener_onContactDeleted_by_other, username));
+                EMLog.i(TAG, context.getString(R.string.demo_contact_listener_onContactDeleted_by_other, username));
+            }
         }
 
         @Override
@@ -690,8 +694,8 @@ public class ChatPresenter extends EaseChatPresenter {
             EaseEvent event = EaseEvent.create(DemoConstant.CONTACT_CHANGE, EaseEvent.TYPE.CONTACT);
             messageChangeLiveData.with(DemoConstant.CONTACT_CHANGE).postValue(event);
 
-            showToast(context.getString(R.string.demo_contact_listener_onContactInvited, username));
-            EMLog.i(TAG, context.getString(R.string.demo_contact_listener_onContactInvited, username));
+            showToast(context.getString(InviteMessageStatus.BEINVITEED.getMsgContent(), username));
+            EMLog.i(TAG, context.getString(InviteMessageStatus.BEINVITEED.getMsgContent(), username));
         }
 
         @Override
@@ -711,17 +715,24 @@ public class ChatPresenter extends EaseChatPresenter {
             EaseEvent event = EaseEvent.create(DemoConstant.CONTACT_CHANGE, EaseEvent.TYPE.CONTACT);
             messageChangeLiveData.with(DemoConstant.CONTACT_CHANGE).postValue(event);
 
-            showToast(context.getString(R.string.demo_contact_listener_onFriendRequestAccepted));
-            EMLog.i(TAG, context.getString(R.string.demo_contact_listener_onFriendRequestAccepted));
+            showToast(context.getString(InviteMessageStatus.BEAGREED.getMsgContent()));
+            EMLog.i(TAG, context.getString(InviteMessageStatus.BEAGREED.getMsgContent()));
         }
 
         @Override
         public void onFriendRequestDeclined(String username) {
             EMLog.i("ChatContactListener", "onFriendRequestDeclined");
+            InviteMessage msg = new InviteMessage();
+            msg.setFrom(username);
+            msg.setTime(System.currentTimeMillis());
+            msg.setStatus(InviteMessageStatus.BEREFUSED);
+            msg.setType(MsgTypeManageEntity.msgType.NOTIFICATION);
+            notifyNewInviteMessage(msg);
+
             EaseEvent event = EaseEvent.create(DemoConstant.CONTACT_CHANGE, EaseEvent.TYPE.CONTACT);
             messageChangeLiveData.with(DemoConstant.CONTACT_CHANGE).postValue(event);
-            showToast(context.getString(R.string.demo_contact_listener_onFriendRequestDeclined, username));
-            EMLog.i(TAG, context.getString(R.string.demo_contact_listener_onFriendRequestDeclined, username));
+            showToast(context.getString(InviteMessageStatus.BEREFUSED.getMsgContent(), username));
+            EMLog.i(TAG, context.getString(InviteMessageStatus.BEREFUSED.getMsgContent(), username));
         }
     }
 

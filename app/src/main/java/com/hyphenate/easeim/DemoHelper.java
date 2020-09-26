@@ -20,6 +20,7 @@ import com.hyphenate.chat.EMGroupManager;
 import com.hyphenate.chat.EMMessage;
 import com.hyphenate.chat.EMOptions;
 import com.hyphenate.chat.EMPushManager;
+import com.hyphenate.easeim.common.db.DemoDbHelper;
 import com.hyphenate.easeim.common.manager.UserProfileManager;
 import com.hyphenate.easeim.common.model.DemoModel;
 import com.hyphenate.easeim.common.model.EmojiconExampleGroupData;
@@ -661,6 +662,24 @@ public class DemoHelper {
         if(pushType == EMPushType.OPPOPUSH && HeytapPushManager.isSupportPush()) {
             HeytapPushManager.requestNotificationPermission();
         }
+    }
+
+    /**
+     * 删除联系人
+     * @param username
+     * @return
+     */
+    public synchronized int deleteContact(String username) {
+        if(TextUtils.isEmpty(username)) {
+            return 0;
+        }
+        DemoDbHelper helper = DemoDbHelper.getInstance(DemoApplication.getInstance());
+        int num = helper.getUserDao().deleteUser(username);
+        helper.getInviteMessageDao().deleteByFrom(username);
+        EMClient.getInstance().chatManager().deleteConversation(username, false);
+        getModel().deleteUsername(username, false);
+        Log.e(TAG, "delete num = "+num);
+        return num;
     }
 
     /**

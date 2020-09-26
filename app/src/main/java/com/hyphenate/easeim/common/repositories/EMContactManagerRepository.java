@@ -1,6 +1,7 @@
 package com.hyphenate.easeim.common.repositories;
 
 import android.text.TextUtils;
+import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.LiveData;
@@ -8,12 +9,16 @@ import androidx.lifecycle.MutableLiveData;
 
 import com.hyphenate.EMCallBack;
 import com.hyphenate.EMValueCallBack;
+import com.hyphenate.chat.EMClient;
+import com.hyphenate.easeim.DemoHelper;
+import com.hyphenate.easeim.common.constant.DemoConstant;
 import com.hyphenate.easeim.common.db.entity.EmUserEntity;
 import com.hyphenate.easeim.common.interfaceOrImplement.ResultCallBack;
 import com.hyphenate.easeim.common.net.ErrorCode;
 import com.hyphenate.easeim.common.net.Resource;
 import com.hyphenate.easeui.manager.EaseThreadManager;
 import com.hyphenate.easeui.domain.EaseUser;
+import com.hyphenate.easeui.model.EaseEvent;
 import com.hyphenate.exceptions.HyphenateException;
 
 import java.util.ArrayList;
@@ -203,9 +208,11 @@ public class EMContactManagerRepository extends BaseEMRepository{
         return new NetworkOnlyResource<Boolean>() {
             @Override
             protected void createCall(@NonNull ResultCallBack<LiveData<Boolean>> callBack) {
+                DemoHelper.getInstance().getModel().deleteUsername(username, true);
                 getContactManager().aysncDeleteContact(username, new EMCallBack() {
                     @Override
                     public void onSuccess() {
+                        DemoHelper.getInstance().deleteContact(username);
                         callBack.onSuccess(createLiveData(true));
                     }
 
