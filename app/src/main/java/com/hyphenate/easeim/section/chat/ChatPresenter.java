@@ -669,7 +669,7 @@ public class ChatPresenter extends EaseChatPresenter {
                 showToast(context.getString(R.string.demo_contact_listener_onContactDeleted, username));
                 EMLog.i(TAG, context.getString(R.string.demo_contact_listener_onContactDeleted, username));
             }else {
-                showToast(context.getString(R.string.demo_contact_listener_onContactDeleted_by_other, username));
+                //showToast(context.getString(R.string.demo_contact_listener_onContactDeleted_by_other, username));
                 EMLog.i(TAG, context.getString(R.string.demo_contact_listener_onContactDeleted_by_other, username));
             }
         }

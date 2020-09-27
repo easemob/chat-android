@@ -146,6 +146,7 @@ public class PushAndMessageHelper {
         switch (status) {
             case BEINVITEED:
             case AGREED:
+            case BEREFUSED:
                 messge = String.format(builder.toString(), msg.getFrom());
                 break;
             case BEAGREED:
