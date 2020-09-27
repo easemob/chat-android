@@ -40,6 +40,7 @@ import com.hyphenate.easeim.common.livedatas.LiveDataBus;
 import com.hyphenate.easeim.common.manager.PushAndMessageHelper;
 import com.hyphenate.easeim.common.repositories.EMContactManagerRepository;
 import com.hyphenate.easeim.common.repositories.EMGroupManagerRepository;
+import com.hyphenate.easeim.common.utils.ToastUtils;
 import com.hyphenate.easeim.section.group.GroupHelper;
 import com.hyphenate.easeui.interfaces.EaseGroupListener;
 import com.hyphenate.easeui.manager.EaseAtMessageHelper;
@@ -115,7 +116,8 @@ public class ChatPresenter extends EaseChatPresenter {
                     case HANDLER_SHOW_TOAST :
                         if(obj instanceof String) {
                             String str = (String) obj;
-                            Toast.makeText(appContext, str, Toast.LENGTH_LONG).show();
+                            ToastUtils.showToast(str);
+                            //Toast.makeText(appContext, str, Toast.LENGTH_LONG).show();
                         }
                         break;
                     case HANDLER_START_CONFERENCE:
