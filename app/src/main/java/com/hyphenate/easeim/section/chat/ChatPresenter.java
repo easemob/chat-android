@@ -116,8 +116,8 @@ public class ChatPresenter extends EaseChatPresenter {
                     case HANDLER_SHOW_TOAST :
                         if(obj instanceof String) {
                             String str = (String) obj;
-                            ToastUtils.showToast(str);
-                            //Toast.makeText(appContext, str, Toast.LENGTH_LONG).show();
+                            //ToastUtils.showToast(str);
+                            Toast.makeText(appContext, str, Toast.LENGTH_SHORT).show();
                         }
                         break;
                     case HANDLER_START_CONFERENCE:

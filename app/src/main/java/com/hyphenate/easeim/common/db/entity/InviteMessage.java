@@ -10,8 +10,7 @@ import com.hyphenate.easeim.common.db.DemoDbHelper;
 
 import java.io.Serializable;
 
-@Entity(tableName = "em_invite_message", primaryKeys = {"id"},
-        indices = {@Index(value = {"time"}, unique = true)})
+@Entity(tableName = "em_invite_message", primaryKeys = {"time"})
 public class InviteMessage implements Serializable {
     private int id;
     private String from;
