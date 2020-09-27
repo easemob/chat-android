@@ -286,7 +286,7 @@ public class ChatPresenter extends EaseChatPresenter {
             }
             if(!TextUtils.isEmpty(event)) {
                 LiveDataBus.get().with(DemoConstant.ACCOUNT_CHANGE).postValue(new EaseEvent(event, EaseEvent.TYPE.ACCOUNT));
-                showToast(event);
+                EMLog.i(TAG, event);
             }
         }
     }
