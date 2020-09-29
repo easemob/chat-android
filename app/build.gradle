@@ -120,6 +120,9 @@ dependencies {
     annotationProcessor "androidx.room:room-compiler:2.2.5"
     // parse
     implementation 'com.parse:parse-android:1.13.1'
+    // bugly
+    implementation 'com.tencent.bugly:crashreport:2.6.6.1'
+    implementation 'com.tencent.bugly:nativecrashreport:3.3.1'
 }
 
 // ADD THIS AT THE BOTTOM
