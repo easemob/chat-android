@@ -105,6 +105,11 @@ public class ChatFragment extends EaseChatFragment implements EaseChatFragment.O
         });
     }
 
+    @Override
+    protected boolean openTurnOnTyping() {
+        return DemoHelper.getInstance().getModel().isShowMsgTyping();
+    }
+
     /**
      * 为了重排默认扩展功能顺序，需要重写此方法，并调用{@link EaseChatExtendMenu#init()}
      */

@@ -12,6 +12,7 @@ import com.hyphenate.easeim.R;
 import com.hyphenate.easeim.common.constant.DemoConstant;
 import com.hyphenate.easeim.common.db.entity.EmUserEntity;
 import com.hyphenate.easeim.common.interfaceOrImplement.OnResourceParseCallback;
+import com.hyphenate.easeim.common.livedatas.LiveDataBus;
 import com.hyphenate.easeim.section.group.GroupHelper;
 import com.hyphenate.easeui.model.EaseEvent;
 
@@ -39,6 +40,15 @@ public class GroupAdminAuthorityActivity extends GroupMemberAuthorityActivity {
 
     @Override
     public void getData() {
+        viewModel.getRefreshObservable().observe(this, response -> {
+            parseResource(response, new OnResourceParseCallback<String>() {
+                @Override
+                public void onSuccess(String message) {
+                    refreshData();
+                    LiveDataBus.get().with(DemoConstant.GROUP_CHANGE).postValue(EaseEvent.create(DemoConstant.GROUP_CHANGE, EaseEvent.TYPE.GROUP));
+                }
+            });
+        });
         viewModel.getGroupObservable().observe(this, response -> {
             parseResource(response, new OnResourceParseCallback<EMGroup>() {
                 @Override
@@ -67,6 +77,15 @@ public class GroupAdminAuthorityActivity extends GroupMemberAuthorityActivity {
             }else if(event.isGroupLeave() && TextUtils.equals(groupId, event.message)) {
                 finish();
             }
+        });
+        viewModel.getTransferOwnerObservable().observe(this, response -> {
+            parseResource(response, new OnResourceParseCallback<Boolean>() {
+                @Override
+                public void onSuccess(Boolean data) {
+                    LiveDataBus.get().with(DemoConstant.GROUP_CHANGE).postValue(EaseEvent.create(DemoConstant.GROUP_OWNER_TRANSFER, EaseEvent.TYPE.GROUP));
+                    finish();
+                }
+            });
         });
         refreshData();
     }

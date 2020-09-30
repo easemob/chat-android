@@ -98,7 +98,8 @@ public class SystemMessageDelegate extends EaseBaseDelegate<MsgTypeManageEntity,
                 String reason = ((InviteMessage) lastMsg).getReason();
                 if(status == InviteMessageStatus.BEINVITEED ||
                         status == InviteMessageStatus.BEAPPLYED ||
-                        status == InviteMessageStatus.GROUPINVITATION) {
+                        status == InviteMessageStatus.GROUPINVITATION ||
+                        status == InviteMessageStatus.AGREED) {
                     message.setText(TextUtils.isEmpty(reason) ? PushAndMessageHelper.getSystemMessage((InviteMessage) lastMsg) : reason);
                 }else {
                     message.setText(PushAndMessageHelper.getSystemMessage((InviteMessage) lastMsg));

@@ -297,6 +297,9 @@ public class VoiceCallFragment extends EaseCallFragment implements View.OnClickL
                             break;
                         case CONNECTED:
                             String con = getString(R.string.em_call_voice_request, username);
+                            if(!isInComingCall) {
+                                con = getString(R.string.em_call_voice_calling);
+                            }
                             callStateTextView.setText(con);
                             break;
                         case ACCEPTED:
@@ -351,12 +354,12 @@ public class VoiceCallFragment extends EaseCallFragment implements View.OnClickL
                             String st5 = getResources().getString(R.string.The_other_is_on_the_phone_please);
 
                             String st6 = getResources().getString(R.string.The_other_party_did_not_answer_new);
-                            String st7 = getResources().getString(R.string.hang_up);
+                            String st7 = getResources().getString(R.string.has_been_hang_up);
                             String st8 = getResources().getString(R.string.The_other_is_hang_up);
 
                             String st9 = getResources().getString(R.string.did_not_answer);
                             String st10 = getResources().getString(R.string.Has_been_cancelled);
-                            String st11 = getResources().getString(R.string.hang_up);
+                            String st11 = getResources().getString(R.string.has_been_hang_up);
                             String st12 = "service not enable";
                             String st13 = "service arrearages";
                             String st14 = "service forbidden";

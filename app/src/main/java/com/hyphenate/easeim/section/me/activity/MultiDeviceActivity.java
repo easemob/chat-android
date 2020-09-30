@@ -78,7 +78,9 @@ public class MultiDeviceActivity extends BaseInitActivity {
         if(TextUtils.isEmpty(model.getCurrentUserPwd())) {
             startActivityForResult(new Intent(this, NamePasswordActivity.class), REQUEST_CODE_USERNAME_PASSWORD);
         }else {
-            updateList(model.getCurrentUsername(), model.getCurrentUserPwd());
+            username = model.getCurrentUsername();
+            password = model.getCurrentUserPwd();
+            updateList(username, password);
         }
     }
 

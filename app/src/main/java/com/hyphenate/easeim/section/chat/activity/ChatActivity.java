@@ -10,6 +10,8 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.google.android.material.snackbar.Snackbar;
+import com.hyphenate.chat.EMClient;
+import com.hyphenate.chat.EMConversation;
 import com.hyphenate.easeim.DemoHelper;
 import com.hyphenate.easeim.R;
 import com.hyphenate.easeim.common.constant.DemoConstant;
@@ -25,6 +27,7 @@ import com.hyphenate.easeui.constants.EaseConstant;
 import com.hyphenate.easeui.domain.EaseUser;
 import com.hyphenate.easeui.model.EaseEvent;
 import com.hyphenate.easeui.ui.EaseChatFragment;
+import com.hyphenate.easeui.utils.EaseCommonUtils;
 import com.hyphenate.easeui.widget.EaseTitleBar;
 
 import java.util.List;
@@ -153,6 +156,17 @@ public class ChatActivity extends BaseInitActivity implements EaseTitleBar.OnBac
             }
             if(event.isMessageChange()) {
                 showSnackBar(event.event);
+            }
+        });
+        messageViewModel.getMessageChange().with(DemoConstant.CONTACT_CHANGE, EaseEvent.class).observe(this, event -> {
+            if(event == null) {
+                return;
+            }
+            EMConversation conversation = EMClient.getInstance()
+                                                    .chatManager()
+                                                    .getConversation(toChatUsername, EaseCommonUtils.getConversationType(chatType), false);
+            if(conversation == null) {
+                finish();
             }
         });
     }

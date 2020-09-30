@@ -47,7 +47,7 @@
         android:minWidth="50dp"
         android:layout_height="match_parent"
         android:layout_alignParentRight="true"
-        android:background="@drawable/ease_common_tab_bg" >
+        android:foreground="@drawable/ease_ripple_click_gray">
 
         <ImageView
             android:id="@+id/right_image"

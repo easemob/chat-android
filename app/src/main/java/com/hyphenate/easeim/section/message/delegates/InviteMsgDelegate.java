@@ -67,11 +67,11 @@ public class InviteMsgDelegate extends EaseBaseDelegate<InviteMessage, InviteMsg
             String reason = msg.getReason();
             if(TextUtils.isEmpty(reason)) {
                 if(msg.getStatusEnum() == InviteMessageStatus.BEINVITEED){
-                    reason = name.getContext().getResources().getString(R.string.Request_to_add_you_as_a_friend);
+                    reason = name.getContext().getString(InviteMessageStatus.BEINVITEED.getMsgContent(), msg.getFrom());
                 }else if (msg.getStatusEnum() == InviteMessageStatus.BEAPPLYED) { //application to join group
-                    reason = name.getContext().getResources().getString(R.string.Apply_to_the_group_of) + msg.getGroupName();
+                    reason = name.getContext().getString(InviteMessageStatus.BEAPPLYED.getMsgContent(), msg.getFrom(), msg.getGroupName());
                 } else if (msg.getStatusEnum() == InviteMessageStatus.GROUPINVITATION) {
-                    reason = name.getContext().getResources().getString(R.string.invite_join_group) + msg.getGroupName();
+                    reason = name.getContext().getString(InviteMessageStatus.GROUPINVITATION.getMsgContent(), msg.getGroupInviter(), msg.getGroupName());
                 }
             }
             message.setText(reason);

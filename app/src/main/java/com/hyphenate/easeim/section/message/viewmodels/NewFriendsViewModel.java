@@ -88,6 +88,7 @@ public class NewFriendsViewModel extends AndroidViewModel {
                     EMClient.getInstance().groupManager().acceptInvitation(msg.getGroupId(), msg.getGroupInviter());
                 }
                 msg.setStatus(InviteMessageStatus.AGREED);
+                msg.setReason(message);
                 messageDao.update(msg);
                 agreeObservable.postValue(Resource.success(message));
                 messageChangeObservable.with(DemoConstant.NOTIFY_CHANGE).postValue(EaseEvent.create(DemoConstant.NOTIFY_CHANGE, EaseEvent.TYPE.NOTIFY));
@@ -113,6 +114,7 @@ public class NewFriendsViewModel extends AndroidViewModel {
                     EMClient.getInstance().groupManager().declineInvitation(msg.getGroupId(), msg.getGroupInviter(), "");
                 }
                 msg.setStatus(InviteMessageStatus.REFUSED);
+                msg.setReason(message);
                 messageDao.update(msg);
                 refuseObservable.postValue(Resource.success(message));
                 messageChangeObservable.with(DemoConstant.NOTIFY_CHANGE).postValue(EaseEvent.create(DemoConstant.NOTIFY_CHANGE, EaseEvent.TYPE.NOTIFY));

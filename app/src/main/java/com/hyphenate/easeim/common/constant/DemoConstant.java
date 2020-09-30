@@ -25,6 +25,7 @@ public interface DemoConstant extends EaseConstant {
     String EM_CONFERENCE_PASSWORD = "em_conference_password";
     String EM_CONFERENCE_TYPE = "em_conference_type";
     String EM_MEMBER_NAME = "em_member_name";
+    String EM_NOTIFICATION_TYPE = "em_notification_type";
 
     String MSG_ATTR_CONF_ID = "conferenceId";
     String MSG_ATTR_CONF_PASS = EXTRA_CONFERENCE_PASS;

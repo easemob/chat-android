@@ -9,6 +9,7 @@ import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
 import android.text.TextUtils;
 import android.view.MotionEvent;
 import android.view.View;
@@ -52,6 +53,8 @@ public class BaseActivity extends AppCompatActivity {
     public BaseActivity mContext;
     private EaseProgressDialog dialog;
     private AlertDialog logoutDialog;
+    private long dialogCreateTime;//dialog生成事件，用以判断dialog的展示时间
+    private Handler handler = new Handler();//用于dialog延迟消失
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -204,6 +207,12 @@ public class BaseActivity extends AppCompatActivity {
             super.onBackPressed();
         }
 
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        dismissLoading();
     }
 
     /**
@@ -406,6 +415,7 @@ public class BaseActivity extends AppCompatActivity {
         if(mContext.isFinishing()) {
             return;
         }
+        dialogCreateTime = System.currentTimeMillis();
         dialog = new EaseProgressDialog.Builder(mContext)
                 .setLoadingMessage(message)
                 .setCancelable(true)
@@ -415,7 +425,22 @@ public class BaseActivity extends AppCompatActivity {
 
     public void dismissLoading() {
         if(dialog != null && dialog.isShowing()) {
-            dialog.dismiss();
+            //如果dialog的展示时间过短，则延迟1s再消失
+            if(System.currentTimeMillis() - dialogCreateTime < 500 && !isFinishing()) {
+                handler.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        if(dialog != null && dialog.isShowing()) {
+                            dialog.dismiss();
+                            dialog = null;
+                        }
+                    }
+                }, 1000);
+            }else {
+                dialog.dismiss();
+                dialog = null;
+            }
+
         }
     }
 }
