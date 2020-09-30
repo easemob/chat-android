@@ -1,6 +1,7 @@
 package com.hyphenate.easeim.common.model;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 
 import com.hyphenate.chat.EMChatRoom;
 import com.hyphenate.chat.EMClient;
@@ -170,6 +171,28 @@ public class DemoModel {
 
     public String getCurrentUsername(){
         return PreferenceManager.getInstance().getCurrentUsername();
+    }
+
+    /**
+     * 保存是否删除联系人的状态
+     * @param username
+     * @param isDelete
+     */
+    public void deleteUsername(String username, boolean isDelete) {
+        SharedPreferences sp = context.getSharedPreferences("save_delete_username_status", Context.MODE_PRIVATE);
+        SharedPreferences.Editor edit = sp.edit();
+        edit.putBoolean(username, isDelete);
+        edit.commit();
+    }
+
+    /**
+     * 查看联系人是否删除
+     * @param username
+     * @return
+     */
+    public boolean isDeleteUsername(String username) {
+        SharedPreferences sp = context.getSharedPreferences("save_delete_username_status", Context.MODE_PRIVATE);
+        return sp.getBoolean(username, false);
     }
 
     /**

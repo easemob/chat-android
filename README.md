@@ -1,9 +1,11 @@
 # 环信
 --------
 ## 简介
-环信App展示了怎么使用环信SDK创建一个完整的类微信的聊天APP。展示的功能包括：注册新用户，用户登录，添加好友，单聊，群聊，发送文字，表情，语音，图片，地理位置等消息，以及实时音视频通话等。
-## 关于如何集成环信IM SDK
+环信App是基于环信SDK开发的一款完整的类微信的聊天APP。展示的功能包括：注册新用户，用户登录，添加好友，单聊，群聊，发送文字，表情，语音，图片，地理位置等消息，以及实时音视频通话等。
+## 如何集成环信IM SDK
 请移步环信官网：[Android SDK 介绍及导入](http://docs-im.easemob.com/im/android/sdk/import)
+## 体验环信App
+请移步环信官网：[场景DEMO及源码下载](https://www.easemob.com/download/im)
 ## 应用架构介绍
 环信APP采用谷歌官方建议的应用架构：
 ![](https://developer.android.google.cn/topic/libraries/architecture/images/final-architecture.png)
@@ -49,11 +51,16 @@
 >MainActivity: 主页面，包含会话列表页面（ConversationListFragment）、联系人列表页（ContactListFragment）、设置页面（AboutMeFragment）；</br>
 >ConversationListFragment：会话列表类，继承自EaseConversationListFragment。ConversationListFragment展示了对EaseConversationListFragment类的扩展；</br>
 >ContactListFragment：联系人列表类，继承自EaseContactListFragment。ContactListFragment展示了对EaseContactListFragment类的扩展。</br>
-## 部分页面展示
-![](https://github.com/easemob/chat-android/blob/master/image/conversation.jpg)
-![](https://github.com/easemob/chat-android/blob/master/image/contact.jpg)
-![](https://github.com/easemob/chat-android/blob/master/image/chat_1.jpg)
-![](https://github.com/easemob/chat-android/blob/master/image/chat_2.jpg)
+## 环信IM基本功能介绍
+[消息](http://docs-im.easemob.com/im/android/basics/message)</br>
+[好友管理](http://docs-im.easemob.com/im/android/basics/buddy)</br>
+[群组管理](http://docs-im.easemob.com/im/android/basics/group)</br>
+[聊天室管理](http://docs-im.easemob.com/im/android/basics/chatroom)</br>
+[多设备登录](http://docs-im.easemob.com/im/android/basics/multidevices)</br>
+## 环信关于第三方推送的集成介绍
+[第三方推送集成](http://docs-im.easemob.com/im/android/push/thirdpartypush)</br>
+[设置当前登录用户的推送昵称](http://docs-im.easemob.com/im/android/push/nickname)</br>
+[离线推送问题排查](http://docs-im.easemob.com/im/android/push/troubleshooting)</br>
 ## 可能会遇到的问题
 1、如果遇到Error: Default interface methods are only supported starting with Android N (--min-api 24)问题</br>
 需要指定JDK版本</br>

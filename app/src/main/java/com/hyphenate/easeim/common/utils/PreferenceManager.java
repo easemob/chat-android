@@ -554,7 +554,7 @@ public class PreferenceManager {
 	}
 
 	public boolean isSortMessageByServerTime() {
-		return mSharedPreferences.getBoolean(SHARED_KEY_SORT_MESSAGE_BY_SERVER_TIME, false);
+		return mSharedPreferences.getBoolean(SHARED_KEY_SORT_MESSAGE_BY_SERVER_TIME, true);
 	}
 
 	/**

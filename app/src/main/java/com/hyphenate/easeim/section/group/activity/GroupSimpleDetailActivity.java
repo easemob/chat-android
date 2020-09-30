@@ -92,9 +92,8 @@ public class GroupSimpleDetailActivity extends BaseInitActivity implements View.
                         }else {
                             showToast(R.string.Join_the_group_chat);
                             ChatActivity.actionStart(mContext, group.getGroupId(), DemoConstant.CHATTYPE_GROUP);
-                            finish();
                         }
-
+                        finish();
                     }
                 }
             });
@@ -129,7 +128,7 @@ public class GroupSimpleDetailActivity extends BaseInitActivity implements View.
     private void addToGroup() {
         String reason = etReason.getText().toString().trim();
         if(TextUtils.isEmpty(reason)) {
-            reason = getString(R.string.em_public_group_request_to_join);
+            reason = getString(R.string.demo_group_listener_onRequestToJoinReceived, DemoHelper.getInstance().getCurrentUser(), group.getGroupName());
         }
         viewModel.joinGroup(group, reason);
     }

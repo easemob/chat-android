@@ -555,7 +555,7 @@ public class EaseChatFragment extends EaseBaseFragment implements View.OnClickLi
             EaseEvent event = EaseEvent.create(EaseConstant.MESSAGE_CHANGE_RECALL, EaseEvent.TYPE.MESSAGE);
             messageChangeListener.onMessageChange(event);
         }
-        refreshMessages(messages);
+        refreshMessages();
     }
 
     /**

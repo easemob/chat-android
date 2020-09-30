@@ -111,6 +111,18 @@ public class NewGroupActivity extends BaseInitActivity implements EaseTitleBar.O
                     ChatActivity.actionStart(mContext, data.getGroupId(), DemoConstant.CHATTYPE_GROUP);
                     finish();
                 }
+
+                @Override
+                public void onLoading() {
+                    super.onLoading();
+                    showLoading(getString(R.string.request));
+                }
+
+                @Override
+                public void hideLoading() {
+                    super.hideLoading();
+                    dismissLoading();
+                }
             });
         });
 
@@ -152,6 +164,9 @@ public class NewGroupActivity extends BaseInitActivity implements EaseTitleBar.O
             option.style = itemSwitchInvite.getSwitch().isChecked() ? EMGroupStyle.EMGroupStylePublicJoinNeedApproval : EMGroupStyle.EMGroupStylePublicOpenJoin;
         }else{
             option.style = itemSwitchInvite.getSwitch().isChecked() ? EMGroupStyle.EMGroupStylePrivateMemberCanInvite : EMGroupStyle.EMGroupStylePrivateOnlyOwnerInvite;
+        }
+        if(newmembers == null) {
+            newmembers = new String[]{};
         }
         viewModel.createGroup(groupName, desc, newmembers, reason, option);
     }

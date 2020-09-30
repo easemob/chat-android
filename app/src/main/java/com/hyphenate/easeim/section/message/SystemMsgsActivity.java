@@ -142,7 +142,6 @@ public class SystemMsgsActivity extends BaseInitActivity implements OnRefreshLoa
             parseResource(response, new OnResourceParseCallback<String>() {
                 @Override
                 public void onSuccess(String message) {
-                    showMessage(message);
                     viewModel.loadMessages(limit);
                     EaseEvent event = EaseEvent.create(DemoConstant.CONTACT_CHANGE, EaseEvent.TYPE.CONTACT);
                     LiveDataBus.get().with(DemoConstant.CONTACT_CHANGE).postValue(event);
@@ -153,7 +152,6 @@ public class SystemMsgsActivity extends BaseInitActivity implements OnRefreshLoa
             parseResource(response, new OnResourceParseCallback<String>() {
                 @Override
                 public void onSuccess(String message) {
-                    showMessage(message);
                     viewModel.loadMessages(limit);
                     EaseEvent event = EaseEvent.create(DemoConstant.CONTACT_CHANGE, EaseEvent.TYPE.CONTACT);
                     LiveDataBus.get().with(DemoConstant.CONTACT_CHANGE).postValue(event);
@@ -162,12 +160,6 @@ public class SystemMsgsActivity extends BaseInitActivity implements OnRefreshLoa
         });
         viewModel.makeAllMsgRead();
         viewModel.loadMessages(limit);
-    }
-
-    private void showMessage(String message) {
-        if(!TextUtils.isEmpty(message)) {
-            showToast(message);
-        }
     }
 
     @Override

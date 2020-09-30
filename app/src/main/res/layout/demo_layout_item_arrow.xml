@@ -46,6 +46,8 @@
         app:layout_goneMarginRight="@dimen/em_margin_20"
         android:textSize="@dimen/em_size_normal"
         android:gravity="end"
+        android:maxLines="1"
+        android:ellipsize="end"
         android:textColor="@color/em_color_common_text_gray"
         tools:text="群文件"/>
 

@@ -111,9 +111,9 @@ public class EMChatRoomManagerRepository extends BaseEMRepository{
                         memberList.removeAll(chatRoom.getAdminList());
                         
                         if(isAdmin(chatRoom)) {
-                            Set<String> muteList = getChatRoomManager().fetchChatRoomMuteList(roomId, 0, 500).keySet();
+                            //Set<String> muteList = getChatRoomManager().fetchChatRoomMuteList(roomId, 0, 500).keySet();
                             List<String> blacks = getChatRoomManager().fetchChatRoomBlackList(roomId, 0, 500);
-                            memberList.removeAll(muteList);
+                            //memberList.removeAll(muteList);
                             memberList.removeAll(blacks);
                         }
 

@@ -48,5 +48,5 @@ public interface EmUserDao {
     int clearBlackUsers();
 
     @Query("delete from em_users where username = :arg0")
-    void deleteUser(String arg0);
+    int deleteUser(String arg0);
 }

@@ -258,13 +258,13 @@ public class ServerSetFragment extends BaseInitFragment implements EaseTitleBar.
         Log.e("TAG", "setButtonEnable = "+enable);
         mBtnServer.setEnabled(enable);
         //同时需要修改右侧drawalbeRight对应的资源
-        Drawable rightDrawable;
-        if(enable) {
-            rightDrawable = ContextCompat.getDrawable(mContext, R.drawable.demo_login_btn_right_enable);
-        }else {
-            rightDrawable = ContextCompat.getDrawable(mContext, R.drawable.demo_login_btn_right_unable);
-        }
-        mBtnServer.setCompoundDrawablesWithIntrinsicBounds(null, null, rightDrawable, null);
+//        Drawable rightDrawable;
+//        if(enable) {
+//            rightDrawable = ContextCompat.getDrawable(mContext, R.drawable.demo_login_btn_right_enable);
+//        }else {
+//            rightDrawable = ContextCompat.getDrawable(mContext, R.drawable.demo_login_btn_right_unable);
+//        }
+//        mBtnServer.setCompoundDrawablesWithIntrinsicBounds(null, null, rightDrawable, null);
     }
 
 }

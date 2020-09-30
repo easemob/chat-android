@@ -16,6 +16,7 @@ import com.hyphenate.easeim.R;
 import com.hyphenate.easeim.section.base.BaseInitActivity;
 import com.hyphenate.easeim.section.contact.fragment.GroupContactManageFragment;
 import com.hyphenate.easeim.section.contact.fragment.GroupPublicContactManageFragment;
+import com.hyphenate.easeim.section.group.activity.GroupPrePickActivity;
 import com.hyphenate.easeim.section.search.SearchGroupActivity;
 import com.hyphenate.easeim.section.search.SearchPublicGroupActivity;
 import com.hyphenate.easeui.widget.EaseSearchTextView;
@@ -90,7 +91,7 @@ public class GroupContactManageActivity extends BaseInitActivity implements Ease
 
     @Override
     public void onRightClick(View view) {
-        switchTab();
+        createNewGroup();
     }
 
     @Override
@@ -106,6 +107,10 @@ public class GroupContactManageActivity extends BaseInitActivity implements Ease
                 }
                 break;
         }
+    }
+
+    private void createNewGroup() {
+        GroupPrePickActivity.actionStart(mContext);
     }
 
     private void switchTab() {
@@ -128,7 +133,7 @@ public class GroupContactManageActivity extends BaseInitActivity implements Ease
     }
 
     private void showJoinGroup() {
-        mTitleBarGroupContact.getRightText().setText(R.string.em_friends_group_public);
+        //mTitleBarGroupContact.getRightText().setText(R.string.em_friends_group_public);
         mTitleBarGroupContact.setTitle(getString(R.string.em_friends_group_join));
         joinGroupFragment = getSupportFragmentManager().findFragmentByTag("join-group");
         if(joinGroupFragment != null && joinGroupFragment.isAdded()) {
@@ -140,7 +145,8 @@ public class GroupContactManageActivity extends BaseInitActivity implements Ease
     }
 
     private void showPublicGroup() {
-        mTitleBarGroupContact.getRightText().setText(R.string.em_friends_group_join);
+        //mTitleBarGroupContact.getRightText().setText(R.string.em_friends_group_join);
+        mTitleBarGroupContact.setRightLayoutVisibility(View.GONE);
         mTitleBarGroupContact.setTitle(getString(R.string.em_friends_group_public));
         //设置公开群fragment
         publicGroupFragment = getSupportFragmentManager().findFragmentByTag("public-group");

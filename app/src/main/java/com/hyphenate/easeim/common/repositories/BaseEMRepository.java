@@ -16,6 +16,7 @@ import com.hyphenate.easeim.DemoApplication;
 import com.hyphenate.easeim.DemoHelper;
 import com.hyphenate.easeim.common.db.DemoDbHelper;
 import com.hyphenate.easeim.common.db.dao.EmUserDao;
+import com.hyphenate.easeim.common.db.dao.InviteMessageDao;
 import com.hyphenate.easeim.common.db.dao.MsgTypeManageDao;
 import com.hyphenate.easeui.manager.EaseThreadManager;
 
@@ -124,6 +125,14 @@ public class BaseEMRepository {
      */
     public MsgTypeManageDao getMsgTypeManageDao() {
         return DemoDbHelper.getInstance(DemoApplication.getInstance()).getMsgTypeManageDao();
+    }
+
+    /**
+     * get invite message dao
+     * @return
+     */
+    public InviteMessageDao getInviteMessageDao() {
+        return DemoDbHelper.getInstance(DemoApplication.getInstance()).getInviteMessageDao();
     }
 
     /**
