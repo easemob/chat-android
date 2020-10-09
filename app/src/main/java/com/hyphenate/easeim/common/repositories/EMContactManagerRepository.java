@@ -37,7 +37,10 @@ public class EMContactManagerRepository extends BaseEMRepository{
                     callBack.onError(ErrorCode.EM_ADD_SELF_ERROR);
                     return;
                 }
-                List<String> users = getUserDao().loadAllUsers();
+                List<String> users = null;
+                if(getUserDao() != null) {
+                    users = getUserDao().loadAllUsers();
+                }
                 if(users != null && users.contains(username)) {
                     if(getContactManager().getBlackListUsernames().contains(username)) {
                         callBack.onError(ErrorCode.EM_FRIEND_BLACK_ERROR);
@@ -119,8 +122,10 @@ public class EMContactManagerRepository extends BaseEMRepository{
 
             @Override
             protected void saveCallResult(List<EaseUser> items) {
-                getUserDao().clearUsers();
-                getUserDao().insert(EmUserEntity.parseList(items));
+                if(getUserDao() != null) {
+                    getUserDao().clearUsers();
+                    getUserDao().insert(EmUserEntity.parseList(items));
+                }
             }
 
         }.asLiveData();
@@ -192,8 +197,10 @@ public class EMContactManagerRepository extends BaseEMRepository{
 
             @Override
             protected void saveCallResult(List<EaseUser> items) {
-                getUserDao().clearBlackUsers();
-                getUserDao().insert(EmUserEntity.parseList(items));
+                if(getUserDao() != null) {
+                    getUserDao().clearBlackUsers();
+                    getUserDao().insert(EmUserEntity.parseList(items));
+                }
             }
 
         }.asLiveData();
@@ -295,11 +302,16 @@ public class EMContactManagerRepository extends BaseEMRepository{
             @Override
             protected void createCall(@NonNull ResultCallBack<LiveData<List<EaseUser>>> callBack) {
                 EaseThreadManager.getInstance().runOnIOThread(()-> {
-                    List<EaseUser> easeUsers = getUserDao().loadContacts();
+                    List<EaseUser> easeUsers = null;
+                    if(getUserDao() != null) {
+                        easeUsers = getUserDao().loadContacts();
+                    }
                     List<EaseUser> list = new ArrayList<>();
-                    for (EaseUser user : easeUsers) {
-                        if(user.getUsername().contains(keyword) || (!TextUtils.isEmpty(user.getNickname()) && user.getNickname().contains(keyword))) {
-                            list.add(user);
+                    if(easeUsers != null && !easeUsers.isEmpty()) {
+                        for (EaseUser user : easeUsers) {
+                            if(user.getUsername().contains(keyword) || (!TextUtils.isEmpty(user.getNickname()) && user.getNickname().contains(keyword))) {
+                                list.add(user);
+                            }
                         }
                     }
                     callBack.onSuccess(createLiveData(list));

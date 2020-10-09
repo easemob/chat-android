@@ -46,7 +46,10 @@ public class MainViewModel extends AndroidViewModel {
     }
 
     public void checkUnreadMsg() {
-        int unreadCount = inviteMessageDao.queryUnreadCount();
+        int unreadCount = 0;
+        if(inviteMessageDao != null) {
+            unreadCount = inviteMessageDao.queryUnreadCount();
+        }
         int unreadMessageCount = DemoHelper.getInstance().getChatManager().getUnreadMessageCount();
         String count = getUnreadCount(unreadCount + unreadMessageCount);
         homeUnReadObservable.postValue(count);

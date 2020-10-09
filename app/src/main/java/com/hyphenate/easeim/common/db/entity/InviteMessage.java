@@ -7,6 +7,7 @@ import androidx.room.Index;
 import com.hyphenate.easeim.DemoApplication;
 import com.hyphenate.easeim.R;
 import com.hyphenate.easeim.common.db.DemoDbHelper;
+import com.hyphenate.easeim.common.db.dao.MsgTypeManageDao;
 
 import java.io.Serializable;
 
@@ -120,7 +121,10 @@ public class InviteMessage implements Serializable {
         //保存相应类型的MsgTypeManageEntity
         MsgTypeManageEntity entity = new MsgTypeManageEntity();
         entity.setType(type.name());
-        DemoDbHelper.getInstance(DemoApplication.getInstance()).getMsgTypeManageDao().insert(entity);
+        MsgTypeManageDao msgTypeManageDao = DemoDbHelper.getInstance(DemoApplication.getInstance()).getMsgTypeManageDao();
+        if(msgTypeManageDao != null) {
+            msgTypeManageDao.insert(entity);
+        }
         this.type = type.name();
     }
 

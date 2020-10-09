@@ -102,7 +102,10 @@ public class ContactDetailActivity extends BaseInitActivity implements EaseTitle
         mUser = (EaseUser) getIntent().getSerializableExtra("user");
         mIsFriend = getIntent().getBooleanExtra("isFriend", true);
         if(!mIsFriend) {
-            List<String> users = DemoDbHelper.getInstance(mContext).getUserDao().loadAllUsers();
+            List<String> users = null;
+            if(DemoDbHelper.getInstance(mContext).getUserDao() != null) {
+                users = DemoDbHelper.getInstance(mContext).getUserDao().loadAllUsers();
+            }
             mIsFriend = users != null && users.contains(mUser.getUsername());
         }
     }

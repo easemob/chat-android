@@ -539,13 +539,16 @@ public class LiveActivity extends BaseActivity implements EMConferenceListener {
 
     private void inviteUserToJoinConference() {
         if (TextUtils.isEmpty(groupId)) { // 联系人界面入口直播，邀请全部联系人
-            LiveData<List<EaseUser>> users = DemoDbHelper.getInstance(mContext).getUserDao().loadUsers();
-            users.observe(this, response -> {
-                for (EaseUser contact : response) {
-                    // 通过消息的方式邀请对方加入
-                    sendInviteMessage(contact.getUsername(), false);
-                }
-            });
+            if(DemoDbHelper.getInstance(mContext).getUserDao() != null) {
+                LiveData<List<EaseUser>> users = DemoDbHelper.getInstance(mContext).getUserDao().loadUsers();
+                users.observe(this, response -> {
+                    for (EaseUser contact : response) {
+                        // 通过消息的方式邀请对方加入
+                        sendInviteMessage(contact.getUsername(), false);
+                    }
+                });
+            }
+
         } else { // 群组界面入口直播，发送一条群消息
             sendInviteMessage(groupId, true);
         }

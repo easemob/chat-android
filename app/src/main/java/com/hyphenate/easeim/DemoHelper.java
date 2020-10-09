@@ -512,8 +512,7 @@ public class DemoHelper {
 
             @Override
             public void onSuccess() {
-                Log.d(TAG, "logout: onSuccess");
-                setAutoLogin(false);
+                logoutSuccess();
                 //reset();
                 if (callback != null) {
                     callback.onSuccess();
@@ -553,12 +552,21 @@ public class DemoHelper {
         System.exit(0);
     }
 
-    private void endCall() {
+    public void endCall() {
         try {
             EMClient.getInstance().callManager().endCall();
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    /**
+     * 退出登录后，需要处理的业务逻辑
+     */
+    public void logoutSuccess() {
+        Log.d(TAG, "logout: onSuccess");
+        setAutoLogin(false);
+        DemoDbHelper.getInstance(DemoApplication.getInstance()).closeDb();
     }
 
     public EaseAvatarOptions getEaseAvatarOptions() {
@@ -674,8 +682,13 @@ public class DemoHelper {
             return 0;
         }
         DemoDbHelper helper = DemoDbHelper.getInstance(DemoApplication.getInstance());
+        if(helper.getUserDao() == null) {
+            return 0;
+        }
         int num = helper.getUserDao().deleteUser(username);
-        helper.getInviteMessageDao().deleteByFrom(username);
+        if(helper.getInviteMessageDao() != null) {
+            helper.getInviteMessageDao().deleteByFrom(username);
+        }
         EMClient.getInstance().chatManager().deleteConversation(username, false);
         getModel().deleteUsername(username, false);
         Log.e(TAG, "delete num = "+num);

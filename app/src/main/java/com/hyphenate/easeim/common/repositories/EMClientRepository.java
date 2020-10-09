@@ -10,6 +10,7 @@ import com.hyphenate.EMCallBack;
 import com.hyphenate.chat.EMClient;
 import com.hyphenate.easeim.DemoApplication;
 import com.hyphenate.easeim.DemoHelper;
+import com.hyphenate.easeim.common.db.DemoDbHelper;
 import com.hyphenate.easeim.common.interfaceOrImplement.DemoEmCallBack;
 import com.hyphenate.easeim.common.net.ErrorCode;
 import com.hyphenate.easeim.common.net.Resource;
@@ -94,6 +95,7 @@ public class EMClientRepository extends BaseEMRepository{
 
     /**
      * 登录到服务器，可选择密码登录或者token登录
+     * 登录之前先初始化数据库，如果登录失败，再关闭数据库;如果登录成功，则再次检查是否初始化数据库
      * @param userName
      * @param pwd
      * @param isTokenFlag
@@ -117,6 +119,7 @@ public class EMClientRepository extends BaseEMRepository{
                         @Override
                         public void onError(int code, String error) {
                             callBack.onError(code, error);
+                            closeDb();
                         }
                     });
                 }else {
@@ -129,6 +132,7 @@ public class EMClientRepository extends BaseEMRepository{
                         @Override
                         public void onError(int code, String error) {
                             callBack.onError(code, error);
+                            closeDb();
                         }
                     });
                 }
@@ -147,17 +151,12 @@ public class EMClientRepository extends BaseEMRepository{
         return new NetworkOnlyResource<Boolean>() {
             @Override
             protected void createCall(@NonNull ResultCallBack<LiveData<Boolean>> callBack) {
-                try {
-                    EMClient.getInstance().callManager().endCall();
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
+                DemoHelper.getInstance().endCall();
                 EMClient.getInstance().logout(unbindDeviceToken, new EMCallBack() {
 
                     @Override
                     public void onSuccess() {
-                        Log.d(TAG, "logout: onSuccess");
-                        setAutoLogin(false);
+                        DemoHelper.getInstance().logoutSuccess();
                         //reset();
                         if (callBack != null) {
                             callBack.onSuccess(createLiveData(true));
@@ -196,5 +195,9 @@ public class EMClientRepository extends BaseEMRepository{
         String currentUser = EMClient.getInstance().getCurrentUser();
         EaseUser user = new EaseUser(currentUser);
         callBack.onSuccess(new MutableLiveData<>(user));
+    }
+
+    private void closeDb() {
+        DemoDbHelper.getInstance(DemoApplication.getInstance()).closeDb();
     }
 }

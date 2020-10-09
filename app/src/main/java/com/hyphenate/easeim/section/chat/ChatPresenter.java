@@ -56,6 +56,7 @@ import java.util.concurrent.ConcurrentLinkedQueue;
 
 /**
  * 主要用于chat过程中的全局监听，并对相应的事件进行处理
+ * {@link #init()}方法建议在登录成功以后进行调用
  */
 public class ChatPresenter extends EaseChatPresenter {
     private static final String TAG = ChatPresenter.class.getSimpleName();
@@ -649,7 +650,7 @@ public class ChatPresenter extends EaseChatPresenter {
             EMLog.i("ChatContactListener", "onContactAdded");
             EmUserEntity entity = new EmUserEntity();
             entity.setUsername(username);
-            DemoDbHelper.getInstance(DemoApplication.getInstance()).getUserDao().insert(entity);
+            DemoHelper.getInstance().getModel().insert(entity);
             EaseEvent event = EaseEvent.create(DemoConstant.CONTACT_CHANGE, EaseEvent.TYPE.CONTACT);
             messageChangeLiveData.with(DemoConstant.CONTACT_CHANGE).postValue(event);
 
@@ -678,14 +679,17 @@ public class ChatPresenter extends EaseChatPresenter {
         public void onContactInvited(String username, String reason) {
             EMLog.i("ChatContactListener", "onContactInvited");
             InviteMessageDao dao = DemoDbHelper.getInstance(DemoApplication.getInstance()).getInviteMessageDao();
-            List<InviteMessage> messages = dao.loadAll();
-            if(messages != null && !messages.isEmpty()) {
-                for (InviteMessage message : messages) {
-                    if(message.getGroupId() == null && message.getFrom().equals(username)) {
-                        dao.deleteByFrom(username);
+            if(dao != null) {
+                List<InviteMessage> messages = dao.loadAll();
+                if(messages != null && !messages.isEmpty()) {
+                    for (InviteMessage message : messages) {
+                        if(message.getGroupId() == null && message.getFrom().equals(username)) {
+                            dao.deleteByFrom(username);
+                        }
                     }
                 }
             }
+
             InviteMessage msg = new InviteMessage();
             msg.setFrom(username);
             msg.setTime(System.currentTimeMillis());
@@ -704,9 +708,11 @@ public class ChatPresenter extends EaseChatPresenter {
         public void onFriendRequestAccepted(String username) {
             EMLog.i("ChatContactListener", "onFriendRequestAccepted");
             InviteMessageDao dao = DemoDbHelper.getInstance(DemoApplication.getInstance()).getInviteMessageDao();
-            List<String> messages = dao.loadAllNames();
-            if(messages.contains(username)) {
-                return;
+            if(dao != null) {
+                List<String> messages = dao.loadAllNames();
+                if(messages.contains(username)) {
+                    return;
+                }
             }
             InviteMessage msg = new InviteMessage();
             msg.setFrom(username);
@@ -742,15 +748,19 @@ public class ChatPresenter extends EaseChatPresenter {
 
         @Override
         public void onContactEvent(int event, String target, String ext) {
-            EMLog.i("ChatMultiDeviceListener", "onContactEvent event"+event);
+            EMLog.i(TAG, "onContactEvent event"+event);
             DemoDbHelper dbHelper = DemoDbHelper.getInstance(DemoApplication.getInstance());
             String message = null;
             switch (event) {
                 case CONTACT_REMOVE: //好友已经在其他机子上被移除
                     EMLog.i("ChatMultiDeviceListener", "CONTACT_REMOVE");
                     message = DemoConstant.CONTACT_REMOVE;
-                    dbHelper.getUserDao().deleteUser(target);
-                    dbHelper.getInviteMessageDao().deleteByFrom(target);
+                    if(dbHelper.getUserDao() != null) {
+                        dbHelper.getUserDao().deleteUser(target);
+                    }
+                    if(dbHelper.getInviteMessageDao() != null) {
+                        dbHelper.getInviteMessageDao().deleteByFrom(target);
+                    }
                     // TODO: 2020/1/16 0016 确认此处逻辑，是否是删除当前的target
                     DemoHelper.getInstance().getChatManager().deleteConversation(target, false);
 
@@ -761,7 +771,9 @@ public class ChatPresenter extends EaseChatPresenter {
                     message = DemoConstant.CONTACT_ACCEPT;
                     EmUserEntity  entity = new EmUserEntity();
                     entity.setUsername(target);
-                    dbHelper.getUserDao().insert(entity);
+                    if(dbHelper.getUserDao() != null) {
+                        dbHelper.getUserDao().insert(entity);
+                    }
                     updateContactNotificationStatus(target, "", InviteMessage.InviteMessageStatus.MULTI_DEVICE_CONTACT_ACCEPT);
 
                     showToast("CONTACT_ACCEPT");
@@ -776,8 +788,12 @@ public class ChatPresenter extends EaseChatPresenter {
                 case CONTACT_BAN: //当前用户在其他设备加某人进入黑名单
                     EMLog.i("ChatMultiDeviceListener", "CONTACT_BAN");
                     message = DemoConstant.CONTACT_BAN;
-                    dbHelper.getUserDao().deleteUser(target);
-                    dbHelper.getInviteMessageDao().deleteByFrom(target);
+                    if(dbHelper.getUserDao() != null) {
+                        dbHelper.getUserDao().deleteUser(target);
+                    }
+                    if(dbHelper.getInviteMessageDao() != null) {
+                        dbHelper.getInviteMessageDao().deleteByFrom(target);
+                    }
                     DemoHelper.getInstance().getChatManager().deleteConversation(target, false);
                     updateContactNotificationStatus(target, "", InviteMessage.InviteMessageStatus.MULTI_DEVICE_CONTACT_BAN);
 
@@ -799,7 +815,7 @@ public class ChatPresenter extends EaseChatPresenter {
 
         @Override
         public void onGroupEvent(int event, String groupId, List<String> usernames) {
-            EMLog.i("ChatMultiDeviceListener", "onGroupEvent event"+event);
+            EMLog.i(TAG, "onGroupEvent event"+event);
             InviteMessageDao messageDao = DemoDbHelper.getInstance(DemoApplication.getInstance()).getInviteMessageDao();
             String message = null;
             switch (event) {
@@ -809,7 +825,9 @@ public class ChatPresenter extends EaseChatPresenter {
                     showToast("GROUP_CREATE");
                     break;
                 case GROUP_DESTROY:
-                    messageDao.deleteByGroupId(groupId);
+                    if(messageDao != null) {
+                        messageDao.deleteByGroupId(groupId);
+                    }
                     saveGroupNotification(groupId, /*groupName*/"",  /*person*/"", /*reason*/"", InviteMessageStatus.MULTI_DEVICE_GROUP_DESTROY);
                     message = DemoConstant.GROUP_CHANGE;
 
@@ -822,27 +840,35 @@ public class ChatPresenter extends EaseChatPresenter {
                     showToast("GROUP_JOIN");
                     break;
                 case GROUP_LEAVE:
-                    messageDao.deleteByGroupId(groupId);
+                    if(messageDao != null) {
+                        messageDao.deleteByGroupId(groupId);
+                    }
                     saveGroupNotification(groupId, /*groupName*/"",  /*person*/"", /*reason*/"", InviteMessageStatus.MULTI_DEVICE_GROUP_LEAVE);
                     message = DemoConstant.GROUP_CHANGE;
 
                     showToast("GROUP_LEAVE");
                     break;
                 case GROUP_APPLY:
-                    messageDao.deleteByGroupId(groupId);
+                    if(messageDao != null) {
+                        messageDao.deleteByGroupId(groupId);
+                    }
                     saveGroupNotification(groupId, /*groupName*/"",  /*person*/"", /*reason*/"", InviteMessageStatus.MULTI_DEVICE_GROUP_APPLY);
 
                     showToast("GROUP_APPLY");
                     break;
                 case GROUP_APPLY_ACCEPT:
-                    messageDao.deleteByGroupId(groupId, usernames.get(0));
+                    if(messageDao != null) {
+                        messageDao.deleteByGroupId(groupId, usernames.get(0));
+                    }
                     // TODO: person, reason from ext
                     saveGroupNotification(groupId, /*groupName*/"",  /*person*/usernames.get(0), /*reason*/"", InviteMessageStatus.MULTI_DEVICE_GROUP_APPLY_ACCEPT);
 
                     showToast("GROUP_APPLY_ACCEPT");
                     break;
                 case GROUP_APPLY_DECLINE:
-                    messageDao.deleteByGroupId(groupId, usernames.get(0));
+                    if(messageDao != null) {
+                        messageDao.deleteByGroupId(groupId, usernames.get(0));
+                    }
                     // TODO: person, reason from ext
                     saveGroupNotification(groupId, /*groupName*/"",  /*person*/usernames.get(0), /*reason*/"", InviteMessageStatus.MULTI_DEVICE_GROUP_APPLY_DECLINE);
 
@@ -871,7 +897,9 @@ public class ChatPresenter extends EaseChatPresenter {
                     // save invitation as messages
                     EMClient.getInstance().chatManager().saveMessage(msg);
 
-                    messageDao.deleteByGroupId(groupId);
+                    if(messageDao != null) {
+                        messageDao.deleteByGroupId(groupId);
+                    }
                     // TODO: person, reason from ext
                     saveGroupNotification(groupId, /*groupName*/"",  /*person*/"", /*reason*/"", InviteMessageStatus.MULTI_DEVICE_GROUP_INVITE_ACCEPT);
                     message = DemoConstant.GROUP_CHANGE;
@@ -879,7 +907,9 @@ public class ChatPresenter extends EaseChatPresenter {
                     showToast("GROUP_INVITE_ACCEPT");
                     break;
                 case GROUP_INVITE_DECLINE:
-                    messageDao.deleteByGroupId(groupId);
+                    if(messageDao != null) {
+                        messageDao.deleteByGroupId(groupId);
+                    }
                     // TODO: person, reason from ext
                     saveGroupNotification(groupId, /*groupName*/"",  /*person*/usernames.get(0), /*reason*/"", InviteMessageStatus.MULTI_DEVICE_GROUP_INVITE_DECLINE);
 
@@ -964,12 +994,14 @@ public class ChatPresenter extends EaseChatPresenter {
     private void updateContactNotificationStatus(String from, String reason, InviteMessage.InviteMessageStatus status) {
         InviteMessage msg = null;
         InviteMessageDao dao = DemoDbHelper.getInstance(DemoApplication.getInstance()).getInviteMessageDao();
-        List<InviteMessage> messages = dao.loadAll();
-        if(messages != null && !messages.isEmpty()) {
-            for (InviteMessage _msg : messages) {
-                if (_msg.getFrom().equals(from)) {
-                    msg = _msg;
-                    break;
+        if(dao != null) {
+            List<InviteMessage> messages = dao.loadAll();
+            if(messages != null && !messages.isEmpty()) {
+                for (InviteMessage _msg : messages) {
+                    if (_msg.getFrom().equals(from)) {
+                        msg = _msg;
+                        break;
+                    }
                 }
             }
         }

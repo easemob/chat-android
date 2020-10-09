@@ -33,7 +33,9 @@ public class EMConferenceManagerRepository extends BaseEMRepository {
                     List<String> contactList = new ArrayList<>();
                     if(TextUtils.isEmpty(groupId)) {
                         // 直接从本地加载所有的联系人
-                        contactList.addAll(DemoDbHelper.getInstance(DemoApplication.getInstance()).getUserDao().loadAllUsers());
+                        if(getUserDao() != null) {
+                            contactList.addAll(getUserDao().loadAllUsers());
+                        }
                     }else {
                         // 根据groupId获取群组中所有成员
                         contactList = new EMGroupManagerRepository().getAllGroupMemberByServer(groupId);

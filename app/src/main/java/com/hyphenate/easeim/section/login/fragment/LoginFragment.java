@@ -29,6 +29,7 @@ import com.hyphenate.EMError;
 import com.hyphenate.easeim.DemoHelper;
 import com.hyphenate.easeim.MainActivity;
 import com.hyphenate.easeim.R;
+import com.hyphenate.easeim.common.db.DemoDbHelper;
 import com.hyphenate.easeim.common.interfaceOrImplement.OnResourceParseCallback;
 import com.hyphenate.easeui.utils.EaseEditTextUtils;
 import com.hyphenate.easeim.common.utils.ToastUtils;
@@ -151,6 +152,11 @@ public class LoginFragment extends BaseInitFragment implements View.OnClickListe
             });
 
         });
+        DemoDbHelper.getInstance(mContext).getDatabaseCreatedObservable().observe(getViewLifecycleOwner(), response -> {
+            if(response != null && !TextUtils.isEmpty(mUserName) && !TextUtils.isEmpty(mPwd)) {
+                mFragmentViewModel.login(mUserName, mPwd, isTokenFlag);
+            }
+        });
     }
 
     @Override
@@ -208,7 +214,8 @@ public class LoginFragment extends BaseInitFragment implements View.OnClickListe
             ToastUtils.showToast(R.string.em_login_btn_info_incomplete);
             return;
         }
-        mFragmentViewModel.login(mUserName, mPwd, isTokenFlag);
+        //先初始化数据库
+        DemoDbHelper.getInstance(mContext).initDb(mUserName);
     }
 
     @Override
