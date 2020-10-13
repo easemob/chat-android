@@ -1,12 +1,14 @@
 package com.hyphenate.easeim.section.contact.fragment;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.ContextMenu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.annotation.StringRes;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.constraintlayout.widget.ConstraintSet;
@@ -131,7 +133,12 @@ public class ContactListFragment extends EaseContactListFragment implements View
             parseResource(response, new OnResourceParseCallback<List<EaseUser>>() {
                 @Override
                 public void onSuccess(List<EaseUser> data) {
-                    // 先进行排序
+                    adapter.setData(data);
+                }
+
+                @Override
+                public void onLoading(@Nullable List<EaseUser> data) {
+                    super.onLoading(data);
                     adapter.setData(data);
                 }
 
@@ -172,9 +179,6 @@ public class ContactListFragment extends EaseContactListFragment implements View
             }
         });
 
-        if(srlContactRefresh != null && !srlContactRefresh.isRefreshing()) {
-            srlContactRefresh.setRefreshing(true);
-        }
         mViewModel.loadContactList();
     }
 

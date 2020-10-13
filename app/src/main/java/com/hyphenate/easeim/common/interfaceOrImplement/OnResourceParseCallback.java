@@ -1,5 +1,7 @@
 package com.hyphenate.easeim.common.interfaceOrImplement;
 
+import androidx.annotation.Nullable;
+
 /**
  * 用于解析Resource<T>，减少重复代码
  * hideErrorMsg默认为false，即默认情况是会展示错误信息
@@ -21,7 +23,7 @@ public abstract class OnResourceParseCallback<T> {
      * 成功
      * @param data
      */
-    public abstract void onSuccess(T data);
+    public abstract void onSuccess(@Nullable T data);
 
     /**
      * 失败
@@ -33,7 +35,7 @@ public abstract class OnResourceParseCallback<T> {
     /**
      * 加载中
      */
-    public void onLoading(){}
+    public void onLoading(@Nullable T data){}
 
     /**
      * 隐藏加载

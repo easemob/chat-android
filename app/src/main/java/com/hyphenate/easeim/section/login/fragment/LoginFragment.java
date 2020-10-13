@@ -123,8 +123,8 @@ public class LoginFragment extends BaseInitFragment implements View.OnClickListe
                 }
 
                 @Override
-                public void onLoading() {
-                    super.onLoading();
+                public void onLoading(EaseUser data) {
+                    super.onLoading(data);
                     showLoading();
                 }
 

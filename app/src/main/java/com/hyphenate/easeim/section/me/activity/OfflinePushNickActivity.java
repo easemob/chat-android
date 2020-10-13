@@ -94,8 +94,8 @@ public class OfflinePushNickActivity extends BaseInitActivity implements OnClick
 				}
 
 				@Override
-				public void onLoading() {
-					super.onLoading();
+				public void onLoading(Boolean data) {
+					super.onLoading(data);
 					showLoading();
 				}
 

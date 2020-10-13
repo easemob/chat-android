@@ -143,8 +143,8 @@ public class GroupSharedFilesActivity extends BaseInitActivity implements OnRefr
                 }
 
                 @Override
-                public void onLoading() {
-                    super.onLoading();
+                public void onLoading(Boolean data) {
+                    super.onLoading(data);
                     showLoading();
                 }
 
