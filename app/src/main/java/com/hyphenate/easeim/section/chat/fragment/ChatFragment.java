@@ -261,9 +261,10 @@ public class ChatFragment extends EaseChatFragment implements EaseChatFragment.O
     private void recallMessage(EMMessage message) {
         EaseThreadManager.getInstance().runOnIOThread(()-> {
             try {
-                EMMessage msgNotification = EMMessage.createTxtSendMessage(" ",message.getTo());
+                EMMessage msgNotification = EMMessage.createSendMessage(EMMessage.Type.TXT);
                 EMTextMessageBody txtBody = new EMTextMessageBody(getResources().getString(R.string.msg_recall_by_self));
                 msgNotification.addBody(txtBody);
+                msgNotification.setTo(message.getTo());
                 msgNotification.setMsgTime(message.getMsgTime());
                 msgNotification.setLocalTime(message.getMsgTime());
                 msgNotification.setAttribute(DemoConstant.MESSAGE_TYPE_RECALL, true);
