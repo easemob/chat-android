@@ -44,6 +44,12 @@ public abstract class EaseBaseRecyclerViewAdapter<T> extends EaseBaseAdapter<Eas
     @Override
     public void onBindViewHolder(@NonNull EaseBaseRecyclerViewAdapter.ViewHolder holder, final int position) {
         holder.setAdapter(this);
+        int viewType = getItemViewType(position);
+        //增加viewType类型的判断
+        if(viewType == VIEW_TYPE_EMPTY) {
+            holder.setData(null, position);
+            return;
+        }
         if(mData == null || mData.isEmpty()) {
             return;
         }
