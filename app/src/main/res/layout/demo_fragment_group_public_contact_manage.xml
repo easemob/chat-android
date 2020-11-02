@@ -9,7 +9,7 @@
         android:id="@+id/srl_refresh"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        app:srlEnableLoadMoreWhenContentNotFull="true">
+        app:srlEnableLoadMoreWhenContentNotFull="false">
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rv_list"

@@ -360,7 +360,7 @@ public class BaseActivity extends AppCompatActivity {
             }
             callback.onError(response.errorCode, response.getMessage());
         }else if(response.status == Status.LOADING) {
-            callback.onLoading();
+            callback.onLoading(response.data);
         }
     }
 

@@ -68,17 +68,22 @@ public class EMChatManagerRepository extends BaseEMRepository{
                 }
             }
         }
-        List<MsgTypeManageEntity> manageEntities = getMsgTypeManageDao().loadAllMsgTypeManage();
-        synchronized (EMChatManagerRepository.class) {
-            for (MsgTypeManageEntity manage : manageEntities) {
-                String extField = manage.getExtField();
-                if(!TextUtils.isEmpty(extField) && EaseCommonUtils.isTimestamp(extField)) {
-                    topSortList.add(new Pair<>(Long.valueOf(extField), manage));
-                }else {
-                    Object lastMsg = manage.getLastMsg();
-                    if(lastMsg instanceof InviteMessage) {
-                        long time = ((InviteMessage) lastMsg).getTime();
-                        sortList.add(new Pair<>(time, manage));
+        List<MsgTypeManageEntity> manageEntities = null;
+        if(getMsgTypeManageDao() != null) {
+            manageEntities = getMsgTypeManageDao().loadAllMsgTypeManage();
+        }
+        if(manageEntities != null && !manageEntities.isEmpty()) {
+            synchronized (EMChatManagerRepository.class) {
+                for (MsgTypeManageEntity manage : manageEntities) {
+                    String extField = manage.getExtField();
+                    if(!TextUtils.isEmpty(extField) && EaseCommonUtils.isTimestamp(extField)) {
+                        topSortList.add(new Pair<>(Long.valueOf(extField), manage));
+                    }else {
+                        Object lastMsg = manage.getLastMsg();
+                        if(lastMsg instanceof InviteMessage) {
+                            long time = ((InviteMessage) lastMsg).getTime();
+                            sortList.add(new Pair<>(time, manage));
+                        }
                     }
                 }
             }

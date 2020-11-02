@@ -3,6 +3,7 @@ package com.hyphenate.easeim.common.db;
 import android.content.Context;
 import android.text.TextUtils;
 
+import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.room.Room;
 
@@ -61,9 +62,17 @@ public class DemoDbHelper {
         mIsDatabaseCreated.postValue(true);
     }
 
-    private void closeDb() {
+    public LiveData<Boolean> getDatabaseCreatedObservable() {
+        return mIsDatabaseCreated;
+    }
+
+    /**
+     * 关闭数据库
+     */
+    public void closeDb() {
         if(mDatabase != null) {
             mDatabase.close();
+            mDatabase = null;
         }
         currentUser = null;
     }

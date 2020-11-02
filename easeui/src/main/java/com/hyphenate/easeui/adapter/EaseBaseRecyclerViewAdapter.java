@@ -38,21 +38,12 @@ public abstract class EaseBaseRecyclerViewAdapter<T> extends EaseBaseAdapter<Eas
         if(viewType == VIEW_TYPE_EMPTY) {
             return getEmptyViewHolder(parent);
         }
-        return getViewHolder(parent, viewType);
-    }
-
-    @Override
-    public void onBindViewHolder(@NonNull EaseBaseRecyclerViewAdapter.ViewHolder holder, final int position) {
-        holder.setAdapter(this);
-        if(mData == null || mData.isEmpty()) {
-            return;
-        }
-        T item = getItem(position);
+        ViewHolder holder = getViewHolder(parent, viewType);
         if(isItemClickEnable()) {
             holder.itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    itemClickAction(v, position);
+                    itemClickAction(v, holder.getBindingAdapterPosition());
                 }
             });
         }
@@ -60,10 +51,26 @@ public abstract class EaseBaseRecyclerViewAdapter<T> extends EaseBaseAdapter<Eas
             holder.itemView.setOnLongClickListener(new View.OnLongClickListener() {
                 @Override
                 public boolean onLongClick(View v) {
-                    return itemLongClickAction(v, position);
+                    return itemLongClickAction(v, holder.getBindingAdapterPosition());
                 }
             });
         }
+        return holder;
+    }
+
+    @Override
+    public void onBindViewHolder(@NonNull EaseBaseRecyclerViewAdapter.ViewHolder holder, final int position) {
+        holder.setAdapter(this);
+        int viewType = getItemViewType(position);
+        //增加viewType类型的判断
+        if(viewType == VIEW_TYPE_EMPTY) {
+            holder.setData(null, position);
+            return;
+        }
+        if(mData == null || mData.isEmpty()) {
+            return;
+        }
+        T item = getItem(position);
         holder.setData(item, position);
         holder.setDataList(mData, position);
     }

@@ -55,11 +55,15 @@ public class NewFriendsViewModel extends AndroidViewModel {
     }
 
     public void loadMessages(int limit) {
-        inviteMsgObservable.setSource(messageDao.loadMessages(limit, 0));
+        if(messageDao != null) {
+            inviteMsgObservable.setSource(messageDao.loadMessages(limit, 0));
+        }
     }
 
     public void loadMoreMessages(int limit, int offset) {
-        moreInviteMsgObservable.setSource(messageDao.loadMessages(limit, offset));
+        if(messageDao != null) {
+            moreInviteMsgObservable.setSource(messageDao.loadMessages(limit, offset));
+        }
     }
 
     public LiveData<Resource<Boolean>> resultObservable() {
@@ -89,7 +93,9 @@ public class NewFriendsViewModel extends AndroidViewModel {
                 }
                 msg.setStatus(InviteMessageStatus.AGREED);
                 msg.setReason(message);
-                messageDao.update(msg);
+                if(messageDao != null) {
+                    messageDao.update(msg);
+                }
                 agreeObservable.postValue(Resource.success(message));
                 messageChangeObservable.with(DemoConstant.NOTIFY_CHANGE).postValue(EaseEvent.create(DemoConstant.NOTIFY_CHANGE, EaseEvent.TYPE.NOTIFY));
             } catch (HyphenateException e) {
@@ -115,7 +121,9 @@ public class NewFriendsViewModel extends AndroidViewModel {
                 }
                 msg.setStatus(InviteMessageStatus.REFUSED);
                 msg.setReason(message);
-                messageDao.update(msg);
+                if(messageDao != null) {
+                    messageDao.update(msg);
+                }
                 refuseObservable.postValue(Resource.success(message));
                 messageChangeObservable.with(DemoConstant.NOTIFY_CHANGE).postValue(EaseEvent.create(DemoConstant.NOTIFY_CHANGE, EaseEvent.TYPE.NOTIFY));
             } catch (HyphenateException e) {
@@ -126,12 +134,16 @@ public class NewFriendsViewModel extends AndroidViewModel {
     }
 
     public void deleteMsg(InviteMessage message) {
-        messageDao.delete(message);
+        if(messageDao != null) {
+            messageDao.delete(message);
+        }
         resultObservable.postValue(Resource.success(true));
     }
 
     public void makeAllMsgRead() {
-        messageDao.makeAllReaded();
+        if(messageDao != null) {
+            messageDao.makeAllReaded();
+        }
         messageChangeObservable.with(DemoConstant.NOTIFY_CHANGE).postValue(EaseEvent.create(DemoConstant.NOTIFY_CHANGE, EaseEvent.TYPE.NOTIFY));
     }
 }

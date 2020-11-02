@@ -1,7 +1,14 @@
-# 环信
+# 环信/EaseIM
 --------
 ## 简介
 环信App是基于环信SDK开发的一款完整的类微信的聊天APP。展示的功能包括：注册新用户，用户登录，添加好友，单聊，群聊，发送文字，表情，语音，图片，地理位置等消息，以及实时音视频通话等。
+## 创建应用并获取AppKey
+运行demo之前，请务必先到[环信管理后台](https://console.easemob.com/user/register)创建您自己的应用并获取到Appkey，然后将获取到的Appkey配置到AndroidManifest.xml中。
+>```Java
+>   <!-- 设置环信应用的AppKey -->
+>   <meta-data android:name="EASEMOB_APPKEY"  android:value="创建应用获取到的Appkey" />
+>```
+注册并创建应用的详情介绍，请移步环信官网：[注册并创建应用](http://docs-im.easemob.com/im/quickstart/guide/experience#%E6%B3%A8%E5%86%8C%E5%B9%B6%E5%88%9B%E5%BB%BA%E5%BA%94%E7%94%A8)
 ## 如何集成环信IM SDK
 请移步环信官网：[Android SDK 介绍及导入](http://docs-im.easemob.com/im/android/sdk/import)
 ## 体验环信App
@@ -78,12 +85,22 @@
 >```
 
 2、解决Android9.0以上强制使用https的问题 
-解决办法可以参考：[StackOverFlow](https://stackoverflow.com/questions/45940861/android-8-cleartext-http-traffic-not-permitted)，也可以直接在AndroidManifest.xml文件的application标签中设置android:usesCleartextTraffic=“true” 
+
+解决办法可以参考：[StackOverFlow](https://stackoverflow.com/questions/45940861/android-8-cleartext-http-traffic-not-permitted)，也可以直接在AndroidManifest.xml文件的application标签中设置android:usesCleartextTraffic=“true”
 >```Java
 ><application 
 >    android:usesCleartextTraffic="true" > 
 >   ......
 ></application>
 >```
+
+3、从github拉取源码，运行demo，遇到登录报缺失Appkey及注册demo崩溃
+
+请先到[环信管理后台](https://console.easemob.com/user/register)创建您自己的应用并获取到Appkey，然后将获取到的Appkey配置到AndroidManifest.xml中。
+>```Java
+>   <!-- 设置环信应用的AppKey -->
+>   <meta-data android:name="EASEMOB_APPKEY"  android:value="创建应用获取到的Appkey" />
+>```
+注册并创建应用的详情介绍，请移步环信官网：[注册并创建应用](http://docs-im.easemob.com/im/quickstart/guide/experience#%E6%B3%A8%E5%86%8C%E5%B9%B6%E5%88%9B%E5%BB%BA%E5%BA%94%E7%94%A8)
 ## 相关文档
 请参考集成文档： http://docs-im.easemob.com/im/android/sdk/import

@@ -113,8 +113,8 @@ public class NewGroupActivity extends BaseInitActivity implements EaseTitleBar.O
                 }
 
                 @Override
-                public void onLoading() {
-                    super.onLoading();
+                public void onLoading(EMGroup data) {
+                    super.onLoading(data);
                     showLoading(getString(R.string.request));
                 }
 

@@ -138,11 +138,17 @@ public class DemoModel {
     public void insert(Object object) {
         DemoDbHelper dbHelper = getDbHelper();
         if(object instanceof InviteMessage) {
-            dbHelper.getInviteMessageDao().insert((InviteMessage) object);
+            if(dbHelper.getInviteMessageDao() != null) {
+                dbHelper.getInviteMessageDao().insert((InviteMessage) object);
+            }
         }else if(object instanceof MsgTypeManageEntity) {
-            dbHelper.getMsgTypeManageDao().insert((MsgTypeManageEntity) object);
+            if(dbHelper.getMsgTypeManageDao() != null) {
+                dbHelper.getMsgTypeManageDao().insert((MsgTypeManageEntity) object);
+            }
         }else if(object instanceof EmUserEntity) {
-            dbHelper.getUserDao().insert((EmUserEntity) object);
+            if(dbHelper.getUserDao() != null) {
+                dbHelper.getUserDao().insert((EmUserEntity) object);
+            }
         }
     }
 
@@ -153,11 +159,17 @@ public class DemoModel {
     public void update(Object object) {
         DemoDbHelper dbHelper = getDbHelper();
         if(object instanceof InviteMessage) {
-            dbHelper.getInviteMessageDao().update((InviteMessage) object);
+            if(dbHelper.getInviteMessageDao() != null) {
+                dbHelper.getInviteMessageDao().update((InviteMessage) object);
+            }
         }else if(object instanceof MsgTypeManageEntity) {
-            dbHelper.getMsgTypeManageDao().update((MsgTypeManageEntity) object);
+            if(dbHelper.getMsgTypeManageDao() != null) {
+                dbHelper.getMsgTypeManageDao().update((MsgTypeManageEntity) object);
+            }
         }else if(object instanceof EmUserEntity) {
-            dbHelper.getUserDao().insert((EmUserEntity) object);
+            if(dbHelper.getUserDao() != null) {
+                dbHelper.getUserDao().insert((EmUserEntity) object);
+            }
         }
     }
     

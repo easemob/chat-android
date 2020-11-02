@@ -96,14 +96,16 @@ public class ChatActivity extends BaseInitActivity implements EaseTitleBar.OnBac
             @Override
             public void provideTitle(int chatType, String title) {
                 if(chatType == DemoConstant.CHATTYPE_SINGLE) {
-                    LiveData<List<EaseUser>> titleObservable = DemoDbHelper.getInstance(mContext).getUserDao().loadUserById(title);
-                    titleObservable.observe(mContext, users -> {
-                        if(users != null && !users.isEmpty()) {
-                            titleBarMessage.setTitle(users.get(0).getNickname());
-                        }else {
-                            titleBarMessage.setTitle(title);
-                        }
-                    });
+                    if(DemoDbHelper.getInstance(mContext).getUserDao() != null) {
+                        LiveData<List<EaseUser>> titleObservable = DemoDbHelper.getInstance(mContext).getUserDao().loadUserById(title);
+                        titleObservable.observe(mContext, users -> {
+                            if(users != null && !users.isEmpty()) {
+                                titleBarMessage.setTitle(users.get(0).getNickname());
+                            }else {
+                                titleBarMessage.setTitle(title);
+                            }
+                        });
+                    }
                 }else {
                     titleBarMessage.setTitle(title);
                 }

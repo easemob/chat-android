@@ -73,8 +73,12 @@ public class ConversationListViewModel extends AndroidViewModel {
     public void deleteSystemMsg(MsgTypeManageEntity msg) {
         try {
             DemoDbHelper dbHelper = DemoDbHelper.getInstance(DemoApplication.getInstance());
-            dbHelper.getInviteMessageDao().delete("type", msg.getType());
-            dbHelper.getMsgTypeManageDao().delete(msg);
+            if(dbHelper.getInviteMessageDao() != null) {
+                dbHelper.getInviteMessageDao().delete("type", msg.getType());
+            }
+            if(dbHelper.getMsgTypeManageDao() != null) {
+                dbHelper.getMsgTypeManageDao().delete(msg);
+            }
             deleteConversationObservable.postValue(Resource.success(true));
         } catch (Exception e) {
             e.printStackTrace();

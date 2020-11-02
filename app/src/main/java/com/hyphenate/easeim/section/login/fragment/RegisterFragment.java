@@ -102,8 +102,8 @@ public class RegisterFragment extends BaseInitFragment implements TextWatcher, V
                 }
 
                 @Override
-                public void onLoading() {
-                    super.onLoading();
+                public void onLoading(String data) {
+                    super.onLoading(data);
                     showLoading();
                 }
 
