@@ -15,8 +15,9 @@
 
     <RelativeLayout
         android:id="@+id/left_layout"
-        android:layout_width="50dip"
+        android:layout_width="wrap_content"
         android:layout_height="match_parent"
+        android:minWidth="50dp"
         android:background="@drawable/ease_common_tab_bg" >
 
         <ImageView
@@ -24,7 +25,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
-            android:scaleType="centerInside" />
+            android:scaleType="centerInside"
+            tools:src="@drawable/ease_mm_title_back"/>
 
     </RelativeLayout>
 

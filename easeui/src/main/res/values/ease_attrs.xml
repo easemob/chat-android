@@ -2,15 +2,32 @@
 <resources>
 
     <declare-styleable name="EaseTitleBar">
+        <!-- 标题文本 -->
         <attr name="titleBarTitle" format="reference|string"/>
+        <!-- 左侧图片 -->
         <attr name="titleBarLeftImage" format="reference"/>
+        <!-- 右侧图片 -->
         <attr name="titleBarRightImage" format="reference"/>
+        <!-- 右标题文本 -->
         <attr name="titleBarRightTitle" format="reference|string"/>
-        <attr name="titleBarBackground" format="reference|color"/>
+        <!-- Toolbar返回箭头颜色 -->
         <attr name="titleBarArrowColor" format="reference|color"/>
+        <!-- Toolbar右侧菜单更多的图标 -->
         <attr name="titleBarMenuResource" format="reference"/>
-        <attr name="titleBarRightVisible" format="boolean"/>
+        <!-- Toolbar是否可见返回按钮 -->
         <attr name="titleBarDisplayHomeAsUpEnabled" format="boolean"/>
+        <!-- 右侧布局是否可见 -->
+        <attr name="titleBarRightVisible" format="boolean"/>
+        <!-- 标题文本的位置-->
+        <attr name="titleBarTitlePosition" format="enum">
+            <enum name="center" value="0"/>
+            <enum name="left" value="1"/>
+            <enum name="right" value="2"/>
+        </attr>
+        <!-- 标题文本的字体大小 -->
+        <attr name="titleBarTitleTextSize" format="dimension"/>
+        <!-- 标题文本的字体颜色 -->
+        <attr name="titleBarTitleTextColor" format="reference|color"/>
     </declare-styleable>
 
     <declare-styleable name="EaseImageView">

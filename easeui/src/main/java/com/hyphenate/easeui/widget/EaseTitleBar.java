@@ -7,6 +7,7 @@ import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
 import android.text.TextUtils;
 import android.util.AttributeSet;
+import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -42,6 +43,7 @@ public class EaseTitleBar extends RelativeLayout implements View.OnClickListener
     private OnRightClickListener mOnRightClickListener;
     private int mArrowColorId;
     private int mArrowColor;
+    private int mTitleTextColor;
     private int mWidth;
     private int mHeight;
     private boolean mDisplayHomeAsUpEnabled;
@@ -110,14 +112,6 @@ public class EaseTitleBar extends RelativeLayout implements View.OnClickListener
                 rightImage.setImageDrawable(rightDrawable);
             }
 
-            int bgId = ta.getResourceId(R.styleable.EaseTitleBar_titleBarBackground, -1);
-            if(bgId != -1) {
-                titleLayout.setBackgroundResource(bgId);
-            }else {
-                int color = ta.getColor(R.styleable.EaseTitleBar_titleBarBackground, Color.TRANSPARENT);
-                titleLayout.setBackgroundColor(color);
-            }
-
             mArrowColorId = ta.getResourceId(R.styleable.EaseTitleBar_titleBarArrowColor, -1);
             mArrowColor = ta.getColor(R.styleable.EaseTitleBar_titleBarArrowColor, Color.BLACK);
 
@@ -139,8 +133,41 @@ public class EaseTitleBar extends RelativeLayout implements View.OnClickListener
 
             mDisplayHomeAsUpEnabled = ta.getBoolean(R.styleable.EaseTitleBar_titleBarDisplayHomeAsUpEnabled, true);
 
+            int titlePosition = ta.getInteger(R.styleable.EaseTitleBar_titleBarTitlePosition, 0);
+            setTitlePosition(titlePosition);
+
+            float titleTextSize = ta.getDimension(R.styleable.EaseTitleBar_titleBarTitleTextSize, (int) sp2px(getContext(), 18));
+            titleView.setTextSize(TypedValue.COMPLEX_UNIT_PX, titleTextSize);
+
+            int titleTextColor = ta.getResourceId(R.styleable.EaseTitleBar_titleBarTitleTextColor, -1);
+            if(titleTextColor != -1) {
+                mTitleTextColor = ContextCompat.getColor(getContext(), titleTextColor);
+            }else {
+                mTitleTextColor = ta.getColor(R.styleable.EaseTitleBar_titleBarTitleTextColor, ContextCompat.getColor(getContext(), R.color.em_toolbar_color_title));
+            }
+            titleView.setTextColor(mTitleTextColor);
+
             ta.recycle();
         }
+    }
+
+    private void setTitlePosition(int titlePosition) {
+        ViewGroup.LayoutParams params = titleView.getLayoutParams();
+        if(params instanceof RelativeLayout.LayoutParams) {
+            if(titlePosition == 0) { //居中
+                ((LayoutParams) params).addRule(RelativeLayout.CENTER_IN_PARENT);
+            }else if(titlePosition == 1) { //居左
+                ((LayoutParams) params).addRule(RelativeLayout.ALIGN_PARENT_LEFT);
+                ((LayoutParams) params).addRule(RelativeLayout.CENTER_VERTICAL);
+                ((LayoutParams) params).addRule(RelativeLayout.RIGHT_OF, leftLayout.getId());
+            }else { //居右
+                ((LayoutParams) params).addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
+                ((LayoutParams) params).addRule(RelativeLayout.CENTER_VERTICAL);
+                ((LayoutParams) params).addRule(LEFT_OF, rightLayout.getId());
+                ((LayoutParams) params).setMargins(0, 0, (int) dip2px(getContext(), 60), 0);
+            }
+        }
+
     }
 
     private void initToolbar() {
@@ -301,5 +328,25 @@ public class EaseTitleBar extends RelativeLayout implements View.OnClickListener
      */
     public interface OnRightClickListener {
         void onRightClick(View view);
+    }
+
+    /**
+     * dip to px
+     * @param context
+     * @param value
+     * @return
+     */
+    public static float dip2px(Context context, float value) {
+        return TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, value, context.getResources().getDisplayMetrics());
+    }
+
+    /**
+     * sp to px
+     * @param context
+     * @param value
+     * @return
+     */
+    public static float sp2px(Context context, float value) {
+        return TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_SP, value, context.getResources().getDisplayMetrics());
     }
 }
