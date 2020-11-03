@@ -550,4 +550,5 @@
     <string name="demo_call_options_merge_stream">合并流</string>
     <string name="demo_call_options_watermark">水印</string>
     <string name="demo_call_options_set_video_resolution">设置视频分辨率：%1$s</string>
+    <string name="demo_grid_file_null">没有获取到文件内容</string>
 </resources>
