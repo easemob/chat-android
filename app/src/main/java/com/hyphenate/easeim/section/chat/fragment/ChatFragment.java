@@ -391,7 +391,7 @@ public class ChatFragment extends EaseChatFragment implements EaseChatFragment.O
                         String uriString = data.getStringExtra("uri");
                         EMLog.d(TAG, "path = "+videoPath + " uriString = "+uriString);
                         if(!TextUtils.isEmpty(videoPath)) {
-                            File file = new File(PathUtil.getInstance().getVideoPath(), "thvideo" + System.currentTimeMillis());
+                            File file = new File(PathUtil.getInstance().getVideoPath(), "thvideo" + System.currentTimeMillis()+".jpeg");
                             try {
                                 FileOutputStream fos = new FileOutputStream(file);
                                 Bitmap ThumbBitmap = ThumbnailUtils.createVideoThumbnail(videoPath, 3);
@@ -404,7 +404,7 @@ public class ChatFragment extends EaseChatFragment implements EaseChatFragment.O
                             }
                         }else {
                             Uri videoUri = UriUtils.getLocalUriFromString(uriString);
-                            File file = new File(PathUtil.getInstance().getVideoPath(), "thvideo" + System.currentTimeMillis());
+                            File file = new File(PathUtil.getInstance().getVideoPath(), "thvideo" + System.currentTimeMillis()+".jpeg");
                             try {
                                 FileOutputStream fos = new FileOutputStream(file);
                                 MediaMetadataRetriever media = new MediaMetadataRetriever();
