@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.media.MediaPlayer;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -184,7 +185,11 @@ public class ImageGridFragment extends BaseFragment implements OnItemClickListen
 		}else{
 			VideoEntity vEntty=mAdapter.getData().get(position-1);
 			Intent intent;
-			if(VersionUtils.isTargetQ(getContext())) {
+			if(vEntty == null || (TextUtils.isEmpty(vEntty.filePath) && vEntty.uri == null)) {
+			    showToast(R.string.demo_grid_file_null);
+			    return;
+			}
+			if(vEntty.uri != null) {
 				intent=getActivity().getIntent().putExtra("uri", vEntty.uri.toString()).putExtra("dur", vEntty.duration);
 			}else {
 				intent=getActivity().getIntent().putExtra("path", vEntty.filePath).putExtra("dur", vEntty.duration);
