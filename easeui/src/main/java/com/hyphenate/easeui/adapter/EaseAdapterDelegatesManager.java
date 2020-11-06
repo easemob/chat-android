@@ -28,11 +28,10 @@ public class EaseAdapterDelegatesManager {
     }
 
     public EaseAdapterDelegatesManager addDelegate(EaseAdapterDelegate<?, ?> delegate, String tag) {
-        Type superclass = delegate.getClass().getGenericSuperclass();
+        Type superclass = getParameterizedType(delegate.getClass());
         if(superclass instanceof ParameterizedType) {
             Class<?> clazz = (Class<?>) ((ParameterizedType) superclass).getActualTypeArguments()[0];
             String typeWithTag = typeWithTag(clazz, tag);
-            
             int viewType = hasConsistItemType ? delegate.getItemViewType() : delegates.size();
             //save the delegate to the collection
             delegates.put(viewType, (EaseAdapterDelegate<Object, ViewHolder>) delegate);
@@ -46,6 +45,21 @@ public class EaseAdapterDelegatesManager {
         return this;
     }
 
+    private Type getParameterizedType(Class<?> clazz) {
+        if(clazz == null) {
+            return null;
+        }
+        Type superclass = clazz.getGenericSuperclass();
+        if(superclass instanceof ParameterizedType) {
+            return superclass;
+        }else {
+            if(clazz.getName().equals("java.lang.Object")) {
+                return null;
+            }
+            return getParameterizedType(clazz.getSuperclass());
+        }
+    }
+
     @Nullable
     public EaseAdapterDelegate<Object, ViewHolder> getDelegate(int viewType) {
         EaseAdapterDelegate<Object, ViewHolder> delegate = delegates.get(viewType);
@@ -53,6 +67,19 @@ public class EaseAdapterDelegatesManager {
             return fallbackDelegate;
         }
         return delegate;
+    }
+
+    public List<EaseAdapterDelegate<Object, ViewHolder>> getAllDelegates() {
+        List<EaseAdapterDelegate<Object, ViewHolder>> list = new ArrayList<>();
+        if(!delegates.isEmpty()) {
+            for(int i = 0; i < delegates.size(); i++) {
+                list.add(delegates.valueAt(i));
+            }
+        }
+        if(fallbackDelegate != null) {
+            list.add(fallbackDelegate);
+        }
+        return list;
     }
 
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -64,8 +91,15 @@ public class EaseAdapterDelegatesManager {
         return delegate.onCreateViewHolder(parent, tag);
     }
 
+    /**
+     * 注意：此处获取viewType时，不要直接使用{@link RecyclerView.ViewHolder#getItemViewType()}
+     * 使用ConcatAdapter时，返回的viewType不准确。下同
+     * @param holder
+     * @param position
+     * @param item
+     */
     public void onBindViewHolder(@NonNull ViewHolder holder, int position, Object item) {
-        int viewType = holder.getItemViewType();
+        int viewType = holder.getAdapter().getItemViewType(position);
         EaseAdapterDelegate<Object, ViewHolder> delegate = getDelegate(viewType);
         if(delegate == null) {
             throw new NullPointerException("No delegate found for item at position = "
@@ -77,7 +111,7 @@ public class EaseAdapterDelegatesManager {
     }
 
     public void onBindViewHolder(@NonNull ViewHolder holder, int position, @NonNull List<Object> payloads, Object item) {
-        int viewType = holder.getItemViewType();
+        int viewType = holder.getAdapter().getItemViewType(position);
         EaseAdapterDelegate<Object, ViewHolder> delegate = getDelegate(viewType);
         if(delegate == null) {
             throw new NullPointerException("No delegate found for item at position = "

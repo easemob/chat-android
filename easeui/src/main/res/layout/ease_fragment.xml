@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <com.hyphenate.easeui.modules.conversation.EaseConversationListLayout
+        android:id="@+id/list"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:ease_con_item_avatar_size="80dp"
+        app:ease_con_item_height="100dp"
+        app:ease_con_item_avatar_default_src="@drawable/ease_default_image"/>
+
+</LinearLayout>

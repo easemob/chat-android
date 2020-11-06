@@ -24,8 +24,8 @@ import java.util.List;
  * @param <T>
  */
 public abstract class EaseBaseRecyclerViewAdapter<T> extends EaseBaseAdapter<EaseBaseRecyclerViewAdapter.ViewHolder> {
-    private static final int VIEW_TYPE_EMPTY = -1;
-    private static final int VIEW_TYPE_ITEM = 0;
+    public static final int VIEW_TYPE_EMPTY = -1;
+    public static final int VIEW_TYPE_ITEM = 0;
     private OnItemClickListener mOnItemClickListener;
     private OnItemLongClickListener mOnItemLongClickListener;
     public Context mContext;
@@ -61,10 +61,8 @@ public abstract class EaseBaseRecyclerViewAdapter<T> extends EaseBaseAdapter<Eas
     @Override
     public void onBindViewHolder(@NonNull EaseBaseRecyclerViewAdapter.ViewHolder holder, final int position) {
         holder.setAdapter(this);
-        int viewType = getItemViewType(position);
         //增加viewType类型的判断
-        if(viewType == VIEW_TYPE_EMPTY) {
-            holder.setData(null, position);
+        if(isEmptyViewType(position)) {
             return;
         }
         if(mData == null || mData.isEmpty()) {
@@ -73,6 +71,16 @@ public abstract class EaseBaseRecyclerViewAdapter<T> extends EaseBaseAdapter<Eas
         T item = getItem(position);
         holder.setData(item, position);
         holder.setDataList(mData, position);
+    }
+
+    /**
+     * 判断是否是空布局类型
+     * @param position
+     * @return
+     */
+    public boolean isEmptyViewType(int position) {
+        int viewType = getItemViewType(position);
+        return viewType == VIEW_TYPE_EMPTY;
     }
 
     public boolean itemLongClickAction(View v, int position) {
@@ -166,7 +174,7 @@ public abstract class EaseBaseRecyclerViewAdapter<T> extends EaseBaseAdapter<Eas
      * @return
      */
     public T getItem(int position) {
-        return mData.get(position);
+        return mData == null ? null : mData.get(position);
     }
 
     /**

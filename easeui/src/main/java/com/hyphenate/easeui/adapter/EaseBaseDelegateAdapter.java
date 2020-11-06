@@ -5,6 +5,8 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import java.util.List;
+
 /**
  * （1）做为与{@link RecyclerView}关联的adapter的基类，实现了与{@link EaseAdapterDelegatesManager}的关联,
  * 将{@link RecyclerView.Adapter}中的{@link #getItemViewType(int)}, {@link #getViewHolder(ViewGroup, int)},
@@ -55,6 +57,10 @@ public abstract class EaseBaseDelegateAdapter<T> extends EaseBaseRecyclerViewAda
         return delegatesManager.getDelegate(viewType);
     }
 
+    public List<EaseAdapterDelegate<Object, ViewHolder>> getAllDelegate() {
+        return delegatesManager.getAllDelegates();
+    }
+
     @Override
     public int getItemViewType(int position) {
         int viewType = 0;
@@ -74,7 +80,29 @@ public abstract class EaseBaseDelegateAdapter<T> extends EaseBaseRecyclerViewAda
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         super.onBindViewHolder(holder, position);
-        //已经通过super处理相应的onBindViewHolder的逻辑，此处不再处理
+        if(isEmptyViewType(position)) {
+            return;
+        }
+        if(mData == null || mData.isEmpty()) {
+            return;
+        }
+        if(!delegatesManager.getAllDelegates().isEmpty()) {
+            delegatesManager.onBindViewHolder(holder, position, getItem(position));
+        }
+    }
+
+    @Override
+    public void onBindViewHolder(@NonNull ViewHolder holder, int position, @NonNull List<Object> payloads) {
+        super.onBindViewHolder(holder, position, payloads);
+        if(isEmptyViewType(position)) {
+            return;
+        }
+        if(mData == null || mData.isEmpty()) {
+            return;
+        }
+        if(!delegatesManager.getAllDelegates().isEmpty()) {
+            delegatesManager.onBindViewHolder(holder, position, payloads, getItem(position));
+        }
     }
 
     @Override
