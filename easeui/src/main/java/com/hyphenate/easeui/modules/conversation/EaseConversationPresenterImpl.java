@@ -6,8 +6,6 @@ import com.hyphenate.chat.EMClient;
 import com.hyphenate.chat.EMConversation;
 import com.hyphenate.easeui.manager.EaseThreadManager;
 import com.hyphenate.easeui.modules.conversation.model.EaseConversationInfo;
-import com.hyphenate.easeui.modules.EaseBasePresenter;
-import com.hyphenate.easeui.modules.ILoadDataView;
 import com.hyphenate.easeui.utils.EaseCommonUtils;
 
 import java.util.ArrayList;
@@ -16,30 +14,14 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 
-public class EaseConversationPresenterImpl extends EaseBasePresenter {
-    private IEaseConversationListView mView;
-
-    @Override
-    public void attachView(ILoadDataView view) {
-        mView = (IEaseConversationListView) view;
-    }
-
-    @Override
-    public void detachView() {
-        mView = null;
-    }
-
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-        detachView();
-    }
+public class EaseConversationPresenterImpl extends EaseConversationPresenter {
 
     /**
      * 注意：默认conversation中设置extField值为时间戳后，是将该会话置顶
-     * 如果有不同的逻辑，请自己实现，并调用{@link #loadData(List)}方法即可
+     * 如果有不同的逻辑，请自己实现，并调用{@link #sortData(List)}方法即可
      */
-    public void loadDefaultData() {
+    @Override
+    public void loadData() {
         // get all conversations
         Map<String, EMConversation> conversations = EMClient.getInstance().chatManager().getAllConversations();
         if(conversations.isEmpty()) {
@@ -68,14 +50,15 @@ public class EaseConversationPresenterImpl extends EaseBasePresenter {
                 }
             }
         }
-        loadData(infos);
+        EaseThreadManager.getInstance().runOnMainThread(()-> mView.loadConversationListSuccess(infos));
     }
 
     /**
      * 排序数据
      * @param data
      */
-    public void loadData(List<EaseConversationInfo> data) {
+    @Override
+    public void sortData(List<EaseConversationInfo> data) {
         if(data == null || data.isEmpty()) {
             EaseThreadManager.getInstance().runOnMainThread(() -> {
                 if(!isDestroy()) {
@@ -101,7 +84,7 @@ public class EaseConversationPresenterImpl extends EaseBasePresenter {
         }
         EaseThreadManager.getInstance().runOnMainThread(() -> {
             if(!isDestroy()) {
-                mView.loadConversationListSuccess(sortList);
+                mView.sortConversationListSuccess(sortList);
             }
         });
     }
@@ -128,5 +111,45 @@ public class EaseConversationPresenterImpl extends EaseBasePresenter {
         });
     }
 
+    @Override
+    public void makeConversionRead(int position, EaseConversationInfo info) {
+        if(info.getInfo() instanceof EMConversation) {
+            ((EMConversation) info.getInfo()).markAllMessagesAsRead();
+        }
+        mView.refreshList(position);
+    }
+
+    @Override
+    public void makeConversationTop(int position, EaseConversationInfo info) {
+        if(info.getInfo() instanceof EMConversation) {
+            long timestamp = System.currentTimeMillis();
+            ((EMConversation) info.getInfo()).setExtField(timestamp +"");
+            info.setTop(true);
+            info.setTimestamp(timestamp);
+        }
+        mView.refreshList();
+    }
+
+    @Override
+    public void cancelConversationTop(int position, EaseConversationInfo info) {
+        if(info.getInfo() instanceof EMConversation) {
+            ((EMConversation) info.getInfo()).setExtField("");
+            info.setTop(false);
+            info.setTimestamp(((EMConversation) info.getInfo()).getLastMessage().getMsgTime());
+        }
+        mView.refreshList();
+    }
+
+    @Override
+    public void deleteConversation(int position, EaseConversationInfo info) {
+        if(info.getInfo() instanceof EMConversation) {
+            boolean isDelete = EMClient.getInstance().chatManager().deleteConversation(((EMConversation) info.getInfo()).conversationId(), true);
+            if(isDelete) {
+                mView.deleteItem(position);
+            }else {
+                mView.deleteItemFail(position, "");
+            }
+        }
+    }
 }
 

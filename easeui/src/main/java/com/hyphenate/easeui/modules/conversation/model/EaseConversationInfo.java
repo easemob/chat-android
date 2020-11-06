@@ -17,6 +17,8 @@ public class EaseConversationInfo implements Serializable, Comparable<EaseConver
     //是否是群组
     private boolean isGroup;
 
+    private OnSelectListener listener;
+
     public Object getInfo() {
         return info;
     }
@@ -31,6 +33,9 @@ public class EaseConversationInfo implements Serializable, Comparable<EaseConver
 
     public void setSelected(boolean selected) {
         isSelected = selected;
+        if(listener != null) {
+            listener.onSelect(selected);
+        }
     }
 
     public long getTimestamp() {
@@ -57,9 +62,17 @@ public class EaseConversationInfo implements Serializable, Comparable<EaseConver
         isGroup = group;
     }
 
+    public void setOnSelectListener(OnSelectListener listener) {
+        this.listener = listener;
+    }
+
     @Override
     public int compareTo(EaseConversationInfo o) {
         return timestamp > o.timestamp ? -1 : 1;
+    }
+
+    public interface OnSelectListener {
+        void onSelect(boolean isSelected);
     }
 }
 

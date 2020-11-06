@@ -48,6 +48,7 @@ public abstract class EaseDefaultConversationDelegate extends EaseBaseConversati
         public TextView mentioned;
         public TextView message;
         public Context mContext;
+        private final Drawable bgDrawable;
 
         public ViewHolder(@NonNull View itemView, EaseConversationSetModel setModel) {
             super(itemView);
@@ -130,6 +131,7 @@ public abstract class EaseDefaultConversationDelegate extends EaseBaseConversati
                 }
                 mUnreadMsgNumber.setVisibility(setModel.isHideUnreadDot() ? View.GONE : View.VISIBLE);
             }
+            bgDrawable = itemView.getBackground();
         }
 
         @Override
@@ -139,7 +141,20 @@ public abstract class EaseDefaultConversationDelegate extends EaseBaseConversati
 
         @Override
         public void setData(EaseConversationInfo item, int position) {
-
+            item.setOnSelectListener(new EaseConversationInfo.OnSelectListener() {
+                @Override
+                public void onSelect(boolean isSelected) {
+                    if(isSelected) {
+                        itemView.setBackgroundResource(R.drawable.ease_conversation_item_selected);
+                    }else {
+                        if(item.isTop()) {
+                            itemView.setBackgroundResource(R.drawable.ease_conversation_top_bg);
+                        }else {
+                            itemView.setBackground(bgDrawable);
+                        }
+                    }
+                }
+            });
         }
     }
 }

@@ -6,16 +6,22 @@ import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.PopupMenu;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.ConcatAdapter;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.hyphenate.chat.EMConversation;
 import com.hyphenate.easeui.R;
 import com.hyphenate.easeui.adapter.EaseAdapterDelegate;
 import com.hyphenate.easeui.adapter.EaseBaseRecyclerViewAdapter;
@@ -26,6 +32,10 @@ import com.hyphenate.easeui.modules.conversation.delegate.EaseConversationDelega
 import com.hyphenate.easeui.modules.conversation.interfaces.IConversationListLayout;
 import com.hyphenate.easeui.modules.conversation.interfaces.IConversationStyle;
 import com.hyphenate.easeui.modules.conversation.model.EaseConversationSetModel;
+import com.hyphenate.easeui.modules.interfaces.IPopupMenu;
+import com.hyphenate.easeui.modules.menu.OnPopupMenuDismissListener;
+import com.hyphenate.easeui.modules.menu.OnPopupMenuItemClickListener;
+import com.hyphenate.easeui.modules.menu.PopupMenuHelper;
 import com.hyphenate.easeui.widget.EaseRecyclerView;
 
 import java.util.List;
@@ -34,16 +44,27 @@ import java.util.List;
 /**
  * 会话列表
  */
-public class EaseConversationListLayout extends EaseBaseLayout implements IConversationListLayout, IConversationStyle, IEaseConversationListView {
+public class EaseConversationListLayout extends EaseBaseLayout implements IConversationListLayout, IConversationStyle
+                                                                        , IEaseConversationListView, IPopupMenu {
+    private static final int MENU_MAKE_READ = 0;
+    private static final int MENU_MAKE_TOP = 1;
+    private static final int MENU_MAKE_CANCEL_TOP = 2;
+    private static final int MENU_DELETE = 3;
     private EaseRecyclerView rvConversationList;
 
     private ConcatAdapter adapter;
     private EaseConversationListAdapter listAdapter;
     private OnItemClickListener itemListener;
     private OnItemLongClickListener itemLongListener;
+    private OnPopupMenuItemClickListener popupMenuItemClickListener;
+    private OnPopupMenuDismissListener dismissListener;
     private EaseConversationSetModel setModel;
 
-    private EaseConversationPresenterImpl presenter;
+    private EaseConversationPresenter presenter;
+    private float touchX;
+    private float touchY;
+    private PopupMenuHelper menuHelper;
+    private boolean showDefaultMenu = true;
 
     public EaseConversationListLayout(Context context) {
         this(context, null);
@@ -158,6 +179,8 @@ public class EaseConversationListLayout extends EaseBaseLayout implements IConve
         listAdapter = new EaseConversationListAdapter();
         adapter.addAdapter(listAdapter);
 
+        menuHelper = new PopupMenuHelper();
+
         initListener();
     }
 
@@ -174,13 +197,28 @@ public class EaseConversationListLayout extends EaseBaseLayout implements IConve
         listAdapter.setOnItemLongClickListener(new com.hyphenate.easeui.interfaces.OnItemLongClickListener() {
             @Override
             public boolean onItemLongClick(View view, int position) {
+                listAdapter.getItem(position).setSelected(true);
                 if(itemLongListener != null) {
+                    if(showDefaultMenu) {
+                        showDefaultMenu(view, position, listAdapter.getItem(position));
+                    }
                     itemLongListener.onItemLongClick(view, position, listAdapter.getItem(position));
+                    return true;
+                }
+                if(showDefaultMenu) {
+                    showDefaultMenu(view, position, listAdapter.getItem(position));
                     return true;
                 }
                 return false;
             }
         });
+    }
+
+    @Override
+    public boolean dispatchTouchEvent(MotionEvent ev) {
+        touchX = ev.getX();
+        touchY = ev.getY();
+        return super.dispatchTouchEvent(ev);
     }
 
     public void init() {
@@ -189,18 +227,18 @@ public class EaseConversationListLayout extends EaseBaseLayout implements IConve
     }
 
     public void loadDefaultData() {
-        presenter.loadDefaultData();
+        presenter.loadData();
     }
 
     public void setData(List<EaseConversationInfo> data) {
-        presenter.loadData(data);
+        presenter.sortData(data);
     }
 
     public void addData(List<EaseConversationInfo> data) {
         if(data != null) {
             List<EaseConversationInfo> infos = listAdapter.getData();
             infos.addAll(data);
-            presenter.loadData(infos);
+            presenter.sortData(infos);
         }
     }
 
@@ -215,6 +253,76 @@ public class EaseConversationListLayout extends EaseBaseLayout implements IConve
             }
             listAdapter.notifyDataSetChanged();
         }
+    }
+
+    /**
+     * 返回触摸点的x坐标
+     * @return
+     */
+    public float getTouchX() {
+        return touchX;
+    }
+
+    /**
+     * 返回触摸点的y坐标
+     * @return
+     */
+    public float getTouchY() {
+        return touchY;
+    }
+
+    private void showDefaultMenu(View view, int position, EaseConversationInfo info) {
+        menuHelper.addItemMenu(Menu.NONE, MENU_MAKE_READ, 0, getContext().getString(R.string.ease_conversation_menu_make_read));
+        menuHelper.addItemMenu(Menu.NONE, MENU_MAKE_TOP, 1, getContext().getString(R.string.ease_conversation_menu_make_top));
+        menuHelper.addItemMenu(Menu.NONE, MENU_MAKE_CANCEL_TOP, 2, getContext().getString(R.string.ease_conversation_menu_cancel_top));
+        menuHelper.addItemMenu(Menu.NONE, MENU_DELETE, 3, getContext().getString(R.string.ease_conversation_menu_delete));
+
+        menuHelper.initMenu(view);
+
+        //检查置顶配置
+        menuHelper.findItemVisible(MENU_MAKE_TOP, !info.isTop());
+        menuHelper.findItemVisible(MENU_MAKE_CANCEL_TOP, info.isTop());
+        //检查已读配置
+        if(info.getInfo() instanceof EMConversation) {
+            menuHelper.findItemVisible(MENU_MAKE_READ, ((EMConversation) info.getInfo()).getUnreadMsgCount() > 0);
+        }
+
+        menuHelper.setOnPopupMenuItemClickListener(new OnPopupMenuItemClickListener() {
+            @Override
+            public void onMenuItemClick(MenuItem item) {
+                if(showDefaultMenu) {
+                    switch (item.getItemId()) {
+                        case MENU_MAKE_READ :
+                            presenter.makeConversionRead(position, info);
+                            break;
+                        case MENU_MAKE_TOP :
+                            presenter.makeConversationTop(position, info);
+                            break;
+                        case MENU_MAKE_CANCEL_TOP :
+                            presenter.cancelConversationTop(position, info);
+                            break;
+                        case MENU_DELETE :
+                            presenter.deleteConversation(position, info);
+                            break;
+                    }
+                }
+                if(popupMenuItemClickListener != null) {
+                    popupMenuItemClickListener.onMenuItemClick(item);
+                }
+            }
+        });
+
+        menuHelper.setOnPopupMenuDismissListener(new OnPopupMenuDismissListener() {
+            @Override
+            public void onDismiss(PopupMenu menu) {
+                info.setSelected(false);
+                if(dismissListener != null) {
+                    dismissListener.onDismiss(menu);
+                }
+            }
+        });
+
+        menuHelper.show((int) getTouchX(), 0);
     }
 
     @Override
@@ -250,6 +358,20 @@ public class EaseConversationListLayout extends EaseBaseLayout implements IConve
     public void addDelegate(EaseBaseConversationDelegate delegate) {
         delegate.setSetModel(setModel);
         listAdapter.addDelegate(delegate);
+    }
+
+    @Override
+    public void setPresenter(EaseConversationPresenter presenter) {
+        this.presenter = presenter;
+        if(getContext() instanceof AppCompatActivity) {
+            ((AppCompatActivity) getContext()).getLifecycle().addObserver(presenter);
+        }
+        this.presenter.attachView(this);
+    }
+
+    @Override
+    public void showItemDefaultMenu(boolean showDefault) {
+        showDefaultMenu = showDefault;
     }
 
     @Override
@@ -364,7 +486,7 @@ public class EaseConversationListLayout extends EaseBaseLayout implements IConve
 
     @Override
     public void loadConversationListSuccess(List<EaseConversationInfo> data) {
-        listAdapter.setData(data);
+        presenter.sortData(data);
     }
 
     @Override
@@ -377,8 +499,63 @@ public class EaseConversationListLayout extends EaseBaseLayout implements IConve
 
     }
 
+    @Override
+    public void sortConversationListSuccess(List<EaseConversationInfo> data) {
+        listAdapter.setData(data);
+    }
+
+    @Override
+    public void refreshList() {
+        presenter.sortData(listAdapter.getData());
+    }
+
+    @Override
+    public void refreshList(int position) {
+        listAdapter.notifyItemChanged(position);
+    }
+
+    @Override
+    public void deleteItem(int position) {
+        listAdapter.notifyItemRemoved(position);
+    }
+
+    @Override
+    public void deleteItemFail(int position, String message) {
+        Toast.makeText(getContext(), "删除失败！", Toast.LENGTH_SHORT).show();
+    }
+
     public EaseConversationListAdapter getListAdapter() {
         return listAdapter;
+    }
+
+    @Override
+    public void clearMenu() {
+        menuHelper.clear();
+    }
+
+    @Override
+    public void addItemMenu(int groupId, int itemId, int order, String title) {
+        menuHelper.addItemMenu(groupId, itemId, order, title);
+    }
+
+    @Override
+    public void findItemVisible(int id, boolean visible) {
+        menuHelper.findItemVisible(id, visible);
+    }
+
+    @Override
+    public void setOnPopupMenuItemClickListener(OnPopupMenuItemClickListener listener) {
+        popupMenuItemClickListener = listener;
+    }
+
+    @Override
+    public void setOnPopupMenuDismissListener(OnPopupMenuDismissListener listener) {
+        dismissListener = listener;
+    }
+
+    @Override
+    public PopupMenuHelper getMenuHelper() {
+        return menuHelper;
     }
 
     public interface OnItemClickListener {
