@@ -139,4 +139,30 @@
         </attr>
     </declare-styleable>
 
+    <declare-styleable name="EaseContactListLayout">
+        <attr name="ease_contact_item_title_text_size" format="dimension"/>
+        <attr name="ease_contact_item_title_text_color" format="reference|color"/>
+        <attr name="ease_contact_item_header_text_size" format="dimension"/>
+        <attr name="ease_contact_item_header_text_color" format="reference|color"/>
+        <attr name="ease_contact_item_header_background" format="reference|color"/>
+        <!-- 设置默认头像 -->
+        <attr name="ease_contact_item_avatar_default_src" format="reference"/>
+        <!-- 头像大小 宽和高一样 -->
+        <attr name="ease_contact_item_avatar_size" format="dimension"/>
+        <!-- 头像形状 -->
+        <attr name="ease_contact_item_avatar_shape_type" format="enum">
+            <enum name="none" value="0" />
+            <enum name="round" value="1" />
+            <enum name="rectangle" value="2" />
+        </attr>
+        <!-- 头像圆角半径 -->
+        <attr name="ease_contact_item_avatar_radius" format="dimension"/>
+        <!-- 描边宽度 -->
+        <attr name="ease_contact_item_avatar_border_width" format="dimension"/>
+        <!-- 描边颜色 -->
+        <attr name="ease_contact_item_avatar_border_color" format="reference|color"/>
+        <attr name="ease_contact_item_height" format="dimension"/>
+        <attr name="ease_contact_item_background" format="reference|color"/>
+    </declare-styleable>
+
 </resources>

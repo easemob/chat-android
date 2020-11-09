@@ -1,4 +1,4 @@
-package com.hyphenate.easeui.modules.contact;
+package com.hyphenate.easeui.modules.contact.interfaces;
 
 import androidx.annotation.ColorInt;
 
@@ -14,5 +14,17 @@ interface IContactTextStyle {
      * @param textColor
      */
     void setTitleTextColor(@ColorInt int textColor);
+
+    /**
+     * 设置header的字体大小
+     * @param textSize
+     */
+    void setHeaderTextSize(int textSize);
+
+    /**
+     * 设置header的字体颜色
+     * @param textColor
+     */
+    void setHeaderTextColor(@ColorInt int textColor);
 
 }

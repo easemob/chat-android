@@ -1,4 +1,4 @@
-package com.hyphenate.easeui.modules.contact;
+package com.hyphenate.easeui.modules.contact.interfaces;
 
 import android.graphics.drawable.Drawable;
 
@@ -16,4 +16,10 @@ public interface IContactListStyle extends IAvatarSet, IContactTextStyle {
      * @param height
      */
     void setItemHeight(int height);
+
+    /**
+     * 设置header的背景
+     * @param backGround
+     */
+    void setHeaderBackGround(Drawable backGround);
 }

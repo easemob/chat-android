@@ -43,4 +43,7 @@
     <color name="ease_conversation_color_item_mention">#ffff2b2b</color>
     <color name="ease_conversation_color_item_message">#ff999999</color>
     <color name="ease_conversation_color_item_time">#ff999999</color>
+
+    <color name="ease_contact_color_item_header">#ff333333</color>
+    <color name="ease_contact_color_item_title">#ff333333</color>
 </resources>
