@@ -3,6 +3,8 @@ package com.hyphenate.easeui.modules.interfaces;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.hyphenate.easeui.interfaces.OnItemClickListener;
+import com.hyphenate.easeui.interfaces.OnItemLongClickListener;
 import com.hyphenate.easeui.modules.conversation.EaseConversationListLayout;
 
 public interface IRecyclerView {
@@ -40,11 +42,11 @@ public interface IRecyclerView {
     /**
      * 设置条目点击事件
      */
-    void setOnItemClickListener(EaseConversationListLayout.OnItemClickListener listener);
+    void setOnItemClickListener(OnItemClickListener listener);
 
     /**
      * 设置条目长按事件
      */
-    void setOnItemLongClickListener(EaseConversationListLayout.OnItemLongClickListener listener);
+    void setOnItemLongClickListener(OnItemLongClickListener listener);
 }
 

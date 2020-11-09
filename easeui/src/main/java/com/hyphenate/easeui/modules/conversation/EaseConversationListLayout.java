@@ -25,6 +25,8 @@ import com.hyphenate.chat.EMConversation;
 import com.hyphenate.easeui.R;
 import com.hyphenate.easeui.adapter.EaseAdapterDelegate;
 import com.hyphenate.easeui.adapter.EaseBaseRecyclerViewAdapter;
+import com.hyphenate.easeui.interfaces.OnItemClickListener;
+import com.hyphenate.easeui.interfaces.OnItemLongClickListener;
 import com.hyphenate.easeui.modules.conversation.model.EaseConversationInfo;
 import com.hyphenate.easeui.modules.EaseBaseLayout;
 import com.hyphenate.easeui.modules.conversation.delegate.EaseBaseConversationDelegate;
@@ -193,7 +195,7 @@ public class EaseConversationListLayout extends EaseBaseLayout implements IConve
             @Override
             public void onItemClick(View view, int position) {
                 if(itemListener != null) {
-                    itemListener.onItemClick(view, position, listAdapter.getItem(position));
+                    itemListener.onItemClick(view, position);
                 }
             }
         });
@@ -206,7 +208,7 @@ public class EaseConversationListLayout extends EaseBaseLayout implements IConve
                     if(showDefaultMenu) {
                         showDefaultMenu(view, position, listAdapter.getItem(position));
                     }
-                    itemLongListener.onItemLongClick(view, position, listAdapter.getItem(position));
+                    itemLongListener.onItemLongClick(view, position);
                     return true;
                 }
                 if(showDefaultMenu) {
@@ -542,11 +544,20 @@ public class EaseConversationListLayout extends EaseBaseLayout implements IConve
 
     @Override
     public void deleteItemFail(int position, String message) {
-        Toast.makeText(getContext(), "删除失败！", Toast.LENGTH_SHORT).show();
+        Toast.makeText(getContext(), R.string.ease_conversation_delete_item_fail, Toast.LENGTH_SHORT).show();
     }
 
+    @Override
     public EaseConversationListAdapter getListAdapter() {
         return listAdapter;
+    }
+
+    @Override
+    public EaseConversationInfo getItem(int position) {
+        if(position >= listAdapter.getData().size()) {
+            throw new ArrayIndexOutOfBoundsException(position);
+        }
+        return listAdapter.getItem(position);
     }
 
     @Override
@@ -579,12 +590,9 @@ public class EaseConversationListLayout extends EaseBaseLayout implements IConve
         return menuHelper;
     }
 
-    public interface OnItemClickListener {
-        void onItemClick(View view, int position, EaseConversationInfo bean);
-    }
-
-    public interface OnItemLongClickListener {
-        void onItemLongClick(View view, int position, EaseConversationInfo bean);
+    @Override
+    public Context context() {
+        return getContext();
     }
 }
 

@@ -17,7 +17,7 @@
         android:paddingLeft="16dp"
         android:paddingRight="10dp"
         android:paddingTop="10dp"
-        android:textColor="#ff333333"
+        android:textColor="@color/ease_contact_color_item_header"
         android:textSize="18sp"
         tools:text="A"
         android:visibility="gone" />
@@ -58,7 +58,7 @@
             android:layout_marginStart="10dp"
             android:ellipsize="end"
             android:singleLine="true"
-            android:textColor="#ff333333"
+            android:textColor="@color/ease_contact_color_item_title"
             android:textSize="16sp"
             tools:text="测试沙发斯蒂芬水电费水电费水电费地方水电费是否"/>
 

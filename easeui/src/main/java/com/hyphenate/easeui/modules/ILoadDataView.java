@@ -1,5 +1,7 @@
 package com.hyphenate.easeui.modules;
 
-public interface ILoadDataView {
+import android.content.Context;
 
+public interface ILoadDataView {
+    Context context();
 }

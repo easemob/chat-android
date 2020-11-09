@@ -136,4 +136,10 @@
     <string name="ease_friends_delete_contact_hint">是否删除联系人？</string>
     <string name="ease_check_file_exist">请检查消息附件是否存在！</string>
 
+    <string name="ease_conversation_delete_item_fail">删除失败！</string>
+
+    <string name="ease_contact_delete_item_fail">删除失败！</string>
+    <string name="ease_contact_menu_add_note">设置备注</string>
+    <string name="ease_contact_add_note_developing">功能开发中，敬请期待</string>
+
 </resources>

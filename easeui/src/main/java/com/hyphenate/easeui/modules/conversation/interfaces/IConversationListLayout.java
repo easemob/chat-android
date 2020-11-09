@@ -2,8 +2,10 @@ package com.hyphenate.easeui.modules.conversation.interfaces;
 
 import android.view.View;
 
+import com.hyphenate.easeui.modules.conversation.EaseConversationListAdapter;
 import com.hyphenate.easeui.modules.conversation.EaseConversationPresenter;
 import com.hyphenate.easeui.modules.conversation.delegate.EaseBaseConversationDelegate;
+import com.hyphenate.easeui.modules.conversation.model.EaseConversationInfo;
 import com.hyphenate.easeui.modules.interfaces.IRecyclerView;
 
 public interface IConversationListLayout extends IRecyclerView {
@@ -37,4 +39,17 @@ public interface IConversationListLayout extends IRecyclerView {
      * @param showDefault
      */
     void showItemDefaultMenu(boolean showDefault);
+
+    /**
+     * 获取数据适配器
+     * @return
+     */
+    EaseConversationListAdapter getListAdapter();
+
+    /**
+     * 获取条目数据
+     * @param position
+     * @return
+     */
+    EaseConversationInfo getItem(int position);
 }
