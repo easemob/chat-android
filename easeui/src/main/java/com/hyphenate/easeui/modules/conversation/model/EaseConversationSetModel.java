@@ -20,6 +20,7 @@ public class EaseConversationSetModel {
     private float itemHeight;
     private Drawable bgDrawable;
     private boolean hideUnreadDot;
+    private UnreadDotPosition unreadDotPosition;
 
     public int getTitleTextColor() {
         return titleTextColor;
@@ -155,6 +156,18 @@ public class EaseConversationSetModel {
 
     public void setHideUnreadDot(boolean hideUnreadDot) {
         this.hideUnreadDot = hideUnreadDot;
+    }
+
+    public UnreadDotPosition getUnreadDotPosition() {
+        return unreadDotPosition;
+    }
+
+    public void setUnreadDotPosition(UnreadDotPosition unreadDotPosition) {
+        this.unreadDotPosition = unreadDotPosition;
+    }
+
+    public enum UnreadDotPosition {
+        LEFT, RIGHT
     }
 }
 

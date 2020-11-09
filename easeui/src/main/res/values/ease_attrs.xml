@@ -133,6 +133,10 @@
         <attr name="ease_con_item_avatar_border_color" format="reference|color"/>
         <attr name="ease_con_item_height" format="dimension"/>
         <attr name="ease_con_item_background" format="reference|color"/>
+        <attr name="ease_con_item_unread_dot_position" format="enum">
+            <enum name="left" value="0"/>
+            <enum name="right" value="1"/>
+        </attr>
     </declare-styleable>
 
 </resources>

@@ -42,6 +42,7 @@ public abstract class EaseDefaultConversationDelegate extends EaseBaseConversati
         public ConstraintLayout listIteaseLayout;
         public EaseImageView avatar;
         public TextView mUnreadMsgNumber;
+        public TextView unreadMsgNumberRight;
         public TextView name;
         public TextView time;
         public ImageView mMsgState;
@@ -56,6 +57,7 @@ public abstract class EaseDefaultConversationDelegate extends EaseBaseConversati
             listIteaseLayout = findViewById(R.id.list_itease_layout);
             avatar = findViewById(R.id.avatar);
             mUnreadMsgNumber = findViewById(R.id.unread_msg_number);
+            unreadMsgNumberRight = findViewById(R.id.unread_msg_number_right);
             name = findViewById(R.id.name);
             time = findViewById(R.id.time);
             mMsgState = findViewById(R.id.msg_state);
@@ -130,6 +132,14 @@ public abstract class EaseDefaultConversationDelegate extends EaseBaseConversati
                     itemView.setBackground(bgDrawable);
                 }
                 mUnreadMsgNumber.setVisibility(setModel.isHideUnreadDot() ? View.GONE : View.VISIBLE);
+                EaseConversationSetModel.UnreadDotPosition dotPosition = setModel.getUnreadDotPosition();
+                if(dotPosition == EaseConversationSetModel.UnreadDotPosition.LEFT) {
+                    mUnreadMsgNumber.setVisibility(View.VISIBLE);
+                    unreadMsgNumberRight.setVisibility(View.GONE);
+                }else {
+                    mUnreadMsgNumber.setVisibility(View.GONE);
+                    unreadMsgNumberRight.setVisibility(View.VISIBLE);
+                }
             }
             bgDrawable = itemView.getBackground();
         }
@@ -155,6 +165,35 @@ public abstract class EaseDefaultConversationDelegate extends EaseBaseConversati
                     }
                 }
             });
+        }
+    }
+
+    public void showUnreadNum(ViewHolder holder, int unreadMsgCount) {
+        if(unreadMsgCount > 0) {
+            holder.mUnreadMsgNumber.setText(handleBigNum(unreadMsgCount));
+            holder.unreadMsgNumberRight.setText(handleBigNum(unreadMsgCount));
+            showUnreadRight(holder, setModel.getUnreadDotPosition() == EaseConversationSetModel.UnreadDotPosition.RIGHT);
+        }else {
+            holder.mUnreadMsgNumber.setVisibility(View.GONE);
+            holder.unreadMsgNumberRight.setVisibility(View.GONE);
+        }
+    }
+
+    public String handleBigNum(int unreadMsgCount) {
+        if(unreadMsgCount <= 99) {
+            return String.valueOf(unreadMsgCount);
+        }else {
+            return "99+";
+        }
+    }
+
+    public void showUnreadRight(ViewHolder holder, boolean isRight) {
+        if(isRight) {
+            holder.mUnreadMsgNumber.setVisibility(View.GONE);
+            holder.unreadMsgNumberRight.setVisibility(View.VISIBLE);
+        }else {
+            holder.mUnreadMsgNumber.setVisibility(View.VISIBLE);
+            holder.unreadMsgNumberRight.setVisibility(View.GONE);
         }
     }
 }

@@ -64,12 +64,7 @@ public class EaseConversationDelegate extends EaseDefaultConversationDelegate {
         }
 
         if(!setModel.isHideUnreadDot()) {
-            if(item.getUnreadMsgCount() > 0) {
-                holder.mUnreadMsgNumber.setText(String.valueOf(item.getUnreadMsgCount()));
-                holder.mUnreadMsgNumber.setVisibility(View.VISIBLE);
-            }else {
-                holder.mUnreadMsgNumber.setVisibility(View.GONE);
-            }
+            showUnreadNum(holder, item.getUnreadMsgCount());
         }
 
         if(item.getAllMsgCount() != 0) {

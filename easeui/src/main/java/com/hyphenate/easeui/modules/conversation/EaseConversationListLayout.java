@@ -163,6 +163,10 @@ public class EaseConversationListLayout extends EaseBaseLayout implements IConve
             Drawable bgDrawable = a.getDrawable(R.styleable.EaseConversationListLayout_ease_con_item_background);
             setModel.setItemHeight(itemHeight);
             setModel.setBgDrawable(bgDrawable);
+
+            int unreadDotPosition = a.getInteger(R.styleable.EaseConversationListLayout_ease_con_item_unread_dot_position, 0);
+            setModel.setUnreadDotPosition(unreadDotPosition == 0 ? EaseConversationSetModel.UnreadDotPosition.LEFT
+                                                                    : EaseConversationSetModel.UnreadDotPosition.RIGHT);
             a.recycle();
         }
     }
@@ -230,10 +234,18 @@ public class EaseConversationListLayout extends EaseBaseLayout implements IConve
         presenter.loadData();
     }
 
+    /**
+     * 设置数据
+     * @param data
+     */
     public void setData(List<EaseConversationInfo> data) {
         presenter.sortData(data);
     }
 
+    /**
+     * 添加数据
+     * @param data
+     */
     public void addData(List<EaseConversationInfo> data) {
         if(data != null) {
             List<EaseConversationInfo> infos = listAdapter.getData();
@@ -242,7 +254,10 @@ public class EaseConversationListLayout extends EaseBaseLayout implements IConve
         }
     }
 
-    private void notifyDataSetChanged() {
+    /**
+     * 刷新数据
+     */
+    public void notifyDataSetChanged() {
         if(listAdapter != null) {
             List<EaseAdapterDelegate<Object, EaseBaseRecyclerViewAdapter.ViewHolder>> delegates = listAdapter.getAllDelegate();
             if (delegates != null && !delegates.isEmpty()) {
@@ -409,6 +424,12 @@ public class EaseConversationListLayout extends EaseBaseLayout implements IConve
     @Override
     public void hideUnreadDot(boolean hide) {
         setModel.setHideUnreadDot(hide);
+        notifyDataSetChanged();
+    }
+
+    @Override
+    public void showUnreadDotPosition(EaseConversationSetModel.UnreadDotPosition position) {
+        setModel.setUnreadDotPosition(position);
         notifyDataSetChanged();
     }
 

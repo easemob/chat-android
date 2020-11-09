@@ -101,21 +101,46 @@
         android:layout_height="wrap_content"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toRightOf="@id/mentioned"
-        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintRight_toLeftOf="@id/rl_unread_right"
         app:layout_constraintHorizontal_bias="0"
-        android:layout_marginRight="20dp"
+        android:layout_marginRight="10dp"
         android:layout_marginEnd="20dp"
         android:layout_marginBottom="5dp"
-        android:layout_marginLeft="4dp"
+        android:layout_marginLeft="2dp"
+        app:layout_goneMarginLeft="11dp"
+        app:layout_goneMarginRight="20dp"
         android:maxLines="1"
         android:ellipsize="end"
-        android:paddingLeft="7dp"
         android:paddingTop="7dp"
         android:paddingBottom="7dp"
-        android:paddingRight="7dp"
         android:textColor="@color/ease_conversation_color_item_message"
         android:textSize="14sp"
         tools:text="环信成立于2013年4月，是国内领先的企业级软件服务提供商，于2016年荣膺"/>
+
+
+    <RelativeLayout
+        android:id="@+id/rl_unread_right"
+        android:layout_width="35dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toRightOf="@id/message"
+        android:layout_marginBottom="10dp"
+        android:layout_marginRight="10dp">
+
+        <TextView
+            android:id="@+id/unread_msg_number_right"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:background="@drawable/ease_unread_count_bg"
+            android:gravity="center"
+            android:textColor="@android:color/white"
+            android:textSize="12sp"
+            tools:text="10"
+            android:visibility="gone"/>
+
+    </RelativeLayout>
 
     <View
         android:layout_width="0dp"
