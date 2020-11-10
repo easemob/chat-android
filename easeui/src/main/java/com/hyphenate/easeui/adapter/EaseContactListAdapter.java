@@ -12,6 +12,7 @@ import androidx.annotation.NonNull;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.content.ContextCompat;
 
+import com.bumptech.glide.Glide;
 import com.hyphenate.easeui.R;
 import com.hyphenate.easeui.domain.EaseUser;
 import com.hyphenate.easeui.modules.contact.EaseContactSetModel;
@@ -134,6 +135,11 @@ public class EaseContactListAdapter extends EaseBaseRecyclerViewAdapter<EaseUser
                 }
             }
             mName.setText(item.getUsername());
+            Drawable defaultDrawable = mAvatar.getDrawable();
+            Glide.with(mContext)
+                    .load(item.getAvatar())
+                    .error(defaultDrawable)
+                    .into(mAvatar);
         }
     }
 }

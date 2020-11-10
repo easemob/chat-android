@@ -357,25 +357,11 @@ public class EaseConversationListLayout extends EaseBaseLayout implements IConve
         this.adapter.removeAdapter(adapter);
     }
 
-    @Override
-    public void addTopView(View top) {
-        if(top != null) {
-            this.addView(top, 0);
-        }
-    }
-
-    @Override
-    public void addBottomView(View bottom) {
-        if(bottom != null) {
-            this.addView(bottom);
-        }
-    }
-
-    @Override
-    public void addDelegate(EaseBaseConversationDelegate delegate) {
-        delegate.setSetModel(setModel);
-        listAdapter.addDelegate(delegate);
-    }
+//    @Override
+//    public void addDelegate(EaseBaseConversationDelegate delegate) {
+//        delegate.setSetModel(setModel);
+//        listAdapter.addDelegate(delegate);
+//    }
 
     @Override
     public void setPresenter(EaseConversationPresenter presenter) {

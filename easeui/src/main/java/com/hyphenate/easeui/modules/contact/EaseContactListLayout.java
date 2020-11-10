@@ -219,6 +219,14 @@ public class EaseContactListLayout extends EaseRecyclerView implements IEaseCont
         presenter.sortData(data);
     }
 
+    /**
+     * 设置数据，不进行排序
+     * @param data
+     */
+    public void setDataNotSort(List<EaseUser> data) {
+        listAdapter.setData(data);
+    }
+
     @Override
     public boolean dispatchTouchEvent(MotionEvent ev) {
         touchX = ev.getX();
