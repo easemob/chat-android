@@ -18,6 +18,7 @@ import com.hyphenate.chat.EMMessage;
 import com.hyphenate.easeim.DemoHelper;
 import com.hyphenate.easeim.R;
 import com.hyphenate.easeim.common.db.entity.InviteMessage;
+import com.hyphenate.easeim.common.db.entity.InviteMessageStatus;
 import com.hyphenate.easeim.common.db.entity.MsgTypeManageEntity;
 import com.hyphenate.easeim.common.manager.PushAndMessageHelper;
 import com.hyphenate.easeui.adapter.EaseBaseRecyclerViewAdapter;
@@ -26,7 +27,6 @@ import com.hyphenate.easeui.utils.EaseCommonUtils;
 import com.hyphenate.easeui.utils.EaseSmileUtils;
 import com.hyphenate.easeui.widget.EaseImageView;
 import com.hyphenate.util.DateUtils;
-import com.hyphenate.easeim.common.db.entity.InviteMessage.InviteMessageStatus;
 
 import java.util.Date;
 
@@ -143,7 +143,7 @@ public class HomeAdapter extends EaseBaseRecyclerViewAdapter<Object> {
                 }
                 if(lastMsg instanceof InviteMessage) {
                     time.setText(DateUtils.getTimestampString(new Date(((InviteMessage) lastMsg).getTime())));
-                    InviteMessage.InviteMessageStatus status = ((InviteMessage) lastMsg).getStatusEnum();
+                    InviteMessageStatus status = ((InviteMessage) lastMsg).getStatusEnum();
                     if(status == null) {
                         return;
                     }

@@ -12,6 +12,7 @@ import androidx.core.content.ContextCompat;
 
 import com.hyphenate.easeim.R;
 import com.hyphenate.easeim.common.db.entity.InviteMessage;
+import com.hyphenate.easeim.common.db.entity.InviteMessageStatus;
 import com.hyphenate.easeim.common.db.entity.MsgTypeManageEntity;
 import com.hyphenate.easeim.common.manager.PushAndMessageHelper;
 import com.hyphenate.easeui.EaseUI;
@@ -19,7 +20,6 @@ import com.hyphenate.easeui.adapter.EaseBaseDelegate;
 import com.hyphenate.easeui.adapter.EaseBaseRecyclerViewAdapter;
 import com.hyphenate.easeui.widget.EaseImageView;
 import com.hyphenate.util.DateUtils;
-import com.hyphenate.easeim.common.db.entity.InviteMessage.InviteMessageStatus;
 
 import java.util.Date;
 
@@ -91,7 +91,7 @@ public class SystemMessageDelegate extends EaseBaseDelegate<MsgTypeManageEntity,
             }
             if(lastMsg instanceof InviteMessage) {
                 time.setText(DateUtils.getTimestampString(new Date(((InviteMessage) lastMsg).getTime())));
-                InviteMessage.InviteMessageStatus status = ((InviteMessage) lastMsg).getStatusEnum();
+                InviteMessageStatus status = ((InviteMessage) lastMsg).getStatusEnum();
                 if(status == null) {
                     return;
                 }

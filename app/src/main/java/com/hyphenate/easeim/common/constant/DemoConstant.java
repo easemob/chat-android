@@ -67,4 +67,11 @@ public interface DemoConstant extends EaseConstant {
     String MESSAGE_NOT_SEND = "message_not_send";
     String MESSAGE_FORWARD = "message_forward";
 
+    String SYSTEM_MESSAGE_FROM = "from";
+    String SYSTEM_MESSAGE_REASON = "reason";
+    String SYSTEM_MESSAGE_STATUS = "status";
+    String SYSTEM_MESSAGE_GROUP_ID = "groupId";
+    String SYSTEM_MESSAGE_NAME = "name";
+    String SYSTEM_MESSAGE_INVITER = "inviter";
+
 }
