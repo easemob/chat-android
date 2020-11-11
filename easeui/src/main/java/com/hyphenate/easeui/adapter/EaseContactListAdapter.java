@@ -15,7 +15,9 @@ import androidx.core.content.ContextCompat;
 import com.bumptech.glide.Glide;
 import com.hyphenate.easeui.R;
 import com.hyphenate.easeui.domain.EaseUser;
+import com.hyphenate.easeui.manager.EaseProviderManager;
 import com.hyphenate.easeui.modules.contact.EaseContactSetModel;
+import com.hyphenate.easeui.provider.EaseUserProfileProvider;
 import com.hyphenate.easeui.widget.EaseImageView;
 
 public class EaseContactListAdapter extends EaseBaseRecyclerViewAdapter<EaseUser> {
@@ -126,6 +128,10 @@ public class EaseContactListAdapter extends EaseBaseRecyclerViewAdapter<EaseUser
 
         @Override
         public void setData(EaseUser item, int position) {
+            EaseUserProfileProvider provider = EaseProviderManager.getInstance().getUserProvider();
+            if(provider != null) {
+                item = provider.getUser(item);
+            }
             String header = item.getInitialLetter();
             mHeader.setVisibility(View.GONE);
             if(position == 0 || (header != null && !header.equals(getItem(position -1).getInitialLetter()))) {
@@ -134,7 +140,7 @@ public class EaseContactListAdapter extends EaseBaseRecyclerViewAdapter<EaseUser
                     mHeader.setText(header);
                 }
             }
-            mName.setText(item.getUsername());
+            mName.setText(item.getNickname());
             Drawable defaultDrawable = mAvatar.getDrawable();
             Glide.with(mContext)
                     .load(item.getAvatar())

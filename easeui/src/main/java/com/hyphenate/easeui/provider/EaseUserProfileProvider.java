@@ -14,4 +14,11 @@ public interface EaseUserProfileProvider {
      * @return
      */
     EaseUser getUser(String username);
+
+    /**
+     * update user
+     * @param user
+     * @return
+     */
+    EaseUser getUser(EaseUser user);
 }

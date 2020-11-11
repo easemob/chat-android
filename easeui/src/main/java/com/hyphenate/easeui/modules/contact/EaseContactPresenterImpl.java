@@ -5,7 +5,9 @@ import com.hyphenate.EMCallBack;
 import com.hyphenate.chat.EMClient;
 import com.hyphenate.easeui.R;
 import com.hyphenate.easeui.domain.EaseUser;
+import com.hyphenate.easeui.manager.EaseProviderManager;
 import com.hyphenate.easeui.manager.EaseThreadManager;
+import com.hyphenate.easeui.provider.EaseUserProfileProvider;
 import com.hyphenate.exceptions.HyphenateException;
 
 import java.util.ArrayList;
@@ -62,11 +64,21 @@ public class EaseContactPresenterImpl extends EaseContactPresenter {
 
     @Override
     public void sortData(List<EaseUser> data) {
+        checkUserProvider(data);
         sortList(data);
         if(!isDestroy()) {
             EaseThreadManager.getInstance().runOnMainThread(() -> mView.sortContactListSuccess(data));
         }
 
+    }
+
+    private void checkUserProvider(List<EaseUser> data) {
+        EaseUserProfileProvider provider = EaseProviderManager.getInstance().getUserProvider();
+        if(provider != null) {
+            for (EaseUser user : data) {
+                provider.getUser(user);
+            }
+        }
     }
 
     /**
