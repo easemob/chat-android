@@ -11,7 +11,6 @@ public class EaseConversationSetModel {
     private float dateTextSize;
     private int mentionTextColor;
     private float mentionTextSize;
-    private Drawable avatarDefaultSrc;
     private float avatarSize;
     private int shapeType;
     private float avatarRadius;
@@ -21,6 +20,7 @@ public class EaseConversationSetModel {
     private Drawable bgDrawable;
     private boolean hideUnreadDot;
     private UnreadDotPosition unreadDotPosition;
+    private boolean showSystemMessage;
 
     public int getTitleTextColor() {
         return titleTextColor;
@@ -84,14 +84,6 @@ public class EaseConversationSetModel {
 
     public void setMentionTextSize(float mentionTextSize) {
         this.mentionTextSize = mentionTextSize;
-    }
-
-    public Drawable getAvatarDefaultSrc() {
-        return avatarDefaultSrc;
-    }
-
-    public void setAvatarDefaultSrc(Drawable avatarDefaultSrc) {
-        this.avatarDefaultSrc = avatarDefaultSrc;
     }
 
     public float getAvatarSize() {
@@ -164,6 +156,14 @@ public class EaseConversationSetModel {
 
     public void setUnreadDotPosition(UnreadDotPosition unreadDotPosition) {
         this.unreadDotPosition = unreadDotPosition;
+    }
+
+    public boolean isShowSystemMessage() {
+        return showSystemMessage;
+    }
+
+    public void setShowSystemMessage(boolean showSystemMessage) {
+        this.showSystemMessage = showSystemMessage;
     }
 
     public enum UnreadDotPosition {

@@ -6,16 +6,20 @@ import android.view.View;
 
 import androidx.core.content.ContextCompat;
 
+import com.bumptech.glide.Glide;
 import com.hyphenate.chat.EMChatRoom;
 import com.hyphenate.chat.EMClient;
 import com.hyphenate.chat.EMConversation;
 import com.hyphenate.chat.EMGroup;
 import com.hyphenate.chat.EMMessage;
 import com.hyphenate.easeui.R;
+import com.hyphenate.easeui.constants.EaseConstant;
 import com.hyphenate.easeui.manager.EaseAtMessageHelper;
 import com.hyphenate.easeui.manager.EasePreferenceManager;
+import com.hyphenate.easeui.manager.EaseProviderManager;
 import com.hyphenate.easeui.modules.conversation.model.EaseConversationInfo;
 import com.hyphenate.easeui.modules.conversation.model.EaseConversationSetModel;
+import com.hyphenate.easeui.provider.EaseConversationInfoProvider;
 import com.hyphenate.easeui.utils.EaseCommonUtils;
 import com.hyphenate.easeui.utils.EaseSmileUtils;
 import com.hyphenate.util.DateUtils;
@@ -42,25 +46,55 @@ public class EaseConversationDelegate extends EaseDefaultConversationDelegate {
                 ? ContextCompat.getDrawable(context, R.drawable.ease_conversation_top_bg)
                 : null);
         holder.mentioned.setVisibility(View.GONE);
+        EaseConversationInfoProvider infoProvider = EaseProviderManager.getInstance().getConversationInfoProvider();
+        int defaultAvatar = 0;
+        String showName = null;
         if(item.getType() == EMConversation.EMConversationType.GroupChat) {
             if(EaseAtMessageHelper.get().hasAtMeMsg(username)) {
                 holder.mentioned.setText(R.string.were_mentioned);
                 holder.mentioned.setVisibility(View.VISIBLE);
             }
-            holder.avatar.setImageResource(R.drawable.ease_group_icon);
+            defaultAvatar = R.drawable.ease_group_icon;
             EMGroup group = EMClient.getInstance().groupManager().getGroup(username);
-            holder.name.setText(group != null ? group.getGroupName() : username);
+            showName = group != null ? group.getGroupName() : username;
         }else if(item.getType() == EMConversation.EMConversationType.ChatRoom) {
-            holder.avatar.setImageResource(R.drawable.ease_chat_room_icon);
+            defaultAvatar = R.drawable.ease_chat_room_icon;
             EMChatRoom chatRoom = EMClient.getInstance().chatroomManager().getChatRoom(username);
-            holder.name.setText(chatRoom != null && !TextUtils.isEmpty(chatRoom.getName()) ? chatRoom.getName() : username);
+            showName = chatRoom != null && !TextUtils.isEmpty(chatRoom.getName()) ? chatRoom.getName() : username;
         }else {
-            if(setModel != null && setModel.getAvatarDefaultSrc() != null) {
-                holder.avatar.setImageDrawable(setModel.getAvatarDefaultSrc());
-            }else {
-                holder.avatar.setImageResource(R.drawable.ease_default_avatar);
+            defaultAvatar = R.drawable.ease_default_avatar;
+            showName = username;
+            if(TextUtils.equals(item.conversationId(), EaseConstant.DEFAULT_SYSTEM_MESSAGE_ID)) {
+                defaultAvatar = R.drawable.em_system_nofinication;
+                showName = holder.mContext.getString(R.string.ease_conversation_system_message);
             }
-            holder.name.setText(username);
+        }
+        holder.avatar.setImageResource(defaultAvatar);
+        holder.name.setText(showName);
+        if(infoProvider != null) {
+            if(item.getType() == EMConversation.EMConversationType.Chat && TextUtils.equals(item.conversationId(), EaseConstant.DEFAULT_SYSTEM_MESSAGE_ID)) {
+                String avatar = infoProvider.getDefaultTypeAvatar(EaseConstant.DEFAULT_SYSTEM_MESSAGE_TYPE);
+                int resource = infoProvider.getDefaultTypeAvatarResource(EaseConstant.DEFAULT_SYSTEM_MESSAGE_TYPE);
+                if(resource != 0) {
+                    Glide.with(holder.mContext).load(resource).error(R.drawable.em_system_nofinication).into(holder.avatar);
+                }
+                if(!TextUtils.isEmpty(avatar)) {
+                    Glide.with(holder.mContext).load(avatar).error(R.drawable.em_system_nofinication).into(holder.avatar);
+                }
+            }else {
+                int avatarResource = infoProvider.getDefaultTypeAvatarResource(item.getType().name());
+                String avatar = infoProvider.getDefaultTypeAvatar(item.getType().name());
+                if(avatarResource != 0) {
+                    Glide.with(holder.mContext).load(avatarResource).error(defaultAvatar).into(holder.avatar);
+                }
+                if(!TextUtils.isEmpty(avatar)) {
+                    Glide.with(holder.mContext).load(avatar).error(defaultAvatar).into(holder.avatar);
+                }
+            }
+            String conversationName = infoProvider.getConversationName(username);
+            if(!TextUtils.isEmpty(conversationName)) {
+                holder.name.setText(conversationName);
+            }
         }
 
         if(!setModel.isHideUnreadDot()) {

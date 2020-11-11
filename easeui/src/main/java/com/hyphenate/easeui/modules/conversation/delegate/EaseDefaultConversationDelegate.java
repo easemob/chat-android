@@ -96,10 +96,6 @@ public abstract class EaseDefaultConversationDelegate extends EaseBaseConversati
                 if(mentionTextColor != 0) {
                     mentioned.setTextColor(mentionTextColor);
                 }
-                Drawable defaultSrc = setModel.getAvatarDefaultSrc();
-                if(defaultSrc != null) {
-                    avatar.setImageDrawable(defaultSrc);
-                }
                 float avatarSize = setModel.getAvatarSize();
                 if(avatarSize != 0) {
                     ViewGroup.LayoutParams layoutParams = avatar.getLayoutParams();

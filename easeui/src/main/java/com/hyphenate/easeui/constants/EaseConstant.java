@@ -61,4 +61,8 @@ public interface EaseConstant {
     String CONVERSATION_READ = "conversation_read";
 
     String GROUP_LEAVE = "group_leave";
+
+    String DEFAULT_SYSTEM_MESSAGE_ID = "em_system";
+    String DEFAULT_SYSTEM_MESSAGE_TYPE = "em_system_type";
+
 }

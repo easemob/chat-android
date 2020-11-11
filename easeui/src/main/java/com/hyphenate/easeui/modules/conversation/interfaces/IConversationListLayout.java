@@ -40,4 +40,39 @@ public interface IConversationListLayout extends IRecyclerView {
      * @return
      */
     EaseConversationInfo getItem(int position);
+
+
+    /**
+     * 将对话置为已读
+     * @param position
+     * @param info
+     */
+    void makeConversionRead(int position, EaseConversationInfo info);
+
+    /**
+     * 置顶
+     * @param position
+     * @param info
+     */
+    void makeConversationTop(int position, EaseConversationInfo info);
+
+    /**
+     * 取消置顶
+     * @param position
+     * @param info
+     */
+    void cancelConversationTop(int position, EaseConversationInfo info);
+
+    /**
+     * 删除会话
+     * @param position
+     * @param info
+     */
+    void deleteConversation(int position, EaseConversationInfo info);
+
+    /**
+     * 设置会话变化的监听
+     * @param listener
+     */
+    void setOnConversationChangeListener(OnConversationChangeListener listener);
 }

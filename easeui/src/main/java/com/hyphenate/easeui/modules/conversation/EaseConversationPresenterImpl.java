@@ -4,6 +4,7 @@ import android.text.TextUtils;
 
 import com.hyphenate.chat.EMClient;
 import com.hyphenate.chat.EMConversation;
+import com.hyphenate.easeui.constants.EaseConstant;
 import com.hyphenate.easeui.manager.EaseThreadManager;
 import com.hyphenate.easeui.modules.conversation.model.EaseConversationInfo;
 import com.hyphenate.easeui.utils.EaseCommonUtils;
@@ -37,6 +38,12 @@ public class EaseConversationPresenterImpl extends EaseConversationPresenter {
             EaseConversationInfo info = null;
             for (EMConversation conversation : conversations.values()) {
                 if(conversation.getAllMessages().size() != 0) {
+                    //如果不展示系统消息，则移除相关系统消息
+                    if(!showSystemMessage) {
+                        if(TextUtils.equals(conversation.conversationId(), EaseConstant.DEFAULT_SYSTEM_MESSAGE_ID)) {
+                            continue;
+                        }
+                    }
                     info = new EaseConversationInfo();
                     info.setInfo(conversation);
                     String extField = conversation.getExtField();
@@ -50,7 +57,9 @@ public class EaseConversationPresenterImpl extends EaseConversationPresenter {
                 }
             }
         }
-        EaseThreadManager.getInstance().runOnMainThread(()-> mView.loadConversationListSuccess(infos));
+        if(isActive()) {
+            EaseThreadManager.getInstance().runOnMainThread(()-> mView.loadConversationListSuccess(infos));
+        }
     }
 
     /**
@@ -116,7 +125,9 @@ public class EaseConversationPresenterImpl extends EaseConversationPresenter {
         if(info.getInfo() instanceof EMConversation) {
             ((EMConversation) info.getInfo()).markAllMessagesAsRead();
         }
-        mView.refreshList(position);
+        if(!isDestroy()) {
+            mView.refreshList(position);
+        }
     }
 
     @Override
@@ -127,7 +138,9 @@ public class EaseConversationPresenterImpl extends EaseConversationPresenter {
             info.setTop(true);
             info.setTimestamp(timestamp);
         }
-        mView.refreshList();
+        if(!isDestroy()) {
+            mView.refreshList();
+        }
     }
 
     @Override
@@ -137,18 +150,23 @@ public class EaseConversationPresenterImpl extends EaseConversationPresenter {
             info.setTop(false);
             info.setTimestamp(((EMConversation) info.getInfo()).getLastMessage().getMsgTime());
         }
-        mView.refreshList();
+        if(!isDestroy()) {
+            mView.refreshList();
+        }
     }
 
     @Override
     public void deleteConversation(int position, EaseConversationInfo info) {
         if(info.getInfo() instanceof EMConversation) {
             boolean isDelete = EMClient.getInstance().chatManager().deleteConversation(((EMConversation) info.getInfo()).conversationId(), true);
-            if(isDelete) {
-                mView.deleteItem(position);
-            }else {
-                mView.deleteItemFail(position, "");
+            if(!isDestroy()) {
+                if(isDelete) {
+                    mView.deleteItem(position);
+                }else {
+                    mView.deleteItemFail(position, "");
+                }
             }
+
         }
     }
 }

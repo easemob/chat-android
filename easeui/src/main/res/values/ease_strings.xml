@@ -137,6 +137,7 @@
     <string name="ease_check_file_exist">请检查消息附件是否存在！</string>
 
     <string name="ease_conversation_delete_item_fail">删除失败！</string>
+    <string name="ease_conversation_system_message">系统消息</string>
 
     <string name="ease_contact_delete_item_fail">删除失败！</string>
     <string name="ease_contact_menu_add_note">设置备注</string>

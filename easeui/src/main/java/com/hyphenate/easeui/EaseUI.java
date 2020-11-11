@@ -10,6 +10,7 @@ import com.hyphenate.chat.EMOptions;
 import com.hyphenate.easeui.domain.EaseAvatarOptions;
 import com.hyphenate.easeui.manager.EaseChatPresenter;
 import com.hyphenate.easeui.model.EaseNotifier;
+import com.hyphenate.easeui.provider.EaseConversationInfoProvider;
 import com.hyphenate.easeui.provider.EaseEmojiconInfoProvider;
 import com.hyphenate.easeui.provider.EaseSettingsProvider;
 import com.hyphenate.easeui.provider.EaseUserProfileProvider;
@@ -23,6 +24,8 @@ public class EaseUI {
     private EaseEmojiconInfoProvider mEmojiconInfoProvider;
 
     private EaseUserProfileProvider userProvider;
+
+    private EaseConversationInfoProvider conversationInfoProvider;
     /**
      * chat avatar options which we can easily control the style
      */

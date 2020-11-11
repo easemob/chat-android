@@ -27,6 +27,7 @@ import com.hyphenate.easeui.adapter.EaseAdapterDelegate;
 import com.hyphenate.easeui.adapter.EaseBaseRecyclerViewAdapter;
 import com.hyphenate.easeui.interfaces.OnItemClickListener;
 import com.hyphenate.easeui.interfaces.OnItemLongClickListener;
+import com.hyphenate.easeui.modules.conversation.interfaces.OnConversationChangeListener;
 import com.hyphenate.easeui.modules.conversation.model.EaseConversationInfo;
 import com.hyphenate.easeui.modules.EaseBaseLayout;
 import com.hyphenate.easeui.modules.conversation.delegate.EaseBaseConversationDelegate;
@@ -67,6 +68,7 @@ public class EaseConversationListLayout extends EaseBaseLayout implements IConve
     private float touchY;
     private PopupMenuHelper menuHelper;
     private boolean showDefaultMenu = true;
+    private OnConversationChangeListener conversationChangeListener;
 
     public EaseConversationListLayout(Context context) {
         this(context, null);
@@ -142,7 +144,6 @@ public class EaseConversationListLayout extends EaseBaseLayout implements IConve
             }
             setModel.setMentionTextColor(mentionTextColor);
 
-            Drawable avatarDefaultDrawable = a.getDrawable(R.styleable.EaseConversationListLayout_ease_con_item_avatar_default_src);
             float avatarSize = a.getDimension(R.styleable.EaseConversationListLayout_ease_con_item_avatar_size, 0);
             int shapeType = a.getInteger(R.styleable.EaseConversationListLayout_ease_con_item_avatar_shape_type, 0);
             float avatarRadius = a.getDimension(R.styleable.EaseConversationListLayout_ease_con_item_avatar_radius, dip2px(context, 50));
@@ -154,7 +155,6 @@ public class EaseConversationListLayout extends EaseBaseLayout implements IConve
             }else {
                 borderColor = a.getColor(R.styleable.EaseConversationListLayout_ease_con_item_avatar_border_color, Color.TRANSPARENT);
             }
-            setModel.setAvatarDefaultSrc(avatarDefaultDrawable);
             setModel.setAvatarSize(avatarSize);
             setModel.setShapeType(shapeType);
             setModel.setAvatarRadius(avatarRadius);
@@ -169,6 +169,11 @@ public class EaseConversationListLayout extends EaseBaseLayout implements IConve
             int unreadDotPosition = a.getInteger(R.styleable.EaseConversationListLayout_ease_con_item_unread_dot_position, 0);
             setModel.setUnreadDotPosition(unreadDotPosition == 0 ? EaseConversationSetModel.UnreadDotPosition.LEFT
                                                                     : EaseConversationSetModel.UnreadDotPosition.RIGHT);
+
+            boolean showSystemMessage = a.getBoolean(R.styleable.EaseConversationListLayout_ease_con_item_show_system_message, true);
+            setModel.setShowSystemMessage(showSystemMessage);
+            presenter.setShowSystemMessage(showSystemMessage);
+
             a.recycle();
         }
     }
@@ -369,6 +374,7 @@ public class EaseConversationListLayout extends EaseBaseLayout implements IConve
         if(getContext() instanceof AppCompatActivity) {
             ((AppCompatActivity) getContext()).getLifecycle().addObserver(presenter);
         }
+        this.presenter.setShowSystemMessage(setModel.isShowSystemMessage());
         this.presenter.attachView(this);
     }
 
@@ -459,8 +465,7 @@ public class EaseConversationListLayout extends EaseBaseLayout implements IConve
 
     @Override
     public void setAvatarDefaultSrc(Drawable src) {
-        setModel.setAvatarDefaultSrc(src);
-        notifyDataSetChanged();
+
     }
 
     @Override
@@ -515,16 +520,25 @@ public class EaseConversationListLayout extends EaseBaseLayout implements IConve
 
     @Override
     public void refreshList() {
+        if(conversationChangeListener != null) {
+            conversationChangeListener.notifyAllChange();
+        }
         presenter.sortData(listAdapter.getData());
     }
 
     @Override
     public void refreshList(int position) {
+        if(conversationChangeListener != null) {
+            conversationChangeListener.notifyItemChange(position);
+        }
         listAdapter.notifyItemChanged(position);
     }
 
     @Override
     public void deleteItem(int position) {
+        if(conversationChangeListener != null) {
+            conversationChangeListener.notifyItemRemove(position);
+        }
         listAdapter.notifyItemRemoved(position);
     }
 
@@ -544,6 +558,31 @@ public class EaseConversationListLayout extends EaseBaseLayout implements IConve
             throw new ArrayIndexOutOfBoundsException(position);
         }
         return listAdapter.getItem(position);
+    }
+
+    @Override
+    public void makeConversionRead(int position, EaseConversationInfo info) {
+        presenter.makeConversionRead(position, info);
+    }
+
+    @Override
+    public void makeConversationTop(int position, EaseConversationInfo info) {
+        presenter.makeConversationTop(position, info);
+    }
+
+    @Override
+    public void cancelConversationTop(int position, EaseConversationInfo info) {
+        presenter.cancelConversationTop(position, info);
+    }
+
+    @Override
+    public void deleteConversation(int position, EaseConversationInfo info) {
+        presenter.deleteConversation(position, info);
+    }
+
+    @Override
+    public void setOnConversationChangeListener(OnConversationChangeListener listener) {
+        this.conversationChangeListener = listener;
     }
 
     @Override

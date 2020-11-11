@@ -8,6 +8,7 @@ import java.util.List;
 
 public abstract class EaseConversationPresenter extends EaseBasePresenter {
     public IEaseConversationListView mView;
+    public boolean showSystemMessage;
 
     @Override
     public void attachView(ILoadDataView view) {
@@ -23,6 +24,14 @@ public abstract class EaseConversationPresenter extends EaseBasePresenter {
     public void onDestroy() {
         super.onDestroy();
         detachView();
+    }
+
+    /**
+     * 是否展示系统消息
+     * @param showSystemMessage
+     */
+    public void setShowSystemMessage(boolean showSystemMessage) {
+        this.showSystemMessage = showSystemMessage;
     }
 
     /**
