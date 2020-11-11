@@ -20,12 +20,18 @@ import androidx.recyclerview.widget.ConcatAdapter;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.hyphenate.easeui.R;
-import com.hyphenate.easeui.adapter.EaseContactListAdapter;
+import com.hyphenate.easeui.modules.contact.adapter.EaseContactListAdapter;
 import com.hyphenate.easeui.domain.EaseUser;
 import com.hyphenate.easeui.interfaces.OnItemClickListener;
 import com.hyphenate.easeui.interfaces.OnItemLongClickListener;
+import com.hyphenate.easeui.modules.contact.adapter.EaseContactCustomAdapter;
+import com.hyphenate.easeui.modules.contact.interfaces.IContactCustomListLayout;
 import com.hyphenate.easeui.modules.contact.interfaces.IContactListLayout;
 import com.hyphenate.easeui.modules.contact.interfaces.IContactListStyle;
+import com.hyphenate.easeui.modules.contact.model.EaseContactSetModel;
+import com.hyphenate.easeui.modules.contact.presenter.EaseContactPresenter;
+import com.hyphenate.easeui.modules.contact.presenter.EaseContactPresenterImpl;
+import com.hyphenate.easeui.modules.contact.presenter.IEaseContactListView;
 import com.hyphenate.easeui.modules.interfaces.IPopupMenu;
 import com.hyphenate.easeui.modules.menu.OnPopupMenuDismissListener;
 import com.hyphenate.easeui.modules.menu.OnPopupMenuItemClickListener;
@@ -34,7 +40,8 @@ import com.hyphenate.easeui.widget.EaseRecyclerView;
 
 import java.util.List;
 
-public class EaseContactListLayout extends EaseRecyclerView implements IEaseContactListView, IContactListLayout, IContactListStyle, IPopupMenu {
+public class EaseContactListLayout extends EaseRecyclerView implements IEaseContactListView, IContactListLayout, IContactCustomListLayout
+                                                                        , IContactListStyle, IPopupMenu {
 
     private static final int MENU_ADD_NOTE = 0;
     private EaseContactSetModel contactSetModel;
@@ -46,10 +53,12 @@ public class EaseContactListLayout extends EaseRecyclerView implements IEaseCont
     private OnPopupMenuItemClickListener popupMenuItemClickListener;
     private OnPopupMenuDismissListener dismissListener;
     private PopupMenuHelper menuHelper;
+    private OnItemClickListener customItemClickListener;
 
     private boolean showDefaultMenu = true;
     private float touchX;
     private float touchY;
+    private EaseContactCustomAdapter customAdapter;
 
     public EaseContactListLayout(Context context) {
         this(context, null);
@@ -62,6 +71,7 @@ public class EaseContactListLayout extends EaseRecyclerView implements IEaseCont
     public EaseContactListLayout(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         contactSetModel = new EaseContactSetModel();
+        contactSetModel.setShowItemHeader(true);
 
         presenter = new EaseContactPresenterImpl();
         if(context instanceof AppCompatActivity) {
@@ -138,12 +148,19 @@ public class EaseContactListLayout extends EaseRecyclerView implements IEaseCont
         concatAdapter = new ConcatAdapter();
         listAdapter = new EaseContactListAdapter();
         listAdapter.setSettingModel(contactSetModel);
+        addHeader();
         concatAdapter.addAdapter(listAdapter);
         setAdapter(concatAdapter);
 
         menuHelper = new PopupMenuHelper();
 
         initListener();
+    }
+
+    private void addHeader() {
+        customAdapter = new EaseContactCustomAdapter();
+        customAdapter.setSettingModel(contactSetModel);
+        concatAdapter.addAdapter(customAdapter);
     }
 
     private void initListener() {
@@ -170,6 +187,15 @@ public class EaseContactListLayout extends EaseRecyclerView implements IEaseCont
                     return true;
                 }
                 return false;
+            }
+        });
+
+        customAdapter.setOnItemClickListener(new OnItemClickListener() {
+            @Override
+            public void onItemClick(View view, int position) {
+                if(customItemClickListener != null) {
+                    customItemClickListener.onItemClick(view, position);
+                }
             }
         });
     }
@@ -267,6 +293,12 @@ public class EaseContactListLayout extends EaseRecyclerView implements IEaseCont
     @Override
     public void showItemDefaultMenu(boolean showDefault) {
         this.showDefaultMenu = showDefault;
+    }
+
+    @Override
+    public void showItemHeader(boolean showItemHeader) {
+        contactSetModel.setShowItemHeader(showItemHeader);
+        notifyDataSetChanged();
     }
 
     @Override
@@ -478,6 +510,30 @@ public class EaseContactListLayout extends EaseRecyclerView implements IEaseCont
     @Override
     public Context context() {
         return getContext();
+    }
+
+    @Override
+    public void addCustomItem(int id, int imageResource, String name) {
+        if(customAdapter != null) {
+            customAdapter.addItem(id, imageResource, name);
+        }
+    }
+
+    @Override
+    public void addCustomItem(int id, String image, String name) {
+        if(customAdapter != null) {
+            customAdapter.addItem(id, image, name);
+        }
+    }
+
+    @Override
+    public void setOnCustomItemClickListener(OnItemClickListener listener) {
+        customItemClickListener = listener;
+    }
+
+    @Override
+    public EaseContactCustomAdapter getCustomAdapter() {
+        return customAdapter;
     }
 }
 

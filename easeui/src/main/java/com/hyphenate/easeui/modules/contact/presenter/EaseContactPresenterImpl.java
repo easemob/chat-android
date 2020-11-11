@@ -1,7 +1,6 @@
-package com.hyphenate.easeui.modules.contact;
+package com.hyphenate.easeui.modules.contact.presenter;
 
 
-import com.hyphenate.EMCallBack;
 import com.hyphenate.chat.EMClient;
 import com.hyphenate.easeui.R;
 import com.hyphenate.easeui.domain.EaseUser;

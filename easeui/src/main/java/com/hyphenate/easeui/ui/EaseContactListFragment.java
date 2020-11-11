@@ -21,7 +21,7 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import com.hyphenate.EMCallBack;
 import com.hyphenate.chat.EMClient;
 import com.hyphenate.easeui.R;
-import com.hyphenate.easeui.adapter.EaseContactListAdapter;
+import com.hyphenate.easeui.modules.contact.adapter.EaseContactListAdapter;
 import com.hyphenate.easeui.domain.EaseUser;
 import com.hyphenate.easeui.interfaces.OnEaseCallBack;
 import com.hyphenate.easeui.interfaces.OnItemClickListener;

@@ -1,4 +1,4 @@
-package com.hyphenate.easeui.adapter;
+package com.hyphenate.easeui.modules.contact.adapter;
 
 import android.graphics.drawable.Drawable;
 import android.text.TextUtils;
@@ -10,54 +10,50 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.constraintlayout.widget.ConstraintLayout;
-import androidx.core.content.ContextCompat;
 
 import com.bumptech.glide.Glide;
 import com.hyphenate.easeui.R;
-import com.hyphenate.easeui.domain.EaseUser;
-import com.hyphenate.easeui.manager.EaseProviderManager;
-import com.hyphenate.easeui.modules.contact.EaseContactSetModel;
-import com.hyphenate.easeui.provider.EaseUserProfileProvider;
+import com.hyphenate.easeui.adapter.EaseBaseRecyclerViewAdapter;
+import com.hyphenate.easeui.modules.contact.model.EaseContactCustomBean;
+import com.hyphenate.easeui.modules.contact.model.EaseContactSetModel;
 import com.hyphenate.easeui.widget.EaseImageView;
 
-public class EaseContactListAdapter extends EaseBaseRecyclerViewAdapter<EaseUser> {
-    private int emptyLayoutResource;
+public class EaseContactCustomAdapter extends EaseBaseRecyclerViewAdapter<EaseContactCustomBean> {
     private EaseContactSetModel contactSetModel;
 
     @Override
     public ViewHolder getViewHolder(ViewGroup parent, int viewType) {
-        return new ContactViewHolder(LayoutInflater.from(mContext).inflate(R.layout.ease_widget_contact_item, parent, false));
-    }
-
-    @Override
-    public int getEmptyLayoutId() {
-        if(emptyLayoutResource != 0) {
-            return emptyLayoutResource;
-        }
-        return super.getEmptyLayoutId();
+        View view = LayoutInflater.from(mContext).inflate(R.layout.ease_widget_contact_item, parent, false);
+        return new CustomViewHolder(view);
     }
 
     public void setSettingModel(EaseContactSetModel settingModel) {
         this.contactSetModel = settingModel;
     }
 
-    /**
-     * 设置无数据时的布局
-     * @param emptyLayoutResource
-     */
-    public void setEmptyLayoutResource(int emptyLayoutResource) {
-        this.emptyLayoutResource = emptyLayoutResource;
+    public void addItem(int id, int image, String name) {
+        EaseContactCustomBean bean = new EaseContactCustomBean();
+        bean.setId(id);
+        bean.setResourceId(image);
+        bean.setName(name);
+        this.addData(bean);
     }
 
-    private class ContactViewHolder extends ViewHolder<EaseUser> {
+    public void addItem(int id, String image, String name) {
+        EaseContactCustomBean bean = new EaseContactCustomBean();
+        bean.setId(id);
+        bean.setImage(image);
+        bean.setName(name);
+        this.addData(bean);
+    }
+
+    private class CustomViewHolder extends ViewHolder<EaseContactCustomBean> {
         private TextView mHeader;
         private EaseImageView mAvatar;
         private TextView mName;
-        private TextView mSignature;
-        private TextView mUnreadMsgNumber;
         private ConstraintLayout clUser;
 
-        public ContactViewHolder(@NonNull View itemView) {
+        public CustomViewHolder(@NonNull View itemView) {
             super(itemView);
         }
 
@@ -66,22 +62,8 @@ public class EaseContactListAdapter extends EaseBaseRecyclerViewAdapter<EaseUser
             mHeader = findViewById(R.id.header);
             mAvatar = findViewById(R.id.avatar);
             mName = findViewById(R.id.name);
-            mSignature = findViewById(R.id.signature);
-            mUnreadMsgNumber = findViewById(R.id.unread_msg_number);
             clUser = findViewById(R.id.cl_user);
             if(contactSetModel != null) {
-                float headerTextSize = contactSetModel.getHeaderTextSize();
-                if(headerTextSize != 0) {
-                    mHeader.setTextSize(TypedValue.COMPLEX_UNIT_PX, headerTextSize);
-                }
-                int headerTextColor = contactSetModel.getHeaderTextColor();
-                if(headerTextColor != 0) {
-                    mHeader.setTextColor(headerTextColor);
-                }
-                Drawable headerBgDrawable = contactSetModel.getHeaderBgDrawable();
-                if(headerBgDrawable != null) {
-                    mHeader.setBackground(headerBgDrawable);
-                }
                 float titleTextSize = contactSetModel.getTitleTextSize();
                 if(titleTextSize != 0) {
                     mName.setTextSize(TypedValue.COMPLEX_UNIT_PX, titleTextSize);
@@ -127,25 +109,15 @@ public class EaseContactListAdapter extends EaseBaseRecyclerViewAdapter<EaseUser
         }
 
         @Override
-        public void setData(EaseUser item, int position) {
-            EaseUserProfileProvider provider = EaseProviderManager.getInstance().getUserProvider();
-            if(provider != null) {
-                item = provider.getUser(item);
-            }
-            String header = item.getInitialLetter();
+        public void setData(EaseContactCustomBean item, int position) {
             mHeader.setVisibility(View.GONE);
-            if(position == 0 || (header != null && !header.equals(getItem(position -1).getInitialLetter()))) {
-                if(!TextUtils.isEmpty(header)) {
-                    mHeader.setVisibility(View.VISIBLE);
-                    mHeader.setText(header);
-                }
+            mName.setText(item.getName());
+            if(item.getResourceId() != 0) {
+                mAvatar.setImageResource(item.getResourceId());
+            }else if(TextUtils.isEmpty(item.getImage())) {
+                Glide.with(itemView.getContext()).load(item.getImage()).into(mAvatar);
             }
-            mName.setText(item.getNickname());
-            Drawable defaultDrawable = mAvatar.getDrawable();
-            Glide.with(mContext)
-                    .load(item.getAvatar())
-                    .error(defaultDrawable)
-                    .into(mAvatar);
         }
     }
 }
+

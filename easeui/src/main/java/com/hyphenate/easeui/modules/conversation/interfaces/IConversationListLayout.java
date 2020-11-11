@@ -1,10 +1,7 @@
 package com.hyphenate.easeui.modules.conversation.interfaces;
 
-import android.view.View;
-
-import com.hyphenate.easeui.modules.conversation.EaseConversationListAdapter;
-import com.hyphenate.easeui.modules.conversation.EaseConversationPresenter;
-import com.hyphenate.easeui.modules.conversation.delegate.EaseBaseConversationDelegate;
+import com.hyphenate.easeui.modules.conversation.adapter.EaseConversationListAdapter;
+import com.hyphenate.easeui.modules.conversation.presenter.EaseConversationPresenter;
 import com.hyphenate.easeui.modules.conversation.model.EaseConversationInfo;
 import com.hyphenate.easeui.modules.interfaces.IRecyclerView;
 

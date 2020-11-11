@@ -1,14 +1,8 @@
 package com.hyphenate.easeui.modules.contact.interfaces;
 
-import android.view.View;
-
-import com.hyphenate.easeui.adapter.EaseContactListAdapter;
+import com.hyphenate.easeui.modules.contact.adapter.EaseContactListAdapter;
 import com.hyphenate.easeui.domain.EaseUser;
-import com.hyphenate.easeui.modules.contact.EaseContactPresenter;
-import com.hyphenate.easeui.modules.conversation.EaseConversationListAdapter;
-import com.hyphenate.easeui.modules.conversation.EaseConversationPresenter;
-import com.hyphenate.easeui.modules.conversation.delegate.EaseBaseConversationDelegate;
-import com.hyphenate.easeui.modules.conversation.model.EaseConversationInfo;
+import com.hyphenate.easeui.modules.contact.presenter.EaseContactPresenter;
 import com.hyphenate.easeui.modules.interfaces.IRecyclerView;
 
 public interface IContactListLayout extends IRecyclerView {
@@ -30,6 +24,12 @@ public interface IContactListLayout extends IRecyclerView {
      * @param showDefault
      */
     void showItemDefaultMenu(boolean showDefault);
+
+    /**
+     * 是否展示条目头部字母
+     * @param showItemHeader
+     */
+    void showItemHeader(boolean showItemHeader);
 
     /**
      * 获取数据适配器

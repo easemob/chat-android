@@ -46,6 +46,22 @@ public class EaseContactLayout extends RelativeLayout implements IContactLayout 
         contactList.loadDefaultData();
     }
 
+    /**
+     * 展示简洁模式
+     */
+    public void showSimple() {
+        contactList.showItemHeader(false);
+        sideBarContact.setVisibility(GONE);
+    }
+
+    /**
+     * 展示常规模式
+     */
+    public void showNormal() {
+        contactList.showItemHeader(true);
+        sideBarContact.setVisibility(VISIBLE);
+    }
+
     @Override
     public EaseContactListLayout getContactList() {
         return contactList;

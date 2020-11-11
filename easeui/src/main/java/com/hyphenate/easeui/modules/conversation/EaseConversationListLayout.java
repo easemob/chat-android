@@ -27,6 +27,7 @@ import com.hyphenate.easeui.adapter.EaseAdapterDelegate;
 import com.hyphenate.easeui.adapter.EaseBaseRecyclerViewAdapter;
 import com.hyphenate.easeui.interfaces.OnItemClickListener;
 import com.hyphenate.easeui.interfaces.OnItemLongClickListener;
+import com.hyphenate.easeui.modules.conversation.adapter.EaseConversationListAdapter;
 import com.hyphenate.easeui.modules.conversation.interfaces.OnConversationChangeListener;
 import com.hyphenate.easeui.modules.conversation.model.EaseConversationInfo;
 import com.hyphenate.easeui.modules.EaseBaseLayout;
@@ -35,6 +36,9 @@ import com.hyphenate.easeui.modules.conversation.delegate.EaseConversationDelega
 import com.hyphenate.easeui.modules.conversation.interfaces.IConversationListLayout;
 import com.hyphenate.easeui.modules.conversation.interfaces.IConversationStyle;
 import com.hyphenate.easeui.modules.conversation.model.EaseConversationSetModel;
+import com.hyphenate.easeui.modules.conversation.presenter.EaseConversationPresenter;
+import com.hyphenate.easeui.modules.conversation.presenter.EaseConversationPresenterImpl;
+import com.hyphenate.easeui.modules.conversation.presenter.IEaseConversationListView;
 import com.hyphenate.easeui.modules.interfaces.IPopupMenu;
 import com.hyphenate.easeui.modules.menu.OnPopupMenuDismissListener;
 import com.hyphenate.easeui.modules.menu.OnPopupMenuItemClickListener;

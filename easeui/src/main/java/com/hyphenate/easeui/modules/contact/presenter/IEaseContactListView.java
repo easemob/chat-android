@@ -1,4 +1,4 @@
-package com.hyphenate.easeui.modules.contact;
+package com.hyphenate.easeui.modules.contact.presenter;
 
 import com.hyphenate.easeui.domain.EaseUser;
 import com.hyphenate.easeui.modules.ILoadDataView;

@@ -1,4 +1,4 @@
-package com.hyphenate.easeui.modules.contact;
+package com.hyphenate.easeui.modules.contact.model;
 
 import android.graphics.drawable.Drawable;
 
@@ -16,6 +16,7 @@ public class EaseContactSetModel {
     private int borderColor;
     private float itemHeight;
     private Drawable bgDrawable;
+    private boolean showItemHeader;
 
     public int getTitleTextColor() {
         return titleTextColor;
@@ -119,6 +120,14 @@ public class EaseContactSetModel {
 
     public void setBgDrawable(Drawable bgDrawable) {
         this.bgDrawable = bgDrawable;
+    }
+
+    public boolean isShowItemHeader() {
+        return showItemHeader;
+    }
+
+    public void setShowItemHeader(boolean showItemHeader) {
+        this.showItemHeader = showItemHeader;
     }
 }
 

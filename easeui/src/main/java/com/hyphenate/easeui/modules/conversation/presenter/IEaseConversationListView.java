@@ -1,4 +1,4 @@
-package com.hyphenate.easeui.modules.conversation;
+package com.hyphenate.easeui.modules.conversation.presenter;
 
 import com.hyphenate.easeui.modules.conversation.model.EaseConversationInfo;
 import com.hyphenate.easeui.modules.ILoadDataView;
