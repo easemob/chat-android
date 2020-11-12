@@ -17,6 +17,7 @@ import com.hyphenate.easeui.constants.EaseConstant;
 import com.hyphenate.easeui.manager.EaseAtMessageHelper;
 import com.hyphenate.easeui.manager.EasePreferenceManager;
 import com.hyphenate.easeui.manager.EaseProviderManager;
+import com.hyphenate.easeui.manager.EaseSystemMsgManager;
 import com.hyphenate.easeui.modules.conversation.model.EaseConversationInfo;
 import com.hyphenate.easeui.modules.conversation.model.EaseConversationSetModel;
 import com.hyphenate.easeui.provider.EaseConversationInfoProvider;
@@ -64,7 +65,7 @@ public class EaseConversationDelegate extends EaseDefaultConversationDelegate {
         }else {
             defaultAvatar = R.drawable.ease_default_avatar;
             showName = username;
-            if(TextUtils.equals(item.conversationId(), EaseConstant.DEFAULT_SYSTEM_MESSAGE_ID)) {
+            if(EaseSystemMsgManager.getInstance().isSystemConversation(item)) {
                 defaultAvatar = R.drawable.em_system_nofinication;
                 showName = holder.mContext.getString(R.string.ease_conversation_system_message);
             }
@@ -72,7 +73,7 @@ public class EaseConversationDelegate extends EaseDefaultConversationDelegate {
         holder.avatar.setImageResource(defaultAvatar);
         holder.name.setText(showName);
         if(infoProvider != null) {
-            if(item.getType() == EMConversation.EMConversationType.Chat && TextUtils.equals(item.conversationId(), EaseConstant.DEFAULT_SYSTEM_MESSAGE_ID)) {
+            if(EaseSystemMsgManager.getInstance().isSystemConversation(item)) {
                 String avatar = infoProvider.getDefaultTypeAvatar(EaseConstant.DEFAULT_SYSTEM_MESSAGE_TYPE);
                 int resource = infoProvider.getDefaultTypeAvatarResource(EaseConstant.DEFAULT_SYSTEM_MESSAGE_TYPE);
                 if(resource != 0) {
