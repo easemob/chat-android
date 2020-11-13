@@ -31,13 +31,13 @@ public interface IRecyclerView {
      * 添加装饰类
      * @param decor
      */
-    void addItemDecoration(@NonNull RecyclerView.ItemDecoration decor);
+    void addRVItemDecoration(@NonNull RecyclerView.ItemDecoration decor);
 
     /**
      * 移除装饰类
      * @param decor
      */
-    void removeItemDecoration(@NonNull RecyclerView.ItemDecoration decor);
+    void removeRVItemDecoration(@NonNull RecyclerView.ItemDecoration decor);
 
     /**
      * 设置条目点击事件

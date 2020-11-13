@@ -12,6 +12,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.PopupMenu;
@@ -438,6 +439,16 @@ public class EaseContactListLayout extends EaseRecyclerView implements IEaseCont
     }
 
     @Override
+    public void addRVItemDecoration(@NonNull ItemDecoration decor) {
+        addItemDecoration(decor);
+    }
+
+    @Override
+    public void removeRVItemDecoration(@NonNull ItemDecoration decor) {
+        removeItemDecoration(decor);
+    }
+
+    @Override
     public void setOnItemClickListener(OnItemClickListener listener) {
         this.itemListener = listener;
     }
@@ -479,7 +490,7 @@ public class EaseContactListLayout extends EaseRecyclerView implements IEaseCont
 
     @Override
     public void addNote(int position) {
-        listAdapter.notifyItemRemoved(position);
+        listAdapter.notifyItemChanged(position);
     }
 
     @Override

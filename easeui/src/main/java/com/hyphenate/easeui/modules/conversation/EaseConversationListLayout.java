@@ -366,6 +366,16 @@ public class EaseConversationListLayout extends EaseBaseLayout implements IConve
         this.adapter.removeAdapter(adapter);
     }
 
+    @Override
+    public void addRVItemDecoration(@NonNull RecyclerView.ItemDecoration decor) {
+        rvConversationList.addItemDecoration(decor);
+    }
+
+    @Override
+    public void removeRVItemDecoration(@NonNull RecyclerView.ItemDecoration decor) {
+        rvConversationList.removeItemDecoration(decor);
+    }
+
 //    @Override
 //    public void addDelegate(EaseBaseConversationDelegate delegate) {
 //        delegate.setSetModel(setModel);
@@ -407,16 +417,6 @@ public class EaseConversationListLayout extends EaseBaseLayout implements IConve
     public void setItemHeight(int height) {
         setModel.setItemHeight(height);
         notifyDataSetChanged();
-    }
-
-    @Override
-    public void addItemDecoration(@NonNull RecyclerView.ItemDecoration decor) {
-        rvConversationList.addItemDecoration(decor);
-    }
-
-    @Override
-    public void removeItemDecoration(@NonNull RecyclerView.ItemDecoration decor) {
-        rvConversationList.removeItemDecoration(decor);
     }
 
     @Override
@@ -540,10 +540,18 @@ public class EaseConversationListLayout extends EaseBaseLayout implements IConve
 
     @Override
     public void deleteItem(int position) {
+        if(listAdapter.getData() == null) {
+            return;
+        }
         if(conversationChangeListener != null) {
             conversationChangeListener.notifyItemRemove(position);
         }
-        listAdapter.notifyItemRemoved(position);
+        try {
+            listAdapter.getData().remove(position);
+            listAdapter.notifyItemRemoved(position);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
