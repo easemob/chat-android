@@ -1,9 +1,9 @@
 package com.hyphenate.easeui.modules.conversation.model;
 
 
-import com.hyphenate.easeui.modules.EaseBaseSetBean;
+import com.hyphenate.easeui.modules.EaseBaseSetStyle;
 
-public class EaseConversationSetModel extends EaseBaseSetBean {
+public class EaseConversationSetStyle extends EaseBaseSetStyle {
     private int titleTextColor;
     private float titleTextSize;
     private int contentTextColor;

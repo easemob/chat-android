@@ -26,7 +26,7 @@ public class EaseConversationPresenterImpl extends EaseConversationPresenter {
         // get all conversations
         Map<String, EMConversation> conversations = EMClient.getInstance().chatManager().getAllConversations();
         if(conversations.isEmpty()) {
-            EaseThreadManager.getInstance().runOnMainThread(() -> {
+            runOnUI(() -> {
                 if(!isDestroy()) {
                     mView.loadConversationListNoData();
                 }
@@ -58,7 +58,7 @@ public class EaseConversationPresenterImpl extends EaseConversationPresenter {
             }
         }
         if(isActive()) {
-            EaseThreadManager.getInstance().runOnMainThread(()-> mView.loadConversationListSuccess(infos));
+            runOnUI(()-> mView.loadConversationListSuccess(infos));
         }
     }
 
@@ -69,7 +69,7 @@ public class EaseConversationPresenterImpl extends EaseConversationPresenter {
     @Override
     public void sortData(List<EaseConversationInfo> data) {
         if(data == null || data.isEmpty()) {
-            EaseThreadManager.getInstance().runOnMainThread(() -> {
+            runOnUI(() -> {
                 if(!isDestroy()) {
                     mView.loadConversationListNoData();
                 }
@@ -91,7 +91,7 @@ public class EaseConversationPresenterImpl extends EaseConversationPresenter {
             sortByTimestamp(sortList);
             sortList.addAll(0, topSortList);
         }
-        EaseThreadManager.getInstance().runOnMainThread(() -> {
+        runOnUI(() -> {
             if(!isDestroy()) {
                 mView.sortConversationListSuccess(sortList);
             }

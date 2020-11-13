@@ -16,13 +16,13 @@ import com.hyphenate.easeui.R;
 import com.hyphenate.easeui.adapter.EaseBaseRecyclerViewAdapter;
 import com.hyphenate.easeui.domain.EaseUser;
 import com.hyphenate.easeui.manager.EaseProviderManager;
-import com.hyphenate.easeui.modules.contact.model.EaseContactSetModel;
+import com.hyphenate.easeui.modules.contact.model.EaseContactSetStyle;
 import com.hyphenate.easeui.provider.EaseUserProfileProvider;
 import com.hyphenate.easeui.widget.EaseImageView;
 
 public class EaseContactListAdapter extends EaseBaseRecyclerViewAdapter<EaseUser> {
     private int emptyLayoutResource;
-    private EaseContactSetModel contactSetModel;
+    private EaseContactSetStyle contactSetModel;
 
     @Override
     public ViewHolder getViewHolder(ViewGroup parent, int viewType) {
@@ -37,7 +37,7 @@ public class EaseContactListAdapter extends EaseBaseRecyclerViewAdapter<EaseUser
         return super.getEmptyLayoutId();
     }
 
-    public void setSettingModel(EaseContactSetModel settingModel) {
+    public void setSettingModel(EaseContactSetStyle settingModel) {
         this.contactSetModel = settingModel;
     }
 

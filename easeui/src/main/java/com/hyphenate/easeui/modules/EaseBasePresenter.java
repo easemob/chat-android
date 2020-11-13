@@ -6,6 +6,8 @@ import androidx.lifecycle.Lifecycle;
 import androidx.lifecycle.LifecycleObserver;
 import androidx.lifecycle.OnLifecycleEvent;
 
+import com.hyphenate.easeui.manager.EaseThreadManager;
+
 public abstract class EaseBasePresenter implements LifecycleObserver {
     private static final String TAG = EaseBasePresenter.class.getSimpleName();
     private boolean isDestroy;
@@ -60,5 +62,21 @@ public abstract class EaseBasePresenter implements LifecycleObserver {
      */
     public boolean isActive() {
         return !isDestroy;
+    }
+
+    /**
+     * 执行UI线程
+     * @param runnable
+     */
+    public void runOnUI(Runnable runnable) {
+        EaseThreadManager.getInstance().runOnMainThread(runnable);
+    }
+
+    /**
+     * 执行IO异步线程
+     * @param runnable
+     */
+    public void runOnIO(Runnable runnable) {
+        EaseThreadManager.getInstance().runOnIOThread(runnable);
     }
 }

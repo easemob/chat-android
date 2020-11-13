@@ -6,6 +6,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -15,8 +16,12 @@ import com.hyphenate.easeui.R;
 import com.hyphenate.easeui.interfaces.OnItemClickListener;
 import com.hyphenate.easeui.interfaces.OnItemLongClickListener;
 import com.hyphenate.easeui.manager.EaseProviderManager;
+import com.hyphenate.easeui.manager.EaseSystemMsgManager;
+import com.hyphenate.easeui.modules.chat.EaseChatListActivity;
+import com.hyphenate.easeui.modules.conversation.model.EaseConversationInfo;
 import com.hyphenate.easeui.provider.EaseConversationInfoProvider;
 import com.hyphenate.easeui.ui.base.EaseBaseFragment;
+import com.hyphenate.easeui.utils.EaseCommonUtils;
 
 public class EaseConversationListFragment extends EaseBaseFragment {
     private EaseConversationListLayout list;
@@ -43,6 +48,14 @@ public class EaseConversationListFragment extends EaseBaseFragment {
             @Override
             public void onItemClick(View view, int position) {
                 Log.e("TAG", "onItemClick position = "+position);
+                EaseConversationInfo item = list.getItem(position);
+                if(item.getInfo() instanceof EMConversation) {
+                    if(EaseSystemMsgManager.getInstance().isSystemConversation((EMConversation) item.getInfo())) {
+                        Toast.makeText(mContext, "跳转到系统消息页面", Toast.LENGTH_SHORT).show();
+                    }else {
+                        EaseChatListActivity.actionStart(mContext, ((EMConversation) item.getInfo()).conversationId(), EaseCommonUtils.getChatType((EMConversation) item.getInfo()));
+                    }
+                }
             }
         });
 

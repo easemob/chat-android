@@ -165,4 +165,37 @@
         <attr name="ease_contact_item_background" format="reference|color"/>
     </declare-styleable>
 
+    <declare-styleable name="EaseChatMessageListLayout">
+        <!-- 文本消息文本字体大小 -->
+        <attr name="ease_chat_item_text_size" format="dimension"/>
+        <!-- 文本消息文本颜色 -->
+        <attr name="ease_chat_item_text_color" format="reference|color"/>
+        <!-- 文本消息文本最小高度 -->
+        <attr name="ease_chat_item_min_height" format="dimension"/>
+        <!-- 时间线文本字体大小 -->
+        <attr name="ease_chat_item_time_text_size" format="dimension"/>
+        <!-- 时间线文本字体颜色 -->
+        <attr name="ease_chat_item_time_text_color" format="reference|color"/>
+        <!-- 时间线背景色 -->
+        <attr name="ease_chat_item_time_background" format="reference|color"/>
+        <!-- 设置默认头像 -->
+        <attr name="ease_chat_item_avatar_default_src" format="reference"/>
+        <!-- 头像大小 宽和高一样 -->
+        <attr name="ease_chat_item_avatar_size" format="dimension"/>
+        <!-- 头像形状 -->
+        <attr name="ease_chat_item_avatar_shape_type" format="enum">
+            <enum name="none" value="0" />
+            <enum name="round" value="1" />
+            <enum name="rectangle" value="2" />
+        </attr>
+        <!-- 头像圆角半径 -->
+        <attr name="ease_chat_item_avatar_radius" format="dimension"/>
+        <!-- 描边宽度 -->
+        <attr name="ease_chat_item_avatar_border_width" format="dimension"/>
+        <!-- 描边颜色 -->
+        <attr name="ease_chat_item_avatar_border_color" format="reference|color"/>
+        <!-- 条目背景资源 -->
+        <attr name="ease_chat_item_background" format="reference|color"/>
+    </declare-styleable>
+
 </resources>

@@ -15,11 +15,11 @@ import com.bumptech.glide.Glide;
 import com.hyphenate.easeui.R;
 import com.hyphenate.easeui.adapter.EaseBaseRecyclerViewAdapter;
 import com.hyphenate.easeui.modules.contact.model.EaseContactCustomBean;
-import com.hyphenate.easeui.modules.contact.model.EaseContactSetModel;
+import com.hyphenate.easeui.modules.contact.model.EaseContactSetStyle;
 import com.hyphenate.easeui.widget.EaseImageView;
 
 public class EaseContactCustomAdapter extends EaseBaseRecyclerViewAdapter<EaseContactCustomBean> {
-    private EaseContactSetModel contactSetModel;
+    private EaseContactSetStyle contactSetModel;
 
     @Override
     public ViewHolder getViewHolder(ViewGroup parent, int viewType) {
@@ -27,7 +27,7 @@ public class EaseContactCustomAdapter extends EaseBaseRecyclerViewAdapter<EaseCo
         return new CustomViewHolder(view);
     }
 
-    public void setSettingModel(EaseContactSetModel settingModel) {
+    public void setSettingModel(EaseContactSetStyle settingModel) {
         this.contactSetModel = settingModel;
     }
 

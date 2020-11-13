@@ -77,8 +77,8 @@ public class EaseContactListFragment extends EaseBaseFragment {
         });
         contactLayout.init();
 
-        contactList.addCustomItem(0, R.drawable.ease_default_avatar, "找朋友");
-        contactList.addCustomItem(1, R.drawable.ease_default_image, "群组");
+        contactList.addCustomItem(0, R.drawable.em_chat_voice_call_normal, "找朋友");
+        contactList.addCustomItem(1, R.drawable.ease_group_icon, "群组");
     }
 }
 

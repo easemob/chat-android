@@ -15,12 +15,12 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 import com.hyphenate.easeui.R;
 import com.hyphenate.easeui.adapter.EaseBaseRecyclerViewAdapter;
 import com.hyphenate.easeui.modules.conversation.model.EaseConversationInfo;
-import com.hyphenate.easeui.modules.conversation.model.EaseConversationSetModel;
+import com.hyphenate.easeui.modules.conversation.model.EaseConversationSetStyle;
 import com.hyphenate.easeui.widget.EaseImageView;
 
 public abstract class EaseDefaultConversationDelegate extends EaseBaseConversationDelegate<EaseConversationInfo, EaseDefaultConversationDelegate.ViewHolder> {
 
-    public EaseDefaultConversationDelegate(EaseConversationSetModel setModel) {
+    public EaseDefaultConversationDelegate(EaseConversationSetStyle setModel) {
         super(setModel);
     }
 
@@ -51,7 +51,7 @@ public abstract class EaseDefaultConversationDelegate extends EaseBaseConversati
         public Context mContext;
         private final Drawable bgDrawable;
 
-        public ViewHolder(@NonNull View itemView, EaseConversationSetModel setModel) {
+        public ViewHolder(@NonNull View itemView, EaseConversationSetStyle setModel) {
             super(itemView);
             mContext = itemView.getContext();
             listIteaseLayout = findViewById(R.id.list_itease_layout);
@@ -128,8 +128,8 @@ public abstract class EaseDefaultConversationDelegate extends EaseBaseConversati
                     itemView.setBackground(bgDrawable);
                 }
                 mUnreadMsgNumber.setVisibility(setModel.isHideUnreadDot() ? View.GONE : View.VISIBLE);
-                EaseConversationSetModel.UnreadDotPosition dotPosition = setModel.getUnreadDotPosition();
-                if(dotPosition == EaseConversationSetModel.UnreadDotPosition.LEFT) {
+                EaseConversationSetStyle.UnreadDotPosition dotPosition = setModel.getUnreadDotPosition();
+                if(dotPosition == EaseConversationSetStyle.UnreadDotPosition.LEFT) {
                     mUnreadMsgNumber.setVisibility(View.VISIBLE);
                     unreadMsgNumberRight.setVisibility(View.GONE);
                 }else {
@@ -168,7 +168,7 @@ public abstract class EaseDefaultConversationDelegate extends EaseBaseConversati
         if(unreadMsgCount > 0) {
             holder.mUnreadMsgNumber.setText(handleBigNum(unreadMsgCount));
             holder.unreadMsgNumberRight.setText(handleBigNum(unreadMsgCount));
-            showUnreadRight(holder, setModel.getUnreadDotPosition() == EaseConversationSetModel.UnreadDotPosition.RIGHT);
+            showUnreadRight(holder, setModel.getUnreadDotPosition() == EaseConversationSetStyle.UnreadDotPosition.RIGHT);
         }else {
             holder.mUnreadMsgNumber.setVisibility(View.GONE);
             holder.unreadMsgNumberRight.setVisibility(View.GONE);

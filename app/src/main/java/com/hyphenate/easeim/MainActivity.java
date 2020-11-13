@@ -36,6 +36,8 @@ import com.hyphenate.easeim.section.contact.viewmodels.ContactsViewModel;
 import com.hyphenate.easeim.section.group.activity.GroupPrePickActivity;
 import com.hyphenate.easeim.section.me.AboutMeFragment;
 import com.hyphenate.easeui.model.EaseEvent;
+import com.hyphenate.easeui.modules.contact.EaseContactListFragment;
+import com.hyphenate.easeui.modules.conversation.EaseConversationListFragment;
 import com.hyphenate.easeui.ui.base.EaseBaseFragment;
 import com.hyphenate.easeui.widget.EaseTitleBar;
 
@@ -277,14 +279,14 @@ public class MainActivity extends BaseInitActivity implements BottomNavigationVi
 
     private void switchToHome() {
         if(mConversationListFragment == null) {
-            mConversationListFragment = new ConversationListFragment();
+            mConversationListFragment = new EaseConversationListFragment();
         }
         replace(mConversationListFragment, "conversation");
     }
 
     private void switchToFriends() {
         if(mFriendsFragment == null) {
-            mFriendsFragment = new ContactListFragment();
+            mFriendsFragment = new EaseContactListFragment();
         }
         replace(mFriendsFragment, "contact");
     }

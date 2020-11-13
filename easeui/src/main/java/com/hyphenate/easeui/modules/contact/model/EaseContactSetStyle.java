@@ -2,9 +2,9 @@ package com.hyphenate.easeui.modules.contact.model;
 
 import android.graphics.drawable.Drawable;
 
-import com.hyphenate.easeui.modules.EaseBaseSetBean;
+import com.hyphenate.easeui.modules.EaseBaseSetStyle;
 
-public class EaseContactSetModel extends EaseBaseSetBean {
+public class EaseContactSetStyle extends EaseBaseSetStyle {
     private int titleTextColor;
     private float titleTextSize;
     private int headerTextColor;

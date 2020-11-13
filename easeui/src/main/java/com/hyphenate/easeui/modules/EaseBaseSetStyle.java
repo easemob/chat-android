@@ -2,7 +2,7 @@ package com.hyphenate.easeui.modules;
 
 import android.graphics.drawable.Drawable;
 
-public class EaseBaseSetBean {
+public class EaseBaseSetStyle {
     private float avatarSize;
     private int shapeType;
     private float avatarRadius;

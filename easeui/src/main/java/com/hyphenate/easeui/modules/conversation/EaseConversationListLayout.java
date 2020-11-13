@@ -35,7 +35,7 @@ import com.hyphenate.easeui.modules.conversation.delegate.EaseBaseConversationDe
 import com.hyphenate.easeui.modules.conversation.delegate.EaseConversationDelegate;
 import com.hyphenate.easeui.modules.conversation.interfaces.IConversationListLayout;
 import com.hyphenate.easeui.modules.conversation.interfaces.IConversationStyle;
-import com.hyphenate.easeui.modules.conversation.model.EaseConversationSetModel;
+import com.hyphenate.easeui.modules.conversation.model.EaseConversationSetStyle;
 import com.hyphenate.easeui.modules.conversation.presenter.EaseConversationPresenter;
 import com.hyphenate.easeui.modules.conversation.presenter.EaseConversationPresenterImpl;
 import com.hyphenate.easeui.modules.conversation.presenter.IEaseConversationListView;
@@ -65,7 +65,7 @@ public class EaseConversationListLayout extends EaseBaseLayout implements IConve
     private OnItemLongClickListener itemLongListener;
     private OnPopupMenuItemClickListener popupMenuItemClickListener;
     private OnPopupMenuDismissListener dismissListener;
-    private EaseConversationSetModel setModel;
+    private EaseConversationSetStyle setModel;
 
     private EaseConversationPresenter presenter;
     private float touchX;
@@ -84,7 +84,7 @@ public class EaseConversationListLayout extends EaseBaseLayout implements IConve
 
     public EaseConversationListLayout(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
-        setModel = new EaseConversationSetModel();
+        setModel = new EaseConversationSetStyle();
         LayoutInflater.from(context).inflate(R.layout.ease_conversation_list, this);
         presenter = new EaseConversationPresenterImpl();
         if(context instanceof AppCompatActivity) {
@@ -171,8 +171,8 @@ public class EaseConversationListLayout extends EaseBaseLayout implements IConve
             setModel.setBgDrawable(bgDrawable);
 
             int unreadDotPosition = a.getInteger(R.styleable.EaseConversationListLayout_ease_con_item_unread_dot_position, 0);
-            setModel.setUnreadDotPosition(unreadDotPosition == 0 ? EaseConversationSetModel.UnreadDotPosition.LEFT
-                                                                    : EaseConversationSetModel.UnreadDotPosition.RIGHT);
+            setModel.setUnreadDotPosition(unreadDotPosition == 0 ? EaseConversationSetStyle.UnreadDotPosition.LEFT
+                                                                    : EaseConversationSetStyle.UnreadDotPosition.RIGHT);
 
             boolean showSystemMessage = a.getBoolean(R.styleable.EaseConversationListLayout_ease_con_item_show_system_message, true);
             setModel.setShowSystemMessage(showSystemMessage);
@@ -426,7 +426,7 @@ public class EaseConversationListLayout extends EaseBaseLayout implements IConve
     }
 
     @Override
-    public void showUnreadDotPosition(EaseConversationSetModel.UnreadDotPosition position) {
+    public void showUnreadDotPosition(EaseConversationSetStyle.UnreadDotPosition position) {
         setModel.setUnreadDotPosition(position);
         notifyDataSetChanged();
     }

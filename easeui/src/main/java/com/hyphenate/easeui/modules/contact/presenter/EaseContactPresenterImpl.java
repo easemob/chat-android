@@ -17,13 +17,13 @@ import java.util.List;
 public class EaseContactPresenterImpl extends EaseContactPresenter {
     @Override
     public void loadData() {
-        EaseThreadManager.getInstance().runOnIOThread(() -> {
+        runOnIO(() -> {
             try {
                 List<String> usernames = EMClient.getInstance().contactManager().getAllContactsFromServer();
                 List<String> ids = EMClient.getInstance().contactManager().getSelfIdsOnOtherPlatform();
                 if((usernames == null || usernames.isEmpty()) && (ids == null || ids.isEmpty())) {
                     if(!isDestroy()) {
-                        EaseThreadManager.getInstance().runOnMainThread(() -> mView.loadContactListNoData());
+                        runOnUI(() -> mView.loadContactListNoData());
                     }
                     return;
                 }
@@ -46,7 +46,7 @@ public class EaseContactPresenterImpl extends EaseContactPresenter {
                         }
                     }
                 }
-                EaseThreadManager.getInstance().runOnMainThread(() -> {
+                runOnUI(() -> {
                     if(!isDestroy()) {
                         mView.loadContactListSuccess(easeUsers);
                     }
@@ -54,7 +54,7 @@ public class EaseContactPresenterImpl extends EaseContactPresenter {
             } catch (HyphenateException e) {
                 e.printStackTrace();
                 if(!isDestroy()) {
-                    EaseThreadManager.getInstance().runOnMainThread(()-> mView.loadContactListFail(e.getDescription()));
+                    runOnUI(()-> mView.loadContactListFail(e.getDescription()));
                 }
 
             }
@@ -66,7 +66,7 @@ public class EaseContactPresenterImpl extends EaseContactPresenter {
         checkUserProvider(data);
         sortList(data);
         if(!isDestroy()) {
-            EaseThreadManager.getInstance().runOnMainThread(() -> mView.sortContactListSuccess(data));
+            runOnUI(() -> mView.sortContactListSuccess(data));
         }
 
     }
@@ -108,7 +108,7 @@ public class EaseContactPresenterImpl extends EaseContactPresenter {
     @Override
     public void addNote(int position, EaseUser user) {
         if(!isDestroy()) {
-            EaseThreadManager.getInstance().runOnMainThread(() -> mView.addNoteFail(position, mView.context().getString(R.string.ease_contact_add_note_developing)));
+            runOnUI(() -> mView.addNoteFail(position, mView.context().getString(R.string.ease_contact_add_note_developing)));
         }
     }
 }

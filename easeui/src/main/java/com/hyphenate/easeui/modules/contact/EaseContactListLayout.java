@@ -29,7 +29,7 @@ import com.hyphenate.easeui.modules.contact.adapter.EaseContactCustomAdapter;
 import com.hyphenate.easeui.modules.contact.interfaces.IContactCustomListLayout;
 import com.hyphenate.easeui.modules.contact.interfaces.IContactListLayout;
 import com.hyphenate.easeui.modules.contact.interfaces.IContactListStyle;
-import com.hyphenate.easeui.modules.contact.model.EaseContactSetModel;
+import com.hyphenate.easeui.modules.contact.model.EaseContactSetStyle;
 import com.hyphenate.easeui.modules.contact.presenter.EaseContactPresenter;
 import com.hyphenate.easeui.modules.contact.presenter.EaseContactPresenterImpl;
 import com.hyphenate.easeui.modules.contact.presenter.IEaseContactListView;
@@ -45,7 +45,7 @@ public class EaseContactListLayout extends EaseRecyclerView implements IEaseCont
                                                                         , IContactListStyle, IPopupMenu {
 
     private static final int MENU_ADD_NOTE = 0;
-    private EaseContactSetModel contactSetModel;
+    private EaseContactSetStyle contactSetModel;
     private EaseContactPresenter presenter;
     private ConcatAdapter concatAdapter;
     private EaseContactListAdapter listAdapter;
@@ -71,7 +71,7 @@ public class EaseContactListLayout extends EaseRecyclerView implements IEaseCont
 
     public EaseContactListLayout(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
-        contactSetModel = new EaseContactSetModel();
+        contactSetModel = new EaseContactSetStyle();
         contactSetModel.setShowItemHeader(true);
 
         presenter = new EaseContactPresenterImpl();

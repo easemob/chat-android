@@ -42,11 +42,11 @@ public interface IRecyclerView {
     /**
      * 设置条目点击事件
      */
-    void setOnItemClickListener(OnItemClickListener listener);
+    default void setOnItemClickListener(OnItemClickListener listener) {}
 
     /**
      * 设置条目长按事件
      */
-    void setOnItemLongClickListener(OnItemLongClickListener listener);
+    default void setOnItemLongClickListener(OnItemLongClickListener listener) {}
 }
 

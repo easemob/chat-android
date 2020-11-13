@@ -3,7 +3,7 @@ package com.hyphenate.easeui.modules.conversation.interfaces;
 import android.graphics.drawable.Drawable;
 
 
-import com.hyphenate.easeui.modules.conversation.model.EaseConversationSetModel;
+import com.hyphenate.easeui.modules.conversation.model.EaseConversationSetStyle;
 import com.hyphenate.easeui.modules.interfaces.IAvatarSet;
 
 public interface IConversationStyle extends IAvatarSet, IConversationTextStyle {
@@ -31,5 +31,5 @@ public interface IConversationStyle extends IAvatarSet, IConversationTextStyle {
      * 目前支持左侧和右侧两种
      * @param position
      */
-    void showUnreadDotPosition(EaseConversationSetModel.UnreadDotPosition position);
+    void showUnreadDotPosition(EaseConversationSetStyle.UnreadDotPosition position);
 }

@@ -308,6 +308,11 @@ public class DemoHelper {
                     public EaseUser getUser(String username) {
                         return getUserInfo(username);
                     }
+
+                    @Override
+                    public EaseUser getUser(EaseUser user) {
+                        return user;
+                    }
                 });
     }
 

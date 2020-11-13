@@ -19,7 +19,7 @@ import com.hyphenate.easeui.manager.EasePreferenceManager;
 import com.hyphenate.easeui.manager.EaseProviderManager;
 import com.hyphenate.easeui.manager.EaseSystemMsgManager;
 import com.hyphenate.easeui.modules.conversation.model.EaseConversationInfo;
-import com.hyphenate.easeui.modules.conversation.model.EaseConversationSetModel;
+import com.hyphenate.easeui.modules.conversation.model.EaseConversationSetStyle;
 import com.hyphenate.easeui.provider.EaseConversationInfoProvider;
 import com.hyphenate.easeui.utils.EaseCommonUtils;
 import com.hyphenate.easeui.utils.EaseSmileUtils;
@@ -29,7 +29,7 @@ import java.util.Date;
 
 public class EaseConversationDelegate extends EaseDefaultConversationDelegate {
 
-    public EaseConversationDelegate(EaseConversationSetModel setModel) {
+    public EaseConversationDelegate(EaseConversationSetStyle setModel) {
         super(setModel);
     }
 

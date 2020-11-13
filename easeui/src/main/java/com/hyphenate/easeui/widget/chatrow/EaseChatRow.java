@@ -288,6 +288,14 @@ public abstract class EaseChatRow extends LinearLayout {
     }
 
     /**
+     * 是否是发送者
+     * @return
+     */
+    public boolean isSender() {
+        return isSender;
+    }
+
+    /**
      * set avatar and nickname
      */
     protected void setAvatarAndNick() {
