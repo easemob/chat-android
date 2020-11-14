@@ -27,7 +27,7 @@ public class ChatConferenceInviteAdapterDelegate extends EaseMessageAdapterDeleg
     }
 
     @Override
-    protected EaseChatRowViewHolder createViewHolder(View view, MessageListItemClickListener itemClickListener, EaseMessageListItemStyle itemStyle) {
-        return new ChatConferenceInviteViewHolder(view, itemClickListener, itemStyle);
+    protected EaseChatRowViewHolder createViewHolder(View view, MessageListItemClickListener itemClickListener) {
+        return new ChatConferenceInviteViewHolder(view, itemClickListener);
     }
 }

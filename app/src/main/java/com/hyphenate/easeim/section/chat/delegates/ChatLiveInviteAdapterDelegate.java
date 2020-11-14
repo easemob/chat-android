@@ -27,7 +27,7 @@ public class ChatLiveInviteAdapterDelegate extends EaseMessageAdapterDelegate<EM
     }
 
     @Override
-    protected EaseChatRowViewHolder createViewHolder(View view, MessageListItemClickListener itemClickListener, EaseMessageListItemStyle itemStyle) {
-        return new ChatLiveInviteViewHolder(view, itemClickListener, itemStyle);
+    protected EaseChatRowViewHolder createViewHolder(View view, MessageListItemClickListener itemClickListener) {
+        return new ChatLiveInviteViewHolder(view, itemClickListener);
     }
 }

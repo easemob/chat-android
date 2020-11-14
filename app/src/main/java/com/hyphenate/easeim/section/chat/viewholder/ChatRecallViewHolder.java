@@ -12,13 +12,13 @@ import com.hyphenate.easeui.viewholder.EaseChatRowViewHolder;
 
 public class ChatRecallViewHolder extends EaseChatRowViewHolder {
 
-    public ChatRecallViewHolder(@NonNull View itemView, MessageListItemClickListener itemClickListener, EaseMessageListItemStyle itemStyle) {
-        super(itemView, itemClickListener, itemStyle);
+    public ChatRecallViewHolder(@NonNull View itemView, MessageListItemClickListener itemClickListener) {
+        super(itemView, itemClickListener);
     }
 
     public static ChatRecallViewHolder create(ViewGroup parent, boolean isSender,
-                                              MessageListItemClickListener listener, EaseMessageListItemStyle itemStyle) {
-        return new ChatRecallViewHolder(new ChatRowRecall(parent.getContext(), isSender), listener, itemStyle);
+                                              MessageListItemClickListener listener) {
+        return new ChatRecallViewHolder(new ChatRowRecall(parent.getContext(), isSender), listener);
     }
 
 
