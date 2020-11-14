@@ -10,7 +10,6 @@ import androidx.annotation.NonNull;
 import com.hyphenate.chat.EMMessage;
 import com.hyphenate.easeui.adapter.EaseMessageAdapter;
 import com.hyphenate.easeui.interfaces.MessageListItemClickListener;
-import com.hyphenate.easeui.model.styles.EaseMessageListItemStyle;
 import com.hyphenate.easeui.widget.chatrow.EaseChatRow;
 
 import java.util.List;
@@ -22,17 +21,14 @@ public class EaseChatRowViewHolder extends EaseMessageAdapter.ViewHolder<EMMessa
     private EaseChatRow chatRow;
     private EMMessage message;
     private MessageListItemClickListener mItemClickListener;
-    private EaseMessageListItemStyle mItemStyle;
 
-    public EaseChatRowViewHolder(@NonNull View itemView, MessageListItemClickListener itemClickListener,
-                                 EaseMessageListItemStyle itemStyle) {
+    public EaseChatRowViewHolder(@NonNull View itemView, MessageListItemClickListener itemClickListener) {
         super(itemView);
         // 解决view宽和高不显示的问题
         ViewGroup.LayoutParams params = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         itemView.setLayoutParams(params);
         this.context = itemView.getContext();
         this.mItemClickListener = itemClickListener;
-        this.mItemStyle = itemStyle;
     }
 
     @Override
@@ -43,7 +39,7 @@ public class EaseChatRowViewHolder extends EaseMessageAdapter.ViewHolder<EMMessa
     @Override
     public void setData(EMMessage item, int position) {
         message = item;
-        chatRow.setUpView(item, position, mItemClickListener, this, mItemStyle);
+        chatRow.setUpView(item, position, mItemClickListener, this);
         handleMessage();
     }
 

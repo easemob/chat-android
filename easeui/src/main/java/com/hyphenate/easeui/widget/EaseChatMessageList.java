@@ -100,12 +100,10 @@ public class EaseChatMessageList extends RelativeLayout implements SwipeRefreshL
         layoutManager = new LinearLayoutManager(context);
         messageList.setLayoutManager(layoutManager);
         messageAdapter = new EaseMessageAdapter();
-        messageAdapter.showUserNick(showUserNick);
         registerDelegates();
         messageList.setAdapter(messageAdapter);
 
         messageAdapter.setListItemClickListener(itemClickListener);
-        messageAdapter.showUserNick(showUserNick);
 
         initListener();
     }

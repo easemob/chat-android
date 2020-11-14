@@ -9,6 +9,8 @@ public class EaseChatItemStyleHelper {
 
     private EaseChatItemStyleHelper(){
         style = new EaseChatSetStyle();
+        style.setShowAvatar(true);
+        style.setShowNickname(false);
     }
 
     public static EaseChatItemStyleHelper getInstance() {
@@ -93,6 +95,18 @@ public class EaseChatItemStyleHelper {
 
     public void setShowAvatar(boolean showAvatar) {
         style.setShowAvatar(showAvatar);
+    }
+
+    public void setReceiverBgDrawable(Drawable receiverBgDrawable) {
+        style.setReceiverBgDrawable(receiverBgDrawable);
+    }
+
+    public void setSenderBgDrawable(Drawable senderBgDrawable) {
+        style.setSenderBgDrawable(senderBgDrawable);
+    }
+
+    public void setItemShowType(int itemShowType) {
+        style.setItemShowType(itemShowType);
     }
 }
 

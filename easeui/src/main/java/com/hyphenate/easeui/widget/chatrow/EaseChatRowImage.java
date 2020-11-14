@@ -44,7 +44,7 @@ public class EaseChatRowImage extends EaseChatRowFile {
 
     @Override
     protected void onInflateView() {
-        inflater.inflate(!isSender ? R.layout.ease_row_received_picture
+        inflater.inflate(!showSenderType ? R.layout.ease_row_received_picture
                 : R.layout.ease_row_sent_picture, this);
     }
 
@@ -57,6 +57,9 @@ public class EaseChatRowImage extends EaseChatRowFile {
     
     @Override
     protected void onSetUpView() {
+        if(bubbleLayout != null) {
+            bubbleLayout.setBackground(null);
+        }
         imgBody = (EMImageMessageBody) message.getBody();
         // received messages
         if (message.direct() == EMMessage.Direct.RECEIVE) {
@@ -81,7 +84,7 @@ public class EaseChatRowImage extends EaseChatRowFile {
 
     @Override
     protected void onMessageInProgress() {
-        if(isSender) {
+        if(message.direct() == EMMessage.Direct.SEND) {
             super.onMessageInProgress();
         }else {
             if(EMClient.getInstance().getOptions().getAutodownloadThumbnail()){

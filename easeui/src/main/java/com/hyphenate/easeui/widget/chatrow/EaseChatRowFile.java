@@ -48,7 +48,7 @@ public class EaseChatRowFile extends EaseChatRow {
 
     @Override
 	protected void onInflateView() {
-	    inflater.inflate(!isSender ? R.layout.ease_row_received_file
+	    inflater.inflate(!showSenderType ? R.layout.ease_row_received_file
                 : R.layout.ease_row_sent_file, this);
 	}
 

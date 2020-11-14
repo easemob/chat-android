@@ -17,15 +17,13 @@ import com.hyphenate.exceptions.HyphenateException;
 
 public class EaseTextViewHolder extends EaseChatRowViewHolder{
 
-    public EaseTextViewHolder(@NonNull View itemView, MessageListItemClickListener itemClickListener,
-                              EaseMessageListItemStyle itemStyle) {
-        super(itemView, itemClickListener, itemStyle);
+    public EaseTextViewHolder(@NonNull View itemView, MessageListItemClickListener itemClickListener) {
+        super(itemView, itemClickListener);
     }
 
     public static EaseChatRowViewHolder create(ViewGroup parent,
-                                               boolean isSender, MessageListItemClickListener itemClickListener,
-                                               EaseMessageListItemStyle itemStyle) {
-        return new EaseTextViewHolder(new EaseChatRowText(parent.getContext(), isSender), itemClickListener, itemStyle);
+                                               boolean isSender, MessageListItemClickListener itemClickListener) {
+        return new EaseTextViewHolder(new EaseChatRowText(parent.getContext(), isSender), itemClickListener);
     }
 
     @Override

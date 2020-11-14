@@ -4,6 +4,7 @@ import android.graphics.drawable.Drawable;
 
 import androidx.annotation.ColorInt;
 
+import com.hyphenate.easeui.modules.chat.EaseChatMessageListLayout;
 import com.hyphenate.easeui.modules.interfaces.IAvatarSet;
 
 public interface IChatMessageItemSet extends IAvatarSet {
@@ -14,10 +15,16 @@ public interface IChatMessageItemSet extends IAvatarSet {
     void showNickname(boolean showNickname);
 
     /**
-     * 设置条目背景
+     * 设置条目发送者的背景
      * @param bgDrawable
      */
-    void setItemBackground(Drawable bgDrawable);
+    void setItemSenderBackground(Drawable bgDrawable);
+
+    /**
+     * 设置接收者的背景
+     * @param bgDrawable
+     */
+    void setItemReceiverBackground(Drawable bgDrawable);
 
     /**
      * 设置文本消息字体大小
@@ -54,4 +61,10 @@ public interface IChatMessageItemSet extends IAvatarSet {
      * @param bgDrawable
      */
     void setTimeBackground(Drawable bgDrawable);
+
+    /**
+     * 聊天列表条目的展示方式
+     * @param type
+     */
+    void setItemShowType(EaseChatMessageListLayout.ShowType type);
 }

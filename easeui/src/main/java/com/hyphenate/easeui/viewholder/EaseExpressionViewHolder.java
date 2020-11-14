@@ -15,15 +15,13 @@ import com.hyphenate.easeui.widget.chatrow.EaseChatRowBigExpression;
 
 public class EaseExpressionViewHolder extends EaseChatRowViewHolder {
 
-    public EaseExpressionViewHolder(@NonNull View itemView, MessageListItemClickListener itemClickListener,
-                                    EaseMessageListItemStyle itemStyle) {
-        super(itemView, itemClickListener, itemStyle);
+    public EaseExpressionViewHolder(@NonNull View itemView, MessageListItemClickListener itemClickListener) {
+        super(itemView, itemClickListener);
     }
 
     public static EaseChatRowViewHolder create(ViewGroup parent
-            , boolean isSender, MessageListItemClickListener itemClickListener
-            , EaseMessageListItemStyle itemStyle) {
-        return new EaseExpressionViewHolder(new EaseChatRowBigExpression(parent.getContext(), isSender), itemClickListener, itemStyle);
+            , boolean isSender, MessageListItemClickListener itemClickListener) {
+        return new EaseExpressionViewHolder(new EaseChatRowBigExpression(parent.getContext(), isSender), itemClickListener);
     }
 
 }

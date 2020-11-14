@@ -26,7 +26,7 @@ public class EaseChatRowCustom extends EaseChatRow {
 
 	@Override
 	protected void onInflateView() {
-		inflater.inflate(!isSender ?
+		inflater.inflate(!showSenderType ?
 				R.layout.ease_row_received_message : R.layout.ease_row_sent_message, this);
 	}
 

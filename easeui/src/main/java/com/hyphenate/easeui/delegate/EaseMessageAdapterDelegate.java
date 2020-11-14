@@ -18,11 +18,8 @@ import com.hyphenate.easeui.widget.chatrow.EaseChatRow;
  */
 public abstract class EaseMessageAdapterDelegate<T, VH extends EaseChatRowViewHolder> extends EaseAdapterDelegate<T, VH> {
     private MessageListItemClickListener mItemClickListener;
-    private EaseMessageListItemStyle mItemStyle;
 
-    public EaseMessageAdapterDelegate() {
-        this.mItemStyle = createDefaultItemStyle();
-    }
+    public EaseMessageAdapterDelegate() {}
 
     public EaseMessageAdapterDelegate(MessageListItemClickListener itemClickListener) {
         this();
@@ -32,9 +29,6 @@ public abstract class EaseMessageAdapterDelegate<T, VH extends EaseChatRowViewHo
     public EaseMessageAdapterDelegate(MessageListItemClickListener itemClickListener,
                                       EaseMessageListItemStyle itemStyle) {
         this(itemClickListener);
-        if(itemStyle != null) {
-            this.mItemStyle = itemStyle;
-        }
     }
 
     /**
@@ -51,7 +45,7 @@ public abstract class EaseMessageAdapterDelegate<T, VH extends EaseChatRowViewHo
     @Override
     public VH onCreateViewHolder(ViewGroup parent, String tag) {
         EaseChatRow view = getEaseChatRow(parent, isSender(tag));
-        return createViewHolder(view, mItemClickListener, mItemStyle);
+        return createViewHolder(view, mItemClickListener);
     }
 
     private boolean isSender(String tag) {
@@ -60,16 +54,10 @@ public abstract class EaseMessageAdapterDelegate<T, VH extends EaseChatRowViewHo
 
     protected abstract EaseChatRow getEaseChatRow(ViewGroup parent, boolean isSender);
 
-    protected abstract VH createViewHolder(View view, MessageListItemClickListener itemClickListener
-            , EaseMessageListItemStyle itemStyle);
+    protected abstract VH createViewHolder(View view, MessageListItemClickListener itemClickListener);
 
     public void setListItemClickListener(MessageListItemClickListener itemClickListener) {
         this.mItemClickListener = itemClickListener;
     }
 
-    public void setItemStyle(EaseMessageListItemStyle itemStyle) {
-        if(itemStyle != null) {
-            this.mItemStyle = itemStyle;
-        }
-    }
 }

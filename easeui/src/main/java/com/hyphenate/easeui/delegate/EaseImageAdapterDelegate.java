@@ -34,7 +34,7 @@ public class EaseImageAdapterDelegate extends EaseMessageAdapterDelegate<EMMessa
     }
 
     @Override
-    protected EaseChatRowViewHolder createViewHolder(View view, MessageListItemClickListener itemClickListener, EaseMessageListItemStyle itemStyle) {
-        return new EaseImageViewHolder(view, itemClickListener, itemStyle);
+    protected EaseChatRowViewHolder createViewHolder(View view, MessageListItemClickListener itemClickListener) {
+        return new EaseImageViewHolder(view, itemClickListener);
     }
 }

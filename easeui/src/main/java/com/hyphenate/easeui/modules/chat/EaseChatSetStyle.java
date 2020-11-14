@@ -14,6 +14,9 @@ public class EaseChatSetStyle extends EaseBaseSetStyle {
     private Drawable avatarDefaultSrc;
     private boolean showNickname;
     private boolean showAvatar;
+    private Drawable receiverBgDrawable;
+    private Drawable senderBgDrawable;
+    private int itemShowType;
 
     public int getTextSize() {
         return textSize;
@@ -85,6 +88,30 @@ public class EaseChatSetStyle extends EaseBaseSetStyle {
 
     public void setShowAvatar(boolean showAvatar) {
         this.showAvatar = showAvatar;
+    }
+
+    public Drawable getReceiverBgDrawable() {
+        return receiverBgDrawable;
+    }
+
+    public void setReceiverBgDrawable(Drawable receiverBgDrawable) {
+        this.receiverBgDrawable = receiverBgDrawable;
+    }
+
+    public Drawable getSenderBgDrawable() {
+        return senderBgDrawable;
+    }
+
+    public void setSenderBgDrawable(Drawable senderBgDrawable) {
+        this.senderBgDrawable = senderBgDrawable;
+    }
+
+    public int getItemShowType() {
+        return itemShowType;
+    }
+
+    public void setItemShowType(int itemShowType) {
+        this.itemShowType = itemShowType;
     }
 }
 

@@ -195,7 +195,18 @@
         <!-- 描边颜色 -->
         <attr name="ease_chat_item_avatar_border_color" format="reference|color"/>
         <!-- 条目背景资源 -->
-        <attr name="ease_chat_item_background" format="reference|color"/>
+        <attr name="ease_chat_item_receiver_background" format="reference|color"/>
+        <attr name="ease_chat_item_sender_background" format="reference|color"/>
+        <!-- 是否展示头像 -->
+        <attr name="ease_chat_item_show_avatar" format="boolean"/>
+        <!-- 是否展示昵称 -->
+        <attr name="ease_chat_item_show_nickname" format="boolean"/>
+        <!-- 条目的展示形式 -->
+        <attr name="ease_chat_item_show_type" format="enum">
+            <enum name="normal" value="0"/>
+            <enum name="left" value="1"/>
+            <enum name="right" value="2"/>
+        </attr>
     </declare-styleable>
 
 </resources>

@@ -50,6 +50,7 @@ public class EaseChatListFragment extends EaseBaseFragment {
     public void initView() {
         layoutMessage = findViewById(R.id.layout_message);
         layoutMessage.setBackgroundColor(ContextCompat.getColor(mContext, R.color.gray));
+        layoutMessage.setItemShowType(EaseChatMessageListLayout.ShowType.RIGHT);
     }
 
     public void initListener() {

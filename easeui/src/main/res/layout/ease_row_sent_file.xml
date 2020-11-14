@@ -31,6 +31,7 @@
             android:layout_marginRight="@dimen/margin_chat_activity"
             android:layout_toLeftOf="@id/iv_userhead"
             android:layout_toRightOf="@+id/ll_loading"
+            android:layout_below="@id/tv_userid"
             android:gravity="center_vertical"
             android:background="@drawable/ease_chat_bubble_send_bg" >
 
@@ -151,6 +152,17 @@
                 android:visibility="invisible"
                 tools:ignore="HardcodedText" />
         </LinearLayout>
+
+        <TextView
+            android:id="@+id/tv_userid"
+            style="@style/chat_text_name_style"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="@dimen/chat_nick_margin_left"
+            android:textSize="@dimen/chat_nick_text_size"
+            android:layout_toLeftOf="@id/iv_userhead"
+            android:visibility="gone" />
+
     </RelativeLayout>
 
 </LinearLayout>

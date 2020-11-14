@@ -34,8 +34,8 @@ public class EaseTextAdapterDelegate extends EaseMessageAdapterDelegate<EMMessag
     }
 
     @Override
-    public EaseChatRowViewHolder createViewHolder(View view, MessageListItemClickListener itemClickListener, EaseMessageListItemStyle itemStyle) {
-        return new EaseTextViewHolder(view, itemClickListener, itemStyle);
+    public EaseChatRowViewHolder createViewHolder(View view, MessageListItemClickListener itemClickListener) {
+        return new EaseTextViewHolder(view, itemClickListener);
     }
 
 }

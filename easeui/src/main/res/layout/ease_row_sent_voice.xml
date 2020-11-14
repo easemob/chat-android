@@ -29,6 +29,7 @@
             android:layout_toLeftOf="@id/iv_userhead"
             android:layout_marginRight="10dp"
             android:minHeight="38dp"
+            android:layout_below="@id/tv_userid"
              android:background="@drawable/ease_chat_bubble_send_bg"
             >
 	        <ImageView
@@ -93,6 +94,16 @@
             android:layout_height="25dp"
             android:layout_toLeftOf="@id/bubble"
           />
+
+        <TextView
+            android:id="@+id/tv_userid"
+            style="@style/chat_text_name_style"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="@dimen/chat_nick_margin_left"
+            android:textSize="@dimen/chat_nick_text_size"
+            android:layout_toLeftOf="@id/iv_userhead"
+            android:visibility="gone" />
     </RelativeLayout>
 
 </LinearLayout>

@@ -13,8 +13,8 @@ import androidx.annotation.NonNull;
 
 public class EaseCustomViewHolder extends EaseChatRowViewHolder {
 
-    public EaseCustomViewHolder(@NonNull View itemView, MessageListItemClickListener itemClickListener, EaseMessageListItemStyle itemStyle) {
-        super(itemView, itemClickListener, itemStyle);
+    public EaseCustomViewHolder(@NonNull View itemView, MessageListItemClickListener itemClickListener) {
+        super(itemView, itemClickListener);
     }
 
     @Override

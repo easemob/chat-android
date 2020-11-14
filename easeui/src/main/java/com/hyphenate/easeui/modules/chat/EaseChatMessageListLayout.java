@@ -2,6 +2,8 @@ package com.hyphenate.easeui.modules.chat;
 
 import android.animation.ValueAnimator;
 import android.content.Context;
+import android.content.res.TypedArray;
+import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
@@ -12,6 +14,7 @@ import android.widget.RelativeLayout;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.ConcatAdapter;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -33,6 +36,8 @@ import com.hyphenate.easeui.modules.chat.interfaces.IRecyclerViewHandle;
 import com.hyphenate.easeui.utils.EaseCommonUtils;
 
 import java.util.List;
+
+import static com.hyphenate.easeui.modules.contact.EaseContactListLayout.dip2px;
 
 
 public class EaseChatMessageListLayout extends RelativeLayout implements IChatMessageListView, IRecyclerViewHandle
@@ -95,7 +100,64 @@ public class EaseChatMessageListLayout extends RelativeLayout implements IChatMe
     }
 
     private void initAttrs(Context context, AttributeSet attrs) {
+        if (attrs != null) {
+            TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.EaseChatMessageListLayout);
+            float textSize = a.getDimension(R.styleable.EaseChatMessageListLayout_ease_chat_item_text_size
+                    , 0);
+            chatSetHelper.setTextSize((int) textSize);
+            int textColorRes = a.getResourceId(R.styleable.EaseChatMessageListLayout_ease_chat_item_text_color, -1);
+            int textColor;
+            if(textColorRes != -1) {
+                textColor = ContextCompat.getColor(context, textColorRes);
+            }else {
+                textColor = a.getColor(R.styleable.EaseChatMessageListLayout_ease_chat_item_text_color, 0);
+            }
+            chatSetHelper.setTextColor(textColor);
 
+            float itemMinHeight = a.getDimension(R.styleable.EaseChatMessageListLayout_ease_chat_item_min_height, 0);
+            chatSetHelper.setItemMinHeight((int) itemMinHeight);
+
+            float timeTextSize = a.getDimension(R.styleable.EaseChatMessageListLayout_ease_chat_item_time_text_size, 0);
+            chatSetHelper.setTimeTextSize((int) timeTextSize);
+            int timeTextColorRes = a.getResourceId(R.styleable.EaseChatMessageListLayout_ease_chat_item_time_text_color, -1);
+            int timeTextColor;
+            if(timeTextColorRes != -1) {
+                timeTextColor = ContextCompat.getColor(context, textColorRes);
+            }else {
+                timeTextColor = a.getColor(R.styleable.EaseChatMessageListLayout_ease_chat_item_time_text_color, 0);
+            }
+            chatSetHelper.setTimeTextColor(timeTextColor);
+            chatSetHelper.setTimeBgDrawable(a.getDrawable(R.styleable.EaseChatMessageListLayout_ease_chat_item_time_background));
+
+            Drawable avatarDefaultDrawable = a.getDrawable(R.styleable.EaseChatMessageListLayout_ease_chat_item_avatar_default_src);
+            float avatarSize = a.getDimension(R.styleable.EaseChatMessageListLayout_ease_chat_item_avatar_size, 0);
+            int shapeType = a.getInteger(R.styleable.EaseChatMessageListLayout_ease_chat_item_avatar_shape_type, 0);
+            float avatarRadius = a.getDimension(R.styleable.EaseChatMessageListLayout_ease_chat_item_avatar_radius, 0);
+            float borderWidth = a.getDimension(R.styleable.EaseChatMessageListLayout_ease_chat_item_avatar_border_width, 0);
+            int borderColorRes = a.getResourceId(R.styleable.EaseChatMessageListLayout_ease_chat_item_avatar_border_color, -1);
+            int borderColor;
+            if(borderColorRes != -1) {
+                borderColor = ContextCompat.getColor(context, borderColorRes);
+            }else {
+                borderColor = a.getColor(R.styleable.EaseChatMessageListLayout_ease_chat_item_avatar_border_color, Color.TRANSPARENT);
+            }
+            chatSetHelper.setAvatarDefaultSrc(avatarDefaultDrawable);
+            chatSetHelper.setAvatarSize(avatarSize);
+            chatSetHelper.setShapeType(shapeType);
+            chatSetHelper.setAvatarRadius(avatarRadius);
+            chatSetHelper.setBorderWidth(borderWidth);
+            chatSetHelper.setBorderColor(borderColor);
+
+            chatSetHelper.setReceiverBgDrawable(a.getDrawable(R.styleable.EaseChatMessageListLayout_ease_chat_item_receiver_background));
+            chatSetHelper.setSenderBgDrawable(a.getDrawable(R.styleable.EaseChatMessageListLayout_ease_chat_item_sender_background));
+
+            chatSetHelper.setShowAvatar(a.getBoolean(R.styleable.EaseChatMessageListLayout_ease_chat_item_show_avatar, true));
+            chatSetHelper.setShowNickname(a.getBoolean(R.styleable.EaseChatMessageListLayout_ease_chat_item_show_nickname, false));
+
+            chatSetHelper.setItemShowType(a.getInteger(R.styleable.EaseChatMessageListLayout_ease_chat_item_show_type, 0));
+
+            a.recycle();
+        }
     }
 
     @Override
@@ -463,8 +525,14 @@ public class EaseChatMessageListLayout extends RelativeLayout implements IChatMe
     }
 
     @Override
-    public void setItemBackground(Drawable bgDrawable) {
-        chatSetHelper.setBgDrawable(bgDrawable);
+    public void setItemSenderBackground(Drawable bgDrawable) {
+        chatSetHelper.setSenderBgDrawable(bgDrawable);
+        notifyDataSetChanged();
+    }
+
+    @Override
+    public void setItemReceiverBackground(Drawable bgDrawable) {
+        chatSetHelper.setReceiverBgDrawable(bgDrawable);
         notifyDataSetChanged();
     }
 
@@ -501,6 +569,12 @@ public class EaseChatMessageListLayout extends RelativeLayout implements IChatMe
     @Override
     public void setTimeBackground(Drawable bgDrawable) {
         chatSetHelper.setTimeBgDrawable(bgDrawable);
+        notifyDataSetChanged();
+    }
+
+    @Override
+    public void setItemShowType(ShowType type) {
+        chatSetHelper.setItemShowType(type.ordinal());
         notifyDataSetChanged();
     }
 
@@ -677,6 +751,16 @@ public class EaseChatMessageListLayout extends RelativeLayout implements IChatMe
      */
     public enum LoadMoreStatus {
         IS_LOADING, HAS_MORE, NO_MORE_DATA
+    }
+
+    /**
+     * 条目的展示方式
+     * normal区分发送方和接收方
+     * left发送方和接收方在左侧
+     * right发送方和接收方在右侧
+     */
+    public enum ShowType {
+        NORMAL, LEFT, RIGHT
     }
 }
 

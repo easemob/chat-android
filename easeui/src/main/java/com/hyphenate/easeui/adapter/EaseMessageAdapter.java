@@ -13,11 +13,8 @@ import com.hyphenate.easeui.delegate.EaseMessageAdapterDelegate;
  */
 public class EaseMessageAdapter extends EaseBaseDelegateAdapter<EMMessage> {
     public MessageListItemClickListener itemClickListener;
-    public EaseMessageListItemStyle itemStyle;
 
-    public EaseMessageAdapter() {
-        itemStyle = createDefaultItemStyle();
-    }
+    public EaseMessageAdapter() {}
 
     @Override
     public int getEmptyLayoutId() {
@@ -43,7 +40,6 @@ public class EaseMessageAdapter extends EaseBaseDelegateAdapter<EMMessage> {
         //设置点击事件
         if(delegate instanceof EaseMessageAdapterDelegate) {
             ((EaseMessageAdapterDelegate) delegate).setListItemClickListener(itemClickListener);
-            ((EaseMessageAdapterDelegate) delegate).setItemStyle(itemStyle);
         }
         return super.addDelegate(delegate);
     }
@@ -53,7 +49,6 @@ public class EaseMessageAdapter extends EaseBaseDelegateAdapter<EMMessage> {
         //设置点击事件
         if(delegate instanceof EaseMessageAdapterDelegate) {
             ((EaseMessageAdapterDelegate) delegate).setListItemClickListener(itemClickListener);
-            ((EaseMessageAdapterDelegate) delegate).setItemStyle(itemStyle);
         }
         return super.setFallbackDelegate(delegate);
     }
@@ -87,22 +82,6 @@ public class EaseMessageAdapter extends EaseBaseDelegateAdapter<EMMessage> {
      */
     public void setListItemClickListener(MessageListItemClickListener itemClickListener) {
         this.itemClickListener = itemClickListener;
-    }
-
-    /**
-     * set item style
-     * @param itemStyle
-     */
-    public void setItemStyle(EaseMessageListItemStyle itemStyle) {
-        this.itemStyle = itemStyle;
-    }
-
-    /**
-     * if show nick name
-     * @param showUserNick
-     */
-    public void showUserNick(boolean showUserNick) {
-        this.itemStyle.setShowUserNick(showUserNick);
     }
 
 }

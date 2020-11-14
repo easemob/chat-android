@@ -34,7 +34,7 @@ public class EaseLocationAdapterDelegate extends EaseMessageAdapterDelegate<EMMe
     }
 
     @Override
-    protected EaseChatRowViewHolder createViewHolder(View view, MessageListItemClickListener itemClickListener, EaseMessageListItemStyle itemStyle) {
-        return new EaseLocationViewHolder(view, itemClickListener, itemStyle);
+    protected EaseChatRowViewHolder createViewHolder(View view, MessageListItemClickListener itemClickListener) {
+        return new EaseLocationViewHolder(view, itemClickListener);
     }
 }

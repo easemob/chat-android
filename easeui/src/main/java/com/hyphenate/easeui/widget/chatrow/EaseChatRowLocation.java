@@ -26,7 +26,7 @@ public class EaseChatRowLocation extends EaseChatRow {
 
     @Override
     protected void onInflateView() {
-        inflater.inflate(!isSender ? R.layout.ease_row_received_location
+        inflater.inflate(!showSenderType ? R.layout.ease_row_received_location
                 : R.layout.ease_row_sent_location, this);
     }
 

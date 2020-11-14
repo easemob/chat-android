@@ -27,16 +27,14 @@ import static com.hyphenate.chat.EMClient.TAG;
 public class EaseVoiceViewHolder extends EaseChatRowViewHolder{
     private EaseChatRowVoicePlayer voicePlayer;
 
-    public EaseVoiceViewHolder(@NonNull View itemView, MessageListItemClickListener itemClickListener,
-                               EaseMessageListItemStyle itemStyle) {
-        super(itemView, itemClickListener, itemStyle);
+    public EaseVoiceViewHolder(@NonNull View itemView, MessageListItemClickListener itemClickListener) {
+        super(itemView, itemClickListener);
         voicePlayer = EaseChatRowVoicePlayer.getInstance(getContext());
     }
 
     public static EaseChatRowViewHolder create(ViewGroup parent,
-                                               boolean isSender, MessageListItemClickListener itemClickListener,
-                                               EaseMessageListItemStyle itemStyle) {
-        return new EaseVoiceViewHolder(new EaseChatRowVoice(parent.getContext(), isSender), itemClickListener, itemStyle);
+                                               boolean isSender, MessageListItemClickListener itemClickListener) {
+        return new EaseVoiceViewHolder(new EaseChatRowVoice(parent.getContext(), isSender), itemClickListener);
     }
 
     @Override

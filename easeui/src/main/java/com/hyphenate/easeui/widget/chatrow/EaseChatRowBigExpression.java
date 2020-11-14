@@ -30,7 +30,7 @@ public class EaseChatRowBigExpression extends EaseChatRowText {
 
     @Override
     protected void onInflateView() {
-        inflater.inflate(!isSender ? R.layout.ease_row_received_bigexpression
+        inflater.inflate(!showSenderType ? R.layout.ease_row_received_bigexpression
                 : R.layout.ease_row_sent_bigexpression, this);
     }
 

@@ -47,7 +47,7 @@ public class EaseChatRowVideo extends EaseChatRowFile {
 
 	@Override
 	protected void onInflateView() {
-		inflater.inflate(!isSender ? R.layout.ease_row_received_video
+		inflater.inflate(!showSenderType ? R.layout.ease_row_received_video
                 : R.layout.ease_row_sent_video, this);
 	}
 
@@ -62,6 +62,9 @@ public class EaseChatRowVideo extends EaseChatRowFile {
 
 	@Override
 	protected void onSetUpView() {
+        if(bubbleLayout != null) {
+            bubbleLayout.setBackground(null);
+        }
         EMVideoMessageBody videoBody = (EMVideoMessageBody) message.getBody();
         Uri localThumb = videoBody.getLocalThumbUri();
 
