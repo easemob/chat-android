@@ -92,6 +92,7 @@ public class EaseChatMessageListLayout extends RelativeLayout implements IChatMe
     public EaseChatMessageListLayout(@NonNull Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         LayoutInflater.from(context).inflate(R.layout.ease_chat_message_list, this);
+        chatSetHelper = EaseChatItemStyleHelper.getInstance();
         presenter = new EaseChatMessagePresenterImpl();
         if(context instanceof AppCompatActivity) {
             ((AppCompatActivity) context).getLifecycle().addObserver(presenter);
@@ -164,7 +165,6 @@ public class EaseChatMessageListLayout extends RelativeLayout implements IChatMe
     protected void onFinishInflate() {
         super.onFinishInflate();
         presenter.attachView(this);
-        chatSetHelper = EaseChatItemStyleHelper.getInstance();
 
         rvList = findViewById(R.id.message_list);
         srlRefresh = findViewById(R.id.srl_refresh);
@@ -227,6 +227,9 @@ public class EaseChatMessageListLayout extends RelativeLayout implements IChatMe
     }
 
     private void loadData() {
+        if(!isSingleChat()) {
+            chatSetHelper.setShowNickname(true);
+        }
         conversation.markAllMessagesAsRead();
         if(loadDataType == LoadDataType.ROAM) {
             presenter.loadServerMessages(pageSize);
@@ -292,6 +295,14 @@ public class EaseChatMessageListLayout extends RelativeLayout implements IChatMe
 
     private boolean isChatRoomCon() {
         return conType == EMConversation.EMConversationType.ChatRoom;
+    }
+
+    private boolean isGroupChat() {
+        return conType == EMConversation.EMConversationType.GroupChat;
+    }
+
+    private boolean isSingleChat() {
+        return conType == EMConversation.EMConversationType.Chat;
     }
 
     private void initListener() {

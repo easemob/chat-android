@@ -64,12 +64,15 @@ public class EaseChatRowVoice extends EaseChatRowFile {
         }
 
         if (message.direct() == EMMessage.Direct.RECEIVE) {
-            if (message.isListened()) {
-                // hide the unread icon
-                readStatusView.setVisibility(View.INVISIBLE);
-            } else {
-                readStatusView.setVisibility(View.VISIBLE);
+            if(readStatusView != null) {
+                if (message.isListened()) {
+                    // hide the unread icon
+                    readStatusView.setVisibility(View.INVISIBLE);
+                } else {
+                    readStatusView.setVisibility(View.VISIBLE);
+                }
             }
+
             EMLog.d(TAG, "it is receive msg");
             if (voiceBody.downloadStatus() == EMFileMessageBody.EMDownloadStatus.DOWNLOADING ||
                     voiceBody.downloadStatus() == EMFileMessageBody.EMDownloadStatus.PENDING) {

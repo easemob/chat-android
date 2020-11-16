@@ -57,6 +57,16 @@
 		</RelativeLayout>
 
         <ImageView
+            android:id="@+id/iv_unread_voice"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:layout_alignTop="@id/bubble"
+            android:layout_toLeftOf="@id/bubble"
+            android:visibility="gone"
+            android:src="@drawable/ease_chat_voice_unread_icon" />
+
+        <ImageView
             android:id="@+id/msg_status"
             android:layout_toLeftOf="@id/bubble"
             style="@style/ease_row_sent_iv_fail_style"/>

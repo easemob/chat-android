@@ -52,7 +52,7 @@ public class EaseChatRowText extends EaseChatRow {
         setStatus(View.GONE, View.GONE);
 
         // Show "1 Read" if this msg is a ding-type msg.
-        if (EaseDingMessageHelper.get().isDingMessage(message) && ackedView != null) {
+        if (isSender() && EaseDingMessageHelper.get().isDingMessage(message) && ackedView != null) {
             ackedView.setVisibility(VISIBLE);
             int count = message.groupAckCount();
             ackedView.setText(String.format(getContext().getString(R.string.group_ack_read_count), count));
@@ -93,8 +93,10 @@ public class EaseChatRowText extends EaseChatRow {
             return;
         }
         ackedView.post(()->{
-            ackedView.setVisibility(VISIBLE);
-            ackedView.setText(String.format(getContext().getString(R.string.group_ack_read_count), count));
+            if (isSender()) {
+                ackedView.setVisibility(VISIBLE);
+                ackedView.setText(String.format(getContext().getString(R.string.group_ack_read_count), count));
+            }
         });
     }
 }

@@ -1,6 +1,7 @@
 package com.hyphenate.easeui.widget.chatrow;
 
 import android.content.Context;
+import android.graphics.drawable.Drawable;
 import android.os.Handler;
 import android.os.Looper;
 import android.util.TypedValue;
@@ -23,6 +24,7 @@ import com.hyphenate.easeui.adapter.EaseBaseAdapter;
 import com.hyphenate.easeui.domain.EaseAvatarOptions;
 import com.hyphenate.easeui.interfaces.MessageListItemClickListener;
 import com.hyphenate.easeui.modules.chat.EaseChatItemStyleHelper;
+import com.hyphenate.easeui.modules.chat.EaseChatMessageListLayout;
 import com.hyphenate.easeui.modules.chat.EaseChatSetStyle;
 import com.hyphenate.easeui.utils.EaseUserUtils;
 import com.hyphenate.easeui.widget.EaseImageView;
@@ -153,8 +155,54 @@ public abstract class EaseChatRow extends LinearLayout {
         ackedView = (TextView) findViewById(R.id.tv_ack);
         deliveredView = (TextView) findViewById(R.id.tv_delivered);
 
+        setLayoutStyle();
+
         mainThreadHandler = new Handler(Looper.getMainLooper());
         onFindViewById();
+    }
+
+    protected void setLayoutStyle() {
+        EaseChatItemStyleHelper helper = getItemStyleHelper();
+        if(helper != null) {
+            EaseChatSetStyle itemStyle = helper.getStyle();
+            if(bubbleLayout != null) {
+                try {
+                    if (isSender()) {
+                        Drawable senderBgDrawable = itemStyle.getSenderBgDrawable();
+                        if(senderBgDrawable != null) {
+                            bubbleLayout.setBackground(senderBgDrawable.getConstantState().newDrawable());
+                        }
+                    } else {
+                        Drawable receiverBgDrawable = itemStyle.getReceiverBgDrawable();
+                        if (receiverBgDrawable != null) {
+                            bubbleLayout.setBackground(receiverBgDrawable.getConstantState().newDrawable());
+                        }
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+            if(timeStampView != null) {
+                if(itemStyle.getTimeBgDrawable() != null) {
+                    timeStampView.setBackground(itemStyle.getTimeBgDrawable().getConstantState().newDrawable());
+                }
+                if(itemStyle.getTimeTextSize() != 0) {
+                    timeStampView.setTextSize(TypedValue.COMPLEX_UNIT_PX, itemStyle.getTimeTextSize());
+                }
+                if(itemStyle.getTimeTextColor() != 0) {
+                    timeStampView.setTextColor(itemStyle.getTimeTextColor());
+                }
+            }
+            TextView content = findViewById(R.id.tv_chatcontent);
+            if(content != null) {
+                if(itemStyle.getTextSize() != 0) {
+                    content.setTextSize(TypedValue.COMPLEX_UNIT_PX, itemStyle.getTextSize());
+                }
+                if(itemStyle.getTextColor() != 0) {
+                    content.setTextColor(itemStyle.getTextColor());
+                }
+            }
+        }
     }
 
     /**
@@ -191,6 +239,7 @@ public abstract class EaseChatRow extends LinearLayout {
 
         setUpBaseView();
         onSetUpView();
+        //setLayoutStyle();
         setClickListener();
     }
 
@@ -206,7 +255,7 @@ public abstract class EaseChatRow extends LinearLayout {
             setAvatarAndNick();
         }
         if (EMClient.getInstance().getOptions().getRequireDeliveryAck()) {
-            if(deliveredView != null){
+            if(deliveredView != null && isSender()){
                 if (message.isDelivered()) {
                     deliveredView.setVisibility(View.VISIBLE);
                 } else {
@@ -215,7 +264,7 @@ public abstract class EaseChatRow extends LinearLayout {
             }
         }
         if (EMClient.getInstance().getOptions().getRequireAck()) {
-            if (ackedView != null) {
+            if (ackedView != null && isSender()) {
                 if (message.isAcked()) {
                     if (deliveredView != null) {
                         deliveredView.setVisibility(View.INVISIBLE);
@@ -247,40 +296,10 @@ public abstract class EaseChatRow extends LinearLayout {
                 }
             }
             if(bubbleLayout != null) {
-                if (message.direct() == Direct.SEND) {
-                    if(itemStyle.getSenderBgDrawable() != null) {
-                        bubbleLayout.setBackground(itemStyle.getSenderBgDrawable());
-                    }
-                } else if (message.direct() == Direct.RECEIVE) {
-                    if (itemStyle.getReceiverBgDrawable() != null) {
-                        bubbleLayout.setBackground(itemStyle.getReceiverBgDrawable());
-                    }
-                }
                 if(message.getType() == EMMessage.Type.TXT) {
                     if(itemStyle.getItemMinHeight() != 0) {
                         bubbleLayout.setMinimumHeight(itemStyle.getItemMinHeight());
                     }
-
-                }
-            }
-            if(timeStampView != null) {
-                if(itemStyle.getTimeBgDrawable() != null) {
-                    timeStampView.setBackground(itemStyle.getTimeBgDrawable());
-                }
-                if(itemStyle.getTimeTextSize() != 0) {
-                    timeStampView.setTextSize(TypedValue.COMPLEX_UNIT_PX, itemStyle.getTimeTextSize());
-                }
-                if(itemStyle.getTimeTextColor() != 0) {
-                    timeStampView.setTextColor(itemStyle.getTimeTextColor());
-                }
-            }
-            TextView content = findViewById(R.id.tv_chatcontent);
-            if(content != null) {
-                if(itemStyle.getTextSize() != 0) {
-                    content.setTextSize(TypedValue.COMPLEX_UNIT_PX, itemStyle.getTextSize());
-                }
-                if(itemStyle.getTextColor() != 0) {
-                    content.setTextColor(itemStyle.getTextColor());
                 }
             }
         }
@@ -357,9 +376,12 @@ public abstract class EaseChatRow extends LinearLayout {
      * set avatar and nickname
      */
     protected void setAvatarAndNick() {
-        if (message.direct() == Direct.SEND) {
+        if (isSender()) {
             EaseUserUtils.setUserAvatar(context, EMClient.getInstance().getCurrentUser(), userAvatarView);
-            EaseUserUtils.setUserNick(message.getFrom(), usernickView);
+            //只要不是常规布局形式，就展示昵称
+            if(EaseChatItemStyleHelper.getInstance().getStyle().getItemShowType() != EaseChatMessageListLayout.ShowType.NORMAL.ordinal()) {
+                EaseUserUtils.setUserNick(message.getFrom(), usernickView);
+            }
         } else {
             EaseUserUtils.setUserAvatar(context, message.getFrom(), userAvatarView);
             EaseUserUtils.setUserNick(message.getFrom(), usernickView);

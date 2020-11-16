@@ -43,7 +43,7 @@ public class EaseChatRowCustom extends EaseChatRow {
     }
 
     public void onAckUserUpdate(final int count) {
-        if (ackedView != null) {
+        if (ackedView != null && isSender()) {
             ackedView.post(new Runnable() {
                 @Override
                 public void run() {
@@ -56,17 +56,25 @@ public class EaseChatRowCustom extends EaseChatRow {
 
     @Override
     protected void onMessageCreate() {
-        progressBar.setVisibility(View.VISIBLE);
-        statusView.setVisibility(View.GONE);
+        if(progressBar != null) {
+            progressBar.setVisibility(View.VISIBLE);
+        }
+        if(statusView != null) {
+            statusView.setVisibility(View.GONE);
+        }
     }
 
     @Override
     protected void onMessageSuccess() {
-        progressBar.setVisibility(View.GONE);
-        statusView.setVisibility(View.GONE);
+        if(progressBar != null) {
+            progressBar.setVisibility(View.GONE);
+        }
+        if(statusView != null) {
+            statusView.setVisibility(View.GONE);
+        }
 
         // Show "1 Read" if this msg is a ding-type msg.
-        if (EaseDingMessageHelper.get().isDingMessage(message) && ackedView != null) {
+        if (isSender() && EaseDingMessageHelper.get().isDingMessage(message) && ackedView != null) {
             ackedView.setVisibility(VISIBLE);
             int count = message.groupAckCount();
             ackedView.setText(String.format(getContext().getString(R.string.group_ack_read_count), count));
@@ -78,14 +86,22 @@ public class EaseChatRowCustom extends EaseChatRow {
 
     @Override
     protected void onMessageError() {
-        progressBar.setVisibility(View.GONE);
-        statusView.setVisibility(View.VISIBLE);
+        if(progressBar != null) {
+            progressBar.setVisibility(View.GONE);
+        }
+        if(statusView != null) {
+            statusView.setVisibility(View.VISIBLE);
+        }
     }
 
     @Override
     protected void onMessageInProgress() {
-        progressBar.setVisibility(View.VISIBLE);
-        statusView.setVisibility(View.GONE);
+        if(progressBar != null) {
+            progressBar.setVisibility(View.VISIBLE);
+        }
+        if(statusView != null) {
+            statusView.setVisibility(View.GONE);
+        }
     }
 
     private EaseDingMessageHelper.IAckUserUpdateListener userUpdateListener =

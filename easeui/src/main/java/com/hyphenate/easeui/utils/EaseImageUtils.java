@@ -204,7 +204,6 @@ public class EaseImageUtils extends com.hyphenate.util.ImageUtils{
 		Glide.with(context)
 				.load(imageUri == null ? imageUrl : imageUri)
 				.apply(new RequestOptions()
-						.placeholder(R.drawable.ease_default_image)
 						.error(R.drawable.ease_default_image))
 				.diskCacheStrategy(DiskCacheStrategy.ALL)
 				.into(imageView);
