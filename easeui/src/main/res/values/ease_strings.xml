@@ -143,4 +143,12 @@
     <string name="ease_contact_menu_add_note">设置备注</string>
     <string name="ease_contact_add_note_developing">功能开发中，敬请期待</string>
 
+    <string name="action_copy">复制</string>
+    <string name="action_forward">转发</string>
+    <string name="action_recall">撤回</string>
+    <string name="action_delete">删除</string>
+    <string name="action_multi_select">多选</string>
+    <string name="delete_voice">删除语音</string>
+    <string name="delete_video">删除视频</string>
+
 </resources>

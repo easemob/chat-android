@@ -1,7 +1,6 @@
-package com.hyphenate.easeui.modules.chat;
+package com.hyphenate.easeui.modules.chat.presenter;
 
 import com.hyphenate.chat.EMConversation;
-import com.hyphenate.chat.EMMessage;
 import com.hyphenate.easeui.modules.EaseBasePresenter;
 import com.hyphenate.easeui.modules.ILoadDataView;
 

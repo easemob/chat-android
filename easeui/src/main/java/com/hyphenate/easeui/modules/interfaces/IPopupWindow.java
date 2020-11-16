@@ -1,10 +1,11 @@
 package com.hyphenate.easeui.modules.interfaces;
 
-import com.hyphenate.easeui.modules.menu.OnPopupMenuDismissListener;
-import com.hyphenate.easeui.modules.menu.OnPopupMenuItemClickListener;
 import com.hyphenate.easeui.modules.menu.EasePopupMenuHelper;
+import com.hyphenate.easeui.modules.menu.EasePopupWindow;
+import com.hyphenate.easeui.modules.menu.EasePopupWindowHelper;
+import com.hyphenate.easeui.modules.menu.MenuItemBean;
 
-public interface IPopupMenu {
+public interface IPopupWindow {
     /**
      * 清除所有菜单项
      */
@@ -20,6 +21,14 @@ public interface IPopupMenu {
     void addItemMenu(int groupId, int itemId, int order, String title);
 
     /**
+     * 查找菜单对象，如果id不存在则返回null
+     * @param id
+     * @return
+     */
+    MenuItemBean findItem(int id);
+
+
+    /**
      * 设置菜单项可见性
      * @param id
      * @param visible
@@ -30,17 +39,17 @@ public interface IPopupMenu {
      * 设置菜单条目监听
      * @param listener
      */
-    void setOnPopupMenuItemClickListener(OnPopupMenuItemClickListener listener);
+    void setOnPopupWindowItemClickListener(EasePopupWindow.OnPopupWindowItemClickListener listener);
 
     /**
      * 监听菜单dismiss事件
      * @param listener
      */
-    void setOnPopupMenuDismissListener(OnPopupMenuDismissListener listener);
+    void setOnPopupWindowDismissListener(EasePopupWindow.OnPopupWindowDismissListener listener);
 
     /**
      * 返回菜单帮助类
      * @return
      */
-    EasePopupMenuHelper getMenuHelper();
+    EasePopupWindowHelper getMenuHelper();
 }

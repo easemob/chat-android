@@ -16,15 +16,15 @@ import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
 
-public class PopupMenuHelper implements PopupMenu.OnMenuItemClickListener, PopupMenu.OnDismissListener {
+public class EasePopupMenuHelper implements PopupMenu.OnMenuItemClickListener, PopupMenu.OnDismissListener {
     private View targetView;
     private OnPopupMenuItemClickListener itemClickListener;
     private OnPopupMenuDismissListener dismissListener;
-    List<MenuItemBean> menuItems = new ArrayList<>();
+    private List<MenuItemBean> menuItems = new ArrayList<>();
     private PopupMenu pMenu;
     private Menu menu;
 
-    public PopupMenuHelper() {
+    public EasePopupMenuHelper() {
         menuItems.clear();
     }
 
@@ -57,6 +57,12 @@ public class PopupMenuHelper implements PopupMenu.OnMenuItemClickListener, Popup
 
     public void clear() {
         menuItems.clear();
+    }
+
+    public void addItemMenu(MenuItemBean item) {
+        if(!menuItems.contains(item)) {
+            menuItems.add(item);
+        }
     }
 
     public void addItemMenu(int groupId, int itemId, int order, String title) {

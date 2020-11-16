@@ -1,4 +1,4 @@
-package com.hyphenate.easeui.modules.chat;
+package com.hyphenate.easeui.modules.chat.presenter;
 
 import com.hyphenate.chat.EMChatRoom;
 import com.hyphenate.chat.EMConversation;

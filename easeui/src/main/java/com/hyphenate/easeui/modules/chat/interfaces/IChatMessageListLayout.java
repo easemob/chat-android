@@ -2,14 +2,19 @@ package com.hyphenate.easeui.modules.chat.interfaces;
 
 import android.graphics.drawable.Drawable;
 
-import com.hyphenate.chat.EMMessage;
 import com.hyphenate.easeui.adapter.EaseMessageAdapter;
 import com.hyphenate.easeui.interfaces.MessageListItemClickListener;
 import com.hyphenate.easeui.modules.chat.EaseChatMessageListLayout;
-import com.hyphenate.easeui.modules.chat.EaseChatMessagePresenter;
+import com.hyphenate.easeui.modules.chat.presenter.EaseChatMessagePresenter;
 import com.hyphenate.easeui.modules.interfaces.IRecyclerView;
 
 public interface IChatMessageListLayout extends IRecyclerView {
+    /**
+     * 是否展示默认的条目菜单
+     * @param showDefault
+     */
+    void showItemDefaultMenu(boolean showDefault);
+
     /**
      * 设置背景
      * @param bgDrawable

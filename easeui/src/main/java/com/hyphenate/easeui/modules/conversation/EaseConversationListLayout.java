@@ -42,7 +42,7 @@ import com.hyphenate.easeui.modules.conversation.presenter.IEaseConversationList
 import com.hyphenate.easeui.modules.interfaces.IPopupMenu;
 import com.hyphenate.easeui.modules.menu.OnPopupMenuDismissListener;
 import com.hyphenate.easeui.modules.menu.OnPopupMenuItemClickListener;
-import com.hyphenate.easeui.modules.menu.PopupMenuHelper;
+import com.hyphenate.easeui.modules.menu.EasePopupMenuHelper;
 import com.hyphenate.easeui.widget.EaseRecyclerView;
 
 import java.util.List;
@@ -70,7 +70,7 @@ public class EaseConversationListLayout extends EaseBaseLayout implements IConve
     private EaseConversationPresenter presenter;
     private float touchX;
     private float touchY;
-    private PopupMenuHelper menuHelper;
+    private EasePopupMenuHelper menuHelper;
     private boolean showDefaultMenu = true;
     private OnConversationChangeListener conversationChangeListener;
 
@@ -194,7 +194,7 @@ public class EaseConversationListLayout extends EaseBaseLayout implements IConve
         listAdapter = new EaseConversationListAdapter();
         adapter.addAdapter(listAdapter);
 
-        menuHelper = new PopupMenuHelper();
+        menuHelper = new EasePopupMenuHelper();
 
         initListener();
     }
@@ -623,7 +623,7 @@ public class EaseConversationListLayout extends EaseBaseLayout implements IConve
     }
 
     @Override
-    public PopupMenuHelper getMenuHelper() {
+    public EasePopupMenuHelper getMenuHelper() {
         return menuHelper;
     }
 

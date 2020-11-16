@@ -1,4 +1,4 @@
-package com.hyphenate.easeui.modules.chat;
+package com.hyphenate.easeui.modules.chat.presenter;
 
 import android.text.TextUtils;
 
@@ -8,7 +8,6 @@ import com.hyphenate.chat.EMClient;
 import com.hyphenate.chat.EMConversation;
 import com.hyphenate.chat.EMCursorResult;
 import com.hyphenate.chat.EMMessage;
-import com.hyphenate.easeui.manager.EaseThreadManager;
 
 import java.util.List;
 

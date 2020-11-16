@@ -1,4 +1,4 @@
-package com.hyphenate.easeui.modules.chat;
+package com.hyphenate.easeui.modules.chat.model;
 
 
 import android.graphics.drawable.Drawable;

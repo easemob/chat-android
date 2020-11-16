@@ -7,7 +7,8 @@ public class MenuItemBean {
     private int itemId;
     private int order;
     private String title;
-    private boolean visible;
+    private boolean visible = true;
+    private int resourceId;
 
     public MenuItemBean(int groupId, int itemId, int order, String title) {
         this.groupId = groupId;
@@ -54,6 +55,14 @@ public class MenuItemBean {
 
     public void setVisible(boolean visible) {
         this.visible = visible;
+    }
+
+    public int getResourceId() {
+        return resourceId;
+    }
+
+    public void setResourceId(int resourceId) {
+        this.resourceId = resourceId;
     }
 
     @Override

@@ -9,11 +9,14 @@ import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewTreeObserver;
+import android.widget.PopupWindow;
 import android.widget.RelativeLayout;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.PopupMenu;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.ConcatAdapter;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -33,15 +36,22 @@ import com.hyphenate.easeui.manager.EaseThreadManager;
 import com.hyphenate.easeui.modules.chat.interfaces.IChatMessageItemSet;
 import com.hyphenate.easeui.modules.chat.interfaces.IChatMessageListLayout;
 import com.hyphenate.easeui.modules.chat.interfaces.IRecyclerViewHandle;
+import com.hyphenate.easeui.modules.chat.model.EaseChatItemStyleHelper;
+import com.hyphenate.easeui.modules.chat.presenter.EaseChatMessagePresenter;
+import com.hyphenate.easeui.modules.chat.presenter.EaseChatMessagePresenterImpl;
+import com.hyphenate.easeui.modules.chat.presenter.IChatMessageListView;
+import com.hyphenate.easeui.modules.interfaces.IPopupWindow;
+import com.hyphenate.easeui.modules.menu.EasePopupMenuHelper;
+import com.hyphenate.easeui.modules.menu.EasePopupWindow;
+import com.hyphenate.easeui.modules.menu.EasePopupWindowHelper;
+import com.hyphenate.easeui.modules.menu.MenuItemBean;
 import com.hyphenate.easeui.utils.EaseCommonUtils;
 
 import java.util.List;
 
-import static com.hyphenate.easeui.modules.contact.EaseContactListLayout.dip2px;
-
 
 public class EaseChatMessageListLayout extends RelativeLayout implements IChatMessageListView, IRecyclerViewHandle
-                                                                        , IChatMessageItemSet, IChatMessageListLayout {
+                                                                        , IChatMessageItemSet, IChatMessageListLayout, IPopupWindow {
     private static final int DEFAULT_PAGE_SIZE = 10;
     private EaseChatMessagePresenter presenter;
     private EaseMessageAdapter messageAdapter;
@@ -80,6 +90,10 @@ public class EaseChatMessageListLayout extends RelativeLayout implements IChatMe
      */
     private MessageListItemClickListener messageListItemClickListener;
     private EaseChatItemStyleHelper chatSetHelper;
+    private EasePopupWindowHelper menuHelper;
+    private boolean showDefaultMenu = true;
+    private EasePopupWindow.OnPopupWindowItemClickListener pwItemClickListener;
+    private EasePopupWindow.OnPopupWindowDismissListener pwDismissListener;
 
     public EaseChatMessageListLayout(@NonNull Context context) {
         this(context, null);
@@ -168,6 +182,8 @@ public class EaseChatMessageListLayout extends RelativeLayout implements IChatMe
 
         rvList = findViewById(R.id.message_list);
         srlRefresh = findViewById(R.id.srl_refresh);
+
+        menuHelper = new EasePopupWindowHelper();
 
         srlRefresh.setEnabled(canUseRefresh);
 
@@ -361,7 +377,156 @@ public class EaseChatMessageListLayout extends RelativeLayout implements IChatMe
                 }
             }
         });
-        messageAdapter.setListItemClickListener(messageListItemClickListener);
+        messageAdapter.setListItemClickListener(new MessageListItemClickListener() {
+            @Override
+            public boolean onBubbleClick(EMMessage message) {
+                if(messageListItemClickListener != null) {
+                    return messageListItemClickListener.onBubbleClick(message);
+                }
+                return false;
+            }
+
+            @Override
+            public boolean onResendClick(EMMessage message) {
+                if(messageListItemClickListener != null) {
+                    return messageListItemClickListener.onResendClick(message);
+                }
+                return false;
+            }
+
+            @Override
+            public void onBubbleLongClick(View v, EMMessage message) {
+                if(showDefaultMenu) {
+                    showDefaultMenu(v, message);
+                }
+                if(messageListItemClickListener != null) {
+                    messageListItemClickListener.onBubbleLongClick(v, message);
+                }
+            }
+
+            @Override
+            public void onUserAvatarClick(String username) {
+                if(messageListItemClickListener != null) {
+                    messageListItemClickListener.onUserAvatarClick(username);
+                }
+            }
+
+            @Override
+            public void onUserAvatarLongClick(String username) {
+                if(messageListItemClickListener != null) {
+                    messageListItemClickListener.onUserAvatarLongClick(username);
+                }
+            }
+
+            @Override
+            public void onMessageCreate(EMMessage message) {
+                if(messageListItemClickListener != null) {
+                    messageListItemClickListener.onMessageCreate(message);
+                }
+            }
+
+            @Override
+            public void onMessageSuccess(EMMessage message) {
+                if(messageListItemClickListener != null) {
+                    messageListItemClickListener.onMessageSuccess(message);
+                }
+            }
+
+            @Override
+            public void onMessageError(EMMessage message, int code, String error) {
+                if(messageListItemClickListener != null) {
+                    messageListItemClickListener.onMessageError(message, code, error);
+                }
+            }
+
+            @Override
+            public void onMessageInProgress(EMMessage message, int progress) {
+                if(messageListItemClickListener != null) {
+                    messageListItemClickListener.onMessageInProgress(message, progress);
+                }
+            }
+        });
+    }
+
+    private void showDefaultMenu(View v, EMMessage message) {
+        menuHelper.initMenu(getContext());
+        menuHelper.setDefaultMenus();
+        menuHelper.setOutsideTouchable(true);
+        setMenuByMsgType(message);
+        menuHelper.setOnPopupMenuItemClickListener(new EasePopupWindow.OnPopupWindowItemClickListener() {
+            @Override
+            public void onMenuItemClick(MenuItemBean item) {
+                if(showDefaultMenu) {
+                    switch (item.getItemId()) {
+                        case EasePopupWindowHelper.ACTION_COPY :
+                            Toast.makeText(getContext(), "点击了复制", Toast.LENGTH_SHORT).show();
+                            break;
+                        case EasePopupWindowHelper.ACTION_FORWARD :
+                            Toast.makeText(getContext(), "点击了转发", Toast.LENGTH_SHORT).show();
+                            break;
+                        case EasePopupWindowHelper.ACTION_DELETE :
+                            Toast.makeText(getContext(), "点击了删除", Toast.LENGTH_SHORT).show();
+                            break;
+                        case EasePopupWindowHelper.ACTION_RECALL :
+                            Toast.makeText(getContext(), "点击了回撤", Toast.LENGTH_SHORT).show();
+                            break;
+                        case EasePopupWindowHelper.ACTION_MULTI_SELECT :
+                            Toast.makeText(getContext(), "点击了多选", Toast.LENGTH_SHORT).show();
+                            break;
+                    }
+                }
+                if(pwItemClickListener != null) {
+                    pwItemClickListener.onMenuItemClick(item);
+                }
+            }
+        });
+        menuHelper.setOnPopupMenuDismissListener(new EasePopupWindow.OnPopupWindowDismissListener() {
+            @Override
+            public void onDismiss(PopupWindow menu) {
+                if(pwDismissListener != null) {
+                    pwDismissListener.onDismiss(menu);
+                }
+            }
+        });
+        menuHelper.show(this, v);
+    }
+
+    private void setMenuByMsgType(EMMessage message) {
+        EMMessage.Type type = message.getType();
+        menuHelper.findItemVisible(EasePopupWindowHelper.ACTION_COPY, false);
+        menuHelper.findItemVisible(EasePopupWindowHelper.ACTION_FORWARD, false);
+        menuHelper.findItemVisible(EasePopupWindowHelper.ACTION_RECALL, false);
+        switch (type) {
+            case TXT:
+                menuHelper.findItemVisible(EasePopupWindowHelper.ACTION_COPY, true);
+                menuHelper.findItemVisible(EasePopupWindowHelper.ACTION_FORWARD, true);
+                menuHelper.findItemVisible(EasePopupWindowHelper.ACTION_RECALL, true);
+                break;
+            case LOCATION:
+            case FILE:
+                menuHelper.findItemVisible(EasePopupWindowHelper.ACTION_RECALL, true);
+                break;
+            case IMAGE:
+                menuHelper.findItemVisible(EasePopupWindowHelper.ACTION_FORWARD, true);
+                menuHelper.findItemVisible(EasePopupWindowHelper.ACTION_RECALL, true);
+                break;
+            case VOICE:
+                menuHelper.findItem(EasePopupWindowHelper.ACTION_DELETE).setTitle(getContext().getString(R.string.delete_voice));
+                menuHelper.findItemVisible(EasePopupWindowHelper.ACTION_RECALL, true);
+                break;
+            case VIDEO:
+                menuHelper.findItem(EasePopupWindowHelper.ACTION_DELETE).setTitle(getContext().getString(R.string.delete_video));
+                menuHelper.findItemVisible(EasePopupWindowHelper.ACTION_RECALL, true);
+                break;
+        }
+
+        if(isChatRoomCon()) {
+            menuHelper.findItemVisible(EasePopupWindowHelper.ACTION_FORWARD, false);
+        }
+
+        if(message.direct() == EMMessage.Direct.RECEIVE ){
+            menuHelper.findItemVisible(EasePopupWindowHelper.ACTION_RECALL, false);
+        }
     }
 
     /**
@@ -694,6 +859,11 @@ public class EaseChatMessageListLayout extends RelativeLayout implements IChatMe
     }
 
     @Override
+    public void showItemDefaultMenu(boolean showDefault) {
+        this.showDefaultMenu = showDefault;
+    }
+
+    @Override
     public void setPresenter(EaseChatMessagePresenter presenter) {
         this.presenter = presenter;
         if(getContext() instanceof AppCompatActivity) {
@@ -725,6 +895,41 @@ public class EaseChatMessageListLayout extends RelativeLayout implements IChatMe
 
     public void runOnUi(Runnable runnable) {
         EaseThreadManager.getInstance().runOnMainThread(runnable);
+    }
+
+    @Override
+    public void clearMenu() {
+        menuHelper.clear();
+    }
+
+    @Override
+    public void addItemMenu(int groupId, int itemId, int order, String title) {
+        menuHelper.addItemMenu(groupId, itemId, order, title);
+    }
+
+    @Override
+    public MenuItemBean findItem(int id) {
+        return menuHelper.findItem(id);
+    }
+
+    @Override
+    public void findItemVisible(int id, boolean visible) {
+        menuHelper.findItemVisible(id, visible);
+    }
+
+    @Override
+    public void setOnPopupWindowItemClickListener(EasePopupWindow.OnPopupWindowItemClickListener listener) {
+        this.pwItemClickListener = listener;
+    }
+
+    @Override
+    public void setOnPopupWindowDismissListener(EasePopupWindow.OnPopupWindowDismissListener listener) {
+        this.pwDismissListener = listener;
+    }
+
+    @Override
+    public EasePopupWindowHelper getMenuHelper() {
+        return menuHelper;
     }
 
     /**

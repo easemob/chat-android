@@ -36,7 +36,7 @@ import com.hyphenate.easeui.modules.contact.presenter.IEaseContactListView;
 import com.hyphenate.easeui.modules.interfaces.IPopupMenu;
 import com.hyphenate.easeui.modules.menu.OnPopupMenuDismissListener;
 import com.hyphenate.easeui.modules.menu.OnPopupMenuItemClickListener;
-import com.hyphenate.easeui.modules.menu.PopupMenuHelper;
+import com.hyphenate.easeui.modules.menu.EasePopupMenuHelper;
 import com.hyphenate.easeui.widget.EaseRecyclerView;
 
 import java.util.List;
@@ -53,7 +53,7 @@ public class EaseContactListLayout extends EaseRecyclerView implements IEaseCont
     private OnItemLongClickListener itemLongListener;
     private OnPopupMenuItemClickListener popupMenuItemClickListener;
     private OnPopupMenuDismissListener dismissListener;
-    private PopupMenuHelper menuHelper;
+    private EasePopupMenuHelper menuHelper;
     private OnItemClickListener customItemClickListener;
 
     private boolean showDefaultMenu = true;
@@ -153,7 +153,7 @@ public class EaseContactListLayout extends EaseRecyclerView implements IEaseCont
         concatAdapter.addAdapter(listAdapter);
         setAdapter(concatAdapter);
 
-        menuHelper = new PopupMenuHelper();
+        menuHelper = new EasePopupMenuHelper();
 
         initListener();
     }
@@ -419,7 +419,7 @@ public class EaseContactListLayout extends EaseRecyclerView implements IEaseCont
     }
 
     @Override
-    public PopupMenuHelper getMenuHelper() {
+    public EasePopupMenuHelper getMenuHelper() {
         return menuHelper;
     }
 
