@@ -1,7 +1,6 @@
 package com.hyphenate.easeui.adapter;
 
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -9,9 +8,12 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.hyphenate.easeui.R;
-import com.hyphenate.easeui.widget.chatextend.EaseChatExtendMenu.ChatMenuItemModel;
+import com.hyphenate.easeui.interfaces.OnItemClickListener;
+import com.hyphenate.easeui.modules.chat.EaseChatExtendMenu.ChatMenuItemModel;
 
 public class EaseChatExtendMenuAdapter extends EaseBaseChatExtendMenuAdapter<EaseChatExtendMenuAdapter.ViewHolder, ChatMenuItemModel> {
+    private OnItemClickListener itemListener;
+
     @Override
     protected int getItemLayoutId() {
         return R.layout.ease_chat_menu_item;
@@ -34,8 +36,15 @@ public class EaseChatExtendMenuAdapter extends EaseBaseChatExtendMenuAdapter<Eas
                 if(item.clickListener != null){
                     item.clickListener.onChatExtendMenuItemClick(item.id, v);
                 }
+                if(itemListener != null) {
+                    itemListener.onItemClick(v, position);
+                }
             }
         });
+    }
+
+    public void setOnItemClickListener(OnItemClickListener listener) {
+        this.itemListener = listener;
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {

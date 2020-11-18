@@ -1,4 +1,4 @@
-package com.hyphenate.easeui.widget.chatextend;
+package com.hyphenate.easeui.modules.chat;
 
 import android.content.Context;
 import android.content.res.TypedArray;
@@ -20,6 +20,11 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.hyphenate.easeui.R;
 import com.hyphenate.easeui.adapter.EaseChatExtendMenuAdapter;
 import com.hyphenate.easeui.adapter.EaseChatExtendMenuIndicatorAdapter;
+import com.hyphenate.easeui.interfaces.OnItemClickListener;
+import com.hyphenate.easeui.modules.chat.interfaces.EaseChatExtendMenuItemClickListener;
+import com.hyphenate.easeui.modules.chat.interfaces.IChatExtendMenu;
+import com.hyphenate.easeui.widget.chatextend.HorizontalPageLayoutManager;
+import com.hyphenate.easeui.widget.chatextend.PagingScrollHelper;
 import com.hyphenate.util.DensityUtil;
 
 import java.util.ArrayList;
@@ -29,7 +34,7 @@ import java.util.List;
  * Extend menu when user want send image, voice clip, etc
  *
  */
-public class EaseChatExtendMenu extends FrameLayout implements PagingScrollHelper.onPageChangeListener {
+public class EaseChatExtendMenu extends FrameLayout implements PagingScrollHelper.onPageChangeListener, IChatExtendMenu, OnItemClickListener {
     protected Context context;
     private RecyclerView rvExtendMenu;
     private RecyclerView rvIndicator;
@@ -38,8 +43,20 @@ public class EaseChatExtendMenu extends FrameLayout implements PagingScrollHelpe
     private int numColumns;
     private int numRows;
     private PagingScrollHelper helper;
-    private EaseChatExtendMenuItemClickListener listener;
     private EaseChatExtendMenuIndicatorAdapter indicatorAdapter;
+    private EaseChatExtendMenuItemClickListener itemListener;
+
+    public static final int ITEM_TAKE_PICTURE = 1;
+    public static final int ITEM_PICTURE = 2;
+    public static final int ITEM_LOCATION = 3;
+    public static final int ITEM_VIDEO = 4;
+    public static final int ITEM_FILE = 5;
+
+    private int[] itemStrings = { R.string.attach_take_pic, R.string.attach_picture,
+            R.string.attach_location, R.string.attach_video, R.string.attach_file};
+    private int[] itemdrawables = { R.drawable.ease_chat_takepic_selector, R.drawable.ease_chat_image_selector,
+            R.drawable.ease_chat_location_selector, R.drawable.em_chat_video_selector, R.drawable.em_chat_file_selector };
+    private int[] itemIds = { ITEM_TAKE_PICTURE, ITEM_PICTURE, ITEM_LOCATION, ITEM_VIDEO, ITEM_FILE};
 
     public EaseChatExtendMenu(Context context) {
         this(context, null);
@@ -76,6 +93,7 @@ public class EaseChatExtendMenu extends FrameLayout implements PagingScrollHelpe
     public void init(){
         initChatExtendMenu();
         initChatExtendMenuIndicator();
+        addDefaultData();
     }
 
     private void initChatExtendMenu() {
@@ -95,6 +113,8 @@ public class EaseChatExtendMenu extends FrameLayout implements PagingScrollHelpe
         helper.scrollToPosition(0);
         setHorizontalFadingEdgeEnabled(true);
         helper.setOnPageChangeListener(this);
+
+        adapter.setOnItemClickListener(this);
     }
 
     private void initChatExtendMenuIndicator() {
@@ -103,6 +123,12 @@ public class EaseChatExtendMenu extends FrameLayout implements PagingScrollHelpe
         DividerItemDecoration itemDecoration = new DividerItemDecoration(context, DividerItemDecoration.HORIZONTAL);
         itemDecoration.setDrawable(ContextCompat.getDrawable(context, R.drawable.ease_chat_extend_menu_indicator_divider));
         rvIndicator.addItemDecoration(itemDecoration);
+    }
+
+    private void addDefaultData() {
+        for(int i = 0; i < itemStrings.length; i++) {
+            registerMenuItem(itemStrings[i], itemdrawables[i], itemIds[i], null);
+        }
     }
 
     /**
@@ -151,18 +177,19 @@ public class EaseChatExtendMenu extends FrameLayout implements PagingScrollHelpe
         indicatorAdapter.setSelectedPosition(index);
     }
 
-    /**
-     * extend menu item click listener
-     */
-    public interface EaseChatExtendMenuItemClickListener{
-        /**
-         * item click
-         * @param itemId
-         * @param view
-         */
-        void onChatExtendMenuItemClick(int itemId, View view);
+    @Override
+    public void onItemClick(View view, int position) {
+        ChatMenuItemModel itemModel = itemModels.get(position);
+        if(itemListener != null) {
+            itemListener.onChatExtendMenuItemClick(itemModel.id, view);
+        }
     }
-    
+
+    @Override
+    public void setEaseChatExtendMenuItemClickListener(EaseChatExtendMenuItemClickListener listener) {
+        this.itemListener = listener;
+    }
+
     public static class ChatMenuItemModel{
         public String name;
         public int image;

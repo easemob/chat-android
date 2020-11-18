@@ -8,7 +8,7 @@ public interface IChatPrimaryMenu {
      * 菜单展示类型
      * @param type
      */
-    void SetMenuShowType(int type);
+    void setMenuShowType(int type);
 
     /**
      * 常规模式
@@ -63,4 +63,10 @@ public interface IChatPrimaryMenu {
      * @param bg
      */
     void setMenuBackground(Drawable bg);
+
+    /**
+     * 设置监听
+     * @param listener
+     */
+    void setEaseChatPrimaryMenuListener(EaseChatPrimaryMenuListener listener);
 }

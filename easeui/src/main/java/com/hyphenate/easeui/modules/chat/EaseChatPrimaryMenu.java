@@ -20,6 +20,7 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 
 import com.hyphenate.easeui.R;
+import com.hyphenate.easeui.modules.chat.interfaces.EaseChatPrimaryMenuListener;
 import com.hyphenate.easeui.modules.chat.interfaces.IChatPrimaryMenu;
 
 public class EaseChatPrimaryMenu extends RelativeLayout implements IChatPrimaryMenu, View.OnClickListener, EaseInputEditText.OnEditTextChangeListener {
@@ -53,11 +54,10 @@ public class EaseChatPrimaryMenu extends RelativeLayout implements IChatPrimaryM
         LayoutInflater.from(context).inflate(R.layout.ease_widget_chat_primary_menu, this);
         activity = (Activity) context;
         inputManager = (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
+        initViews();
     }
 
-    @Override
-    protected void onFinishInflate() {
-        super.onFinishInflate();
+    private void initViews() {
         rlBottom = findViewById(R.id.rl_bottom);
         buttonSetModeVoice = findViewById(R.id.btn_set_mode_voice);
         buttonSetModeKeyboard = findViewById(R.id.btn_set_mode_keyboard);
@@ -107,7 +107,7 @@ public class EaseChatPrimaryMenu extends RelativeLayout implements IChatPrimaryM
     }
 
     @Override
-    public void SetMenuShowType(int type) {
+    public void setMenuShowType(int type) {
         this.menuType = type;
         checkMenuType();
     }
@@ -136,6 +136,9 @@ public class EaseChatPrimaryMenu extends RelativeLayout implements IChatPrimaryM
         showSoftKeyboard(editText);
         checkSendButton();
         checkMenuType();
+        if(listener != null) {
+            listener.onToggleTextBtnClicked();
+        }
     }
 
     @Override
@@ -169,7 +172,7 @@ public class EaseChatPrimaryMenu extends RelativeLayout implements IChatPrimaryM
         }
         checkMenuType();
         if(listener != null) {
-            listener.onToggleEmojiconClicked();
+            listener.onToggleEmojiconClicked(faceChecked.getVisibility() == VISIBLE);
         }
     }
 
@@ -187,7 +190,7 @@ public class EaseChatPrimaryMenu extends RelativeLayout implements IChatPrimaryM
         }
         checkMenuType();
         if(listener != null) {
-            listener.onToggleExtendClicked();
+            listener.onToggleExtendClicked(buttonMore.isChecked());
         }
     }
 
@@ -333,53 +336,10 @@ public class EaseChatPrimaryMenu extends RelativeLayout implements IChatPrimaryM
         inputManager.showSoftInput(et, InputMethodManager.SHOW_IMPLICIT);
     }
 
+    @Override
     public void setEaseChatPrimaryMenuListener(EaseChatPrimaryMenuListener listener) {
         this.listener = listener;
     }
 
-    public interface EaseChatPrimaryMenuListener{
-        /**
-         * when send button clicked
-         * @param content
-         */
-        void onSendBtnClicked(String content);
-
-        /**
-         * when typing on the edit-text layout.
-         */
-        void onTyping(CharSequence s, int start, int before, int count);
-
-        /**
-         * when speak button is touched
-         * @return
-         */
-        boolean onPressToSpeakBtnTouch(View v, MotionEvent event);
-
-        /**
-         * toggle on/off voice button
-         */
-        void onToggleVoiceBtnClicked();
-
-        /**
-         * toggle on/off extend menu
-         */
-        void onToggleExtendClicked();
-
-        /**
-         * toggle on/off emoji icon
-         */
-        void onToggleEmojiconClicked();
-
-        /**
-         * on text input is clicked
-         */
-        void onEditTextClicked();
-
-        /**
-         * if edit text has focus
-         */
-        void onEditTextHasFocus(boolean hasFocus);
-
-    }
 }
 
