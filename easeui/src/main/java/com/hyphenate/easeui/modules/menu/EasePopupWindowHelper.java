@@ -32,7 +32,7 @@ public class EasePopupWindowHelper {
     public static final int ACTION_DELETE = 13;
     public static final int ACTION_RECALL = 14;
     public static final int ACTION_MULTI_SELECT = 15;
-    private static final int[] itemIds = {ACTION_COPY, ACTION_FORWARD, ACTION_DELETE, ACTION_RECALL, ACTION_MULTI_SELECT};
+    private static final int[] itemIds = {ACTION_COPY, ACTION_FORWARD, ACTION_DELETE, ACTION_RECALL};
     private static final int[] titles = {R.string.action_copy, R.string.action_forward, R.string.action_delete, R.string.action_recall, R.string.action_multi_select};
     private static final int[] icons = {R.drawable.ease_delete_expression, R.drawable.ease_delete_expression, R.drawable.ease_delete_expression
                                         , R.drawable.ease_delete_expression, R.drawable.ease_delete_expression};
@@ -63,7 +63,7 @@ public class EasePopupWindowHelper {
      */
     public void initMenu(@NonNull Context context) {
         this.context = context;
-        pMenu = new EasePopupWindow(context);
+        pMenu = new EasePopupWindow(context, true);
         layout = LayoutInflater.from(context).inflate(R.layout.ease_layout_menu_popupwindow, null);
         pMenu.setContentView(layout);
         tvTitle = layout.findViewById(R.id.tv_title);

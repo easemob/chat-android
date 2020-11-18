@@ -22,20 +22,18 @@
         android:paddingTop="4dp"
         android:paddingBottom="4dp">
 
-        <Button
+        <ImageView
             android:id="@+id/btn_set_mode_voice"
-            android:layout_width="@dimen/ease_chat_primary_menu_icon_size"
-            android:layout_height="@dimen/ease_chat_primary_menu_icon_size"
+            style="@style/ease_chat_input_button_size"
             android:layout_marginLeft="16dp"
-            android:background="@drawable/ease_chatting_setmode_voice_btn"
+            android:src="@drawable/ease_chatting_setmode_voice_btn"
             android:visibility="visible" />
 
-        <Button
+        <ImageView
             android:id="@+id/btn_set_mode_keyboard"
-            android:layout_width="@dimen/ease_chat_primary_menu_icon_size"
-            android:layout_height="@dimen/ease_chat_primary_menu_icon_size"
+            style="@style/ease_chat_input_button_size"
             android:layout_marginLeft="16dp"
-            android:background="@drawable/ease_chatting_setmode_keyboard_btn"
+            android:src="@drawable/ease_chatting_setmode_keyboard_btn"
             android:visibility="gone" />
 
         <LinearLayout
@@ -72,10 +70,11 @@
             android:focusableInTouchMode="true"
             android:gravity="bottom">
 
-            <EditText
+            <com.hyphenate.easeui.modules.chat.EaseInputEditText
                 android:id="@+id/et_sendmessage"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:focusableInTouchMode="true"
                 android:minHeight="32dp"
                 android:background="@drawable/ease_send_message_et_bg"
                 android:maxLines="3"
