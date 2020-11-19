@@ -17,6 +17,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-        android:orientation="horizontal"/>
+        android:orientation="horizontal"
+        android:layout_marginBottom="5dp"/>
 
 </LinearLayout>

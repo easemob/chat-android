@@ -9,7 +9,6 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
-import android.widget.ScrollView;
 
 import androidx.annotation.StringRes;
 
@@ -17,9 +16,9 @@ import com.hyphenate.easeui.R;
 import com.hyphenate.easeui.domain.EaseEmojicon;
 import com.hyphenate.easeui.domain.EaseEmojiconGroupEntity;
 import com.hyphenate.easeui.model.EaseDefaultEmojiconDatas;
+import com.hyphenate.easeui.modules.chat.interfaces.EaseChatExtendMenuItemClickListener;
 import com.hyphenate.easeui.utils.EaseSmileUtils;
-import com.hyphenate.easeui.widget.chatextend.EaseChatExtendMenu;
-import com.hyphenate.easeui.widget.chatextend.EaseChatExtendMenu.EaseChatExtendMenuItemClickListener;
+import com.hyphenate.easeui.modules.chat.EaseChatExtendMenu;
 import com.hyphenate.easeui.widget.EaseChatPrimaryMenuBase.EaseChatPrimaryMenuListener;
 import com.hyphenate.easeui.widget.emojicon.EaseEmojiconMenu;
 import com.hyphenate.easeui.widget.emojicon.EaseEmojiconMenuBase;

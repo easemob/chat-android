@@ -112,6 +112,7 @@ public class EaseChatMessageListLayout extends RelativeLayout implements IChatMe
             ((AppCompatActivity) context).getLifecycle().addObserver(presenter);
         }
         initAttrs(context, attrs);
+        initViews();
     }
 
     private void initAttrs(Context context, AttributeSet attrs) {
@@ -175,9 +176,7 @@ public class EaseChatMessageListLayout extends RelativeLayout implements IChatMe
         }
     }
 
-    @Override
-    protected void onFinishInflate() {
-        super.onFinishInflate();
+    private void initViews() {
         presenter.attachView(this);
 
         rvList = findViewById(R.id.message_list);
@@ -222,6 +221,14 @@ public class EaseChatMessageListLayout extends RelativeLayout implements IChatMe
         this.conType = EaseCommonUtils.getConversationType(chatType);
         conversation = EMClient.getInstance().chatManager().getConversation(username, conType, true);
         presenter.setupWithConversation(conversation);
+    }
+
+    public void init(String username, int chatType) {
+        init(LoadDataType.LOCAL, username, chatType);
+    }
+
+    public void loadDefaultData() {
+        loadDefaultData(pageSize, null);
     }
 
     public void loadDefaultData(String msgId) {
@@ -594,6 +601,7 @@ public class EaseChatMessageListLayout extends RelativeLayout implements IChatMe
     @Override
     public void loadLocalMsgSuccess(List<EMMessage> data) {
         messageAdapter.setData(data);
+        refreshToLatest();
     }
 
     @Override
@@ -635,6 +643,7 @@ public class EaseChatMessageListLayout extends RelativeLayout implements IChatMe
     @Override
     public void loadServerMsgSuccess(List<EMMessage> data) {
         messageAdapter.setData(data);
+        refreshToLatest();
     }
 
     @Override
@@ -958,6 +967,9 @@ public class EaseChatMessageListLayout extends RelativeLayout implements IChatMe
         void onChatError(int code, String errorMsg);
     }
 
+    /**
+     * 三种数据加载模式，local是从本地数据库加载，Roam是开启消息漫游，History是搜索本地消息
+     */
     public enum LoadDataType {
         LOCAL, ROAM, HISTORY
     }

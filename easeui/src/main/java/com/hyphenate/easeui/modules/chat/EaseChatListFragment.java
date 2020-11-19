@@ -4,7 +4,6 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -14,7 +13,7 @@ import com.hyphenate.easeui.R;
 import com.hyphenate.easeui.ui.base.EaseBaseFragment;
 
 public class EaseChatListFragment extends EaseBaseFragment {
-    private EaseChatMessageListLayout layoutMessage;
+    private EaseChatLayout layoutMessage;
     private String username;
     private int chatType;
 
@@ -48,9 +47,9 @@ public class EaseChatListFragment extends EaseBaseFragment {
     }
 
     public void initView() {
-        layoutMessage = findViewById(R.id.layout_message);
-        layoutMessage.setBackgroundColor(ContextCompat.getColor(mContext, R.color.gray));
-        layoutMessage.setItemShowType(EaseChatMessageListLayout.ShowType.RIGHT);
+        layoutMessage = findViewById(R.id.layout_chat);
+        layoutMessage.getChatMessageListLayout().setItemShowType(EaseChatMessageListLayout.ShowType.LEFT);
+        layoutMessage.getChatMessageListLayout().setBackgroundColor(ContextCompat.getColor(mContext, R.color.gray));
     }
 
     public void initListener() {
@@ -58,8 +57,7 @@ public class EaseChatListFragment extends EaseBaseFragment {
     }
 
     public void initData() {
-        layoutMessage.init(EaseChatMessageListLayout.LoadDataType.LOCAL, username, chatType);
-        layoutMessage.loadDefaultData(null);
+        layoutMessage.init(username, chatType);
     }
 }
 

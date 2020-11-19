@@ -42,6 +42,7 @@ public class EaseChatExtendMenu extends FrameLayout implements PagingScrollHelpe
     private EaseChatExtendMenuAdapter adapter;
     private int numColumns;
     private int numRows;
+    private int currentPosition;
     private PagingScrollHelper helper;
     private EaseChatExtendMenuIndicatorAdapter indicatorAdapter;
     private EaseChatExtendMenuItemClickListener itemListener;
@@ -86,7 +87,7 @@ public class EaseChatExtendMenu extends FrameLayout implements PagingScrollHelpe
         rvIndicator = findViewById(R.id.rv_indicator);
     }
 
-    
+
     /**
      * init
      */
@@ -123,12 +124,22 @@ public class EaseChatExtendMenu extends FrameLayout implements PagingScrollHelpe
         DividerItemDecoration itemDecoration = new DividerItemDecoration(context, DividerItemDecoration.HORIZONTAL);
         itemDecoration.setDrawable(ContextCompat.getDrawable(context, R.drawable.ease_chat_extend_menu_indicator_divider));
         rvIndicator.addItemDecoration(itemDecoration);
+        indicatorAdapter.setSelectedPosition(currentPosition);
     }
 
     private void addDefaultData() {
         for(int i = 0; i < itemStrings.length; i++) {
             registerMenuItem(itemStrings[i], itemdrawables[i], itemIds[i], null);
         }
+    }
+
+    /**
+     * 清空数据
+     */
+    public void clear() {
+        itemModels.clear();
+        adapter.notifyDataSetChanged();
+        indicatorAdapter.setPageCount(0);
     }
 
     /**
@@ -152,7 +163,7 @@ public class EaseChatExtendMenu extends FrameLayout implements PagingScrollHelpe
         itemModels.add(item);
         adapter.notifyItemInserted(itemModels.size() - 1);
         //设置需要显示的indicator的个数
-        indicatorAdapter.setPageCount((int) Math.ceil(itemModels.size() / (numColumns * numRows)));
+        indicatorAdapter.setPageCount((int) Math.ceil(itemModels.size() * 1.0f / (numColumns * numRows)));
     }
 
     /**
@@ -173,6 +184,7 @@ public class EaseChatExtendMenu extends FrameLayout implements PagingScrollHelpe
 
     @Override
     public void onPageChange(int index) {
+        currentPosition = index;
         //设置选中的indicator
         indicatorAdapter.setSelectedPosition(index);
     }
@@ -186,8 +198,27 @@ public class EaseChatExtendMenu extends FrameLayout implements PagingScrollHelpe
     }
 
     @Override
+    public void registerMenuItem(String name, int drawableRes, int itemId) {
+        registerMenuItem(name, drawableRes, itemId, null);
+    }
+
+    @Override
+    public void registerMenuItem(int nameRes, int drawableRes, int itemId) {
+        registerMenuItem(nameRes, drawableRes, itemId, null);
+    }
+
+    @Override
     public void setEaseChatExtendMenuItemClickListener(EaseChatExtendMenuItemClickListener listener) {
         this.itemListener = listener;
+    }
+
+    @Override
+    protected void onDetachedFromWindow() {
+        super.onDetachedFromWindow();
+        if(helper != null && rvExtendMenu != null) {
+            helper.scrollToPosition(0);
+            helper.checkCurrentStatus();
+        }
     }
 
     public static class ChatMenuItemModel{

@@ -3,6 +3,7 @@ package com.hyphenate.easeui.widget.chatextend;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.animation.ValueAnimator;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 
@@ -27,6 +28,7 @@ public class PagingScrollHelper {
     private onPageChangeListener mOnPageChangeListener;
     private int lastPageIndex;
     private ORIENTATION mOrientation = ORIENTATION.HORIZONTAL;
+    private int currentPosition;
 
     enum ORIENTATION {
         HORIZONTAL, VERTICAL, NULL
@@ -85,6 +87,7 @@ public class PagingScrollHelper {
     }
 
     public void scrollToPosition(int position) {
+        this.currentPosition = position;
         if (mAnimator == null) {
             mOnFlingListener.onFling(0, 0);
         }
@@ -98,6 +101,24 @@ public class PagingScrollHelper {
             if (startPoint != endPoint) {
                 mAnimator.setIntValues(startPoint, endPoint);
                 mAnimator.start();
+            }
+        }
+    }
+
+    public void checkCurrentStatus() {
+        if(mOrientation == ORIENTATION.VERTICAL) {
+            if(mRecyclerView != null) {
+                if(offsetY != mRecyclerView.getHeight() * currentPosition) {
+                    offsetX = mRecyclerView.getHeight() * currentPosition;
+                    mRecyclerView.scrollTo(0, offsetY);
+                }
+            }
+        }else {
+            if(mRecyclerView != null) {
+                if(offsetX != mRecyclerView.getWidth() * currentPosition) {
+                    offsetX = mRecyclerView.getWidth() * currentPosition;
+                    mRecyclerView.scrollTo(offsetX, 0);
+                }
             }
         }
     }
@@ -142,12 +163,12 @@ public class PagingScrollHelper {
             if (endPoint < 0) {
                 endPoint = 0;
             }
- 
+
             //使用动画处理滚动
             if (mAnimator == null) {
-                mAnimator = new ValueAnimator().ofInt(startPoint, endPoint);
+                mAnimator =  ValueAnimator.ofInt(startPoint, endPoint);
  
-                mAnimator.setDuration(300);
+                mAnimator.setDuration(200);
                 mAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
                     @Override
                     public void onAnimationUpdate(ValueAnimator animation) {
