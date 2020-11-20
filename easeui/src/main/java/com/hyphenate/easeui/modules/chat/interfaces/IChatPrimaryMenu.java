@@ -36,6 +36,16 @@ public interface IChatPrimaryMenu {
     void showMoreStatus();
 
     /**
+     * 隐藏扩展区模式
+     */
+    void hideExtendStatus();
+
+    /**
+     * 隐藏软键盘
+     */
+    void hideSoftKeyboard();
+
+   /**
      * 输入表情
      * @param emojiContent
      */

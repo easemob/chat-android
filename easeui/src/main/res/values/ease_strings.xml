@@ -118,6 +118,7 @@
     <string name="group_ack_read_count">%1$d 已读</string>
 
     <string name="search_new">搜</string>
+    <string name="has_been_send">已发送</string>
 
     <string name="ease_search_text_hint">搜索</string>
 

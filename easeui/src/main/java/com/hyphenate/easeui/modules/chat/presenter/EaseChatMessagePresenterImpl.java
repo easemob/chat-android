@@ -169,6 +169,28 @@ public class EaseChatMessagePresenterImpl extends EaseChatMessagePresenter {
                 });
     }
 
+    @Override
+    public void refreshCurrentConversation() {
+        if(conversation == null) {
+            throw new NullPointerException("should first set up with conversation");
+        }
+        List<EMMessage> allMessages = conversation.getAllMessages();
+        if(isActive()) {
+            runOnUI(()->mView.refreshCurrentConSuccess(allMessages, false));
+        }
+    }
+
+    @Override
+    public void refreshToLatest() {
+        if(conversation == null) {
+            throw new NullPointerException("should first set up with conversation");
+        }
+        List<EMMessage> allMessages = conversation.getAllMessages();
+        if(isActive()) {
+            runOnUI(()->mView.refreshCurrentConSuccess(allMessages, true));
+        }
+    }
+
     /**
      * 判断是否是消息id
      * @param msgId

@@ -48,6 +48,8 @@ public interface EaseConstant {
     String MESSAGE_TYPE_CONFERENCE_INVITE = "conference_invite";
     String MESSAGE_TYPE_LIVE_INVITE = "live_invite";
 
+    String MESSAGE_FORWARD = "message_forward";
+
     String MESSAGE_CHANGE_RECEIVE = "message_receive";
     String MESSAGE_CHANGE_CMD_RECEIVE = "message_cmd_receive";
     String MESSAGE_CHANGE_SEND_SUCCESS = "message_success";

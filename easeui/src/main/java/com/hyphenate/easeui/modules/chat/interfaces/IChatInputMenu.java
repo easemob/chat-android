@@ -33,6 +33,11 @@ public interface IChatInputMenu {
     void showExtendMenu(boolean show);
 
     /**
+     * 隐藏软键盘
+     */
+    void hideSoftKeyboard();
+
+    /**
      * 设置菜单监听事件
      * @param listener
      */

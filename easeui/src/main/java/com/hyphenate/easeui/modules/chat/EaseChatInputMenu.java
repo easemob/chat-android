@@ -97,6 +97,16 @@ public class EaseChatInputMenu extends LinearLayout implements IChatInputMenu, E
             showExtendMenu();
         }else {
             extendMenuContainer.setVisibility(GONE);
+            if(primaryMenu != null) {
+                primaryMenu.hideExtendStatus();
+            }
+        }
+    }
+
+    @Override
+    public void hideSoftKeyboard() {
+        if(primaryMenu != null) {
+            primaryMenu.hideSoftKeyboard();
         }
     }
 

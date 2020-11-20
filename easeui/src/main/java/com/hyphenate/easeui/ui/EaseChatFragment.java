@@ -24,7 +24,6 @@ import androidx.annotation.StringRes;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.hyphenate.EMError;
 import com.hyphenate.EMMessageListener;
 import com.hyphenate.EMValueCallBack;
 import com.hyphenate.chat.EMChatRoom;
@@ -46,6 +45,7 @@ import com.hyphenate.easeui.interfaces.EaseChatRoomListener;
 import com.hyphenate.easeui.interfaces.EaseGroupListener;
 import com.hyphenate.easeui.interfaces.MessageListItemClickListener;
 import com.hyphenate.easeui.manager.EaseAtMessageHelper;
+import com.hyphenate.easeui.modules.chat.interfaces.EaseChatExtendMenuItemClickListener;
 import com.hyphenate.easeui.utils.EaseCompat;
 import com.hyphenate.easeui.model.EaseEvent;
 import com.hyphenate.easeui.ui.base.EaseBaseFragment;
@@ -53,12 +53,13 @@ import com.hyphenate.easeui.utils.EaseCommonUtils;
 import com.hyphenate.easeui.manager.EaseDingMessageHelper;
 import com.hyphenate.easeui.utils.EaseUserUtils;
 import com.hyphenate.easeui.widget.EaseAlertDialog;
-import com.hyphenate.easeui.widget.chatextend.EaseChatExtendMenu;
+import com.hyphenate.easeui.modules.chat.EaseChatExtendMenu;
 import com.hyphenate.easeui.widget.EaseChatInputMenu;
 import com.hyphenate.easeui.widget.EaseChatMessageList;
 import com.hyphenate.easeui.widget.EaseVoiceRecorderView;
 import com.hyphenate.exceptions.HyphenateException;
 import com.hyphenate.util.EMLog;
+import com.hyphenate.util.ImageUtils;
 import com.hyphenate.util.PathUtil;
 import com.hyphenate.util.VersionUtils;
 
@@ -67,7 +68,7 @@ import java.util.List;
 
 public class EaseChatFragment extends EaseBaseFragment implements View.OnClickListener,
         EaseChatInputMenu.ChatInputMenuListener,
-        EaseChatExtendMenu.EaseChatExtendMenuItemClickListener, MessageListItemClickListener,
+        EaseChatExtendMenuItemClickListener, MessageListItemClickListener,
         EMMessageListener, TextWatcher, EaseChatMessageList.OnMessageListListener {
 
     private static final String TAG = EaseChatFragment.class.getSimpleName();

@@ -65,5 +65,15 @@ public abstract class EaseChatMessagePresenter extends EaseBasePresenter {
      * @param pageSize
      */
     public abstract void loadMoreServerMessages(String msgId, int pageSize);
+
+    /**
+     * 刷新当前的会话
+     */
+    public abstract void refreshCurrentConversation();
+
+    /**
+     * 刷新当前会话，并移动到最新
+     */
+    public abstract void refreshToLatest();
 }
 

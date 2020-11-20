@@ -219,6 +219,47 @@ public abstract class EaseBaseRecyclerViewAdapter<T> extends EaseBaseAdapter<Eas
     }
 
     /**
+     * 添加更多数据
+     * @param position 插入位置
+     * @param data
+     */
+    public void addData(int position, List<T> data) {
+        synchronized (EaseBaseRecyclerViewAdapter.class) {
+            if(data == null || data.isEmpty()) {
+                return;
+            }
+            if(this.mData == null) {
+                this.mData = data;
+            }else {
+                this.mData.addAll(position, data);
+            }
+        }
+        notifyDataSetChanged();
+    }
+
+    /**
+     * 添加更多数据
+     * @param position
+     * @param data
+     * @param refresh
+     */
+    public void addData(int position, List<T> data, boolean refresh) {
+        synchronized (EaseBaseRecyclerViewAdapter.class) {
+            if(data == null || data.isEmpty()) {
+                return;
+            }
+            if(this.mData == null) {
+                this.mData = data;
+            }else {
+                this.mData.addAll(position, data);
+            }
+        }
+        if(refresh) {
+            notifyDataSetChanged();
+        }
+    }
+
+    /**
      * 获取数据
      * @return
      */

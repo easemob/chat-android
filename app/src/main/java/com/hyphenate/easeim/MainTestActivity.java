@@ -27,12 +27,11 @@ import com.hyphenate.easeim.section.MainViewModel;
 import com.hyphenate.easeim.section.base.BaseInitActivity;
 import com.hyphenate.easeim.section.chat.ChatPresenter;
 import com.hyphenate.easeim.section.conference.ConferenceActivity;
+import com.hyphenate.easeim.section.contact.activity.AddContactActivity;
 import com.hyphenate.easeim.section.contact.activity.GroupContactManageActivity;
 import com.hyphenate.easeim.section.contact.fragment.ContactListFragment;
-import com.hyphenate.easeim.section.conversation.ConversationListFragment;
-import com.hyphenate.easeim.section.discover.DiscoverFragment;
-import com.hyphenate.easeim.section.contact.activity.AddContactActivity;
 import com.hyphenate.easeim.section.contact.viewmodels.ContactsViewModel;
+import com.hyphenate.easeim.section.discover.DiscoverFragment;
 import com.hyphenate.easeim.section.group.activity.GroupPrePickActivity;
 import com.hyphenate.easeim.section.me.AboutMeFragment;
 import com.hyphenate.easeui.model.EaseEvent;
@@ -44,7 +43,7 @@ import com.hyphenate.easeui.widget.EaseTitleBar;
 import java.lang.reflect.Method;
 
 
-public class MainActivity extends BaseInitActivity implements BottomNavigationView.OnNavigationItemSelectedListener {
+public class MainTestActivity extends BaseInitActivity implements BottomNavigationView.OnNavigationItemSelectedListener {
     private BottomNavigationView navView;
     private EaseTitleBar mTitleBar;
     private EaseBaseFragment mConversationListFragment, mFriendsFragment, mDiscoverFragment, mAboutMeFragment;
@@ -54,11 +53,6 @@ public class MainActivity extends BaseInitActivity implements BottomNavigationVi
     private int[] msgIds = {R.id.tv_main_home_msg, R.id.tv_main_friends_msg, R.id.tv_main_discover_msg, R.id.tv_main_about_me_msg};
     private MainViewModel viewModel;
     private boolean showMenu = true;//是否显示菜单项
-
-//    public static void startAction(Context context) {
-//        Intent starter = new Intent(context, MainActivity.class);
-//        context.startActivity(starter);
-//    }
 
     public static void startAction(Context context) {
         Intent starter = new Intent(context, MainTestActivity.class);
@@ -284,14 +278,14 @@ public class MainActivity extends BaseInitActivity implements BottomNavigationVi
 
     private void switchToHome() {
         if(mConversationListFragment == null) {
-            mConversationListFragment = new ConversationListFragment();
+            mConversationListFragment = new EaseConversationListFragment();
         }
         replace(mConversationListFragment, "conversation");
     }
 
     private void switchToFriends() {
         if(mFriendsFragment == null) {
-            mFriendsFragment = new ContactListFragment();
+            mFriendsFragment = new EaseContactListFragment();
         }
         replace(mFriendsFragment, "contact");
     }

@@ -3,10 +3,14 @@ package com.hyphenate.easeui.modules.chat;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.FrameLayout;
+import android.widget.Toast;
 
 import com.hyphenate.easeui.R;
+import com.hyphenate.easeui.model.EaseEvent;
+import com.hyphenate.easeui.modules.chat.interfaces.OnChatLayoutListener;
 import com.hyphenate.easeui.ui.base.EaseBaseActivity;
 import com.hyphenate.easeui.widget.EaseTitleBar;
 
@@ -40,6 +44,29 @@ public class EaseChatListActivity extends EaseBaseActivity {
         bundle.putInt("chatType", getIntent().getIntExtra("chatType", 0));
         fragment.setArguments(bundle);
         getSupportFragmentManager().beginTransaction().replace(R.id.fl_fragment, fragment).commit();
+
+        titleBar.setTitle(getIntent().getStringExtra("username"));
+
+        fragment.setOnChatLayoutListener(new OnChatLayoutListener() {
+            @Override
+            public void onMessageChange(EaseEvent change) {
+
+            }
+
+            @Override
+            public void onChatExtendMenuItemClick(View view, int itemId) {
+                Toast.makeText(EaseChatListActivity.this, "itemId = "+itemId, Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onOtherTyping(String action) {
+                if(TextUtils.equals(action, EaseChatLayout.ACTION_TYPING_BEGIN)) {
+                    titleBar.setTitle("正在输入...");
+                }else {
+                    titleBar.setTitle(getIntent().getStringExtra("username"));
+                }
+            }
+        });
     }
 }
 

@@ -72,4 +72,10 @@ public interface IChatMessageListView extends ILoadDataView {
      * @param data
      */
     void loadMoreServerMsgSuccess(List<EMMessage> data);
+
+    /**
+     * 刷新当前会话
+     * @param data
+     */
+    void refreshCurrentConSuccess(List<EMMessage> data, boolean toLatest);
 }

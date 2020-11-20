@@ -6,6 +6,7 @@ import android.content.res.TypedArray;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewTreeObserver;
@@ -16,7 +17,6 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.PopupMenu;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.ConcatAdapter;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -41,7 +41,6 @@ import com.hyphenate.easeui.modules.chat.presenter.EaseChatMessagePresenter;
 import com.hyphenate.easeui.modules.chat.presenter.EaseChatMessagePresenterImpl;
 import com.hyphenate.easeui.modules.chat.presenter.IChatMessageListView;
 import com.hyphenate.easeui.modules.interfaces.IPopupWindow;
-import com.hyphenate.easeui.modules.menu.EasePopupMenuHelper;
 import com.hyphenate.easeui.modules.menu.EasePopupWindow;
 import com.hyphenate.easeui.modules.menu.EasePopupWindowHelper;
 import com.hyphenate.easeui.modules.menu.MenuItemBean;
@@ -77,7 +76,7 @@ public class EaseChatMessageListLayout extends RelativeLayout implements IChatMe
      * 另一侧的环信id
      */
     private String username;
-    private boolean canUseRefresh;
+    private boolean canUseRefresh = true;
     private LoadMoreStatus loadMoreStatus;
     private OnMessageTouchListener messageTouchListener;
     private OnChatErrorListener errorListener;
@@ -228,14 +227,14 @@ public class EaseChatMessageListLayout extends RelativeLayout implements IChatMe
     }
 
     public void loadDefaultData() {
-        loadDefaultData(pageSize, null);
+        loadData(pageSize, null);
     }
 
-    public void loadDefaultData(String msgId) {
-        loadDefaultData(pageSize, msgId);
+    public void loadData(String msgId) {
+        loadData(pageSize, msgId);
     }
 
-    public void loadDefaultData(int pageSize, String msgId) {
+    public void loadData(int pageSize, String msgId) {
         this.pageSize = pageSize;
         this.msgId = msgId;
         checkConType();
@@ -473,6 +472,7 @@ public class EaseChatMessageListLayout extends RelativeLayout implements IChatMe
                             break;
                         case EasePopupWindowHelper.ACTION_DELETE :
                             Toast.makeText(getContext(), "点击了删除", Toast.LENGTH_SHORT).show();
+                            Log.e("TAG", "currentMsgId = "+message.getMsgId() + " timestamp = "+message.getMsgTime());
                             break;
                         case EasePopupWindowHelper.ACTION_RECALL :
                             Toast.makeText(getContext(), "点击了回撤", Toast.LENGTH_SHORT).show();
@@ -600,7 +600,6 @@ public class EaseChatMessageListLayout extends RelativeLayout implements IChatMe
 
     @Override
     public void loadLocalMsgSuccess(List<EMMessage> data) {
-        messageAdapter.setData(data);
         refreshToLatest();
     }
 
@@ -612,7 +611,8 @@ public class EaseChatMessageListLayout extends RelativeLayout implements IChatMe
     @Override
     public void loadMoreLocalMsgSuccess(List<EMMessage> data) {
         finishRefresh();
-        messageAdapter.addData(data);
+        presenter.refreshCurrentConversation();
+        seekToPosition(data.size() - 1);
     }
 
     @Override
@@ -624,7 +624,7 @@ public class EaseChatMessageListLayout extends RelativeLayout implements IChatMe
     public void loadMoreLocalHistoryMsgSuccess(List<EMMessage> data, EMConversation.EMSearchDirection direction) {
         if(direction == EMConversation.EMSearchDirection.UP) {
             finishRefresh();
-            messageAdapter.getData().addAll(0, data);
+            messageAdapter.addData(0, data);
         }else {
             messageAdapter.addData(data);
             if(data.size() >= pageSize) {
@@ -642,37 +642,45 @@ public class EaseChatMessageListLayout extends RelativeLayout implements IChatMe
 
     @Override
     public void loadServerMsgSuccess(List<EMMessage> data) {
-        messageAdapter.setData(data);
-        refreshToLatest();
+        presenter.refreshToLatest();
     }
 
     @Override
     public void loadMoreServerMsgSuccess(List<EMMessage> data) {
         finishRefresh();
-        messageAdapter.addData(data);
+        presenter.refreshCurrentConversation();
+        seekToPosition(data.size() - 1);
+    }
+
+    @Override
+    public void refreshCurrentConSuccess(List<EMMessage> data, boolean toLatest) {
+        messageAdapter.setData(data);
+        if(toLatest) {
+            seekToPosition(messageAdapter.getData().size() - 1);
+        }
     }
 
     @Override
     public void canUseDefaultRefresh(boolean canUseRefresh) {
+        this.canUseRefresh = canUseRefresh;
         srlRefresh.setEnabled(canUseRefresh);
     }
 
     @Override
     public void refreshMessages() {
-        messageAdapter.notifyDataSetChanged();
+        presenter.refreshCurrentConversation();
     }
 
     @Override
     public void refreshToLatest() {
-        messageAdapter.notifyDataSetChanged();
-        seekToPosition(messageAdapter.getData().size() - 1);
+        presenter.refreshToLatest();
     }
 
     @Override
     public void refreshMessage(EMMessage message) {
         int position = messageAdapter.getData().lastIndexOf(message);
         if(position != -1) {
-            messageAdapter.notifyItemChanged(position);
+            runOnUi(()-> messageAdapter.notifyItemChanged(position));
         }
     }
 
@@ -849,7 +857,7 @@ public class EaseChatMessageListLayout extends RelativeLayout implements IChatMe
             position = 0;
         }
         int finalPosition = position;
-        rvList.post(()-> {
+        post(()-> {
             setMoveAnimation(layoutManager, finalPosition);
         });
     }
@@ -863,7 +871,7 @@ public class EaseChatMessageListLayout extends RelativeLayout implements IChatMe
                 ((LinearLayoutManager)manager).scrollToPositionWithOffset(position, value);
             }
         });
-        animator.setDuration(500);
+        animator.setDuration(200);
         animator.start();
     }
 

@@ -119,8 +119,7 @@ public class EaseChatPrimaryMenu extends RelativeLayout implements IChatPrimaryM
         buttonSetModeKeyboard.setVisibility(GONE);
         edittext_layout.setVisibility(VISIBLE);
         buttonPressToSpeak.setVisibility(GONE);
-        buttonMore.setChecked(false);
-        showNormalFaceImage();
+        hideExtendStatus();
         checkSendButton();
         checkMenuType();
     }
@@ -131,8 +130,7 @@ public class EaseChatPrimaryMenu extends RelativeLayout implements IChatPrimaryM
         buttonSetModeKeyboard.setVisibility(GONE);
         edittext_layout.setVisibility(VISIBLE);
         buttonPressToSpeak.setVisibility(GONE);
-        buttonMore.setChecked(false);
-        showNormalFaceImage();
+        hideExtendStatus();
         showSoftKeyboard(editText);
         checkSendButton();
         checkMenuType();
@@ -148,8 +146,7 @@ public class EaseChatPrimaryMenu extends RelativeLayout implements IChatPrimaryM
         buttonSetModeKeyboard.setVisibility(VISIBLE);
         edittext_layout.setVisibility(GONE);
         buttonPressToSpeak.setVisibility(VISIBLE);
-        buttonMore.setChecked(false);
-        showNormalFaceImage();
+        hideExtendStatus();
         checkMenuType();
         if(listener != null) {
             listener.onToggleVoiceBtnClicked();
@@ -192,6 +189,12 @@ public class EaseChatPrimaryMenu extends RelativeLayout implements IChatPrimaryM
         if(listener != null) {
             listener.onToggleExtendClicked(buttonMore.isChecked());
         }
+    }
+
+    @Override
+    public void hideExtendStatus() {
+        buttonMore.setChecked(false);
+        showNormalFaceImage();
     }
 
     @Override
@@ -242,9 +245,6 @@ public class EaseChatPrimaryMenu extends RelativeLayout implements IChatPrimaryM
             showMoreStatus();
         }else if (id == R.id.et_sendmessage) {//切换到文本模式
             showTextStatus();
-            if(listener != null) {
-                listener.onEditTextClicked();
-            }
         }else if (id == R.id.rl_face) {//切换到表情模式
             showEmojiconStatus();
         }
@@ -317,7 +317,12 @@ public class EaseChatPrimaryMenu extends RelativeLayout implements IChatPrimaryM
     /**
      * hide soft keyboard
      */
-    private void hideSoftKeyboard() {
+    @Override
+    public void hideSoftKeyboard() {
+        if(editText == null) {
+            return;
+        }
+        editText.requestFocus();
         if (activity.getWindow().getAttributes().softInputMode != WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN) {
             if (activity.getCurrentFocus() != null)
                 inputManager.hideSoftInputFromWindow(activity.getCurrentFocus().getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
