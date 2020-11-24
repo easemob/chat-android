@@ -4,15 +4,19 @@ import android.net.Uri;
 
 import androidx.annotation.NonNull;
 
+import com.hyphenate.chat.EMClient;
+import com.hyphenate.chat.EMConversation;
 import com.hyphenate.chat.EMMessage;
 import com.hyphenate.easeui.constants.EaseConstant;
 import com.hyphenate.easeui.modules.EaseBasePresenter;
 import com.hyphenate.easeui.modules.ILoadDataView;
+import com.hyphenate.easeui.utils.EaseCommonUtils;
 
 public abstract class EaseHandleMessagePresenter extends EaseBasePresenter {
     protected IHandleMessageView mView;
     protected int chatType;
     protected String toChatUsername;
+    protected EMConversation conversation;
 
     @Override
     public void attachView(ILoadDataView view) {
@@ -38,6 +42,7 @@ public abstract class EaseHandleMessagePresenter extends EaseBasePresenter {
     public void setupWithToUser(int chatType, @NonNull String toChatUsername) {
         this.chatType = chatType;
         this.toChatUsername = toChatUsername;
+        conversation = EMClient.getInstance().chatManager().getConversation(toChatUsername, EaseCommonUtils.getConversationType(chatType), true);
     }
 
     /**
@@ -130,6 +135,18 @@ public abstract class EaseHandleMessagePresenter extends EaseBasePresenter {
      * @param action
      */
     public abstract void sendCmdMessage(String action);
+
+    /**
+     * 删除消息
+     * @param message
+     */
+    public abstract void deleteMessage(EMMessage message);
+
+    /**
+     * 撤回消息
+     * @param message
+     */
+    public abstract void recallMessage(EMMessage message);
 
     /**
      * 是否是群聊

@@ -64,6 +64,9 @@
     <string name="all_members">所有成员</string>
     <string name="not_connect_to_server">尚未连接至服务器，请稍后重试</string>
 
+    <string name="msg_recall_by_self">您撤回了一条消息</string>
+    <string name="msg_recall_by_user">%1$s 撤回了一条消息</string>
+
     <string name="Video_footage">拍摄录像</string>
     <string name="recording_video">录制视频</string>
     <string name="The_video_to_start">录像开始</string>
@@ -123,6 +126,7 @@
     <string name="ease_search_text_hint">搜索</string>
 
     <string name="ease_list_no_data_text">暂无数据</string>
+    <string name="ease_list_no_conversation_data_text">暂无聊天数据</string>
 
     <string name="ease_map_title">位置信息</string>
 

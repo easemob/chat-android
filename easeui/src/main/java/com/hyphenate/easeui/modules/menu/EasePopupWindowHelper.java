@@ -21,21 +21,20 @@ import com.hyphenate.easeui.interfaces.OnItemClickListener;
 import com.hyphenate.easeui.utils.EaseCommonUtils;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
 public class EasePopupWindowHelper {
-    public static final int ACTION_COPY = 11;
-    public static final int ACTION_FORWARD = 12;
-    public static final int ACTION_DELETE = 13;
-    public static final int ACTION_RECALL = 14;
-    public static final int ACTION_MULTI_SELECT = 15;
-    private static final int[] itemIds = {ACTION_COPY, ACTION_FORWARD, ACTION_DELETE, ACTION_RECALL};
-    private static final int[] titles = {R.string.action_copy, R.string.action_forward, R.string.action_delete, R.string.action_recall, R.string.action_multi_select};
-    private static final int[] icons = {R.drawable.ease_delete_expression, R.drawable.ease_delete_expression, R.drawable.ease_delete_expression
-                                        , R.drawable.ease_delete_expression, R.drawable.ease_delete_expression};
+    public static final int ACTION_COPY = 10;
+    public static final int ACTION_DELETE = 11;
+    public static final int ACTION_RECALL = 12;
+    private static final int[] itemIds = {ACTION_COPY, ACTION_DELETE, ACTION_RECALL};
+    private static final int[] titles = {R.string.action_copy, R.string.action_delete, R.string.action_recall};
+    private static final int[] icons = {R.drawable.ease_chat_item_menu_copy, R.drawable.ease_chat_item_menu_delete, R.drawable.ease_chat_item_menu_recall};
     private static final int SPAN_COUNT = 5;
     private EasePopupWindow pMenu;
     private List<MenuItemBean> menuItems = new ArrayList<>();
@@ -89,7 +88,7 @@ public class EasePopupWindowHelper {
     public void setDefaultMenus() {
         MenuItemBean bean;
         for(int i = 0; i < itemIds.length; i++) {
-            bean = new MenuItemBean(0, itemIds[i], i, context.getString(titles[i]));
+            bean = new MenuItemBean(0, itemIds[i], (i+1)*10, context.getString(titles[i]));
             bean.setResourceId(icons[i]);
             addItemMenu(bean);
         }
@@ -131,7 +130,25 @@ public class EasePopupWindowHelper {
         pMenu.setOutsideTouchable(touchable);
         pMenu.setBackgroundDrawable(background);
         checkIfShowItems();
+        sortList(menuItems);
         adapter.setData(menuItems);
+    }
+
+    private void sortList(List<MenuItemBean> menuItems) {
+        Collections.sort(menuItems, new Comparator<MenuItemBean>() {
+            @Override
+            public int compare(MenuItemBean o1, MenuItemBean o2) {
+                int order1 = o1.getOrder();
+                int order2 = o2.getOrder();
+                if(order2 < order1) {
+                    return 1;
+                }else if(order1 == order2) {
+                    return 0;
+                }else {
+                    return -1;
+                }
+            }
+        });
     }
 
     private void checkIfShowItems() {
@@ -163,21 +180,23 @@ public class EasePopupWindowHelper {
         }else {
             rvMenuList.setLayoutManager(new GridLayoutManager(context, SPAN_COUNT, RecyclerView.VERTICAL, false));
         }
-
-
         getView().measure(View.MeasureSpec.UNSPECIFIED, View.MeasureSpec.UNSPECIFIED);
         int popupWidth = getView().getMeasuredWidth();    //  获取测量后的宽度
         int popupHeight = getView().getMeasuredHeight();  //获取测量后的高度
 
+        //获取依附view的坐标
         int[] location = new int[2];
         v.getLocationOnScreen(location);
 
-        int[] location2 = new int[2];
-        parent.getLocationOnScreen(location2);
+        //设定与依附view之间的间距
         int margin = (int) EaseCommonUtils.dip2px(context, 5);
 
+        //获取StatusBar的高度
+        int resourceId = context.getResources().getIdentifier("status_bar_height", "dimen", "android");
+        int statusBarHeight = context.getResources().getDimensionPixelSize(resourceId);
+
         int yOffset = 0;
-        if(location[1] - popupHeight - margin < location2[1]) {
+        if(location[1] - popupHeight - margin < statusBarHeight + margin * 2) {
             yOffset = location[1] + v.getHeight() + margin;
         }else {
             yOffset = location[1] - popupHeight - margin;
@@ -188,6 +207,10 @@ public class EasePopupWindowHelper {
             xOffset = (int) (parent.getWidth() - EaseCommonUtils.dip2px(context, 10) - popupWidth);
         }else {
             xOffset = location[0] + v.getWidth() / 2 - popupWidth / 2;
+        }
+        //增加对左侧的判断
+        if(xOffset < EaseCommonUtils.dip2px(context, 10)) {
+            xOffset = (int) EaseCommonUtils.dip2px(context, 10);
         }
         pMenu.showAtLocation(v, Gravity.NO_GRAVITY, xOffset, yOffset);
     }

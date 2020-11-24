@@ -455,9 +455,9 @@ public abstract class EaseChatRow extends LinearLayout {
                 @Override
                 public boolean onLongClick(View v) {
                     if (itemClickListener != null) {
-                        itemClickListener.onBubbleLongClick(v, message);
+                        return itemClickListener.onBubbleLongClick(v, message);
                     }
-                    return true;
+                    return false;
                 }
             });
         }

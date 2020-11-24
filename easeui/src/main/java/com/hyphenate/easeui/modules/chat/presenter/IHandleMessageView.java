@@ -33,4 +33,23 @@ public interface IHandleMessageView extends ILoadDataView {
      * @param message
      */
     void sendForwardMsgFinish(EMMessage message);
+
+    /**
+     * 删除本地消息
+     * @param message
+     */
+    void deleteLocalMessageSuccess(EMMessage message);
+
+    /**
+     * 完成撤回消息
+     * @param message
+     */
+    void recallMessageFinish(EMMessage message);
+
+    /**
+     * 撤回消息失败
+     * @param code
+     * @param message
+     */
+    void recallMessageFail(int code, String message);
 }

@@ -20,6 +20,12 @@ public interface IChatLayout {
     EaseChatInputMenu getChatInputMenu();
 
     /**
+     * 获取输入框内容
+     * @return
+     */
+    String getInputContent();
+
+    /**
      * 是否打开正在输入监控
      * @param turnOn
      */
@@ -122,4 +128,5 @@ public interface IChatLayout {
      * @param listener
      */
     void setOnChatLayoutListener(OnChatLayoutListener listener);
+
 }

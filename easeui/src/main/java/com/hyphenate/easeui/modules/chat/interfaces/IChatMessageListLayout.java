@@ -9,11 +9,6 @@ import com.hyphenate.easeui.modules.chat.presenter.EaseChatMessagePresenter;
 import com.hyphenate.easeui.modules.interfaces.IRecyclerView;
 
 public interface IChatMessageListLayout extends IRecyclerView {
-    /**
-     * 是否展示默认的条目菜单
-     * @param showDefault
-     */
-    void showItemDefaultMenu(boolean showDefault);
 
     /**
      * 设置背景

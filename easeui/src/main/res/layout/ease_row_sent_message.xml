@@ -43,7 +43,7 @@
                 android:gravity="center|left"
                 android:lineSpacingExtra="2dp"
                 android:maxWidth="225.0dip"
-                android:minHeight="38dp"
+                android:minHeight="22dp"
                 android:textColor="#000000"
                 tools:text="环信"
                 android:textSize="15sp" />

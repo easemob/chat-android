@@ -10,7 +10,7 @@
         android:id="@+id/iv_action_icon"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:src="@drawable/ease_delete_expression"/>
+        android:src="@drawable/ease_chat_item_menu_copy"/>
 
     <TextView
         android:id="@+id/tv_action_name"
@@ -18,7 +18,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="5dp"
         tools:text="复制"
-        android:textColor="@color/white"
+        android:textColor="@color/black"
         android:textSize="12sp"/>
 
 </LinearLayout>

@@ -34,7 +34,7 @@ public class EaseContactListAdapter extends EaseBaseRecyclerViewAdapter<EaseUser
         if(emptyLayoutResource != 0) {
             return emptyLayoutResource;
         }
-        return super.getEmptyLayoutId();
+        return R.layout.ease_layout_no_data_show_nothing;
     }
 
     public void setSettingModel(EaseContactSetStyle settingModel) {

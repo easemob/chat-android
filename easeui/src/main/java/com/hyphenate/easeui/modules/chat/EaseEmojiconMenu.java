@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.res.TypedArray;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
+import android.view.View;
 import android.widget.LinearLayout;
 
 import androidx.annotation.Nullable;
@@ -83,6 +84,48 @@ public class EaseEmojiconMenu extends LinearLayout implements IChatEmojiconMenu 
                 pagerView.setGroupPostion(position);
             }
         });
+    }
+
+    /**
+     * add emojicon group
+     * @param groupEntity
+     */
+    public void addEmojiconGroup(EaseEmojiconGroupEntity groupEntity){
+        emojiconGroupList.add(groupEntity);
+        pagerView.addEmojiconGroup(groupEntity, true);
+        tabBar.addTab(groupEntity.getIcon());
+    }
+
+    /**
+     * add emojicon group list
+     * @param groupEntitieList
+     */
+    public void addEmojiconGroup(List<EaseEmojiconGroupEntity> groupEntitieList){
+        for(int i= 0; i < groupEntitieList.size(); i++){
+            EaseEmojiconGroupEntity groupEntity = groupEntitieList.get(i);
+            emojiconGroupList.add(groupEntity);
+            pagerView.addEmojiconGroup(groupEntity, i == groupEntitieList.size()-1 ? true : false);
+            tabBar.addTab(groupEntity.getIcon());
+        }
+
+    }
+
+    /**
+     * remove emojicon group
+     * @param position
+     */
+    public void removeEmojiconGroup(int position){
+        emojiconGroupList.remove(position);
+        pagerView.removeEmojiconGroup(position);
+        tabBar.removeTab(position);
+    }
+
+    public void setTabBarVisibility(boolean isVisible){
+        if(!isVisible){
+            tabBar.setVisibility(View.GONE);
+        }else{
+            tabBar.setVisibility(View.VISIBLE);
+        }
     }
 
     @Override

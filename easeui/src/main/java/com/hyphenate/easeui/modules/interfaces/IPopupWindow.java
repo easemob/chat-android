@@ -1,15 +1,26 @@
 package com.hyphenate.easeui.modules.interfaces;
 
-import com.hyphenate.easeui.modules.menu.EasePopupMenuHelper;
-import com.hyphenate.easeui.modules.menu.EasePopupWindow;
+import com.hyphenate.easeui.modules.chat.interfaces.OnMenuChangeListener;
 import com.hyphenate.easeui.modules.menu.EasePopupWindowHelper;
 import com.hyphenate.easeui.modules.menu.MenuItemBean;
 
 public interface IPopupWindow {
     /**
+     * 是否展示默认的条目菜单
+     * @param showDefault
+     */
+    void showItemDefaultMenu(boolean showDefault);
+
+    /**
      * 清除所有菜单项
      */
     void clearMenu();
+
+    /**
+     * 添加菜单项
+     * @param item
+     */
+    void addItemMenu(MenuItemBean item);
 
     /**
      * 添加菜单项
@@ -39,13 +50,7 @@ public interface IPopupWindow {
      * 设置菜单条目监听
      * @param listener
      */
-    void setOnPopupWindowItemClickListener(EasePopupWindow.OnPopupWindowItemClickListener listener);
-
-    /**
-     * 监听菜单dismiss事件
-     * @param listener
-     */
-    void setOnPopupWindowDismissListener(EasePopupWindow.OnPopupWindowDismissListener listener);
+    void setOnPopupWindowItemClickListener(OnMenuChangeListener listener);
 
     /**
      * 返回菜单帮助类

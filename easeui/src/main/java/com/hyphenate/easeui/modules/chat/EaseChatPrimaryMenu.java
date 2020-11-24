@@ -15,6 +15,7 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -27,8 +28,8 @@ public class EaseChatPrimaryMenu extends RelativeLayout implements IChatPrimaryM
     private LinearLayout rlBottom;
     private ImageView buttonSetModeVoice;
     private ImageView buttonSetModeKeyboard;
-    private LinearLayout buttonPressToSpeak;
-    private RelativeLayout edittext_layout;
+    private FrameLayout buttonPressToSpeak;
+    private FrameLayout edittext_layout;
     private EaseInputEditText editText;
     private RelativeLayout faceLayout;
     private ImageView faceNormal;

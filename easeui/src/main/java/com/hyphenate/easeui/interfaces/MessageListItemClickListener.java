@@ -28,7 +28,7 @@ public interface MessageListItemClickListener{
 	 * @param v
 	 * @param message
 	 */
-	void onBubbleLongClick(View v, EMMessage message);
+	boolean onBubbleLongClick(View v, EMMessage message);
 
 	/**
 	 * click the user avatar

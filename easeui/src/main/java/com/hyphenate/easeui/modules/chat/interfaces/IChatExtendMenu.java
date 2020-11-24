@@ -2,6 +2,11 @@ package com.hyphenate.easeui.modules.chat.interfaces;
 
 public interface IChatExtendMenu {
     /**
+     * 清理扩展功能
+     */
+    void clear();
+
+    /**
      * 添加新的扩展功能
      * @param name
      * @param drawableRes

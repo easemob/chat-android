@@ -396,8 +396,8 @@ public class EaseChatFragment extends EaseBaseFragment implements View.OnClickLi
      * @param message
      */
     @Override
-    public void onBubbleLongClick(View v, EMMessage message) {
-
+    public boolean onBubbleLongClick(View v, EMMessage message) {
+        return false;
     }
 
     /**

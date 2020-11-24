@@ -21,6 +21,11 @@ public interface IChatInputMenu {
     void setCustomExtendMenu(IChatExtendMenu menu);
 
     /**
+     * 隐藏扩展区域（包含表情和扩展菜单）
+     */
+    void hideExtendContainer();
+
+    /**
      * 是否展示表情菜单
      * @param show
      */

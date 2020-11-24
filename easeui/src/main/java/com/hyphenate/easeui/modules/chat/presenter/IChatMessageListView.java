@@ -9,6 +9,11 @@ import java.util.List;
 
 public interface IChatMessageListView extends ILoadDataView {
     /**
+     * 获取当前会话
+     * @return
+     */
+    EMConversation getCurrentConversation();
+    /**
      * 加入聊天室成功
      * @param value
      */

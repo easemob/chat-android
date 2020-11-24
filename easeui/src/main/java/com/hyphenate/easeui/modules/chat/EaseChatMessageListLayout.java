@@ -50,8 +50,9 @@ import java.util.List;
 
 
 public class EaseChatMessageListLayout extends RelativeLayout implements IChatMessageListView, IRecyclerViewHandle
-                                                                        , IChatMessageItemSet, IChatMessageListLayout, IPopupWindow {
+                                                                        , IChatMessageItemSet, IChatMessageListLayout {
     private static final int DEFAULT_PAGE_SIZE = 10;
+    private static final String TAG = EaseChatMessageListLayout.class.getSimpleName();
     private EaseChatMessagePresenter presenter;
     private EaseMessageAdapter messageAdapter;
     private ConcatAdapter baseAdapter;
@@ -89,10 +90,6 @@ public class EaseChatMessageListLayout extends RelativeLayout implements IChatMe
      */
     private MessageListItemClickListener messageListItemClickListener;
     private EaseChatItemStyleHelper chatSetHelper;
-    private EasePopupWindowHelper menuHelper;
-    private boolean showDefaultMenu = true;
-    private EasePopupWindow.OnPopupWindowItemClickListener pwItemClickListener;
-    private EasePopupWindow.OnPopupWindowDismissListener pwDismissListener;
 
     public EaseChatMessageListLayout(@NonNull Context context) {
         this(context, null);
@@ -180,8 +177,6 @@ public class EaseChatMessageListLayout extends RelativeLayout implements IChatMe
 
         rvList = findViewById(R.id.message_list);
         srlRefresh = findViewById(R.id.srl_refresh);
-
-        menuHelper = new EasePopupWindowHelper();
 
         srlRefresh.setEnabled(canUseRefresh);
 
@@ -315,11 +310,11 @@ public class EaseChatMessageListLayout extends RelativeLayout implements IChatMe
         return message == null ? null : message.getMsgId();
     }
 
-    private boolean isChatRoomCon() {
+    public boolean isChatRoomCon() {
         return conType == EMConversation.EMConversationType.ChatRoom;
     }
 
-    private boolean isGroupChat() {
+    public boolean isGroupChat() {
         return conType == EMConversation.EMConversationType.GroupChat;
     }
 
@@ -366,9 +361,8 @@ public class EaseChatMessageListLayout extends RelativeLayout implements IChatMe
                 }
                 if(recyclerViewLastHeight != height) {
                     //RecyclerView高度发生变化，刷新页面
-
                     if(messageAdapter.getData() != null && !messageAdapter.getData().isEmpty()) {
-                        seekToPosition(messageAdapter.getData().size() - 1);
+                        smoothSeekToPosition(messageAdapter.getData().size() - 1);
                     }
                 }
                 recyclerViewLastHeight = height;
@@ -401,13 +395,11 @@ public class EaseChatMessageListLayout extends RelativeLayout implements IChatMe
             }
 
             @Override
-            public void onBubbleLongClick(View v, EMMessage message) {
-                if(showDefaultMenu) {
-                    showDefaultMenu(v, message);
-                }
+            public boolean onBubbleLongClick(View v, EMMessage message) {
                 if(messageListItemClickListener != null) {
-                    messageListItemClickListener.onBubbleLongClick(v, message);
+                    return messageListItemClickListener.onBubbleLongClick(v, message);
                 }
+                return false;
             }
 
             @Override
@@ -454,88 +446,6 @@ public class EaseChatMessageListLayout extends RelativeLayout implements IChatMe
         });
     }
 
-    private void showDefaultMenu(View v, EMMessage message) {
-        menuHelper.initMenu(getContext());
-        menuHelper.setDefaultMenus();
-        menuHelper.setOutsideTouchable(true);
-        setMenuByMsgType(message);
-        menuHelper.setOnPopupMenuItemClickListener(new EasePopupWindow.OnPopupWindowItemClickListener() {
-            @Override
-            public void onMenuItemClick(MenuItemBean item) {
-                if(showDefaultMenu) {
-                    switch (item.getItemId()) {
-                        case EasePopupWindowHelper.ACTION_COPY :
-                            Toast.makeText(getContext(), "点击了复制", Toast.LENGTH_SHORT).show();
-                            break;
-                        case EasePopupWindowHelper.ACTION_FORWARD :
-                            Toast.makeText(getContext(), "点击了转发", Toast.LENGTH_SHORT).show();
-                            break;
-                        case EasePopupWindowHelper.ACTION_DELETE :
-                            Toast.makeText(getContext(), "点击了删除", Toast.LENGTH_SHORT).show();
-                            Log.e("TAG", "currentMsgId = "+message.getMsgId() + " timestamp = "+message.getMsgTime());
-                            break;
-                        case EasePopupWindowHelper.ACTION_RECALL :
-                            Toast.makeText(getContext(), "点击了回撤", Toast.LENGTH_SHORT).show();
-                            break;
-                        case EasePopupWindowHelper.ACTION_MULTI_SELECT :
-                            Toast.makeText(getContext(), "点击了多选", Toast.LENGTH_SHORT).show();
-                            break;
-                    }
-                }
-                if(pwItemClickListener != null) {
-                    pwItemClickListener.onMenuItemClick(item);
-                }
-            }
-        });
-        menuHelper.setOnPopupMenuDismissListener(new EasePopupWindow.OnPopupWindowDismissListener() {
-            @Override
-            public void onDismiss(PopupWindow menu) {
-                if(pwDismissListener != null) {
-                    pwDismissListener.onDismiss(menu);
-                }
-            }
-        });
-        menuHelper.show(this, v);
-    }
-
-    private void setMenuByMsgType(EMMessage message) {
-        EMMessage.Type type = message.getType();
-        menuHelper.findItemVisible(EasePopupWindowHelper.ACTION_COPY, false);
-        menuHelper.findItemVisible(EasePopupWindowHelper.ACTION_FORWARD, false);
-        menuHelper.findItemVisible(EasePopupWindowHelper.ACTION_RECALL, false);
-        switch (type) {
-            case TXT:
-                menuHelper.findItemVisible(EasePopupWindowHelper.ACTION_COPY, true);
-                menuHelper.findItemVisible(EasePopupWindowHelper.ACTION_FORWARD, true);
-                menuHelper.findItemVisible(EasePopupWindowHelper.ACTION_RECALL, true);
-                break;
-            case LOCATION:
-            case FILE:
-                menuHelper.findItemVisible(EasePopupWindowHelper.ACTION_RECALL, true);
-                break;
-            case IMAGE:
-                menuHelper.findItemVisible(EasePopupWindowHelper.ACTION_FORWARD, true);
-                menuHelper.findItemVisible(EasePopupWindowHelper.ACTION_RECALL, true);
-                break;
-            case VOICE:
-                menuHelper.findItem(EasePopupWindowHelper.ACTION_DELETE).setTitle(getContext().getString(R.string.delete_voice));
-                menuHelper.findItemVisible(EasePopupWindowHelper.ACTION_RECALL, true);
-                break;
-            case VIDEO:
-                menuHelper.findItem(EasePopupWindowHelper.ACTION_DELETE).setTitle(getContext().getString(R.string.delete_video));
-                menuHelper.findItemVisible(EasePopupWindowHelper.ACTION_RECALL, true);
-                break;
-        }
-
-        if(isChatRoomCon()) {
-            menuHelper.findItemVisible(EasePopupWindowHelper.ACTION_FORWARD, false);
-        }
-
-        if(message.direct() == EMMessage.Direct.RECEIVE ){
-            menuHelper.findItemVisible(EasePopupWindowHelper.ACTION_RECALL, false);
-        }
-    }
-
     /**
      * 停止下拉动画
      */
@@ -572,6 +482,11 @@ public class EaseChatMessageListLayout extends RelativeLayout implements IChatMe
     @Override
     public Context context() {
         return getContext();
+    }
+
+    @Override
+    public EMConversation getCurrentConversation() {
+        return conversation;
     }
 
     @Override
@@ -612,7 +527,7 @@ public class EaseChatMessageListLayout extends RelativeLayout implements IChatMe
     public void loadMoreLocalMsgSuccess(List<EMMessage> data) {
         finishRefresh();
         presenter.refreshCurrentConversation();
-        seekToPosition(data.size() - 1);
+        smoothSeekToPosition(data.size() - 1);
     }
 
     @Override
@@ -649,15 +564,17 @@ public class EaseChatMessageListLayout extends RelativeLayout implements IChatMe
     public void loadMoreServerMsgSuccess(List<EMMessage> data) {
         finishRefresh();
         presenter.refreshCurrentConversation();
-        seekToPosition(data.size() - 1);
+        smoothSeekToPosition(data.size() - 1);
     }
 
     @Override
     public void refreshCurrentConSuccess(List<EMMessage> data, boolean toLatest) {
-        messageAdapter.setData(data);
-        if(toLatest) {
-            seekToPosition(messageAdapter.getData().size() - 1);
-        }
+        post(()-> {
+            messageAdapter.setData(data);
+            if(toLatest) {
+                seekToPosition(data.size() - 1);
+            }
+        });
     }
 
     @Override
@@ -856,10 +773,30 @@ public class EaseChatMessageListLayout extends RelativeLayout implements IChatMe
         if(position < 0) {
             position = 0;
         }
+        RecyclerView.LayoutManager manager = rvList.getLayoutManager();
+        if(manager instanceof LinearLayoutManager) {
+            ((LinearLayoutManager) manager).scrollToPositionWithOffset(position, 0);
+            boolean visibleBottom = isVisibleBottom(rvList);
+            Log.e("TAG", "visibleBottom = "+visibleBottom);
+        }
+    }
+
+    /**
+     * 移动到指定位置
+     * @param position
+     */
+    private void smoothSeekToPosition(int position) {
+        if(presenter.isDestroy() || rvList == null) {
+            return;
+        }
+        if(position < 0) {
+            position = 0;
+        }
         int finalPosition = position;
-        post(()-> {
-            setMoveAnimation(layoutManager, finalPosition);
-        });
+        RecyclerView.LayoutManager manager = rvList.getLayoutManager();
+        if(manager instanceof LinearLayoutManager) {
+           setMoveAnimation(manager, finalPosition);
+        }
     }
 
     private void setMoveAnimation(RecyclerView.LayoutManager manager, int position) {
@@ -871,13 +808,8 @@ public class EaseChatMessageListLayout extends RelativeLayout implements IChatMe
                 ((LinearLayoutManager)manager).scrollToPositionWithOffset(position, value);
             }
         });
-        animator.setDuration(200);
+        animator.setDuration(500);
         animator.start();
-    }
-
-    @Override
-    public void showItemDefaultMenu(boolean showDefault) {
-        this.showDefaultMenu = showDefault;
     }
 
     @Override
@@ -910,43 +842,30 @@ public class EaseChatMessageListLayout extends RelativeLayout implements IChatMe
         this.messageListItemClickListener = listener;
     }
 
+    /**
+     * 是否滑动到底部
+     * @param recyclerView
+     * @return
+     */
+    public static boolean isVisibleBottom(RecyclerView recyclerView) {
+        LinearLayoutManager layoutManager = (LinearLayoutManager) recyclerView.getLayoutManager();
+        //屏幕中最后一个可见子项的position
+        int lastVisibleItemPosition = layoutManager.findLastVisibleItemPosition();
+        //当前屏幕所看到的子项个数
+        int visibleItemCount = layoutManager.getChildCount();
+        //当前RecyclerView的所有子项个数
+        int totalItemCount = layoutManager.getItemCount();
+        //RecyclerView的滑动状态
+        int state = recyclerView.getScrollState();
+        if(visibleItemCount > 0 && lastVisibleItemPosition == totalItemCount - 1 && state == recyclerView.SCROLL_STATE_IDLE){
+            return true;
+        } else {
+            return false;
+        }
+    }
+
     public void runOnUi(Runnable runnable) {
         EaseThreadManager.getInstance().runOnMainThread(runnable);
-    }
-
-    @Override
-    public void clearMenu() {
-        menuHelper.clear();
-    }
-
-    @Override
-    public void addItemMenu(int groupId, int itemId, int order, String title) {
-        menuHelper.addItemMenu(groupId, itemId, order, title);
-    }
-
-    @Override
-    public MenuItemBean findItem(int id) {
-        return menuHelper.findItem(id);
-    }
-
-    @Override
-    public void findItemVisible(int id, boolean visible) {
-        menuHelper.findItemVisible(id, visible);
-    }
-
-    @Override
-    public void setOnPopupWindowItemClickListener(EasePopupWindow.OnPopupWindowItemClickListener listener) {
-        this.pwItemClickListener = listener;
-    }
-
-    @Override
-    public void setOnPopupWindowDismissListener(EasePopupWindow.OnPopupWindowDismissListener listener) {
-        this.pwDismissListener = listener;
-    }
-
-    @Override
-    public EasePopupWindowHelper getMenuHelper() {
-        return menuHelper;
     }
 
     /**

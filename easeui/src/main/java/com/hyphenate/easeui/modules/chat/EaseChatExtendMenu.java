@@ -87,7 +87,6 @@ public class EaseChatExtendMenu extends FrameLayout implements PagingScrollHelpe
         rvIndicator = findViewById(R.id.rv_indicator);
     }
 
-
     /**
      * init
      */
@@ -136,6 +135,7 @@ public class EaseChatExtendMenu extends FrameLayout implements PagingScrollHelpe
     /**
      * 清空数据
      */
+    @Override
     public void clear() {
         itemModels.clear();
         adapter.notifyDataSetChanged();

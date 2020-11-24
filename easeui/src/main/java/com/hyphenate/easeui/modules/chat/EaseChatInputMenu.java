@@ -64,6 +64,14 @@ public class EaseChatInputMenu extends LinearLayout implements IChatInputMenu, E
 
     private void init() {
         showPrimaryMenu();
+        if(extendMenu == null) {
+            extendMenu = new EaseChatExtendMenu(getContext());
+            ((EaseChatExtendMenu)extendMenu).init();
+        }
+        if(emojiconMenu == null) {
+            emojiconMenu = new EaseEmojiconMenu(getContext());
+            ((EaseEmojiconMenu)emojiconMenu).init();
+        }
     }
 
     @Override
@@ -80,6 +88,12 @@ public class EaseChatInputMenu extends LinearLayout implements IChatInputMenu, E
     @Override
     public void setCustomExtendMenu(IChatExtendMenu menu) {
         this.extendMenu = menu;
+    }
+
+    @Override
+    public void hideExtendContainer() {
+        primaryMenu.showNormalStatus();
+        extendMenuContainer.setVisibility(GONE);
     }
 
     @Override

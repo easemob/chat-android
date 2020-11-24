@@ -19,6 +19,7 @@ import com.hyphenate.easeui.constants.EaseConstant;
 import com.hyphenate.easeui.manager.EaseAtMessageHelper;
 import com.hyphenate.easeui.modules.chat.EaseChatLayout;
 import com.hyphenate.easeui.utils.EaseCommonUtils;
+import com.hyphenate.exceptions.HyphenateException;
 import com.hyphenate.util.EMLog;
 import com.hyphenate.util.PathUtil;
 import com.hyphenate.util.UriUtils;
@@ -185,6 +186,38 @@ public class EaseHandleMessagePresenterImpl extends EaseHandleMessagePresenter {
         beginMsg.addBody(body);
         beginMsg.setTo(toChatUsername);
         EMClient.getInstance().chatManager().sendMessage(beginMsg);
+    }
+
+    @Override
+    public void deleteMessage(EMMessage message) {
+        conversation.removeMessage(message.getMsgId());
+        if(isActive()) {
+            runOnUI(()->mView.deleteLocalMessageSuccess(message));
+        }
+    }
+
+    @Override
+    public void recallMessage(EMMessage message) {
+        try {
+            EMMessage msgNotification = EMMessage.createSendMessage(EMMessage.Type.TXT);
+            EMTextMessageBody txtBody = new EMTextMessageBody(mView.context().getResources().getString(R.string.msg_recall_by_self));
+            msgNotification.addBody(txtBody);
+            msgNotification.setTo(message.getTo());
+            msgNotification.setMsgTime(message.getMsgTime());
+            msgNotification.setLocalTime(message.getMsgTime());
+            msgNotification.setAttribute(EaseConstant.MESSAGE_TYPE_RECALL, true);
+            msgNotification.setStatus(EMMessage.Status.SUCCESS);
+            EMClient.getInstance().chatManager().recallMessage(message);
+            EMClient.getInstance().chatManager().saveMessage(msgNotification);
+            if(isActive()) {
+                runOnUI(()->mView.recallMessageFinish(msgNotification));
+            }
+        } catch (HyphenateException e) {
+            e.printStackTrace();
+            if(isActive()) {
+                runOnUI(()->mView.recallMessageFail(e.getErrorCode(), e.getDescription()));
+            }
+        }
     }
 
     /**
