@@ -75,6 +75,12 @@ public interface IChatPrimaryMenu {
     void setMenuBackground(Drawable bg);
 
     /**
+     * 设置发送按钮背景
+     * @param bg
+     */
+    void setSendButtonBackground(Drawable bg);
+
+    /**
      * 设置监听
      * @param listener
      */

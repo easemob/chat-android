@@ -183,6 +183,10 @@ public class EaseChatLayout extends RelativeLayout implements IChatLayout, IHand
         messageListLayout.loadData(pageSize, msgId);
     }
 
+    public void loadData(String msgId) {
+        messageListLayout.loadData(msgId);
+    }
+
     private void initTypingHandler() {
         if(turnOnTyping) {
             typingHandler = new Handler() {
@@ -323,11 +327,6 @@ public class EaseChatLayout extends RelativeLayout implements IChatLayout, IHand
     }
 
     @Override
-    public void sendForwardMsg(String forwardMsgId) {
-        presenter.sendForwardMsg(forwardMsgId);
-    }
-
-    @Override
     public void addMessageAttributes(EMMessage message) {
         presenter.addMessageAttributes(message);
     }
@@ -377,10 +376,6 @@ public class EaseChatLayout extends RelativeLayout implements IChatLayout, IHand
 
     @Override
     public void onMessageReceived(List<EMMessage> messages) {
-        if(listener != null) {
-            EaseEvent event = EaseEvent.create(EaseConstant.MESSAGE_CHANGE_RECEIVE, EaseEvent.TYPE.MESSAGE);
-            listener.onMessageChange(event);
-        }
         boolean refresh = false;
         for (EMMessage message : messages) {
             String username = null;
@@ -436,10 +431,6 @@ public class EaseChatLayout extends RelativeLayout implements IChatLayout, IHand
 
     @Override
     public void onMessageRecalled(List<EMMessage> messages) {
-        if(listener != null) {
-            EaseEvent event = EaseEvent.create(EaseConstant.MESSAGE_CHANGE_RECALL, EaseEvent.TYPE.MESSAGE);
-            listener.onMessageChange(event);
-        }
         if(getChatMessageListLayout() != null) {
             getChatMessageListLayout().refreshMessages();
         }
@@ -447,9 +438,6 @@ public class EaseChatLayout extends RelativeLayout implements IChatLayout, IHand
 
     @Override
     public void onMessageChanged(EMMessage message, Object change) {
-        if(listener != null) {
-            listener.onMessageChange(EaseEvent.create(EaseConstant.MESSAGE_CHANGE_CHANGE, EaseEvent.TYPE.MESSAGE));
-        }
         refreshMessage(message);
     }
 
@@ -488,21 +476,6 @@ public class EaseChatLayout extends RelativeLayout implements IChatLayout, IHand
     public void sendMessageFinish(EMMessage message) {
         if(getChatMessageListLayout() != null) {
             getChatMessageListLayout().refreshToLatest();
-        }
-    }
-
-    @Override
-    public void sendForwardMsgFail(String message) {
-        if(listener != null) {
-            listener.onChatError(-1, message);
-        }
-    }
-
-    @Override
-    public void sendForwardMsgFinish(EMMessage message) {
-        if(listener != null) {
-            EaseEvent event = EaseEvent.create(EaseConstant.MESSAGE_FORWARD, EaseEvent.TYPE.MESSAGE, context().getString(R.string.has_been_send));
-            listener.onMessageChange(event);
         }
     }
 
@@ -601,18 +574,10 @@ public class EaseChatLayout extends RelativeLayout implements IChatLayout, IHand
     @Override
     public void onMessageSuccess(EMMessage message) {
         EMLog.i(TAG, "send message onMessageSuccess");
-        if(listener != null) {
-            EaseEvent event = EaseEvent.create(EaseConstant.MESSAGE_CHANGE_SEND_SUCCESS, EaseEvent.TYPE.MESSAGE);
-            listener.onMessageChange(event);
-        }
     }
 
     @Override
     public void onMessageError(EMMessage message, int code, String error) {
-        if(listener != null) {
-            EaseEvent event = EaseEvent.create(EaseConstant.MESSAGE_CHANGE_SEND_ERROR, EaseEvent.TYPE.MESSAGE);
-            listener.onMessageChange(event);
-        }
         if(listener != null) {
             listener.onChatError(code, error);
         }
@@ -621,10 +586,7 @@ public class EaseChatLayout extends RelativeLayout implements IChatLayout, IHand
     @Override
     public void onMessageInProgress(EMMessage message, int progress) {
         EMLog.i(TAG, "send message on progress");
-        if(listener != null) {
-            EaseEvent event = EaseEvent.create(EaseConstant.MESSAGE_CHANGE_SEND_PROGRESS, EaseEvent.TYPE.MESSAGE);
-            listener.onMessageChange(event);
-        }
+
     }
 
     @Override

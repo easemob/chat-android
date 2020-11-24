@@ -23,18 +23,6 @@ public interface IHandleMessageView extends ILoadDataView {
     void sendMessageFinish(EMMessage message);
 
     /**
-     * 转发消息失败
-     * @param message
-     */
-    void sendForwardMsgFail(String message);
-
-    /**
-     * 转发消息成功
-     * @param message
-     */
-    void sendForwardMsgFinish(EMMessage message);
-
-    /**
      * 删除本地消息
      * @param message
      */

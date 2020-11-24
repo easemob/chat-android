@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -41,6 +42,8 @@ public class EaseChatFragment extends EaseBaseFragment implements OnChatLayoutLi
     public EaseChatLayout chatLayout;
     public String toChatUsername;
     public int chatType;
+    public String historyMsgId;
+    public boolean isRoam;
     private OnChatLayoutListener listener;
 
     protected File cameraFile;
@@ -70,8 +73,13 @@ public class EaseChatFragment extends EaseBaseFragment implements OnChatLayoutLi
     }
 
     public void initArguments() {
-        toChatUsername = getArguments().getString(EaseConstant.EXTRA_USER_ID);
-        chatType = getArguments().getInt(EaseConstant.EXTRA_CHAT_TYPE, EaseConstant.CHATTYPE_SINGLE);
+        Bundle bundle = getArguments();
+        if(bundle != null) {
+            toChatUsername = bundle.getString(EaseConstant.EXTRA_USER_ID);
+            chatType = bundle.getInt(EaseConstant.EXTRA_CHAT_TYPE, EaseConstant.CHATTYPE_SINGLE);
+            historyMsgId = bundle.getString(EaseConstant.HISTORY_MSG_ID);
+            isRoam = bundle.getBoolean(EaseConstant.EXTRA_IS_ROAM, false);
+        }
     }
 
     public void initView() {
@@ -85,8 +93,17 @@ public class EaseChatFragment extends EaseBaseFragment implements OnChatLayoutLi
     }
 
     public void initData() {
-        chatLayout.init(toChatUsername, chatType);
-        chatLayout.loadDefaultData();
+        if(!TextUtils.isEmpty(historyMsgId)) {
+            chatLayout.init(EaseChatMessageListLayout.LoadDataType.HISTORY, toChatUsername, chatType);
+            chatLayout.loadData(historyMsgId);
+        }else {
+            if(isRoam) {
+                chatLayout.init(EaseChatMessageListLayout.LoadDataType.ROAM, toChatUsername, chatType);
+            }else {
+                chatLayout.init(toChatUsername, chatType);
+            }
+            chatLayout.loadDefaultData();
+        }
     }
 
     public void setOnChatLayoutListener(OnChatLayoutListener listener) {

@@ -125,12 +125,6 @@ public abstract class EaseHandleMessagePresenter extends EaseBasePresenter {
     public abstract void sendMessage(EMMessage message);
 
     /**
-     * 转发消息
-     * @param forwardMsgId
-     */
-    public abstract void sendForwardMsg(String forwardMsgId);
-
-    /**
      * 发送cmd消息
      * @param action
      */

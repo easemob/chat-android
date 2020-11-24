@@ -230,6 +230,11 @@ public class EaseChatPrimaryMenu extends RelativeLayout implements IChatPrimaryM
     }
 
     @Override
+    public void setSendButtonBackground(Drawable bg) {
+        buttonSend.setBackground(bg);
+    }
+
+    @Override
     public void onClick(View v) {
         int id = v.getId();
         if(id == R.id.btn_send) {//发送

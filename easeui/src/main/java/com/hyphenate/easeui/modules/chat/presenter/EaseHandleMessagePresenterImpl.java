@@ -141,43 +141,6 @@ public class EaseHandleMessagePresenterImpl extends EaseHandleMessagePresenter {
     }
 
     @Override
-    public void sendForwardMsg(String forwardMsgId) {
-        if(TextUtils.isEmpty(forwardMsgId)) {
-            if(isActive()) {
-                runOnUI(()-> mView.sendForwardMsgFail("forwarding message id should not be null"));
-            }
-            return;
-        }
-        final EMMessage forward_msg = EMClient.getInstance().chatManager().getMessage(forwardMsgId);
-        EMMessage.Type type = forward_msg.getType();
-        switch (type) {
-            case TXT:
-                if(forward_msg.getBooleanAttribute(EaseConstant.MESSAGE_ATTR_IS_BIG_EXPRESSION, false)){
-                    sendBigExpressionMessage(((EMTextMessageBody) forward_msg.getBody()).getMessage(),
-                            forward_msg.getStringAttribute(EaseConstant.MESSAGE_ATTR_EXPRESSION_ID, null));
-                }else{
-                    // get the content and send it
-                    String content = ((EMTextMessageBody) forward_msg.getBody()).getMessage();
-                    sendTextMessage(content);
-                }
-                break;
-            case IMAGE:
-                // send image
-                Uri filePath = ((EMImageMessageBody) forward_msg.getBody()).getLocalUri();
-                if(UriUtils.isFileExistByUri(mView.context(), filePath)) {
-                    sendImageMessage(filePath);
-                }else {
-                    if(isActive()) {
-                        runOnUI(() -> mView.sendForwardMsgFail("not found local uri when send forward message"));
-                    }
-                }
-                break;
-            default:
-                break;
-        }
-    }
-
-    @Override
     public void sendCmdMessage(String action) {
         EMMessage beginMsg = EMMessage.createSendMessage(EMMessage.Type.CMD);
         EMCmdMessageBody body = new EMCmdMessageBody(action);

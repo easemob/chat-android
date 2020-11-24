@@ -102,6 +102,7 @@ public class EaseChatMessageListLayout extends RelativeLayout implements IChatMe
     public EaseChatMessageListLayout(@NonNull Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         LayoutInflater.from(context).inflate(R.layout.ease_chat_message_list, this);
+        EaseChatItemStyleHelper.getInstance().clear();
         chatSetHelper = EaseChatItemStyleHelper.getInstance();
         presenter = new EaseChatMessagePresenterImpl();
         if(context instanceof AppCompatActivity) {
@@ -142,28 +143,28 @@ public class EaseChatMessageListLayout extends RelativeLayout implements IChatMe
             chatSetHelper.setTimeBgDrawable(a.getDrawable(R.styleable.EaseChatMessageListLayout_ease_chat_item_time_background));
 
             Drawable avatarDefaultDrawable = a.getDrawable(R.styleable.EaseChatMessageListLayout_ease_chat_item_avatar_default_src);
-            float avatarSize = a.getDimension(R.styleable.EaseChatMessageListLayout_ease_chat_item_avatar_size, 0);
+            //float avatarSize = a.getDimension(R.styleable.EaseChatMessageListLayout_ease_chat_item_avatar_size, 0);
             int shapeType = a.getInteger(R.styleable.EaseChatMessageListLayout_ease_chat_item_avatar_shape_type, 0);
-            float avatarRadius = a.getDimension(R.styleable.EaseChatMessageListLayout_ease_chat_item_avatar_radius, 0);
-            float borderWidth = a.getDimension(R.styleable.EaseChatMessageListLayout_ease_chat_item_avatar_border_width, 0);
-            int borderColorRes = a.getResourceId(R.styleable.EaseChatMessageListLayout_ease_chat_item_avatar_border_color, -1);
-            int borderColor;
-            if(borderColorRes != -1) {
-                borderColor = ContextCompat.getColor(context, borderColorRes);
-            }else {
-                borderColor = a.getColor(R.styleable.EaseChatMessageListLayout_ease_chat_item_avatar_border_color, Color.TRANSPARENT);
-            }
+            //float avatarRadius = a.getDimension(R.styleable.EaseChatMessageListLayout_ease_chat_item_avatar_radius, 0);
+            //float borderWidth = a.getDimension(R.styleable.EaseChatMessageListLayout_ease_chat_item_avatar_border_width, 0);
+            //int borderColorRes = a.getResourceId(R.styleable.EaseChatMessageListLayout_ease_chat_item_avatar_border_color, -1);
+//            int borderColor;
+//            if(borderColorRes != -1) {
+//                borderColor = ContextCompat.getColor(context, borderColorRes);
+//            }else {
+//                borderColor = a.getColor(R.styleable.EaseChatMessageListLayout_ease_chat_item_avatar_border_color, Color.TRANSPARENT);
+//            }
             chatSetHelper.setAvatarDefaultSrc(avatarDefaultDrawable);
-            chatSetHelper.setAvatarSize(avatarSize);
+//            chatSetHelper.setAvatarSize(avatarSize);
             chatSetHelper.setShapeType(shapeType);
-            chatSetHelper.setAvatarRadius(avatarRadius);
-            chatSetHelper.setBorderWidth(borderWidth);
-            chatSetHelper.setBorderColor(borderColor);
+//            chatSetHelper.setAvatarRadius(avatarRadius);
+//            chatSetHelper.setBorderWidth(borderWidth);
+//            chatSetHelper.setBorderColor(borderColor);
 
             chatSetHelper.setReceiverBgDrawable(a.getDrawable(R.styleable.EaseChatMessageListLayout_ease_chat_item_receiver_background));
             chatSetHelper.setSenderBgDrawable(a.getDrawable(R.styleable.EaseChatMessageListLayout_ease_chat_item_sender_background));
 
-            chatSetHelper.setShowAvatar(a.getBoolean(R.styleable.EaseChatMessageListLayout_ease_chat_item_show_avatar, true));
+            //chatSetHelper.setShowAvatar(a.getBoolean(R.styleable.EaseChatMessageListLayout_ease_chat_item_show_avatar, true));
             chatSetHelper.setShowNickname(a.getBoolean(R.styleable.EaseChatMessageListLayout_ease_chat_item_show_nickname, false));
 
             chatSetHelper.setItemShowType(a.getInteger(R.styleable.EaseChatMessageListLayout_ease_chat_item_show_type, 0));
@@ -658,11 +659,11 @@ public class EaseChatMessageListLayout extends RelativeLayout implements IChatMe
         notifyDataSetChanged();
     }
 
-    @Override
-    public void setItemMinHeight(int height) {
-        chatSetHelper.setItemMinHeight(height);
-        notifyDataSetChanged();
-    }
+//    @Override
+//    public void setItemMinHeight(int height) {
+//        chatSetHelper.setItemMinHeight(height);
+//        notifyDataSetChanged();
+//    }
 
     @Override
     public void setTimeTextSize(int textSize) {
@@ -684,8 +685,10 @@ public class EaseChatMessageListLayout extends RelativeLayout implements IChatMe
 
     @Override
     public void setItemShowType(ShowType type) {
-        chatSetHelper.setItemShowType(type.ordinal());
-        notifyDataSetChanged();
+        if(!isSingleChat()) {
+            chatSetHelper.setItemShowType(type.ordinal());
+            notifyDataSetChanged();
+        }
     }
 
     @Override
@@ -694,11 +697,11 @@ public class EaseChatMessageListLayout extends RelativeLayout implements IChatMe
         notifyDataSetChanged();
     }
 
-    @Override
-    public void setAvatarSize(float avatarSize) {
-        chatSetHelper.setAvatarSize(avatarSize);
-        notifyDataSetChanged();
-    }
+//    @Override
+//    public void setAvatarSize(float avatarSize) {
+//        chatSetHelper.setAvatarSize(avatarSize);
+//        notifyDataSetChanged();
+//    }
 
     @Override
     public void setAvatarShapeType(int shapeType) {
@@ -706,23 +709,23 @@ public class EaseChatMessageListLayout extends RelativeLayout implements IChatMe
         notifyDataSetChanged();
     }
 
-    @Override
-    public void setAvatarRadius(int radius) {
-        chatSetHelper.setAvatarRadius(radius);
-        notifyDataSetChanged();
-    }
+//    @Override
+//    public void setAvatarRadius(int radius) {
+//        chatSetHelper.setAvatarRadius(radius);
+//        notifyDataSetChanged();
+//    }
 
-    @Override
-    public void setAvatarBorderWidth(int borderWidth) {
-        chatSetHelper.setBorderWidth(borderWidth);
-        notifyDataSetChanged();
-    }
+//    @Override
+//    public void setAvatarBorderWidth(int borderWidth) {
+//        chatSetHelper.setBorderWidth(borderWidth);
+//        notifyDataSetChanged();
+//    }
 
-    @Override
-    public void setAvatarBorderColor(int borderColor) {
-        chatSetHelper.setBorderColor(borderColor);
-        notifyDataSetChanged();
-    }
+//    @Override
+//    public void setAvatarBorderColor(int borderColor) {
+//        chatSetHelper.setBorderColor(borderColor);
+//        notifyDataSetChanged();
+//    }
 
     @Override
     public void addHeaderAdapter(RecyclerView.Adapter adapter) {

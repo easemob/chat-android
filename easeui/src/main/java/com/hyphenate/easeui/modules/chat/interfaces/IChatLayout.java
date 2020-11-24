@@ -118,12 +118,6 @@ public interface IChatLayout {
     void sendMessage(EMMessage message);
 
     /**
-     * 转发消息
-     * @param forwardMsgId
-     */
-    void sendForwardMsg(String forwardMsgId);
-
-    /**
      * 用于监听消息的变化
      * @param listener
      */

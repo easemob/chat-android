@@ -7,7 +7,19 @@ import androidx.annotation.ColorInt;
 import com.hyphenate.easeui.modules.chat.EaseChatMessageListLayout;
 import com.hyphenate.easeui.modules.interfaces.IAvatarSet;
 
-public interface IChatMessageItemSet extends IAvatarSet {
+public interface IChatMessageItemSet {
+    /**
+     * 设置默认头像
+     * @param src
+     */
+    void setAvatarDefaultSrc(Drawable src);
+
+    /**
+     * 设置头像样式
+     * @param shapeType
+     */
+    void setAvatarShapeType(int shapeType);
+
     /**
      * 是否展示昵称
      * @param showNickname
@@ -42,7 +54,7 @@ public interface IChatMessageItemSet extends IAvatarSet {
      * 设置文本消息条目的最小高度
      * @param height
      */
-    void setItemMinHeight(int height);
+    //void setItemMinHeight(int height);
 
     /**
      * 设置时间线文本大小
