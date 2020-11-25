@@ -918,7 +918,7 @@ public class EaseChatMessageListLayout extends RelativeLayout implements IChatMe
      * right发送方和接收方在右侧
      */
     public enum ShowType {
-        NORMAL, LEFT, RIGHT
+        NORMAL, LEFT/*, RIGHT*/
     }
 }
 

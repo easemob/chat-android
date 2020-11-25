@@ -279,18 +279,18 @@ public class EaseChatPrimaryMenu extends RelativeLayout implements IChatPrimaryM
     }
 
     private void checkMenuType() {
-        if(menuType == MenuShowType.DISABLE_VOICE.ordinal()) {
+        if(menuType == EaseInputMenuStyle.DISABLE_VOICE.ordinal()) {
             buttonSetModeVoice.setVisibility(GONE);
             buttonSetModeKeyboard.setVisibility(GONE);
             buttonPressToSpeak.setVisibility(GONE);
-        }else if(menuType == MenuShowType.DISABLE_EMOJICON.ordinal()) {
+        }else if(menuType == EaseInputMenuStyle.DISABLE_EMOJICON.ordinal()) {
             faceLayout.setVisibility(GONE);
-        }else if(menuType == MenuShowType.DISABLE_VOICE_EMOJICON.ordinal()) {
+        }else if(menuType == EaseInputMenuStyle.DISABLE_VOICE_EMOJICON.ordinal()) {
             buttonSetModeVoice.setVisibility(GONE);
             buttonSetModeKeyboard.setVisibility(GONE);
             buttonPressToSpeak.setVisibility(GONE);
             faceLayout.setVisibility(GONE);
-        }else if(menuType == MenuShowType.ONLY_TEXT.ordinal()) {
+        }else if(menuType == EaseInputMenuStyle.ONLY_TEXT.ordinal()) {
             buttonSetModeVoice.setVisibility(GONE);
             buttonSetModeKeyboard.setVisibility(GONE);
             buttonPressToSpeak.setVisibility(GONE);
