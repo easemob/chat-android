@@ -2,29 +2,36 @@ package com.hyphenate.easeui.modules.conversation;
 
 import android.os.Bundle;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
+import android.widget.LinearLayout;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.hyphenate.chat.EMConversation;
 import com.hyphenate.easeui.R;
 import com.hyphenate.easeui.interfaces.OnItemClickListener;
-import com.hyphenate.easeui.interfaces.OnItemLongClickListener;
 import com.hyphenate.easeui.manager.EaseProviderManager;
-import com.hyphenate.easeui.manager.EaseSystemMsgManager;
-import com.hyphenate.easeui.modules.chat.EaseChatListActivity;
+import com.hyphenate.easeui.modules.conversation.interfaces.OnConversationLoadListener;
 import com.hyphenate.easeui.modules.conversation.model.EaseConversationInfo;
+import com.hyphenate.easeui.modules.menu.EasePopupMenuHelper;
+import com.hyphenate.easeui.modules.menu.OnPopupMenuItemClickListener;
+import com.hyphenate.easeui.modules.menu.OnPopupMenuPreShowListener;
 import com.hyphenate.easeui.provider.EaseConversationInfoProvider;
 import com.hyphenate.easeui.ui.base.EaseBaseFragment;
-import com.hyphenate.easeui.utils.EaseCommonUtils;
+import com.hyphenate.util.EMLog;
 
-public class EaseConversationListFragment extends EaseBaseFragment {
-    private EaseConversationListLayout list;
+import java.util.List;
+
+public class EaseConversationListFragment extends EaseBaseFragment implements OnItemClickListener, OnPopupMenuItemClickListener, OnPopupMenuPreShowListener, SwipeRefreshLayout.OnRefreshListener, OnConversationLoadListener {
+    private static final String TAG = EaseConversationListFragment.class.getSimpleName();
+    public LinearLayout llRoot;
+    public EaseConversationListLayout conversationListLayout;
+    public SwipeRefreshLayout srlRefresh;
 
     @Nullable
     @Override
@@ -39,76 +46,89 @@ public class EaseConversationListFragment extends EaseBaseFragment {
         initListener();
     }
 
-    public int getLayoutId() {
-        return R.layout.ease_fragment;
-    }
-
-    private void initListener() {
-        list.setOnItemClickListener(new OnItemClickListener() {
-            @Override
-            public void onItemClick(View view, int position) {
-                Log.e("TAG", "onItemClick position = "+position);
-                EaseConversationInfo item = list.getItem(position);
-                if(item.getInfo() instanceof EMConversation) {
-                    if(EaseSystemMsgManager.getInstance().isSystemConversation((EMConversation) item.getInfo())) {
-                        Toast.makeText(mContext, "跳转到系统消息页面", Toast.LENGTH_SHORT).show();
-                    }else {
-                        EaseChatListActivity.actionStart(mContext, ((EMConversation) item.getInfo()).conversationId(), EaseCommonUtils.getChatType((EMConversation) item.getInfo()));
-                    }
-                }
-            }
-        });
-
-        list.setOnItemLongClickListener(new OnItemLongClickListener() {
-            @Override
-            public boolean onItemLongClick(View view, int position) {
-                Log.e("TAG", "onItemLongClick position = "+position);
-                return true;
-            }
-        });
-
-    }
-
-    private void initView(Bundle savedInstanceState) {
-        list = findViewById(R.id.list);
-        list.init();
-
-        EaseProviderManager.getInstance().setConversationInfoProvider(new EaseConversationInfoProvider() {
-            @Override
-            public String getDefaultTypeAvatar(String type) {
-                if(TextUtils.equals(type, EMConversation.EMConversationType.Chat.name())) {
-                    return "https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1605085753048&di=154d47eff01205a62cb779f8588eeb43&imgtype=0&src=http%3A%2F%2Fb.hiphotos.baidu.com%2Fzhidao%2Fwh%253D450%252C600%2Fsign%3Da587b23df11f3a295a9dddcaac159007%2F500fd9f9d72a60590cfef2f92934349b023bba62.jpg";
-                }
-                return null;
-            }
-
-            @Override
-            public int getDefaultTypeAvatarResource(String type) {
-                if(TextUtils.equals(type, EMConversation.EMConversationType.GroupChat.name())) {
-                    return R.drawable.ease_default_image;
-                }
-                return 0;
-            }
-
-            @Override
-            public String getConversationName(String username) {
-                if(TextUtils.equals(username, "ljn")) {
-                    return "刘吉南";
-                }
-                return null;
-            }
-        });
-    }
-
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         initData();
     }
 
-    private void initData() {
-        list.loadDefaultData();
+    public int getLayoutId() {
+        return R.layout.ease_fragment_conversations;
     }
 
+    public void initView(Bundle savedInstanceState) {
+        llRoot = findViewById(R.id.ll_root);
+        srlRefresh = findViewById(R.id.srl_refresh);
+        conversationListLayout = findViewById(R.id.list_conversation);
+        conversationListLayout.init();
+    }
+
+    public void initListener() {
+        conversationListLayout.setOnItemClickListener(this);
+        conversationListLayout.setOnPopupMenuItemClickListener(this);
+        conversationListLayout.setOnPopupMenuPreShowListener(this);
+        conversationListLayout.setOnConversationLoadListener(this);
+        srlRefresh.setOnRefreshListener(this);
+    }
+
+    public void initData() {
+        conversationListLayout.loadDefaultData();
+    }
+
+    /**
+     * 会话条目点击事件
+     * @param view
+     * @param position
+     */
+    @Override
+    public void onItemClick(View view, int position) {
+
+    }
+
+    /**
+     * 会话长按菜单条目点击事件
+     * @param item
+     * @param position
+     */
+    @Override
+    public boolean onMenuItemClick(MenuItem item, int position) {
+        EMLog.i(TAG, "click menu position = "+position);
+        return false;
+    }
+
+    /**
+     * 会话长按菜单显示前的监听事件，可以对PopupMenu增加条目{@link EaseConversationListLayout#addItemMenu(int, int, int, String)}，
+     * 隐藏或者显示条目{@link EaseConversationListLayout#findItemVisible(int, boolean)}
+     * @param menuHelper
+     * @param position
+     */
+    @Override
+    public void onMenuPreShow(EasePopupMenuHelper menuHelper, int position) {
+
+    }
+
+    @Override
+    public void onRefresh() {
+        conversationListLayout.loadDefaultData();
+    }
+
+    @Override
+    public void loadDataFinish(List<EaseConversationInfo> data) {
+        finishRefresh();
+    }
+
+    @Override
+    public void loadDataFail(String message) {
+        finishRefresh();
+    }
+
+    /**
+     * 停止刷新
+     */
+    public void finishRefresh() {
+        if(!mContext.isFinishing() && srlRefresh != null) {
+            runOnUiThread(()->srlRefresh.setRefreshing(false));
+        }
+    }
 }
 

@@ -63,12 +63,13 @@ public class EaseContactPresenterImpl extends EaseContactPresenter {
 
     @Override
     public void sortData(List<EaseUser> data) {
-        checkUserProvider(data);
-        sortList(data);
-        if(!isDestroy()) {
-            runOnUI(() -> mView.sortContactListSuccess(data));
+        if(data != null) {
+            checkUserProvider(data);
+            sortList(data);
+            if(!isDestroy()) {
+                runOnUI(() -> mView.sortContactListSuccess(data));
+            }
         }
-
     }
 
     private void checkUserProvider(List<EaseUser> data) {

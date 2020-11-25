@@ -124,8 +124,7 @@ public class EasePopupMenuHelper implements PopupMenu.OnMenuItemClickListener, P
     @Override
     public boolean onMenuItemClick(MenuItem item) {
         if(itemClickListener != null) {
-            itemClickListener.onMenuItemClick(item);
-            return true;
+            return itemClickListener.onMenuItemClick(item, -1);
         }
         return false;
     }

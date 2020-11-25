@@ -27,6 +27,12 @@ public interface IContactCustomListLayout {
     void setOnCustomItemClickListener(OnItemClickListener listener);
 
     /**
+     * 设置联系人加载结果监听
+     * @param loadListener
+     */
+    void setOnContactLoadListener(OnContactLoadListener loadListener);
+
+    /**
      * 获取头部适配器
      */
     EaseContactCustomAdapter getCustomAdapter();

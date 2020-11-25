@@ -3,6 +3,7 @@ package com.hyphenate.easeui.modules.interfaces;
 import com.hyphenate.easeui.modules.menu.OnPopupMenuDismissListener;
 import com.hyphenate.easeui.modules.menu.OnPopupMenuItemClickListener;
 import com.hyphenate.easeui.modules.menu.EasePopupMenuHelper;
+import com.hyphenate.easeui.modules.menu.OnPopupMenuPreShowListener;
 
 public interface IPopupMenu {
     /**
@@ -25,6 +26,12 @@ public interface IPopupMenu {
      * @param visible
      */
     void findItemVisible(int id, boolean visible);
+
+    /**
+     * PopupMenu展示前的监听，可以对PopupMenu进行设置，如添加菜单项，隐藏或者显示菜单项
+     * @param preShowListener
+     */
+    void setOnPopupMenuPreShowListener(OnPopupMenuPreShowListener preShowListener);
 
     /**
      * 设置菜单条目监听

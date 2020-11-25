@@ -37,6 +37,16 @@ public class EaseUser implements Serializable {
      */
     private int contact;
 
+    /**
+     * the timestamp when set nickname
+     */
+    private long modifyNicknameTimestamp;
+
+    /**
+     * the timestamp when set initialLetter
+     */
+    private long modifyInitialLetterTimestamp;
+
     @NonNull
     public String getUsername() {
         return username;
@@ -52,10 +62,11 @@ public class EaseUser implements Serializable {
 
     public void setNickname(String nickname) {
         this.nickname = nickname;
+        modifyNicknameTimestamp = System.currentTimeMillis();
     }
 
     public String getInitialLetter() {
-        if(initialLetter == null) {
+        if(initialLetter == null || modifyNicknameTimestamp > modifyInitialLetterTimestamp) {
             if(!TextUtils.isEmpty(nickname)) {
                 return getInitialLetter(nickname);
             }
@@ -66,6 +77,7 @@ public class EaseUser implements Serializable {
 
     public void setInitialLetter(String initialLetter) {
         this.initialLetter = initialLetter;
+        modifyInitialLetterTimestamp = System.currentTimeMillis();
     }
 
     public String getAvatar() {

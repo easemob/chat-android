@@ -7,7 +7,7 @@ public interface IAvatarSet {
      * 设置默认头像
      * @param src
      */
-    void setAvatarDefaultSrc(Drawable src);
+    default void setAvatarDefaultSrc(Drawable src){}
 
     /**
      * 设置头像大小，长和宽是相同的

@@ -29,6 +29,7 @@ import com.hyphenate.easeui.interfaces.OnItemClickListener;
 import com.hyphenate.easeui.interfaces.OnItemLongClickListener;
 import com.hyphenate.easeui.modules.conversation.adapter.EaseConversationListAdapter;
 import com.hyphenate.easeui.modules.conversation.interfaces.OnConversationChangeListener;
+import com.hyphenate.easeui.modules.conversation.interfaces.OnConversationLoadListener;
 import com.hyphenate.easeui.modules.conversation.model.EaseConversationInfo;
 import com.hyphenate.easeui.modules.EaseBaseLayout;
 import com.hyphenate.easeui.modules.conversation.delegate.EaseBaseConversationDelegate;
@@ -43,8 +44,10 @@ import com.hyphenate.easeui.modules.interfaces.IPopupMenu;
 import com.hyphenate.easeui.modules.menu.OnPopupMenuDismissListener;
 import com.hyphenate.easeui.modules.menu.OnPopupMenuItemClickListener;
 import com.hyphenate.easeui.modules.menu.EasePopupMenuHelper;
+import com.hyphenate.easeui.modules.menu.OnPopupMenuPreShowListener;
 import com.hyphenate.easeui.widget.EaseRecyclerView;
 
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -53,10 +56,10 @@ import java.util.List;
  */
 public class EaseConversationListLayout extends EaseBaseLayout implements IConversationListLayout, IConversationStyle
                                                                         , IEaseConversationListView, IPopupMenu {
-    private static final int MENU_MAKE_READ = 0;
-    private static final int MENU_MAKE_TOP = 1;
-    private static final int MENU_MAKE_CANCEL_TOP = 2;
-    private static final int MENU_DELETE = 3;
+    public static final int MENU_MAKE_READ = 0;
+    public static final int MENU_MAKE_TOP = 1;
+    public static final int MENU_MAKE_CANCEL_TOP = 2;
+    public static final int MENU_DELETE = 3;
     private EaseRecyclerView rvConversationList;
 
     private ConcatAdapter adapter;
@@ -65,6 +68,7 @@ public class EaseConversationListLayout extends EaseBaseLayout implements IConve
     private OnItemLongClickListener itemLongListener;
     private OnPopupMenuItemClickListener popupMenuItemClickListener;
     private OnPopupMenuDismissListener dismissListener;
+    private OnPopupMenuPreShowListener menuPreShowListener;
     private EaseConversationSetStyle setModel;
 
     private EaseConversationPresenter presenter;
@@ -73,6 +77,7 @@ public class EaseConversationListLayout extends EaseBaseLayout implements IConve
     private EasePopupMenuHelper menuHelper;
     private boolean showDefaultMenu = true;
     private OnConversationChangeListener conversationChangeListener;
+    private OnConversationLoadListener loadListener;
 
     public EaseConversationListLayout(Context context) {
         this(context, null);
@@ -91,6 +96,7 @@ public class EaseConversationListLayout extends EaseBaseLayout implements IConve
             ((AppCompatActivity) context).getLifecycle().addObserver(presenter);
         }
         initAttrs(context, attrs);
+        initViews();
     }
 
     private void initAttrs(Context context, AttributeSet attrs) {
@@ -172,7 +178,7 @@ public class EaseConversationListLayout extends EaseBaseLayout implements IConve
 
             int unreadDotPosition = a.getInteger(R.styleable.EaseConversationListLayout_ease_con_item_unread_dot_position, 0);
             setModel.setUnreadDotPosition(unreadDotPosition == 0 ? EaseConversationSetStyle.UnreadDotPosition.LEFT
-                                                                    : EaseConversationSetStyle.UnreadDotPosition.RIGHT);
+                    : EaseConversationSetStyle.UnreadDotPosition.RIGHT);
 
             boolean showSystemMessage = a.getBoolean(R.styleable.EaseConversationListLayout_ease_con_item_show_system_message, true);
             setModel.setShowSystemMessage(showSystemMessage);
@@ -182,9 +188,7 @@ public class EaseConversationListLayout extends EaseBaseLayout implements IConve
         }
     }
 
-    @Override
-    protected void onFinishInflate() {
-        super.onFinishInflate();
+    private void initViews() {
         presenter.attachView(this);
 
         rvConversationList = findViewById(R.id.rv_conversation_list);
@@ -214,11 +218,7 @@ public class EaseConversationListLayout extends EaseBaseLayout implements IConve
             public boolean onItemLongClick(View view, int position) {
                 listAdapter.getItem(position).setSelected(true);
                 if(itemLongListener != null) {
-                    if(showDefaultMenu) {
-                        showDefaultMenu(view, position, listAdapter.getItem(position));
-                    }
-                    itemLongListener.onItemLongClick(view, position);
-                    return true;
+                    return itemLongListener.onItemLongClick(view, position);
                 }
                 if(showDefaultMenu) {
                     showDefaultMenu(view, position, listAdapter.getItem(position));
@@ -312,29 +312,30 @@ public class EaseConversationListLayout extends EaseBaseLayout implements IConve
         if(info.getInfo() instanceof EMConversation) {
             menuHelper.findItemVisible(MENU_MAKE_READ, ((EMConversation) info.getInfo()).getUnreadMsgCount() > 0);
         }
-
+        if(menuPreShowListener != null) {
+            menuPreShowListener.onMenuPreShow(menuHelper, position);
+        }
         menuHelper.setOnPopupMenuItemClickListener(new OnPopupMenuItemClickListener() {
             @Override
-            public void onMenuItemClick(MenuItem item) {
-                if(showDefaultMenu) {
-                    switch (item.getItemId()) {
-                        case MENU_MAKE_READ :
-                            presenter.makeConversionRead(position, info);
-                            break;
-                        case MENU_MAKE_TOP :
-                            presenter.makeConversationTop(position, info);
-                            break;
-                        case MENU_MAKE_CANCEL_TOP :
-                            presenter.cancelConversationTop(position, info);
-                            break;
-                        case MENU_DELETE :
-                            presenter.deleteConversation(position, info);
-                            break;
-                    }
-                }
+            public boolean onMenuItemClick(MenuItem item, int menuPos) {
                 if(popupMenuItemClickListener != null) {
-                    popupMenuItemClickListener.onMenuItemClick(item);
+                    return popupMenuItemClickListener.onMenuItemClick(item, position);
                 }
+                switch (item.getItemId()) {
+                    case MENU_MAKE_READ :
+                        presenter.makeConversionRead(position, info);
+                        return true;
+                    case MENU_MAKE_TOP :
+                        presenter.makeConversationTop(position, info);
+                        return true;
+                    case MENU_MAKE_CANCEL_TOP :
+                        presenter.cancelConversationTop(position, info);
+                        return true;
+                    case MENU_DELETE :
+                        presenter.deleteConversation(position, info);
+                        return true;
+                }
+                return false;
             }
         });
 
@@ -468,11 +469,6 @@ public class EaseConversationListLayout extends EaseBaseLayout implements IConve
     }
 
     @Override
-    public void setAvatarDefaultSrc(Drawable src) {
-
-    }
-
-    @Override
     public void setAvatarSize(float avatarSize) {
         setModel.setAvatarSize(avatarSize);
         notifyDataSetChanged();
@@ -509,16 +505,23 @@ public class EaseConversationListLayout extends EaseBaseLayout implements IConve
 
     @Override
     public void loadConversationListNoData() {
-
+        if(loadListener != null) {
+            loadListener.loadDataFinish(new ArrayList<>());
+        }
     }
 
     @Override
     public void loadConversationListFail(String message) {
-
+        if(loadListener != null) {
+            loadListener.loadDataFail(message);
+        }
     }
 
     @Override
     public void sortConversationListSuccess(List<EaseConversationInfo> data) {
+        if(loadListener != null) {
+            loadListener.loadDataFinish(data);
+        }
         listAdapter.setData(data);
     }
 
@@ -598,6 +601,11 @@ public class EaseConversationListLayout extends EaseBaseLayout implements IConve
     }
 
     @Override
+    public void setOnConversationLoadListener(OnConversationLoadListener loadListener) {
+        this.loadListener = loadListener;
+    }
+
+    @Override
     public void clearMenu() {
         menuHelper.clear();
     }
@@ -610,6 +618,11 @@ public class EaseConversationListLayout extends EaseBaseLayout implements IConve
     @Override
     public void findItemVisible(int id, boolean visible) {
         menuHelper.findItemVisible(id, visible);
+    }
+
+    @Override
+    public void setOnPopupMenuPreShowListener(OnPopupMenuPreShowListener preShowListener) {
+        this.menuPreShowListener = preShowListener;
     }
 
     @Override

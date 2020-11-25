@@ -72,4 +72,10 @@ public interface IConversationListLayout extends IRecyclerView {
      * @param listener
      */
     void setOnConversationChangeListener(OnConversationChangeListener listener);
+
+    /**
+     * 设置加载会话状态监听
+     * @param loadListener
+     */
+    void setOnConversationLoadListener(OnConversationLoadListener loadListener);
 }

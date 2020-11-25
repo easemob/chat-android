@@ -20,5 +20,7 @@ public interface EaseUserProfileProvider {
      * @param user
      * @return
      */
-    EaseUser getUser(EaseUser user);
+    default EaseUser getUser(EaseUser user) {
+        return user;
+    }
 }
