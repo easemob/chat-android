@@ -26,7 +26,7 @@ import com.hyphenate.easeim.section.group.activity.GroupDetailActivity;
 import com.hyphenate.easeui.constants.EaseConstant;
 import com.hyphenate.easeui.domain.EaseUser;
 import com.hyphenate.easeui.model.EaseEvent;
-import com.hyphenate.easeui.ui.EaseChatFragment;
+import com.hyphenate.easeui.modules.chat.EaseChatFragment;
 import com.hyphenate.easeui.utils.EaseCommonUtils;
 import com.hyphenate.easeui.widget.EaseTitleBar;
 
@@ -37,7 +37,6 @@ public class ChatActivity extends BaseInitActivity implements EaseTitleBar.OnBac
     private String toChatUsername;
     private int chatType;
     private EaseChatFragment fragment;
-    private String forwardMsgId;
     private String historyMsgId;
     private ChatViewModel viewModel;
 
@@ -58,7 +57,6 @@ public class ChatActivity extends BaseInitActivity implements EaseTitleBar.OnBac
         super.initIntent(intent);
         toChatUsername = intent.getStringExtra(EaseConstant.EXTRA_USER_ID);
         chatType = intent.getIntExtra(EaseConstant.EXTRA_CHAT_TYPE, EaseConstant.CHATTYPE_SINGLE);
-        forwardMsgId = intent.getStringExtra(DemoConstant.FORWARD_MSG_ID);
         historyMsgId = intent.getStringExtra(DemoConstant.HISTORY_MSG_ID);
     }
 
@@ -70,9 +68,8 @@ public class ChatActivity extends BaseInitActivity implements EaseTitleBar.OnBac
         Bundle bundle = new Bundle();
         bundle.putString(EaseConstant.EXTRA_USER_ID, toChatUsername);
         bundle.putInt(EaseConstant.EXTRA_CHAT_TYPE, chatType);
-        bundle.putString(DemoConstant.FORWARD_MSG_ID, forwardMsgId);
         bundle.putString(DemoConstant.HISTORY_MSG_ID, historyMsgId);
-        bundle.putBoolean("isRoaming", DemoHelper.getInstance().getModel().isMsgRoaming());
+        bundle.putBoolean(EaseConstant.EXTRA_IS_ROAM, DemoHelper.getInstance().getModel().isMsgRoaming());
         fragment.setArguments(bundle);
         getSupportFragmentManager().beginTransaction().replace(R.id.fl_fragment, fragment, "chat").commit();
 
@@ -92,25 +89,25 @@ public class ChatActivity extends BaseInitActivity implements EaseTitleBar.OnBac
         super.initListener();
         titleBarMessage.setOnBackPressListener(this);
         titleBarMessage.setOnRightClickListener(this);
-        fragment.setIChatTitleProvider(new EaseChatFragment.IChatTitleProvider() {
-            @Override
-            public void provideTitle(int chatType, String title) {
-                if(chatType == DemoConstant.CHATTYPE_SINGLE) {
-                    if(DemoDbHelper.getInstance(mContext).getUserDao() != null) {
-                        LiveData<List<EaseUser>> titleObservable = DemoDbHelper.getInstance(mContext).getUserDao().loadUserById(title);
-                        titleObservable.observe(mContext, users -> {
-                            if(users != null && !users.isEmpty()) {
-                                titleBarMessage.setTitle(users.get(0).getNickname());
-                            }else {
-                                titleBarMessage.setTitle(title);
-                            }
-                        });
-                    }
-                }else {
-                    titleBarMessage.setTitle(title);
-                }
-            }
-        });
+//        fragment.setIChatTitleProvider(new EaseChatFragment.IChatTitleProvider() {
+//            @Override
+//            public void provideTitle(int chatType, String title) {
+//                if(chatType == DemoConstant.CHATTYPE_SINGLE) {
+//                    if(DemoDbHelper.getInstance(mContext).getUserDao() != null) {
+//                        LiveData<List<EaseUser>> titleObservable = DemoDbHelper.getInstance(mContext).getUserDao().loadUserById(title);
+//                        titleObservable.observe(mContext, users -> {
+//                            if(users != null && !users.isEmpty()) {
+//                                titleBarMessage.setTitle(users.get(0).getNickname());
+//                            }else {
+//                                titleBarMessage.setTitle(title);
+//                            }
+//                        });
+//                    }
+//                }else {
+//                    titleBarMessage.setTitle(title);
+//                }
+//            }
+//        });
     }
 
     @Override

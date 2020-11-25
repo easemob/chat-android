@@ -397,8 +397,6 @@
 
     <string name="Select_the_contact">选择联系人</string>
     <string name="emojicon_test_name">示例</string>
-    <string name="msg_recall_by_self">您撤回了一条消息</string>
-    <string name="msg_recall_by_user">%1$s 撤回了一条消息</string>
     <string name="msg_conference_invite">快来加入会议</string>
     <string name="tips_select_contacts_first">请先选择联系人 ~</string>
     <string name="alert_request_tobe_talker">请求连麦 &#8230;</string>

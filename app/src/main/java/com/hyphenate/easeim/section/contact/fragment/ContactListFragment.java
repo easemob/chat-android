@@ -1,8 +1,9 @@
 package com.hyphenate.easeim.section.contact.fragment;
 
 import android.os.Bundle;
-import android.util.Log;
+import android.text.TextUtils;
 import android.view.ContextMenu;
+import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,6 +15,7 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.constraintlayout.widget.ConstraintSet;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.ConcatAdapter;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.hyphenate.easeim.R;
 import com.hyphenate.easeim.common.constant.DemoConstant;
@@ -34,15 +36,21 @@ import com.hyphenate.easeim.section.dialog.SimpleDialogFragment;
 import com.hyphenate.easeim.section.search.SearchFriendsActivity;
 import com.hyphenate.easeui.domain.EaseUser;
 import com.hyphenate.easeui.interfaces.OnItemClickListener;
+import com.hyphenate.easeui.manager.EaseProviderManager;
 import com.hyphenate.easeui.model.EaseEvent;
-import com.hyphenate.easeui.ui.EaseContactListFragment;
+import com.hyphenate.easeui.modules.contact.EaseContactListFragment;
+import com.hyphenate.easeui.modules.contact.model.EaseContactCustomBean;
+import com.hyphenate.easeui.modules.menu.EasePopupMenuHelper;
+import com.hyphenate.easeui.provider.EaseUserProfileProvider;
 import com.hyphenate.easeui.widget.EaseSearchTextView;
 
 import java.util.List;
 
-public class ContactListFragment extends EaseContactListFragment implements View.OnClickListener {
+public class ContactListFragment extends EaseContactListFragment implements View.OnClickListener, SwipeRefreshLayout.OnRefreshListener {
+    private static final int CUSTOM_NEW_CHAT = 0;
+    private static final int CUSTOM_GROUP_LIST = 1;
+    private static final int CUSTOM_CHAT_ROOM_LIST = 2;
     private EaseSearchTextView tvSearch;
-
     private ContactsViewModel mViewModel;
 
     @Override
@@ -50,80 +58,90 @@ public class ContactListFragment extends EaseContactListFragment implements View
         super.initView(savedInstanceState);
         addSearchView();
         //设置无数据时空白页面
-        adapter.setEmptyLayoutResource(R.layout.demo_layout_friends_empty_list);
+        contactLayout.getContactList().getListAdapter().setEmptyLayoutResource(R.layout.demo_layout_friends_empty_list);
+        addHeader();
+
+//        EaseProviderManager.getInstance().setUserProvider(new EaseUserProfileProvider() {
+//            @Override
+//            public EaseUser getUser(String username) {
+//                return null;
+//            }
+//
+//            @Override
+//            public EaseUser getUser(EaseUser user) {
+//                if(TextUtils.equals(user.getUsername(), "chong")) {
+//                    user.setAvatar("https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1605085753048&di=d1e68d730cde4b1d399eea7770a50a45&imgtype=0&src=http%3A%2F%2Fc-ssl.duitang.com%2Fuploads%2Fitem%2F202005%2F11%2F20200511141839_NUsHG.thumb.400_0.jpeg");
+//                    user.setNickname("马上详见");
+//                }
+//                if(TextUtils.equals(user.getUsername(), "ljna")) {
+//                    user.setAvatar("https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1605085753046&di=de5215509a758bbaed0d7dac0fd756c9&imgtype=0&src=http%3A%2F%2Fc-ssl.duitang.com%2Fuploads%2Fitem%2F202006%2F07%2F20200607211021_SNzhk.thumb.400_0.jpeg");
+//                    user.setNickname("小号的天下");
+//                }
+//                return user;
+//            }
+//        });
     }
 
     @Override
-    public void onChildCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
-        super.onChildCreateContextMenu(menu, v, menuInfo);
-        menu.add(1, R.id.action_friend_block, 2, getString(R.string.em_friends_move_into_the_blacklist_new));
+    public void onMenuPreShow(EasePopupMenuHelper menuHelper, int position) {
+        super.onMenuPreShow(menuHelper, position);
+        menuHelper.addItemMenu(1, R.id.action_friend_block, 2, getString(R.string.em_friends_move_into_the_blacklist_new));
+        menuHelper.addItemMenu(1, R.id.action_friend_delete, 1, getString(R.string.ease_friends_delete_the_contact));
     }
 
     @Override
-    public void onChildContextItemSelected(MenuItem item, EaseUser user) {
-        super.onChildContextItemSelected(item, user);
+    public boolean onMenuItemClick(MenuItem item, int position) {
+        EaseUser user = contactLayout.getContactList().getItem(position);
         switch (item.getItemId()) {
             case R.id.action_friend_block :
                 mViewModel.addUserToBlackList(user.getUsername(), false);
-                break;
+                return true;
+            case R.id.action_friend_delete:
+                showDeleteDialog(user);
+                return true;
         }
+        return super.onMenuItemClick(item, position);
     }
 
     private void addSearchView() {
         //添加搜索会话布局
-        viewStub.setLayoutResource(R.layout.demo_layout_search);
-        View view = viewStub.inflate();
-        ViewGroup.LayoutParams params = view.getLayoutParams();
-        if(params instanceof ConstraintLayout.LayoutParams) {
-            ConstraintSet set = new ConstraintSet();
-            set.clone(mContext, R.layout.ease_fragment_contact_list);
-            set.connect(view.getId(), ConstraintSet.LEFT, ConstraintSet.PARENT_ID, ConstraintSet.LEFT);
-            set.connect(view.getId(), ConstraintSet.RIGHT, ConstraintSet.PARENT_ID, ConstraintSet.RIGHT);
-            set.connect(view.getId(), ConstraintSet.TOP, ConstraintSet.PARENT_ID, ConstraintSet.TOP);
-            set.connect(view.getId(), ConstraintSet.BOTTOM, R.id.srl_contact_refresh, ConstraintSet.TOP);
-            set.constrainWidth(view.getId(), ViewGroup.LayoutParams.MATCH_PARENT);
-            set.constrainHeight(view.getId(), ViewGroup.LayoutParams.WRAP_CONTENT);
-            set.connect(R.id.srl_contact_refresh, ConstraintSet.TOP, view.getId(), ConstraintSet.BOTTOM);
-            set.connect(R.id.side_bar_friend, ConstraintSet.TOP, view.getId(), ConstraintSet.BOTTOM);
-            ConstraintLayout clRoot = findViewById(R.id.cl_root);
-            set.applyTo(clRoot);
-        }
+        View view = LayoutInflater.from(mContext).inflate(R.layout.demo_layout_search, null);
+        llRoot.addView(view, 0);
         tvSearch = view.findViewById(R.id.tv_search);
         tvSearch.setHint(R.string.em_friend_list_search_hint);
     }
 
     /**
-     * 根据需要，可以将搜索框布局也通过concatAdapter.addAdapter(searchAdapter)添加到recyclerView中
-     * @param concatAdapter
+     * 添加头布局
      */
-    @Override
-    public void addHeader(ConcatAdapter concatAdapter) {
-        super.addHeader(concatAdapter);
-        ContactHeaderAdapter headerAdapter = new ContactHeaderAdapter();
-        concatAdapter.addAdapter(headerAdapter);
-        headerAdapter.setOnItemClickListener(new OnItemClickListener() {
-            @Override
-            public void onItemClick(View view, int position) {
-                ContactHeaderBean item = headerAdapter.getItem(position);
-                switch (item.getName()) {
-                    case R.string.em_friends_new_chat :
-                        AddContactActivity.startAction(mContext, SearchType.CHAT);
-                        break;
-                    case R.string.em_friends_group_chat :
-                        GroupContactManageActivity.actionStart(mContext);
-                        break;
-                    case R.string.em_friends_chat_room :
-                        ChatRoomContactManageActivity.actionStart(mContext);
-                        break;
-                }
-            }
-        });
+    public void addHeader() {
+        contactLayout.getContactList().addCustomItem(CUSTOM_NEW_CHAT, R.drawable.em_friends_new_chat, getString(R.string.em_friends_new_chat));
+        contactLayout.getContactList().addCustomItem(CUSTOM_GROUP_LIST, R.drawable.em_friends_group_chat, getString(R.string.em_friends_group_chat));
+        contactLayout.getContactList().addCustomItem(CUSTOM_CHAT_ROOM_LIST, R.drawable.em_friends_chat_room, getString(R.string.em_friends_chat_room));
     }
 
     @Override
     public void initListener() {
         super.initListener();
+        contactLayout.getSwipeRefreshLayout().setOnRefreshListener(this);
         tvSearch.setOnClickListener(this);
+        contactLayout.getContactList().setOnCustomItemClickListener(new OnItemClickListener() {
+            @Override
+            public void onItemClick(View view, int position) {
+                EaseContactCustomBean item = contactLayout.getContactList().getCustomAdapter().getItem(position);
+                switch (item.getId()) {
+                    case CUSTOM_NEW_CHAT :
+                        AddContactActivity.startAction(mContext, SearchType.CHAT);
+                        break;
+                    case CUSTOM_GROUP_LIST :
+                        GroupContactManageActivity.actionStart(mContext);
+                        break;
+                    case CUSTOM_CHAT_ROOM_LIST :
+                        ChatRoomContactManageActivity.actionStart(mContext);
+                        break;
+                }
+            }
+        });
     }
 
     @Override
@@ -133,20 +151,15 @@ public class ContactListFragment extends EaseContactListFragment implements View
             parseResource(response, new OnResourceParseCallback<List<EaseUser>>() {
                 @Override
                 public void onSuccess(List<EaseUser> data) {
-                    adapter.setData(data);
+                    contactLayout.getContactList().setData(data);
                 }
 
                 @Override
                 public void onLoading(@Nullable List<EaseUser> data) {
                     super.onLoading(data);
-                    adapter.setData(data);
+                    contactLayout.getContactList().setData(data);
                 }
 
-                @Override
-                public void hideLoading() {
-                    super.hideLoading();
-                    finishRefresh();
-                }
             });
 
         });
@@ -183,11 +196,6 @@ public class ContactListFragment extends EaseContactListFragment implements View
     }
 
     @Override
-    public void refreshContactList() {
-        mViewModel.loadContactList();
-    }
-
-    @Override
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.tv_search :
@@ -196,8 +204,7 @@ public class ContactListFragment extends EaseContactListFragment implements View
         }
     }
 
-    @Override
-    public void showDeleteDialog(EaseUser user) {
+    private void showDeleteDialog(EaseUser user) {
         new SimpleDialogFragment.Builder((BaseActivity) mContext)
                 .setTitle(R.string.ease_friends_delete_contact_hint)
                 .setOnConfirmClickListener(new DemoDialogFragment.OnConfirmClickListener() {
@@ -213,7 +220,7 @@ public class ContactListFragment extends EaseContactListFragment implements View
     @Override
     public void onItemClick(View view, int position) {
         super.onItemClick(view, position);
-        EaseUser item = adapter.getItem(position);
+        EaseUser item = contactLayout.getContactList().getItem(position);
         ContactDetailActivity.actionStart(mContext, item);
     }
 
@@ -243,5 +250,10 @@ public class ContactListFragment extends EaseContactListFragment implements View
      */
     public void showToast(@StringRes int messageId) {
         ToastUtils.showToast(messageId);
+    }
+
+    @Override
+    public void onRefresh() {
+        mViewModel.loadContactList();
     }
 }
