@@ -53,13 +53,11 @@ import com.hyphenate.easeui.utils.EaseCommonUtils;
 import com.hyphenate.easeui.manager.EaseDingMessageHelper;
 import com.hyphenate.easeui.utils.EaseUserUtils;
 import com.hyphenate.easeui.widget.EaseAlertDialog;
-import com.hyphenate.easeui.modules.chat.EaseChatExtendMenu;
 import com.hyphenate.easeui.widget.EaseChatInputMenu;
 import com.hyphenate.easeui.widget.EaseChatMessageList;
 import com.hyphenate.easeui.widget.EaseVoiceRecorderView;
 import com.hyphenate.exceptions.HyphenateException;
 import com.hyphenate.util.EMLog;
-import com.hyphenate.util.ImageUtils;
 import com.hyphenate.util.PathUtil;
 import com.hyphenate.util.VersionUtils;
 
@@ -161,7 +159,7 @@ public class EaseChatFragment extends EaseBaseFragment implements View.OnClickLi
         if(bundle != null) {
             isRoaming = bundle.getBoolean("isRoaming", false);
             chatType = bundle.getInt(EaseConstant.EXTRA_CHAT_TYPE, EaseConstant.CHATTYPE_SINGLE);
-            toChatUsername = bundle.getString(EaseConstant.EXTRA_USER_ID);
+            toChatUsername = bundle.getString(EaseConstant.EXTRA_CONVERSATION_ID);
             forwardMsgId = bundle.getString(EaseConstant.FORWARD_MSG_ID);
             historyMsgId = bundle.getString(EaseConstant.HISTORY_MSG_ID);
             turnOnTyping = openTurnOnTyping();

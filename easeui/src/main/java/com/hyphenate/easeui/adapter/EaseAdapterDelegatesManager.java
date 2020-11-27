@@ -16,6 +16,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.hyphenate.chat.EMMessage;
 import com.hyphenate.easeui.adapter.EaseBaseRecyclerViewAdapter.ViewHolder;
+import com.hyphenate.easeui.delegate.EaseMessageAdapterDelegate;
 
 public class EaseAdapterDelegatesManager {
     private boolean hasConsistItemType;
@@ -222,7 +223,22 @@ public class EaseAdapterDelegatesManager {
     }
 
     private String targetTag(Object item) {
-        return item instanceof EMMessage ? ((EMMessage) item).direct().toString() : EaseAdapterDelegate.DEFAULT_TAG;
+        if(item instanceof EMMessage) {
+            if(!delegates.isEmpty()) {
+                boolean isChat = true;
+                for(int i = 0; i < delegates.size(); i++) {
+                    int key = delegates.indexOfKey(i);
+                    EaseAdapterDelegate<Object, ViewHolder> delegate = delegates.get(key);
+                    if(!(delegate instanceof EaseMessageAdapterDelegate)) {
+                        isChat = false;
+                        break;
+                    }
+                }
+                return isChat ? ((EMMessage) item).direct().toString() : EaseAdapterDelegate.DEFAULT_TAG;
+            }
+            return EaseAdapterDelegate.DEFAULT_TAG;
+        }
+        return EaseAdapterDelegate.DEFAULT_TAG;
     }
 
     private List<Integer> indexesOfValue(SparseArrayCompat<String> array, String value) {

@@ -11,7 +11,7 @@ import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
 import android.widget.TextView;
 
-public class EaseInputEditText extends EditText implements View.OnKeyListener, TextView.OnEditorActionListener, TextWatcher {
+public class EaseInputEditText extends EditText implements View.OnKeyListener, TextView.OnEditorActionListener {
     private boolean ctrlPress = false;
     private OnEditTextChangeListener listener;
 
@@ -27,7 +27,6 @@ public class EaseInputEditText extends EditText implements View.OnKeyListener, T
         super(context, attrs, defStyleAttr);
         setOnKeyListener(this);
         setOnEditorActionListener(this);
-        addTextChangedListener(this);
     }
 
     @Override
@@ -68,23 +67,6 @@ public class EaseInputEditText extends EditText implements View.OnKeyListener, T
         }
     }
 
-    @Override
-    public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-    }
-
-    @Override
-    public void onTextChanged(CharSequence s, int start, int before, int count) {
-        if (listener != null) {
-            listener.onEditTextTyping(s, start, before, count);
-        }
-    }
-
-    @Override
-    public void afterTextChanged(Editable s) {
-
-    }
-
     /**
      * 设置监听
      * @param listener
@@ -94,11 +76,6 @@ public class EaseInputEditText extends EditText implements View.OnKeyListener, T
     }
 
     public interface OnEditTextChangeListener {
-
-        /**
-         * when typing on the edit-text layout.
-         */
-        void onEditTextTyping(CharSequence s, int start, int before, int count);
 
         /**
          * when send button clicked

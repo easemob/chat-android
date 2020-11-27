@@ -42,8 +42,8 @@
     <string name="The_recording_time_is_too_short">说话时间太短</string>
     <string name="send_failure_please">发送失败，请检测服务器是否连接</string>
     <string name="Send_voice_need_sdcard_support">发送语音需要sdcard支持</string>
-    <string name="move_up_to_cancel">手指上滑，取消发送</string>
-    <string name="release_to_cancel">松开手指，取消发送</string>
+    <string name="move_up_to_cancel">手指上滑\u0020\u0020取消发送</string>
+    <string name="release_to_cancel">松开手指\u0020\u0020取消发送</string>
     <string name="send_fail">发送消息失败,</string>
     <string name="recoding_fail">录音失败，请重试！</string>
     <string name="attach_smile">表情</string>

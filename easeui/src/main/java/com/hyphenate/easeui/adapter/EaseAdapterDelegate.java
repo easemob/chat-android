@@ -24,9 +24,9 @@ import androidx.recyclerview.widget.RecyclerView;
  * @param <T>
  * @param <VH>
  */
-public abstract class EaseAdapterDelegate<T, VH extends RecyclerView.ViewHolder> {
+public abstract class EaseAdapterDelegate<T, VH extends RecyclerView.ViewHolder> implements Cloneable{
     public static final String DEFAULT_TAG = "";
-    public String tag = DEFAULT_TAG;
+    private String tag = DEFAULT_TAG;
     public List<String> tags = new ArrayList<>();
 
     public EaseAdapterDelegate() {
@@ -80,7 +80,23 @@ public abstract class EaseAdapterDelegate<T, VH extends RecyclerView.ViewHolder>
         tags.add(tag);
     }
 
+    public String getTag() {
+        return tag;
+    }
+
     public List<String> getTags() {
         return tags;
+    }
+
+    @NonNull
+    @Override
+    protected Object clone() throws CloneNotSupportedException {
+        Object obj = null;
+        try {
+            obj = super.clone();
+        } catch (CloneNotSupportedException e) {
+            e.printStackTrace();
+        }
+        return obj;
     }
 }

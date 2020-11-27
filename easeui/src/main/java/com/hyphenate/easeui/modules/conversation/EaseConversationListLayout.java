@@ -28,6 +28,7 @@ import com.hyphenate.easeui.adapter.EaseBaseRecyclerViewAdapter;
 import com.hyphenate.easeui.interfaces.OnItemClickListener;
 import com.hyphenate.easeui.interfaces.OnItemLongClickListener;
 import com.hyphenate.easeui.modules.conversation.adapter.EaseConversationListAdapter;
+import com.hyphenate.easeui.modules.conversation.delegate.EaseSystemMsgDelegate;
 import com.hyphenate.easeui.modules.conversation.interfaces.OnConversationChangeListener;
 import com.hyphenate.easeui.modules.conversation.interfaces.OnConversationLoadListener;
 import com.hyphenate.easeui.modules.conversation.model.EaseConversationInfo;
@@ -237,6 +238,7 @@ public class EaseConversationListLayout extends EaseBaseLayout implements IConve
     }
 
     public void init() {
+        listAdapter.addDelegate(new EaseSystemMsgDelegate(setModel));
         listAdapter.addDelegate(new EaseConversationDelegate(setModel));
         rvConversationList.setAdapter(adapter);
     }

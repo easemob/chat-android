@@ -5,7 +5,9 @@ import android.content.Context;
 import android.graphics.drawable.Drawable;
 import android.text.Editable;
 import android.text.TextUtils;
+import android.text.TextWatcher;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -24,7 +26,7 @@ import com.hyphenate.easeui.R;
 import com.hyphenate.easeui.modules.chat.interfaces.EaseChatPrimaryMenuListener;
 import com.hyphenate.easeui.modules.chat.interfaces.IChatPrimaryMenu;
 
-public class EaseChatPrimaryMenu extends RelativeLayout implements IChatPrimaryMenu, View.OnClickListener, EaseInputEditText.OnEditTextChangeListener {
+public class EaseChatPrimaryMenu extends RelativeLayout implements IChatPrimaryMenu, View.OnClickListener, EaseInputEditText.OnEditTextChangeListener, TextWatcher {
     private LinearLayout rlBottom;
     private ImageView buttonSetModeVoice;
     private ImageView buttonSetModeKeyboard;
@@ -86,6 +88,7 @@ public class EaseChatPrimaryMenu extends RelativeLayout implements IChatPrimaryM
         faceLayout.setOnClickListener(this);
         editText.setOnClickListener(this);
         editText.setOnEditTextChangeListener(this);
+        editText.addTextChangedListener(this);
         buttonPressToSpeak.setOnTouchListener(new OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
@@ -105,6 +108,12 @@ public class EaseChatPrimaryMenu extends RelativeLayout implements IChatPrimaryM
             buttonMore.setVisibility(GONE);
             buttonSend.setVisibility(VISIBLE);
         }
+    }
+
+    @Override
+    protected void onDetachedFromWindow() {
+        super.onDetachedFromWindow();
+        editText.removeTextChangedListener(this);
     }
 
     @Override
@@ -257,14 +266,6 @@ public class EaseChatPrimaryMenu extends RelativeLayout implements IChatPrimaryM
     }
 
     @Override
-    public void onEditTextTyping(CharSequence s, int start, int before, int count) {
-        showSendButton(s);
-        if(listener != null) {
-            listener.onTyping(s, start, before, count);
-        }
-    }
-
-    @Override
     public void onClickKeyboardSendBtn(String content) {
         if(listener != null) {
             listener.onSendBtnClicked(content);
@@ -352,5 +353,23 @@ public class EaseChatPrimaryMenu extends RelativeLayout implements IChatPrimaryM
         this.listener = listener;
     }
 
+    @Override
+    public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+    }
+
+    @Override
+    public void onTextChanged(CharSequence s, int start, int before, int count) {
+        Log.e("TAG", this.getClass().getSimpleName() + " onTextChanged s:"+s);
+        showSendButton(s);
+        if(listener != null) {
+            listener.onTyping(s, start, before, count);
+        }
+    }
+
+    @Override
+    public void afterTextChanged(Editable s) {
+        Log.e("TAG", this.getClass().getSimpleName() + " afterTextChanged s:"+s);
+    }
 }
 

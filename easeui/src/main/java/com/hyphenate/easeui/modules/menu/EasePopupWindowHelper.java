@@ -188,15 +188,19 @@ public class EasePopupWindowHelper {
         int[] location = new int[2];
         v.getLocationOnScreen(location);
 
+        //获取父布局的坐标
+        int[] location2 = new int[2];
+        parent.getLocationOnScreen(location2);
+
         //设定与依附view之间的间距
         int margin = (int) EaseCommonUtils.dip2px(context, 5);
 
         //获取StatusBar的高度
-        int resourceId = context.getResources().getIdentifier("status_bar_height", "dimen", "android");
-        int statusBarHeight = context.getResources().getDimensionPixelSize(resourceId);
+        //int resourceId = context.getResources().getIdentifier("status_bar_height", "dimen", "android");
+        //int statusBarHeight = context.getResources().getDimensionPixelSize(resourceId);
 
         int yOffset = 0;
-        if(location[1] - popupHeight - margin < statusBarHeight + margin * 2) {
+        if(location[1] - popupHeight - margin < location2[1]) {
             yOffset = location[1] + v.getHeight() + margin;
         }else {
             yOffset = location[1] - popupHeight - margin;

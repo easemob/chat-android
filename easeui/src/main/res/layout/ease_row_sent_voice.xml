@@ -96,14 +96,13 @@
             android:visibility="invisible"
             />
         <ProgressBar
-            android:visibility="visible"
+            android:visibility="invisible"
             android:id="@+id/progress_bar"
             style="?android:attr/progressBarStyle"
             android:indeterminateDrawable="@drawable/ease_chat_loading_progress_bar"
             android:layout_width="25dp"
             android:layout_height="25dp"
-            android:layout_toLeftOf="@id/bubble"
-          />
+            android:layout_toLeftOf="@id/bubble" />
 
         <TextView
             android:id="@+id/tv_userid"

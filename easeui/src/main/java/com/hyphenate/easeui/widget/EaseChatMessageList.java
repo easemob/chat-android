@@ -4,13 +4,9 @@ import android.animation.ValueAnimator;
 import android.app.Activity;
 import android.content.Context;
 import android.content.res.TypedArray;
-import android.os.Handler;
-import android.os.Looper;
 import android.text.TextUtils;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewTreeObserver;
 import android.widget.RelativeLayout;
@@ -30,12 +26,11 @@ import com.hyphenate.easeui.R;
 import com.hyphenate.easeui.adapter.EaseMessageAdapter;
 import com.hyphenate.easeui.interfaces.MessageListItemClickListener;
 import com.hyphenate.easeui.interfaces.OnItemClickListener;
-import com.hyphenate.easeui.manager.EaseConTypeSetManager;
+import com.hyphenate.easeui.manager.EaseMessageTypeSetManager;
 import com.hyphenate.easeui.manager.EaseThreadManager;
 import com.hyphenate.easeui.model.styles.EaseMessageListItemStyle;
 import com.hyphenate.easeui.utils.EaseCommonUtils;
 
-import java.util.Iterator;
 import java.util.List;
 
 public class EaseChatMessageList extends RelativeLayout implements SwipeRefreshLayout.OnRefreshListener {
@@ -174,7 +169,7 @@ public class EaseChatMessageList extends RelativeLayout implements SwipeRefreshL
      */
     private void registerDelegates() {
         try {
-            EaseConTypeSetManager.getInstance().registerConversationType(messageAdapter);
+            EaseMessageTypeSetManager.getInstance().registerMessageType(messageAdapter);
         } catch (InstantiationException e) {
             e.printStackTrace();
         } catch (IllegalAccessException e) {

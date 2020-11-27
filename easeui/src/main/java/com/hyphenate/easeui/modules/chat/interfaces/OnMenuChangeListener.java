@@ -22,11 +22,11 @@ public interface OnMenuChangeListener {
      * @param item
      * @param message
      */
-    void onMenuItemClick(MenuItemBean item, EMMessage message);
+    boolean onMenuItemClick(MenuItemBean item, EMMessage message);
 
     /**
      * 消失
      * @param menu
      */
-    void onDismiss(PopupWindow menu);
+    default void onDismiss(PopupWindow menu) {}
 }

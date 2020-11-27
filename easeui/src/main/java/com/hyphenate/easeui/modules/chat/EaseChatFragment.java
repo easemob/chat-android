@@ -40,7 +40,7 @@ public class EaseChatFragment extends EaseBaseFragment implements OnChatLayoutLi
     protected static final int REQUEST_CODE_SELECT_FILE = 12;
     private static final String TAG = EaseChatFragment.class.getSimpleName();
     public EaseChatLayout chatLayout;
-    public String toChatUsername;
+    public String conversationId;
     public int chatType;
     public String historyMsgId;
     public boolean isRoam;
@@ -75,7 +75,7 @@ public class EaseChatFragment extends EaseBaseFragment implements OnChatLayoutLi
     public void initArguments() {
         Bundle bundle = getArguments();
         if(bundle != null) {
-            toChatUsername = bundle.getString(EaseConstant.EXTRA_USER_ID);
+            conversationId = bundle.getString(EaseConstant.EXTRA_CONVERSATION_ID);
             chatType = bundle.getInt(EaseConstant.EXTRA_CHAT_TYPE, EaseConstant.CHATTYPE_SINGLE);
             historyMsgId = bundle.getString(EaseConstant.HISTORY_MSG_ID);
             isRoam = bundle.getBoolean(EaseConstant.EXTRA_IS_ROAM, false);
@@ -94,13 +94,13 @@ public class EaseChatFragment extends EaseBaseFragment implements OnChatLayoutLi
 
     public void initData() {
         if(!TextUtils.isEmpty(historyMsgId)) {
-            chatLayout.init(EaseChatMessageListLayout.LoadDataType.HISTORY, toChatUsername, chatType);
+            chatLayout.init(EaseChatMessageListLayout.LoadDataType.HISTORY, conversationId, chatType);
             chatLayout.loadData(historyMsgId);
         }else {
             if(isRoam) {
-                chatLayout.init(EaseChatMessageListLayout.LoadDataType.ROAM, toChatUsername, chatType);
+                chatLayout.init(EaseChatMessageListLayout.LoadDataType.ROAM, conversationId, chatType);
             }else {
-                chatLayout.init(toChatUsername, chatType);
+                chatLayout.init(conversationId, chatType);
             }
             chatLayout.loadDefaultData();
         }
@@ -108,13 +108,6 @@ public class EaseChatFragment extends EaseBaseFragment implements OnChatLayoutLi
 
     public void setOnChatLayoutListener(OnChatLayoutListener listener) {
         this.listener = listener;
-    }
-
-    @Override
-    public void onMessageChange(EaseEvent change) {
-        if(listener != null) {
-            listener.onMessageChange(change);
-        }
     }
 
     @Override
@@ -300,7 +293,7 @@ public class EaseChatFragment extends EaseBaseFragment implements OnChatLayoutLi
             String msgContent = data.getStringExtra("msg");
             EMLog.i(TAG, "To send the ding-type msg, content: " + msgContent);
             // Send the ding-type msg.
-            EMMessage dingMsg = EaseDingMessageHelper.get().createDingMessage(toChatUsername, msgContent);
+            EMMessage dingMsg = EaseDingMessageHelper.get().createDingMessage(conversationId, msgContent);
             chatLayout.sendMessage(dingMsg);
         }
     }

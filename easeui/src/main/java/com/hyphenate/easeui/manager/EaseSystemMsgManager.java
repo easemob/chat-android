@@ -8,7 +8,12 @@ import com.hyphenate.chat.EMMessage;
 import com.hyphenate.chat.EMTextMessageBody;
 import com.hyphenate.easeui.constants.EaseConstant;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
@@ -42,11 +47,65 @@ public class EaseSystemMsgManager {
         emMessage.setStatus(EMMessage.Status.SUCCESS);
         emMessage.addBody(new EMTextMessageBody(message));
         if(ext != null && !ext.isEmpty()) {
-            emMessage.ext().putAll(ext);
+            Iterator<String> iterator = ext.keySet().iterator();
+            while (iterator.hasNext()) {
+                String key = iterator.next();
+                Object value = ext.get(key);
+                putObject(emMessage, key, value);
+            }
         }
         emMessage.setUnread(true);
         EMClient.getInstance().chatManager().saveMessage(emMessage);
         return emMessage;
+    }
+
+    private void putObject(EMMessage message, String key, Object value) {
+        if(TextUtils.isEmpty(key)) {
+            return;
+        }
+        if(value instanceof String) {
+            message.setAttribute(key, (String) value);
+        }else if(value instanceof Byte) {
+            message.setAttribute(key, (Integer) value);
+        }else if(value instanceof Character) {
+            message.setAttribute(key, (Integer) value);
+        }else if(value instanceof Short) {
+            message.setAttribute(key, (Integer) value);
+        }else if(value instanceof Integer) {
+            message.setAttribute(key, (Integer) value);
+        }else if(value instanceof Boolean) {
+            message.setAttribute(key, (Boolean) value);
+        }else if(value instanceof Long) {
+            message.setAttribute(key, (Long) value);
+        }else if(value instanceof Float) {
+            JSONObject object = new JSONObject();
+            try {
+                object.put(key, value);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+            message.setAttribute(key, object);
+        }else if(value instanceof Double) {
+            JSONObject object = new JSONObject();
+            try {
+                object.put(key, value);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+            message.setAttribute(key, object);
+        }else if(value instanceof JSONObject) {
+            message.setAttribute(key, (JSONObject) value);
+        }else if(value instanceof JSONArray) {
+            message.setAttribute(key, (JSONArray) value);
+        }else {
+            JSONObject object = new JSONObject();
+            try {
+                object.put(key, value);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+            message.setAttribute(key, object);
+        }
     }
 
     /**

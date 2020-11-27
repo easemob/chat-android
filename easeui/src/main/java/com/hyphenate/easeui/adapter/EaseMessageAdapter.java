@@ -37,6 +37,19 @@ public class EaseMessageAdapter extends EaseBaseDelegateAdapter<EMMessage> {
      */
     @Override
     public EaseBaseDelegateAdapter addDelegate(EaseAdapterDelegate delegate) {
+        EaseAdapterDelegate clone = null;
+        try {
+            clone = (EaseAdapterDelegate) delegate.clone();
+            clone.setTag(EMMessage.Direct.RECEIVE.name());
+            //设置点击事件
+            if(clone instanceof EaseMessageAdapterDelegate) {
+                ((EaseMessageAdapterDelegate) clone).setListItemClickListener(itemClickListener);
+            }
+            super.addDelegate(clone);
+        } catch (CloneNotSupportedException e) {
+            e.printStackTrace();
+        }
+        delegate.setTag(EMMessage.Direct.SEND.name());
         //设置点击事件
         if(delegate instanceof EaseMessageAdapterDelegate) {
             ((EaseMessageAdapterDelegate) delegate).setListItemClickListener(itemClickListener);
@@ -46,6 +59,19 @@ public class EaseMessageAdapter extends EaseBaseDelegateAdapter<EMMessage> {
 
     @Override
     public EaseBaseDelegateAdapter setFallbackDelegate(EaseAdapterDelegate delegate) {
+        EaseAdapterDelegate clone = null;
+        try {
+            clone = (EaseAdapterDelegate) delegate.clone();
+            clone.setTag(EMMessage.Direct.RECEIVE.name());
+            //设置点击事件
+            if(clone instanceof EaseMessageAdapterDelegate) {
+                ((EaseMessageAdapterDelegate) clone).setListItemClickListener(itemClickListener);
+            }
+            super.setFallbackDelegate(clone);
+        } catch (CloneNotSupportedException e) {
+            e.printStackTrace();
+        }
+        delegate.setTag(EMMessage.Direct.SEND.name());
         //设置点击事件
         if(delegate instanceof EaseMessageAdapterDelegate) {
             ((EaseMessageAdapterDelegate) delegate).setListItemClickListener(itemClickListener);

@@ -97,11 +97,11 @@ public class EasePopupMenuHelper implements PopupMenu.OnMenuItemClickListener, P
             Field field = pMenu.getClass().getDeclaredField("mPopup");
             field.setAccessible(true);
             MenuPopupHelper helper = (MenuPopupHelper) field.get(pMenu);
-            x = (int) (x - dip2px(targetView.getContext(), 100));
-            if(x < 0) {
-                x = 0;
-            }
-            y = y - targetView.getHeight() / 2;
+//            x = (int) (x - dip2px(targetView.getContext(), 100));
+//            if(x < 0) {
+//                x = 0;
+//            }
+            //y = y - targetView.getHeight();
             Log.e("TAG", "show menu x = "+x + " y = "+y);
             helper.show(x, y);
         } catch (NoSuchFieldException e) {

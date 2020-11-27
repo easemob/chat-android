@@ -3,16 +3,12 @@ package com.hyphenate.easeui.modules.chat;
 import android.animation.ValueAnimator;
 import android.content.Context;
 import android.content.res.TypedArray;
-import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewTreeObserver;
-import android.widget.PopupWindow;
 import android.widget.RelativeLayout;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -31,7 +27,7 @@ import com.hyphenate.easeui.R;
 import com.hyphenate.easeui.adapter.EaseMessageAdapter;
 import com.hyphenate.easeui.interfaces.MessageListItemClickListener;
 import com.hyphenate.easeui.interfaces.OnItemClickListener;
-import com.hyphenate.easeui.manager.EaseConTypeSetManager;
+import com.hyphenate.easeui.manager.EaseMessageTypeSetManager;
 import com.hyphenate.easeui.manager.EaseThreadManager;
 import com.hyphenate.easeui.modules.chat.interfaces.IChatMessageItemSet;
 import com.hyphenate.easeui.modules.chat.interfaces.IChatMessageListLayout;
@@ -40,10 +36,6 @@ import com.hyphenate.easeui.modules.chat.model.EaseChatItemStyleHelper;
 import com.hyphenate.easeui.modules.chat.presenter.EaseChatMessagePresenter;
 import com.hyphenate.easeui.modules.chat.presenter.EaseChatMessagePresenterImpl;
 import com.hyphenate.easeui.modules.chat.presenter.IChatMessageListView;
-import com.hyphenate.easeui.modules.interfaces.IPopupWindow;
-import com.hyphenate.easeui.modules.menu.EasePopupWindow;
-import com.hyphenate.easeui.modules.menu.EasePopupWindowHelper;
-import com.hyphenate.easeui.modules.menu.MenuItemBean;
 import com.hyphenate.easeui.utils.EaseCommonUtils;
 
 import java.util.List;
@@ -202,7 +194,7 @@ public class EaseChatMessageListLayout extends RelativeLayout implements IChatMe
 
     private void registerChatType() {
         try {
-            EaseConTypeSetManager.getInstance().registerConversationType(messageAdapter);
+            EaseMessageTypeSetManager.getInstance().registerMessageType(messageAdapter);
         } catch (InstantiationException e) {
             e.printStackTrace();
         } catch (IllegalAccessException e) {
@@ -570,12 +562,10 @@ public class EaseChatMessageListLayout extends RelativeLayout implements IChatMe
 
     @Override
     public void refreshCurrentConSuccess(List<EMMessage> data, boolean toLatest) {
-        post(()-> {
-            messageAdapter.setData(data);
-            if(toLatest) {
-                seekToPosition(data.size() - 1);
-            }
-        });
+        messageAdapter.setData(data);
+        if(toLatest) {
+            seekToPosition(data.size() - 1);
+        }
     }
 
     @Override
@@ -779,8 +769,6 @@ public class EaseChatMessageListLayout extends RelativeLayout implements IChatMe
         RecyclerView.LayoutManager manager = rvList.getLayoutManager();
         if(manager instanceof LinearLayoutManager) {
             ((LinearLayoutManager) manager).scrollToPositionWithOffset(position, 0);
-            boolean visibleBottom = isVisibleBottom(rvList);
-            Log.e("TAG", "visibleBottom = "+visibleBottom);
         }
     }
 

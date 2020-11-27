@@ -6,6 +6,7 @@ import android.graphics.drawable.Drawable;
 import android.os.Handler;
 import android.os.PowerManager;
 import android.util.AttributeSet;
+import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -32,6 +33,7 @@ public class EaseVoiceRecorderView extends RelativeLayout {
     protected EaseVoiceRecorder voiceRecorder;
 
     protected PowerManager.WakeLock wakeLock;
+    protected ImageView ivIcon;
     protected ImageView micImage;
     protected TextView recordingHint;
 
@@ -66,6 +68,7 @@ public class EaseVoiceRecorderView extends RelativeLayout {
         this.context = context;
         LayoutInflater.from(context).inflate(R.layout.ease_widget_voice_recorder, this);
 
+        ivIcon = findViewById(R.id.iv_icon);
         micImage = (ImageView) findViewById(R.id.mic_image);
         recordingHint = (TextView) findViewById(R.id.recording_hint);
 
@@ -75,17 +78,7 @@ public class EaseVoiceRecorderView extends RelativeLayout {
         micImages = new Drawable[] { getResources().getDrawable(R.drawable.ease_record_animate_01),
                 getResources().getDrawable(R.drawable.ease_record_animate_02),
                 getResources().getDrawable(R.drawable.ease_record_animate_03),
-                getResources().getDrawable(R.drawable.ease_record_animate_04),
-                getResources().getDrawable(R.drawable.ease_record_animate_05),
-                getResources().getDrawable(R.drawable.ease_record_animate_06),
-                getResources().getDrawable(R.drawable.ease_record_animate_07),
-                getResources().getDrawable(R.drawable.ease_record_animate_08),
-                getResources().getDrawable(R.drawable.ease_record_animate_09),
-                getResources().getDrawable(R.drawable.ease_record_animate_10),
-                getResources().getDrawable(R.drawable.ease_record_animate_11),
-                getResources().getDrawable(R.drawable.ease_record_animate_12),
-                getResources().getDrawable(R.drawable.ease_record_animate_13),
-                getResources().getDrawable(R.drawable.ease_record_animate_14), };
+                getResources().getDrawable(R.drawable.ease_record_animate_04)};
 
         wakeLock = ((PowerManager) context.getSystemService(Context.POWER_SERVICE)).newWakeLock(
                 PowerManager.SCREEN_DIM_WAKE_LOCK, "demo");
@@ -113,7 +106,7 @@ public class EaseVoiceRecorderView extends RelativeLayout {
             return true;
         case MotionEvent.ACTION_MOVE:
             setTextContent(v, true);
-            if (event.getY() < 0) {
+            if (event.getY() < dip2px(getContext(), 10)) {
                 showReleaseToCancelHint();
             } else {
                 showMoveUpToCancelHint();
@@ -181,6 +174,8 @@ public class EaseVoiceRecorderView extends RelativeLayout {
             this.setVisibility(View.VISIBLE);
             recordingHint.setText(context.getString(R.string.move_up_to_cancel));
             recordingHint.setBackgroundColor(Color.TRANSPARENT);
+            ivIcon.setImageResource(R.drawable.ease_record_icon);
+            micImage.setVisibility(VISIBLE);
             voiceRecorder.startRecording(context);
         } catch (Exception e) {
             e.printStackTrace();
@@ -196,12 +191,16 @@ public class EaseVoiceRecorderView extends RelativeLayout {
 
     public void showReleaseToCancelHint() {
         recordingHint.setText(context.getString(R.string.release_to_cancel));
-        recordingHint.setBackgroundResource(R.drawable.ease_recording_text_hint_bg);
+        //recordingHint.setBackgroundResource(R.drawable.ease_recording_text_hint_bg);
+        ivIcon.setImageResource(R.drawable.ease_record_cancel);
+        micImage.setVisibility(GONE);
     }
 
     public void showMoveUpToCancelHint() {
         recordingHint.setText(context.getString(R.string.move_up_to_cancel));
         recordingHint.setBackgroundColor(Color.TRANSPARENT);
+        ivIcon.setImageResource(R.drawable.ease_record_icon);
+        micImage.setVisibility(VISIBLE);
     }
 
     public void discardRecording() {
@@ -236,4 +235,13 @@ public class EaseVoiceRecorderView extends RelativeLayout {
         return voiceRecorder.isRecording();
     }
 
+    /**
+     * dip to px
+     * @param context
+     * @param value
+     * @return
+     */
+    public static float dip2px(Context context, float value) {
+        return TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, value, context.getResources().getDisplayMetrics());
+    }
 }

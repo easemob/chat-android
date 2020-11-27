@@ -13,9 +13,9 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.PopupWindow;
 import android.widget.RelativeLayout;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -33,11 +33,11 @@ import com.hyphenate.easeui.domain.EaseUser;
 import com.hyphenate.easeui.interfaces.MessageListItemClickListener;
 import com.hyphenate.easeui.manager.EaseAtMessageHelper;
 import com.hyphenate.easeui.manager.EaseThreadManager;
-import com.hyphenate.easeui.model.EaseEvent;
 import com.hyphenate.easeui.modules.chat.interfaces.ChatInputMenuListener;
 import com.hyphenate.easeui.modules.chat.interfaces.IChatLayout;
 import com.hyphenate.easeui.modules.chat.interfaces.OnChatLayoutListener;
 import com.hyphenate.easeui.modules.chat.interfaces.OnMenuChangeListener;
+import com.hyphenate.easeui.modules.chat.interfaces.OnRecallMessageResultListener;
 import com.hyphenate.easeui.modules.chat.presenter.EaseHandleMessagePresenter;
 import com.hyphenate.easeui.modules.chat.presenter.EaseHandleMessagePresenterImpl;
 import com.hyphenate.easeui.modules.chat.presenter.IHandleMessageView;
@@ -64,6 +64,9 @@ public class EaseChatLayout extends RelativeLayout implements IChatLayout, IHand
     public static final String ACTION_TYPING_END = "TypingEnd";
     protected static final int TYPING_SHOW_TIME = 5000;
 
+    public static final String AT_PREFIX = "@";
+    public static final String AT_SUFFIX = " ";
+
     private EaseChatMessageListLayout messageListLayout;
     private EaseChatInputMenu inputMenu;
     private EaseVoiceRecorderView voiceRecorder;
@@ -76,9 +79,9 @@ public class EaseChatLayout extends RelativeLayout implements IChatLayout, IHand
      */
     private Handler typingHandler;
     /**
-     * 对方的环信id
+     * 会话id，可能是对方环信id，也可能是群id或者聊天室id
      */
-    private String toChatUsername;
+    private String conversationId;
     /**
      * 聊天类型
      */
@@ -98,6 +101,10 @@ public class EaseChatLayout extends RelativeLayout implements IChatLayout, IHand
     private EasePopupWindowHelper menuHelper;
     private ClipboardManager clipboard;
     private OnMenuChangeListener menuChangeListener;
+    /**
+     * 撤回监听
+     */
+    private OnRecallMessageResultListener recallMessageListener;
 
     public EaseChatLayout(Context context) {
         this(context, null);
@@ -155,14 +162,14 @@ public class EaseChatLayout extends RelativeLayout implements IChatLayout, IHand
     /**
      * 初始化
      * @param loadDataType 加载数据模式
-     * @param username 环信id
+     * @param conversationId 会话id，可能是对方环信id，也可能是群id或者聊天室id
      * @param chatType 聊天类型，单聊，群聊或者聊天室
      */
-    public void init(EaseChatMessageListLayout.LoadDataType loadDataType, String username, int chatType) {
-        this.toChatUsername = username;
+    public void init(EaseChatMessageListLayout.LoadDataType loadDataType, String conversationId, int chatType) {
+        this.conversationId = conversationId;
         this.chatType = chatType;
-        messageListLayout.init(loadDataType, toChatUsername, chatType);
-        presenter.setupWithToUser(chatType, toChatUsername);
+        messageListLayout.init(loadDataType, this.conversationId, chatType);
+        presenter.setupWithToUser(chatType, this.conversationId);
         initTypingHandler();
     }
 
@@ -327,6 +334,17 @@ public class EaseChatLayout extends RelativeLayout implements IChatLayout, IHand
     }
 
     @Override
+    public void deleteMessage(EMMessage message) {
+        messageListLayout.getCurrentConversation().removeMessage(message.getMsgId());
+        messageListLayout.removeMessage(message);
+    }
+
+    @Override
+    public void recallMessage(EMMessage message) {
+        presenter.recallMessage(message);
+    }
+
+    @Override
     public void addMessageAttributes(EMMessage message) {
         presenter.addMessageAttributes(message);
     }
@@ -334,6 +352,11 @@ public class EaseChatLayout extends RelativeLayout implements IChatLayout, IHand
     @Override
     public void setOnChatLayoutListener(OnChatLayoutListener listener) {
         this.listener = listener;
+    }
+
+    @Override
+    public void setOnRecallMessageResultListener(OnRecallMessageResultListener listener) {
+        this.recallMessageListener = listener;
     }
 
     @Override
@@ -394,7 +417,7 @@ public class EaseChatLayout extends RelativeLayout implements IChatLayout, IHand
                 username = message.getFrom();
             }
             // if the message is for current conversation
-            if (username.equals(toChatUsername) || message.getTo().equals(toChatUsername) || message.conversationId().equals(toChatUsername)) {
+            if (username.equals(conversationId) || message.getTo().equals(conversationId) || message.conversationId().equals(conversationId)) {
                 refresh = true;
             }
         }
@@ -410,7 +433,7 @@ public class EaseChatLayout extends RelativeLayout implements IChatLayout, IHand
             final EMCmdMessageBody body = (EMCmdMessageBody) msg.getBody();
             EMLog.i(TAG, "Receive cmd message: " + body.action() + " - " + body.isDeliverOnlineOnly());
             EaseThreadManager.getInstance().runOnMainThread(() -> {
-                if(TextUtils.equals(msg.getFrom(), toChatUsername)) {
+                if(TextUtils.equals(msg.getFrom(), conversationId)) {
                     if(listener != null) {
                         listener.onOtherTyping(body.action());
                     }
@@ -486,11 +509,17 @@ public class EaseChatLayout extends RelativeLayout implements IChatLayout, IHand
 
     @Override
     public void recallMessageFinish(EMMessage message) {
+        if(recallMessageListener != null) {
+            recallMessageListener.recallSuccess(message);
+        }
         messageListLayout.refreshMessages();
     }
 
     @Override
     public void recallMessageFail(int code, String message) {
+        if(recallMessageListener != null) {
+            recallMessageListener.recallFail(code, message);
+        }
         if(listener != null) {
             listener.onChatError(code, message);
         }
@@ -651,10 +680,24 @@ public class EaseChatLayout extends RelativeLayout implements IChatLayout, IHand
         if (user != null){
             username = user.getNickname();
         }
+        EditText editText = inputMenu.getPrimaryMenu().getEditText();
         if(autoAddAtSymbol)
-            inputMenu.getPrimaryMenu().getEditText().setText("@" + username + " ");
+            insertText(editText, AT_PREFIX + username + AT_SUFFIX);
         else
-            inputMenu.getPrimaryMenu().getEditText().setText(username + " ");
+            insertText(editText, username + AT_SUFFIX);
+    }
+
+    /**
+     * insert text to EditText
+     * @param edit
+     * @param text
+     */
+    private void insertText(EditText edit, String text) {
+        if(edit.isFocused()) {
+            edit.getText().insert(edit.getSelectionStart(), text);
+        }else {
+            edit.getText().insert(edit.getText().length() - 1, text);
+        }
     }
 
     private void showDefaultMenu(View v, EMMessage message) {
@@ -667,7 +710,10 @@ public class EaseChatLayout extends RelativeLayout implements IChatLayout, IHand
         }
         menuHelper.setOnPopupMenuItemClickListener(new EasePopupWindow.OnPopupWindowItemClickListener() {
             @Override
-            public void onMenuItemClick(MenuItemBean item) {
+            public boolean onMenuItemClick(MenuItemBean item) {
+                if(menuChangeListener != null) {
+                    return menuChangeListener.onMenuItemClick(item, message);
+                }
                 if(showDefaultMenu) {
                     switch (item.getItemId()) {
                         case EasePopupWindowHelper.ACTION_COPY :
@@ -676,26 +722,16 @@ public class EaseChatLayout extends RelativeLayout implements IChatLayout, IHand
                             EMLog.i(TAG, "copy success");
                             break;
                         case EasePopupWindowHelper.ACTION_DELETE :
-                            if(listener != null) {
-                                EaseEvent event = EaseEvent.create(EaseConstant.MESSAGE_CHANGE_DELETE, EaseEvent.TYPE.MESSAGE);
-                                listener.onMessageChange(event);
-                            }
-                            messageListLayout.getCurrentConversation().removeMessage(message.getMsgId());
-                            messageListLayout.removeMessage(message);
+                            deleteMessage(message);
                             Log.e("TAG", "currentMsgId = "+message.getMsgId() + " timestamp = "+message.getMsgTime());
                             break;
                         case EasePopupWindowHelper.ACTION_RECALL :
-                            if(listener != null) {
-                                EaseEvent event = EaseEvent.create(EaseConstant.MESSAGE_CHANGE_RECALL, EaseEvent.TYPE.MESSAGE);
-                                listener.onMessageChange(event);
-                            }
-                            presenter.recallMessage(message);
+                            recallMessage(message);
                             break;
                     }
+                    return true;
                 }
-                if(menuChangeListener != null) {
-                    menuChangeListener.onMenuItemClick(item, message);
-                }
+                return false;
             }
         });
         menuHelper.setOnPopupMenuDismissListener(new EasePopupWindow.OnPopupWindowDismissListener() {

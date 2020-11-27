@@ -192,7 +192,7 @@ public class EasePopupWindow extends PopupWindow {
     }
 
     public interface OnPopupWindowItemClickListener {
-        void onMenuItemClick(MenuItemBean item);
+        boolean onMenuItemClick(MenuItemBean item);
     }
 
     public interface OnPopupWindowDismissListener {

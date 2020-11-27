@@ -118,9 +118,27 @@ public interface IChatLayout {
     void sendMessage(EMMessage message);
 
     /**
+     * 删除消息
+     * @param message
+     */
+    void deleteMessage(EMMessage message);
+
+    /**
+     * 撤回消息
+     * @param message
+     */
+    void recallMessage(EMMessage message);
+
+    /**
      * 用于监听消息的变化
      * @param listener
      */
     void setOnChatLayoutListener(OnChatLayoutListener listener);
+
+    /**
+     * 消息撤回监听
+     * @param listener
+     */
+    void setOnRecallMessageResultListener(OnRecallMessageResultListener listener);
 
 }

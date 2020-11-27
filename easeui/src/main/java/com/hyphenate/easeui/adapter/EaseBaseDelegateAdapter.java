@@ -29,7 +29,7 @@ public abstract class EaseBaseDelegateAdapter<T> extends EaseBaseRecyclerViewAda
     }
 
     public EaseBaseDelegateAdapter addDelegate(EaseAdapterDelegate delegate) {
-        delegatesManager.addDelegate(delegate, delegate.tag);
+        delegatesManager.addDelegate(delegate, delegate.getTag());
         notifyDataSetChanged();
         return this;
     }

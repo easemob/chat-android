@@ -100,6 +100,22 @@ public class EaseUser implements Serializable {
         return new GetInitialLetter().getLetter(name);
     }
 
+    public long getModifyNicknameTimestamp() {
+        return modifyNicknameTimestamp;
+    }
+
+    public void setModifyNicknameTimestamp(long modifyNicknameTimestamp) {
+        this.modifyNicknameTimestamp = modifyNicknameTimestamp;
+    }
+
+    public long getModifyInitialLetterTimestamp() {
+        return modifyInitialLetterTimestamp;
+    }
+
+    public void setModifyInitialLetterTimestamp(long modifyInitialLetterTimestamp) {
+        this.modifyInitialLetterTimestamp = modifyInitialLetterTimestamp;
+    }
+
     public EaseUser() {
     }
 

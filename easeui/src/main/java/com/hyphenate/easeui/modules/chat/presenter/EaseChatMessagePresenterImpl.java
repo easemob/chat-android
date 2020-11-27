@@ -174,6 +174,7 @@ public class EaseChatMessagePresenterImpl extends EaseChatMessagePresenter {
         if(conversation == null) {
             throw new NullPointerException("should first set up with conversation");
         }
+        conversation.markAllMessagesAsRead();
         List<EMMessage> allMessages = conversation.getAllMessages();
         if(isActive()) {
             runOnUI(()->mView.refreshCurrentConSuccess(allMessages, false));
@@ -185,6 +186,7 @@ public class EaseChatMessagePresenterImpl extends EaseChatMessagePresenter {
         if(conversation == null) {
             throw new NullPointerException("should first set up with conversation");
         }
+        conversation.markAllMessagesAsRead();
         List<EMMessage> allMessages = conversation.getAllMessages();
         if(isActive()) {
             runOnUI(()->mView.refreshCurrentConSuccess(allMessages, true));
