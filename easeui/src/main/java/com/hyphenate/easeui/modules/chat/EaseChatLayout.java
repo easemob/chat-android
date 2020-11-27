@@ -57,12 +57,12 @@ public class EaseChatLayout extends RelativeLayout implements IChatLayout, IHand
         , ChatInputMenuListener, EMMessageListener, EaseChatMessageListLayout.OnMessageTouchListener
         , MessageListItemClickListener, EaseChatMessageListLayout.OnChatErrorListener {
     private static final String TAG = EaseChatLayout.class.getSimpleName();
-    private static final int MSG_TYPING_BEGIN = 0;
+    private static final int MSG_TYPING_HEARTBEAT = 0;
     private static final int MSG_TYPING_END = 1;
 
     public static final String ACTION_TYPING_BEGIN = "TypingBegin";
     public static final String ACTION_TYPING_END = "TypingEnd";
-    protected static final int TYPING_SHOW_TIME = 5000;
+    protected static final int TYPING_SHOW_TIME = 10000;
 
     public static final String AT_PREFIX = "@";
     public static final String AT_SUFFIX = " ";
@@ -105,6 +105,10 @@ public class EaseChatLayout extends RelativeLayout implements IChatLayout, IHand
      * 撤回监听
      */
     private OnRecallMessageResultListener recallMessageListener;
+    /**
+     * 是否是首次发送，默认true
+     */
+    private boolean isNotFirstSend;
 
     public EaseChatLayout(Context context) {
         this(context, null);
@@ -148,6 +152,9 @@ public class EaseChatLayout extends RelativeLayout implements IChatLayout, IHand
     protected void onDetachedFromWindow() {
         super.onDetachedFromWindow();
         getChatManager().removeMessageListener(this);
+        if(typingHandler != null) {
+            typingHandler.removeCallbacksAndMessages(null);
+        }
     }
 
     /**
@@ -200,7 +207,7 @@ public class EaseChatLayout extends RelativeLayout implements IChatLayout, IHand
                 @Override
                 public void handleMessage(@NonNull Message msg) {
                     switch (msg.what) {
-                        case MSG_TYPING_BEGIN :
+                        case MSG_TYPING_HEARTBEAT :
                             setTypingBeginMsg(this);
                             break;
                         case MSG_TYPING_END :
@@ -225,14 +232,9 @@ public class EaseChatLayout extends RelativeLayout implements IChatLayout, IHand
         // Only support single-chat type conversation.
         if (chatType != EaseConstant.CHATTYPE_SINGLE)
             return;
-        if (handler.hasMessages(MSG_TYPING_END)) {
-            // reset the MSG_TYPING_END handler msg.
-            handler.removeMessages(MSG_TYPING_END);
-        } else {
-            // Send TYPING-BEGIN cmd msg
-            presenter.sendCmdMessage(ACTION_TYPING_BEGIN);
-        }
-        handler.sendEmptyMessageDelayed(MSG_TYPING_END, TYPING_SHOW_TIME);
+        // Send TYPING-BEGIN cmd msg
+        presenter.sendCmdMessage(ACTION_TYPING_BEGIN);
+        handler.sendEmptyMessageDelayed(MSG_TYPING_HEARTBEAT, TYPING_SHOW_TIME);
     }
 
     /**
@@ -246,10 +248,11 @@ public class EaseChatLayout extends RelativeLayout implements IChatLayout, IHand
         if (chatType != EaseConstant.CHATTYPE_SINGLE)
             return;
 
+        isNotFirstSend = false;
         // remove all pedding msgs to avoid memory leak.
         handler.removeCallbacksAndMessages(null);
         // Send TYPING-END cmd msg
-        presenter.sendCmdMessage(ACTION_TYPING_END);
+        //presenter.sendCmdMessage(ACTION_TYPING_END);
     }
 
     @Override
@@ -365,7 +368,12 @@ public class EaseChatLayout extends RelativeLayout implements IChatLayout, IHand
             listener.onTextChanged(s, start, before, count);
         }
         if(typingHandler != null) {
-            typingHandler.sendEmptyMessage(MSG_TYPING_BEGIN);
+            if(!isNotFirstSend) {
+                isNotFirstSend = true;
+                typingHandler.sendEmptyMessage(MSG_TYPING_HEARTBEAT);
+            }
+            typingHandler.removeMessages(MSG_TYPING_END);
+            typingHandler.sendEmptyMessageDelayed(MSG_TYPING_END, TYPING_SHOW_TIME);
         }
     }
 
