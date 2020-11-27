@@ -80,6 +80,9 @@ public class SystemMsgsActivity extends BaseInitActivity implements OnRefreshLoa
         } catch (HyphenateException e) {
             e.printStackTrace();
         }
+        if(statusParams == null) {
+            return;
+        }
         InviteMessageStatus statusEnum = InviteMessageStatus.valueOf(statusParams);
         if(statusEnum == InviteMessageStatus.BEINVITEED ||
                 statusEnum == InviteMessageStatus.BEAPPLYED ||
@@ -164,7 +167,17 @@ public class SystemMsgsActivity extends BaseInitActivity implements OnRefreshLoa
                 }
             });
         });
+        LiveDataBus bus = LiveDataBus.get();
+        bus.with(DemoConstant.NOTIFY_CHANGE, EaseEvent.class).observe(this, this::loadData);
+        bus.with(DemoConstant.MESSAGE_CHANGE_CHANGE, EaseEvent.class).observe(this, this::loadData);
+        bus.with(DemoConstant.GROUP_CHANGE, EaseEvent.class).observe(this, this::loadData);
+        bus.with(DemoConstant.CHAT_ROOM_CHANGE, EaseEvent.class).observe(this, this::loadData);
+        bus.with(DemoConstant.CONTACT_CHANGE, EaseEvent.class).observe(this, this::loadData);
         viewModel.makeAllMsgRead();
+        viewModel.loadMessages(limit);
+    }
+
+    private void loadData(EaseEvent easeEvent) {
         viewModel.loadMessages(limit);
     }
 

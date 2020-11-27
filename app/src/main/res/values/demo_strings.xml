@@ -149,6 +149,8 @@
 
     <string name="em_chat_pick_user_title">选择联系人</string>
 
+    <string name="em_chat_delete_title">确认删除？</string>
+
     <string name="em_single_set_title">聊天详情</string>
     <string name="em_single_search_history">查找聊天记录</string>
     <string name="em_single_clear_history">清空聊天记录</string>

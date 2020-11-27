@@ -1,16 +1,22 @@
 package com.hyphenate.easeim.section.chat.fragment;
 
 import android.app.Activity;
+import android.app.Dialog;
+import android.app.ProgressDialog;
 import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
+import android.view.ViewGroup;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.PopupWindow;
 
 import androidx.annotation.Nullable;
-import androidx.appcompat.widget.PopupMenu;
+import androidx.appcompat.app.AlertDialog;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.hyphenate.chat.EMClient;
@@ -21,6 +27,8 @@ import com.hyphenate.easeim.R;
 import com.hyphenate.easeim.common.constant.DemoConstant;
 import com.hyphenate.easeim.common.livedatas.LiveDataBus;
 import com.hyphenate.easeim.common.model.EmojiconExampleGroupData;
+import com.hyphenate.easeim.common.utils.ToastUtils;
+import com.hyphenate.easeim.common.widget.EaseProgressDialog;
 import com.hyphenate.easeim.section.base.BaseActivity;
 import com.hyphenate.easeim.section.chat.activity.ChatVideoCallActivity;
 import com.hyphenate.easeim.section.chat.activity.ChatVoiceCallActivity;
@@ -30,9 +38,11 @@ import com.hyphenate.easeim.section.chat.activity.ImageGridActivity;
 import com.hyphenate.easeim.section.chat.activity.LiveActivity;
 import com.hyphenate.easeim.section.chat.activity.PickAtUserActivity;
 import com.hyphenate.easeim.section.chat.viewmodel.MessageViewModel;
+import com.hyphenate.easeim.section.dialog.DemoDialogFragment;
 import com.hyphenate.easeim.section.dialog.DemoListDialogFragment;
 import com.hyphenate.easeim.section.dialog.FullEditDialogFragment;
 import com.hyphenate.easeim.section.contact.activity.ContactDetailActivity;
+import com.hyphenate.easeim.section.dialog.SimpleDialogFragment;
 import com.hyphenate.easeim.section.group.GroupHelper;
 import com.hyphenate.easeui.constants.EaseConstant;
 import com.hyphenate.easeui.domain.EaseUser;
@@ -40,6 +50,7 @@ import com.hyphenate.easeui.model.EaseEvent;
 import com.hyphenate.easeui.modules.chat.EaseChatFragment;
 import com.hyphenate.easeui.modules.chat.interfaces.IChatExtendMenu;
 import com.hyphenate.easeui.modules.chat.interfaces.OnMenuChangeListener;
+import com.hyphenate.easeui.modules.chat.interfaces.OnRecallMessageResultListener;
 import com.hyphenate.easeui.modules.menu.EasePopupWindowHelper;
 import com.hyphenate.easeui.modules.menu.MenuItemBean;
 import com.hyphenate.easeui.widget.EaseChatInputMenu;
@@ -47,7 +58,7 @@ import com.hyphenate.util.EMLog;
 import com.hyphenate.util.UriUtils;
 
 
-public class ChatFragment extends EaseChatFragment implements OnMenuChangeListener {
+public class ChatFragment extends EaseChatFragment implements OnMenuChangeListener, OnRecallMessageResultListener {
     private static final String TAG = ChatFragment.class.getSimpleName();
     private static final int ACTION_FORWARD = 1;
     private MessageViewModel viewModel;
@@ -56,6 +67,8 @@ public class ChatFragment extends EaseChatFragment implements OnMenuChangeListen
     private static final int REQUEST_CODE_SELECT_AT_USER = 15;
     private static final int ITEM_DELIVERY = 10;
     private static final String[] calls = {"视频通话", "语音通话"};
+    private OnFragmentInfoListener infoListener;
+    private Dialog dialog;
 
     @Override
     public void initView() {
@@ -90,7 +103,7 @@ public class ChatFragment extends EaseChatFragment implements OnMenuChangeListen
         chatExtendMenu.registerMenuItem(R.string.attach_file, R.drawable.em_chat_file_selector, EaseChatInputMenu.ITEM_FILE);
         //群组类型，开启消息回执，且是owner
         if(chatType == EaseConstant.CHATTYPE_GROUP && EMClient.getInstance().getOptions().getRequireAck()) {
-            EMGroup group = DemoHelper.getInstance().getGroupManager().getGroup(toChatUsername);
+            EMGroup group = DemoHelper.getInstance().getGroupManager().getGroup(conversationId);
             if(GroupHelper.isOwner(group)) {
                 chatExtendMenu.registerMenuItem(R.string.em_chat_group_delivery_ack, R.drawable.demo_chat_delivery_selector, ITEM_DELIVERY);
             }
@@ -103,6 +116,7 @@ public class ChatFragment extends EaseChatFragment implements OnMenuChangeListen
     public void initListener() {
         super.initListener();
         chatLayout.setOnPopupWindowItemClickListener(this);
+        chatLayout.setOnRecallMessageResultListener(this);
     }
 
     @Override
@@ -112,7 +126,7 @@ public class ChatFragment extends EaseChatFragment implements OnMenuChangeListen
         addItemMenuAction();
 
         chatLayout.getChatInputMenu().getPrimaryMenu().getEditText().setText(getUnSendMsg());
-        chatLayout.turnOnTypingMonitor(true);
+        chatLayout.turnOnTypingMonitor(DemoHelper.getInstance().getModel().isShowMsgTyping());
 
         LiveDataBus.get().with(DemoConstant.MESSAGE_CHANGE_CHANGE).postValue(new EaseEvent(DemoConstant.MESSAGE_CHANGE_CHANGE, EaseEvent.TYPE.MESSAGE));
         LiveDataBus.get().with(DemoConstant.MESSAGE_CALL_SAVE, Boolean.class).observe(getViewLifecycleOwner(), event -> {
@@ -195,7 +209,7 @@ public class ChatFragment extends EaseChatFragment implements OnMenuChangeListen
             return;
         }
         if(count == 1 && "@".equals(String.valueOf(s.charAt(start)))){
-            PickAtUserActivity.actionStartForResult(ChatFragment.this, toChatUsername, REQUEST_CODE_SELECT_AT_USER);
+            PickAtUserActivity.actionStartForResult(ChatFragment.this, conversationId, REQUEST_CODE_SELECT_AT_USER);
         }
     }
 
@@ -204,11 +218,6 @@ public class ChatFragment extends EaseChatFragment implements OnMenuChangeListen
         super.selectVideoFromLocal();
         Intent intent = new Intent(getActivity(), ImageGridActivity.class);
         startActivityForResult(intent, REQUEST_CODE_SELECT_VIDEO);
-    }
-
-    @Override
-    public void onMessageChange(EaseEvent change) {
-        viewModel.setMessageChange(change);
     }
 
     @Override
@@ -228,10 +237,10 @@ public class ChatFragment extends EaseChatFragment implements OnMenuChangeListen
 //                showSelectDialog();
 //                break;
             case EaseChatInputMenu.ITEM_CONFERENCE_CALL:
-                ConferenceActivity.startConferenceCall(getActivity(), toChatUsername);
+                ConferenceActivity.startConferenceCall(getActivity(), conversationId);
                 break;
             case EaseChatInputMenu.ITEM_LIVE:
-                LiveActivity.startLive(getContext(), toChatUsername);
+                LiveActivity.startLive(getContext(), conversationId);
                 break;
             case ITEM_DELIVERY://群消息回执
                 showDeliveryDialog();
@@ -241,12 +250,16 @@ public class ChatFragment extends EaseChatFragment implements OnMenuChangeListen
 
     @Override
     public void onChatError(int code, String errorMsg) {
-
+        if(infoListener != null) {
+            infoListener.onChatError(code, errorMsg);
+        }
     }
 
     @Override
     public void onOtherTyping(String action) {
-
+        if(infoListener != null) {
+            infoListener.onOtherTyping(action);
+        }
     }
 
     @Override
@@ -304,7 +317,7 @@ public class ChatFragment extends EaseChatFragment implements OnMenuChangeListen
     }
 
     private void showMsgToast(String string) {
-
+        ToastUtils.showToast(string);
     }
 
     /**
@@ -319,11 +332,11 @@ public class ChatFragment extends EaseChatFragment implements OnMenuChangeListen
     }
 
     protected void startChatVideoCall() {
-        ChatVideoCallActivity.actionStart(mContext, toChatUsername);
+        ChatVideoCallActivity.actionStart(mContext, conversationId);
     }
 
     protected void startChatVoiceCall() {
-        ChatVoiceCallActivity.actionStart(mContext, toChatUsername);
+        ChatVoiceCallActivity.actionStart(mContext, conversationId);
     }
 
     /**
@@ -331,11 +344,11 @@ public class ChatFragment extends EaseChatFragment implements OnMenuChangeListen
      * @param content
      */
     private void saveUnSendMsg(String content) {
-        DemoHelper.getInstance().getModel().saveUnSendMsg(toChatUsername, content);
+        DemoHelper.getInstance().getModel().saveUnSendMsg(conversationId, content);
     }
 
     private String getUnSendMsg() {
-        return DemoHelper.getInstance().getModel().getUnSendMsg(toChatUsername);
+        return DemoHelper.getInstance().getModel().getUnSendMsg(conversationId);
     }
 
     @Override
@@ -365,16 +378,67 @@ public class ChatFragment extends EaseChatFragment implements OnMenuChangeListen
     }
 
     @Override
-    public void onMenuItemClick(MenuItemBean item, EMMessage message) {
+    public boolean onMenuItemClick(MenuItemBean item, EMMessage message) {
         switch (item.getItemId()) {
-            case 1 :
+            case ACTION_FORWARD :
                 ForwardMessageActivity.actionStart(mContext, message.getMsgId());
-                break;
+                return true;
+            case EasePopupWindowHelper.ACTION_DELETE:
+                showDeleteDialog(message);
+                return true;
+            case EasePopupWindowHelper.ACTION_RECALL :
+                showProgressBar();
+                chatLayout.recallMessage(message);
+                return true;
+        }
+        return false;
+    }
+
+    private void showProgressBar() {
+        View view = View.inflate(mContext, R.layout.demo_layout_progress_recall, null);
+        dialog = new Dialog(mContext,R.style.dialog_recall);
+        ViewGroup.LayoutParams layoutParams = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        dialog.setContentView(view, layoutParams);
+        dialog.setCancelable(false);
+        dialog.setCanceledOnTouchOutside(true);
+        dialog.show();
+    }
+
+    private void showDeleteDialog(EMMessage message) {
+        new SimpleDialogFragment.Builder((BaseActivity) mContext)
+                .setTitle(getString(R.string.em_chat_delete_title))
+                .setConfirmColor(R.color.red)
+                .setOnConfirmClickListener(getString(R.string.delete), new DemoDialogFragment.OnConfirmClickListener() {
+                    @Override
+                    public void onConfirmClick(View view) {
+                        chatLayout.deleteMessage(message);
+                    }
+                })
+                .showCancelButton(true)
+                .show();
+    }
+
+    public void setOnFragmentInfoListener(OnFragmentInfoListener listener) {
+        this.infoListener = listener;
+    }
+
+    @Override
+    public void recallSuccess(EMMessage message) {
+        if(dialog != null && dialog.isShowing()) {
+            dialog.dismiss();
         }
     }
 
     @Override
-    public void onDismiss(PopupWindow menu) {
+    public void recallFail(int code, String errorMsg) {
+        if(dialog != null && dialog.isShowing()) {
+            dialog.dismiss();
+        }
+    }
 
+    public interface OnFragmentInfoListener {
+        void onChatError(int code, String errorMsg);
+
+        void onOtherTyping(String action);
     }
 }

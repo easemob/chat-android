@@ -82,10 +82,10 @@ public class NewFriendsViewModel extends AndroidViewModel {
                 InviteMessageStatus status = InviteMessageStatus.valueOf(statusParams);
                 String message = "";
                 if (status == InviteMessageStatus.BEINVITEED) {//accept be friends
-                    message = getApplication().getString(R.string.demo_system_agree_invite, msg.getFrom());
+                    message = getApplication().getString(R.string.demo_system_agree_invite, msg.getStringAttribute(DemoConstant.SYSTEM_MESSAGE_FROM));
                     EMClient.getInstance().contactManager().acceptInvitation(msg.getStringAttribute(DemoConstant.SYSTEM_MESSAGE_FROM));
                 } else if (status == InviteMessageStatus.BEAPPLYED) { //accept application to join group
-                    message = getApplication().getString(R.string.demo_system_agree_remote_user_apply_to_join_group, msg.getFrom());
+                    message = getApplication().getString(R.string.demo_system_agree_remote_user_apply_to_join_group, msg.getStringAttribute(DemoConstant.SYSTEM_MESSAGE_FROM));
                     EMClient.getInstance().groupManager().acceptApplication(msg.getStringAttribute(DemoConstant.SYSTEM_MESSAGE_FROM), msg.getStringAttribute(DemoConstant.SYSTEM_MESSAGE_GROUP_ID));
                 } else if (status == InviteMessageStatus.GROUPINVITATION) {
                     message = getApplication().getString(R.string.demo_system_agree_received_remote_user_invitation, msg.getStringAttribute(DemoConstant.SYSTEM_MESSAGE_INVITER));
@@ -111,10 +111,10 @@ public class NewFriendsViewModel extends AndroidViewModel {
                 InviteMessageStatus status = InviteMessageStatus.valueOf(statusParams);
                 String message = "";
                 if (status == InviteMessageStatus.BEINVITEED) {//decline the invitation
-                    message = getApplication().getString(R.string.demo_system_decline_invite, msg.getFrom());
+                    message = getApplication().getString(R.string.demo_system_decline_invite, msg.getStringAttribute(DemoConstant.SYSTEM_MESSAGE_FROM));
                     EMClient.getInstance().contactManager().declineInvitation(msg.getStringAttribute(DemoConstant.SYSTEM_MESSAGE_FROM));
                 } else if (status == InviteMessageStatus.BEAPPLYED) { //decline application to join group
-                    message = getApplication().getString(R.string.demo_system_decline_remote_user_apply_to_join_group, msg.getFrom());
+                    message = getApplication().getString(R.string.demo_system_decline_remote_user_apply_to_join_group, msg.getStringAttribute(DemoConstant.SYSTEM_MESSAGE_FROM));
                     EMClient.getInstance().groupManager().declineApplication(msg.getStringAttribute(DemoConstant.SYSTEM_MESSAGE_FROM)
                             , msg.getStringAttribute(DemoConstant.SYSTEM_MESSAGE_GROUP_ID), "");
                 } else if (status == InviteMessageStatus.GROUPINVITATION) {

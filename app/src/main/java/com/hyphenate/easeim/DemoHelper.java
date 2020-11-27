@@ -47,7 +47,7 @@ import com.hyphenate.easeui.domain.EaseAvatarOptions;
 import com.hyphenate.easeui.domain.EaseEmojicon;
 import com.hyphenate.easeui.domain.EaseEmojiconGroupEntity;
 import com.hyphenate.easeui.domain.EaseUser;
-import com.hyphenate.easeui.manager.EaseConTypeSetManager;
+import com.hyphenate.easeui.manager.EaseMessageTypeSetManager;
 import com.hyphenate.easeui.model.EaseNotifier;
 import com.hyphenate.easeui.provider.EaseEmojiconInfoProvider;
 import com.hyphenate.easeui.provider.EaseSettingsProvider;
@@ -138,21 +138,21 @@ public class DemoHelper {
      *注册对话类型
      */
     private void registerConversationType() {
-        EaseConTypeSetManager.getInstance()
-                .addConversationType(EaseExpressionAdapterDelegate.class)       //自定义表情
-                .addConversationType(EaseFileAdapterDelegate.class)             //文件
-                .addConversationType(EaseImageAdapterDelegate.class)            //图片
-                .addConversationType(EaseLocationAdapterDelegate.class)         //定位
-                .addConversationType(EaseVideoAdapterDelegate.class)            //视频
-                .addConversationType(EaseVoiceAdapterDelegate.class)            //声音
-                .addConversationType(ChatConferenceInviteAdapterDelegate.class) //会议邀请
-                .addConversationType(ChatLiveInviteAdapterDelegate.class)       //语音邀请
-                .addConversationType(ChatRecallAdapterDelegate.class)           //消息撤回
-                .addConversationType(ChatVideoCallAdapterDelegate.class)        //视频通话
-                .addConversationType(ChatVoiceCallAdapterDelegate.class)        //语音通话
-                .addConversationType(EaseCustomAdapterDelegate.class)           //自定义消息
-                .addConversationType(ChatNotificationAdapterDelegate.class)     //入群等通知消息
-                .setDefaultConversionType(EaseTextAdapterDelegate.class);       //文本
+        EaseMessageTypeSetManager.getInstance()
+                .addMessageType(EaseExpressionAdapterDelegate.class)       //自定义表情
+                .addMessageType(EaseFileAdapterDelegate.class)             //文件
+                .addMessageType(EaseImageAdapterDelegate.class)            //图片
+                .addMessageType(EaseLocationAdapterDelegate.class)         //定位
+                .addMessageType(EaseVideoAdapterDelegate.class)            //视频
+                .addMessageType(EaseVoiceAdapterDelegate.class)            //声音
+                .addMessageType(ChatConferenceInviteAdapterDelegate.class) //会议邀请
+                .addMessageType(ChatLiveInviteAdapterDelegate.class)       //语音邀请
+                .addMessageType(ChatRecallAdapterDelegate.class)           //消息撤回
+                .addMessageType(ChatVideoCallAdapterDelegate.class)        //视频通话
+                .addMessageType(ChatVoiceCallAdapterDelegate.class)        //语音通话
+                .addMessageType(EaseCustomAdapterDelegate.class)           //自定义消息
+                .addMessageType(ChatNotificationAdapterDelegate.class)     //入群等通知消息
+                .setDefaultMessageType(EaseTextAdapterDelegate.class);       //文本
     }
 
     /**
