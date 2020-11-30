@@ -27,6 +27,7 @@ import com.hyphenate.easeui.utils.EaseCommonUtils;
 import com.hyphenate.easeui.utils.EaseCompat;
 import com.hyphenate.util.EMLog;
 import com.hyphenate.util.PathUtil;
+import com.hyphenate.util.UriUtils;
 import com.hyphenate.util.VersionUtils;
 
 import java.io.File;
@@ -264,7 +265,12 @@ public class EaseChatFragment extends EaseBaseFragment implements OnChatLayoutLi
         if (data != null) {
             Uri selectedImage = data.getData();
             if (selectedImage != null) {
-                chatLayout.sendImageMessage(selectedImage);
+                String filePath = UriUtils.getFilePath(mContext, selectedImage);
+                if(!TextUtils.isEmpty(filePath) && new File(filePath).exists()) {
+                    chatLayout.sendImageMessage(Uri.parse(filePath));
+                }else {
+                    chatLayout.sendImageMessage(selectedImage);
+                }
             }
         }
     }
@@ -306,7 +312,12 @@ public class EaseChatFragment extends EaseBaseFragment implements OnChatLayoutLi
         if (data != null) {
             Uri uri = data.getData();
             if (uri != null) {
-                chatLayout.sendFileMessage(uri);
+                String filePath = UriUtils.getFilePath(mContext, uri);
+                if(!TextUtils.isEmpty(filePath) && new File(filePath).exists()) {
+                    chatLayout.sendFileMessage(Uri.parse(filePath));
+                }else {
+                    chatLayout.sendImageMessage(uri);
+                }
             }
         }
     }

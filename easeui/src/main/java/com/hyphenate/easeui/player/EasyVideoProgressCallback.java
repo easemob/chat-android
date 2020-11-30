@@ -1,4 +1,4 @@
-package com.hyphenate.player;
+package com.hyphenate.easeui.player;
 
 public interface EasyVideoProgressCallback {
 

@@ -8,10 +8,8 @@ import android.text.TextUtils;
 
 import com.hyphenate.easeui.R;
 import com.hyphenate.easeui.ui.base.EaseBaseActivity;
-import com.hyphenate.player.EasyVideoCallback;
-import com.hyphenate.player.EasyVideoPlayer;
-
-import java.io.Serializable;
+import com.hyphenate.easeui.player.EasyVideoCallback;
+import com.hyphenate.easeui.player.EasyVideoPlayer;
 
 public class EaseShowLocalVideoActivity extends EaseBaseActivity implements EasyVideoCallback {
     private EasyVideoPlayer evpPlayer;

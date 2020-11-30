@@ -3,7 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <com.hyphenate.player.EasyVideoPlayer
+    <com.hyphenate.easeui.player.EasyVideoPlayer
         android:id="@+id/evp_player"
         android:layout_width="match_parent"
         android:layout_height="match_parent"/>
