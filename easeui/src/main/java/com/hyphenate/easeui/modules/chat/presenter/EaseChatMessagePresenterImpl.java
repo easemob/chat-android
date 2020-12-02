@@ -200,7 +200,8 @@ public class EaseChatMessagePresenterImpl extends EaseChatMessagePresenter {
      */
     public boolean isMessageId(String msgId) {
         if(TextUtils.isEmpty(msgId)) {
-            return false;
+            //可以允许消息id为空
+            return true;
         }
         EMMessage message = conversation.getMessage(msgId, false);
         return message != null;
