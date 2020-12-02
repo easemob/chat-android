@@ -24,6 +24,10 @@ android {
         }
     }
 
+    lintOptions {
+        abortOnError false
+    }
+
     //自3.6.0开始需要java8的支持
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
@@ -111,7 +115,6 @@ bintray {
         publish = true
     }
 }
-
 
 dependencies {
     api fileTree(dir: 'libs', include: ['*.jar'])
