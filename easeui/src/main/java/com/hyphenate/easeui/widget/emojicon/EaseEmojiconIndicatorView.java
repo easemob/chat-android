@@ -12,6 +12,7 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 
 import com.hyphenate.easeui.R;
+import com.hyphenate.easeui.widget.EImageView;
 import com.hyphenate.util.DensityUtil;
 
 import java.util.ArrayList;
@@ -56,7 +57,7 @@ public class EaseEmojiconIndicatorView extends LinearLayout{
             LayoutParams params = new LayoutParams(dotHeight,dotHeight);
             RelativeLayout.LayoutParams layoutParams = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT,RelativeLayout.LayoutParams.WRAP_CONTENT);
             layoutParams.addRule(RelativeLayout.CENTER_IN_PARENT);
-            ImageView imageView = new ImageView(context);
+            ImageView imageView = new EImageView(context);
 
             if(i == 0){
                 imageView.setImageBitmap(selectedBitmap);
@@ -92,7 +93,7 @@ public class EaseEmojiconIndicatorView extends LinearLayout{
                 LayoutParams params = new LayoutParams(dotHeight,dotHeight);
                 RelativeLayout.LayoutParams layoutParams = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT,RelativeLayout.LayoutParams.WRAP_CONTENT);
                 layoutParams.addRule(RelativeLayout.CENTER_IN_PARENT);
-                ImageView imageView = new ImageView(context);
+                ImageView imageView = new EImageView(context);
                 imageView.setImageBitmap(unselectedBitmap);
                 rl.addView(imageView, layoutParams);
                 rl.setVisibility(View.GONE);
@@ -102,7 +103,7 @@ public class EaseEmojiconIndicatorView extends LinearLayout{
             }
         }
     }
-    
+
     @Override
     protected void onDetachedFromWindow() {
         super.onDetachedFromWindow();
