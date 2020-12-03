@@ -203,7 +203,7 @@
                 android:id="@+id/item_group_member_manage"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/item_group_notice"
+                app:layout_constraintTop_toBottomOf="@id/item_group_introduction"
                 app:arrowItemTitle="@string/em_chat_group_detail_member_manage"
                 app:arrowItemShowDivider="false"
                 style="@style/em_group_arrow_item"/>
