@@ -18,6 +18,7 @@ import com.hyphenate.easeim.common.manager.PushAndMessageHelper;
 import com.hyphenate.easeui.EaseUI;
 import com.hyphenate.easeui.adapter.EaseBaseDelegate;
 import com.hyphenate.easeui.adapter.EaseBaseRecyclerViewAdapter;
+import com.hyphenate.easeui.utils.EaseDateUtils;
 import com.hyphenate.easeui.widget.EaseImageView;
 import com.hyphenate.util.DateUtils;
 
@@ -90,7 +91,7 @@ public class SystemMessageDelegate extends EaseBaseDelegate<MsgTypeManageEntity,
                 mUnreadMsgNumber.setVisibility(View.GONE);
             }
             if(lastMsg instanceof InviteMessage) {
-                time.setText(DateUtils.getTimestampString(new Date(((InviteMessage) lastMsg).getTime())));
+                time.setText(EaseDateUtils.getTimestampString(mContext, new Date(((InviteMessage) lastMsg).getTime())));
                 InviteMessageStatus status = ((InviteMessage) lastMsg).getStatusEnum();
                 if(status == null) {
                     return;

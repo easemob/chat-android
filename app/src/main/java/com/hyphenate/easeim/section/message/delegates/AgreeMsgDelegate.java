@@ -12,6 +12,7 @@ import com.hyphenate.easeim.common.db.entity.InviteMessage;
 import com.hyphenate.easeim.common.db.entity.InviteMessageStatus;
 import com.hyphenate.easeui.adapter.EaseBaseDelegate;
 import com.hyphenate.easeui.adapter.EaseBaseRecyclerViewAdapter;
+import com.hyphenate.easeui.utils.EaseDateUtils;
 import com.hyphenate.easeui.widget.EaseImageView;
 import com.hyphenate.exceptions.HyphenateException;
 import com.hyphenate.util.DateUtils;
@@ -89,7 +90,7 @@ public class AgreeMsgDelegate extends EaseBaseDelegate<EMMessage, AgreeMsgDelega
 
             }
             message.setText(reason);
-            time.setText(DateUtils.getTimestampString(new Date(msg.getMsgTime())));
+            time.setText(EaseDateUtils.getTimestampString(itemView.getContext(), new Date(msg.getMsgTime())));
         }
     }
 }
