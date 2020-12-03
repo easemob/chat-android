@@ -204,10 +204,12 @@ public class EaseContactListLayout extends EaseRecyclerView implements IEaseCont
     }
 
     private void showDefaultMenu(View view, int position, EaseUser user) {
-        menuHelper.addItemMenu(Menu.NONE, MENU_ADD_NOTE, 0, getContext().getString(R.string.ease_contact_menu_add_note));
+        menuHelper.addItemMenu(Menu.NONE, R.id.action_add_note, 0, getContext().getString(R.string.ease_contact_menu_add_note));
 
         menuHelper.initMenu(view);
 
+        //该功能未实现，暂时隐藏
+        menuHelper.findItemVisible(R.id.action_add_note, false);
         if(menuPreShowListener != null) {
             menuPreShowListener.onMenuPreShow(menuHelper, position);
         }
@@ -218,10 +220,9 @@ public class EaseContactListLayout extends EaseRecyclerView implements IEaseCont
                 if(popupMenuItemClickListener != null) {
                     return popupMenuItemClickListener.onMenuItemClick(item, position);
                 }
-                switch (item.getItemId()) {
-                    case MENU_ADD_NOTE:
-                        presenter.addNote(position, user);
-                        return true;
+                if(item.getItemId() == R.id.action_add_note) {
+                    presenter.addNote(position, user);
+                    return true;
                 }
                 return false;
             }
