@@ -6,9 +6,11 @@ import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
 
+import androidx.annotation.Nullable;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.google.android.material.snackbar.Snackbar;
+import com.hyphenate.chat.EMChatRoom;
 import com.hyphenate.chat.EMClient;
 import com.hyphenate.chat.EMConversation;
 import com.hyphenate.easeim.DemoHelper;
@@ -19,6 +21,8 @@ import com.hyphenate.easeim.section.base.BaseInitActivity;
 import com.hyphenate.easeim.section.chat.fragment.ChatFragment;
 import com.hyphenate.easeim.section.chat.viewmodel.ChatViewModel;
 import com.hyphenate.easeim.section.chat.viewmodel.MessageViewModel;
+import com.hyphenate.easeim.section.group.ChatRoomHelper;
+import com.hyphenate.easeim.section.group.GroupHelper;
 import com.hyphenate.easeim.section.group.activity.ChatRoomDetailActivity;
 import com.hyphenate.easeim.section.group.activity.GroupDetailActivity;
 import com.hyphenate.easeui.constants.EaseConstant;
@@ -109,6 +113,14 @@ public class ChatActivity extends BaseInitActivity implements EaseTitleBar.OnBac
                 }
             });
         });
+        viewModel.getChatRoomObservable().observe(this, response -> {
+            parseResource(response, new OnResourceParseCallback<EMChatRoom>() {
+                @Override
+                public void onSuccess(@Nullable EMChatRoom data) {
+                    setDefaultTitle();
+                }
+            });
+        });
         messageViewModel.getMessageChange().with(DemoConstant.GROUP_CHANGE, EaseEvent.class).observe(this, event -> {
             if(event == null) {
                 return;
@@ -144,10 +156,29 @@ public class ChatActivity extends BaseInitActivity implements EaseTitleBar.OnBac
                 finish();
             }
         });
+
+        setDefaultTitle();
     }
 
     private void showSnackBar(String event) {
         Snackbar.make(titleBarMessage, event, Snackbar.LENGTH_SHORT).show();
+    }
+
+    private void setDefaultTitle() {
+        String title;
+        if(chatType == DemoConstant.CHATTYPE_GROUP) {
+            title = GroupHelper.getGroupName(conversationId);
+        }else if(chatType == DemoConstant.CHATTYPE_CHATROOM) {
+            EMChatRoom room = EMClient.getInstance().chatroomManager().getChatRoom(conversationId);
+            if(room == null) {
+                viewModel.getChatRoom(conversationId);
+                return;
+            }
+            title =  TextUtils.isEmpty(room.getName()) ? conversationId : room.getName();
+        }else {
+            title = conversationId;
+        }
+        titleBarMessage.setTitle(title);
     }
 
     @Override
@@ -180,7 +211,7 @@ public class ChatActivity extends BaseInitActivity implements EaseTitleBar.OnBac
         if (TextUtils.equals(action, "TypingBegin")) {
             titleBarMessage.setTitle(getString(com.hyphenate.easeui.R.string.alert_during_typing));
         }else if(TextUtils.equals(action, "TypingEnd")) {
-            titleBarMessage.setTitle(conversationId);
+            setDefaultTitle();
         }
     }
 }

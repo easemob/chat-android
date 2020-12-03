@@ -16,6 +16,8 @@ import com.hyphenate.easeui.manager.EaseThreadManager;
 import com.hyphenate.easeui.model.EaseEvent;
 import com.hyphenate.exceptions.HyphenateException;
 
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 import androidx.annotation.NonNull;
@@ -55,13 +57,26 @@ public class NewFriendsViewModel extends AndroidViewModel {
     public void loadMessages(int limit) {
         List<EMMessage> emMessages = EMClient.getInstance().chatManager().searchMsgFromDB(EMMessage.Type.TXT
                 , System.currentTimeMillis(), limit, EaseConstant.DEFAULT_SYSTEM_MESSAGE_ID, EMConversation.EMSearchDirection.UP);
+        sortData(emMessages);
         inviteMsgObservable.setSource(new MutableLiveData<>(emMessages));
     }
 
     public void loadMoreMessages(String targetId, int limit) {
         EMConversation conversation = EMClient.getInstance().chatManager().getConversation(EaseConstant.DEFAULT_SYSTEM_MESSAGE_ID, EMConversation.EMConversationType.Chat, true);
         List<EMMessage> messages = conversation.loadMoreMsgFromDB(targetId, limit);
+        sortData(messages);
         moreInviteMsgObservable.setSource(new MutableLiveData<>(messages));
+    }
+    
+    private void sortData(List<EMMessage> messages) {
+        Collections.sort(messages, new Comparator<EMMessage>() {
+            @Override
+            public int compare(EMMessage o1, EMMessage o2) {
+                long o1MsgTime = o1.getMsgTime();
+                long o2MsgTime = o2.getMsgTime();
+                return (int) (o2MsgTime - o1MsgTime);
+            }
+        });
     }
 
     public LiveData<Resource<Boolean>> resultObservable() {

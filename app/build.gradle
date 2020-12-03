@@ -21,8 +21,8 @@ android {
         applicationId "com.hyphenate.easeim"
         minSdkVersion 19
         targetSdkVersion 29
-        versionCode 71
-        versionName "3.7.1"
+        versionCode 72
+        versionName "3.7.2"
         multiDexEnabled true
         //为了兼容5.0以下使用vector图标
         vectorDrawables.useSupportLibrary = true
@@ -48,6 +48,7 @@ android {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+            signingConfig signingConfigs.debug
         }
 
         debug {
@@ -113,7 +114,10 @@ dependencies {
     implementation 'com.google.firebase:firebase-messaging:11.4.0'
     // fresh and load more
     api 'com.scwang.smartrefresh:SmartRefreshLayout:1.0.5.1'
+    implementation 'androidx.swiperefreshlayout:swiperefreshlayout:1.1.0'
     // easeui
+    //api 'com.hyphenate:easeim-kit:1.0.0'
+    //implementation 'com.github.jinanzhuan:chat-android:1.0.1'
     api project(path: ':easeui')
     // room
     implementation "androidx.room:room-runtime:2.2.5"

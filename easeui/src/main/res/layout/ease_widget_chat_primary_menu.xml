@@ -89,7 +89,6 @@
                 android:paddingTop="3dp"
                 android:paddingRight="10dp"
                 android:paddingBottom="3dp"
-                android:inputType="text|textCapCharacters|textNoSuggestions"
                 android:textSize="18sp" />
 
         </FrameLayout>

@@ -95,7 +95,8 @@ public class ConversationListFragment extends EaseConversationListFragment imple
     @Override
     public void initData() {
         super.initData();
-        EaseProviderManager.getInstance().setConversationInfoProvider(new EaseConversationInfoProvider() {
+        //设置默认聊天类型头像
+        /*EaseProviderManager.getInstance().setConversationInfoProvider(new EaseConversationInfoProvider() {
             @Override
             public String getDefaultTypeAvatar(String type) {
                 if(TextUtils.equals(type, EMConversation.EMConversationType.Chat.name())) {
@@ -114,12 +115,9 @@ public class ConversationListFragment extends EaseConversationListFragment imple
 
             @Override
             public String getConversationName(String username) {
-                if(TextUtils.equals(username, "ljn")) {
-                    return "威武";
-                }
                 return null;
             }
-        });
+        });*/
     }
 
     private void initViewModel() {

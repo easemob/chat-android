@@ -59,10 +59,12 @@ public class EaseChatLayout extends RelativeLayout implements IChatLayout, IHand
     private static final String TAG = EaseChatLayout.class.getSimpleName();
     private static final int MSG_TYPING_HEARTBEAT = 0;
     private static final int MSG_TYPING_END = 1;
+    private static final int MSG_OTHER_TYPING_END = 2;
 
     public static final String ACTION_TYPING_BEGIN = "TypingBegin";
     public static final String ACTION_TYPING_END = "TypingEnd";
     protected static final int TYPING_SHOW_TIME = 10000;
+    protected static final int OTHER_TYPING_SHOW_TIME = 5000;
 
     public static final String AT_PREFIX = "@";
     public static final String AT_SUFFIX = " ";
@@ -213,6 +215,9 @@ public class EaseChatLayout extends RelativeLayout implements IChatLayout, IHand
                         case MSG_TYPING_END :
                             setTypingEndMsg(this);
                             break;
+                        case MSG_OTHER_TYPING_END:
+                            setOtherTypingEnd(this);
+                            break;
                     }
                 }
             };
@@ -220,6 +225,23 @@ public class EaseChatLayout extends RelativeLayout implements IChatLayout, IHand
             if(typingHandler != null) {
                 typingHandler.removeCallbacksAndMessages(null);
             }
+        }
+    }
+
+    /**
+     * 对方输入状态中止
+     * @param handler
+     */
+    private void setOtherTypingEnd(Handler handler) {
+        if(!turnOnTyping) {
+            return;
+        }
+        // Only support single-chat type conversation.
+        if (chatType != EaseConstant.CHATTYPE_SINGLE)
+            return;
+        handler.removeMessages(MSG_OTHER_TYPING_END);
+        if(listener != null) {
+            listener.onOtherTyping(ACTION_TYPING_END);
         }
     }
 
@@ -445,6 +467,8 @@ public class EaseChatLayout extends RelativeLayout implements IChatLayout, IHand
                     if(listener != null) {
                         listener.onOtherTyping(body.action());
                     }
+                    typingHandler.removeMessages(MSG_OTHER_TYPING_END);
+                    typingHandler.sendEmptyMessageDelayed(MSG_OTHER_TYPING_END, OTHER_TYPING_SHOW_TIME);
                 }
             });
         }

@@ -535,10 +535,6 @@
         <activity android:name=".section.me.activity.MessagePushStyleActivity" />
         <!--WebView加载网页-->
         <activity android:name=".section.base.WebViewActivity" />
-        <activity android:name=".MainTestActivity" />
-        <activity android:name="com.hyphenate.easeui.modules.chat.EaseChatListActivity"
-            android:windowSoftInputMode="stateHidden|adjustResize"/>
-
         <!--捕获屏幕service-->
         <service android:name=".section.conference.SRForegroundService"
             android:enabled="true"

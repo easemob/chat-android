@@ -36,8 +36,6 @@ import com.hyphenate.easeim.section.contact.viewmodels.ContactsViewModel;
 import com.hyphenate.easeim.section.group.activity.GroupPrePickActivity;
 import com.hyphenate.easeim.section.me.AboutMeFragment;
 import com.hyphenate.easeui.model.EaseEvent;
-import com.hyphenate.easeui.modules.contact.EaseContactListFragment;
-import com.hyphenate.easeui.modules.conversation.EaseConversationListFragment;
 import com.hyphenate.easeui.ui.base.EaseBaseFragment;
 import com.hyphenate.easeui.widget.EaseTitleBar;
 
@@ -55,13 +53,8 @@ public class MainActivity extends BaseInitActivity implements BottomNavigationVi
     private MainViewModel viewModel;
     private boolean showMenu = true;//是否显示菜单项
 
-//    public static void startAction(Context context) {
-//        Intent starter = new Intent(context, MainActivity.class);
-//        context.startActivity(starter);
-//    }
-
     public static void startAction(Context context) {
-        Intent starter = new Intent(context, MainTestActivity.class);
+        Intent starter = new Intent(context, MainActivity.class);
         context.startActivity(starter);
     }
 

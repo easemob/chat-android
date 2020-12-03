@@ -2,21 +2,15 @@ package com.hyphenate.easeim.section.chat.fragment;
 
 import android.app.Activity;
 import android.app.Dialog;
-import android.app.ProgressDialog;
 import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.Window;
-import android.view.WindowManager;
-import android.widget.PopupWindow;
 
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.AlertDialog;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.hyphenate.chat.EMClient;
@@ -28,7 +22,6 @@ import com.hyphenate.easeim.common.constant.DemoConstant;
 import com.hyphenate.easeim.common.livedatas.LiveDataBus;
 import com.hyphenate.easeim.common.model.EmojiconExampleGroupData;
 import com.hyphenate.easeim.common.utils.ToastUtils;
-import com.hyphenate.easeim.common.widget.EaseProgressDialog;
 import com.hyphenate.easeim.section.base.BaseActivity;
 import com.hyphenate.easeim.section.chat.activity.ChatVideoCallActivity;
 import com.hyphenate.easeim.section.chat.activity.ChatVoiceCallActivity;
@@ -47,13 +40,14 @@ import com.hyphenate.easeim.section.group.GroupHelper;
 import com.hyphenate.easeui.constants.EaseConstant;
 import com.hyphenate.easeui.domain.EaseUser;
 import com.hyphenate.easeui.model.EaseEvent;
+import com.hyphenate.easeui.modules.chat.EaseChatExtendMenu;
 import com.hyphenate.easeui.modules.chat.EaseChatFragment;
+import com.hyphenate.easeui.modules.chat.EaseChatInputMenu;
 import com.hyphenate.easeui.modules.chat.interfaces.IChatExtendMenu;
 import com.hyphenate.easeui.modules.chat.interfaces.OnMenuChangeListener;
 import com.hyphenate.easeui.modules.chat.interfaces.OnRecallMessageResultListener;
 import com.hyphenate.easeui.modules.menu.EasePopupWindowHelper;
 import com.hyphenate.easeui.modules.menu.MenuItemBean;
-import com.hyphenate.easeui.widget.EaseChatInputMenu;
 import com.hyphenate.util.EMLog;
 import com.hyphenate.util.UriUtils;
 
@@ -61,6 +55,8 @@ import com.hyphenate.util.UriUtils;
 public class ChatFragment extends EaseChatFragment implements OnMenuChangeListener, OnRecallMessageResultListener {
     private static final String TAG = ChatFragment.class.getSimpleName();
     private static final int ACTION_FORWARD = 1;
+    private static final int ITEM_VIDEO_CALL = 11;
+    private static final int ITEM_CONFERENCE_CALL = 12;
     private MessageViewModel viewModel;
     protected ClipboardManager clipboard;
 
@@ -86,21 +82,21 @@ public class ChatFragment extends EaseChatFragment implements OnMenuChangeListen
     private void resetChatExtendMenu() {
         IChatExtendMenu chatExtendMenu = chatLayout.getChatInputMenu().getChatExtendMenu();
         chatExtendMenu.clear();
-        chatExtendMenu.registerMenuItem(R.string.attach_picture, R.drawable.ease_chat_image_selector, EaseChatInputMenu.ITEM_PICTURE);
-        chatExtendMenu.registerMenuItem(R.string.attach_take_pic, R.drawable.ease_chat_takepic_selector, EaseChatInputMenu.ITEM_TAKE_PICTURE);
-        chatExtendMenu.registerMenuItem(R.string.attach_video, R.drawable.em_chat_video_selector, EaseChatInputMenu.ITEM_VIDEO);
+        chatExtendMenu.registerMenuItem(R.string.attach_picture, R.drawable.ease_chat_image_selector, EaseChatExtendMenu.ITEM_PICTURE);
+        chatExtendMenu.registerMenuItem(R.string.attach_take_pic, R.drawable.ease_chat_takepic_selector, EaseChatExtendMenu.ITEM_TAKE_PICTURE);
+        chatExtendMenu.registerMenuItem(R.string.attach_video, R.drawable.em_chat_video_selector, EaseChatExtendMenu.ITEM_VIDEO);
         //添加扩展槽
         if(chatType == EaseConstant.CHATTYPE_SINGLE){
             //inputMenu.registerExtendMenuItem(R.string.attach_voice_call, R.drawable.em_chat_voice_call_selector, EaseChatInputMenu.ITEM_VOICE_CALL, this);
-            chatExtendMenu.registerMenuItem(R.string.attach_media_call, R.drawable.em_chat_video_call_selector, EaseChatInputMenu.ITEM_VIDEO_CALL);
+            chatExtendMenu.registerMenuItem(R.string.attach_media_call, R.drawable.em_chat_video_call_selector, ITEM_VIDEO_CALL);
         }
         if (chatType == EaseConstant.CHATTYPE_GROUP) { // 音视频会议
-            chatExtendMenu.registerMenuItem(R.string.voice_and_video_conference, R.drawable.em_chat_video_call_selector, EaseChatInputMenu.ITEM_CONFERENCE_CALL);
+            chatExtendMenu.registerMenuItem(R.string.voice_and_video_conference, R.drawable.em_chat_video_call_selector, ITEM_CONFERENCE_CALL);
             //目前普通模式也支持设置主播和观众人数，都建议使用普通模式
             //inputMenu.registerExtendMenuItem(R.string.title_live, R.drawable.em_chat_video_call_selector, EaseChatInputMenu.ITEM_LIVE, this);
         }
-        chatExtendMenu.registerMenuItem(R.string.attach_location, R.drawable.ease_chat_location_selector, EaseChatInputMenu.ITEM_LOCATION);
-        chatExtendMenu.registerMenuItem(R.string.attach_file, R.drawable.em_chat_file_selector, EaseChatInputMenu.ITEM_FILE);
+        chatExtendMenu.registerMenuItem(R.string.attach_location, R.drawable.ease_chat_location_selector, EaseChatExtendMenu.ITEM_LOCATION);
+        chatExtendMenu.registerMenuItem(R.string.attach_file, R.drawable.em_chat_file_selector, EaseChatExtendMenu.ITEM_FILE);
         //群组类型，开启消息回执，且是owner
         if(chatType == EaseConstant.CHATTYPE_GROUP && EMClient.getInstance().getOptions().getRequireAck()) {
             EMGroup group = DemoHelper.getInstance().getGroupManager().getGroup(conversationId);
@@ -229,18 +225,15 @@ public class ChatFragment extends EaseChatFragment implements OnMenuChangeListen
     public void onChatExtendMenuItemClick(View view, int itemId) {
         super.onChatExtendMenuItemClick(view, itemId);
         switch (itemId) {
-            case EaseChatInputMenu.ITEM_VIDEO_CALL:
+            case ITEM_VIDEO_CALL:
                 //startVideoCall();
                 showSelectDialog();
                 break;
 //            case EaseChatInputMenu.ITEM_VOICE_CALL:
 //                showSelectDialog();
 //                break;
-            case EaseChatInputMenu.ITEM_CONFERENCE_CALL:
+            case ITEM_CONFERENCE_CALL:
                 ConferenceActivity.startConferenceCall(getActivity(), conversationId);
-                break;
-            case EaseChatInputMenu.ITEM_LIVE:
-                LiveActivity.startLive(getContext(), conversationId);
                 break;
             case ITEM_DELIVERY://群消息回执
                 showDeliveryDialog();
