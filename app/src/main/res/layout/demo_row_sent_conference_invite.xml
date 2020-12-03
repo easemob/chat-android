@@ -41,7 +41,7 @@
                 android:gravity="center"
                 android:layout_marginLeft="8dip"
                 android:layout_marginRight="8dip"
-                android:minHeight="40dp"
+                android:minHeight="@dimen/ease_chat_text_min_height"
                 android:padding="8dp"
                 android:text="@string/msg_conference_invite"
                 android:textColor="#ff000000"

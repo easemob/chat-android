@@ -24,6 +24,8 @@
     <dimen name="ease_chat_image_corner_radius">8dp</dimen>
     <dimen name="ease_chat_primary_margin_right">16dp</dimen>
 
+    <dimen name="ease_chat_text_min_height">22dp</dimen>
+
     <!--头像距离左边或者右边的距离-->
     <dimen name="ease_chat_avatar_margin">18dp</dimen>
     <!--内容布局距离头像的距离-->

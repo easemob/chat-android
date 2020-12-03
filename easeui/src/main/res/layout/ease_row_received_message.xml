@@ -42,7 +42,7 @@
                 android:layout_centerInParent="true"
                 android:gravity="center|left"
                 android:lineSpacingExtra="2dp"
-                android:minHeight="22dp"
+                android:minHeight="@dimen/ease_chat_text_min_height"
                 android:maxWidth="225.0dip"
                 android:textColor="#ff000000"
                 android:textSize="15sp"
