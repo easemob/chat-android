@@ -18,6 +18,7 @@ import com.hyphenate.chat.EMMessage;
 import com.hyphenate.chat.EMVideoMessageBody;
 import com.hyphenate.easeui.R;
 import com.hyphenate.easeui.utils.EaseCommonUtils;
+import com.hyphenate.easeui.utils.EaseDateUtils;
 import com.hyphenate.easeui.utils.EaseImageCache;
 import com.hyphenate.easeui.utils.EaseImageUtils;
 import com.hyphenate.util.DateUtils;
@@ -70,7 +71,7 @@ public class EaseChatRowVideo extends EaseChatRowFile {
 
         showVideoThumbView(message);
         if (videoBody.getDuration() > 0) {
-            String time = DateUtils.toTime(videoBody.getDuration());
+            String time = EaseDateUtils.toTime(videoBody.getDuration());
             timeLengthView.setText(time);
         }
 

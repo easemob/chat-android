@@ -23,6 +23,7 @@ import com.hyphenate.easeui.domain.EaseAvatarOptions;
 import com.hyphenate.easeui.manager.EaseAtMessageHelper;
 import com.hyphenate.easeui.manager.EasePreferenceManager;
 import com.hyphenate.easeui.utils.EaseCommonUtils;
+import com.hyphenate.easeui.utils.EaseDateUtils;
 import com.hyphenate.easeui.utils.EaseSmileUtils;
 import com.hyphenate.easeui.widget.EaseImageView;
 import com.hyphenate.util.DateUtils;
@@ -116,7 +117,7 @@ public class ConversationDelegate extends EaseBaseDelegate<EMConversation, Conve
             if(item.getAllMsgCount() != 0) {
                 EMMessage lastMessage = item.getLastMessage();
                 message.setText(EaseSmileUtils.getSmiledText(mContext, EaseCommonUtils.getMessageDigest(lastMessage, mContext)));
-                time.setText(DateUtils.getTimestampString(new Date(lastMessage.getMsgTime())));
+                time.setText(EaseDateUtils.getTimestampString(mContext, new Date(lastMessage.getMsgTime())));
                 if (lastMessage.direct() == EMMessage.Direct.SEND && lastMessage.status() == EMMessage.Status.FAIL) {
                     mMsgState.setVisibility(View.VISIBLE);
                 } else {

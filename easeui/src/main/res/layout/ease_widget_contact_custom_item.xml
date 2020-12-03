@@ -9,17 +9,16 @@
     <TextView
         android:id="@+id/header"
         android:layout_width="0dp"
-        android:layout_height="40dp"
+        android:layout_height="42dp"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         android:gravity="center_vertical"
         android:paddingLeft="16dp"
         android:paddingRight="10dp"
-        android:paddingTop="3dp"
+        android:paddingTop="10dp"
         android:textColor="@color/ease_contact_color_item_header"
-        android:textSize="17sp"
-        android:background="@color/ease_contact_color_item_header_bg"
+        android:textSize="18sp"
         tools:text="A"
         android:visibility="gone" />
 
@@ -55,12 +54,12 @@
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toTopOf="@id/signature"
             android:layout_marginRight="34dp"
-            android:layout_marginLeft="10dp"
+            android:layout_marginLeft="12dp"
             android:layout_marginStart="10dp"
             android:ellipsize="end"
             android:singleLine="true"
             android:textColor="@color/ease_contact_color_item_title"
-            android:textSize="16sp"
+            android:textSize="17sp"
             tools:text="测试沙发斯蒂芬水电费水电费水电费地方水电费是否"/>
 
         <TextView

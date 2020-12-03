@@ -22,6 +22,7 @@ import com.hyphenate.easeui.modules.conversation.model.EaseConversationInfo;
 import com.hyphenate.easeui.modules.conversation.model.EaseConversationSetStyle;
 import com.hyphenate.easeui.provider.EaseConversationInfoProvider;
 import com.hyphenate.easeui.utils.EaseCommonUtils;
+import com.hyphenate.easeui.utils.EaseDateUtils;
 import com.hyphenate.easeui.utils.EaseSmileUtils;
 import com.hyphenate.util.DateUtils;
 
@@ -90,7 +91,7 @@ public class EaseConversationDelegate extends EaseDefaultConversationDelegate {
         if(item.getAllMsgCount() != 0) {
             EMMessage lastMessage = item.getLastMessage();
             holder.message.setText(EaseSmileUtils.getSmiledText(context, EaseCommonUtils.getMessageDigest(lastMessage, context)));
-            holder.time.setText(DateUtils.getTimestampString(new Date(lastMessage.getMsgTime())));
+            holder.time.setText(EaseDateUtils.getTimestampString(context, new Date(lastMessage.getMsgTime())));
             if (lastMessage.direct() == EMMessage.Direct.SEND && lastMessage.status() == EMMessage.Status.FAIL) {
                 holder.mMsgState.setVisibility(View.VISIBLE);
             } else {

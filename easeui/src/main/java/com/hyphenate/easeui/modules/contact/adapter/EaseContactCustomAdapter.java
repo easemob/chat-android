@@ -23,7 +23,7 @@ public class EaseContactCustomAdapter extends EaseBaseRecyclerViewAdapter<EaseCo
 
     @Override
     public ViewHolder getViewHolder(ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(mContext).inflate(R.layout.ease_widget_contact_item, parent, false);
+        View view = LayoutInflater.from(mContext).inflate(R.layout.ease_widget_contact_custom_item, parent, false);
         return new CustomViewHolder(view);
     }
 

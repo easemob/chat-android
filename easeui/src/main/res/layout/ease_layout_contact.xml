@@ -23,7 +23,7 @@
         android:layout_marginTop="20dp"
         android:layout_marginBottom="20dp"
         android:layout_alignParentRight="true"
-        app:ease_side_bar_text_size="16sp"
+        app:ease_side_bar_text_size="14sp"
         app:ease_side_bar_head_arrays="@array/side_bar_array"/>
 
     <TextView

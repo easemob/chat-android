@@ -26,6 +26,7 @@ import com.hyphenate.easeui.interfaces.MessageListItemClickListener;
 import com.hyphenate.easeui.modules.chat.model.EaseChatItemStyleHelper;
 import com.hyphenate.easeui.modules.chat.EaseChatMessageListLayout;
 import com.hyphenate.easeui.modules.chat.model.EaseChatSetStyle;
+import com.hyphenate.easeui.utils.EaseDateUtils;
 import com.hyphenate.easeui.utils.EaseUserUtils;
 import com.hyphenate.easeui.widget.EaseImageView;
 import com.hyphenate.util.DateUtils;
@@ -395,7 +396,7 @@ public abstract class EaseChatRow extends LinearLayout {
     protected void setTimestamp(TextView timestamp) {
         if(adapter != null) {
             if (position == 0) {
-                timestamp.setText(DateUtils.getTimestampString(new Date(message.getMsgTime())));
+                timestamp.setText(EaseDateUtils.getTimestampString(getContext(), new Date(message.getMsgTime())));
                 timestamp.setVisibility(View.VISIBLE);
             } else {
                 // show time stamp if interval with last message is > 30 seconds
@@ -407,10 +408,10 @@ public abstract class EaseChatRow extends LinearLayout {
                     prevMessage = (EMMessage) ((EaseBaseAdapter)adapter).getItem(position - 1);
                 }
 
-                if (prevMessage != null && DateUtils.isCloseEnough(message.getMsgTime(), prevMessage.getMsgTime())) {
+                if (prevMessage != null && EaseDateUtils.isCloseEnough(message.getMsgTime(), prevMessage.getMsgTime())) {
                     timestamp.setVisibility(View.GONE);
                 } else {
-                    timestamp.setText(DateUtils.getTimestampString(new Date(message.getMsgTime())));
+                    timestamp.setText(EaseDateUtils.getTimestampString(getContext(), new Date(message.getMsgTime())));
                     timestamp.setVisibility(View.VISIBLE);
                 }
             }
@@ -419,13 +420,13 @@ public abstract class EaseChatRow extends LinearLayout {
 
     public void setTimestamp(EMMessage preMessage) {
         if (position == 0) {
-            timeStampView.setText(DateUtils.getTimestampString(new Date(message.getMsgTime())));
+            timeStampView.setText(EaseDateUtils.getTimestampString(getContext(), new Date(message.getMsgTime())));
             timeStampView.setVisibility(View.VISIBLE);
         } else {
-            if (preMessage != null && DateUtils.isCloseEnough(message.getMsgTime(), preMessage.getMsgTime())) {
+            if (preMessage != null && EaseDateUtils.isCloseEnough(message.getMsgTime(), preMessage.getMsgTime())) {
                 timeStampView.setVisibility(View.GONE);
             } else {
-                timeStampView.setText(DateUtils.getTimestampString(new Date(message.getMsgTime())));
+                timeStampView.setText(EaseDateUtils.getTimestampString(getContext(), new Date(message.getMsgTime())));
                 timeStampView.setVisibility(View.VISIBLE);
             }
         }
