@@ -505,6 +505,7 @@
             android:screenOrientation="portrait"/>
         <!--聊天历史-->
         <activity android:name=".section.chat.activity.ChatHistoryActivity"
+            android:windowSoftInputMode="stateHidden|adjustResize"
             android:screenOrientation="portrait"/>
         <!--个人资料-->
         <activity android:name=".section.me.activity.UserDetailActivity"

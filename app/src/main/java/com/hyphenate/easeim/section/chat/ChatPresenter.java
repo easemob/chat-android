@@ -714,6 +714,7 @@ public class ChatPresenter extends EaseChatPresenter {
                     Map<String, Object> ext = message.ext();
                     if(ext != null && (ext.containsKey(DemoConstant.SYSTEM_MESSAGE_FROM)
                             && TextUtils.equals(username, (String)ext.get(DemoConstant.SYSTEM_MESSAGE_FROM)))) {
+                        updateMessage(message);
                         return;
                     }
                 }
@@ -746,6 +747,13 @@ public class ChatPresenter extends EaseChatPresenter {
             showToast(context.getString(InviteMessageStatus.BEREFUSED.getMsgContent(), username));
             EMLog.i(TAG, context.getString(InviteMessageStatus.BEREFUSED.getMsgContent(), username));
         }
+    }
+
+    private void updateMessage(EMMessage message) {
+        message.setAttribute(DemoConstant.SYSTEM_MESSAGE_STATUS, InviteMessageStatus.BEAGREED.name());
+        EMTextMessageBody body = new EMTextMessageBody(PushAndMessageHelper.getSystemMessage(message.ext()));
+        message.addBody(body);
+        EaseSystemMsgManager.getInstance().updateMessage(message);
     }
 
     private class ChatMultiDeviceListener implements EMMultiDeviceListener {

@@ -1,10 +1,13 @@
 package com.hyphenate.easeim.section.message.viewmodels;
 
 import android.app.Application;
+import android.util.Log;
 
 import com.hyphenate.chat.EMClient;
 import com.hyphenate.chat.EMConversation;
 import com.hyphenate.chat.EMMessage;
+import com.hyphenate.chat.EMMessageBody;
+import com.hyphenate.chat.EMTextMessageBody;
 import com.hyphenate.easeim.R;
 import com.hyphenate.easeim.common.constant.DemoConstant;
 import com.hyphenate.easeim.common.db.entity.InviteMessageStatus;
@@ -109,6 +112,11 @@ public class NewFriendsViewModel extends AndroidViewModel {
                 }
                 msg.setAttribute(DemoConstant.SYSTEM_MESSAGE_STATUS, InviteMessageStatus.AGREED.name());
                 msg.setAttribute(DemoConstant.SYSTEM_MESSAGE_REASON, message);
+                EMTextMessageBody body = new EMTextMessageBody(message);
+                msg.addBody(body);
+                EMConversation conversation = EMClient.getInstance().chatManager().getConversation(DemoConstant.DEFAULT_SYSTEM_MESSAGE_ID);
+                conversation.removeMessage(msg.getMsgId());
+                EMClient.getInstance().chatManager().saveMessage(msg);
                 EMClient.getInstance().chatManager().updateMessage(msg);
                 agreeObservable.postValue(Resource.success(message));
                 messageChangeObservable.with(DemoConstant.NOTIFY_CHANGE).postValue(EaseEvent.create(DemoConstant.NOTIFY_CHANGE, EaseEvent.TYPE.NOTIFY));
@@ -139,7 +147,12 @@ public class NewFriendsViewModel extends AndroidViewModel {
                 }
                 msg.setAttribute(DemoConstant.SYSTEM_MESSAGE_STATUS, InviteMessageStatus.REFUSED.name());
                 msg.setAttribute(DemoConstant.SYSTEM_MESSAGE_REASON, message);
-                EMClient.getInstance().chatManager().updateMessage(msg);
+                EMTextMessageBody body = new EMTextMessageBody(message);
+                msg.addBody(body);
+                EMConversation conversation = EMClient.getInstance().chatManager().getConversation(DemoConstant.DEFAULT_SYSTEM_MESSAGE_ID);
+                conversation.removeMessage(msg.getMsgId());
+                EMClient.getInstance().chatManager().saveMessage(msg);
+                //EMClient.getInstance().chatManager().updateMessage(msg);
                 refuseObservable.postValue(Resource.success(message));
                 messageChangeObservable.with(DemoConstant.NOTIFY_CHANGE).postValue(EaseEvent.create(DemoConstant.NOTIFY_CHANGE, EaseEvent.TYPE.NOTIFY));
             } catch (HyphenateException e) {

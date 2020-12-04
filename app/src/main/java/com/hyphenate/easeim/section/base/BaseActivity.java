@@ -26,6 +26,8 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.content.ContextCompat;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
 
 import com.hyphenate.EMCallBack;
 import com.hyphenate.easeim.DemoApplication;
@@ -60,6 +62,7 @@ public class BaseActivity extends AppCompatActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mContext = this;
+        clearFragmentsBeforeCreate();
         registerAccountObservable();
     }
 
@@ -442,5 +445,20 @@ public class BaseActivity extends AppCompatActivity {
             }
 
         }
+    }
+
+    /**
+     * 处理因为Activity重建导致的fragment叠加问题
+     */
+    public void clearFragmentsBeforeCreate() {
+        List<Fragment> fragments = getSupportFragmentManager().getFragments();
+        if (fragments.size() == 0){
+            return;
+        }
+        FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+        for (Fragment fragment : fragments) {
+            fragmentTransaction.remove(fragment);
+        }
+        fragmentTransaction.commitNow();
     }
 }
