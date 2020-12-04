@@ -192,7 +192,13 @@ public class EaseSystemMsgManager {
         if(message == null) {
             return false;
         }
-        return EMClient.getInstance().chatManager().updateMessage(message);
+        if(!isSystemMessage(message)) {
+            return false;
+        }
+        EMConversation conversation = EMClient.getInstance().chatManager().getConversation(EaseConstant.DEFAULT_SYSTEM_MESSAGE_ID);
+        conversation.removeMessage(message.getMsgId());
+        EMClient.getInstance().chatManager().saveMessage(message);
+        return true;
     }
 
 }

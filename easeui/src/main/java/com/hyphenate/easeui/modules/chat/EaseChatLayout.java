@@ -1,5 +1,6 @@
 package com.hyphenate.easeui.modules.chat;
 
+import android.app.Activity;
 import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
@@ -20,16 +21,23 @@ import android.widget.RelativeLayout;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.hyphenate.EMChatRoomChangeListener;
+import com.hyphenate.EMGroupChangeListener;
 import com.hyphenate.EMMessageListener;
 import com.hyphenate.chat.EMChatManager;
 import com.hyphenate.chat.EMClient;
 import com.hyphenate.chat.EMCmdMessageBody;
+import com.hyphenate.chat.EMConversation;
 import com.hyphenate.chat.EMMessage;
+import com.hyphenate.chat.EMMucSharedFile;
 import com.hyphenate.chat.EMTextMessageBody;
+import com.hyphenate.chat.adapter.EMAChatRoomManagerListener;
 import com.hyphenate.easeui.R;
 import com.hyphenate.easeui.constants.EaseConstant;
 import com.hyphenate.easeui.domain.EaseEmojicon;
 import com.hyphenate.easeui.domain.EaseUser;
+import com.hyphenate.easeui.interfaces.EaseChatRoomListener;
+import com.hyphenate.easeui.interfaces.EaseGroupListener;
 import com.hyphenate.easeui.interfaces.MessageListItemClickListener;
 import com.hyphenate.easeui.manager.EaseAtMessageHelper;
 import com.hyphenate.easeui.manager.EaseThreadManager;
@@ -45,6 +53,7 @@ import com.hyphenate.easeui.modules.interfaces.IPopupWindow;
 import com.hyphenate.easeui.modules.menu.EasePopupWindow;
 import com.hyphenate.easeui.modules.menu.EasePopupWindowHelper;
 import com.hyphenate.easeui.modules.menu.MenuItemBean;
+import com.hyphenate.easeui.utils.EaseCommonUtils;
 import com.hyphenate.easeui.utils.EaseUserUtils;
 import com.hyphenate.easeui.widget.EaseAlertDialog;
 import com.hyphenate.easeui.widget.EaseVoiceRecorderView;
@@ -108,6 +117,14 @@ public class EaseChatLayout extends RelativeLayout implements IChatLayout, IHand
      */
     private OnRecallMessageResultListener recallMessageListener;
     /**
+     * 聊天室监听
+     */
+    private ChatRoomListener chatRoomListener;
+    /**
+     * 群组监听
+     */
+    private GroupListener groupListener;
+    /**
      * 是否是首次发送，默认true
      */
     private boolean isNotFirstSend;
@@ -154,6 +171,12 @@ public class EaseChatLayout extends RelativeLayout implements IChatLayout, IHand
     protected void onDetachedFromWindow() {
         super.onDetachedFromWindow();
         getChatManager().removeMessageListener(this);
+        if(isChatRoomCon() && chatRoomListener != null) {
+            EMClient.getInstance().chatroomManager().removeChatRoomListener(chatRoomListener);
+        }
+        if(isGroupCon() && groupListener != null) {
+            EMClient.getInstance().groupManager().removeGroupChangeListener(groupListener);
+        }
         if(typingHandler != null) {
             typingHandler.removeCallbacksAndMessages(null);
         }
@@ -179,6 +202,13 @@ public class EaseChatLayout extends RelativeLayout implements IChatLayout, IHand
         this.chatType = chatType;
         messageListLayout.init(loadDataType, this.conversationId, chatType);
         presenter.setupWithToUser(chatType, this.conversationId);
+        if(isChatRoomCon()) {
+            chatRoomListener = new ChatRoomListener();
+            EMClient.getInstance().chatroomManager().addChatRoomChangeListener(chatRoomListener);
+        }else if(isGroupCon()) {
+            groupListener = new GroupListener();
+            EMClient.getInstance().groupManager().addGroupChangeListener(groupListener);
+        }
         initTypingHandler();
     }
 
@@ -275,6 +305,22 @@ public class EaseChatLayout extends RelativeLayout implements IChatLayout, IHand
         handler.removeCallbacksAndMessages(null);
         // Send TYPING-END cmd msg
         //presenter.sendCmdMessage(ACTION_TYPING_END);
+    }
+
+    /**
+     * 是否是聊天室
+     * @return
+     */
+    public boolean isChatRoomCon() {
+        return EaseCommonUtils.getConversationType(chatType) == EMConversation.EMConversationType.ChatRoom;
+    }
+
+    /**
+     * 是否是群聊
+     * @return
+     */
+    public boolean isGroupCon() {
+        return EaseCommonUtils.getConversationType(chatType) == EMConversation.EMConversationType.GroupChat;
     }
 
     @Override
@@ -806,5 +852,59 @@ public class EaseChatLayout extends RelativeLayout implements IChatLayout, IHand
             menuHelper.findItemVisible(EasePopupWindowHelper.ACTION_RECALL, false);
         }
     }
+
+    private class ChatRoomListener extends EaseChatRoomListener {
+
+        @Override
+        public void onChatRoomDestroyed(String roomId, String roomName) {
+            finishCurrent();
+        }
+
+        @Override
+        public void onRemovedFromChatRoom(int reason, String roomId, String roomName, String participant) {
+            if(!TextUtils.equals(roomId, conversationId)) {
+                return;
+            }
+            if(reason == EMAChatRoomManagerListener.BE_KICKED) {
+                finishCurrent();
+            }
+        }
+
+        @Override
+        public void onMemberJoined(String roomId, String participant) {
+
+        }
+
+        @Override
+        public void onMemberExited(String roomId, String roomName, String participant) {
+
+        }
+    }
+
+    /**
+     * group listener
+     */
+    private class GroupListener extends EaseGroupListener {
+
+        @Override
+        public void onUserRemoved(String groupId, String groupName) {
+            finishCurrent();
+        }
+
+        @Override
+        public void onGroupDestroyed(String groupId, String groupName) {
+            finishCurrent();
+        }
+    }
+
+    /**
+     * finish current activity
+     */
+    private void finishCurrent() {
+        if(getContext() instanceof Activity) {
+            ((Activity) getContext()).finish();
+        }
+    }
+
 }
 
