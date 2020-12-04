@@ -1,4 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <!--删除联系人-->
     <item name="action_friend_delete" type="id"/>
+    <!--添加备注-->
+    <item name="action_add_note" type="id"/>
+    <!--复制-->
+    <item name="action_chat_copy" type="id"/>
+    <!--删除-->
+    <item name="action_chat_delete" type="id"/>
+    <!--撤回-->
+    <item name="action_chat_recall" type="id"/>
 </resources>

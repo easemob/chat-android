@@ -8,6 +8,7 @@
         android:id="@+id/layout_chat_message"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:paddingBottom="5dp"
         android:layout_above="@id/layout_menu"/>
 
     <com.hyphenate.easeui.modules.chat.EaseChatInputMenu

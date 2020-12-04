@@ -105,10 +105,11 @@ public class EaseVoiceRecorderView extends RelativeLayout {
             }
             return true;
         case MotionEvent.ACTION_MOVE:
-            setTextContent(v, true);
             if (event.getY() < dip2px(getContext(), 10)) {
+                setTextContent(v, false);
                 showReleaseToCancelHint();
             } else {
+                setTextContent(v, true);
                 showMoveUpToCancelHint();
             }
             return true;

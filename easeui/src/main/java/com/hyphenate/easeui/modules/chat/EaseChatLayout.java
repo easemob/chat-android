@@ -171,11 +171,14 @@ public class EaseChatLayout extends RelativeLayout implements IChatLayout, IHand
     protected void onDetachedFromWindow() {
         super.onDetachedFromWindow();
         getChatManager().removeMessageListener(this);
-        if(isChatRoomCon() && chatRoomListener != null) {
+        if(chatRoomListener != null) {
             EMClient.getInstance().chatroomManager().removeChatRoomListener(chatRoomListener);
         }
-        if(isGroupCon() && groupListener != null) {
+        if(groupListener != null) {
             EMClient.getInstance().groupManager().removeGroupChangeListener(groupListener);
+        }
+        if(isChatRoomCon()) {
+            EMClient.getInstance().chatroomManager().leaveChatRoom(conversationId);
         }
         if(typingHandler != null) {
             typingHandler.removeCallbacksAndMessages(null);
@@ -234,24 +237,23 @@ public class EaseChatLayout extends RelativeLayout implements IChatLayout, IHand
     }
 
     private void initTypingHandler() {
-        if(turnOnTyping) {
-            typingHandler = new Handler() {
-                @Override
-                public void handleMessage(@NonNull Message msg) {
-                    switch (msg.what) {
-                        case MSG_TYPING_HEARTBEAT :
-                            setTypingBeginMsg(this);
-                            break;
-                        case MSG_TYPING_END :
-                            setTypingEndMsg(this);
-                            break;
-                        case MSG_OTHER_TYPING_END:
-                            setOtherTypingEnd(this);
-                            break;
-                    }
+        typingHandler = new Handler() {
+            @Override
+            public void handleMessage(@NonNull Message msg) {
+                switch (msg.what) {
+                    case MSG_TYPING_HEARTBEAT :
+                        setTypingBeginMsg(this);
+                        break;
+                    case MSG_TYPING_END :
+                        setTypingEndMsg(this);
+                        break;
+                    case MSG_OTHER_TYPING_END:
+                        setOtherTypingEnd(this);
+                        break;
                 }
-            };
-        }else {
+            }
+        };
+        if(!turnOnTyping) {
             if(typingHandler != null) {
                 typingHandler.removeCallbacksAndMessages(null);
             }
@@ -341,7 +343,9 @@ public class EaseChatLayout extends RelativeLayout implements IChatLayout, IHand
     @Override
     public void turnOnTypingMonitor(boolean turnOn) {
         this.turnOnTyping = turnOn;
-        initTypingHandler();
+        if(!turnOn) {
+            isNotFirstSend = false;
+        }
     }
 
     @Override
@@ -435,13 +439,15 @@ public class EaseChatLayout extends RelativeLayout implements IChatLayout, IHand
         if(listener != null) {
             listener.onTextChanged(s, start, before, count);
         }
-        if(typingHandler != null) {
-            if(!isNotFirstSend) {
-                isNotFirstSend = true;
-                typingHandler.sendEmptyMessage(MSG_TYPING_HEARTBEAT);
+        if(turnOnTyping) {
+            if(typingHandler != null) {
+                if(!isNotFirstSend) {
+                    isNotFirstSend = true;
+                    typingHandler.sendEmptyMessage(MSG_TYPING_HEARTBEAT);
+                }
+                typingHandler.removeMessages(MSG_TYPING_END);
+                typingHandler.sendEmptyMessageDelayed(MSG_TYPING_END, TYPING_SHOW_TIME);
             }
-            typingHandler.removeMessages(MSG_TYPING_END);
-            typingHandler.sendEmptyMessageDelayed(MSG_TYPING_END, TYPING_SHOW_TIME);
         }
     }
 
@@ -513,8 +519,10 @@ public class EaseChatLayout extends RelativeLayout implements IChatLayout, IHand
                     if(listener != null) {
                         listener.onOtherTyping(body.action());
                     }
-                    typingHandler.removeMessages(MSG_OTHER_TYPING_END);
-                    typingHandler.sendEmptyMessageDelayed(MSG_OTHER_TYPING_END, OTHER_TYPING_SHOW_TIME);
+                    if(typingHandler != null) {
+                        typingHandler.removeMessages(MSG_OTHER_TYPING_END);
+                        typingHandler.sendEmptyMessageDelayed(MSG_OTHER_TYPING_END, OTHER_TYPING_SHOW_TIME);
+                    }
                 }
             });
         }
@@ -793,19 +801,16 @@ public class EaseChatLayout extends RelativeLayout implements IChatLayout, IHand
                     return menuChangeListener.onMenuItemClick(item, message);
                 }
                 if(showDefaultMenu) {
-                    switch (item.getItemId()) {
-                        case EasePopupWindowHelper.ACTION_COPY :
-                            clipboard.setPrimaryClip(ClipData.newPlainText(null,
-                                    ((EMTextMessageBody) message.getBody()).getMessage()));
-                            EMLog.i(TAG, "copy success");
-                            break;
-                        case EasePopupWindowHelper.ACTION_DELETE :
-                            deleteMessage(message);
-                            Log.e("TAG", "currentMsgId = "+message.getMsgId() + " timestamp = "+message.getMsgTime());
-                            break;
-                        case EasePopupWindowHelper.ACTION_RECALL :
-                            recallMessage(message);
-                            break;
+                    int itemId = item.getItemId();
+                    if(itemId == R.id.action_chat_copy) {
+                        clipboard.setPrimaryClip(ClipData.newPlainText(null,
+                                ((EMTextMessageBody) message.getBody()).getMessage()));
+                        EMLog.i(TAG, "copy success");
+                    }else if(itemId == R.id.action_chat_delete) {
+                        deleteMessage(message);
+                        EMLog.i(TAG,"currentMsgId = "+message.getMsgId() + " timestamp = "+message.getMsgTime());
+                    }else if(itemId == R.id.action_chat_recall) {
+                        recallMessage(message);
                     }
                     return true;
                 }
@@ -825,31 +830,31 @@ public class EaseChatLayout extends RelativeLayout implements IChatLayout, IHand
 
     private void setMenuByMsgType(EMMessage message) {
         EMMessage.Type type = message.getType();
-        menuHelper.findItemVisible(EasePopupWindowHelper.ACTION_COPY, false);
-        menuHelper.findItemVisible(EasePopupWindowHelper.ACTION_RECALL, false);
-        menuHelper.findItem(EasePopupWindowHelper.ACTION_DELETE).setTitle(getContext().getString(R.string.action_delete));
+        menuHelper.findItemVisible(R.id.action_chat_copy, false);
+        menuHelper.findItemVisible(R.id.action_chat_recall, false);
+        menuHelper.findItem(R.id.action_chat_delete).setTitle(getContext().getString(R.string.action_delete));
         switch (type) {
             case TXT:
-                menuHelper.findItemVisible(EasePopupWindowHelper.ACTION_COPY, true);
-                menuHelper.findItemVisible(EasePopupWindowHelper.ACTION_RECALL, true);
+                menuHelper.findItemVisible(R.id.action_chat_copy, true);
+                menuHelper.findItemVisible(R.id.action_chat_recall, true);
                 break;
             case LOCATION:
             case FILE:
             case IMAGE:
-                menuHelper.findItemVisible(EasePopupWindowHelper.ACTION_RECALL, true);
+                menuHelper.findItemVisible(R.id.action_chat_recall, true);
                 break;
             case VOICE:
-                menuHelper.findItem(EasePopupWindowHelper.ACTION_DELETE).setTitle(getContext().getString(R.string.delete_voice));
-                menuHelper.findItemVisible(EasePopupWindowHelper.ACTION_RECALL, true);
+                menuHelper.findItem(R.id.action_chat_delete).setTitle(getContext().getString(R.string.delete_voice));
+                menuHelper.findItemVisible(R.id.action_chat_recall, true);
                 break;
             case VIDEO:
-                menuHelper.findItem(EasePopupWindowHelper.ACTION_DELETE).setTitle(getContext().getString(R.string.delete_video));
-                menuHelper.findItemVisible(EasePopupWindowHelper.ACTION_RECALL, true);
+                menuHelper.findItem(R.id.action_chat_delete).setTitle(getContext().getString(R.string.delete_video));
+                menuHelper.findItemVisible(R.id.action_chat_recall, true);
                 break;
         }
 
         if(message.direct() == EMMessage.Direct.RECEIVE ){
-            menuHelper.findItemVisible(EasePopupWindowHelper.ACTION_RECALL, false);
+            menuHelper.findItemVisible(R.id.action_chat_recall, false);
         }
     }
 

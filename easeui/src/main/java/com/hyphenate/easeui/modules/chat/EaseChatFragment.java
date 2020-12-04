@@ -316,7 +316,7 @@ public class EaseChatFragment extends EaseBaseFragment implements OnChatLayoutLi
                 if(!TextUtils.isEmpty(filePath) && new File(filePath).exists()) {
                     chatLayout.sendFileMessage(Uri.parse(filePath));
                 }else {
-                    chatLayout.sendImageMessage(uri);
+                    chatLayout.sendFileMessage(uri);
                 }
             }
         }

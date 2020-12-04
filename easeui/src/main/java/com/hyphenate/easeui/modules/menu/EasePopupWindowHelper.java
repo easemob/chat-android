@@ -29,10 +29,7 @@ import java.util.List;
 import java.util.Map;
 
 public class EasePopupWindowHelper {
-    public static final int ACTION_COPY = 10;
-    public static final int ACTION_DELETE = 11;
-    public static final int ACTION_RECALL = 12;
-    private static final int[] itemIds = {ACTION_COPY, ACTION_DELETE, ACTION_RECALL};
+    private static final int[] itemIds = {R.id.action_chat_copy, R.id.action_chat_delete, R.id.action_chat_recall};
     private static final int[] titles = {R.string.action_copy, R.string.action_delete, R.string.action_recall};
     private static final int[] icons = {R.drawable.ease_chat_item_menu_copy, R.drawable.ease_chat_item_menu_delete, R.drawable.ease_chat_item_menu_recall};
     private static final int SPAN_COUNT = 5;
