@@ -48,6 +48,7 @@ public class ConversationListFragment extends EaseConversationListFragment imple
         View view = LayoutInflater.from(mContext).inflate(R.layout.demo_layout_search, null);
         llRoot.addView(view, 0);
         tvSearch = view.findViewById(R.id.tv_search);
+        conversationListLayout.getListAdapter().setEmptyLayoutId(R.layout.ease_layout_default_no_data);
 
         initViewModel();
     }

@@ -54,7 +54,6 @@ import com.hyphenate.util.UriUtils;
 
 public class ChatFragment extends EaseChatFragment implements OnMenuChangeListener, OnRecallMessageResultListener {
     private static final String TAG = ChatFragment.class.getSimpleName();
-    private static final int ACTION_FORWARD = 1;
     private static final int ITEM_VIDEO_CALL = 11;
     private static final int ITEM_CONFERENCE_CALL = 12;
     private MessageViewModel viewModel;
@@ -71,10 +70,11 @@ public class ChatFragment extends EaseChatFragment implements OnMenuChangeListen
         super.initView();
         clipboard = (ClipboardManager) getActivity().getSystemService(Context.CLIPBOARD_SERVICE);
         viewModel = new ViewModelProvider(this).get(MessageViewModel.class);
+
     }
 
     private void addItemMenuAction() {
-        MenuItemBean itemMenu = new MenuItemBean(0, ACTION_FORWARD, 11, getString(R.string.action_forward));
+        MenuItemBean itemMenu = new MenuItemBean(0, R.id.action_chat_forward, 11, getString(R.string.action_forward));
         itemMenu.setResourceId(R.drawable.ease_chat_item_menu_forward);
         chatLayout.addItemMenu(itemMenu );
     }
@@ -346,40 +346,39 @@ public class ChatFragment extends EaseChatFragment implements OnMenuChangeListen
 
     @Override
     public void onPreMenu(EasePopupWindowHelper helper, EMMessage message) {
+        //默认两分钟后，即不可撤回
+        if(System.currentTimeMillis() - message.getMsgTime() > 2 * 60 * 1000) {
+            helper.findItemVisible(R.id.action_chat_recall, false);
+        }
         EMMessage.Type type = message.getType();
-        helper.findItemVisible(ACTION_FORWARD, false);
-        helper.findItemVisible(ACTION_FORWARD, true);
+        helper.findItemVisible(R.id.action_chat_forward, false);
         switch (type) {
             case TXT:
-                if(message.getBooleanAttribute(DemoConstant.MESSAGE_ATTR_IS_VIDEO_CALL, false)
-                        || message.getBooleanAttribute(DemoConstant.MESSAGE_ATTR_IS_VOICE_CALL, false)){
-
-                }else if(message.getBooleanAttribute(DemoConstant.MESSAGE_ATTR_IS_BIG_EXPRESSION, false)){
-                    helper.findItemVisible(ACTION_FORWARD, true);
-                }else{
-                    helper.findItemVisible(ACTION_FORWARD, true);
+                if(!message.getBooleanAttribute(DemoConstant.MESSAGE_ATTR_IS_VIDEO_CALL, false)
+                        && !message.getBooleanAttribute(DemoConstant.MESSAGE_ATTR_IS_VOICE_CALL, false)) {
+                    helper.findItemVisible(R.id.action_chat_forward, true);
                 }
                 break;
             case IMAGE:
-                helper.findItemVisible(ACTION_FORWARD, true);
+                helper.findItemVisible(R.id.action_chat_forward, true);
                 break;
         }
 
         if(chatType == DemoConstant.CHATTYPE_CHATROOM) {
-            helper.findItemVisible(ACTION_FORWARD, true);
+            helper.findItemVisible(R.id.action_chat_forward, true);
         }
     }
 
     @Override
     public boolean onMenuItemClick(MenuItemBean item, EMMessage message) {
         switch (item.getItemId()) {
-            case ACTION_FORWARD :
+            case R.id.action_chat_forward :
                 ForwardMessageActivity.actionStart(mContext, message.getMsgId());
                 return true;
-            case EasePopupWindowHelper.ACTION_DELETE:
+            case R.id.action_chat_delete:
                 showDeleteDialog(message);
                 return true;
-            case EasePopupWindowHelper.ACTION_RECALL :
+            case R.id.action_chat_recall :
                 showProgressBar();
                 chatLayout.recallMessage(message);
                 return true;

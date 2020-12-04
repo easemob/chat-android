@@ -93,7 +93,7 @@
     <string name="em_conversation_menu_video">音视频会议</string>
     <string name="em_conversation_menu_group">创建群组</string>
     <string name="em_conversation_menu_friend">添加好友</string>
-    <string name="em_conversation_menu_search_friend">找人</string>
+    <string name="em_conversation_menu_search_friend">添加好友</string>
     <string name="em_conversation_menu_search_group">找群</string>
     <string name="em_conversation_menu_scan">扫一扫</string>
     <string name="em_conversation_system_notification">系统通知</string>
