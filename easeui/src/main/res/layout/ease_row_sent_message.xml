@@ -30,6 +30,7 @@
             android:layout_toLeftOf="@id/iv_userhead"
             android:minWidth="30dp"
             android:padding="8dp"
+            android:layout_marginTop="2dp"
             android:background="@drawable/ease_chat_bubble_send_bg"
             android:layout_below="@id/tv_userid"
             >

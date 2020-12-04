@@ -31,8 +31,8 @@
             android:layout_marginLeft="@dimen/margin_chat_activity"
             android:layout_toRightOf="@id/iv_userhead"
             android:padding="8dp"
-            android:background="@drawable/ease_chat_bubble_receive_bg"
-             >
+            android:layout_marginTop="2dp"
+            android:background="@drawable/ease_chat_bubble_receive_bg">
 
             <TextView
                 android:id="@+id/tv_chatcontent"
@@ -56,6 +56,7 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="@dimen/chat_nick_margin_left"
             android:textSize="@dimen/chat_nick_text_size"
+            tools:text="som"
             android:layout_toRightOf="@id/iv_userhead"
             android:visibility="gone" />
     </RelativeLayout>

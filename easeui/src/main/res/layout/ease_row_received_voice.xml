@@ -30,6 +30,7 @@
             android:layout_toRightOf="@id/iv_userhead"
             android:layout_marginLeft="@dimen/margin_chat_activity"
             android:layout_below="@+id/tv_userid"
+            android:layout_marginTop="2dp"
             android:background="@drawable/ease_chat_bubble_receive_bg">
 
             <TextView

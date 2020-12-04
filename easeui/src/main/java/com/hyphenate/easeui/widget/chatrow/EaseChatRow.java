@@ -294,6 +294,8 @@ public abstract class EaseChatRow extends LinearLayout {
                 //如果在同一侧展示，则需要显示昵称
                 if(itemStyle.getItemShowType() == 1 || itemStyle.getItemShowType() == 2) {
                     usernickView.setVisibility(VISIBLE);
+                }else {
+                    usernickView.setVisibility(GONE);
                 }
             }
             if(bubbleLayout != null) {

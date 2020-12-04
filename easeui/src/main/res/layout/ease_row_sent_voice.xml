@@ -30,6 +30,7 @@
             android:layout_marginRight="10dp"
             android:minHeight="38dp"
             android:layout_below="@id/tv_userid"
+            android:layout_marginTop="2dp"
              android:background="@drawable/ease_chat_bubble_send_bg"
             >
 	        <ImageView
