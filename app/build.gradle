@@ -116,8 +116,8 @@ dependencies {
     api 'com.scwang.smartrefresh:SmartRefreshLayout:1.0.5.1'
     implementation 'androidx.swiperefreshlayout:swiperefreshlayout:1.1.0'
     // easeui
-    //api 'com.hyphenate:easeim-kit:1.0.0'
     //implementation 'com.github.jinanzhuan:chat-android:1.0.1'
+    //implementation 'com.hyphenate:ease-im-kit:1.0.0'
     api project(path: ':easeui')
     // room
     implementation "androidx.room:room-runtime:2.2.5"

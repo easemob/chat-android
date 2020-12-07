@@ -37,6 +37,9 @@ if (JavaVersion.current().isJava8Compatible()) {
     }
 }
 ext{
+//    PUBLISH_GROUP_ID = 'com.hyphenate'
+//    PUBLISH_ARTIFACT_ID = 'ease-im-kit'
+//    PUBLISH_VERSION = '1.0.0'
     if(!project.hasProperty('isAarRelease')){
         isAarRelease = false;
     }
