@@ -355,7 +355,7 @@ public class EaseChatMessageListLayout extends RelativeLayout implements IChatMe
                 if(recyclerViewLastHeight != height) {
                     //RecyclerView高度发生变化，刷新页面
                     if(messageAdapter.getData() != null && !messageAdapter.getData().isEmpty()) {
-                        smoothSeekToPosition(messageAdapter.getData().size() - 1);
+                        post(()-> smoothSeekToPosition(messageAdapter.getData().size() - 1));
                     }
                 }
                 recyclerViewLastHeight = height;
@@ -520,7 +520,7 @@ public class EaseChatMessageListLayout extends RelativeLayout implements IChatMe
     public void loadMoreLocalMsgSuccess(List<EMMessage> data) {
         finishRefresh();
         presenter.refreshCurrentConversation();
-        smoothSeekToPosition(data.size() - 1);
+        post(()->smoothSeekToPosition(data.size() - 1));
     }
 
     @Override
@@ -557,7 +557,7 @@ public class EaseChatMessageListLayout extends RelativeLayout implements IChatMe
     public void loadMoreServerMsgSuccess(List<EMMessage> data) {
         finishRefresh();
         presenter.refreshCurrentConversation();
-        smoothSeekToPosition(data.size() - 1);
+        post(()-> smoothSeekToPosition(data.size() - 1));
     }
 
     @Override
@@ -783,23 +783,36 @@ public class EaseChatMessageListLayout extends RelativeLayout implements IChatMe
         if(position < 0) {
             position = 0;
         }
-        int finalPosition = position;
         RecyclerView.LayoutManager manager = rvList.getLayoutManager();
         if(manager instanceof LinearLayoutManager) {
-           setMoveAnimation(manager, finalPosition);
+            ((LinearLayoutManager) manager).scrollToPositionWithOffset(position, 0);
+            //setMoveAnimation(manager, position);
         }
     }
 
     private void setMoveAnimation(RecyclerView.LayoutManager manager, int position) {
-        ValueAnimator animator = ValueAnimator.ofInt(-200, 0);
+        int prePosition;
+        if(position > 0) {
+            prePosition = position - 1;
+        }else {
+            prePosition = position;
+        }
+        View view = manager.findViewByPosition(0);
+        int height;
+        if(view != null) {
+            height = view.getHeight();
+        }else {
+            height = 200;
+        }
+        ValueAnimator animator = ValueAnimator.ofInt(-height, 0);
         animator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
             @Override
             public void onAnimationUpdate(ValueAnimator animation) {
                 int value = (int) animation.getAnimatedValue();
-                ((LinearLayoutManager)manager).scrollToPositionWithOffset(position, value);
+                ((LinearLayoutManager)manager).scrollToPositionWithOffset(prePosition, value);
             }
         });
-        animator.setDuration(500);
+        animator.setDuration(800);
         animator.start();
     }
 
