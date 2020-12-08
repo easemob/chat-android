@@ -10,12 +10,13 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.core.content.ContextCompat;
 
 import com.bumptech.glide.Glide;
+import com.hyphenate.easeui.EaseIM;
 import com.hyphenate.easeui.R;
 import com.hyphenate.easeui.adapter.EaseBaseRecyclerViewAdapter;
 import com.hyphenate.easeui.domain.EaseUser;
-import com.hyphenate.easeui.manager.EaseProviderManager;
 import com.hyphenate.easeui.modules.contact.model.EaseContactSetStyle;
 import com.hyphenate.easeui.provider.EaseUserProfileProvider;
 import com.hyphenate.easeui.widget.EaseImageView;
@@ -128,9 +129,9 @@ public class EaseContactListAdapter extends EaseBaseRecyclerViewAdapter<EaseUser
 
         @Override
         public void setData(EaseUser item, int position) {
-            EaseUserProfileProvider provider = EaseProviderManager.getInstance().getUserProvider();
+            EaseUserProfileProvider provider = EaseIM.getInstance().getUserProvider();
             if(provider != null) {
-                item = provider.getUser(item);
+                item = provider.getUser(item.getUsername());
             }
             String header = item.getInitialLetter();
             mHeader.setVisibility(View.GONE);
@@ -144,10 +145,10 @@ public class EaseContactListAdapter extends EaseBaseRecyclerViewAdapter<EaseUser
                 }
             }
             mName.setText(item.getNickname());
-            Drawable defaultDrawable = mAvatar.getDrawable();
             Glide.with(mContext)
                     .load(item.getAvatar())
-                    .error(defaultDrawable)
+                    .error(contactSetModel.getAvatarDefaultSrc() != null ? contactSetModel.getAvatarDefaultSrc()
+                            : ContextCompat.getDrawable(mContext, R.drawable.ease_default_avatar))
                     .into(mAvatar);
         }
     }

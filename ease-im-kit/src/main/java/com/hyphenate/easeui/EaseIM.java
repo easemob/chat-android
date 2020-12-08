@@ -25,6 +25,9 @@ public class EaseIM {
 
     private EaseUserProfileProvider userProvider;
 
+    /**
+     * conversation default avatar and name provider
+     */
     private EaseConversationInfoProvider conversationInfoProvider;
     /**
      * chat avatar options which we can easily control the style
@@ -211,7 +214,25 @@ public class EaseIM {
         return this;
     }
 
-    public Context getContext() {
+    /**
+     * get conversation info provider
+     * @return
+     */
+    public EaseConversationInfoProvider getConversationInfoProvider() {
+        return conversationInfoProvider;
+    }
+
+    /**
+     * set conversation provider
+     * @param provider
+     * @return
+     */
+    public EaseIM setConversationInfoProvider(EaseConversationInfoProvider provider) {
+        this.conversationInfoProvider = provider;
+        return this;
+    }
+
+  public Context getContext() {
         return appContext;
     }
 

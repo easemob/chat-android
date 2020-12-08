@@ -1,7 +1,6 @@
 package com.hyphenate.easeui.modules.conversation;
 
 import android.os.Bundle;
-import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -12,16 +11,13 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
-import com.hyphenate.chat.EMConversation;
 import com.hyphenate.easeui.R;
 import com.hyphenate.easeui.interfaces.OnItemClickListener;
-import com.hyphenate.easeui.manager.EaseProviderManager;
 import com.hyphenate.easeui.modules.conversation.interfaces.OnConversationLoadListener;
 import com.hyphenate.easeui.modules.conversation.model.EaseConversationInfo;
 import com.hyphenate.easeui.modules.menu.EasePopupMenuHelper;
 import com.hyphenate.easeui.modules.menu.OnPopupMenuItemClickListener;
 import com.hyphenate.easeui.modules.menu.OnPopupMenuPreShowListener;
-import com.hyphenate.easeui.provider.EaseConversationInfoProvider;
 import com.hyphenate.easeui.ui.base.EaseBaseFragment;
 import com.hyphenate.util.EMLog;
 

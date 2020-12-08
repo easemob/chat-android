@@ -1,5 +1,7 @@
 package com.hyphenate.easeui.provider;
 
+import android.text.TextUtils;
+
 import com.hyphenate.easeui.domain.EaseUser;
 
 /**
@@ -14,13 +16,4 @@ public interface EaseUserProfileProvider {
      * @return
      */
     EaseUser getUser(String username);
-
-    /**
-     * update user
-     * @param user
-     * @return
-     */
-    default EaseUser getUser(EaseUser user) {
-        return user;
-    }
 }

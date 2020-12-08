@@ -1,6 +1,7 @@
 package com.hyphenate.easeui.modules.conversation.delegate;
 
 import android.content.Context;
+import android.graphics.drawable.Drawable;
 import android.text.TextUtils;
 import android.view.View;
 
@@ -12,19 +13,18 @@ import com.hyphenate.chat.EMClient;
 import com.hyphenate.chat.EMConversation;
 import com.hyphenate.chat.EMGroup;
 import com.hyphenate.chat.EMMessage;
+import com.hyphenate.easeui.EaseIM;
 import com.hyphenate.easeui.R;
-import com.hyphenate.easeui.constants.EaseConstant;
+import com.hyphenate.easeui.domain.EaseUser;
 import com.hyphenate.easeui.manager.EaseAtMessageHelper;
 import com.hyphenate.easeui.manager.EasePreferenceManager;
-import com.hyphenate.easeui.manager.EaseProviderManager;
-import com.hyphenate.easeui.manager.EaseSystemMsgManager;
 import com.hyphenate.easeui.modules.conversation.model.EaseConversationInfo;
 import com.hyphenate.easeui.modules.conversation.model.EaseConversationSetStyle;
 import com.hyphenate.easeui.provider.EaseConversationInfoProvider;
+import com.hyphenate.easeui.provider.EaseUserProfileProvider;
 import com.hyphenate.easeui.utils.EaseCommonUtils;
 import com.hyphenate.easeui.utils.EaseDateUtils;
 import com.hyphenate.easeui.utils.EaseSmileUtils;
-import com.hyphenate.util.DateUtils;
 
 import java.util.Date;
 
@@ -48,7 +48,6 @@ public class EaseConversationDelegate extends EaseDefaultConversationDelegate {
                 ? ContextCompat.getDrawable(context, R.drawable.ease_conversation_top_bg)
                 : null);
         holder.mentioned.setVisibility(View.GONE);
-        EaseConversationInfoProvider infoProvider = EaseProviderManager.getInstance().getConversationInfoProvider();
         int defaultAvatar = 0;
         String showName = null;
         if(item.getType() == EMConversation.EMConversationType.GroupChat) {
@@ -69,18 +68,27 @@ public class EaseConversationDelegate extends EaseDefaultConversationDelegate {
         }
         holder.avatar.setImageResource(defaultAvatar);
         holder.name.setText(showName);
+        EaseConversationInfoProvider infoProvider = EaseIM.getInstance().getConversationInfoProvider();
         if(infoProvider != null) {
-            int avatarResource = infoProvider.getDefaultTypeAvatarResource(item.getType().name());
-            String avatar = infoProvider.getDefaultTypeAvatar(item.getType().name());
-            if(avatarResource != 0) {
+            Drawable avatarResource = infoProvider.getDefaultTypeAvatar(item.getType().name());
+            if(avatarResource != null) {
                 Glide.with(holder.mContext).load(avatarResource).error(defaultAvatar).into(holder.avatar);
             }
-            if(!TextUtils.isEmpty(avatar)) {
-                Glide.with(holder.mContext).load(avatar).error(defaultAvatar).into(holder.avatar);
-            }
-            String conversationName = infoProvider.getConversationName(username);
-            if(!TextUtils.isEmpty(conversationName)) {
-                holder.name.setText(conversationName);
+        }
+        EaseUserProfileProvider userProvider = EaseIM.getInstance().getUserProvider();
+        if(userProvider != null) {
+            EaseUser user = userProvider.getUser(username);
+            if(user != null) {
+                if(!TextUtils.isEmpty(user.getNickname())) {
+                    holder.name.setText(user.getNickname());
+                }
+                if(!TextUtils.isEmpty(user.getAvatar())) {
+                    Drawable drawable = holder.avatar.getDrawable();
+                    Glide.with(holder.mContext)
+                            .load(user.getAvatar())
+                            .error(drawable)
+                            .into(holder.avatar);
+                }
             }
         }
 

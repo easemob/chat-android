@@ -57,7 +57,7 @@ public class EaseUser implements Serializable {
     }
 
     public String getNickname() {
-        return nickname == null ? username : nickname;
+        return TextUtils.isEmpty(nickname) ? username : nickname;
     }
 
     public void setNickname(String nickname) {

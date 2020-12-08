@@ -1,11 +1,12 @@
 package com.hyphenate.easeui.modules.contact.presenter;
 
 
+import android.text.TextUtils;
+
 import com.hyphenate.chat.EMClient;
+import com.hyphenate.easeui.EaseIM;
 import com.hyphenate.easeui.R;
 import com.hyphenate.easeui.domain.EaseUser;
-import com.hyphenate.easeui.manager.EaseProviderManager;
-import com.hyphenate.easeui.manager.EaseThreadManager;
 import com.hyphenate.easeui.provider.EaseUserProfileProvider;
 import com.hyphenate.exceptions.HyphenateException;
 
@@ -73,10 +74,18 @@ public class EaseContactPresenterImpl extends EaseContactPresenter {
     }
 
     private void checkUserProvider(List<EaseUser> data) {
-        EaseUserProfileProvider provider = EaseProviderManager.getInstance().getUserProvider();
+        EaseUserProfileProvider provider = EaseIM.getInstance().getUserProvider();
         if(provider != null) {
             for (EaseUser user : data) {
-                provider.getUser(user);
+                EaseUser setUser = provider.getUser(user.getUsername());
+                if(setUser != null) {
+                    if(TextUtils.isEmpty(user.getNickname()) || TextUtils.equals(user.getNickname(), user.getUsername())) {
+                        user.setNickname(setUser.getNickname());
+                    }
+                    if(TextUtils.isEmpty(user.getAvatar())) {
+                        user.setAvatar(setUser.getAvatar());
+                    }
+                }
             }
         }
     }

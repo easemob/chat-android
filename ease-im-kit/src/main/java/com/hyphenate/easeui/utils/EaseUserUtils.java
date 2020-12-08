@@ -7,14 +7,13 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.RequestOptions;
+import com.hyphenate.easeui.EaseIM;
 import com.hyphenate.easeui.R;
 import com.hyphenate.easeui.domain.EaseUser;
 import com.hyphenate.easeui.provider.EaseUserProfileProvider;
 
 public class EaseUserUtils {
-    
-    static EaseUserProfileProvider userProvider;
-    
+
     static {
         // TODO: 2019/12/30 0030 how to provide userProfileProvider
 //        userProvider = EaseUI.getInstance().getUserProfileProvider();
@@ -26,10 +25,7 @@ public class EaseUserUtils {
      * @return
      */
     public static EaseUser getUserInfo(String username){
-        if(userProvider != null)
-            return userProvider.getUser(username);
-        
-        return null;
+        return EaseIM.getInstance().getUserProvider().getUser(username);
     }
     
     /**
