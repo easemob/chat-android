@@ -6,7 +6,7 @@ import android.media.MediaPlayer;
 
 import com.hyphenate.chat.EMMessage;
 import com.hyphenate.chat.EMVoiceMessageBody;
-import com.hyphenate.easeui.EaseUI;
+import com.hyphenate.easeui.EaseIM;
 
 import java.io.IOException;
 
@@ -108,7 +108,7 @@ public class EaseChatRowVoicePlayer {
     }
 
     private void setSpeaker() {
-        boolean speakerOn = EaseUI.getInstance().getSettingsProvider().isSpeakerOpened();
+        boolean speakerOn = EaseIM.getInstance().getSettingsProvider().isSpeakerOpened();
         if (speakerOn) {
             audioManager.setMode(AudioManager.MODE_NORMAL);
             audioManager.setSpeakerphoneOn(true);

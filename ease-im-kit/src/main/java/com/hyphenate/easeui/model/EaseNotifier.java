@@ -29,7 +29,7 @@ import android.text.TextUtils;
 import androidx.core.app.NotificationCompat;
 
 import com.hyphenate.chat.EMMessage;
-import com.hyphenate.easeui.EaseUI;
+import com.hyphenate.easeui.EaseIM;
 import com.hyphenate.easeui.provider.EaseSettingsProvider;
 import com.hyphenate.easeui.utils.EaseCommonUtils;
 import com.hyphenate.util.EMLog;
@@ -127,7 +127,7 @@ public class EaseNotifier {
             return;
         }
 
-        EaseSettingsProvider settingsProvider = EaseUI.getInstance().getSettingsProvider();
+        EaseSettingsProvider settingsProvider = EaseIM.getInstance().getSettingsProvider();
         if (!settingsProvider.isMsgNotifyAllowed(message)) {
             return;
         }
@@ -146,7 +146,7 @@ public class EaseNotifier {
             return;
         }
 
-        EaseSettingsProvider settingsProvider = EaseUI.getInstance().getSettingsProvider();
+        EaseSettingsProvider settingsProvider = EaseIM.getInstance().getSettingsProvider();
         if (!settingsProvider.isMsgNotifyAllowed(null)) {
             return;
         }
@@ -312,7 +312,7 @@ public class EaseNotifier {
             }
         }
 
-        final EaseSettingsProvider settingsProvider = EaseUI.getInstance().getSettingsProvider();
+        final EaseSettingsProvider settingsProvider = EaseIM.getInstance().getSettingsProvider();
         if (!settingsProvider.isMsgNotifyAllowed(null)) {
             return;
         }

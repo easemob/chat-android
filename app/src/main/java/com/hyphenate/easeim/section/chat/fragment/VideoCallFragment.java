@@ -42,7 +42,7 @@ import com.hyphenate.easeim.R;
 import com.hyphenate.easeim.common.utils.PreferenceManager;
 import com.hyphenate.easeim.common.utils.ViewScrollHelper;
 import com.hyphenate.easeim.section.conference.CallFloatWindow;
-import com.hyphenate.easeui.EaseUI;
+import com.hyphenate.easeui.EaseIM;
 import com.hyphenate.easeui.manager.PhoneStateManager;
 import com.hyphenate.exceptions.HyphenateException;
 import com.hyphenate.media.EMCallSurfaceView;
@@ -118,7 +118,7 @@ public class VideoCallFragment extends EaseCallFragment implements View.OnClickL
 
     @Override
     protected void initView() {
-        EaseUI.getInstance().isVideoCalling = true;
+        EaseIM.getInstance().isVideoCalling = true;
         callType = 1;
 
         callStateTextView = (TextView) findViewById(R.id.tv_call_state);
@@ -257,7 +257,7 @@ public class VideoCallFragment extends EaseCallFragment implements View.OnClickL
 
     @Override
     public void onDestroy() {
-        EaseUI.getInstance().isVideoCalling = false;
+        EaseIM.getInstance().isVideoCalling = false;
         stopMonitor();
         localSurface.getRenderer().dispose();
         localSurface = null;

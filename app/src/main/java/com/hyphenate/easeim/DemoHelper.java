@@ -34,7 +34,7 @@ import com.hyphenate.easeim.section.chat.delegates.ChatRecallAdapterDelegate;
 import com.hyphenate.easeim.section.chat.delegates.ChatVideoCallAdapterDelegate;
 import com.hyphenate.easeim.section.chat.delegates.ChatVoiceCallAdapterDelegate;
 import com.hyphenate.easeim.section.chat.receiver.CallReceiver;
-import com.hyphenate.easeui.EaseUI;
+import com.hyphenate.easeui.EaseIM;
 import com.hyphenate.easeui.delegate.EaseCustomAdapterDelegate;
 import com.hyphenate.easeui.delegate.EaseExpressionAdapterDelegate;
 import com.hyphenate.easeui.delegate.EaseFileAdapterDelegate;
@@ -122,7 +122,7 @@ public class DemoHelper {
         //options.setIMServer("116.85.43.118");
         //options.setImPort(6717);
         // 初始化SDK
-        isSDKInit = EaseUI.getInstance().init(context, options);
+        isSDKInit = EaseIM.getInstance().init(context, options);
         return isSDKInit();
     }
 
@@ -240,8 +240,8 @@ public class DemoHelper {
      */
     private void initEaseUI(Context context) {
         //添加ChatPresenter,ChatPresenter中添加了网络连接状态监听，
-        EaseUI.getInstance().addChatPresenter(ChatPresenter.getInstance());
-        EaseUI.getInstance()
+        EaseIM.getInstance().addChatPresenter(ChatPresenter.getInstance());
+        EaseIM.getInstance()
                 .setSettingsProvider(new EaseSettingsProvider() {
                     @Override
                     public boolean isMsgNotifyAllowed(EMMessage message) {
@@ -488,7 +488,7 @@ public class DemoHelper {
     }
 
     public void initPush(Context context) {
-        if(EaseUI.getInstance().isMainProcess(context)) {
+        if(EaseIM.getInstance().isMainProcess(context)) {
             //OPPO SDK升级到2.1.0后需要进行初始化
             HeytapPushManager.init(context, true);
             //HMSPushHelper.getInstance().initHMSAgent(DemoApplication.getInstance());
@@ -575,7 +575,7 @@ public class DemoHelper {
     }
 
     public EaseAvatarOptions getEaseAvatarOptions() {
-        return EaseUI.getInstance().getAvatarOptions();
+        return EaseIM.getInstance().getAvatarOptions();
     }
 
     public DemoModel getModel(){
@@ -594,7 +594,7 @@ public class DemoHelper {
      * @return
      */
     public EaseNotifier getNotifier(){
-        return EaseUI.getInstance().getNotifier();
+        return EaseIM.getInstance().getNotifier();
     }
 
     /**

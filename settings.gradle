@@ -1,5 +1,5 @@
 include ':app'
-include ':easeui'
+include ':ease-im-kit'
 
 //project(':easeui').projectDir = new File('../easeui/easeui')
 //project(':player').projectDir = new File('../easeui/player')

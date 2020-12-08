@@ -18,7 +18,7 @@ import com.hyphenate.EMCallBack;
 import com.hyphenate.chat.EMClient;
 import com.hyphenate.chat.EMMessage;
 import com.hyphenate.chat.EMMessage.Direct;
-import com.hyphenate.easeui.EaseUI;
+import com.hyphenate.easeui.EaseIM;
 import com.hyphenate.easeui.R;
 import com.hyphenate.easeui.adapter.EaseBaseAdapter;
 import com.hyphenate.easeui.domain.EaseAvatarOptions;
@@ -29,7 +29,6 @@ import com.hyphenate.easeui.modules.chat.model.EaseChatSetStyle;
 import com.hyphenate.easeui.utils.EaseDateUtils;
 import com.hyphenate.easeui.utils.EaseUserUtils;
 import com.hyphenate.easeui.widget.EaseImageView;
-import com.hyphenate.util.DateUtils;
 import com.hyphenate.util.EMLog;
 
 import java.util.Date;
@@ -364,7 +363,7 @@ public abstract class EaseChatRow extends LinearLayout {
      * @return
      */
     protected EaseAvatarOptions provideAvatarOptions() {
-        return EaseUI.getInstance().getAvatarOptions();
+        return EaseIM.getInstance().getAvatarOptions();
     }
 
     /**

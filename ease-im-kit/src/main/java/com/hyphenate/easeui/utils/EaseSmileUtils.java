@@ -19,7 +19,7 @@ import android.text.Spannable;
 import android.text.Spannable.Factory;
 import android.text.style.ImageSpan;
 
-import com.hyphenate.easeui.EaseUI;
+import com.hyphenate.easeui.EaseIM;
 import com.hyphenate.easeui.domain.EaseEmojicon;
 import com.hyphenate.easeui.model.EaseDefaultEmojiconDatas;
 import com.hyphenate.easeui.provider.EaseEmojiconInfoProvider;
@@ -81,7 +81,7 @@ public class EaseSmileUtils {
 		for (EaseEmojicon emojicon : emojicons) {
 			addPattern(emojicon.getEmojiText(), emojicon.getIcon());
 		}
-	    EaseEmojiconInfoProvider emojiconInfoProvider = EaseUI.getInstance().getEmojiconInfoProvider();
+	    EaseEmojiconInfoProvider emojiconInfoProvider = EaseIM.getInstance().getEmojiconInfoProvider();
 	    if(emojiconInfoProvider != null && emojiconInfoProvider.getTextEmojiconMapping() != null){
 	        for(Entry<String, Object> entry : emojiconInfoProvider.getTextEmojiconMapping().entrySet()){
 	            addPattern(entry.getKey(), entry.getValue());

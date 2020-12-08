@@ -14,7 +14,6 @@
 
 package com.hyphenate.easeui.ui.base;
 
-import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
@@ -28,9 +27,7 @@ import android.view.inputmethod.InputMethodManager;
 import androidx.annotation.ColorRes;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
-import androidx.fragment.app.FragmentActivity;
 
-import com.hyphenate.easeui.EaseUI;
 import com.hyphenate.easeui.R;
 import com.hyphenate.easeui.utils.StatusBarCompat;
 

@@ -4,7 +4,7 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.SharedPreferences;
 
-import com.hyphenate.easeui.EaseUI;
+import com.hyphenate.easeui.EaseIM;
 
 import java.util.Set;
 
@@ -17,7 +17,7 @@ public class EasePreferenceManager {
 
     @SuppressLint("CommitPrefEdits")
     private EasePreferenceManager(){
-        mSharedPreferences = EaseUI.getInstance().getContext().getSharedPreferences("EM_SP_AT_MESSAGE", Context.MODE_PRIVATE);
+        mSharedPreferences = EaseIM.getInstance().getContext().getSharedPreferences("EM_SP_AT_MESSAGE", Context.MODE_PRIVATE);
         editor = mSharedPreferences.edit();
     }
     private static EasePreferenceManager instance;

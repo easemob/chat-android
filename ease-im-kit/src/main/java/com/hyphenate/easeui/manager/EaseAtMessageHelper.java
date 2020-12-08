@@ -5,7 +5,7 @@ import android.text.TextUtils;
 import com.hyphenate.chat.EMClient;
 import com.hyphenate.chat.EMMessage;
 import com.hyphenate.chat.EMMessage.ChatType;
-import com.hyphenate.easeui.EaseUI;
+import com.hyphenate.easeui.EaseIM;
 import com.hyphenate.easeui.R;
 import com.hyphenate.easeui.constants.EaseConstant;
 import com.hyphenate.easeui.domain.EaseUser;
@@ -77,7 +77,7 @@ public class EaseAtMessageHelper {
     }
 
     public boolean containsAtAll(String content){
-        String atAll = "@" + EaseUI.getInstance().getContext().getString(R.string.all_members);
+        String atAll = "@" + EaseIM.getInstance().getContext().getString(R.string.all_members);
         if(content.contains(atAll)){
             return true;
         }

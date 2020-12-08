@@ -15,9 +15,9 @@ import com.hyphenate.easeui.provider.EaseEmojiconInfoProvider;
 import com.hyphenate.easeui.provider.EaseSettingsProvider;
 import com.hyphenate.easeui.provider.EaseUserProfileProvider;
 
-public class EaseUI {
-    private static final String TAG = EaseUI.class.getSimpleName();
-    private static EaseUI instance;
+public class EaseIM {
+    private static final String TAG = EaseIM.class.getSimpleName();
+    private static EaseIM instance;
 
     private EaseSettingsProvider settingsProvider;
 
@@ -48,13 +48,13 @@ public class EaseUI {
     public boolean isVideoCalling;
     private EaseChatPresenter presenter;
 
-    private EaseUI() {}
+    private EaseIM() {}
 
-    public static EaseUI getInstance() {
+    public static EaseIM getInstance() {
         if(instance == null) {
-            synchronized (EaseUI.class) {
+            synchronized (EaseIM.class) {
                 if(instance == null) {
-                    instance = new EaseUI();
+                    instance = new EaseIM();
                 }
             }
         }
@@ -146,7 +146,7 @@ public class EaseUI {
      * @param emojiconInfoProvider
      * @return
      */
-    public EaseUI setEmojiconInfoProvider(EaseEmojiconInfoProvider emojiconInfoProvider) {
+    public EaseIM setEmojiconInfoProvider(EaseEmojiconInfoProvider emojiconInfoProvider) {
         mEmojiconInfoProvider = emojiconInfoProvider;
         return this;
     }
@@ -167,7 +167,7 @@ public class EaseUI {
      * @param settingsProvider
      * @return
      */
-    public EaseUI setSettingsProvider(EaseSettingsProvider settingsProvider) {
+    public EaseIM setSettingsProvider(EaseSettingsProvider settingsProvider) {
         this.settingsProvider = settingsProvider;
         return this;
     }
@@ -189,7 +189,7 @@ public class EaseUI {
      * @param userProvider
      * @return
      */
-    public EaseUI setUserProvider(EaseUserProfileProvider userProvider) {
+    public EaseIM setUserProvider(EaseUserProfileProvider userProvider) {
         this.userProvider = userProvider;
         return this;
     }
@@ -206,7 +206,7 @@ public class EaseUI {
      * set avatar options
      * @param avatarOptions
      */
-    public EaseUI setAvatarOptions(EaseAvatarOptions avatarOptions) {
+    public EaseIM setAvatarOptions(EaseAvatarOptions avatarOptions) {
         this.avatarOptions = avatarOptions;
         return this;
     }

@@ -8,7 +8,7 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.hyphenate.chat.EMMessage;
-import com.hyphenate.easeui.EaseUI;
+import com.hyphenate.easeui.EaseIM;
 import com.hyphenate.easeui.R;
 import com.hyphenate.easeui.constants.EaseConstant;
 import com.hyphenate.easeui.domain.EaseEmojicon;
@@ -44,8 +44,8 @@ public class EaseChatRowBigExpression extends EaseChatRowText {
     public void onSetUpView() {
         String emojiconId = message.getStringAttribute(EaseConstant.MESSAGE_ATTR_EXPRESSION_ID, null);
         EaseEmojicon emojicon = null;
-        if(EaseUI.getInstance().getEmojiconInfoProvider() != null){
-            emojicon =  EaseUI.getInstance().getEmojiconInfoProvider().getEmojiconInfo(emojiconId);
+        if(EaseIM.getInstance().getEmojiconInfoProvider() != null){
+            emojicon =  EaseIM.getInstance().getEmojiconInfoProvider().getEmojiconInfo(emojiconId);
         }
         if(emojicon != null){
             if(emojicon.getBigIcon() != 0){

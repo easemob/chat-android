@@ -15,7 +15,7 @@ import com.hyphenate.chat.EMClient;
 import com.hyphenate.chat.EMConversation;
 import com.hyphenate.chat.EMGroup;
 import com.hyphenate.chat.EMMessage;
-import com.hyphenate.easeui.EaseUI;
+import com.hyphenate.easeui.EaseIM;
 import com.hyphenate.easeui.R;
 import com.hyphenate.easeui.adapter.EaseBaseDelegate;
 import com.hyphenate.easeui.adapter.EaseBaseRecyclerViewAdapter;
@@ -26,7 +26,6 @@ import com.hyphenate.easeui.utils.EaseCommonUtils;
 import com.hyphenate.easeui.utils.EaseDateUtils;
 import com.hyphenate.easeui.utils.EaseSmileUtils;
 import com.hyphenate.easeui.widget.EaseImageView;
-import com.hyphenate.util.DateUtils;
 
 import java.util.Date;
 
@@ -75,7 +74,7 @@ public class ConversationDelegate extends EaseBaseDelegate<EMConversation, Conve
             mMsgState = findViewById(R.id.msg_state);
             mentioned = findViewById(R.id.mentioned);
             message = findViewById(R.id.message);
-            EaseAvatarOptions avatarOptions = EaseUI.getInstance().getAvatarOptions();
+            EaseAvatarOptions avatarOptions = EaseIM.getInstance().getAvatarOptions();
             if(avatarOptions != null) {
                 avatar.setShapeType(avatarOptions.getAvatarShape());
             }
