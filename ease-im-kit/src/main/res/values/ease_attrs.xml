@@ -40,7 +40,6 @@
             <enum name="none" value="0" />
             <enum name="round" value="1" />
             <enum name="rectangle" value="2" />
-            <enum name="rectangle2" value="3" />
         </attr>
     </declare-styleable>
 

@@ -3,12 +3,14 @@ package com.hyphenate.easeui.modules.chat.interfaces;
 import android.graphics.drawable.Drawable;
 import android.widget.EditText;
 
+import com.hyphenate.easeui.modules.chat.EaseInputMenuStyle;
+
 public interface IChatPrimaryMenu {
     /**
      * 菜单展示类型
-     * @param type
+     * @param style
      */
-    void setMenuShowType(int type);
+    void setMenuShowType(EaseInputMenuStyle style);
 
     /**
      * 常规模式

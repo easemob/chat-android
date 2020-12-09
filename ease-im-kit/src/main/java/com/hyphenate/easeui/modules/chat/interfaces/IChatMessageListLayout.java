@@ -11,12 +11,6 @@ import com.hyphenate.easeui.modules.interfaces.IRecyclerView;
 public interface IChatMessageListLayout extends IRecyclerView {
 
     /**
-     * 设置背景
-     * @param bgDrawable
-     */
-    void setBackground(Drawable bgDrawable);
-
-    /**
      * 设置presenter
      * @param presenter
      */
@@ -45,5 +39,4 @@ public interface IChatMessageListLayout extends IRecyclerView {
      * @param listener
      */
     void setMessageListItemClickListener(MessageListItemClickListener listener);
-
 }

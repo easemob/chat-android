@@ -40,7 +40,7 @@ public class EaseChatPrimaryMenu extends RelativeLayout implements IChatPrimaryM
     private Button buttonSend;
 
     private EaseChatPrimaryMenuListener listener;
-    private int menuType = 0;//菜单展示形式
+    private EaseInputMenuStyle menuType = EaseInputMenuStyle.All;//菜单展示形式
     protected InputMethodManager inputManager;
     protected Activity activity;
 
@@ -117,8 +117,8 @@ public class EaseChatPrimaryMenu extends RelativeLayout implements IChatPrimaryM
     }
 
     @Override
-    public void setMenuShowType(int type) {
-        this.menuType = type;
+    public void setMenuShowType(EaseInputMenuStyle style) {
+        this.menuType = style;
         checkMenuType();
     }
 
@@ -280,18 +280,18 @@ public class EaseChatPrimaryMenu extends RelativeLayout implements IChatPrimaryM
     }
 
     private void checkMenuType() {
-        if(menuType == EaseInputMenuStyle.DISABLE_VOICE.ordinal()) {
+        if(menuType == EaseInputMenuStyle.DISABLE_VOICE) {
             buttonSetModeVoice.setVisibility(GONE);
             buttonSetModeKeyboard.setVisibility(GONE);
             buttonPressToSpeak.setVisibility(GONE);
-        }else if(menuType == EaseInputMenuStyle.DISABLE_EMOJICON.ordinal()) {
+        }else if(menuType == EaseInputMenuStyle.DISABLE_EMOJICON) {
             faceLayout.setVisibility(GONE);
-        }else if(menuType == EaseInputMenuStyle.DISABLE_VOICE_EMOJICON.ordinal()) {
+        }else if(menuType == EaseInputMenuStyle.DISABLE_VOICE_EMOJICON) {
             buttonSetModeVoice.setVisibility(GONE);
             buttonSetModeKeyboard.setVisibility(GONE);
             buttonPressToSpeak.setVisibility(GONE);
             faceLayout.setVisibility(GONE);
-        }else if(menuType == EaseInputMenuStyle.ONLY_TEXT.ordinal()) {
+        }else if(menuType == EaseInputMenuStyle.ONLY_TEXT) {
             buttonSetModeVoice.setVisibility(GONE);
             buttonSetModeKeyboard.setVisibility(GONE);
             buttonPressToSpeak.setVisibility(GONE);

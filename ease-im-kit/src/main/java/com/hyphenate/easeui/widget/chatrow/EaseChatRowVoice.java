@@ -55,7 +55,7 @@ public class EaseChatRowVoice extends EaseChatRowFile {
         } else {
             voiceLengthView.setVisibility(View.INVISIBLE);
         }
-        if (message.direct() == EMMessage.Direct.RECEIVE) {
+        if (!showSenderType) {
             voiceImageView.setImageResource(R.drawable.ease_chatfrom_voice_playing);
             voiceLengthView.setPadding(padding, 0, 0, 0);
         } else {
@@ -85,6 +85,9 @@ public class EaseChatRowVoice extends EaseChatRowFile {
             } else {
                 progressBar.setVisibility(View.INVISIBLE);
             }
+        }else {
+            // hide the unread icon
+            readStatusView.setVisibility(View.INVISIBLE);
         }
 
         // To avoid the item is recycled by listview and slide to this item again but the animation is stopped.
