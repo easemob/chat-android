@@ -167,7 +167,6 @@ public class EaseTitleBar extends RelativeLayout implements View.OnClickListener
                 ((LayoutParams) params).setMargins(0, 0, (int) dip2px(getContext(), 60), 0);
             }
         }
-
     }
 
     private void initToolbar() {
@@ -237,6 +236,22 @@ public class EaseTitleBar extends RelativeLayout implements View.OnClickListener
             titleMenu.setText(title);
             rightLayout.setVisibility(VISIBLE);
         }
+    }
+
+    /**
+     * 设置标题位置
+     * @param position
+     */
+    public void setTitlePosition(TitlePosition position) {
+        int pos;
+        if(position == TitlePosition.Center) {
+            pos = 0;
+        }else if(position == TitlePosition.Left) {
+            pos = 1;
+        }else {
+            pos = 2;
+        }
+        setTitlePosition(pos);
     }
     
     public void setLeftLayoutClickListener(OnClickListener listener){
@@ -328,6 +343,13 @@ public class EaseTitleBar extends RelativeLayout implements View.OnClickListener
      */
     public interface OnRightClickListener {
         void onRightClick(View view);
+    }
+
+    /**
+     * 标题位置
+     */
+    public enum TitlePosition {
+        Center, Left, Right
     }
 
     /**
