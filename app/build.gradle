@@ -115,10 +115,6 @@ dependencies {
     // fresh and load more
     api 'com.scwang.smartrefresh:SmartRefreshLayout:1.0.5.1'
     implementation 'androidx.swiperefreshlayout:swiperefreshlayout:1.1.0'
-    // easeui
-    //implementation 'com.github.jinanzhuan:chat-android:1.0.1'
-    //implementation 'com.hyphenate:ease-im-kit:1.0.0'
-    api project(path: ':ease-im-kit')
     // room
     implementation "androidx.room:room-runtime:2.2.5"
     annotationProcessor "androidx.room:room-compiler:2.2.5"
@@ -127,6 +123,15 @@ dependencies {
     // bugly
     implementation 'com.tencent.bugly:crashreport:2.6.6.1'
     implementation 'com.tencent.bugly:nativecrashreport:3.3.1'
+
+    // EaseIMKit
+    //implementation 'com.github.jinanzhuan:chat-android:1.0.1'
+    //implementation 'com.hyphenate:ease-im-kit:1.0.0'
+    api (project(path: ':ease-im-kit')) {
+        exclude group:'com.hyphenate',module:'hyphenate-sdk-lite'
+    }
+    // EaseIMKit依赖，必须添加环信IM SDK
+    implementation 'com.hyphenate:hyphenate-sdk:3.7.2'
 }
 
 // ADD THIS AT THE BOTTOM
