@@ -12,10 +12,13 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.constraintlayout.widget.ConstraintLayout;
 
+import com.hyphenate.easeui.EaseIM;
 import com.hyphenate.easeui.R;
 import com.hyphenate.easeui.adapter.EaseBaseRecyclerViewAdapter;
+import com.hyphenate.easeui.domain.EaseAvatarOptions;
 import com.hyphenate.easeui.modules.conversation.model.EaseConversationInfo;
 import com.hyphenate.easeui.modules.conversation.model.EaseConversationSetStyle;
+import com.hyphenate.easeui.utils.EaseUserUtils;
 import com.hyphenate.easeui.widget.EaseImageView;
 
 public abstract class EaseDefaultConversationDelegate extends EaseBaseConversationDelegate<EaseConversationInfo, EaseDefaultConversationDelegate.ViewHolder> {
@@ -63,6 +66,7 @@ public abstract class EaseDefaultConversationDelegate extends EaseBaseConversati
             mMsgState = findViewById(R.id.msg_state);
             mentioned = findViewById(R.id.mentioned);
             message = findViewById(R.id.message);
+            EaseUserUtils.setUserAvatarStyle(avatar);
             if(setModel != null) {
                 float titleTextSize = setModel.getTitleTextSize();
                 if(titleTextSize != 0) {
@@ -102,10 +106,7 @@ public abstract class EaseDefaultConversationDelegate extends EaseBaseConversati
                     layoutParams.height = (int) avatarSize;
                     layoutParams.width = (int) avatarSize;
                 }
-                int shapeType = setModel.getShapeType();
-                if(shapeType != 0) {
-                    avatar.setShapeType(shapeType);
-                }
+                avatar.setShapeType(setModel.getShapeType());
                 float borderWidth = setModel.getBorderWidth();
                 if(borderWidth != 0) {
                     avatar.setBorderWidth((int) borderWidth);

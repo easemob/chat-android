@@ -2,6 +2,8 @@ package com.hyphenate.easeui.modules.interfaces;
 
 import android.graphics.drawable.Drawable;
 
+import com.hyphenate.easeui.widget.EaseImageView;
+
 public interface IAvatarSet {
     /**
      * 设置默认头像
@@ -19,7 +21,7 @@ public interface IAvatarSet {
      * 设置头像样式
      * @param shapeType
      */
-    void setAvatarShapeType(int shapeType);
+    void setAvatarShapeType(EaseImageView.ShapeType shapeType);
 
     /**
      * 设置头像半径

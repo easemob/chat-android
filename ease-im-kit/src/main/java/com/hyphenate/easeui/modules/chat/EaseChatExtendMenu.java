@@ -47,17 +47,11 @@ public class EaseChatExtendMenu extends FrameLayout implements PagingScrollHelpe
     private EaseChatExtendMenuIndicatorAdapter indicatorAdapter;
     private EaseChatExtendMenuItemClickListener itemListener;
 
-    public static final int ITEM_TAKE_PICTURE = 1;
-    public static final int ITEM_PICTURE = 2;
-    public static final int ITEM_LOCATION = 3;
-    public static final int ITEM_VIDEO = 4;
-    public static final int ITEM_FILE = 5;
-
     private int[] itemStrings = { R.string.attach_take_pic, R.string.attach_picture,
             R.string.attach_location, R.string.attach_video, R.string.attach_file};
     private int[] itemdrawables = { R.drawable.ease_chat_takepic_selector, R.drawable.ease_chat_image_selector,
             R.drawable.ease_chat_location_selector, R.drawable.em_chat_video_selector, R.drawable.em_chat_file_selector };
-    private int[] itemIds = { ITEM_TAKE_PICTURE, ITEM_PICTURE, ITEM_LOCATION, ITEM_VIDEO, ITEM_FILE};
+    private int[] itemIds = { R.id.extend_item_take_picture, R.id.extend_item_picture, R.id.extend_item_location, R.id.extend_item_video, R.id.extend_item_file};
 
     public EaseChatExtendMenu(Context context) {
         this(context, null);

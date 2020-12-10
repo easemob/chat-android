@@ -384,4 +384,23 @@ public class EaseImageView extends AppCompatImageView {
         this.shapeType = shapeType;
         invalidate();
     }
+
+    /**
+     * set shape type
+     * @param shapeType
+     */
+    public void setShapeType(ShapeType shapeType) {
+        if(shapeType == null) {
+            return;
+        }
+        this.shapeType = shapeType.ordinal();
+        invalidate();
+    }
+
+    /**
+     * 图片形状
+     */
+    public enum ShapeType {
+        NONE, ROUND, RECTANGLE
+    }
 }

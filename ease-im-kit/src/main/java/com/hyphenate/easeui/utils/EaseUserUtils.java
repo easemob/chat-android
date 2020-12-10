@@ -9,8 +9,10 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.RequestOptions;
 import com.hyphenate.easeui.EaseIM;
 import com.hyphenate.easeui.R;
+import com.hyphenate.easeui.domain.EaseAvatarOptions;
 import com.hyphenate.easeui.domain.EaseUser;
 import com.hyphenate.easeui.provider.EaseUserProfileProvider;
+import com.hyphenate.easeui.widget.EaseImageView;
 
 public class EaseUserUtils {
 
@@ -26,6 +28,25 @@ public class EaseUserUtils {
      */
     public static EaseUser getUserInfo(String username){
         return EaseIM.getInstance().getUserProvider().getUser(username);
+    }
+
+    /**
+     * set user's avatar style
+     * @param imageView
+     */
+    public static void setUserAvatarStyle(EaseImageView imageView) {
+        EaseAvatarOptions avatarOptions = EaseIM.getInstance().getAvatarOptions();
+        if(avatarOptions == null || imageView == null) {
+            return;
+        }
+        if(avatarOptions.getAvatarShape() != 0)
+            imageView.setShapeType(avatarOptions.getAvatarShape());
+        if(avatarOptions.getAvatarBorderWidth() != 0)
+            imageView.setBorderWidth(avatarOptions.getAvatarBorderWidth());
+        if(avatarOptions.getAvatarBorderColor() != 0)
+            imageView.setBorderColor(avatarOptions.getAvatarBorderColor());
+        if(avatarOptions.getAvatarRadius() != 0)
+            imageView.setRadius(avatarOptions.getAvatarRadius());
     }
     
     /**

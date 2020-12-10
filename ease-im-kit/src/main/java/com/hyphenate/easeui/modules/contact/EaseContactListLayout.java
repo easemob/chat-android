@@ -39,6 +39,7 @@ import com.hyphenate.easeui.modules.menu.OnPopupMenuDismissListener;
 import com.hyphenate.easeui.modules.menu.OnPopupMenuItemClickListener;
 import com.hyphenate.easeui.modules.menu.EasePopupMenuHelper;
 import com.hyphenate.easeui.modules.menu.OnPopupMenuPreShowListener;
+import com.hyphenate.easeui.widget.EaseImageView;
 import com.hyphenate.easeui.widget.EaseRecyclerView;
 
 import java.util.ArrayList;
@@ -47,7 +48,6 @@ import java.util.List;
 public class EaseContactListLayout extends EaseRecyclerView implements IEaseContactListView, IContactListLayout, IContactCustomListLayout
                                                                         , IContactListStyle, IPopupMenu {
 
-    private static final int MENU_ADD_NOTE = 0;
     private EaseContactSetStyle contactSetModel;
     private EaseContactPresenter presenter;
     private ConcatAdapter concatAdapter;
@@ -121,7 +121,7 @@ public class EaseContactListLayout extends EaseRecyclerView implements IEaseCont
 
             Drawable avatarDefaultDrawable = a.getDrawable(R.styleable.EaseContactListLayout_ease_contact_item_avatar_default_src);
             float avatarSize = a.getDimension(R.styleable.EaseContactListLayout_ease_contact_item_avatar_size, 0);
-            int shapeType = a.getInteger(R.styleable.EaseContactListLayout_ease_contact_item_avatar_shape_type, 0);
+            int shapeType = a.getInteger(R.styleable.EaseContactListLayout_ease_contact_item_avatar_shape_type, -1);
             float avatarRadius = a.getDimension(R.styleable.EaseContactListLayout_ease_contact_item_avatar_radius, dip2px(context, 50));
             float borderWidth = a.getDimension(R.styleable.EaseContactListLayout_ease_contact_item_avatar_border_width, 0);
             int borderColorRes = a.getResourceId(R.styleable.EaseContactListLayout_ease_contact_item_avatar_border_color, -1);
@@ -376,7 +376,7 @@ public class EaseContactListLayout extends EaseRecyclerView implements IEaseCont
     }
 
     @Override
-    public void setAvatarShapeType(int shapeType) {
+    public void setAvatarShapeType(EaseImageView.ShapeType shapeType) {
         contactSetModel.setShapeType(shapeType);
         notifyDataSetChanged();
     }

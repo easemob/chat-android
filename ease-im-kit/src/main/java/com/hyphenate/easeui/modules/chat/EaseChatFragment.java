@@ -21,6 +21,9 @@ import com.hyphenate.easeui.constants.EaseConstant;
 import com.hyphenate.easeui.manager.EaseDingMessageHelper;
 import com.hyphenate.easeui.model.EaseEvent;
 import com.hyphenate.easeui.modules.chat.interfaces.OnChatLayoutListener;
+import com.hyphenate.easeui.modules.chat.interfaces.OnMenuChangeListener;
+import com.hyphenate.easeui.modules.menu.EasePopupWindowHelper;
+import com.hyphenate.easeui.modules.menu.MenuItemBean;
 import com.hyphenate.easeui.ui.EaseBaiduMapActivity;
 import com.hyphenate.easeui.ui.base.EaseBaseFragment;
 import com.hyphenate.easeui.utils.EaseCommonUtils;
@@ -32,7 +35,7 @@ import com.hyphenate.util.VersionUtils;
 
 import java.io.File;
 
-public class EaseChatFragment extends EaseBaseFragment implements OnChatLayoutListener {
+public class EaseChatFragment extends EaseBaseFragment implements OnChatLayoutListener, OnMenuChangeListener {
     protected static final int REQUEST_CODE_MAP = 1;
     protected static final int REQUEST_CODE_CAMERA = 2;
     protected static final int REQUEST_CODE_LOCAL = 3;
@@ -91,6 +94,7 @@ public class EaseChatFragment extends EaseBaseFragment implements OnChatLayoutLi
 
     public void initListener() {
         chatLayout.setOnChatLayoutListener(this);
+        chatLayout.setOnPopupWindowItemClickListener(this);
     }
 
     public void initData() {
@@ -143,22 +147,16 @@ public class EaseChatFragment extends EaseBaseFragment implements OnChatLayoutLi
 
     @Override
     public void onChatExtendMenuItemClick(View view, int itemId) {
-        switch (itemId) {
-            case EaseChatExtendMenu.ITEM_TAKE_PICTURE :
-                selectPicFromCamera();
-                break;
-            case EaseChatExtendMenu.ITEM_PICTURE :
-                selectPicFromLocal();
-                break;
-            case EaseChatExtendMenu.ITEM_LOCATION :
-                startMapLocation(REQUEST_CODE_MAP);
-                break;
-            case EaseChatExtendMenu.ITEM_VIDEO :
-                selectVideoFromLocal();
-                break;
-            case EaseChatExtendMenu.ITEM_FILE :
-                selectFileFromLocal();
-                break;
+        if(itemId == R.id.extend_item_take_picture) {
+            selectPicFromCamera();
+        }else if(itemId == R.id.extend_item_picture) {
+            selectPicFromLocal();
+        }else if(itemId == R.id.extend_item_location) {
+            startMapLocation(REQUEST_CODE_MAP);
+        }else if(itemId == R.id.extend_item_video) {
+            selectVideoFromLocal();
+        }else if(itemId == R.id.extend_item_file) {
+            selectFileFromLocal();
         }
     }
 
@@ -328,6 +326,16 @@ public class EaseChatFragment extends EaseBaseFragment implements OnChatLayoutLi
      */
     protected boolean checkSdCardExist() {
         return EaseCommonUtils.isSdcardExist();
+    }
+
+    @Override
+    public void onPreMenu(EasePopupWindowHelper helper, EMMessage message) {
+
+    }
+
+    @Override
+    public boolean onMenuItemClick(MenuItemBean item, EMMessage message) {
+        return false;
     }
 }
 

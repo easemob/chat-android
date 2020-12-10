@@ -46,6 +46,7 @@ import com.hyphenate.easeui.modules.menu.OnPopupMenuDismissListener;
 import com.hyphenate.easeui.modules.menu.OnPopupMenuItemClickListener;
 import com.hyphenate.easeui.modules.menu.EasePopupMenuHelper;
 import com.hyphenate.easeui.modules.menu.OnPopupMenuPreShowListener;
+import com.hyphenate.easeui.widget.EaseImageView;
 import com.hyphenate.easeui.widget.EaseRecyclerView;
 
 import java.util.ArrayList;
@@ -57,10 +58,6 @@ import java.util.List;
  */
 public class EaseConversationListLayout extends EaseBaseLayout implements IConversationListLayout, IConversationStyle
                                                                         , IEaseConversationListView, IPopupMenu {
-    public static final int MENU_MAKE_READ = 0;
-    public static final int MENU_MAKE_TOP = 1;
-    public static final int MENU_MAKE_CANCEL_TOP = 2;
-    public static final int MENU_DELETE = 3;
     private EaseRecyclerView rvConversationList;
 
     private ConcatAdapter adapter;
@@ -156,7 +153,7 @@ public class EaseConversationListLayout extends EaseBaseLayout implements IConve
             setModel.setMentionTextColor(mentionTextColor);
 
             float avatarSize = a.getDimension(R.styleable.EaseConversationListLayout_ease_con_item_avatar_size, 0);
-            int shapeType = a.getInteger(R.styleable.EaseConversationListLayout_ease_con_item_avatar_shape_type, 0);
+            int shapeType = a.getInteger(R.styleable.EaseConversationListLayout_ease_con_item_avatar_shape_type, -1);
             float avatarRadius = a.getDimension(R.styleable.EaseConversationListLayout_ease_con_item_avatar_radius, dip2px(context, 50));
             float borderWidth = a.getDimension(R.styleable.EaseConversationListLayout_ease_con_item_avatar_border_width, 0);
             int borderColorRes = a.getResourceId(R.styleable.EaseConversationListLayout_ease_con_item_avatar_border_color, -1);
@@ -300,19 +297,19 @@ public class EaseConversationListLayout extends EaseBaseLayout implements IConve
     }
 
     private void showDefaultMenu(View view, int position, EaseConversationInfo info) {
-        menuHelper.addItemMenu(Menu.NONE, MENU_MAKE_READ, 0, getContext().getString(R.string.ease_conversation_menu_make_read));
-        menuHelper.addItemMenu(Menu.NONE, MENU_MAKE_TOP, 1, getContext().getString(R.string.ease_conversation_menu_make_top));
-        menuHelper.addItemMenu(Menu.NONE, MENU_MAKE_CANCEL_TOP, 2, getContext().getString(R.string.ease_conversation_menu_cancel_top));
-        menuHelper.addItemMenu(Menu.NONE, MENU_DELETE, 3, getContext().getString(R.string.ease_conversation_menu_delete));
+        menuHelper.addItemMenu(Menu.NONE, R.id.action_con_make_read, 0, getContext().getString(R.string.ease_conversation_menu_make_read));
+        menuHelper.addItemMenu(Menu.NONE, R.id.action_con_make_top, 1, getContext().getString(R.string.ease_conversation_menu_make_top));
+        menuHelper.addItemMenu(Menu.NONE, R.id.action_con_cancel_top, 2, getContext().getString(R.string.ease_conversation_menu_cancel_top));
+        menuHelper.addItemMenu(Menu.NONE, R.id.action_con_delete, 3, getContext().getString(R.string.ease_conversation_menu_delete));
 
         menuHelper.initMenu(view);
 
         //检查置顶配置
-        menuHelper.findItemVisible(MENU_MAKE_TOP, !info.isTop());
-        menuHelper.findItemVisible(MENU_MAKE_CANCEL_TOP, info.isTop());
+        menuHelper.findItemVisible(R.id.action_con_make_top, !info.isTop());
+        menuHelper.findItemVisible(R.id.action_con_cancel_top, info.isTop());
         //检查已读配置
         if(info.getInfo() instanceof EMConversation) {
-            menuHelper.findItemVisible(MENU_MAKE_READ, ((EMConversation) info.getInfo()).getUnreadMsgCount() > 0);
+            menuHelper.findItemVisible(R.id.action_con_make_read, ((EMConversation) info.getInfo()).getUnreadMsgCount() > 0);
         }
         if(menuPreShowListener != null) {
             menuPreShowListener.onMenuPreShow(menuHelper, position);
@@ -323,19 +320,19 @@ public class EaseConversationListLayout extends EaseBaseLayout implements IConve
                 if(popupMenuItemClickListener != null) {
                     return popupMenuItemClickListener.onMenuItemClick(item, position);
                 }
-                switch (item.getItemId()) {
-                    case MENU_MAKE_READ :
-                        presenter.makeConversionRead(position, info);
-                        return true;
-                    case MENU_MAKE_TOP :
-                        presenter.makeConversationTop(position, info);
-                        return true;
-                    case MENU_MAKE_CANCEL_TOP :
-                        presenter.cancelConversationTop(position, info);
-                        return true;
-                    case MENU_DELETE :
-                        presenter.deleteConversation(position, info);
-                        return true;
+                int itemId = item.getItemId();
+                if(itemId == R.id.action_con_make_read) {
+                    presenter.makeConversionRead(position, info);
+                    return true;
+                }else if(itemId == R.id.action_con_make_top) {
+                    presenter.makeConversationTop(position, info);
+                    return true;
+                }else if(itemId == R.id.action_con_cancel_top) {
+                    presenter.cancelConversationTop(position, info);
+                    return true;
+                }else if(itemId == R.id.action_con_delete) {
+                    presenter.deleteConversation(position, info);
+                    return true;
                 }
                 return false;
             }
@@ -429,6 +426,13 @@ public class EaseConversationListLayout extends EaseBaseLayout implements IConve
     }
 
     @Override
+    public void showSystemMessage(boolean show) {
+        setModel.setShowSystemMessage(show);
+        presenter.setShowSystemMessage(show);
+        notifyDataSetChanged();
+    }
+
+    @Override
     public void showUnreadDotPosition(EaseConversationSetStyle.UnreadDotPosition position) {
         setModel.setUnreadDotPosition(position);
         notifyDataSetChanged();
@@ -477,7 +481,7 @@ public class EaseConversationListLayout extends EaseBaseLayout implements IConve
     }
 
     @Override
-    public void setAvatarShapeType(int shapeType) {
+    public void setAvatarShapeType(EaseImageView.ShapeType shapeType) {
         setModel.setShapeType(shapeType);
         notifyDataSetChanged();
     }

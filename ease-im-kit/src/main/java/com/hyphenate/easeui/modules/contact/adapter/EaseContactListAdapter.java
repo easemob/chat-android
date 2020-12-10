@@ -19,6 +19,7 @@ import com.hyphenate.easeui.adapter.EaseBaseRecyclerViewAdapter;
 import com.hyphenate.easeui.domain.EaseUser;
 import com.hyphenate.easeui.modules.contact.model.EaseContactSetStyle;
 import com.hyphenate.easeui.provider.EaseUserProfileProvider;
+import com.hyphenate.easeui.utils.EaseUserUtils;
 import com.hyphenate.easeui.widget.EaseImageView;
 
 public class EaseContactListAdapter extends EaseBaseRecyclerViewAdapter<EaseUser> {
@@ -70,6 +71,7 @@ public class EaseContactListAdapter extends EaseBaseRecyclerViewAdapter<EaseUser
             mSignature = findViewById(R.id.signature);
             mUnreadMsgNumber = findViewById(R.id.unread_msg_number);
             clUser = findViewById(R.id.cl_user);
+            EaseUserUtils.setUserAvatarStyle(mAvatar);
             if(contactSetModel != null) {
                 float headerTextSize = contactSetModel.getHeaderTextSize();
                 if(headerTextSize != 0) {
@@ -107,10 +109,7 @@ public class EaseContactListAdapter extends EaseBaseRecyclerViewAdapter<EaseUser
                 if(borderColor != 0) {
                     mAvatar.setBorderColor(borderColor);
                 }
-                int shapeType = contactSetModel.getShapeType();
-                if(shapeType != 0) {
-                    mAvatar.setShapeType(shapeType);
-                }
+                mAvatar.setShapeType(contactSetModel.getShapeType());
                 float avatarSize = contactSetModel.getAvatarSize();
                 if(avatarSize != 0) {
                     ViewGroup.LayoutParams mAvatarLayoutParams = mAvatar.getLayoutParams();

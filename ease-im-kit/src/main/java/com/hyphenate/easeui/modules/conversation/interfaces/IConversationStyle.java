@@ -27,6 +27,12 @@ public interface IConversationStyle extends IAvatarSet, IConversationTextStyle {
     void hideUnreadDot(boolean hide);
 
     /**
+     * 是否展示系统消息
+     * @param show
+     */
+    void showSystemMessage(boolean show);
+
+    /**
      * 未读数显示位置
      * 目前支持左侧和右侧两种
      * @param position

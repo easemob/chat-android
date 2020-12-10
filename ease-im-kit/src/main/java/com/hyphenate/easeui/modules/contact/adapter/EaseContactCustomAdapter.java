@@ -88,10 +88,7 @@ public class EaseContactCustomAdapter extends EaseBaseRecyclerViewAdapter<EaseCo
                 if(borderColor != 0) {
                     mAvatar.setBorderColor(borderColor);
                 }
-                int shapeType = contactSetModel.getShapeType();
-                if(shapeType != 0) {
-                    mAvatar.setShapeType(shapeType);
-                }
+                mAvatar.setShapeType(contactSetModel.getShapeType());
                 float avatarSize = contactSetModel.getAvatarSize();
                 if(avatarSize != 0) {
                     ViewGroup.LayoutParams mAvatarLayoutParams = mAvatar.getLayoutParams();

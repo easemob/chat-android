@@ -2,9 +2,11 @@ package com.hyphenate.easeui.modules;
 
 import android.graphics.drawable.Drawable;
 
+import com.hyphenate.easeui.widget.EaseImageView;
+
 public class EaseBaseSetStyle {
     private float avatarSize;
-    private int shapeType;
+    private EaseImageView.ShapeType shapeType;
     private float avatarRadius;
     private float borderWidth;
     private int borderColor;
@@ -19,12 +21,24 @@ public class EaseBaseSetStyle {
         this.avatarSize = avatarSize;
     }
 
-    public int getShapeType() {
+    public EaseImageView.ShapeType getShapeType() {
         return shapeType;
     }
 
-    public void setShapeType(int shapeType) {
+    public void setShapeType(EaseImageView.ShapeType shapeType) {
         this.shapeType = shapeType;
+    }
+
+    public void setShapeType(int shapeType) {
+        if(shapeType == 1) {
+            this.shapeType = EaseImageView.ShapeType.ROUND;
+        }else if(shapeType == 2) {
+            this.shapeType = EaseImageView.ShapeType.RECTANGLE;
+        }else {
+            if(shapeType >= 0) {
+                this.shapeType = EaseImageView.ShapeType.NONE;
+            }
+        }
     }
 
     public float getAvatarRadius() {
