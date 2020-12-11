@@ -15,13 +15,13 @@ import com.hyphenate.easeui.viewholder.EaseChatRowViewHolder;
 
 public class ChatConferenceInviteViewHolder extends EaseChatRowViewHolder {
 
-    public ChatConferenceInviteViewHolder(@NonNull View itemView, MessageListItemClickListener itemClickListener, EaseMessageListItemStyle itemStyle) {
-        super(itemView, itemClickListener, itemStyle);
+    public ChatConferenceInviteViewHolder(@NonNull View itemView, MessageListItemClickListener itemClickListener) {
+        super(itemView, itemClickListener);
     }
 
     public static ChatConferenceInviteViewHolder create(ViewGroup parent, boolean isSender,
-                                                        MessageListItemClickListener itemClickListener, EaseMessageListItemStyle itemStyle) {
-        return new ChatConferenceInviteViewHolder(new ChatRowConferenceInvite(parent.getContext(), isSender), itemClickListener, itemStyle);
+                                                        MessageListItemClickListener itemClickListener) {
+        return new ChatConferenceInviteViewHolder(new ChatRowConferenceInvite(parent.getContext(), isSender), itemClickListener);
     }
 
     @Override

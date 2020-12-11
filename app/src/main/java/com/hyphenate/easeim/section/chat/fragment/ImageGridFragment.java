@@ -36,6 +36,7 @@ import com.hyphenate.easeim.section.chat.viewmodel.VideoListViewModel;
 import com.hyphenate.easeui.interfaces.OnItemClickListener;
 import com.hyphenate.easeui.model.VideoEntity;
 import com.hyphenate.easeui.utils.EaseCompat;
+import com.hyphenate.easeui.utils.EaseDateUtils;
 import com.hyphenate.easeui.widget.EaseTitleBar;
 import com.hyphenate.util.DateUtils;
 import com.hyphenate.util.TextFormater;
@@ -245,7 +246,7 @@ public class ImageGridFragment extends BaseFragment implements OnItemClickListen
 			holder.videoDataArea.setVisibility(View.VISIBLE);
 			holder.tvDur.setVisibility(View.VISIBLE);
 
-			holder.tvDur.setText(DateUtils.toTime(entity.duration));
+			holder.tvDur.setText(EaseDateUtils.toTime(entity.duration));
 			holder.tvSize.setText(TextFormater.getDataSize(entity.size));
 			holder.imageView.setBackground(null);
 			holder.imageView.setImageResource(R.drawable.em_empty_photo);

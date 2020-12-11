@@ -15,6 +15,8 @@ import android.widget.TextView;
 
 import androidx.annotation.ColorInt;
 import androidx.annotation.ColorRes;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.annotation.StringRes;
 import androidx.constraintlayout.widget.Group;
 import androidx.core.content.ContextCompat;
@@ -24,6 +26,8 @@ import com.hyphenate.easeim.R;
 import com.hyphenate.easeim.section.base.BaseActivity;
 import com.hyphenate.easeim.section.base.BaseDialogFragment;
 import com.hyphenate.easeui.utils.EaseCommonUtils;
+
+import java.lang.reflect.Field;
 
 public class DemoDialogFragment extends BaseDialogFragment implements View.OnClickListener {
     public TextView mTvDialogTitle;
@@ -83,6 +87,48 @@ public class DemoDialogFragment extends BaseDialogFragment implements View.OnCli
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    public int showAllowingStateLoss(@NonNull FragmentTransaction transaction, @Nullable String tag) {
+        try {
+            Field dismissed = DemoDialogFragment.class.getDeclaredField("mDismissed");
+            dismissed.setAccessible(true);
+            dismissed.set(this, false);
+        } catch (NoSuchFieldException e) {
+            e.printStackTrace();
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        }
+        try {
+            Field shown = DemoDialogFragment.class.getDeclaredField("mShownByMe");
+            shown.setAccessible(true);
+            shown.set(this, true);
+        } catch (NoSuchFieldException e) {
+            e.printStackTrace();
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        }
+        transaction.add(this, tag);
+        try {
+            Field viewDestroyed = DemoDialogFragment.class.getDeclaredField("mViewDestroyed");
+            viewDestroyed.setAccessible(true);
+            viewDestroyed.set(this, false);
+        } catch (NoSuchFieldException e) {
+            e.printStackTrace();
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        }
+        int mBackStackId = transaction.commitAllowingStateLoss();
+        try {
+            Field backStackId = DemoDialogFragment.class.getDeclaredField("mBackStackId");
+            backStackId.setAccessible(true);
+            backStackId.set(this, mBackStackId);
+        } catch (NoSuchFieldException e) {
+            e.printStackTrace();
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        }
+        return mBackStackId;
     }
 
     /**
@@ -324,7 +370,7 @@ public class DemoDialogFragment extends BaseDialogFragment implements View.OnCli
             DemoDialogFragment fragment = build();
             FragmentTransaction transaction = context.getSupportFragmentManager().beginTransaction();
             transaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
-            fragment.show(transaction, null);
+            fragment.showAllowingStateLoss(transaction, null);
             return fragment;
         }
     }

@@ -27,7 +27,7 @@ public class ChatVoiceCallAdapterDelegate extends EaseMessageAdapterDelegate<EMM
     }
 
     @Override
-    protected EaseChatRowViewHolder createViewHolder(View view, MessageListItemClickListener itemClickListener, EaseMessageListItemStyle itemStyle) {
-        return new ChatVoiceCallViewHolder(view, itemClickListener, itemStyle);
+    protected EaseChatRowViewHolder createViewHolder(View view, MessageListItemClickListener itemClickListener) {
+        return new ChatVoiceCallViewHolder(view, itemClickListener);
     }
 }

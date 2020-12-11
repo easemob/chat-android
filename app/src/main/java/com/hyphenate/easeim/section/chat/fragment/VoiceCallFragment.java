@@ -30,7 +30,7 @@ import com.hyphenate.chat.EMClient;
 import com.hyphenate.easeim.DemoApplication;
 import com.hyphenate.easeim.R;
 import com.hyphenate.easeim.section.conference.CallFloatWindow;
-import com.hyphenate.easeui.EaseUI;
+import com.hyphenate.easeui.EaseIM;
 import com.hyphenate.easeui.manager.PhoneStateManager;
 import com.hyphenate.exceptions.HyphenateException;
 import com.hyphenate.util.EMLog;
@@ -86,7 +86,7 @@ public class VoiceCallFragment extends EaseCallFragment implements View.OnClickL
     @Override
     protected void initView() {
         super.initView();
-        EaseUI.getInstance().isVoiceCalling = true;
+        EaseIM.getInstance().isVoiceCalling = true;
         callType = 0;
 
         comingBtnContainer = findViewById(R.id.ll_coming_call);
@@ -165,7 +165,7 @@ public class VoiceCallFragment extends EaseCallFragment implements View.OnClickL
 
     @Override
     public void onDestroy() {
-        EaseUI.getInstance().isVoiceCalling = false;
+        EaseIM.getInstance().isVoiceCalling = false;
         stopMonitor();
         super.onDestroy();
     }

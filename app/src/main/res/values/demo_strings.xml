@@ -93,7 +93,7 @@
     <string name="em_conversation_menu_video">音视频会议</string>
     <string name="em_conversation_menu_group">创建群组</string>
     <string name="em_conversation_menu_friend">添加好友</string>
-    <string name="em_conversation_menu_search_friend">找人</string>
+    <string name="em_conversation_menu_search_friend">添加好友</string>
     <string name="em_conversation_menu_search_group">找群</string>
     <string name="em_conversation_menu_scan">扫一扫</string>
     <string name="em_conversation_system_notification">系统通知</string>
@@ -148,6 +148,8 @@
     <string name="demo_contact_add_black">%1$s已添加至黑名单</string>
 
     <string name="em_chat_pick_user_title">选择联系人</string>
+
+    <string name="em_chat_delete_title">确认删除？</string>
 
     <string name="em_single_set_title">聊天详情</string>
     <string name="em_single_search_history">查找聊天记录</string>
@@ -397,8 +399,6 @@
 
     <string name="Select_the_contact">选择联系人</string>
     <string name="emojicon_test_name">示例</string>
-    <string name="msg_recall_by_self">您撤回了一条消息</string>
-    <string name="msg_recall_by_user">%1$s 撤回了一条消息</string>
     <string name="msg_conference_invite">快来加入会议</string>
     <string name="tips_select_contacts_first">请先选择联系人 ~</string>
     <string name="alert_request_tobe_talker">请求连麦 &#8230;</string>

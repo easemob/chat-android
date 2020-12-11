@@ -29,15 +29,18 @@
             android:layout_marginLeft="@dimen/margin_chat_activity"
             android:layout_toRightOf="@id/iv_userhead"
             android:layout_below="@+id/tv_userid"
+            android:minHeight="30dp"
             android:padding="8dp"
+            android:layout_marginTop="2dp"
             android:background="@drawable/ease_chat_bubble_receive_bg" >
 
             <TextView
                 android:id="@+id/tv_chatcontent"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:padding="6dp"
-                android:minHeight="40dp"
+                android:minHeight="@dimen/ease_chat_text_min_height"
+                android:paddingLeft="6dp"
+                android:paddingRight="6dp"
                 android:textSize="15sp"
                 android:layout_centerVertical="true"
                 android:gravity="center_vertical"

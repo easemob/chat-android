@@ -344,6 +344,7 @@ public class GroupDetailActivity extends BaseInitActivity implements EaseTitleBa
                 getString(R.string.em_chat_group_detail_announcement),
                 group.getAnnouncement(),
                 getString(R.string.em_chat_group_detail_announcement_hint),
+                GroupHelper.isAdmin(group) || GroupHelper.isOwner(group),
                 new GroupEditFragment.OnSaveClickListener() {
                     @Override
                     public void onSaveClick(View view, String content) {
@@ -358,6 +359,7 @@ public class GroupDetailActivity extends BaseInitActivity implements EaseTitleBa
                 getString(R.string.em_chat_group_detail_introduction),
                 group.getDescription(),
                 getString(R.string.em_chat_group_detail_introduction_hint),
+                GroupHelper.isAdmin(group) || GroupHelper.isOwner(group),
                 new GroupEditFragment.OnSaveClickListener() {
                     @Override
                     public void onSaveClick(View view, String content) {

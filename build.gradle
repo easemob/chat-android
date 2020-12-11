@@ -10,8 +10,8 @@ buildscript {
         classpath 'com.android.tools.build:gradle:3.5.2'
 
         classpath 'com.jfrog.bintray.gradle:gradle-bintray-plugin:1.7.3'
-        classpath 'com.github.dcendents:android-maven-gradle-plugin:1.5'
-        
+        classpath 'com.github.dcendents:android-maven-gradle-plugin:2.1'
+
         // NOTE: Do not place your application dependencies here; they belong
         // in the individual module build.gradle files
         // Google Firebase cloud messaging
@@ -25,6 +25,7 @@ allprojects {
         google()
         jcenter()
         maven { url 'http://developer.huawei.com/repo'}
+        maven { url 'https://jitpack.io' }
     }
 }
 
@@ -36,6 +37,9 @@ if (JavaVersion.current().isJava8Compatible()) {
     }
 }
 ext{
+//    PUBLISH_GROUP_ID = 'com.hyphenate'
+//    PUBLISH_ARTIFACT_ID = 'ease-im-kit'
+//    PUBLISH_VERSION = '1.0.0'
     if(!project.hasProperty('isAarRelease')){
         isAarRelease = false;
     }

@@ -1,21 +1,27 @@
 package com.hyphenate.easeim.section.message.viewmodels;
 
 import android.app.Application;
+import android.util.Log;
 
 import com.hyphenate.chat.EMClient;
+import com.hyphenate.chat.EMConversation;
+import com.hyphenate.chat.EMMessage;
+import com.hyphenate.chat.EMMessageBody;
+import com.hyphenate.chat.EMTextMessageBody;
 import com.hyphenate.easeim.R;
 import com.hyphenate.easeim.common.constant.DemoConstant;
-import com.hyphenate.easeim.common.db.DemoDbHelper;
-import com.hyphenate.easeim.common.db.dao.InviteMessageDao;
-import com.hyphenate.easeim.common.db.entity.InviteMessage;
+import com.hyphenate.easeim.common.db.entity.InviteMessageStatus;
 import com.hyphenate.easeim.common.livedatas.LiveDataBus;
 import com.hyphenate.easeim.common.livedatas.SingleSourceLiveData;
-import com.hyphenate.easeim.common.db.entity.InviteMessage.InviteMessageStatus;
 import com.hyphenate.easeim.common.net.Resource;
+import com.hyphenate.easeui.constants.EaseConstant;
+import com.hyphenate.easeui.manager.EaseSystemMsgManager;
 import com.hyphenate.easeui.manager.EaseThreadManager;
 import com.hyphenate.easeui.model.EaseEvent;
 import com.hyphenate.exceptions.HyphenateException;
 
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 import androidx.annotation.NonNull;
@@ -24,9 +30,8 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
 public class NewFriendsViewModel extends AndroidViewModel {
-    private InviteMessageDao messageDao;
-    private SingleSourceLiveData<List<InviteMessage>> inviteMsgObservable;
-    private SingleSourceLiveData<List<InviteMessage>> moreInviteMsgObservable;
+    private SingleSourceLiveData<List<EMMessage>> inviteMsgObservable;
+    private SingleSourceLiveData<List<EMMessage>> moreInviteMsgObservable;
     private MutableLiveData<Resource<Boolean>> resultObservable;
     private MutableLiveData<Resource<String>> agreeObservable;
     private MutableLiveData<Resource<String>> refuseObservable;
@@ -34,7 +39,6 @@ public class NewFriendsViewModel extends AndroidViewModel {
 
     public NewFriendsViewModel(@NonNull Application application) {
         super(application);
-        messageDao = DemoDbHelper.getInstance(application).getInviteMessageDao();
         inviteMsgObservable = new SingleSourceLiveData<>();
         moreInviteMsgObservable = new SingleSourceLiveData<>();
         resultObservable = new MutableLiveData<>();
@@ -46,24 +50,37 @@ public class NewFriendsViewModel extends AndroidViewModel {
         return messageChangeObservable;
     }
 
-    public LiveData<List<InviteMessage>> inviteMsgObservable() {
+    public LiveData<List<EMMessage>> inviteMsgObservable() {
         return inviteMsgObservable;
     }
 
-    public LiveData<List<InviteMessage>> moreInviteMsgObservable() {
+    public LiveData<List<EMMessage>> moreInviteMsgObservable() {
         return moreInviteMsgObservable;
     }
 
     public void loadMessages(int limit) {
-        if(messageDao != null) {
-            inviteMsgObservable.setSource(messageDao.loadMessages(limit, 0));
-        }
+        List<EMMessage> emMessages = EMClient.getInstance().chatManager().searchMsgFromDB(EMMessage.Type.TXT
+                , System.currentTimeMillis(), limit, EaseConstant.DEFAULT_SYSTEM_MESSAGE_ID, EMConversation.EMSearchDirection.UP);
+        sortData(emMessages);
+        inviteMsgObservable.setSource(new MutableLiveData<>(emMessages));
     }
 
-    public void loadMoreMessages(int limit, int offset) {
-        if(messageDao != null) {
-            moreInviteMsgObservable.setSource(messageDao.loadMessages(limit, offset));
-        }
+    public void loadMoreMessages(String targetId, int limit) {
+        EMConversation conversation = EMClient.getInstance().chatManager().getConversation(EaseConstant.DEFAULT_SYSTEM_MESSAGE_ID, EMConversation.EMConversationType.Chat, true);
+        List<EMMessage> messages = conversation.loadMoreMsgFromDB(targetId, limit);
+        sortData(messages);
+        moreInviteMsgObservable.setSource(new MutableLiveData<>(messages));
+    }
+    
+    private void sortData(List<EMMessage> messages) {
+        Collections.sort(messages, new Comparator<EMMessage>() {
+            @Override
+            public int compare(EMMessage o1, EMMessage o2) {
+                long o1MsgTime = o1.getMsgTime();
+                long o2MsgTime = o2.getMsgTime();
+                return (int) (o2MsgTime - o1MsgTime);
+            }
+        });
     }
 
     public LiveData<Resource<Boolean>> resultObservable() {
@@ -77,25 +94,28 @@ public class NewFriendsViewModel extends AndroidViewModel {
         return refuseObservable;
     }
 
-    public void agreeInvite(InviteMessage msg) {
+    public void agreeInvite(EMMessage msg) {
         EaseThreadManager.getInstance().runOnIOThread(() -> {
             try {
+                String statusParams = msg.getStringAttribute(DemoConstant.SYSTEM_MESSAGE_STATUS);
+                InviteMessageStatus status = InviteMessageStatus.valueOf(statusParams);
                 String message = "";
-                if (msg.getStatusEnum() == InviteMessageStatus.BEINVITEED) {//accept be friends
-                    message = getApplication().getString(R.string.demo_system_agree_invite, msg.getFrom());
-                    EMClient.getInstance().contactManager().acceptInvitation(msg.getFrom());
-                } else if (msg.getStatusEnum() == InviteMessageStatus.BEAPPLYED) { //accept application to join group
-                    message = getApplication().getString(R.string.demo_system_agree_remote_user_apply_to_join_group, msg.getFrom());
-                    EMClient.getInstance().groupManager().acceptApplication(msg.getFrom(), msg.getGroupId());
-                } else if (msg.getStatusEnum() == InviteMessageStatus.GROUPINVITATION) {
-                    message = getApplication().getString(R.string.demo_system_agree_received_remote_user_invitation, msg.getGroupInviter());
-                    EMClient.getInstance().groupManager().acceptInvitation(msg.getGroupId(), msg.getGroupInviter());
+                if (status == InviteMessageStatus.BEINVITEED) {//accept be friends
+                    message = getApplication().getString(R.string.demo_system_agree_invite, msg.getStringAttribute(DemoConstant.SYSTEM_MESSAGE_FROM));
+                    EMClient.getInstance().contactManager().acceptInvitation(msg.getStringAttribute(DemoConstant.SYSTEM_MESSAGE_FROM));
+                } else if (status == InviteMessageStatus.BEAPPLYED) { //accept application to join group
+                    message = getApplication().getString(R.string.demo_system_agree_remote_user_apply_to_join_group, msg.getStringAttribute(DemoConstant.SYSTEM_MESSAGE_FROM));
+                    EMClient.getInstance().groupManager().acceptApplication(msg.getStringAttribute(DemoConstant.SYSTEM_MESSAGE_FROM), msg.getStringAttribute(DemoConstant.SYSTEM_MESSAGE_GROUP_ID));
+                } else if (status == InviteMessageStatus.GROUPINVITATION) {
+                    message = getApplication().getString(R.string.demo_system_agree_received_remote_user_invitation, msg.getStringAttribute(DemoConstant.SYSTEM_MESSAGE_INVITER));
+                    EMClient.getInstance().groupManager().acceptInvitation(msg.getStringAttribute(DemoConstant.SYSTEM_MESSAGE_GROUP_ID)
+                            , msg.getStringAttribute(DemoConstant.SYSTEM_MESSAGE_INVITER));
                 }
-                msg.setStatus(InviteMessageStatus.AGREED);
-                msg.setReason(message);
-                if(messageDao != null) {
-                    messageDao.update(msg);
-                }
+                msg.setAttribute(DemoConstant.SYSTEM_MESSAGE_STATUS, InviteMessageStatus.AGREED.name());
+                msg.setAttribute(DemoConstant.SYSTEM_MESSAGE_REASON, message);
+                EMTextMessageBody body = new EMTextMessageBody(message);
+                msg.addBody(body);
+                EaseSystemMsgManager.getInstance().updateMessage(msg);
                 agreeObservable.postValue(Resource.success(message));
                 messageChangeObservable.with(DemoConstant.NOTIFY_CHANGE).postValue(EaseEvent.create(DemoConstant.NOTIFY_CHANGE, EaseEvent.TYPE.NOTIFY));
             } catch (HyphenateException e) {
@@ -105,25 +125,29 @@ public class NewFriendsViewModel extends AndroidViewModel {
         });
     }
 
-    public void refuseInvite(InviteMessage msg) {
+    public void refuseInvite(EMMessage msg) {
         EaseThreadManager.getInstance().runOnIOThread(() -> {
             try {
+                String statusParams = msg.getStringAttribute(DemoConstant.SYSTEM_MESSAGE_STATUS);
+                InviteMessageStatus status = InviteMessageStatus.valueOf(statusParams);
                 String message = "";
-                if (msg.getStatusEnum() == InviteMessageStatus.BEINVITEED) {//decline the invitation
-                    message = getApplication().getString(R.string.demo_system_decline_invite, msg.getFrom());
-                    EMClient.getInstance().contactManager().declineInvitation(msg.getFrom());
-                } else if (msg.getStatusEnum() == InviteMessageStatus.BEAPPLYED) { //decline application to join group
-                    message = getApplication().getString(R.string.demo_system_decline_remote_user_apply_to_join_group, msg.getFrom());
-                    EMClient.getInstance().groupManager().declineApplication(msg.getFrom(), msg.getGroupId(), "");
-                } else if (msg.getStatusEnum() == InviteMessageStatus.GROUPINVITATION) {
-                    message = getApplication().getString(R.string.demo_system_decline_received_remote_user_invitation, msg.getGroupInviter());
-                    EMClient.getInstance().groupManager().declineInvitation(msg.getGroupId(), msg.getGroupInviter(), "");
+                if (status == InviteMessageStatus.BEINVITEED) {//decline the invitation
+                    message = getApplication().getString(R.string.demo_system_decline_invite, msg.getStringAttribute(DemoConstant.SYSTEM_MESSAGE_FROM));
+                    EMClient.getInstance().contactManager().declineInvitation(msg.getStringAttribute(DemoConstant.SYSTEM_MESSAGE_FROM));
+                } else if (status == InviteMessageStatus.BEAPPLYED) { //decline application to join group
+                    message = getApplication().getString(R.string.demo_system_decline_remote_user_apply_to_join_group, msg.getStringAttribute(DemoConstant.SYSTEM_MESSAGE_FROM));
+                    EMClient.getInstance().groupManager().declineApplication(msg.getStringAttribute(DemoConstant.SYSTEM_MESSAGE_FROM)
+                            , msg.getStringAttribute(DemoConstant.SYSTEM_MESSAGE_GROUP_ID), "");
+                } else if (status == InviteMessageStatus.GROUPINVITATION) {
+                    message = getApplication().getString(R.string.demo_system_decline_received_remote_user_invitation, msg.getStringAttribute(DemoConstant.SYSTEM_MESSAGE_INVITER));
+                    EMClient.getInstance().groupManager().declineInvitation(msg.getStringAttribute(DemoConstant.SYSTEM_MESSAGE_GROUP_ID)
+                            , msg.getStringAttribute(DemoConstant.SYSTEM_MESSAGE_INVITER), "");
                 }
-                msg.setStatus(InviteMessageStatus.REFUSED);
-                msg.setReason(message);
-                if(messageDao != null) {
-                    messageDao.update(msg);
-                }
+                msg.setAttribute(DemoConstant.SYSTEM_MESSAGE_STATUS, InviteMessageStatus.REFUSED.name());
+                msg.setAttribute(DemoConstant.SYSTEM_MESSAGE_REASON, message);
+                EMTextMessageBody body = new EMTextMessageBody(message);
+                msg.addBody(body);
+                EaseSystemMsgManager.getInstance().updateMessage(msg);
                 refuseObservable.postValue(Resource.success(message));
                 messageChangeObservable.with(DemoConstant.NOTIFY_CHANGE).postValue(EaseEvent.create(DemoConstant.NOTIFY_CHANGE, EaseEvent.TYPE.NOTIFY));
             } catch (HyphenateException e) {
@@ -133,17 +157,15 @@ public class NewFriendsViewModel extends AndroidViewModel {
         });
     }
 
-    public void deleteMsg(InviteMessage message) {
-        if(messageDao != null) {
-            messageDao.delete(message);
-        }
+    public void deleteMsg(EMMessage message) {
+        EMConversation conversation = EMClient.getInstance().chatManager().getConversation(DemoConstant.DEFAULT_SYSTEM_MESSAGE_ID, EMConversation.EMConversationType.Chat, true);
+        conversation.removeMessage(message.getMsgId());
         resultObservable.postValue(Resource.success(true));
     }
 
     public void makeAllMsgRead() {
-        if(messageDao != null) {
-            messageDao.makeAllReaded();
-        }
+        EMConversation conversation = EMClient.getInstance().chatManager().getConversation(DemoConstant.DEFAULT_SYSTEM_MESSAGE_ID, EMConversation.EMConversationType.Chat, true);
+        conversation.markAllMessagesAsRead();
         messageChangeObservable.with(DemoConstant.NOTIFY_CHANGE).postValue(EaseEvent.create(DemoConstant.NOTIFY_CHANGE, EaseEvent.TYPE.NOTIFY));
     }
 }
