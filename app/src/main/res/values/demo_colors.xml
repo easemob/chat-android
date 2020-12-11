@@ -58,7 +58,7 @@
     <color name="em_indicator_select">#9E9E9E</color>
     <color name="em_indicator_normal">#1AFFFFFF</color>
     <color name="black_deep">#FF000000</color>
-    <color name="recall_black_38">#89ffffff</color>
+    <color name="recall_black_38">#ffA3A3A3</color>
     <color name="recall_black">#61212121</color>
     <color name="em_blue">#1E88E5</color>
     <color name="em_blue_pressed">#0000aF</color>

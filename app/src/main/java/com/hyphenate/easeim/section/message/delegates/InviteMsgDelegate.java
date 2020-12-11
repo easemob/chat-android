@@ -5,27 +5,38 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
+import com.hyphenate.chat.EMMessage;
 import com.hyphenate.easeim.DemoHelper;
 import com.hyphenate.easeim.R;
+import com.hyphenate.easeim.common.constant.DemoConstant;
 import com.hyphenate.easeim.common.db.entity.InviteMessage;
+import com.hyphenate.easeim.common.db.entity.InviteMessageStatus;
 import com.hyphenate.easeui.adapter.EaseBaseDelegate;
 import com.hyphenate.easeui.adapter.EaseBaseRecyclerViewAdapter;
-import com.hyphenate.easeim.common.db.entity.InviteMessage.InviteMessageStatus;
+import com.hyphenate.easeui.utils.EaseDateUtils;
 import com.hyphenate.easeui.widget.EaseImageView;
+import com.hyphenate.exceptions.HyphenateException;
 import com.hyphenate.util.DateUtils;
 
 import java.util.Date;
 
 import androidx.annotation.NonNull;
 
-public class InviteMsgDelegate extends EaseBaseDelegate<InviteMessage, InviteMsgDelegate.ViewHolder> {
+public class InviteMsgDelegate extends EaseBaseDelegate<EMMessage, InviteMsgDelegate.ViewHolder> {
     private OnInviteListener listener;
 
     @Override
-    public boolean isForViewType(InviteMessage msg, int position) {
-        return msg.getStatusEnum() == InviteMessageStatus.BEINVITEED ||
-                msg.getStatusEnum() == InviteMessageStatus.BEAPPLYED ||
-                msg.getStatusEnum() == InviteMessageStatus.GROUPINVITATION;
+    public boolean isForViewType(EMMessage msg, int position) {
+        String statusParams = null;
+        try {
+            statusParams = msg.getStringAttribute(DemoConstant.SYSTEM_MESSAGE_STATUS);
+        } catch (HyphenateException e) {
+            e.printStackTrace();
+        }
+        InviteMessageStatus status = InviteMessageStatus.valueOf(statusParams);
+        return status == InviteMessageStatus.BEINVITEED ||
+                status == InviteMessageStatus.BEAPPLYED ||
+                status == InviteMessageStatus.GROUPINVITATION;
     }
 
     @Override
@@ -38,7 +49,7 @@ public class InviteMsgDelegate extends EaseBaseDelegate<InviteMessage, InviteMsg
         return new ViewHolder(view);
     }
 
-    public class ViewHolder extends EaseBaseRecyclerViewAdapter.ViewHolder<InviteMessage> {
+    public class ViewHolder extends EaseBaseRecyclerViewAdapter.ViewHolder<EMMessage> {
         private TextView name;
         private TextView message;
         private Button agree;
@@ -62,20 +73,35 @@ public class InviteMsgDelegate extends EaseBaseDelegate<InviteMessage, InviteMsg
         }
 
         @Override
-        public void setData(InviteMessage msg, int position) {
-            name.setText(msg.getFrom());
-            String reason = msg.getReason();
+        public void setData(EMMessage msg, int position) {
+            String reason = null;
+            try {
+                name.setText(msg.getStringAttribute(DemoConstant.SYSTEM_MESSAGE_FROM));
+                reason = msg.getStringAttribute(DemoConstant.SYSTEM_MESSAGE_REASON);
+            } catch (HyphenateException e) {
+                e.printStackTrace();
+            }
             if(TextUtils.isEmpty(reason)) {
-                if(msg.getStatusEnum() == InviteMessageStatus.BEINVITEED){
-                    reason = name.getContext().getString(InviteMessageStatus.BEINVITEED.getMsgContent(), msg.getFrom());
-                }else if (msg.getStatusEnum() == InviteMessageStatus.BEAPPLYED) { //application to join group
-                    reason = name.getContext().getString(InviteMessageStatus.BEAPPLYED.getMsgContent(), msg.getFrom(), msg.getGroupName());
-                } else if (msg.getStatusEnum() == InviteMessageStatus.GROUPINVITATION) {
-                    reason = name.getContext().getString(InviteMessageStatus.GROUPINVITATION.getMsgContent(), msg.getGroupInviter(), msg.getGroupName());
+                String statusParams = null;
+                try {
+                    statusParams = msg.getStringAttribute(DemoConstant.SYSTEM_MESSAGE_STATUS);
+                    InviteMessageStatus status = InviteMessageStatus.valueOf(statusParams);
+                    if(status == InviteMessageStatus.BEINVITEED){
+                        reason = name.getContext().getString(InviteMessageStatus.BEINVITEED.getMsgContent(), msg.getStringAttribute(DemoConstant.SYSTEM_MESSAGE_FROM));
+                    }else if (status == InviteMessageStatus.BEAPPLYED) { //application to join group
+                        reason = name.getContext().getString(InviteMessageStatus.BEAPPLYED.getMsgContent()
+                                , msg.getStringAttribute(DemoConstant.SYSTEM_MESSAGE_FROM), msg.getStringAttribute(DemoConstant.SYSTEM_MESSAGE_NAME));
+                    } else if (status == InviteMessageStatus.GROUPINVITATION) {
+                        reason = name.getContext().getString(InviteMessageStatus.GROUPINVITATION.getMsgContent()
+                                , msg.getStringAttribute(DemoConstant.SYSTEM_MESSAGE_INVITER),  msg.getStringAttribute(DemoConstant.SYSTEM_MESSAGE_NAME));
+                    }
+                } catch (HyphenateException e) {
+                    e.printStackTrace();
                 }
+
             }
             message.setText(reason);
-            time.setText(DateUtils.getTimestampString(new Date(msg.getTime())));
+            time.setText(EaseDateUtils.getTimestampString(itemView.getContext(), new Date(msg.getMsgTime())));
 
             agree.setOnClickListener(view -> {
                 if(listener != null) {
@@ -96,7 +122,7 @@ public class InviteMsgDelegate extends EaseBaseDelegate<InviteMessage, InviteMsg
     }
 
     public interface OnInviteListener {
-        void onInviteAgree(View view, InviteMessage msg);
-        void onInviteRefuse(View view, InviteMessage msg);
+        void onInviteAgree(View view, EMMessage msg);
+        void onInviteRefuse(View view, EMMessage msg);
     }
 }

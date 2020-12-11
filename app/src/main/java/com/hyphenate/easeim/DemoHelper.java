@@ -34,7 +34,7 @@ import com.hyphenate.easeim.section.chat.delegates.ChatRecallAdapterDelegate;
 import com.hyphenate.easeim.section.chat.delegates.ChatVideoCallAdapterDelegate;
 import com.hyphenate.easeim.section.chat.delegates.ChatVoiceCallAdapterDelegate;
 import com.hyphenate.easeim.section.chat.receiver.CallReceiver;
-import com.hyphenate.easeui.EaseUI;
+import com.hyphenate.easeui.EaseIM;
 import com.hyphenate.easeui.delegate.EaseCustomAdapterDelegate;
 import com.hyphenate.easeui.delegate.EaseExpressionAdapterDelegate;
 import com.hyphenate.easeui.delegate.EaseFileAdapterDelegate;
@@ -47,12 +47,11 @@ import com.hyphenate.easeui.domain.EaseAvatarOptions;
 import com.hyphenate.easeui.domain.EaseEmojicon;
 import com.hyphenate.easeui.domain.EaseEmojiconGroupEntity;
 import com.hyphenate.easeui.domain.EaseUser;
-import com.hyphenate.easeui.manager.EaseConTypeSetManager;
+import com.hyphenate.easeui.manager.EaseMessageTypeSetManager;
 import com.hyphenate.easeui.model.EaseNotifier;
 import com.hyphenate.easeui.provider.EaseEmojiconInfoProvider;
 import com.hyphenate.easeui.provider.EaseSettingsProvider;
 import com.hyphenate.easeui.provider.EaseUserProfileProvider;
-import com.hyphenate.easeui.utils.EaseCommonUtils;
 import com.hyphenate.push.EMPushConfig;
 import com.hyphenate.push.EMPushHelper;
 import com.hyphenate.push.EMPushType;
@@ -122,7 +121,7 @@ public class DemoHelper {
         //options.setIMServer("116.85.43.118");
         //options.setImPort(6717);
         // 初始化SDK
-        isSDKInit = EaseUI.getInstance().init(context, options);
+        isSDKInit = EaseIM.getInstance().init(context, options);
         return isSDKInit();
     }
 
@@ -138,21 +137,21 @@ public class DemoHelper {
      *注册对话类型
      */
     private void registerConversationType() {
-        EaseConTypeSetManager.getInstance()
-                .addConversationType(EaseExpressionAdapterDelegate.class)       //自定义表情
-                .addConversationType(EaseFileAdapterDelegate.class)             //文件
-                .addConversationType(EaseImageAdapterDelegate.class)            //图片
-                .addConversationType(EaseLocationAdapterDelegate.class)         //定位
-                .addConversationType(EaseVideoAdapterDelegate.class)            //视频
-                .addConversationType(EaseVoiceAdapterDelegate.class)            //声音
-                .addConversationType(ChatConferenceInviteAdapterDelegate.class) //会议邀请
-                .addConversationType(ChatLiveInviteAdapterDelegate.class)       //语音邀请
-                .addConversationType(ChatRecallAdapterDelegate.class)           //消息撤回
-                .addConversationType(ChatVideoCallAdapterDelegate.class)        //视频通话
-                .addConversationType(ChatVoiceCallAdapterDelegate.class)        //语音通话
-                .addConversationType(EaseCustomAdapterDelegate.class)           //自定义消息
-                .addConversationType(ChatNotificationAdapterDelegate.class)     //入群等通知消息
-                .setDefaultConversionType(EaseTextAdapterDelegate.class);       //文本
+        EaseMessageTypeSetManager.getInstance()
+                .addMessageType(EaseExpressionAdapterDelegate.class)       //自定义表情
+                .addMessageType(EaseFileAdapterDelegate.class)             //文件
+                .addMessageType(EaseImageAdapterDelegate.class)            //图片
+                .addMessageType(EaseLocationAdapterDelegate.class)         //定位
+                .addMessageType(EaseVideoAdapterDelegate.class)            //视频
+                .addMessageType(EaseVoiceAdapterDelegate.class)            //声音
+                .addMessageType(ChatConferenceInviteAdapterDelegate.class) //会议邀请
+                .addMessageType(ChatLiveInviteAdapterDelegate.class)       //语音邀请
+                .addMessageType(ChatRecallAdapterDelegate.class)           //消息撤回
+                .addMessageType(ChatVideoCallAdapterDelegate.class)        //视频通话
+                .addMessageType(ChatVoiceCallAdapterDelegate.class)        //语音通话
+                .addMessageType(EaseCustomAdapterDelegate.class)           //自定义消息
+                .addMessageType(ChatNotificationAdapterDelegate.class)     //入群等通知消息
+                .setDefaultMessageType(EaseTextAdapterDelegate.class);       //文本
     }
 
     /**
@@ -240,8 +239,8 @@ public class DemoHelper {
      */
     private void initEaseUI(Context context) {
         //添加ChatPresenter,ChatPresenter中添加了网络连接状态监听，
-        EaseUI.getInstance().addChatPresenter(ChatPresenter.getInstance());
-        EaseUI.getInstance()
+        EaseIM.getInstance().addChatPresenter(ChatPresenter.getInstance());
+        EaseIM.getInstance()
                 .setSettingsProvider(new EaseSettingsProvider() {
                     @Override
                     public boolean isMsgNotifyAllowed(EMMessage message) {
@@ -308,6 +307,7 @@ public class DemoHelper {
                     public EaseUser getUser(String username) {
                         return getUserInfo(username);
                     }
+
                 });
     }
 
@@ -328,12 +328,6 @@ public class DemoHelper {
         if(username.equals(EMClient.getInstance().getCurrentUser()))
             return getUserProfileManager().getCurrentUserInfo();
         user = getContactList().get(username);
-
-        // if user is not in your contacts, set inital letter for him/her
-        if(user == null){
-            user = new EaseUser(username);
-            EaseCommonUtils.setUserInitialLetter(user);
-        }
         return user;
     }
 
@@ -483,7 +477,7 @@ public class DemoHelper {
     }
 
     public void initPush(Context context) {
-        if(EaseUI.getInstance().isMainProcess(context)) {
+        if(EaseIM.getInstance().isMainProcess(context)) {
             //OPPO SDK升级到2.1.0后需要进行初始化
             HeytapPushManager.init(context, true);
             //HMSPushHelper.getInstance().initHMSAgent(DemoApplication.getInstance());
@@ -570,7 +564,7 @@ public class DemoHelper {
     }
 
     public EaseAvatarOptions getEaseAvatarOptions() {
-        return EaseUI.getInstance().getAvatarOptions();
+        return EaseIM.getInstance().getAvatarOptions();
     }
 
     public DemoModel getModel(){
@@ -589,7 +583,7 @@ public class DemoHelper {
      * @return
      */
     public EaseNotifier getNotifier(){
-        return EaseUI.getInstance().getNotifier();
+        return EaseIM.getInstance().getNotifier();
     }
 
     /**

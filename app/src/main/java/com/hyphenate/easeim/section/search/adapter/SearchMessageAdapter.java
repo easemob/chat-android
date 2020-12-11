@@ -11,6 +11,7 @@ import androidx.annotation.NonNull;
 
 import com.hyphenate.chat.EMMessage;
 import com.hyphenate.easeim.R;
+import com.hyphenate.easeui.utils.EaseDateUtils;
 import com.hyphenate.easeui.utils.EaseEditTextUtils;
 import com.hyphenate.easeui.adapter.EaseBaseRecyclerViewAdapter;
 import com.hyphenate.easeui.utils.EaseCommonUtils;
@@ -58,7 +59,7 @@ public class SearchMessageAdapter extends EaseBaseRecyclerViewAdapter<EMMessage>
         @Override
         public void setData(EMMessage item, int position) {
             EMMessage.ChatType chatType = item.getChatType();
-            time.setText(DateUtils.getTimestampString(new Date(item.getMsgTime())));
+            time.setText(EaseDateUtils.getTimestampString(mContext, new Date(item.getMsgTime())));
             if(chatType == EMMessage.ChatType.GroupChat || chatType == EMMessage.ChatType.ChatRoom) {
                 name.setText(item.getFrom());
             }else {

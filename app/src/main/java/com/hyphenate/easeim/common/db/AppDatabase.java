@@ -18,7 +18,7 @@ import com.hyphenate.easeim.common.db.entity.MsgTypeManageEntity;
         InviteMessage.class,
         MsgTypeManageEntity.class,
         AppKeyEntity.class},
-        version = 13)
+        version = 16)
 @TypeConverters(DateConverter.class)
 public abstract class AppDatabase extends RoomDatabase {
 

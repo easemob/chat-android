@@ -1,4 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <item name="action_friend_block" type="id"/>
+    <item name="action_chat_forward" type="id"/>
+
+    <!-- app层菜单扩展功能id -->
+    <!-- 视频通话 -->
+    <item name="extend_item_video_call" type="id"/>
+    <!-- 视频会议 -->
+    <item name="extend_item_conference_call" type="id"/>
+    <!-- 回执 -->
+    <item name="extend_item_delivery" type="id"/>
+
+    <!-- app层联系人头布局条目id -->
+    <!-- 添加好友 -->
+    <item name="contact_header_item_new_chat" type="id"/>
+    <!-- 群聊 -->
+    <item name="contact_header_item_group_list" type="id"/>
+    <!-- 聊天室 -->
+    <item name="contact_header_item_chat_room_list" type="id"/>
 </resources>

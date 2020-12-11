@@ -325,7 +325,7 @@
         <!--聊天页面-->
         <activity
             android:name=".section.chat.activity.ChatActivity"
-            android:windowSoftInputMode="stateHidden|adjustPan"
+            android:windowSoftInputMode="stateHidden|adjustResize"
             android:screenOrientation="portrait"
             android:launchMode="singleTask"/>
         <!--群组列表-->
@@ -505,6 +505,7 @@
             android:screenOrientation="portrait"/>
         <!--聊天历史-->
         <activity android:name=".section.chat.activity.ChatHistoryActivity"
+            android:windowSoftInputMode="stateHidden|adjustResize"
             android:screenOrientation="portrait"/>
         <!--个人资料-->
         <activity android:name=".section.me.activity.UserDetailActivity"
@@ -535,7 +536,6 @@
         <activity android:name=".section.me.activity.MessagePushStyleActivity" />
         <!--WebView加载网页-->
         <activity android:name=".section.base.WebViewActivity" />
-
         <!--捕获屏幕service-->
         <service android:name=".section.conference.SRForegroundService"
             android:enabled="true"

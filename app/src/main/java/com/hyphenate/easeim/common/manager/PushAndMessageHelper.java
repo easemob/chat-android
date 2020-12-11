@@ -14,6 +14,7 @@ import com.hyphenate.easeim.DemoHelper;
 import com.hyphenate.easeim.R;
 import com.hyphenate.easeim.common.constant.DemoConstant;
 import com.hyphenate.easeim.common.db.entity.InviteMessage;
+import com.hyphenate.easeim.common.db.entity.InviteMessageStatus;
 import com.hyphenate.easeim.common.interfaceOrImplement.UserActivityLifecycleCallbacks;
 import com.hyphenate.easeim.common.livedatas.LiveDataBus;
 import com.hyphenate.easeim.section.conference.ConferenceActivity;
@@ -21,11 +22,13 @@ import com.hyphenate.easeim.section.chat.activity.LiveActivity;
 import com.hyphenate.easeui.constants.EaseConstant;
 import com.hyphenate.easeui.model.EaseEvent;
 import com.hyphenate.easeui.utils.EaseCommonUtils;
-import com.hyphenate.easeim.common.db.entity.InviteMessage.InviteMessageStatus;
+import com.hyphenate.exceptions.HyphenateException;
 import com.hyphenate.util.UriUtils;
 
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import java.util.Map;
 
 /**
  * 用于处理推送及消息相关
@@ -179,6 +182,138 @@ public class PushAndMessageHelper {
             case MULTI_DEVICE_CONTACT_ACCEPT:
             case MULTI_DEVICE_CONTACT_DECLINE:
                 messge = String.format(builder.toString(), msg.getFrom());
+                break;
+            case REFUSED:
+            case MULTI_DEVICE_GROUP_APPLY:
+                messge = builder.toString();
+                break;
+            default:
+                messge = "";
+                break;
+        }
+        return messge;
+    }
+
+    /**
+     * 获取系统消息内容
+     * @param msg
+     * @return
+     */
+    public static String getSystemMessage(EMMessage msg)  throws HyphenateException {
+        String messageStatus = msg.getStringAttribute(DemoConstant.SYSTEM_MESSAGE_STATUS);
+        if(TextUtils.isEmpty(messageStatus)) {
+            return "";
+        }
+        InviteMessageStatus status = InviteMessageStatus.valueOf(messageStatus);
+        if(status == null) {
+            return "";
+        }
+        String messge;
+        Context context = DemoApplication.getInstance();
+        StringBuilder builder = new StringBuilder(context.getString(status.getMsgContent()));
+        switch (status) {
+            case BEINVITEED:
+            case AGREED:
+            case BEREFUSED:
+                messge = String.format(builder.toString(), msg.getStringAttribute(DemoConstant.SYSTEM_MESSAGE_FROM));
+                break;
+            case BEAGREED:
+                messge = builder.toString();
+                break;
+            case BEAPPLYED:
+            case GROUPINVITATION:
+                String name = msg.getStringAttribute(DemoConstant.SYSTEM_MESSAGE_NAME);
+                messge = String.format(builder.toString(), msg.getStringAttribute(DemoConstant.SYSTEM_MESSAGE_FROM), name);
+                break;
+            case GROUPINVITATION_ACCEPTED:
+            case GROUPINVITATION_DECLINED:
+            case MULTI_DEVICE_GROUP_APPLY_ACCEPT:
+            case MULTI_DEVICE_GROUP_APPLY_DECLINE:
+            case MULTI_DEVICE_GROUP_INVITE:
+            case MULTI_DEVICE_GROUP_INVITE_ACCEPT:
+            case MULTI_DEVICE_GROUP_INVITE_DECLINE:
+            case MULTI_DEVICE_GROUP_KICK:
+            case MULTI_DEVICE_GROUP_BAN:
+            case MULTI_DEVICE_GROUP_ALLOW:
+            case MULTI_DEVICE_GROUP_ASSIGN_OWNER:
+            case MULTI_DEVICE_GROUP_ADD_ADMIN:
+            case MULTI_DEVICE_GROUP_REMOVE_ADMIN:
+            case MULTI_DEVICE_GROUP_ADD_MUTE:
+            case MULTI_DEVICE_GROUP_REMOVE_MUTE:
+                messge = String.format(builder.toString(), msg.getStringAttribute(DemoConstant.SYSTEM_MESSAGE_INVITER));
+                break;
+            case MULTI_DEVICE_CONTACT_ADD:
+            case MULTI_DEVICE_CONTACT_BAN:
+            case MULTI_DEVICE_CONTACT_ALLOW:
+            case MULTI_DEVICE_CONTACT_ACCEPT:
+            case MULTI_DEVICE_CONTACT_DECLINE:
+                messge = String.format(builder.toString(), msg.getStringAttribute(DemoConstant.SYSTEM_MESSAGE_FROM));
+                break;
+            case REFUSED:
+            case MULTI_DEVICE_GROUP_APPLY:
+                messge = builder.toString();
+                break;
+            default:
+                messge = "";
+                break;
+        }
+        return messge;
+    }
+
+    /**
+     * 获取系统消息内容
+     * @param msg
+     * @return
+     */
+    public static String getSystemMessage(Map<String, Object> msg)  throws NullPointerException {
+        String messageStatus = (String) msg.get(DemoConstant.SYSTEM_MESSAGE_STATUS);
+        if(TextUtils.isEmpty(messageStatus)) {
+            return "";
+        }
+        InviteMessageStatus status = InviteMessageStatus.valueOf(messageStatus);
+        if(status == null) {
+            return "";
+        }
+        String messge;
+        Context context = DemoApplication.getInstance();
+        StringBuilder builder = new StringBuilder(context.getString(status.getMsgContent()));
+        switch (status) {
+            case BEINVITEED:
+            case AGREED:
+            case BEREFUSED:
+                messge = String.format(builder.toString(), msg.get(DemoConstant.SYSTEM_MESSAGE_FROM));
+                break;
+            case BEAGREED:
+                messge = builder.toString();
+                break;
+            case BEAPPLYED:
+            case GROUPINVITATION:
+                String name = (String) msg.get(DemoConstant.SYSTEM_MESSAGE_NAME);
+                messge = String.format(builder.toString(), msg.get(DemoConstant.SYSTEM_MESSAGE_FROM), name);
+                break;
+            case GROUPINVITATION_ACCEPTED:
+            case GROUPINVITATION_DECLINED:
+            case MULTI_DEVICE_GROUP_APPLY_ACCEPT:
+            case MULTI_DEVICE_GROUP_APPLY_DECLINE:
+            case MULTI_DEVICE_GROUP_INVITE:
+            case MULTI_DEVICE_GROUP_INVITE_ACCEPT:
+            case MULTI_DEVICE_GROUP_INVITE_DECLINE:
+            case MULTI_DEVICE_GROUP_KICK:
+            case MULTI_DEVICE_GROUP_BAN:
+            case MULTI_DEVICE_GROUP_ALLOW:
+            case MULTI_DEVICE_GROUP_ASSIGN_OWNER:
+            case MULTI_DEVICE_GROUP_ADD_ADMIN:
+            case MULTI_DEVICE_GROUP_REMOVE_ADMIN:
+            case MULTI_DEVICE_GROUP_ADD_MUTE:
+            case MULTI_DEVICE_GROUP_REMOVE_MUTE:
+                messge = String.format(builder.toString(), msg.get(DemoConstant.SYSTEM_MESSAGE_INVITER));
+                break;
+            case MULTI_DEVICE_CONTACT_ADD:
+            case MULTI_DEVICE_CONTACT_BAN:
+            case MULTI_DEVICE_CONTACT_ALLOW:
+            case MULTI_DEVICE_CONTACT_ACCEPT:
+            case MULTI_DEVICE_CONTACT_DECLINE:
+                messge = String.format(builder.toString(), msg.get(DemoConstant.SYSTEM_MESSAGE_FROM));
                 break;
             case REFUSED:
             case MULTI_DEVICE_GROUP_APPLY:
