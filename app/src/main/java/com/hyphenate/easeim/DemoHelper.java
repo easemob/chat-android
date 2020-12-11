@@ -52,7 +52,6 @@ import com.hyphenate.easeui.model.EaseNotifier;
 import com.hyphenate.easeui.provider.EaseEmojiconInfoProvider;
 import com.hyphenate.easeui.provider.EaseSettingsProvider;
 import com.hyphenate.easeui.provider.EaseUserProfileProvider;
-import com.hyphenate.easeui.utils.EaseCommonUtils;
 import com.hyphenate.push.EMPushConfig;
 import com.hyphenate.push.EMPushHelper;
 import com.hyphenate.push.EMPushType;
@@ -309,10 +308,6 @@ public class DemoHelper {
                         return getUserInfo(username);
                     }
 
-                    @Override
-                    public EaseUser getUser(EaseUser user) {
-                        return user;
-                    }
                 });
     }
 
@@ -333,12 +328,6 @@ public class DemoHelper {
         if(username.equals(EMClient.getInstance().getCurrentUser()))
             return getUserProfileManager().getCurrentUserInfo();
         user = getContactList().get(username);
-
-        // if user is not in your contacts, set inital letter for him/her
-        if(user == null){
-            user = new EaseUser(username);
-            EaseCommonUtils.setUserInitialLetter(user);
-        }
         return user;
     }
 

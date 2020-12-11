@@ -15,6 +15,7 @@ import com.hyphenate.easeim.common.livedatas.LiveDataBus;
 import com.hyphenate.easeim.common.livedatas.SingleSourceLiveData;
 import com.hyphenate.easeim.common.net.Resource;
 import com.hyphenate.easeui.constants.EaseConstant;
+import com.hyphenate.easeui.manager.EaseSystemMsgManager;
 import com.hyphenate.easeui.manager.EaseThreadManager;
 import com.hyphenate.easeui.model.EaseEvent;
 import com.hyphenate.exceptions.HyphenateException;
@@ -114,10 +115,7 @@ public class NewFriendsViewModel extends AndroidViewModel {
                 msg.setAttribute(DemoConstant.SYSTEM_MESSAGE_REASON, message);
                 EMTextMessageBody body = new EMTextMessageBody(message);
                 msg.addBody(body);
-                EMConversation conversation = EMClient.getInstance().chatManager().getConversation(DemoConstant.DEFAULT_SYSTEM_MESSAGE_ID);
-                conversation.removeMessage(msg.getMsgId());
-                EMClient.getInstance().chatManager().saveMessage(msg);
-                EMClient.getInstance().chatManager().updateMessage(msg);
+                EaseSystemMsgManager.getInstance().updateMessage(msg);
                 agreeObservable.postValue(Resource.success(message));
                 messageChangeObservable.with(DemoConstant.NOTIFY_CHANGE).postValue(EaseEvent.create(DemoConstant.NOTIFY_CHANGE, EaseEvent.TYPE.NOTIFY));
             } catch (HyphenateException e) {
@@ -149,10 +147,7 @@ public class NewFriendsViewModel extends AndroidViewModel {
                 msg.setAttribute(DemoConstant.SYSTEM_MESSAGE_REASON, message);
                 EMTextMessageBody body = new EMTextMessageBody(message);
                 msg.addBody(body);
-                EMConversation conversation = EMClient.getInstance().chatManager().getConversation(DemoConstant.DEFAULT_SYSTEM_MESSAGE_ID);
-                conversation.removeMessage(msg.getMsgId());
-                EMClient.getInstance().chatManager().saveMessage(msg);
-                //EMClient.getInstance().chatManager().updateMessage(msg);
+                EaseSystemMsgManager.getInstance().updateMessage(msg);
                 refuseObservable.postValue(Resource.success(message));
                 messageChangeObservable.with(DemoConstant.NOTIFY_CHANGE).postValue(EaseEvent.create(DemoConstant.NOTIFY_CHANGE, EaseEvent.TYPE.NOTIFY));
             } catch (HyphenateException e) {

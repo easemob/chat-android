@@ -125,11 +125,10 @@ dependencies {
     implementation 'com.tencent.bugly:nativecrashreport:3.3.1'
 
     // EaseIMKit
-    //implementation 'com.github.jinanzhuan:chat-android:1.0.1'
-    //implementation 'com.hyphenate:ease-im-kit:1.0.0'
-    api (project(path: ':ease-im-kit')) {
-        exclude group:'com.hyphenate',module:'hyphenate-sdk-lite'
-    }
+//    api (project(path: ':ease-im-kit')) {
+//        exclude group:'com.hyphenate',module:'hyphenate-sdk-lite'
+//    }
+    implementation 'com.hyphenate:ease-im-kit:1.0.0.1'
     // EaseIMKit依赖，必须添加环信IM SDK
     implementation 'com.hyphenate:hyphenate-sdk:3.7.2'
 }

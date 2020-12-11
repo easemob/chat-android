@@ -5,17 +5,23 @@ import android.app.Dialog;
 import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.text.TextUtils;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.content.ContextCompat;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.hyphenate.chat.EMClient;
 import com.hyphenate.chat.EMGroup;
 import com.hyphenate.chat.EMMessage;
+import com.hyphenate.chat.EMTextMessageBody;
 import com.hyphenate.easeim.DemoHelper;
 import com.hyphenate.easeim.R;
 import com.hyphenate.easeim.common.constant.DemoConstant;
@@ -38,29 +44,38 @@ import com.hyphenate.easeim.section.contact.activity.ContactDetailActivity;
 import com.hyphenate.easeim.section.dialog.SimpleDialogFragment;
 import com.hyphenate.easeim.section.group.GroupHelper;
 import com.hyphenate.easeui.constants.EaseConstant;
+import com.hyphenate.easeui.delegate.EaseExpressionAdapterDelegate;
+import com.hyphenate.easeui.delegate.EaseFileAdapterDelegate;
+import com.hyphenate.easeui.delegate.EaseMessageAdapterDelegate;
+import com.hyphenate.easeui.delegate.EaseTextAdapterDelegate;
 import com.hyphenate.easeui.domain.EaseUser;
+import com.hyphenate.easeui.interfaces.MessageListItemClickListener;
 import com.hyphenate.easeui.model.EaseEvent;
+import com.hyphenate.easeui.model.styles.EaseMessageListItemStyle;
 import com.hyphenate.easeui.modules.chat.EaseChatExtendMenu;
 import com.hyphenate.easeui.modules.chat.EaseChatFragment;
 import com.hyphenate.easeui.modules.chat.EaseChatInputMenu;
+import com.hyphenate.easeui.modules.chat.EaseChatMessageListLayout;
+import com.hyphenate.easeui.modules.chat.EaseInputMenuStyle;
 import com.hyphenate.easeui.modules.chat.interfaces.IChatExtendMenu;
+import com.hyphenate.easeui.modules.chat.interfaces.IChatPrimaryMenu;
 import com.hyphenate.easeui.modules.chat.interfaces.OnMenuChangeListener;
 import com.hyphenate.easeui.modules.chat.interfaces.OnRecallMessageResultListener;
 import com.hyphenate.easeui.modules.menu.EasePopupWindowHelper;
 import com.hyphenate.easeui.modules.menu.MenuItemBean;
+import com.hyphenate.easeui.utils.EaseCommonUtils;
+import com.hyphenate.easeui.viewholder.EaseChatRowViewHolder;
+import com.hyphenate.easeui.widget.chatrow.EaseChatRow;
 import com.hyphenate.util.EMLog;
 import com.hyphenate.util.UriUtils;
 
 
-public class ChatFragment extends EaseChatFragment implements OnMenuChangeListener, OnRecallMessageResultListener {
+public class ChatFragment extends EaseChatFragment implements OnRecallMessageResultListener {
     private static final String TAG = ChatFragment.class.getSimpleName();
-    private static final int ITEM_VIDEO_CALL = 11;
-    private static final int ITEM_CONFERENCE_CALL = 12;
     private MessageViewModel viewModel;
     protected ClipboardManager clipboard;
 
     private static final int REQUEST_CODE_SELECT_AT_USER = 15;
-    private static final int ITEM_DELIVERY = 10;
     private static final String[] calls = {"视频通话", "语音通话"};
     private OnFragmentInfoListener infoListener;
     private Dialog dialog;
@@ -70,6 +85,36 @@ public class ChatFragment extends EaseChatFragment implements OnMenuChangeListen
         super.initView();
         clipboard = (ClipboardManager) getActivity().getSystemService(Context.CLIPBOARD_SERVICE);
         viewModel = new ViewModelProvider(this).get(MessageViewModel.class);
+
+        //获取到聊天列表控件
+        //EaseChatMessageListLayout messageListLayout = chatLayout.getChatMessageListLayout();
+        //设置聊天列表背景
+        //messageListLayout.setBackground(new ColorDrawable(Color.parseColor("#DA5A4D")));
+        //设置默认头像
+        //messageListLayout.setAvatarDefaultSrc(ContextCompat.getDrawable(mContext, R.drawable.ease_default_avatar));
+        //设置头像形状
+        //messageListLayout.setAvatarShapeType(1);
+        //设置文本字体大小
+        //messageListLayout.setItemTextSize((int) EaseCommonUtils.sp2px(mContext, 18));
+        //设置文本字体颜色
+        //messageListLayout.setItemTextColor(ContextCompat.getColor(mContext, R.color.red));
+        //设置时间线的背景
+        //messageListLayout.setTimeBackground(ContextCompat.getDrawable(mContext, R.color.gray_normal));
+        //设置时间线的文本大小
+        //messageListLayout.setTimeTextSize((int) EaseCommonUtils.sp2px(mContext, 18));
+        //设置时间线的文本颜色
+        //messageListLayout.setTimeTextColor(ContextCompat.getColor(mContext, R.color.black));
+        //设置聊天列表样式：两侧及均位于左侧
+        //messageListLayout.setItemShowType(EaseChatMessageListLayout.ShowType.LEFT);
+
+        //获取到菜单输入父控件
+        //EaseChatInputMenu chatInputMenu = chatLayout.getChatInputMenu();
+        //获取到菜单输入控件
+        //IChatPrimaryMenu primaryMenu = chatInputMenu.getPrimaryMenu();
+        //if(primaryMenu != null) {
+            //设置菜单样式为不可用语音模式
+        //    primaryMenu.setMenuShowType(EaseInputMenuStyle.ONLY_TEXT);
+        //}
 
     }
 
@@ -82,26 +127,26 @@ public class ChatFragment extends EaseChatFragment implements OnMenuChangeListen
     private void resetChatExtendMenu() {
         IChatExtendMenu chatExtendMenu = chatLayout.getChatInputMenu().getChatExtendMenu();
         chatExtendMenu.clear();
-        chatExtendMenu.registerMenuItem(R.string.attach_picture, R.drawable.ease_chat_image_selector, EaseChatExtendMenu.ITEM_PICTURE);
-        chatExtendMenu.registerMenuItem(R.string.attach_take_pic, R.drawable.ease_chat_takepic_selector, EaseChatExtendMenu.ITEM_TAKE_PICTURE);
-        chatExtendMenu.registerMenuItem(R.string.attach_video, R.drawable.em_chat_video_selector, EaseChatExtendMenu.ITEM_VIDEO);
+        chatExtendMenu.registerMenuItem(R.string.attach_picture, R.drawable.ease_chat_image_selector, R.id.extend_item_picture);
+        chatExtendMenu.registerMenuItem(R.string.attach_take_pic, R.drawable.ease_chat_takepic_selector, R.id.extend_item_take_picture);
+        chatExtendMenu.registerMenuItem(R.string.attach_video, R.drawable.em_chat_video_selector, R.id.extend_item_video);
         //添加扩展槽
         if(chatType == EaseConstant.CHATTYPE_SINGLE){
             //inputMenu.registerExtendMenuItem(R.string.attach_voice_call, R.drawable.em_chat_voice_call_selector, EaseChatInputMenu.ITEM_VOICE_CALL, this);
-            chatExtendMenu.registerMenuItem(R.string.attach_media_call, R.drawable.em_chat_video_call_selector, ITEM_VIDEO_CALL);
+            chatExtendMenu.registerMenuItem(R.string.attach_media_call, R.drawable.em_chat_video_call_selector, R.id.extend_item_video_call);
         }
         if (chatType == EaseConstant.CHATTYPE_GROUP) { // 音视频会议
-            chatExtendMenu.registerMenuItem(R.string.voice_and_video_conference, R.drawable.em_chat_video_call_selector, ITEM_CONFERENCE_CALL);
+            chatExtendMenu.registerMenuItem(R.string.voice_and_video_conference, R.drawable.em_chat_video_call_selector, R.id.extend_item_conference_call);
             //目前普通模式也支持设置主播和观众人数，都建议使用普通模式
             //inputMenu.registerExtendMenuItem(R.string.title_live, R.drawable.em_chat_video_call_selector, EaseChatInputMenu.ITEM_LIVE, this);
         }
-        chatExtendMenu.registerMenuItem(R.string.attach_location, R.drawable.ease_chat_location_selector, EaseChatExtendMenu.ITEM_LOCATION);
-        chatExtendMenu.registerMenuItem(R.string.attach_file, R.drawable.em_chat_file_selector, EaseChatExtendMenu.ITEM_FILE);
+        chatExtendMenu.registerMenuItem(R.string.attach_location, R.drawable.ease_chat_location_selector, R.id.extend_item_location);
+        chatExtendMenu.registerMenuItem(R.string.attach_file, R.drawable.em_chat_file_selector, R.id.extend_item_file);
         //群组类型，开启消息回执，且是owner
         if(chatType == EaseConstant.CHATTYPE_GROUP && EMClient.getInstance().getOptions().getRequireAck()) {
             EMGroup group = DemoHelper.getInstance().getGroupManager().getGroup(conversationId);
             if(GroupHelper.isOwner(group)) {
-                chatExtendMenu.registerMenuItem(R.string.em_chat_group_delivery_ack, R.drawable.demo_chat_delivery_selector, ITEM_DELIVERY);
+                chatExtendMenu.registerMenuItem(R.string.em_chat_group_delivery_ack, R.drawable.demo_chat_delivery_selector, R.id.extend_item_delivery);
             }
         }
         //添加扩展表情
@@ -111,7 +156,6 @@ public class ChatFragment extends EaseChatFragment implements OnMenuChangeListen
     @Override
     public void initListener() {
         super.initListener();
-        chatLayout.setOnPopupWindowItemClickListener(this);
         chatLayout.setOnRecallMessageResultListener(this);
     }
 
@@ -225,17 +269,17 @@ public class ChatFragment extends EaseChatFragment implements OnMenuChangeListen
     public void onChatExtendMenuItemClick(View view, int itemId) {
         super.onChatExtendMenuItemClick(view, itemId);
         switch (itemId) {
-            case ITEM_VIDEO_CALL:
+            case R.id.extend_item_video_call:
                 //startVideoCall();
                 showSelectDialog();
                 break;
 //            case EaseChatInputMenu.ITEM_VOICE_CALL:
 //                showSelectDialog();
 //                break;
-            case ITEM_CONFERENCE_CALL:
+            case R.id.extend_item_conference_call:
                 ConferenceActivity.startConferenceCall(getActivity(), conversationId);
                 break;
-            case ITEM_DELIVERY://群消息回执
+            case R.id.extend_item_delivery://群消息回执
                 showDeliveryDialog();
                 break;
         }

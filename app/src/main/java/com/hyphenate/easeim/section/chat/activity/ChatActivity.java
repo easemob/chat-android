@@ -25,8 +25,11 @@ import com.hyphenate.easeim.section.group.ChatRoomHelper;
 import com.hyphenate.easeim.section.group.GroupHelper;
 import com.hyphenate.easeim.section.group.activity.ChatRoomDetailActivity;
 import com.hyphenate.easeim.section.group.activity.GroupDetailActivity;
+import com.hyphenate.easeui.EaseIM;
 import com.hyphenate.easeui.constants.EaseConstant;
+import com.hyphenate.easeui.domain.EaseUser;
 import com.hyphenate.easeui.model.EaseEvent;
+import com.hyphenate.easeui.provider.EaseUserProfileProvider;
 import com.hyphenate.easeui.utils.EaseCommonUtils;
 import com.hyphenate.easeui.widget.EaseTitleBar;
 
@@ -176,7 +179,17 @@ public class ChatActivity extends BaseInitActivity implements EaseTitleBar.OnBac
             }
             title =  TextUtils.isEmpty(room.getName()) ? conversationId : room.getName();
         }else {
-            title = conversationId;
+            EaseUserProfileProvider userProvider = EaseIM.getInstance().getUserProvider();
+            if(userProvider != null) {
+                EaseUser user = userProvider.getUser(conversationId);
+                if(user != null) {
+                    title = user.getNickname();
+                }else {
+                    title = conversationId;
+                }
+            }else {
+                title = conversationId;
+            }
         }
         titleBarMessage.setTitle(title);
     }

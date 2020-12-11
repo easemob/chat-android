@@ -1,15 +1,20 @@
 package com.hyphenate.easeim.section.conversation;
 
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
 import androidx.annotation.NonNull;
+import androidx.core.content.ContextCompat;
 import androidx.lifecycle.ViewModelProvider;
 
+import com.hyphenate.chat.EMClient;
 import com.hyphenate.chat.EMConversation;
+import com.hyphenate.easeim.DemoHelper;
 import com.hyphenate.easeim.R;
 import com.hyphenate.easeim.common.constant.DemoConstant;
 import com.hyphenate.easeim.common.interfaceOrImplement.OnResourceParseCallback;
@@ -24,13 +29,15 @@ import com.hyphenate.easeim.section.dialog.DemoDialogFragment;
 import com.hyphenate.easeim.section.dialog.SimpleDialogFragment;
 import com.hyphenate.easeim.section.message.SystemMsgsActivity;
 import com.hyphenate.easeim.section.search.SearchConversationActivity;
-import com.hyphenate.easeui.manager.EaseProviderManager;
+import com.hyphenate.easeui.EaseIM;
+import com.hyphenate.easeui.domain.EaseUser;
 import com.hyphenate.easeui.manager.EaseSystemMsgManager;
 import com.hyphenate.easeui.model.EaseEvent;
 import com.hyphenate.easeui.modules.conversation.EaseConversationListFragment;
 import com.hyphenate.easeui.modules.conversation.EaseConversationListLayout;
 import com.hyphenate.easeui.modules.conversation.model.EaseConversationInfo;
 import com.hyphenate.easeui.provider.EaseConversationInfoProvider;
+import com.hyphenate.easeui.provider.EaseUserProfileProvider;
 import com.hyphenate.easeui.utils.EaseCommonUtils;
 import com.hyphenate.easeui.widget.EaseSearchTextView;
 
@@ -60,13 +67,13 @@ public class ConversationListFragment extends EaseConversationListFragment imple
 
         if(object instanceof EMConversation) {
             switch (item.getItemId()) {
-                case EaseConversationListLayout.MENU_MAKE_TOP :
+                case R.id.action_con_make_top :
                     conversationListLayout.makeConversationTop(position, info);
                     return true;
-                case EaseConversationListLayout.MENU_MAKE_CANCEL_TOP :
+                case R.id.action_con_cancel_top :
                     conversationListLayout.cancelConversationTop(position, info);
                     return true;
-                case EaseConversationListLayout.MENU_DELETE :
+                case R.id.action_con_delete :
                     showDeleteDialog(position, info);
                     return true;
             }
@@ -96,29 +103,6 @@ public class ConversationListFragment extends EaseConversationListFragment imple
     @Override
     public void initData() {
         super.initData();
-        //设置默认聊天类型头像
-        /*EaseProviderManager.getInstance().setConversationInfoProvider(new EaseConversationInfoProvider() {
-            @Override
-            public String getDefaultTypeAvatar(String type) {
-                if(TextUtils.equals(type, EMConversation.EMConversationType.Chat.name())) {
-                    return "https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1605085753048&di=154d47eff01205a62cb779f8588eeb43&imgtype=0&src=http%3A%2F%2Fb.hiphotos.baidu.com%2Fzhidao%2Fwh%253D450%252C600%2Fsign%3Da587b23df11f3a295a9dddcaac159007%2F500fd9f9d72a60590cfef2f92934349b023bba62.jpg";
-                }
-                return null;
-            }
-
-            @Override
-            public int getDefaultTypeAvatarResource(String type) {
-                if(TextUtils.equals(type, EMConversation.EMConversationType.GroupChat.name())) {
-                    return com.hyphenate.easeui.R.drawable.ease_default_image;
-                }
-                return 0;
-            }
-
-            @Override
-            public String getConversationName(String username) {
-                return null;
-            }
-        });*/
     }
 
     private void initViewModel() {

@@ -1,27 +1,21 @@
 package com.hyphenate.easeim.section.contact.fragment;
 
 import android.os.Bundle;
-import android.text.TextUtils;
-import android.view.ContextMenu;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.StringRes;
-import androidx.constraintlayout.widget.ConstraintLayout;
-import androidx.constraintlayout.widget.ConstraintSet;
+import androidx.core.content.ContextCompat;
 import androidx.lifecycle.ViewModelProvider;
-import androidx.recyclerview.widget.ConcatAdapter;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.hyphenate.easeim.R;
 import com.hyphenate.easeim.common.constant.DemoConstant;
 import com.hyphenate.easeim.common.enums.SearchType;
 import com.hyphenate.easeim.common.interfaceOrImplement.OnResourceParseCallback;
-import com.hyphenate.easeim.common.model.ContactHeaderBean;
 import com.hyphenate.easeim.common.net.Resource;
 import com.hyphenate.easeim.common.utils.ToastUtils;
 import com.hyphenate.easeim.section.base.BaseActivity;
@@ -29,27 +23,23 @@ import com.hyphenate.easeim.section.contact.activity.AddContactActivity;
 import com.hyphenate.easeim.section.contact.activity.ChatRoomContactManageActivity;
 import com.hyphenate.easeim.section.contact.activity.ContactDetailActivity;
 import com.hyphenate.easeim.section.contact.activity.GroupContactManageActivity;
-import com.hyphenate.easeim.section.contact.adapter.ContactHeaderAdapter;
 import com.hyphenate.easeim.section.contact.viewmodels.ContactsViewModel;
 import com.hyphenate.easeim.section.dialog.DemoDialogFragment;
 import com.hyphenate.easeim.section.dialog.SimpleDialogFragment;
 import com.hyphenate.easeim.section.search.SearchFriendsActivity;
 import com.hyphenate.easeui.domain.EaseUser;
 import com.hyphenate.easeui.interfaces.OnItemClickListener;
-import com.hyphenate.easeui.manager.EaseProviderManager;
 import com.hyphenate.easeui.model.EaseEvent;
 import com.hyphenate.easeui.modules.contact.EaseContactListFragment;
+import com.hyphenate.easeui.modules.contact.EaseContactListLayout;
 import com.hyphenate.easeui.modules.contact.model.EaseContactCustomBean;
 import com.hyphenate.easeui.modules.menu.EasePopupMenuHelper;
-import com.hyphenate.easeui.provider.EaseUserProfileProvider;
+import com.hyphenate.easeui.utils.EaseCommonUtils;
 import com.hyphenate.easeui.widget.EaseSearchTextView;
 
 import java.util.List;
 
 public class ContactListFragment extends EaseContactListFragment implements View.OnClickListener, SwipeRefreshLayout.OnRefreshListener {
-    private static final int CUSTOM_NEW_CHAT = 0;
-    private static final int CUSTOM_GROUP_LIST = 1;
-    private static final int CUSTOM_CHAT_ROOM_LIST = 2;
     private EaseSearchTextView tvSearch;
     private ContactsViewModel mViewModel;
 
@@ -61,25 +51,20 @@ public class ContactListFragment extends EaseContactListFragment implements View
         contactLayout.getContactList().getListAdapter().setEmptyLayoutResource(R.layout.demo_layout_friends_empty_list);
         addHeader();
 
-//        EaseProviderManager.getInstance().setUserProvider(new EaseUserProfileProvider() {
-//            @Override
-//            public EaseUser getUser(String username) {
-//                return null;
-//            }
-//
-//            @Override
-//            public EaseUser getUser(EaseUser user) {
-//                if(TextUtils.equals(user.getUsername(), "chong")) {
-//                    user.setAvatar("https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1605085753048&di=d1e68d730cde4b1d399eea7770a50a45&imgtype=0&src=http%3A%2F%2Fc-ssl.duitang.com%2Fuploads%2Fitem%2F202005%2F11%2F20200511141839_NUsHG.thumb.400_0.jpeg");
-//                    user.setNickname("马上详见");
-//                }
-//                if(TextUtils.equals(user.getUsername(), "ljna")) {
-//                    user.setAvatar("https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1605085753046&di=de5215509a758bbaed0d7dac0fd756c9&imgtype=0&src=http%3A%2F%2Fc-ssl.duitang.com%2Fuploads%2Fitem%2F202006%2F07%2F20200607211021_SNzhk.thumb.400_0.jpeg");
-//                    user.setNickname("小号的天下");
-//                }
-//                return user;
-//            }
-//        });
+        //设置为简洁模式
+        //contactLayout.showSimple();
+        //获取列表控件
+        //EaseContactListLayout contactList = contactLayout.getContactList();
+        //设置条目高度
+        //contactList.setItemHeight((int) EaseCommonUtils.dip2px(mContext, 80));
+        //设置条目背景
+        //contactList.setItemBackGround(ContextCompat.getDrawable(mContext, R.color.gray));
+        //设置头像样式
+        //contactList.setAvatarShapeType(2);
+        //设置头像圆角
+        //contactList.setAvatarRadius((int) EaseCommonUtils.dip2px(mContext, 5));
+        //设置header背景
+        //contactList.setHeaderBackGround(ContextCompat.getDrawable(mContext, R.color.white));
     }
 
     @Override
@@ -115,9 +100,9 @@ public class ContactListFragment extends EaseContactListFragment implements View
      * 添加头布局
      */
     public void addHeader() {
-        contactLayout.getContactList().addCustomItem(CUSTOM_NEW_CHAT, R.drawable.em_friends_new_chat, getString(R.string.em_friends_new_chat));
-        contactLayout.getContactList().addCustomItem(CUSTOM_GROUP_LIST, R.drawable.em_friends_group_chat, getString(R.string.em_friends_group_chat));
-        contactLayout.getContactList().addCustomItem(CUSTOM_CHAT_ROOM_LIST, R.drawable.em_friends_chat_room, getString(R.string.em_friends_chat_room));
+        contactLayout.getContactList().addCustomItem(R.id.contact_header_item_new_chat, R.drawable.em_friends_new_chat, getString(R.string.em_friends_new_chat));
+        contactLayout.getContactList().addCustomItem(R.id.contact_header_item_group_list, R.drawable.em_friends_group_chat, getString(R.string.em_friends_group_chat));
+        contactLayout.getContactList().addCustomItem(R.id.contact_header_item_chat_room_list, R.drawable.em_friends_chat_room, getString(R.string.em_friends_chat_room));
     }
 
     @Override
@@ -130,13 +115,13 @@ public class ContactListFragment extends EaseContactListFragment implements View
             public void onItemClick(View view, int position) {
                 EaseContactCustomBean item = contactLayout.getContactList().getCustomAdapter().getItem(position);
                 switch (item.getId()) {
-                    case CUSTOM_NEW_CHAT :
+                    case R.id.contact_header_item_new_chat :
                         AddContactActivity.startAction(mContext, SearchType.CHAT);
                         break;
-                    case CUSTOM_GROUP_LIST :
+                    case R.id.contact_header_item_group_list :
                         GroupContactManageActivity.actionStart(mContext);
                         break;
-                    case CUSTOM_CHAT_ROOM_LIST :
+                    case R.id.contact_header_item_chat_room_list :
                         ChatRoomContactManageActivity.actionStart(mContext);
                         break;
                 }
