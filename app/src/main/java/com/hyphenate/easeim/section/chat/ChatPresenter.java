@@ -653,6 +653,7 @@ public class ChatPresenter extends EaseChatPresenter {
             EmUserEntity entity = new EmUserEntity();
             entity.setUsername(username);
             DemoHelper.getInstance().getModel().insert(entity);
+            DemoHelper.getInstance().updateContactList();
             EaseEvent event = EaseEvent.create(DemoConstant.CONTACT_CHANGE, EaseEvent.TYPE.CONTACT);
             messageChangeLiveData.with(DemoConstant.CONTACT_CHANGE).postValue(event);
 
@@ -665,6 +666,7 @@ public class ChatPresenter extends EaseChatPresenter {
             EMLog.i("ChatContactListener", "onContactDeleted");
             boolean deleteUsername = DemoHelper.getInstance().getModel().isDeleteUsername(username);
             int num = DemoHelper.getInstance().deleteContact(username);
+            DemoHelper.getInstance().updateContactList();
             EaseEvent event = EaseEvent.create(DemoConstant.CONTACT_CHANGE, EaseEvent.TYPE.CONTACT);
             messageChangeLiveData.with(DemoConstant.CONTACT_CHANGE).postValue(event);
 
