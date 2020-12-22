@@ -128,8 +128,8 @@ dependencies {
     api (project(path: ':ease-im-kit')) {exclude group:'com.hyphenate',module:'hyphenate-sdk'}
     //implementation 'com.hyphenate:ease-im-kit:1.0.1'
     // EaseIMKit依赖，必须添加环信IM SDK
-    //implementation project(path: ':hyphenatechatsdk')
-    implementation 'com.hyphenate:hyphenate-sdk:3.7.2'
+    implementation project(path: ':hyphenatechatsdk')
+    //implementation 'com.hyphenate:hyphenate-sdk:3.7.2'
 }
 
 // ADD THIS AT THE BOTTOM
