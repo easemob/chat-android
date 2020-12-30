@@ -351,12 +351,12 @@ public class GroupMemberAuthorityActivity extends BaseInitActivity implements Ea
                 setMenuItemVisible(menu.getMenu(), R.id.action_group_add_black);
             }
             setMenuItemVisible(menu.getMenu(), R.id.action_group_unmute);
-        }else if(isInAdminList(username)) {
+        }else if(isInAdminList(username) && isOwner()) {
             setMenuItemVisible(menu.getMenu(), R.id.action_group_remove_admin);
             setMenuItemVisible(menu.getMenu(), R.id.action_group_transfer_owner);
         }else {
             menu.getMenu().findItem(R.id.action_group_add_admin).setVisible(isOwner());
-            setMenuItemVisible(menu.getMenu(), R.id.action_group_transfer_owner);
+            menu.getMenu().findItem(R.id.action_group_transfer_owner).setVisible(isOwner());
             setMenuItemVisible(menu.getMenu(), R.id.action_group_remove_member);
             setMenuItemVisible(menu.getMenu(), R.id.action_group_add_black);
             setMenuItemVisible(menu.getMenu(), R.id.action_group_mute);
