@@ -114,7 +114,7 @@ public class NewFriendsViewModel extends AndroidViewModel {
                 msg.setAttribute(DemoConstant.SYSTEM_MESSAGE_STATUS, InviteMessageStatus.AGREED.name());
                 msg.setAttribute(DemoConstant.SYSTEM_MESSAGE_REASON, message);
                 EMTextMessageBody body = new EMTextMessageBody(message);
-                msg.addBody(body);
+                msg.setBody(body);
                 EaseSystemMsgManager.getInstance().updateMessage(msg);
                 agreeObservable.postValue(Resource.success(message));
                 messageChangeObservable.with(DemoConstant.NOTIFY_CHANGE).postValue(EaseEvent.create(DemoConstant.NOTIFY_CHANGE, EaseEvent.TYPE.NOTIFY));
@@ -146,7 +146,7 @@ public class NewFriendsViewModel extends AndroidViewModel {
                 msg.setAttribute(DemoConstant.SYSTEM_MESSAGE_STATUS, InviteMessageStatus.REFUSED.name());
                 msg.setAttribute(DemoConstant.SYSTEM_MESSAGE_REASON, message);
                 EMTextMessageBody body = new EMTextMessageBody(message);
-                msg.addBody(body);
+                msg.setBody(body);
                 EaseSystemMsgManager.getInstance().updateMessage(msg);
                 refuseObservable.postValue(Resource.success(message));
                 messageChangeObservable.with(DemoConstant.NOTIFY_CHANGE).postValue(EaseEvent.create(DemoConstant.NOTIFY_CHANGE, EaseEvent.TYPE.NOTIFY));

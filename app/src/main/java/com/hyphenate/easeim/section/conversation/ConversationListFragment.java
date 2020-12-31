@@ -203,4 +203,15 @@ public class ConversationListFragment extends EaseConversationListFragment imple
             }
         }
     }
+
+    @Override
+    public void notifyItemChange(int position) {
+        super.notifyItemChange(position);
+        LiveDataBus.get().with(DemoConstant.MESSAGE_CHANGE_CHANGE).postValue(new EaseEvent(DemoConstant.MESSAGE_CHANGE_CHANGE, EaseEvent.TYPE.MESSAGE));
+    }
+
+    @Override
+    public void notifyAllChange() {
+        super.notifyAllChange();
+    }
 }

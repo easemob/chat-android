@@ -648,6 +648,15 @@ public class DemoHelper {
         return contactList;
     }
 
+    /**
+     * update contact list
+     */
+    public void updateContactList() {
+        if(isLoggedIn()) {
+            contactList = demoModel.getContactList();
+        }
+    }
+
     public UserProfileManager getUserProfileManager() {
         if (userProManager == null) {
             userProManager = new UserProfileManager();
