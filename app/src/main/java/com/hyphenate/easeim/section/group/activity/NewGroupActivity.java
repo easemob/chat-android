@@ -178,6 +178,7 @@ public class NewGroupActivity extends BaseInitActivity implements EaseTitleBar.O
             if(requestCode == ADD_NEW_CONTACTS) {
                 if(data == null) {
                     setGroupMembersNum("0");
+                    newmembers = null;
                     return;
                 }
                 newmembers = data.getStringArrayExtra("newmembers");

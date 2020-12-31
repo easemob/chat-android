@@ -379,6 +379,17 @@ public class ChatPresenter extends EaseChatPresenter {
         @Override
         public void onInvitationReceived(String groupId, String groupName, String inviter, String reason) {
             super.onInvitationReceived(groupId, groupName, inviter, reason);
+            //移除相同的请求
+            List<EMMessage> allMessages = EaseSystemMsgManager.getInstance().getAllMessages();
+            if(allMessages != null && !allMessages.isEmpty()) {
+                for (EMMessage message : allMessages) {
+                    Map<String, Object> ext = message.ext();
+                    if(ext != null && (ext.containsKey(DemoConstant.SYSTEM_MESSAGE_GROUP_ID) && TextUtils.equals(groupId, (String)ext.get(DemoConstant.SYSTEM_MESSAGE_GROUP_ID)))
+                            && (ext.containsKey(DemoConstant.SYSTEM_MESSAGE_INVITER) && TextUtils.equals(inviter, (String)ext.get(DemoConstant.SYSTEM_MESSAGE_INVITER)))) {
+                        EaseSystemMsgManager.getInstance().removeMessage(message);
+                    }
+                }
+            }
             groupName = TextUtils.isEmpty(groupName) ? groupId : groupName;
             Map<String, Object> ext = EaseSystemMsgManager.getInstance().createMsgExt();
             ext.put(DemoConstant.SYSTEM_MESSAGE_FROM, groupId);
@@ -466,6 +477,17 @@ public class ChatPresenter extends EaseChatPresenter {
         @Override
         public void onRequestToJoinReceived(String groupId, String groupName, String applicant, String reason) {
             super.onRequestToJoinReceived(groupId, groupName, applicant, reason);
+            //移除相同的请求
+            List<EMMessage> allMessages = EaseSystemMsgManager.getInstance().getAllMessages();
+            if(allMessages != null && !allMessages.isEmpty()) {
+                for (EMMessage message : allMessages) {
+                    Map<String, Object> ext = message.ext();
+                    if(ext != null && (ext.containsKey(DemoConstant.SYSTEM_MESSAGE_GROUP_ID) && TextUtils.equals(groupId, (String)ext.get(DemoConstant.SYSTEM_MESSAGE_GROUP_ID)))
+                            && (ext.containsKey(DemoConstant.SYSTEM_MESSAGE_FROM) && TextUtils.equals(applicant, (String)ext.get(DemoConstant.SYSTEM_MESSAGE_FROM)))) {
+                        EaseSystemMsgManager.getInstance().removeMessage(message);
+                    }
+                }
+            }
             // user apply to join group
             Map<String, Object> ext = EaseSystemMsgManager.getInstance().createMsgExt();
             ext.put(DemoConstant.SYSTEM_MESSAGE_FROM, applicant);
@@ -688,7 +710,7 @@ public class ChatPresenter extends EaseChatPresenter {
                     Map<String, Object> ext = message.ext();
                     if(ext != null && !ext.containsKey(DemoConstant.SYSTEM_MESSAGE_GROUP_ID)
                             && (ext.containsKey(DemoConstant.SYSTEM_MESSAGE_FROM) && TextUtils.equals(username, (String)ext.get(DemoConstant.SYSTEM_MESSAGE_FROM)))) {
-                        EaseSystemMsgManager.getInstance().getConversation().removeMessage(message.getMsgId());
+                        EaseSystemMsgManager.getInstance().removeMessage(message);
                     }
                 }
             }
