@@ -77,7 +77,7 @@ public class IncomingCallView extends FrameLayout {
     protected void onVisibilityChanged(@NonNull View changedView, int visibility) {
         super.onVisibilityChanged(changedView, visibility);
         if(visibility == View.VISIBLE) {
-            mIvCallAnim.setBackgroundResource(R.drawable.ring_anim);
+            mIvCallAnim.setBackgroundResource(R.drawable.call_ring_anim);
             mDrawableAnim = mIvCallAnim.getBackground();
             if(mDrawableAnim instanceof AnimationDrawable) {
                 ((AnimationDrawable) mDrawableAnim).setOneShot(false);

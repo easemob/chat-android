@@ -40,19 +40,19 @@ public class EMConferenceManagerRepository extends BaseEMRepository {
                         // 根据groupId获取群组中所有成员
                         contactList = new EMGroupManagerRepository().getAllGroupMemberByServer(groupId);
                     }
-                    //获取管理员列表
-                    try {
-                        EMGroup group = EMClient.getInstance().groupManager().getGroupFromServer(groupId, true);
-                        if(group != null) {
-                            if(group.getAdminList() != null) {
-                                contactList.addAll(group.getAdminList());
-                            }
-                            contactList.add(group.getOwner());
-                        }
-
-                    } catch (HyphenateException e) {
-                        e.printStackTrace();
-                    }
+//                    //获取管理员列表
+//                    try {
+//                        EMGroup group = EMClient.getInstance().groupManager().getGroupFromServer(groupId, true);
+//                        if(group != null) {
+//                            if(group.getAdminList() != null) {
+//                                contactList.addAll(group.getAdminList());
+//                            }
+//                            contactList.add(group.getOwner());
+//                        }
+//
+//                    } catch (HyphenateException e) {
+//                        e.printStackTrace();
+//                    }
                     List<KV<String, Integer>> contacts = new ArrayList<>();
                     for (String it : contactList) {
                         if(!it.equals(DemoConstant.NEW_FRIENDS_USERNAME)

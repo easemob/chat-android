@@ -12,6 +12,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.HandlerThread;
 import android.os.Message;
+import android.os.Parcel;
 import android.view.View;
 import android.widget.Toast;
 
@@ -25,7 +26,9 @@ import com.hyphenate.chat.EMCallStateChangeListener;
 import com.hyphenate.chat.EMClient;
 import com.hyphenate.chat.EMConferenceStream;
 import com.hyphenate.chat.EMConversation;
+import com.hyphenate.chat.EMCustomMessageBody;
 import com.hyphenate.chat.EMMessage;
+import com.hyphenate.chat.EMMessageBody;
 import com.hyphenate.chat.EMMirror;
 import com.hyphenate.chat.EMTextMessageBody;
 import com.hyphenate.chat.EMWaterMarkOption;
@@ -93,7 +96,8 @@ public class EaseCallFragment extends BaseFragment {
     protected int callType = 0;
 
     HandlerThread callHandlerThread = new HandlerThread("callHandlerThread");
-    { callHandlerThread.start(); }
+    { callHandlerThread.start();}
+
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -306,7 +310,7 @@ public class EaseCallFragment extends BaseFragment {
                                 EMClient.getInstance().callManager().getCallOptions().
                                         setLocalVideoViewMirror(EMMirror.ON);
                             }
-                            EMClient.getInstance().callManager().makeVideoCall(username, "", record, merge);
+//                            EMClient.getInstance().callManager().makeVideoCall(username, "", record, merge)
                         } else {
                             EMClient.getInstance().callManager().makeVoiceCall(username, "", record, merge);
                         }

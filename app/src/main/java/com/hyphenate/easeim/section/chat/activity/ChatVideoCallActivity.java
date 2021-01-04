@@ -17,9 +17,14 @@ public class ChatVideoCallActivity extends BaseInitActivity {
     EaseTitleBar titleBar;
     private VideoCallFragment fragment;
 
-    public static void actionStart(Context context, String toChatName) {
+
+    public static void actionStart(Context context, String toChatName,boolean isComingCall) {
         Intent intent = new Intent(context, ChatVideoCallActivity.class);
         intent.putExtra("username", toChatName);
+        intent.putExtra("isComingCall", isComingCall);
+        if(isComingCall){
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        }
         context.startActivity(intent);
     }
 
@@ -54,7 +59,12 @@ public class ChatVideoCallActivity extends BaseInitActivity {
         bundle.putString("username", getIntent().getStringExtra("username"));
         bundle.putBoolean("isComingCall", getIntent().getBooleanExtra("isComingCall", false));
         fragment.setArguments(bundle);
-        getSupportFragmentManager().beginTransaction().replace(R.id.fl_fragment, fragment).commit();
+        boolean isComingCall = getIntent().getBooleanExtra("isComingCall", false);
+        String username = getIntent().getStringExtra("username");
+
+//        //发起视频通话
+//        fragment.startVideoCall(username,isComingCall);
+//        getSupportFragmentManager().beginTransaction().replace(R.id.fl_fragment, fragment).commit();
     }
 
     @Override

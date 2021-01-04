@@ -28,7 +28,7 @@
                 android:id="@+id/state_cover_main"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/adaptive_88dp"
-                android:background="@drawable/demo_conference_member_cover"
+                android:background="@drawable/call_member_cover"
                 android:orientation="vertical"
                 android:visibility="gone">
 

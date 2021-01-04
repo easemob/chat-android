@@ -13,6 +13,7 @@ import com.google.android.material.snackbar.Snackbar;
 import com.hyphenate.chat.EMClient;
 import com.hyphenate.chat.EMConversation;
 import com.hyphenate.easeim.DemoHelper;
+import com.hyphenate.easeim.MainActivity;
 import com.hyphenate.easeim.R;
 import com.hyphenate.easeim.common.constant.DemoConstant;
 import com.hyphenate.easeim.common.db.DemoDbHelper;
@@ -29,7 +30,6 @@ import com.hyphenate.easeui.model.EaseEvent;
 import com.hyphenate.easeui.ui.EaseChatFragment;
 import com.hyphenate.easeui.utils.EaseCommonUtils;
 import com.hyphenate.easeui.widget.EaseTitleBar;
-
 import java.util.List;
 
 public class ChatActivity extends BaseInitActivity implements EaseTitleBar.OnBackPressListener, EaseTitleBar.OnRightClickListener {
@@ -40,7 +40,6 @@ public class ChatActivity extends BaseInitActivity implements EaseTitleBar.OnBac
     private String forwardMsgId;
     private String historyMsgId;
     private ChatViewModel viewModel;
-
     public static void actionStart(Context context, String userId, int chatType) {
         Intent intent = new Intent(context, ChatActivity.class);
         intent.putExtra(EaseConstant.EXTRA_USER_ID, userId);

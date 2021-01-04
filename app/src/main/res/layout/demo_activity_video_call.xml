@@ -12,10 +12,12 @@
         android:id="@+id/opposite_surface"
         android:layout_width="0dp"
         android:layout_height="0dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"/>
+        app:layout_constraintVertical_bias="0.0" />
 
     <com.hyphenate.media.EMCallSurfaceView
         android:id="@+id/local_surface"
@@ -116,6 +118,7 @@
         android:scaleType="fitCenter"
         android:src="@drawable/em_icon_mute_normal" />
 
+
     <TextView
         android:id="@+id/tv_mute"
         android:layout_width="wrap_content"
@@ -138,6 +141,7 @@
         android:scaleType="fitCenter"
         android:src="@drawable/em_icon_speaker_normal" />
 
+
     <TextView
         android:id="@+id/tv_handsfree"
         android:layout_width="wrap_content"
@@ -146,9 +150,8 @@
         android:gravity="center"
         android:text="@string/Hands_free"
         android:textColor="@color/white"
-        app:layout_constraintLeft_toLeftOf="@id/iv_handsfree"
         app:layout_constraintRight_toRightOf="@id/iv_handsfree"
-        app:layout_constraintTop_toBottomOf="@id/iv_handsfree"/>
+        app:layout_constraintTop_toBottomOf="@id/iv_mute"/>
 
     <ImageButton
         android:id="@+id/btn_hangup_call"
@@ -185,13 +188,14 @@
         app:layout_constraintBottom_toTopOf="@id/btn_hangup_call"
         tools:ignore="HardcodedText" />
 
+
     <Button
         android:id="@+id/btn_switch_camera"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="@id/btn_hangup_call"
-        app:layout_constraintBottom_toBottomOf="@id/btn_hangup_call"
+        app:layout_constraintBottom_toBottomOf="@id/tv_handsfree"
         android:layout_marginRight="@dimen/em_margin_20"
         android:layout_marginEnd="@dimen/em_margin_20"
         android:text="@string/switch_camera"/>

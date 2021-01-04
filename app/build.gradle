@@ -22,7 +22,7 @@ android {
         minSdkVersion 19
         targetSdkVersion 29
         versionCode 71
-        versionName "3.7.1"
+        versionName "3.7.2"
         multiDexEnabled true
         //为了兼容5.0以下使用vector图标
         vectorDrawables.useSupportLibrary = true
@@ -89,12 +89,14 @@ android {
 }
 
 dependencies {
-    implementation fileTree(dir: 'libs', include: ['*.jar'])
+    implementation fileTree(include: ['*.jar'], dir: 'libs')
     implementation 'androidx.appcompat:appcompat:1.2.0'
     implementation 'com.google.android.material:material:1.2.1'
     implementation 'androidx.constraintlayout:constraintlayout:2.0.1'
     //ViewModel and LiveData
     implementation 'androidx.lifecycle:lifecycle-extensions:2.2.0'
+    implementation 'androidx.navigation:navigation-fragment:2.3.2'
+    implementation 'androidx.navigation:navigation-ui:2.3.2'
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'androidx.test.ext:junit:1.1.1'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
@@ -105,9 +107,10 @@ dependencies {
     // hms push
     implementation 'com.huawei.hms:push:4.0.2.300'
     // meizu push
-    implementation 'com.meizu.flyme.internet:push-internal:3.7.0@aar'//配置集成sdk
+    implementation 'com.meizu.flyme.internet:push-internal:3.7.0@aar'
+    //配置集成sdk
     //oppo push
-    implementation (name:'oppo_push_v2.1.0',ext:'aar')
+    implementation(name: 'oppo_push_v2.1.0', ext: 'aar')
     // Google firebase cloud messaging
     implementation 'com.google.android.gms:play-services-base:11.4.0'
     implementation 'com.google.firebase:firebase-messaging:11.4.0'
@@ -116,13 +119,15 @@ dependencies {
     // easeui
     api project(path: ':easeui')
     // room
-    implementation "androidx.room:room-runtime:2.2.5"
+    implementation 'androidx.room:room-runtime:2.2.5'
     annotationProcessor "androidx.room:room-compiler:2.2.5"
     // parse
     implementation 'com.parse:parse-android:1.13.1'
     // bugly
     implementation 'com.tencent.bugly:crashreport:2.6.6.1'
     implementation 'com.tencent.bugly:nativecrashreport:3.3.1'
+    // calluikit
+    api project(':calluikit')
 }
 
 // ADD THIS AT THE BOTTOM

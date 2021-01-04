@@ -482,6 +482,8 @@ public class ConferenceActivity extends BaseActivity implements EMConferenceList
         localView.setUsername(EMClient.getInstance().getCurrentUser());
         EMClient.getInstance().conferenceManager().setLocalSurfaceView(localView.getSurfaceView());
 
+
+
         callConferenceViewGroup.addView(localView);
     }
 
@@ -576,7 +578,6 @@ public class ConferenceActivity extends BaseActivity implements EMConferenceList
         final ConferenceMemberView memberView = (ConferenceMemberView) callConferenceViewGroup.getChildAt(index);
         streamList.remove(stream);
         callConferenceViewGroup.removeView(memberView);
-        debugPanelView.setStreamListAndNotify(streamList);
     }
 
     /**

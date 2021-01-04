@@ -27,9 +27,9 @@ public class ChatVideoCallViewHolder extends EaseChatRowViewHolder {
     public void onBubbleClick(EMMessage message) {
         super.onBubbleClick(message);
         if(message.direct() == EMMessage.Direct.SEND) {
-            ChatVideoCallActivity.actionStart(getContext(), message.getTo());
+            ChatVideoCallActivity.actionStart(getContext(), message.getTo(),false);
         }else {
-            ChatVideoCallActivity.actionStart(getContext(), message.getFrom());
+            ChatVideoCallActivity.actionStart(getContext(), message.getFrom(),true);
         }
     }
 }

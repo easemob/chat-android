@@ -7,9 +7,13 @@ import android.content.IntentFilter;
 import android.os.Process;
 import android.text.TextUtils;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.heytap.msp.push.HeytapPushManager;
 import com.hyphenate.EMCallBack;
+import com.hyphenate.calluikit.EaseCallKitListener;
+import com.hyphenate.calluikit.EaseCallUIKit;
+import com.hyphenate.calluikit.EaseCallKitType;
 import com.hyphenate.chat.EMChatManager;
 import com.hyphenate.chat.EMChatRoomManager;
 import com.hyphenate.chat.EMClient;
@@ -20,6 +24,7 @@ import com.hyphenate.chat.EMGroupManager;
 import com.hyphenate.chat.EMMessage;
 import com.hyphenate.chat.EMOptions;
 import com.hyphenate.chat.EMPushManager;
+import com.hyphenate.easeim.common.constant.DemoConstant;
 import com.hyphenate.easeim.common.db.DemoDbHelper;
 import com.hyphenate.easeim.common.manager.UserProfileManager;
 import com.hyphenate.easeim.common.model.DemoModel;
@@ -34,6 +39,7 @@ import com.hyphenate.easeim.section.chat.delegates.ChatRecallAdapterDelegate;
 import com.hyphenate.easeim.section.chat.delegates.ChatVideoCallAdapterDelegate;
 import com.hyphenate.easeim.section.chat.delegates.ChatVoiceCallAdapterDelegate;
 import com.hyphenate.easeim.section.chat.receiver.CallReceiver;
+import com.hyphenate.easeim.section.conference.ConferenceInviteActivity;
 import com.hyphenate.easeui.EaseUI;
 import com.hyphenate.easeui.delegate.EaseCustomAdapterDelegate;
 import com.hyphenate.easeui.delegate.EaseExpressionAdapterDelegate;
@@ -63,6 +69,8 @@ import java.util.Hashtable;
 import java.util.List;
 import java.util.Map;
 
+import static android.content.Intent.FLAG_ACTIVITY_NEW_TASK;
+
 /**
  * 作为hyphenate-sdk的入口控制类，获取sdk下的基础类均通过此类
  */
@@ -75,6 +83,9 @@ public class DemoHelper {
     private DemoModel demoModel = null;
     private Map<String, EaseUser> contactList;
     private UserProfileManager userProManager;
+
+    //通话监听
+    private EaseCallKitListener callListener;
 
     private DemoHelper() {}
 
@@ -106,7 +117,6 @@ public class DemoHelper {
             //注册对话类型
             registerConversationType();
         }
-
     }
 
     /**
@@ -123,6 +133,16 @@ public class DemoHelper {
         //options.setImPort(6717);
         // 初始化SDK
         isSDKInit = EaseUI.getInstance().init(context, options);
+
+        //EaseCallUIKit初始化
+        EaseCallUIKit.getInstance().init(context,options);
+
+        //设置超时时间
+        EaseCallUIKit.getInstance().setCallTimeOutInterval(30*1000);
+
+        //增加会话监听
+        addCallListener();
+
         return isSDKInit();
     }
 
@@ -517,7 +537,6 @@ public class DemoHelper {
                 if (callback != null) {
                     callback.onSuccess();
                 }
-
             }
 
             @Override
@@ -567,6 +586,8 @@ public class DemoHelper {
         Log.d(TAG, "logout: onSuccess");
         setAutoLogin(false);
         DemoDbHelper.getInstance(DemoApplication.getInstance()).closeDb();
+        //remove callListener
+       // EaseCallUIKit.getInstance().removeCallListener(callListener);
     }
 
     public EaseAvatarOptions getEaseAvatarOptions() {
@@ -704,5 +725,39 @@ public class DemoHelper {
          * @param success true：data sync successful，false: failed to sync data
          */
         void onSyncComplete(boolean success);
+    }
+
+    /**
+     * add callListener
+     */
+    private void addCallListener(){
+        callListener = new EaseCallKitListener() {
+            @Override
+            public void onInviteUsers(Context context) {
+                //启动用户邀请界面
+                Intent intent = new Intent(context, ConferenceInviteActivity.class).addFlags(FLAG_ACTIVITY_NEW_TASK);
+                intent.putExtra(DemoConstant.EXTRA_CONFERENCE_GROUP_ID, "");
+                context.startActivity(intent);
+            }
+
+            @Override
+            public void onEndCallWithReason(EaseCallKitType callType, String reason, int callTime){
+
+            }
+
+            @Override
+            public void onRecivedCall(EaseCallKitType callType, String userId){
+
+            }
+
+            @Override
+            public void onInviteerIsFull(int Count,int currentCount) {
+                String info = "邀请人数太多,最多还能邀请 ";
+                info += String.valueOf(Count-currentCount);
+                info += "人";
+                Toast.makeText(EaseCallUIKit.getInstance().getContext(), info, Toast.LENGTH_SHORT).show();
+            }
+        };
+        EaseCallUIKit.getInstance().setCallListener(callListener);
     }
 }

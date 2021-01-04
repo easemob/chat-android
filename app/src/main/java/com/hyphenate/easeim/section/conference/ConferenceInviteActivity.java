@@ -21,6 +21,7 @@ import android.widget.TextView;
 
 import androidx.lifecycle.ViewModelProvider;
 
+import com.hyphenate.calluikit.EaseCallUIKit;
 import com.hyphenate.easeim.R;
 import com.hyphenate.easeim.common.constant.DemoConstant;
 import com.hyphenate.easeim.common.interfaceOrImplement.OnResourceParseCallback;
@@ -105,6 +106,8 @@ public class ConferenceInviteActivity extends BaseInitActivity implements View.O
     public void onBackPressed() {
         setResult(Activity.RESULT_CANCELED);
         super.onBackPressed();
+        EaseCallUIKit.getInstance().startInviteMuitupleCall(null);
+
     }
 
     private String[] getSelectMembers() {
@@ -162,9 +165,11 @@ public class ConferenceInviteActivity extends BaseInitActivity implements View.O
                     showToast(R.string.tips_select_contacts_first);
                     return;
                 }
-                Intent intent = getIntent();
-                intent.putExtra("members", members);
-                setResult(RESULT_OK, intent);
+//                Intent intent = getIntent();
+//                intent.putExtra("members", members);
+//                setResult(RESULT_OK, intent);
+                //开始邀请人员
+                EaseCallUIKit.getInstance().startInviteMuitupleCall(members);
                 finish();
                 break;
         }

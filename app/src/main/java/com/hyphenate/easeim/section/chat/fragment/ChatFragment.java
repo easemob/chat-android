@@ -20,6 +20,8 @@ import androidx.appcompat.widget.PopupMenu;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.hyphenate.EMError;
+import com.hyphenate.calluikit.EaseCallUIKit;
+import com.hyphenate.calluikit.EaseCallKitType;
 import com.hyphenate.chat.EMClient;
 import com.hyphenate.chat.EMGroup;
 import com.hyphenate.chat.EMMessage;
@@ -29,12 +31,10 @@ import com.hyphenate.easeim.R;
 import com.hyphenate.easeim.common.constant.DemoConstant;
 import com.hyphenate.easeim.common.livedatas.LiveDataBus;
 import com.hyphenate.easeim.common.model.EmojiconExampleGroupData;
+import com.hyphenate.easeim.section.conference.ConferenceInviteActivity;
 import com.hyphenate.easeui.manager.EaseThreadManager;
 import com.hyphenate.easeim.common.utils.ToastUtils;
 import com.hyphenate.easeim.section.base.BaseActivity;
-import com.hyphenate.easeim.section.chat.activity.ChatVideoCallActivity;
-import com.hyphenate.easeim.section.chat.activity.ChatVoiceCallActivity;
-import com.hyphenate.easeim.section.conference.ConferenceActivity;
 import com.hyphenate.easeim.section.chat.activity.ImageGridActivity;
 import com.hyphenate.easeim.section.chat.activity.LiveActivity;
 import com.hyphenate.easeim.section.chat.activity.PickAtUserActivity;
@@ -58,6 +58,8 @@ import com.hyphenate.util.UriUtils;
 
 import java.io.File;
 import java.io.FileOutputStream;
+
+import static android.content.Intent.FLAG_ACTIVITY_NEW_TASK;
 
 public class ChatFragment extends EaseChatFragment implements EaseChatFragment.OnMessageChangeListener {
     private static final String TAG = ChatFragment.class.getSimpleName();
@@ -153,14 +155,18 @@ public class ChatFragment extends EaseChatFragment implements EaseChatFragment.O
         super.onChatExtendMenuItemClick(itemId, view);
         switch (itemId) {
             case EaseChatInputMenu.ITEM_VIDEO_CALL:
-                //startVideoCall();
                 showSelectDialog();
                 break;
-//            case EaseChatInputMenu.ITEM_VOICE_CALL:
-//                showSelectDialog();
-//                break;
+            case EaseChatInputMenu.ITEM_VOICE_CALL:
+                showSelectDialog();
+                break;
             case EaseChatInputMenu.ITEM_CONFERENCE_CALL:
-                ConferenceActivity.startConferenceCall(getActivity(), toChatUsername);
+//                ConferenceActivity.startConferenceCall(getActivity(), toChatUsername);
+                //开启音视频会议
+                Intent intent = new Intent(getContext(), ConferenceInviteActivity.class).addFlags(FLAG_ACTIVITY_NEW_TASK);
+                intent.putExtra(DemoConstant.EXTRA_CONFERENCE_GROUP_ID, "");
+                getContext().startActivity(intent);
+
                 break;
             case EaseChatInputMenu.ITEM_LIVE:
                 LiveActivity.startLive(getContext(), toChatUsername);
@@ -464,11 +470,14 @@ public class ChatFragment extends EaseChatFragment implements EaseChatFragment.O
     }
 
     protected void startChatVideoCall() {
-        ChatVideoCallActivity.actionStart(mContext, toChatUsername);
+      // ChatVideoCallActivity.actionStart(mContext, toChatUsername,false);
+       //EMVideoCallFragment.actionStart(mContext,toChatUsername);
+        EaseCallUIKit.getInstance().startSignleCall(EaseCallKitType.SIGNAL_VIDEO_CALL,toChatUsername);
     }
 
     protected void startChatVoiceCall() {
-        ChatVoiceCallActivity.actionStart(mContext, toChatUsername);
+       // ChatVoiceCallActivity.actionStart(mContext, toChatUsername);
+        EaseCallUIKit.getInstance().startSignleCall(EaseCallKitType.SIGNAL_VOICE_CALL,toChatUsername);
     }
 //================================== for video and voice end ====================================
 

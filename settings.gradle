@@ -1,5 +1,6 @@
 include ':app', ':easeui', ':player'
-
+include ':calluikit'
+project(':calluikit').projectDir = new File('../EaseCallUIKit/calluikit')
 //project(':easeui').projectDir = new File('../easeui/easeui')
 //project(':player').projectDir = new File('../easeui/player')
 
