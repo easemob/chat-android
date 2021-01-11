@@ -704,6 +704,43 @@ public class DemoModel {
         return EasePreferenceManager.getInstance().getUnSendMsgInfo(toChatUsername);
     }
 
+    /**
+     * 检查是否是第一次安装登录
+     * 默认值是true, 需要在用api拉取完会话列表后，就其置为false.
+     * @return
+     */
+    public boolean isFirstInstall() {
+        SharedPreferences preferences = DemoApplication.getInstance().getSharedPreferences("first_install", Context.MODE_PRIVATE);
+        return preferences.getBoolean("is_first_install", true);
+    }
+
+    /**
+     * 将状态置为非第一次安装，在调用获取会话列表的api后调用
+     * 并将会话列表是否来自服务器置为true
+     */
+    public void makeNotFirstInstall() {
+        SharedPreferences preferences = DemoApplication.getInstance().getSharedPreferences("first_install", Context.MODE_PRIVATE);
+        preferences.edit().putBoolean("is_first_install", false).apply();
+        preferences.edit().putBoolean("is_conversation_come_from_server", true).apply();
+    }
+
+    /**
+     * 检查会话列表是否从服务器返回数据
+     * @return
+     */
+    public boolean isConComeFromServer() {
+        SharedPreferences preferences = DemoApplication.getInstance().getSharedPreferences("first_install", Context.MODE_PRIVATE);
+        return preferences.getBoolean("is_conversation_come_from_server", false);
+    }
+
+    /**
+     * 将会话列表从服务器取数据的状态置为false，即后面应该采用本地数据库数据。
+     */
+    public void modifyConComeFromStatus() {
+        SharedPreferences preferences = DemoApplication.getInstance().getSharedPreferences("first_install", Context.MODE_PRIVATE);
+        preferences.edit().putBoolean("is_conversation_come_from_server", false).apply();
+    }
+
     enum Key{
         VibrateAndPlayToneOn,
         VibrateOn,

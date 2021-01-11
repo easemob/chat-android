@@ -9,6 +9,7 @@ import android.view.MenuItem;
 import android.view.View;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
 import androidx.lifecycle.ViewModelProvider;
 
@@ -41,6 +42,7 @@ import com.hyphenate.easeui.provider.EaseUserProfileProvider;
 import com.hyphenate.easeui.utils.EaseCommonUtils;
 import com.hyphenate.easeui.widget.EaseSearchTextView;
 
+import java.util.List;
 
 
 public class ConversationListFragment extends EaseConversationListFragment implements View.OnClickListener {
@@ -102,7 +104,12 @@ public class ConversationListFragment extends EaseConversationListFragment imple
 
     @Override
     public void initData() {
-        super.initData();
+        //需要两个条件，判断是否触发从服务器拉取会话列表的时机，一是第一次安装，二则本地数据库没有会话列表数据
+        if(DemoHelper.getInstance().isFirstInstall() && EMClient.getInstance().chatManager().getAllConversations().isEmpty()) {
+            mViewModel.fetchConversationsFromServer();
+        }else {
+            super.initData();
+        }
     }
 
     private void initViewModel() {
@@ -125,6 +132,15 @@ public class ConversationListFragment extends EaseConversationListFragment imple
                 public void onSuccess(Boolean data) {
                     LiveDataBus.get().with(DemoConstant.MESSAGE_CHANGE_CHANGE).postValue(new EaseEvent(DemoConstant.MESSAGE_CHANGE_CHANGE, EaseEvent.TYPE.MESSAGE));
                     conversationListLayout.loadDefaultData();
+                }
+            });
+        });
+
+        mViewModel.getConversationInfoObservable().observe(getViewLifecycleOwner(), response -> {
+            parseResource(response, new OnResourceParseCallback<List<EaseConversationInfo>>() {
+                @Override
+                public void onSuccess(@Nullable List<EaseConversationInfo> data) {
+                    conversationListLayout.setData(data);
                 }
             });
         });

@@ -690,6 +690,38 @@ public class DemoHelper {
     }
 
     /**
+     * 检查是否是第一次安装登录
+     * 默认值是true, 需要在用api拉取完会话列表后，就其置为false.
+     * @return
+     */
+    public boolean isFirstInstall() {
+        return getModel().isFirstInstall();
+    }
+
+    /**
+     * 将状态置为非第一次安装，在调用获取会话列表的api后调用
+     * 并将会话列表是否来自服务器置为true
+     */
+    public void makeNotFirstInstall() {
+        getModel().makeNotFirstInstall();
+    }
+
+    /**
+     * 检查会话列表是否从服务器返回数据
+     * @return
+     */
+    public boolean isConComeFromServer() {
+        return getModel().isConComeFromServer();
+    }
+
+    /**
+     * 将会话列表从服务器取数据的状态置为false，即后面应该采用本地数据库数据。
+     */
+    public void modifyConComeFromStatus() {
+        getModel().modifyConComeFromStatus();
+    }
+
+    /**
      * data sync listener
      */
     public interface DataSyncListener {

@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 
 import androidx.annotation.Nullable;
@@ -124,6 +125,15 @@ public class ChatActivity extends BaseInitActivity implements EaseTitleBar.OnBac
                 }
             });
         });
+        viewModel.getMakeConversationReadObservable().observe(this, response -> {
+            parseResource(response, new OnResourceParseCallback<Boolean>() {
+                @Override
+                public void onSuccess(@Nullable Boolean data) {
+                    //什么也不做
+                    Log.e("TAG", "make conversation read success");
+                }
+            });
+        });
         messageViewModel.getMessageChange().with(DemoConstant.GROUP_CHANGE, EaseEvent.class).observe(this, event -> {
             if(event == null) {
                 return;
@@ -161,6 +171,10 @@ public class ChatActivity extends BaseInitActivity implements EaseTitleBar.OnBac
         });
 
         setDefaultTitle();
+
+        if(DemoHelper.getInstance().isConComeFromServer()) {
+            viewModel.makeConversationReadByAck(conversationId);
+        }
     }
 
     private void showSnackBar(String event) {
