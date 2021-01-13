@@ -63,6 +63,7 @@ public interface DemoConstant extends EaseConstant {
     String REFRESH_NICKNAME = "refresh_nickname";
 
     String CONVERSATION_DELETE = "conversation_delete";
+    String CONVERSATION_READ = "conversation_read";
 
     String MESSAGE_NOT_SEND = "message_not_send";
 

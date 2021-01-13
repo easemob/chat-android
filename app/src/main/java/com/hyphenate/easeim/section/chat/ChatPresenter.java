@@ -15,6 +15,7 @@ import com.hyphenate.EMChatRoomChangeListener;
 import com.hyphenate.EMConferenceListener;
 import com.hyphenate.EMConnectionListener;
 import com.hyphenate.EMContactListener;
+import com.hyphenate.EMConversationListener;
 import com.hyphenate.EMError;
 import com.hyphenate.EMMultiDeviceListener;
 import com.hyphenate.chat.EMClient;
@@ -89,6 +90,8 @@ public class ChatPresenter extends EaseChatPresenter {
         DemoHelper.getInstance().getChatroomManager().addChatRoomChangeListener(new ChatRoomListener());
         //添加会议监听
         DemoHelper.getInstance().getConferenceManager().addConferenceListener(new ChatConferenceListener());
+        //添加对会话的监听（监听已读回执）
+        DemoHelper.getInstance().getChatManager().addConversationListener(new ChatConversationListener());
     }
 
     public static ChatPresenter getInstance() {
@@ -239,6 +242,20 @@ public class ChatPresenter extends EaseChatPresenter {
             msgNotification.setAttribute(DemoConstant.MESSAGE_TYPE_RECALL, true);
             msgNotification.setStatus(EMMessage.Status.SUCCESS);
             EMClient.getInstance().chatManager().saveMessage(msgNotification);
+        }
+    }
+
+    private class ChatConversationListener implements EMConversationListener {
+
+        @Override
+        public void onCoversationUpdate() {
+
+        }
+
+        @Override
+        public void onConversationRead(List<String> conversationIds) {
+            EaseEvent event = EaseEvent.create(DemoConstant.CONVERSATION_READ, EaseEvent.TYPE.MESSAGE);
+            messageChangeLiveData.with(DemoConstant.CONVERSATION_READ).postValue(event);
         }
     }
 
