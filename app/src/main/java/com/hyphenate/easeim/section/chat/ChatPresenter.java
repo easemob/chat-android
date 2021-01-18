@@ -269,17 +269,17 @@ public class ChatPresenter extends EaseChatPresenter {
             }
             if(!isGroupsSyncedWithServer) {
                 EMLog.i(TAG, "isGroupsSyncedWithServer");
-                new EMGroupManagerRepository().getAllGroups();
+                new EMGroupManagerRepository().getAllGroups(null);
                 isGroupsSyncedWithServer = true;
             }
             if(!isContactsSyncedWithServer) {
                 EMLog.i(TAG, "isContactsSyncedWithServer");
-                new EMContactManagerRepository().getContactList();
+                new EMContactManagerRepository().getContactList(null);
                 isContactsSyncedWithServer = true;
             }
             if(!isBlackListSyncedWithServer) {
                 EMLog.i(TAG, "isBlackListSyncedWithServer");
-                new EMContactManagerRepository().getBlackContactList();
+                new EMContactManagerRepository().getBlackContactList(null);
                 isBlackListSyncedWithServer = true;
             }
         }

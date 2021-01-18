@@ -131,6 +131,49 @@ public class EMContactManagerRepository extends BaseEMRepository{
         }.asLiveData();
     }
 
+    /**
+     * 获取联系人列表
+     * @param callBack
+     */
+    public void getContactList(ResultCallBack<List<EaseUser>> callBack) {
+        if(!isLoggedIn()) {
+            callBack.onError(ErrorCode.EM_NOT_LOGIN);
+            return;
+        }
+        runOnIOThread(()-> {
+            try {
+                List<String> usernames = getContactManager().getAllContactsFromServer();
+                List<String> ids = getContactManager().getSelfIdsOnOtherPlatform();
+                if(usernames == null) {
+                    usernames = new ArrayList<>();
+                }
+                if(ids != null && !ids.isEmpty()) {
+                    usernames.addAll(ids);
+                }
+                List<EaseUser> easeUsers = EmUserEntity.parse(usernames);
+                if(usernames != null && !usernames.isEmpty()) {
+                    List<String> blackListFromServer = getContactManager().getBlackListFromServer();
+                    for (EaseUser user : easeUsers) {
+                        if(blackListFromServer != null && !blackListFromServer.isEmpty()) {
+                            if(blackListFromServer.contains(user.getUsername())) {
+                                user.setContact(1);
+                            }
+                        }
+                    }
+                }
+                sortData(easeUsers);
+                if(callBack != null) {
+                    callBack.onSuccess(easeUsers);
+                }
+            } catch (HyphenateException e) {
+                e.printStackTrace();
+                if(callBack != null) {
+                    callBack.onError(e.getErrorCode(), e.getDescription());
+                }
+            }
+        });
+    }
+
     private void sortData(List<EaseUser> data) {
         if(data == null || data.isEmpty()) {
             return;
@@ -204,6 +247,38 @@ public class EMContactManagerRepository extends BaseEMRepository{
             }
 
         }.asLiveData();
+    }
+
+    /**
+     * 获取黑名单用户列表
+     * @param callBack
+     */
+    public void getBlackContactList(ResultCallBack<List<EaseUser>> callBack) {
+        if(!isLoggedIn()) {
+            callBack.onError(ErrorCode.EM_NOT_LOGIN);
+            return;
+        }
+        getContactManager().aysncGetBlackListFromServer(new EMValueCallBack<List<String>>() {
+            @Override
+            public void onSuccess(List<String> value) {
+                List<EaseUser> users = EmUserEntity.parse(value);
+                if(users != null && !users.isEmpty()) {
+                    for (EaseUser user : users) {
+                        user.setContact(1);
+                    }
+                }
+                if(callBack != null) {
+                    callBack.onSuccess(users);
+                }
+            }
+
+            @Override
+            public void onError(int error, String errorMsg) {
+                if(callBack != null) {
+                    callBack.onError(error, errorMsg);
+                }
+            }
+        });
     }
 
     /**

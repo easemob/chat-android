@@ -213,13 +213,15 @@ public class EMChatManagerRepository extends BaseEMRepository{
         return new NetworkOnlyResource<Boolean>() {
             @Override
             protected void createCall(@NonNull ResultCallBack<LiveData<Boolean>> callBack) {
-                try {
-                    getChatManager().ackConversationRead(conversationId);
-                    callBack.onSuccess(createLiveData(true));
-                } catch (HyphenateException e) {
-                    e.printStackTrace();
-                    callBack.onError(e.getErrorCode(), e.getDescription());
-                }
+                runOnIOThread(()-> {
+                    try {
+                        getChatManager().ackConversationRead(conversationId);
+                        callBack.onSuccess(createLiveData(true));
+                    } catch (HyphenateException e) {
+                        e.printStackTrace();
+                        callBack.onError(e.getErrorCode(), e.getDescription());
+                    }
+                });
             }
         }.asLiveData();
     }

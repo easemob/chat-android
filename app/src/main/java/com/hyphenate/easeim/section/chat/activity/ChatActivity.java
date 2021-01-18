@@ -172,9 +172,9 @@ public class ChatActivity extends BaseInitActivity implements EaseTitleBar.OnBac
 
         setDefaultTitle();
 
-        if(DemoHelper.getInstance().isConComeFromServer()) {
+        //if(DemoHelper.getInstance().isConComeFromServer()) {
             viewModel.makeConversationReadByAck(conversationId);
-        }
+        //}
     }
 
     private void showSnackBar(String event) {
