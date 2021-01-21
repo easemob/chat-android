@@ -7,7 +7,9 @@ import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
@@ -20,6 +22,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import androidx.lifecycle.ViewModelProvider;
+import easemob.hyphenate.calluikit.EaseCallUIKit;
 
 import com.hyphenate.easeim.R;
 import com.hyphenate.easeim.common.constant.DemoConstant;
@@ -45,6 +48,14 @@ public class ConferenceInviteActivity extends BaseInitActivity implements View.O
     private TextView mBtnStart;
     private ListView mListView;
     private String groupId;
+
+    //手指按下的点为(x1, y1)手指离开屏幕的点为(x2, y2)
+    private float x1 = 0;
+    private float x2 = 0;
+    private float y1 = 0;
+    private float y2 = 0;
+
+
 
     @Override
     protected int getLayoutId() {
@@ -158,13 +169,15 @@ public class ConferenceInviteActivity extends BaseInitActivity implements View.O
         switch (v.getId()) {
             case R.id.btn_start :
                 String[] members = getSelectMembers();
-                if(members.length == 0) {
-                    showToast(R.string.tips_select_contacts_first);
-                    return;
-                }
-                Intent intent = getIntent();
-                intent.putExtra("members", members);
-                setResult(RESULT_OK, intent);
+//                if(members.length == 0) {
+//                    showToast(R.string.tips_select_contacts_first);
+//                    return;
+//                }
+//                Intent intent = getIntent();
+//                intent.putExtra("members", members);
+//                setResult(RESULT_OK, intent);
+                //开始邀请人员
+                EaseCallUIKit.getInstance().startInviteMuitupleCall(members);
                 finish();
                 break;
         }
@@ -173,7 +186,40 @@ public class ConferenceInviteActivity extends BaseInitActivity implements View.O
     @Override
     public void onBackPress(View view) {
         onBackPressed();
+        EaseCallUIKit.getInstance().startInviteMuitupleCall(null);
     }
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if (keyCode == KeyEvent.KEYCODE_BACK) {
+            EaseCallUIKit.getInstance().startInviteMuitupleCall(null);
+            return true;
+        }
+        return super.onKeyDown(keyCode, event);
+    }
+
+    @Override
+    public boolean onTouchEvent(MotionEvent event) {
+        //继承了Activity的onTouchEvent方法，直接监听点击事件
+        if (event.getAction() == MotionEvent.ACTION_DOWN) {
+            //当手指按下的时候
+            x1 = event.getX();
+            y1 = event.getY();
+        }
+        if (event.getAction() == MotionEvent.ACTION_UP) {
+            //当手指离开的时候
+            x2 = event.getX();
+            y2 = event.getY();
+            if (y1 - y2 > 50) {
+            } else if (y2 - y1 > 50) {
+            } else if (x1 - x2 > 50) {
+            } else if (x2 - x1 > 50) {
+                EaseCallUIKit.getInstance().startInviteMuitupleCall(null);
+            }
+        }
+        return super.onTouchEvent(event);
+    }
+
 
     private class ContactsAdapter extends BaseAdapter {
         private Context context;

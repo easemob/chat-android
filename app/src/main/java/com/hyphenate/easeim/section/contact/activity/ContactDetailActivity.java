@@ -11,6 +11,8 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.constraintlayout.widget.Group;
 import androidx.lifecycle.ViewModelProvider;
+import easemob.hyphenate.calluikit.EaseCallUIKit;
+import easemob.hyphenate.calluikit.utils.EaseCallKitType;
 
 import com.hyphenate.easeim.DemoHelper;
 import com.hyphenate.easeim.R;
@@ -234,10 +236,12 @@ public class ContactDetailActivity extends BaseInitActivity implements EaseTitle
                 ChatActivity.actionStart(mContext, mUser.getUsername(), EaseConstant.CHATTYPE_SINGLE);
                 break;
             case R.id.btn_voice :
-                ChatVoiceCallActivity.actionStart(mContext, mUser.getUsername());
+                EaseCallUIKit.getInstance().startSignleCall(EaseCallKitType.SIGNAL_VOICE_CALL,mUser.getUsername());
+//                ChatVoiceCallActivity.actionStart(mContext, mUser.getUsername());
                 break;
             case R.id.btn_video :
-                ChatVideoCallActivity.actionStart(mContext, mUser.getUsername());
+                EaseCallUIKit.getInstance().startSignleCall(EaseCallKitType.SIGNAL_VIDEO_CALL,mUser.getUsername());
+//                ChatVideoCallActivity.actionStart(mContext, mUser.getUsername());
                 break;
             case R.id.btn_add_contact :
                 addContactViewModel.addContact(mUser.getUsername(), getResources().getString(R.string.em_add_contact_add_a_friend));

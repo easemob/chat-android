@@ -17,6 +17,8 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
 import androidx.lifecycle.ViewModelProvider;
+import easemob.hyphenate.calluikit.EaseCallUIKit;
+import easemob.hyphenate.calluikit.utils.EaseCallKitType;
 
 import com.hyphenate.chat.EMClient;
 import com.hyphenate.chat.EMGroup;
@@ -213,10 +215,12 @@ public class ChatFragment extends EaseChatFragment implements OnRecallMessageRes
                     public void OnItemClick(View view, int position) {
                         switch (position) {
                             case 0 :
-                                startVideoCall();
+                               // startVideoCall();conversationId
+                                EaseCallUIKit.getInstance().startSignleCall(EaseCallKitType.SIGNAL_VIDEO_CALL,conversationId);
                                 break;
                             case 1 :
-                                startVoiceCall();
+                                //startVoiceCall();
+                                EaseCallUIKit.getInstance().startSignleCall(EaseCallKitType.SIGNAL_VOICE_CALL,conversationId);
                                 break;
                         }
                     }

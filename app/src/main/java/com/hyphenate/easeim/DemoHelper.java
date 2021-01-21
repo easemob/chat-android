@@ -20,6 +20,7 @@ import com.hyphenate.chat.EMGroupManager;
 import com.hyphenate.chat.EMMessage;
 import com.hyphenate.chat.EMOptions;
 import com.hyphenate.chat.EMPushManager;
+import com.hyphenate.easeim.common.constant.DemoConstant;
 import com.hyphenate.easeim.common.db.DemoDbHelper;
 import com.hyphenate.easeim.common.manager.UserProfileManager;
 import com.hyphenate.easeim.common.model.DemoModel;
@@ -34,6 +35,7 @@ import com.hyphenate.easeim.section.chat.delegates.ChatRecallAdapterDelegate;
 import com.hyphenate.easeim.section.chat.delegates.ChatVideoCallAdapterDelegate;
 import com.hyphenate.easeim.section.chat.delegates.ChatVoiceCallAdapterDelegate;
 import com.hyphenate.easeim.section.chat.receiver.CallReceiver;
+import com.hyphenate.easeim.section.conference.ConferenceInviteActivity;
 import com.hyphenate.easeui.EaseIM;
 import com.hyphenate.easeui.delegate.EaseCustomAdapterDelegate;
 import com.hyphenate.easeui.delegate.EaseExpressionAdapterDelegate;
@@ -62,6 +64,12 @@ import java.util.Hashtable;
 import java.util.List;
 import java.util.Map;
 
+import easemob.hyphenate.calluikit.EaseCallUIKit;
+import easemob.hyphenate.calluikit.utils.EaseCallKitListener;
+import easemob.hyphenate.calluikit.utils.EaseCallKitType;
+
+import static android.content.Intent.FLAG_ACTIVITY_NEW_TASK;
+
 /**
  * 作为hyphenate-sdk的入口控制类，获取sdk下的基础类均通过此类
  */
@@ -74,6 +82,8 @@ public class DemoHelper {
     private DemoModel demoModel = null;
     private Map<String, EaseUser> contactList;
     private UserProfileManager userProManager;
+
+    private EaseCallKitListener callKitListener;
 
     private DemoHelper() {}
 
@@ -122,6 +132,10 @@ public class DemoHelper {
         //options.setImPort(6717);
         // 初始化SDK
         isSDKInit = EaseIM.getInstance().init(context, options);
+
+        //初始化 calluikit
+        EaseCallUIKit.getInstance().init(context,options);
+        addCallkitListener();
         return isSDKInit();
     }
 
@@ -697,6 +711,38 @@ public class DemoHelper {
         Log.e(TAG, "delete num = "+num);
         return num;
     }
+
+    /**
+     * 增加callUikit监听
+     */
+    public void addCallkitListener(){
+        callKitListener = new EaseCallKitListener() {
+            @Override
+            public void onInviteUsers(Context context) {
+                Intent intent = new Intent(context, ConferenceInviteActivity.class).addFlags(FLAG_ACTIVITY_NEW_TASK);
+                intent.putExtra(DemoConstant.EXTRA_CONFERENCE_GROUP_ID, "");
+                context.startActivity(intent);
+            }
+
+            @Override
+            public void onEndCallWithReason(EaseCallKitType callType, String reason, int callTime) {
+
+            }
+
+            @Override
+            public void onRecivedCall(EaseCallKitType callType, String userId) {
+                //收到接听电话
+
+            }
+
+            @Override
+            public void onInviteerIsFull(int viodeCount, int currentCount) {
+
+            }
+        };
+        EaseCallUIKit.getInstance().setCallListener(callKitListener);
+    }
+
 
     /**
      * data sync listener
