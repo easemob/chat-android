@@ -55,6 +55,7 @@ public class LoginFragment extends BaseInitFragment implements View.OnClickListe
     private Drawable clear;
     private Drawable eyeOpen;
     private Drawable eyeClose;
+    private boolean isClick;
 
     @Override
     protected int getLayoutId() {
@@ -153,7 +154,7 @@ public class LoginFragment extends BaseInitFragment implements View.OnClickListe
 
         });
         DemoDbHelper.getInstance(mContext).getDatabaseCreatedObservable().observe(getViewLifecycleOwner(), response -> {
-            if(response != null && !TextUtils.isEmpty(mUserName) && !TextUtils.isEmpty(mPwd)) {
+            if(response != null && !TextUtils.isEmpty(mUserName) && !TextUtils.isEmpty(mPwd) && isClick) {
                 mFragmentViewModel.login(mUserName, mPwd, isTokenFlag);
             }
         });
@@ -188,6 +189,7 @@ public class LoginFragment extends BaseInitFragment implements View.OnClickListe
                 mViewModel.setPageSelect(2);
                 break;
             case R.id.btn_login:
+                hideKeyboard();
                 loginToServer();
                 break;
         }
@@ -214,6 +216,7 @@ public class LoginFragment extends BaseInitFragment implements View.OnClickListe
             ToastUtils.showToast(R.string.em_login_btn_info_incomplete);
             return;
         }
+        isClick = true;
         //先初始化数据库
         DemoDbHelper.getInstance(mContext).initDb(mUserName);
     }
@@ -305,4 +308,11 @@ public class LoginFragment extends BaseInitFragment implements View.OnClickListe
             ds.bgColor = Color.TRANSPARENT;
         }
     }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        isClick = false;
+    }
+
 }

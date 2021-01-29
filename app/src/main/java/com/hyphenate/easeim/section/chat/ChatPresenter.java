@@ -40,6 +40,7 @@ import com.hyphenate.easeim.common.livedatas.LiveDataBus;
 import com.hyphenate.easeim.common.manager.PushAndMessageHelper;
 import com.hyphenate.easeim.common.repositories.EMContactManagerRepository;
 import com.hyphenate.easeim.common.repositories.EMGroupManagerRepository;
+import com.hyphenate.easeim.common.repositories.EMPushManagerRepository;
 import com.hyphenate.easeim.section.group.GroupHelper;
 import com.hyphenate.easeui.constants.EaseConstant;
 import com.hyphenate.easeui.interfaces.EaseGroupListener;
@@ -69,6 +70,7 @@ public class ChatPresenter extends EaseChatPresenter {
     private boolean isGroupsSyncedWithServer = false;
     private boolean isContactsSyncedWithServer = false;
     private boolean isBlackListSyncedWithServer = false;
+    private boolean isPushConfigsWithServer = false;
     private Context appContext;
     protected Handler handler;
 
@@ -183,6 +185,11 @@ public class ChatPresenter extends EaseChatPresenter {
                 }
                 startConference(message);
             }
+            // 如果设置群组离线消息免打扰，则不进行消息通知
+            List<String> disabledIds = DemoHelper.getInstance().getPushManager().getNoPushGroups();
+            if(disabledIds != null && disabledIds.contains(message.conversationId())) {
+                return;
+            }
             // in background, do not refresh UI, notify it in notification bar
             if(!DemoApplication.getInstance().getLifecycleCallbacks().isFront()){
                 getNotifier().notify(message);
@@ -253,7 +260,7 @@ public class ChatPresenter extends EaseChatPresenter {
         }
 
         @Override
-        public void onConversationRead(List<String> conversationIds) {
+        public void onConversationRead(String from, String to) {
             EaseEvent event = EaseEvent.create(DemoConstant.CONVERSATION_READ, EaseEvent.TYPE.MESSAGE);
             messageChangeLiveData.with(DemoConstant.CONVERSATION_READ).postValue(event);
         }
@@ -281,6 +288,12 @@ public class ChatPresenter extends EaseChatPresenter {
                 EMLog.i(TAG, "isBlackListSyncedWithServer");
                 new EMContactManagerRepository().getBlackContactList(null);
                 isBlackListSyncedWithServer = true;
+            }
+            if(!isPushConfigsWithServer) {
+                EMLog.i(TAG, "isPushConfigsWithServer");
+                //首先获取push配置，否则获取push配置项会为空
+                new EMPushManagerRepository().fetchPushConfigsFromServer();
+                isPushConfigsWithServer = true;
             }
         }
 

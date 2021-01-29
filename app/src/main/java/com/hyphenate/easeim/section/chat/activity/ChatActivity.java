@@ -105,6 +105,7 @@ public class ChatActivity extends BaseInitActivity implements EaseTitleBar.OnBac
     @Override
     protected void initData() {
         super.initData();
+        EMConversation conversation = EMClient.getInstance().chatManager().getConversation(conversationId);
         MessageViewModel messageViewModel = new ViewModelProvider(this).get(MessageViewModel.class);
         viewModel = new ViewModelProvider(this).get(ChatViewModel.class);
         viewModel.getDeleteObservable().observe(this, response -> {
@@ -122,15 +123,6 @@ public class ChatActivity extends BaseInitActivity implements EaseTitleBar.OnBac
                 @Override
                 public void onSuccess(@Nullable EMChatRoom data) {
                     setDefaultTitle();
-                }
-            });
-        });
-        viewModel.getMakeConversationReadObservable().observe(this, response -> {
-            parseResource(response, new OnResourceParseCallback<Boolean>() {
-                @Override
-                public void onSuccess(@Nullable Boolean data) {
-                    //什么也不做
-                    Log.e("TAG", "make conversation read success");
                 }
             });
         });
@@ -162,19 +154,12 @@ public class ChatActivity extends BaseInitActivity implements EaseTitleBar.OnBac
             if(event == null) {
                 return;
             }
-            EMConversation conversation = EMClient.getInstance()
-                                                    .chatManager()
-                                                    .getConversation(conversationId, EaseCommonUtils.getConversationType(chatType), false);
             if(conversation == null) {
                 finish();
             }
         });
 
         setDefaultTitle();
-
-        //if(DemoHelper.getInstance().isConComeFromServer()) {
-            viewModel.makeConversationReadByAck(conversationId);
-        //}
     }
 
     private void showSnackBar(String event) {

@@ -715,13 +715,6 @@ public class DemoHelper {
     }
 
     /**
-     * 将会话列表从服务器取数据的状态置为false，即后面应该采用本地数据库数据。
-     */
-    public void modifyConComeFromStatus() {
-        getModel().modifyConComeFromStatus();
-    }
-
-    /**
      * data sync listener
      */
     public interface DataSyncListener {

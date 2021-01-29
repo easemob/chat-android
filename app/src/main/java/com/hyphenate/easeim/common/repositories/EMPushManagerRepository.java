@@ -52,6 +52,19 @@ public class EMPushManagerRepository extends BaseEMRepository {
     }
 
     /**
+     * 获取推送配置
+     * @return
+     */
+    public EMPushConfigs fetchPushConfigsFromServer() {
+        try {
+            return getPushManager().getPushConfigsFromServer();
+        } catch (HyphenateException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    /**
      * 设置免打扰时间段
      * 如果end小于start,则end为第二天的hour
      * @param start
