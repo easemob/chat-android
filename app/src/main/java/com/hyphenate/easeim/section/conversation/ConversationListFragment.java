@@ -90,6 +90,7 @@ public class ConversationListFragment extends EaseConversationListFragment imple
                     @Override
                     public void onConfirmClick(View view) {
                         conversationListLayout.deleteConversation(position, info);
+                        LiveDataBus.get().with(DemoConstant.CONVERSATION_DELETE).postValue(new EaseEvent(DemoConstant.CONVERSATION_DELETE, EaseEvent.TYPE.MESSAGE));
                     }
                 })
                 .showCancelButton(true)
