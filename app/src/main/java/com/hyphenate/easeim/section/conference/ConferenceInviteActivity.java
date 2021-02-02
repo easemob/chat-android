@@ -169,15 +169,15 @@ public class ConferenceInviteActivity extends BaseInitActivity implements View.O
         switch (v.getId()) {
             case R.id.btn_start :
                 String[] members = getSelectMembers();
-//                if(members.length == 0) {
-//                    showToast(R.string.tips_select_contacts_first);
-//                    return;
-//                }
+                if(members.length == 0) {
+                    showToast(R.string.tips_select_contacts_first);
+                    return;
+                }
 //                Intent intent = getIntent();
 //                intent.putExtra("members", members);
 //                setResult(RESULT_OK, intent);
                 //开始邀请人员
-                EaseCallUIKit.getInstance().startInviteMuitupleCall(members);
+                EaseCallUIKit.getInstance().startInviteMultipleCall(members);
                 finish();
                 break;
         }
@@ -186,13 +186,13 @@ public class ConferenceInviteActivity extends BaseInitActivity implements View.O
     @Override
     public void onBackPress(View view) {
         onBackPressed();
-        EaseCallUIKit.getInstance().startInviteMuitupleCall(null);
+        EaseCallUIKit.getInstance().startInviteMultipleCall(null);
     }
 
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if (keyCode == KeyEvent.KEYCODE_BACK) {
-            EaseCallUIKit.getInstance().startInviteMuitupleCall(null);
+            EaseCallUIKit.getInstance().startInviteMultipleCall(null);
             return true;
         }
         return super.onKeyDown(keyCode, event);
@@ -214,7 +214,7 @@ public class ConferenceInviteActivity extends BaseInitActivity implements View.O
             } else if (y2 - y1 > 50) {
             } else if (x1 - x2 > 50) {
             } else if (x2 - x1 > 50) {
-                EaseCallUIKit.getInstance().startInviteMuitupleCall(null);
+                EaseCallUIKit.getInstance().startInviteMultipleCall(null);
             }
         }
         return super.onTouchEvent(event);

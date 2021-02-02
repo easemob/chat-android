@@ -7,6 +7,7 @@ import android.content.IntentFilter;
 import android.os.Process;
 import android.text.TextUtils;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.heytap.msp.push.HeytapPushManager;
 import com.hyphenate.EMCallBack;
@@ -60,13 +61,20 @@ import com.hyphenate.push.EMPushType;
 import com.hyphenate.push.PushListener;
 import com.hyphenate.util.EMLog;
 
+import java.text.SimpleDateFormat;
+import java.util.HashMap;
 import java.util.Hashtable;
 import java.util.List;
 import java.util.Map;
+import java.util.TimeZone;
 
 import easemob.hyphenate.calluikit.EaseCallUIKit;
-import easemob.hyphenate.calluikit.utils.EaseCallKitListener;
-import easemob.hyphenate.calluikit.utils.EaseCallKitType;
+import easemob.hyphenate.calluikit.base.EaseCallKitConfig;
+import easemob.hyphenate.calluikit.base.EaseCallUserInfo;
+import easemob.hyphenate.calluikit.base.EaseCallEndReason;
+import easemob.hyphenate.calluikit.base.EaseCallKitListener;
+import easemob.hyphenate.calluikit.base.EaseCallType;
+import easemob.hyphenate.calluikit.utils.EaseFileUtils;
 
 import static android.content.Intent.FLAG_ACTIVITY_NEW_TASK;
 
@@ -84,6 +92,7 @@ public class DemoHelper {
     private UserProfileManager userProManager;
 
     private EaseCallKitListener callKitListener;
+    private Context mianContext;
 
     private DemoHelper() {}
 
@@ -114,6 +123,22 @@ public class DemoHelper {
             initEaseUI(context);
             //注册对话类型
             registerConversationType();
+
+            //初始化 calluikit
+            EaseCallKitConfig callKitConfig = new EaseCallKitConfig();
+//        callKitConfig.setDefaultHeadImage("https://download-sdk.oss-cn-beijing.aliyuncs.com/downloads/RtcDemo/headImage/Image6.png");
+
+            String headImage = EaseFileUtils.getModelFilePath(context,"watermark.png");
+            callKitConfig.setDefaultHeadImage(headImage);
+            String ringFile = EaseFileUtils.getModelFilePath(context,"huahai.mp3");
+            callKitConfig.setRingFile(ringFile);
+            callKitConfig.setCallTimeOut(30 * 1000);
+            Map<String, EaseCallUserInfo> userInfoMap = new HashMap<>();
+            userInfoMap.put("lijian66",new EaseCallUserInfo("李剑66",null));
+            userInfoMap.put("lijian88",new EaseCallUserInfo("李剑88",null));
+            callKitConfig.setUserInfoMap(userInfoMap);
+            EaseCallUIKit.getInstance().init(context,callKitConfig);
+            addCallkitListener();
         }
 
     }
@@ -132,10 +157,7 @@ public class DemoHelper {
         //options.setImPort(6717);
         // 初始化SDK
         isSDKInit = EaseIM.getInstance().init(context, options);
-
-        //初始化 calluikit
-        EaseCallUIKit.getInstance().init(context,options);
-        addCallkitListener();
+        mianContext = context;
         return isSDKInit();
     }
 
@@ -718,29 +740,34 @@ public class DemoHelper {
     public void addCallkitListener(){
         callKitListener = new EaseCallKitListener() {
             @Override
-            public void onInviteUsers(Context context) {
+            public void onInviteUsers(Context context,String userId[]) {
                 Intent intent = new Intent(context, ConferenceInviteActivity.class).addFlags(FLAG_ACTIVITY_NEW_TASK);
                 intent.putExtra(DemoConstant.EXTRA_CONFERENCE_GROUP_ID, "");
                 context.startActivity(intent);
             }
 
             @Override
-            public void onEndCallWithReason(EaseCallKitType callType, String reason, int callTime) {
+            public void onEndCallWithReason(EaseCallType callType, String channelName, EaseCallEndReason reason, long callTime) {
+                EMLog.d(TAG,"onEndCallWithReason" + callType.name() + " reason:" + reason + " time:"+ callTime);
+                SimpleDateFormat formatter = new SimpleDateFormat("mm:ss");
+                formatter.setTimeZone(TimeZone.getTimeZone("UTC"));
+                String callString = "通话时长 ";
+                callString += formatter.format(callTime);
 
+                Toast.makeText(mianContext,callString,Toast.LENGTH_SHORT).show();
             }
 
             @Override
-            public void onRecivedCall(EaseCallKitType callType, String userId) {
+            public void onRevivedCall(EaseCallType callType, String fromUserId) {
                 //收到接听电话
-
+                EMLog.d(TAG,"onRecivedCall" + callType.name() + " fromUserId:" + fromUserId);
             }
-
             @Override
-            public void onInviteerIsFull(int viodeCount, int currentCount) {
+            public  void onCallError(EaseCallUIKit.EaseCallError type, int errorCode, String description){
 
             }
         };
-        EaseCallUIKit.getInstance().setCallListener(callKitListener);
+        EaseCallUIKit.getInstance().setCallKitListener(callKitListener);
     }
 
 

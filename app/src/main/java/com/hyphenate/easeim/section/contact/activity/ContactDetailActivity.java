@@ -12,7 +12,7 @@ import androidx.annotation.NonNull;
 import androidx.constraintlayout.widget.Group;
 import androidx.lifecycle.ViewModelProvider;
 import easemob.hyphenate.calluikit.EaseCallUIKit;
-import easemob.hyphenate.calluikit.utils.EaseCallKitType;
+import easemob.hyphenate.calluikit.base.EaseCallType;
 
 import com.hyphenate.easeim.DemoHelper;
 import com.hyphenate.easeim.R;
@@ -22,8 +22,6 @@ import com.hyphenate.easeim.common.interfaceOrImplement.OnResourceParseCallback;
 import com.hyphenate.easeim.common.livedatas.LiveDataBus;
 import com.hyphenate.easeim.section.base.BaseInitActivity;
 import com.hyphenate.easeim.section.chat.activity.ChatActivity;
-import com.hyphenate.easeim.section.chat.activity.ChatVideoCallActivity;
-import com.hyphenate.easeim.section.chat.activity.ChatVoiceCallActivity;
 import com.hyphenate.easeim.section.dialog.DemoDialogFragment;
 import com.hyphenate.easeim.section.dialog.SimpleDialogFragment;
 import com.hyphenate.easeim.section.contact.viewmodels.AddContactViewModel;
@@ -236,11 +234,11 @@ public class ContactDetailActivity extends BaseInitActivity implements EaseTitle
                 ChatActivity.actionStart(mContext, mUser.getUsername(), EaseConstant.CHATTYPE_SINGLE);
                 break;
             case R.id.btn_voice :
-                EaseCallUIKit.getInstance().startSignleCall(EaseCallKitType.SIGNAL_VOICE_CALL,mUser.getUsername());
+                EaseCallUIKit.getInstance().startSingleCall(EaseCallType.SIGNAL_VOICE_CALL,mUser.getUsername());
 //                ChatVoiceCallActivity.actionStart(mContext, mUser.getUsername());
                 break;
             case R.id.btn_video :
-                EaseCallUIKit.getInstance().startSignleCall(EaseCallKitType.SIGNAL_VIDEO_CALL,mUser.getUsername());
+                EaseCallUIKit.getInstance().startSingleCall(EaseCallType.SIGNAL_VIDEO_CALL,mUser.getUsername());
 //                ChatVideoCallActivity.actionStart(mContext, mUser.getUsername());
                 break;
             case R.id.btn_add_contact :

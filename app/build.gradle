@@ -134,7 +134,8 @@ dependencies {
     implementation 'com.hyphenate:hyphenate-sdk:3.7.3'
 
     //calluikit
-    api project(':calluikit')
+    api project(':ease-call-kit')
+    //implementation 'com.hyphenate:ease-call-kit:3.7.3'
 }
 
 // ADD THIS AT THE BOTTOM

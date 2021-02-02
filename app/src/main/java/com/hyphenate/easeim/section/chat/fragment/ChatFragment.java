@@ -5,25 +5,19 @@ import android.app.Dialog;
 import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Color;
-import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.text.TextUtils;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 
-import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.core.content.ContextCompat;
 import androidx.lifecycle.ViewModelProvider;
 import easemob.hyphenate.calluikit.EaseCallUIKit;
-import easemob.hyphenate.calluikit.utils.EaseCallKitType;
+import easemob.hyphenate.calluikit.base.EaseCallType;
 
 import com.hyphenate.chat.EMClient;
 import com.hyphenate.chat.EMGroup;
 import com.hyphenate.chat.EMMessage;
-import com.hyphenate.chat.EMTextMessageBody;
 import com.hyphenate.easeim.DemoHelper;
 import com.hyphenate.easeim.R;
 import com.hyphenate.easeim.common.constant.DemoConstant;
@@ -36,7 +30,6 @@ import com.hyphenate.easeim.section.chat.activity.ChatVoiceCallActivity;
 import com.hyphenate.easeim.section.chat.activity.ForwardMessageActivity;
 import com.hyphenate.easeim.section.conference.ConferenceActivity;
 import com.hyphenate.easeim.section.chat.activity.ImageGridActivity;
-import com.hyphenate.easeim.section.chat.activity.LiveActivity;
 import com.hyphenate.easeim.section.chat.activity.PickAtUserActivity;
 import com.hyphenate.easeim.section.chat.viewmodel.MessageViewModel;
 import com.hyphenate.easeim.section.dialog.DemoDialogFragment;
@@ -46,28 +39,13 @@ import com.hyphenate.easeim.section.contact.activity.ContactDetailActivity;
 import com.hyphenate.easeim.section.dialog.SimpleDialogFragment;
 import com.hyphenate.easeim.section.group.GroupHelper;
 import com.hyphenate.easeui.constants.EaseConstant;
-import com.hyphenate.easeui.delegate.EaseExpressionAdapterDelegate;
-import com.hyphenate.easeui.delegate.EaseFileAdapterDelegate;
-import com.hyphenate.easeui.delegate.EaseMessageAdapterDelegate;
-import com.hyphenate.easeui.delegate.EaseTextAdapterDelegate;
 import com.hyphenate.easeui.domain.EaseUser;
-import com.hyphenate.easeui.interfaces.MessageListItemClickListener;
 import com.hyphenate.easeui.model.EaseEvent;
-import com.hyphenate.easeui.model.styles.EaseMessageListItemStyle;
-import com.hyphenate.easeui.modules.chat.EaseChatExtendMenu;
 import com.hyphenate.easeui.modules.chat.EaseChatFragment;
-import com.hyphenate.easeui.modules.chat.EaseChatInputMenu;
-import com.hyphenate.easeui.modules.chat.EaseChatMessageListLayout;
-import com.hyphenate.easeui.modules.chat.EaseInputMenuStyle;
 import com.hyphenate.easeui.modules.chat.interfaces.IChatExtendMenu;
-import com.hyphenate.easeui.modules.chat.interfaces.IChatPrimaryMenu;
-import com.hyphenate.easeui.modules.chat.interfaces.OnMenuChangeListener;
 import com.hyphenate.easeui.modules.chat.interfaces.OnRecallMessageResultListener;
 import com.hyphenate.easeui.modules.menu.EasePopupWindowHelper;
 import com.hyphenate.easeui.modules.menu.MenuItemBean;
-import com.hyphenate.easeui.utils.EaseCommonUtils;
-import com.hyphenate.easeui.viewholder.EaseChatRowViewHolder;
-import com.hyphenate.easeui.widget.chatrow.EaseChatRow;
 import com.hyphenate.util.EMLog;
 import com.hyphenate.util.UriUtils;
 
@@ -216,11 +194,11 @@ public class ChatFragment extends EaseChatFragment implements OnRecallMessageRes
                         switch (position) {
                             case 0 :
                                // startVideoCall();conversationId
-                                EaseCallUIKit.getInstance().startSignleCall(EaseCallKitType.SIGNAL_VIDEO_CALL,conversationId);
+                                EaseCallUIKit.getInstance().startSingleCall(EaseCallType.SIGNAL_VIDEO_CALL,conversationId);
                                 break;
                             case 1 :
                                 //startVoiceCall();
-                                EaseCallUIKit.getInstance().startSignleCall(EaseCallKitType.SIGNAL_VOICE_CALL,conversationId);
+                                EaseCallUIKit.getInstance().startSingleCall(EaseCallType.SIGNAL_VOICE_CALL,conversationId);
                                 break;
                         }
                     }
