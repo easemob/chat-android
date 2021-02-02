@@ -96,7 +96,7 @@ public class ServerSetFragment extends BaseInitFragment implements EaseTitleBar.
         mSwitchSpecifyServer.setChecked(mCustomServerEnable);
         mSwitchHttpsSet.setChecked(DemoHelper.getInstance().getModel().getUsingHttpsOnly());
         String appkey = DemoHelper.getInstance().getModel().getCutomAppkey();
-        mEtAppkey.setText(TextUtils.isEmpty(appkey) ? "":appkey);
+        mEtAppkey.setText((!DemoHelper.getInstance().getModel().isCustomAppkeyEnabled() || TextUtils.isEmpty(appkey)) ? "":appkey);
         String imServer = DemoHelper.getInstance().getModel().getIMServer();
         mEtServerAddress.setText(TextUtils.isEmpty(imServer) ? "" : imServer);
         int imServerPort = DemoHelper.getInstance().getModel().getIMServerPort();

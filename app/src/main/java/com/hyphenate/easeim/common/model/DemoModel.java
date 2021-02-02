@@ -2,6 +2,7 @@ package com.hyphenate.easeim.common.model;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.text.TextUtils;
 
 import com.hyphenate.chat.EMChatRoom;
 import com.hyphenate.chat.EMClient;
@@ -86,14 +87,12 @@ public class DemoModel {
             return new ArrayList<>();
         }
         String defAppkey = OptionsHelper.getInstance().getDefAppkey();
-        List<AppKeyEntity> keys = dao.queryKey(defAppkey);
-        if(keys == null || keys.isEmpty()) {
-            dao.insert(new AppKeyEntity(defAppkey));
-        }
         String appKey = EMClient.getInstance().getOptions().getAppKey();
-        List<AppKeyEntity> appKeys = dao.queryKey(appKey);
-        if(appKeys == null || appKeys.isEmpty()) {
-            dao.insert(new AppKeyEntity(appKey));
+        if(!TextUtils.equals(defAppkey, appKey)) {
+            List<AppKeyEntity> appKeys = dao.queryKey(appKey);
+            if(appKeys == null || appKeys.isEmpty()) {
+                dao.insert(new AppKeyEntity(appKey));
+            }
         }
         return dao.loadAllAppKeys();
     }
@@ -106,10 +105,6 @@ public class DemoModel {
         AppKeyDao dao = DemoDbHelper.getInstance(context).getAppKeyDao();
         if(dao == null) {
             return;
-        }
-        List<AppKeyEntity> keys = dao.loadAllAppKeys();
-        if(keys == null || keys.isEmpty()) {
-            dao.insert(new AppKeyEntity(OptionsHelper.getInstance().getDefAppkey()));
         }
         AppKeyEntity entity = new AppKeyEntity(appKey);
         dao.insert(entity);
