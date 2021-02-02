@@ -138,7 +138,7 @@ public class ConversationListFragment extends EaseConversationListFragment imple
         });
 
         mViewModel.getConversationInfoObservable().observe(getViewLifecycleOwner(), response -> {
-            parseResource(response, new OnResourceParseCallback<List<EaseConversationInfo>>() {
+            parseResource(response, new OnResourceParseCallback<List<EaseConversationInfo>>(true) {
                 @Override
                 public void onSuccess(@Nullable List<EaseConversationInfo> data) {
                     conversationListLayout.setData(data);
