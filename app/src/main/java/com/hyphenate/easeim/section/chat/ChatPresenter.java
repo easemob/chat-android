@@ -23,6 +23,7 @@ import com.hyphenate.chat.EMConferenceManager;
 import com.hyphenate.chat.EMConferenceMember;
 import com.hyphenate.chat.EMConferenceStream;
 import com.hyphenate.chat.EMConversation;
+import com.hyphenate.chat.EMGroup;
 import com.hyphenate.chat.EMMessage;
 import com.hyphenate.chat.EMMucSharedFile;
 import com.hyphenate.chat.EMStreamStatistics;
@@ -36,11 +37,13 @@ import com.hyphenate.easeim.common.constant.DemoConstant;
 import com.hyphenate.easeim.common.db.DemoDbHelper;
 import com.hyphenate.easeim.common.db.entity.EmUserEntity;
 import com.hyphenate.easeim.common.db.entity.InviteMessageStatus;
+import com.hyphenate.easeim.common.interfaceOrImplement.ResultCallBack;
 import com.hyphenate.easeim.common.livedatas.LiveDataBus;
 import com.hyphenate.easeim.common.manager.PushAndMessageHelper;
 import com.hyphenate.easeim.common.repositories.EMContactManagerRepository;
 import com.hyphenate.easeim.common.repositories.EMGroupManagerRepository;
 import com.hyphenate.easeim.common.repositories.EMPushManagerRepository;
+import com.hyphenate.easeim.section.chat.activity.ChatActivity;
 import com.hyphenate.easeim.section.group.GroupHelper;
 import com.hyphenate.easeui.constants.EaseConstant;
 import com.hyphenate.easeui.interfaces.EaseGroupListener;
@@ -230,6 +233,15 @@ public class ChatPresenter extends EaseChatPresenter {
     }
 
     @Override
+    public void onMessageRead(List<EMMessage> messages) {
+        super.onMessageRead(messages);
+        if(!(DemoApplication.getInstance().getLifecycleCallbacks().current() instanceof ChatActivity)) {
+            EaseEvent event = EaseEvent.create(DemoConstant.MESSAGE_CHANGE_RECALL, EaseEvent.TYPE.MESSAGE);
+            messageChangeLiveData.with(DemoConstant.MESSAGE_CHANGE_CHANGE).postValue(event);
+        }
+    }
+
+    @Override
     public void onMessageRecalled(List<EMMessage> messages) {
         EaseEvent event = EaseEvent.create(DemoConstant.MESSAGE_CHANGE_RECALL, EaseEvent.TYPE.MESSAGE);
         messageChangeLiveData.with(DemoConstant.MESSAGE_CHANGE_CHANGE).postValue(event);
@@ -276,7 +288,20 @@ public class ChatPresenter extends EaseChatPresenter {
             }
             if(!isGroupsSyncedWithServer) {
                 EMLog.i(TAG, "isGroupsSyncedWithServer");
-                new EMGroupManagerRepository().getAllGroups(null);
+                new EMGroupManagerRepository().getAllGroups(new ResultCallBack<List<EMGroup>>() {
+                    @Override
+                    public void onSuccess(List<EMGroup> value) {
+                        //加载完群组信息后，刷新会话列表页面，保证展示群组名称
+                        EMLog.i(TAG, "isGroupsSyncedWithServer success");
+                        EaseEvent event = EaseEvent.create(DemoConstant.GROUP_CHANGE, EaseEvent.TYPE.GROUP);
+                        messageChangeLiveData.with(DemoConstant.GROUP_CHANGE).postValue(event);
+                    }
+
+                    @Override
+                    public void onError(int error, String errorMsg) {
+
+                    }
+                });
                 isGroupsSyncedWithServer = true;
             }
             if(!isContactsSyncedWithServer) {

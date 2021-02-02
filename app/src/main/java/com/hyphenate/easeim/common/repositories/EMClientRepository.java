@@ -8,16 +8,23 @@ import androidx.lifecycle.MutableLiveData;
 
 import com.hyphenate.EMCallBack;
 import com.hyphenate.chat.EMClient;
+import com.hyphenate.chat.EMGroup;
 import com.hyphenate.easeim.DemoApplication;
 import com.hyphenate.easeim.DemoHelper;
+import com.hyphenate.easeim.common.constant.DemoConstant;
 import com.hyphenate.easeim.common.db.DemoDbHelper;
 import com.hyphenate.easeim.common.interfaceOrImplement.DemoEmCallBack;
+import com.hyphenate.easeim.common.livedatas.LiveDataBus;
 import com.hyphenate.easeim.common.net.ErrorCode;
 import com.hyphenate.easeim.common.net.Resource;
 import com.hyphenate.easeim.common.interfaceOrImplement.ResultCallBack;
 import com.hyphenate.easeim.common.utils.PreferenceManager;
 import com.hyphenate.easeui.domain.EaseUser;
+import com.hyphenate.easeui.model.EaseEvent;
 import com.hyphenate.exceptions.HyphenateException;
+import com.hyphenate.util.EMLog;
+
+import java.util.List;
 
 /**
  * 作为EMClient的repository,处理EMClient相关的逻辑
@@ -191,10 +198,29 @@ public class EMClientRepository extends BaseEMRepository{
     private void successForCallBack(@NonNull ResultCallBack<LiveData<EaseUser>> callBack) {
         // ** manually load all local groups and conversation
         loadAllConversationsAndGroups();
+        //从服务器拉取加入的群，防止进入会话页面只显示id
+        getAllJoinGroup();
         // get current user id
         String currentUser = EMClient.getInstance().getCurrentUser();
         EaseUser user = new EaseUser(currentUser);
         callBack.onSuccess(new MutableLiveData<>(user));
+    }
+
+    private void getAllJoinGroup() {
+        new EMGroupManagerRepository().getAllGroups(new ResultCallBack<List<EMGroup>>() {
+            @Override
+            public void onSuccess(List<EMGroup> value) {
+                //加载完群组信息后，刷新会话列表页面，保证展示群组名称
+                EMLog.i("ChatPresenter", "isGroupsSyncedWithServer success");
+                EaseEvent event = EaseEvent.create(DemoConstant.GROUP_CHANGE, EaseEvent.TYPE.GROUP);
+                LiveDataBus.get().with(DemoConstant.GROUP_CHANGE).postValue(event);
+            }
+
+            @Override
+            public void onError(int error, String errorMsg) {
+
+            }
+        });
     }
 
     private void closeDb() {
