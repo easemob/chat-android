@@ -910,7 +910,7 @@ public class ChatPresenter extends EaseChatPresenter {
                     showToast("GROUP_CREATE");
                     break;
                 case GROUP_DESTROY:
-                    removeTargetSystemMessage(groupId, DemoConstant.EXTRA_CONFERENCE_GROUP_ID);
+                    removeTargetSystemMessage(groupId, DemoConstant.SYSTEM_MESSAGE_GROUP_ID);
                     saveGroupNotification(groupId, /*groupName*/"",  /*person*/"", /*reason*/"", InviteMessageStatus.MULTI_DEVICE_GROUP_DESTROY);
                     message = DemoConstant.GROUP_CHANGE;
 
@@ -923,27 +923,27 @@ public class ChatPresenter extends EaseChatPresenter {
                     showToast("GROUP_JOIN");
                     break;
                 case GROUP_LEAVE:
-                    removeTargetSystemMessage(groupId, DemoConstant.EXTRA_CONFERENCE_GROUP_ID);
+                    removeTargetSystemMessage(groupId, DemoConstant.SYSTEM_MESSAGE_GROUP_ID);
                     saveGroupNotification(groupId, /*groupName*/"",  /*person*/"", /*reason*/"", InviteMessageStatus.MULTI_DEVICE_GROUP_LEAVE);
                     message = DemoConstant.GROUP_CHANGE;
 
                     showToast("GROUP_LEAVE");
                     break;
                 case GROUP_APPLY:
-                    removeTargetSystemMessage(groupId, DemoConstant.EXTRA_CONFERENCE_GROUP_ID);
+                    removeTargetSystemMessage(groupId, DemoConstant.SYSTEM_MESSAGE_GROUP_ID);
                     saveGroupNotification(groupId, /*groupName*/"",  /*person*/"", /*reason*/"", InviteMessageStatus.MULTI_DEVICE_GROUP_APPLY);
 
                     showToast("GROUP_APPLY");
                     break;
                 case GROUP_APPLY_ACCEPT:
-                    removeTargetSystemMessage(groupId, DemoConstant.EXTRA_CONFERENCE_GROUP_ID, usernames.get(0), DemoConstant.SYSTEM_MESSAGE_FROM);
+                    removeTargetSystemMessage(groupId, DemoConstant.SYSTEM_MESSAGE_GROUP_ID, usernames.get(0), DemoConstant.SYSTEM_MESSAGE_FROM);
                     // TODO: person, reason from ext
                     saveGroupNotification(groupId, /*groupName*/"",  /*person*/usernames.get(0), /*reason*/"", InviteMessageStatus.MULTI_DEVICE_GROUP_APPLY_ACCEPT);
 
                     showToast("GROUP_APPLY_ACCEPT");
                     break;
                 case GROUP_APPLY_DECLINE:
-                    removeTargetSystemMessage(groupId, DemoConstant.EXTRA_CONFERENCE_GROUP_ID, usernames.get(0), DemoConstant.SYSTEM_MESSAGE_FROM);
+                    removeTargetSystemMessage(groupId, DemoConstant.SYSTEM_MESSAGE_GROUP_ID, usernames.get(0), DemoConstant.SYSTEM_MESSAGE_FROM);
                     // TODO: person, reason from ext
                     saveGroupNotification(groupId, /*groupName*/"",  /*person*/usernames.get(0), /*reason*/"", InviteMessageStatus.MULTI_DEVICE_GROUP_APPLY_DECLINE);
 
@@ -972,7 +972,7 @@ public class ChatPresenter extends EaseChatPresenter {
                     // save invitation as messages
                     EMClient.getInstance().chatManager().saveMessage(msg);
 
-                    removeTargetSystemMessage(groupId, DemoConstant.EXTRA_CONFERENCE_GROUP_ID);
+                    removeTargetSystemMessage(groupId, DemoConstant.SYSTEM_MESSAGE_GROUP_ID);
                     // TODO: person, reason from ext
                     saveGroupNotification(groupId, /*groupName*/"",  /*person*/"", /*reason*/"", InviteMessageStatus.MULTI_DEVICE_GROUP_INVITE_ACCEPT);
                     message = DemoConstant.GROUP_CHANGE;
@@ -980,7 +980,7 @@ public class ChatPresenter extends EaseChatPresenter {
                     showToast("GROUP_INVITE_ACCEPT");
                     break;
                 case GROUP_INVITE_DECLINE:
-                    removeTargetSystemMessage(groupId, DemoConstant.EXTRA_CONFERENCE_GROUP_ID);
+                    removeTargetSystemMessage(groupId, DemoConstant.SYSTEM_MESSAGE_GROUP_ID);
                     // TODO: person, reason from ext
                     saveGroupNotification(groupId, /*groupName*/"",  /*person*/usernames.get(0), /*reason*/"", InviteMessageStatus.MULTI_DEVICE_GROUP_INVITE_DECLINE);
 
