@@ -7,13 +7,17 @@ import androidx.annotation.NonNull;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
+import com.hyphenate.EMValueCallBack;
+import com.hyphenate.chat.EMClient;
 import com.hyphenate.chat.EMConversation;
 import com.hyphenate.easeim.common.db.entity.InviteMessage;
 import com.hyphenate.easeim.common.db.entity.MsgTypeManageEntity;
 import com.hyphenate.easeim.common.interfaceOrImplement.ResultCallBack;
 import com.hyphenate.easeim.common.net.ErrorCode;
 import com.hyphenate.easeim.common.net.Resource;
+import com.hyphenate.easeui.modules.conversation.model.EaseConversationInfo;
 import com.hyphenate.easeui.utils.EaseCommonUtils;
+import com.hyphenate.exceptions.HyphenateException;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -159,6 +163,65 @@ public class EMChatManagerRepository extends BaseEMRepository{
                     conversation.markAllMessagesAsRead();
                     callBack.onSuccess(createLiveData(true));
                 }
+            }
+        }.asLiveData();
+    }
+
+    /**
+     * 获取会话列表
+     * @return
+     */
+    public LiveData<Resource<List<EaseConversationInfo>>> fetchConversationsFromServer() {
+        return new NetworkOnlyResource<List<EaseConversationInfo>>() {
+
+            @Override
+            protected void createCall(@NonNull ResultCallBack<LiveData<List<EaseConversationInfo>>> callBack) {
+                EMClient.getInstance().chatManager().asyncFetchConversationsFromServer(new EMValueCallBack<Map<String, EMConversation>>() {
+                    @Override
+                    public void onSuccess(Map<String, EMConversation> value) {
+                        List<EMConversation> conversations = new ArrayList<EMConversation>(value.values());
+                        List<EaseConversationInfo> infoList = new ArrayList<>();
+                        if(!conversations.isEmpty()) {
+                            EaseConversationInfo info = null;
+                            for(EMConversation conversation : conversations) {
+                                info = new EaseConversationInfo();
+                                info.setInfo(conversation);
+                                info.setTimestamp(conversation.getLastMessage().getMsgTime());
+                                infoList.add(info);
+                            }
+                        }
+                        callBack.onSuccess(createLiveData(infoList));
+                    }
+
+                    @Override
+                    public void onError(int error, String errorMsg) {
+                        callBack.onError(error, errorMsg);
+                    }
+                });
+            }
+
+        }.asLiveData();
+    }
+
+
+    /**
+     * 调用api请求将会话置为已读
+     * @param conversationId
+     * @return
+     */
+    public LiveData<Resource<Boolean>> makeConversationReadByAck(String conversationId) {
+        return new NetworkOnlyResource<Boolean>() {
+            @Override
+            protected void createCall(@NonNull ResultCallBack<LiveData<Boolean>> callBack) {
+                runOnIOThread(()-> {
+                    try {
+                        getChatManager().ackConversationRead(conversationId);
+                        callBack.onSuccess(createLiveData(true));
+                    } catch (HyphenateException e) {
+                        e.printStackTrace();
+                        callBack.onError(e.getErrorCode(), e.getDescription());
+                    }
+                });
             }
         }.asLiveData();
     }

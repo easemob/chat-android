@@ -9,6 +9,7 @@ import android.view.MenuItem;
 import android.view.View;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
 import androidx.lifecycle.ViewModelProvider;
 
@@ -41,6 +42,7 @@ import com.hyphenate.easeui.provider.EaseUserProfileProvider;
 import com.hyphenate.easeui.utils.EaseCommonUtils;
 import com.hyphenate.easeui.widget.EaseSearchTextView;
 
+import java.util.List;
 
 
 public class ConversationListFragment extends EaseConversationListFragment implements View.OnClickListener {
@@ -88,6 +90,7 @@ public class ConversationListFragment extends EaseConversationListFragment imple
                     @Override
                     public void onConfirmClick(View view) {
                         conversationListLayout.deleteConversation(position, info);
+                        LiveDataBus.get().with(DemoConstant.CONVERSATION_DELETE).postValue(new EaseEvent(DemoConstant.CONVERSATION_DELETE, EaseEvent.TYPE.MESSAGE));
                     }
                 })
                 .showCancelButton(true)
@@ -102,7 +105,12 @@ public class ConversationListFragment extends EaseConversationListFragment imple
 
     @Override
     public void initData() {
-        super.initData();
+        //需要两个条件，判断是否触发从服务器拉取会话列表的时机，一是第一次安装，二则本地数据库没有会话列表数据
+        if(DemoHelper.getInstance().isFirstInstall() && EMClient.getInstance().chatManager().getAllConversations().isEmpty()) {
+            mViewModel.fetchConversationsFromServer();
+        }else {
+            super.initData();
+        }
     }
 
     private void initViewModel() {
@@ -129,6 +137,15 @@ public class ConversationListFragment extends EaseConversationListFragment imple
             });
         });
 
+        mViewModel.getConversationInfoObservable().observe(getViewLifecycleOwner(), response -> {
+            parseResource(response, new OnResourceParseCallback<List<EaseConversationInfo>>(true) {
+                @Override
+                public void onSuccess(@Nullable List<EaseConversationInfo> data) {
+                    conversationListLayout.setData(data);
+                }
+            });
+        });
+
         MessageViewModel messageViewModel = new ViewModelProvider(this).get(MessageViewModel.class);
         LiveDataBus messageChange = messageViewModel.getMessageChange();
         messageChange.with(DemoConstant.NOTIFY_CHANGE, EaseEvent.class).observe(getViewLifecycleOwner(), this::loadList);
@@ -136,6 +153,7 @@ public class ConversationListFragment extends EaseConversationListFragment imple
         messageChange.with(DemoConstant.GROUP_CHANGE, EaseEvent.class).observe(getViewLifecycleOwner(), this::loadList);
         messageChange.with(DemoConstant.CHAT_ROOM_CHANGE, EaseEvent.class).observe(getViewLifecycleOwner(), this::loadList);
         messageChange.with(DemoConstant.CONVERSATION_DELETE, EaseEvent.class).observe(getViewLifecycleOwner(), this::loadList);
+        messageChange.with(DemoConstant.CONVERSATION_READ, EaseEvent.class).observe(getViewLifecycleOwner(), this::loadList);
         messageChange.with(DemoConstant.CONTACT_CHANGE, EaseEvent.class).observe(getViewLifecycleOwner(), this::loadList);
         messageChange.with(DemoConstant.MESSAGE_CALL_SAVE, Boolean.class).observe(getViewLifecycleOwner(), this::refreshList);
         messageChange.with(DemoConstant.MESSAGE_NOT_SEND, Boolean.class).observe(getViewLifecycleOwner(), this::refreshList);

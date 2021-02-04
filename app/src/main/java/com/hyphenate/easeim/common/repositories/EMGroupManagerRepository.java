@@ -81,6 +81,32 @@ public class EMGroupManagerRepository extends BaseEMRepository{
     }
 
     /**
+     * 获取所有群组列表
+     * @param callBack
+     */
+    public void getAllGroups(ResultCallBack<List<EMGroup>> callBack) {
+        if(!isLoggedIn()) {
+            callBack.onError(ErrorCode.EM_NOT_LOGIN);
+            return;
+        }
+        getGroupManager().asyncGetJoinedGroupsFromServer(new EMValueCallBack<List<EMGroup>>() {
+            @Override
+            public void onSuccess(List<EMGroup> value) {
+                if(callBack != null) {
+                    callBack.onSuccess(value);
+                }
+            }
+
+            @Override
+            public void onError(int error, String errorMsg) {
+                if(callBack != null) {
+                    callBack.onError(error, errorMsg);
+                }
+            }
+        });
+    }
+
+    /**
      * 从服务器分页获取加入的群组
      * @param pageIndex
      * @param pageSize

@@ -218,6 +218,7 @@ public class PushAndMessageHelper {
                 messge = String.format(builder.toString(), msg.getStringAttribute(DemoConstant.SYSTEM_MESSAGE_FROM));
                 break;
             case BEAGREED:
+            case MULTI_DEVICE_GROUP_LEAVE:
                 messge = builder.toString();
                 break;
             case BEAPPLYED:
@@ -284,6 +285,7 @@ public class PushAndMessageHelper {
                 messge = String.format(builder.toString(), msg.get(DemoConstant.SYSTEM_MESSAGE_FROM));
                 break;
             case BEAGREED:
+            case MULTI_DEVICE_GROUP_LEAVE:
                 messge = builder.toString();
                 break;
             case BEAPPLYED:

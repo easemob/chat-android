@@ -15,6 +15,7 @@ import com.hyphenate.EMChatRoomChangeListener;
 import com.hyphenate.EMConferenceListener;
 import com.hyphenate.EMConnectionListener;
 import com.hyphenate.EMContactListener;
+import com.hyphenate.EMConversationListener;
 import com.hyphenate.EMError;
 import com.hyphenate.EMMultiDeviceListener;
 import com.hyphenate.chat.EMClient;
@@ -22,6 +23,7 @@ import com.hyphenate.chat.EMConferenceManager;
 import com.hyphenate.chat.EMConferenceMember;
 import com.hyphenate.chat.EMConferenceStream;
 import com.hyphenate.chat.EMConversation;
+import com.hyphenate.chat.EMGroup;
 import com.hyphenate.chat.EMMessage;
 import com.hyphenate.chat.EMMucSharedFile;
 import com.hyphenate.chat.EMStreamStatistics;
@@ -35,10 +37,13 @@ import com.hyphenate.easeim.common.constant.DemoConstant;
 import com.hyphenate.easeim.common.db.DemoDbHelper;
 import com.hyphenate.easeim.common.db.entity.EmUserEntity;
 import com.hyphenate.easeim.common.db.entity.InviteMessageStatus;
+import com.hyphenate.easeim.common.interfaceOrImplement.ResultCallBack;
 import com.hyphenate.easeim.common.livedatas.LiveDataBus;
 import com.hyphenate.easeim.common.manager.PushAndMessageHelper;
 import com.hyphenate.easeim.common.repositories.EMContactManagerRepository;
 import com.hyphenate.easeim.common.repositories.EMGroupManagerRepository;
+import com.hyphenate.easeim.common.repositories.EMPushManagerRepository;
+import com.hyphenate.easeim.section.chat.activity.ChatActivity;
 import com.hyphenate.easeim.section.group.GroupHelper;
 import com.hyphenate.easeui.constants.EaseConstant;
 import com.hyphenate.easeui.interfaces.EaseGroupListener;
@@ -68,6 +73,7 @@ public class ChatPresenter extends EaseChatPresenter {
     private boolean isGroupsSyncedWithServer = false;
     private boolean isContactsSyncedWithServer = false;
     private boolean isBlackListSyncedWithServer = false;
+    private boolean isPushConfigsWithServer = false;
     private Context appContext;
     protected Handler handler;
 
@@ -89,6 +95,8 @@ public class ChatPresenter extends EaseChatPresenter {
         DemoHelper.getInstance().getChatroomManager().addChatRoomChangeListener(new ChatRoomListener());
         //添加会议监听
         DemoHelper.getInstance().getConferenceManager().addConferenceListener(new ChatConferenceListener());
+        //添加对会话的监听（监听已读回执）
+        DemoHelper.getInstance().getChatManager().addConversationListener(new ChatConversationListener());
     }
 
     public static ChatPresenter getInstance() {
@@ -180,6 +188,11 @@ public class ChatPresenter extends EaseChatPresenter {
                 }
                 startConference(message);
             }
+            // 如果设置群组离线消息免打扰，则不进行消息通知
+            List<String> disabledIds = DemoHelper.getInstance().getPushManager().getNoPushGroups();
+            if(disabledIds != null && disabledIds.contains(message.conversationId())) {
+                return;
+            }
             // in background, do not refresh UI, notify it in notification bar
             if(!DemoApplication.getInstance().getLifecycleCallbacks().isFront()){
                 getNotifier().notify(message);
@@ -220,6 +233,15 @@ public class ChatPresenter extends EaseChatPresenter {
     }
 
     @Override
+    public void onMessageRead(List<EMMessage> messages) {
+        super.onMessageRead(messages);
+        if(!(DemoApplication.getInstance().getLifecycleCallbacks().current() instanceof ChatActivity)) {
+            EaseEvent event = EaseEvent.create(DemoConstant.MESSAGE_CHANGE_RECALL, EaseEvent.TYPE.MESSAGE);
+            messageChangeLiveData.with(DemoConstant.MESSAGE_CHANGE_CHANGE).postValue(event);
+        }
+    }
+
+    @Override
     public void onMessageRecalled(List<EMMessage> messages) {
         EaseEvent event = EaseEvent.create(DemoConstant.MESSAGE_CHANGE_RECALL, EaseEvent.TYPE.MESSAGE);
         messageChangeLiveData.with(DemoConstant.MESSAGE_CHANGE_CHANGE).postValue(event);
@@ -242,6 +264,20 @@ public class ChatPresenter extends EaseChatPresenter {
         }
     }
 
+    private class ChatConversationListener implements EMConversationListener {
+
+        @Override
+        public void onCoversationUpdate() {
+
+        }
+
+        @Override
+        public void onConversationRead(String from, String to) {
+            EaseEvent event = EaseEvent.create(DemoConstant.CONVERSATION_READ, EaseEvent.TYPE.MESSAGE);
+            messageChangeLiveData.with(DemoConstant.CONVERSATION_READ).postValue(event);
+        }
+    }
+
     private class ChatConnectionListener implements EMConnectionListener {
 
         @Override
@@ -252,18 +288,37 @@ public class ChatPresenter extends EaseChatPresenter {
             }
             if(!isGroupsSyncedWithServer) {
                 EMLog.i(TAG, "isGroupsSyncedWithServer");
-                new EMGroupManagerRepository().getAllGroups();
+                new EMGroupManagerRepository().getAllGroups(new ResultCallBack<List<EMGroup>>() {
+                    @Override
+                    public void onSuccess(List<EMGroup> value) {
+                        //加载完群组信息后，刷新会话列表页面，保证展示群组名称
+                        EMLog.i(TAG, "isGroupsSyncedWithServer success");
+                        EaseEvent event = EaseEvent.create(DemoConstant.GROUP_CHANGE, EaseEvent.TYPE.GROUP);
+                        messageChangeLiveData.with(DemoConstant.GROUP_CHANGE).postValue(event);
+                    }
+
+                    @Override
+                    public void onError(int error, String errorMsg) {
+
+                    }
+                });
                 isGroupsSyncedWithServer = true;
             }
             if(!isContactsSyncedWithServer) {
                 EMLog.i(TAG, "isContactsSyncedWithServer");
-                new EMContactManagerRepository().getContactList();
+                new EMContactManagerRepository().getContactList(null);
                 isContactsSyncedWithServer = true;
             }
             if(!isBlackListSyncedWithServer) {
                 EMLog.i(TAG, "isBlackListSyncedWithServer");
-                new EMContactManagerRepository().getBlackContactList();
+                new EMContactManagerRepository().getBlackContactList(null);
                 isBlackListSyncedWithServer = true;
+            }
+            if(!isPushConfigsWithServer) {
+                EMLog.i(TAG, "isPushConfigsWithServer");
+                //首先获取push配置，否则获取push配置项会为空
+                new EMPushManagerRepository().fetchPushConfigsFromServer();
+                isPushConfigsWithServer = true;
             }
         }
 
@@ -857,7 +912,7 @@ public class ChatPresenter extends EaseChatPresenter {
                     showToast("GROUP_CREATE");
                     break;
                 case GROUP_DESTROY:
-                    removeTargetSystemMessage(groupId, DemoConstant.EXTRA_CONFERENCE_GROUP_ID);
+                    removeTargetSystemMessage(groupId, DemoConstant.SYSTEM_MESSAGE_GROUP_ID);
                     saveGroupNotification(groupId, /*groupName*/"",  /*person*/"", /*reason*/"", InviteMessageStatus.MULTI_DEVICE_GROUP_DESTROY);
                     message = DemoConstant.GROUP_CHANGE;
 
@@ -870,27 +925,27 @@ public class ChatPresenter extends EaseChatPresenter {
                     showToast("GROUP_JOIN");
                     break;
                 case GROUP_LEAVE:
-                    removeTargetSystemMessage(groupId, DemoConstant.EXTRA_CONFERENCE_GROUP_ID);
+                    removeTargetSystemMessage(groupId, DemoConstant.SYSTEM_MESSAGE_GROUP_ID);
                     saveGroupNotification(groupId, /*groupName*/"",  /*person*/"", /*reason*/"", InviteMessageStatus.MULTI_DEVICE_GROUP_LEAVE);
                     message = DemoConstant.GROUP_CHANGE;
 
                     showToast("GROUP_LEAVE");
                     break;
                 case GROUP_APPLY:
-                    removeTargetSystemMessage(groupId, DemoConstant.EXTRA_CONFERENCE_GROUP_ID);
+                    removeTargetSystemMessage(groupId, DemoConstant.SYSTEM_MESSAGE_GROUP_ID);
                     saveGroupNotification(groupId, /*groupName*/"",  /*person*/"", /*reason*/"", InviteMessageStatus.MULTI_DEVICE_GROUP_APPLY);
 
                     showToast("GROUP_APPLY");
                     break;
                 case GROUP_APPLY_ACCEPT:
-                    removeTargetSystemMessage(groupId, DemoConstant.EXTRA_CONFERENCE_GROUP_ID, usernames.get(0), DemoConstant.SYSTEM_MESSAGE_FROM);
+                    removeTargetSystemMessage(groupId, DemoConstant.SYSTEM_MESSAGE_GROUP_ID, usernames.get(0), DemoConstant.SYSTEM_MESSAGE_FROM);
                     // TODO: person, reason from ext
                     saveGroupNotification(groupId, /*groupName*/"",  /*person*/usernames.get(0), /*reason*/"", InviteMessageStatus.MULTI_DEVICE_GROUP_APPLY_ACCEPT);
 
                     showToast("GROUP_APPLY_ACCEPT");
                     break;
                 case GROUP_APPLY_DECLINE:
-                    removeTargetSystemMessage(groupId, DemoConstant.EXTRA_CONFERENCE_GROUP_ID, usernames.get(0), DemoConstant.SYSTEM_MESSAGE_FROM);
+                    removeTargetSystemMessage(groupId, DemoConstant.SYSTEM_MESSAGE_GROUP_ID, usernames.get(0), DemoConstant.SYSTEM_MESSAGE_FROM);
                     // TODO: person, reason from ext
                     saveGroupNotification(groupId, /*groupName*/"",  /*person*/usernames.get(0), /*reason*/"", InviteMessageStatus.MULTI_DEVICE_GROUP_APPLY_DECLINE);
 
@@ -919,7 +974,7 @@ public class ChatPresenter extends EaseChatPresenter {
                     // save invitation as messages
                     EMClient.getInstance().chatManager().saveMessage(msg);
 
-                    removeTargetSystemMessage(groupId, DemoConstant.EXTRA_CONFERENCE_GROUP_ID);
+                    removeTargetSystemMessage(groupId, DemoConstant.SYSTEM_MESSAGE_GROUP_ID);
                     // TODO: person, reason from ext
                     saveGroupNotification(groupId, /*groupName*/"",  /*person*/"", /*reason*/"", InviteMessageStatus.MULTI_DEVICE_GROUP_INVITE_ACCEPT);
                     message = DemoConstant.GROUP_CHANGE;
@@ -927,7 +982,7 @@ public class ChatPresenter extends EaseChatPresenter {
                     showToast("GROUP_INVITE_ACCEPT");
                     break;
                 case GROUP_INVITE_DECLINE:
-                    removeTargetSystemMessage(groupId, DemoConstant.EXTRA_CONFERENCE_GROUP_ID);
+                    removeTargetSystemMessage(groupId, DemoConstant.SYSTEM_MESSAGE_GROUP_ID);
                     // TODO: person, reason from ext
                     saveGroupNotification(groupId, /*groupName*/"",  /*person*/usernames.get(0), /*reason*/"", InviteMessageStatus.MULTI_DEVICE_GROUP_INVITE_DECLINE);
 

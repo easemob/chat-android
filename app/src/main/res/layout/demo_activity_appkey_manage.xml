@@ -12,6 +12,8 @@
         android:layout_height="@dimen/em_common_title_bar_height"
         app:titleBarTitle="@string/em_developer_appkey_self"
         android:background="@color/white"
+        app:titleBarRightTitle="@string/em_developer_appkey_default"
+        app:titleBarRightVisible="true"
         app:titleBarDisplayHomeAsUpEnabled="true"/>
 
     <com.scwang.smartrefresh.layout.SmartRefreshLayout

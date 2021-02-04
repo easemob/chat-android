@@ -125,4 +125,22 @@ public class GroupHelper {
         }
         return TextUtils.isEmpty(group.getGroupName()) ? groupId : group.getGroupName();
     }
+
+    /**
+     * 判断是否加入了群组
+     * @param allJoinGroups 所有加入的群组
+     * @param groupId
+     * @return
+     */
+    public static boolean isJoinedGroup(List<EMGroup> allJoinGroups, String groupId) {
+        if(allJoinGroups == null || allJoinGroups.isEmpty()) {
+            return false;
+        }
+        for (EMGroup group : allJoinGroups) {
+            if(TextUtils.equals(group.getGroupId(), groupId)) {
+                return true;
+            }
+        }
+        return false;
+    }
 }
