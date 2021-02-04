@@ -48,8 +48,8 @@ public class DemoApplication extends Application implements Thread.UncaughtExcep
         // 初始化PreferenceManager
         PreferenceManager.init(this);
         // init hx sdk
-        Log.e("TAG", "application initHx");
         if(DemoHelper.getInstance().getAutoLogin()) {
+            EMLog.i("DemoApplication", "application initHx");
             DemoHelper.getInstance().init(this);
         }
 

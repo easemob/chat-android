@@ -42,11 +42,12 @@
     <TextView
         android:id="@+id/tv_cancel"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_height="0dp"
         app:layout_constraintLeft_toRightOf="@id/query"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="@id/query"
         app:layout_constraintBottom_toBottomOf="@id/query"
+        android:gravity="center"
         android:text="@string/cancel"
         android:textSize="@dimen/em_size_normal"
         android:textColor="@color/em_color_brand"

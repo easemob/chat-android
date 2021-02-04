@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 
 import androidx.annotation.Nullable;
@@ -104,6 +105,7 @@ public class ChatActivity extends BaseInitActivity implements EaseTitleBar.OnBac
     @Override
     protected void initData() {
         super.initData();
+        EMConversation conversation = EMClient.getInstance().chatManager().getConversation(conversationId);
         MessageViewModel messageViewModel = new ViewModelProvider(this).get(MessageViewModel.class);
         viewModel = new ViewModelProvider(this).get(ChatViewModel.class);
         viewModel.getDeleteObservable().observe(this, response -> {
@@ -152,9 +154,6 @@ public class ChatActivity extends BaseInitActivity implements EaseTitleBar.OnBac
             if(event == null) {
                 return;
             }
-            EMConversation conversation = EMClient.getInstance()
-                                                    .chatManager()
-                                                    .getConversation(conversationId, EaseCommonUtils.getConversationType(chatType), false);
             if(conversation == null) {
                 finish();
             }

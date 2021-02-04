@@ -44,7 +44,7 @@ public class GroupContactViewModel extends AndroidViewModel {
         return LiveDataBus.get();
     }
 
-    public LiveData<Resource<List<EMGroup>>> getAllGroups() {
+    public LiveData<Resource<List<EMGroup>>> getAllGroupsObservable() {
         return allGroupObservable;
     }
 

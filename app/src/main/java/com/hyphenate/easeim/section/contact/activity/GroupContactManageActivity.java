@@ -9,6 +9,7 @@ import android.widget.FrameLayout;
 
 import androidx.constraintlayout.widget.Group;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.viewpager.widget.ViewPager;
 
 import com.google.android.material.tabs.TabLayout;
@@ -16,6 +17,7 @@ import com.hyphenate.easeim.R;
 import com.hyphenate.easeim.section.base.BaseInitActivity;
 import com.hyphenate.easeim.section.contact.fragment.GroupContactManageFragment;
 import com.hyphenate.easeim.section.contact.fragment.GroupPublicContactManageFragment;
+import com.hyphenate.easeim.section.contact.viewmodels.GroupContactViewModel;
 import com.hyphenate.easeim.section.group.activity.GroupPrePickActivity;
 import com.hyphenate.easeim.section.search.SearchGroupActivity;
 import com.hyphenate.easeim.section.search.SearchPublicGroupActivity;
@@ -77,7 +79,9 @@ public class GroupContactManageActivity extends BaseInitActivity implements Ease
     @Override
     protected void initData() {
         super.initData();
+        GroupContactViewModel viewModel = new ViewModelProvider(mContext).get(GroupContactViewModel.class);
         if(showPublic) {
+            viewModel.loadAllGroups();
             showPublicGroup();
         }else {
             showJoinGroup();
@@ -100,10 +104,10 @@ public class GroupContactManageActivity extends BaseInitActivity implements Ease
             case R.id.search_group :
                 if(isShowPublic()) {
                     //搜索公开群
-                    SearchGroupActivity.actionStart(mContext);
+                    SearchPublicGroupActivity.actionStart(mContext);
                 }else {
                     //搜索已加入的群
-                    SearchPublicGroupActivity.actionStart(mContext);
+                    SearchGroupActivity.actionStart(mContext);
                 }
                 break;
         }
@@ -128,8 +132,7 @@ public class GroupContactManageActivity extends BaseInitActivity implements Ease
      * @return
      */
     private boolean isShowPublic() {
-        String rightContent = mTitleBarGroupContact.getRightText().getText().toString().trim();
-        return TextUtils.equals(rightContent, getString(R.string.em_friends_group_public));
+        return showPublic;
     }
 
     private void showJoinGroup() {

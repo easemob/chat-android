@@ -9,7 +9,7 @@ android {
 
     signingConfigs {
         debug {
-            storeFile file(properties.getProperty('DEBUG_STORE_FILE_PATH', '/keystore/sdkdemo.jks'))
+            storeFile file(properties.getProperty('DEBUG_STORE_FILE_PATH', './keystore/sdkdemo.jks'))
             storePassword properties.getProperty('DEBUG_STORE_PASSWORD', '123456')
             keyAlias = properties.getProperty('DEBUG_KEY_ALIAS', 'easemob')
             keyPassword properties.getProperty('DEBUG_KEY_PASSWORD', '123456')
@@ -21,8 +21,8 @@ android {
         applicationId "com.hyphenate.easeim"
         minSdkVersion 19
         targetSdkVersion 29
-        versionCode 73
-        versionName "3.7.3"
+        versionCode 74
+        versionName "3.7.4"
         multiDexEnabled true
         //为了兼容5.0以下使用vector图标
         vectorDrawables.useSupportLibrary = true
@@ -126,10 +126,10 @@ dependencies {
 
     // EaseIMKit
     //api (project(path: ':ease-im-kit')) {exclude group:'com.hyphenate',module:'hyphenate-sdk'}
-    implementation 'com.hyphenate:ease-im-kit:3.7.3'
+    implementation 'com.hyphenate:ease-im-kit:3.7.4'
     // EaseIMKit依赖，必须添加环信IM SDK
     //implementation project(path: ':hyphenatechatsdk')
-    implementation 'com.hyphenate:hyphenate-sdk:3.7.3'
+    implementation 'com.hyphenate:hyphenate-sdk:3.7.4'
 }
 
 // ADD THIS AT THE BOTTOM

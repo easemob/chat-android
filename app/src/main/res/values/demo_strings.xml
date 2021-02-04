@@ -295,6 +295,7 @@
     <string name="em_developer_appkey_self">自定义AppKey</string>
     <string name="em_developer_appkey_self_add">添加自定义AppKey</string>
     <string name="em_developer_appkey_delete">删除自定义AppKey？</string>
+    <string name="em_developer_appkey_default">默认配置</string>
     <string name="em_developer_allow_token">允许使用token登录</string>
     <string name="em_developer_from_server">优先从服务器获取消息</string>
     <string name="em_developer_upload_to_hx">消息附件上传到环信服务器</string>
