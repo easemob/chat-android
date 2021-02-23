@@ -58,12 +58,6 @@
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
     <!-- 百度地图定位配置 end -->
 
-    <!--  是否可以在后台弹出界面-->
-    <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW"/>
-
-    <uses-permission android:name="android.permission.USE_FULL_SCREEN_INTENT" />
-
-
     <!--bugly start-->
     <uses-permission android:name="android.permission.READ_LOGS" />
     <!--bugly end-->
