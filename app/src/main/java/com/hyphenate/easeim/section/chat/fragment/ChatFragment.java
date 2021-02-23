@@ -194,11 +194,11 @@ public class ChatFragment extends EaseChatFragment implements OnRecallMessageRes
                         switch (position) {
                             case 0 :
                                // startVideoCall();conversationId
-                                EaseCallUIKit.getInstance().startSingleCall(EaseCallType.SIGNAL_VIDEO_CALL,conversationId);
+                                EaseCallUIKit.getInstance().startSingleCall(EaseCallType.SIGNAL_VIDEO_CALL,conversationId,null);
                                 break;
                             case 1 :
                                 //startVoiceCall();
-                                EaseCallUIKit.getInstance().startSingleCall(EaseCallType.SIGNAL_VOICE_CALL,conversationId);
+                                EaseCallUIKit.getInstance().startSingleCall(EaseCallType.SIGNAL_VOICE_CALL,conversationId,null);
                                 break;
                         }
                     }

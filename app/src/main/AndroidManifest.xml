@@ -58,6 +58,12 @@
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
     <!-- 百度地图定位配置 end -->
 
+    <!--  是否可以在后台弹出界面-->
+    <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW"/>
+
+    <uses-permission android:name="android.permission.USE_FULL_SCREEN_INTENT" />
+
+
     <!--bugly start-->
     <uses-permission android:name="android.permission.READ_LOGS" />
     <!--bugly end-->
@@ -96,7 +102,7 @@
         android:roundIcon="@mipmap/em_logo_uidemo"
         android:supportsRtl="true"
         android:usesNonSdkApi="true"
-        android:requestLegacyExternalStorage="false"
+        android:requestLegacyExternalStorage="true"
         android:usesCleartextTraffic="true"
         android:name=".DemoApplication"
         android:theme="@style/AppTheme">
@@ -268,7 +274,7 @@
 
         </receiver>
 
-        <receiver android:name="com.hyphenate.push.platform.mi.EMMiMsgReceiver">
+        <receiver android:name=".common.receiver.MiMsgReceiver">
             <intent-filter>
                 <action android:name="com.xiaomi.mipush.RECEIVE_MESSAGE" />
             </intent-filter>

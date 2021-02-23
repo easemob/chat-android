@@ -23,6 +23,7 @@ import android.widget.TextView;
 
 import androidx.lifecycle.ViewModelProvider;
 import easemob.hyphenate.calluikit.EaseCallUIKit;
+import easemob.hyphenate.calluikit.utils.EaseCallKitUtils;
 
 import com.hyphenate.easeim.R;
 import com.hyphenate.easeim.common.constant.DemoConstant;
@@ -33,8 +34,14 @@ import com.hyphenate.easeim.section.chat.viewmodel.ConferenceInviteViewModel;
 import com.hyphenate.easeui.utils.EaseUserUtils;
 import com.hyphenate.easeui.widget.EaseTitleBar;
 
+import org.json.JSONObject;
+
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+
+import static easemob.hyphenate.calluikit.utils.EaseMsgUtils.CALL_GROUP_ID;
 
 public class ConferenceInviteActivity extends BaseInitActivity implements View.OnClickListener, EaseTitleBar.OnBackPressListener {
     private static final String TAG = "ConferenceInvite";
@@ -47,14 +54,14 @@ public class ConferenceInviteActivity extends BaseInitActivity implements View.O
     private EaseTitleBar mTitleBar;
     private TextView mBtnStart;
     private ListView mListView;
-    private String groupId;
+    private static String groupId;
+    private String[] exist_member;
 
     //手指按下的点为(x1, y1)手指离开屏幕的点为(x2, y2)
     private float x1 = 0;
     private float x2 = 0;
     private float y1 = 0;
     private float y2 = 0;
-
 
 
     @Override
@@ -65,7 +72,11 @@ public class ConferenceInviteActivity extends BaseInitActivity implements View.O
     @Override
     protected void initIntent(Intent intent) {
         super.initIntent(intent);
-        groupId = intent.getStringExtra(DemoConstant.EXTRA_CONFERENCE_GROUP_ID);
+        String group = intent.getStringExtra(DemoConstant.EXTRA_CONFERENCE_GROUP_ID);
+        if(group != null){
+            groupId = group;
+            exist_member = intent.getStringArrayExtra(DemoConstant.EXTRA_CONFERENCE_GROUP_EXIST_MEMBERS);
+        }
     }
 
     @Override
@@ -110,6 +121,7 @@ public class ConferenceInviteActivity extends BaseInitActivity implements View.O
             });
         });
         viewModel.getConferenceMembers(groupId);
+        viewModel.setExistMembers(exist_member);
     }
 
     @Override
@@ -173,11 +185,12 @@ public class ConferenceInviteActivity extends BaseInitActivity implements View.O
                     showToast(R.string.tips_select_contacts_first);
                     return;
                 }
-//                Intent intent = getIntent();
-//                intent.putExtra("members", members);
-//                setResult(RESULT_OK, intent);
+                //用户自定义扩展字段
+                Map<String, Object> params = new HashMap<>();
+                params.put("groupId", groupId);
+//                JSONObject object = EaseCallKitUtils.convertMapToJSONObject(params);
                 //开始邀请人员
-                EaseCallUIKit.getInstance().startInviteMultipleCall(members);
+                EaseCallUIKit.getInstance().startInviteMultipleCall(members,params);
                 finish();
                 break;
         }
@@ -186,13 +199,13 @@ public class ConferenceInviteActivity extends BaseInitActivity implements View.O
     @Override
     public void onBackPress(View view) {
         onBackPressed();
-        EaseCallUIKit.getInstance().startInviteMultipleCall(null);
+        EaseCallUIKit.getInstance().startInviteMultipleCall(null,null);
     }
 
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if (keyCode == KeyEvent.KEYCODE_BACK) {
-            EaseCallUIKit.getInstance().startInviteMultipleCall(null);
+            EaseCallUIKit.getInstance().startInviteMultipleCall(null,null);
             return true;
         }
         return super.onKeyDown(keyCode, event);
@@ -214,7 +227,7 @@ public class ConferenceInviteActivity extends BaseInitActivity implements View.O
             } else if (y2 - y1 > 50) {
             } else if (x1 - x2 > 50) {
             } else if (x2 - x1 > 50) {
-                EaseCallUIKit.getInstance().startInviteMultipleCall(null);
+                EaseCallUIKit.getInstance().startInviteMultipleCall(null,null);
             }
         }
         return super.onTouchEvent(event);

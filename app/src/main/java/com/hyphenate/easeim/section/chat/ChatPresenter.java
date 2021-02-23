@@ -185,7 +185,7 @@ public class ChatPresenter extends EaseChatPresenter {
                 getNotifier().notify(message);
             }
             //notify new message
-            getNotifier().vibrateAndPlayTone(message);
+            //getNotifier().vibrateAndPlayTone(message);
         }
     }
 

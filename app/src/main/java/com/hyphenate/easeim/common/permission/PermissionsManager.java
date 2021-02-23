@@ -16,13 +16,17 @@ package com.hyphenate.easeim.common.permission;
 import android.Manifest;
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
+import android.net.Uri;
 import android.os.Build;
+import android.provider.Settings;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.annotation.RequiresApi;
 import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.Fragment;
 
@@ -202,6 +206,7 @@ public class PermissionsManager {
    * @param activity the Activity necessary to request and check permissions.
    * @param action   the PermissionsResultAction used to notify you of permissions being accepted.
    */
+
   @SuppressWarnings("unused")
   public synchronized void requestAllManifestPermissionsIfNecessary(final @Nullable Activity activity,
       final @Nullable PermissionsResultAction action) {
@@ -210,6 +215,22 @@ public class PermissionsManager {
     }
     String[] perms = getManifestPermissions(activity);
     requestPermissionsIfNecessaryForResult(activity, perms, action);
+
+    //是否已经授予可以弹出权限
+//    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+//      requestCanDrawOverlays(activity);
+//    }
+  }
+
+
+  @RequiresApi(api = Build.VERSION_CODES.M)
+  void requestCanDrawOverlays(@Nullable Activity activity){
+    if (!Settings.canDrawOverlays(activity)) {
+      //若未授权则请求权限
+      Intent intent = new Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION);
+      intent.setData(Uri.parse("package:" + activity.getPackageName()));
+      activity.startActivityForResult(intent, 0);
+    }
   }
 
   /**
