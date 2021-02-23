@@ -78,7 +78,6 @@ public class SplashActivity extends BaseInitActivity {
             parseResource(response, new OnResourceParseCallback<Boolean>(true) {
                 @Override
                 public void onSuccess(Boolean data) {
-                    EMLog.i("TAG", "error message = "+data);
                     MainActivity.startAction(mContext);
                     finish();
                 }

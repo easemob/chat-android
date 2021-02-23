@@ -102,7 +102,7 @@
         android:roundIcon="@mipmap/em_logo_uidemo"
         android:supportsRtl="true"
         android:usesNonSdkApi="true"
-        android:requestLegacyExternalStorage="true"
+        android:requestLegacyExternalStorage="false"
         android:usesCleartextTraffic="true"
         android:name=".DemoApplication"
         android:theme="@style/AppTheme">

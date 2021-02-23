@@ -35,10 +35,6 @@ public class UserActivityLifecycleCallbacks implements Application.ActivityLifec
 
     @Override
     public void onActivityResumed(Activity activity) {
-        Log.e("ActivityLifecycle 111", "onActivityResumed "+activity.getLocalClassName());
-        for(Activity activity1 : resumeActivity){
-            Log.e("ActivityLifecycle 222", "onActivityResumed "+activity1.getLocalClassName());
-        }
         if (!resumeActivity.contains(activity)) {
             resumeActivity.add(activity);
             if(resumeActivity.size() == 1) {

@@ -663,7 +663,6 @@ public class DemoHelper {
     }
 
     /**
-<<<<<<< HEAD
      * 检查是否是第一次安装登录
      * 默认值是true, 需要在用api拉取完会话列表后，就其置为false.
      * @return

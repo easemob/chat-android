@@ -235,11 +235,9 @@ public class ContactDetailActivity extends BaseInitActivity implements EaseTitle
                 break;
             case R.id.btn_voice :
                 EaseCallUIKit.getInstance().startSingleCall(EaseCallType.SIGNAL_VOICE_CALL,mUser.getUsername(),null);
-//                ChatVoiceCallActivity.actionStart(mContext, mUser.getUsername());
                 break;
             case R.id.btn_video :
                 EaseCallUIKit.getInstance().startSingleCall(EaseCallType.SIGNAL_VIDEO_CALL,mUser.getUsername(),null);
-//                ChatVideoCallActivity.actionStart(mContext, mUser.getUsername());
                 break;
             case R.id.btn_add_contact :
                 addContactViewModel.addContact(mUser.getUsername(), getResources().getString(R.string.em_add_contact_add_a_friend));
