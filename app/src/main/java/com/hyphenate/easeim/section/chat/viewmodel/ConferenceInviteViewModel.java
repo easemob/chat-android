@@ -30,4 +30,10 @@ public class ConferenceInviteViewModel extends AndroidViewModel {
     public LiveData<Resource<List<KV<String, Integer>>>> getConferenceInvite() {
         return conferenceInviteObservable;
     }
+
+    public void setExistMembers(String[] existMember) {
+       if(repository != null){
+           repository.SetExistMembers(existMember);
+       }
+    }
 }

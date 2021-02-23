@@ -36,6 +36,8 @@ public class CallReceiver extends BroadcastReceiver{
 		String from = intent.getStringExtra("from");
 		//call type
 		String type = intent.getStringExtra("type");
+
+
 		if(Build.VERSION.SDK_INT >= 29 && !EasyUtils.isAppRunningForeground(context)) {
 			Intent fullScreenIntent;
 			String content = "";

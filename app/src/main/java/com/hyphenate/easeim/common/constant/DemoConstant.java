@@ -15,6 +15,7 @@ public interface DemoConstant extends EaseConstant {
     String EXTRA_CONFERENCE_INVITER = "inviter";
     String EXTRA_CONFERENCE_IS_CREATOR = "is_creator";
     String EXTRA_CONFERENCE_GROUP_ID = "group_id";
+    String EXTRA_CONFERENCE_GROUP_EXIST_MEMBERS = "exist_members";
 
     String OP_INVITE = "invite";
     String OP_REQUEST_TOBE_SPEAKER = "request_tobe_speaker";

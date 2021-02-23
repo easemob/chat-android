@@ -130,6 +130,10 @@ dependencies {
     // EaseIMKit依赖，必须添加环信IM SDK
     //implementation project(path: ':hyphenatechatsdk')
     implementation 'com.hyphenate:hyphenate-sdk:3.7.4'
+
+    //EaseCallKit依赖，必须添加环信IM SDK
+    //api project(':ease-call-kit')
+    implementation 'com.hyphenate:ease-call-kit:3.7.4'
 }
 
 // ADD THIS AT THE BOTTOM
