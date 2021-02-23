@@ -27,14 +27,6 @@ public class ChatLiveInviteViewHolder extends EaseChatRowViewHolder {
     @Override
     public void onBubbleClick(EMMessage message) {
         super.onBubbleClick(message);
-
-        String confId = message.getStringAttribute(DemoConstant.EM_CONFERENCE_ID, "");
-        String confPassword = message.getStringAttribute(DemoConstant.EM_CONFERENCE_PASSWORD,"");
-        int type = message.getIntAttribute(DemoConstant.EM_CONFERENCE_TYPE, 0);
-        goLive(confId, confPassword, message.getFrom());
     }
 
-    public void goLive(String confId, String password, String inviter) {
-        PushAndMessageHelper.goLive(getContext(), confId, password, inviter);
-    }
 }

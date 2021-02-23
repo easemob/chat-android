@@ -11,8 +11,6 @@ import android.os.Bundle;
 import android.util.Log;
 
 
-import com.hyphenate.easeim.section.conference.CallFloatWindow;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -148,8 +146,8 @@ public class UserActivityLifecycleCallbacks implements Application.ActivityLifec
             Activity topActivity = activityList.get(0);
             if(!topActivity.isFinishing() //没有正在finish
                     && topActivity != activity //当前activity和列表中首个activity不相同
-                    && topActivity.getTaskId() != activity.getTaskId() //分属不同的任务栈 且 没有展示悬浮框
-                    && !CallFloatWindow.getInstance(topActivity).isShowing()) {
+                    && topActivity.getTaskId() != activity.getTaskId()
+            ){
                 Log.e("ActivityLifecycle", "启动了activity = "+topActivity.getClass().getName());
                 activity.startActivity(new Intent(activity, topActivity.getClass()));
             }

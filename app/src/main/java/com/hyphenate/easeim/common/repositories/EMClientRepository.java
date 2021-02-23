@@ -158,7 +158,6 @@ public class EMClientRepository extends BaseEMRepository{
         return new NetworkOnlyResource<Boolean>() {
             @Override
             protected void createCall(@NonNull ResultCallBack<LiveData<Boolean>> callBack) {
-                DemoHelper.getInstance().endCall();
                 EMClient.getInstance().logout(unbindDeviceToken, new EMCallBack() {
 
                     @Override

@@ -30,6 +30,5 @@ public class ChatConferenceInviteViewHolder extends EaseChatRowViewHolder {
         String confId = message.getStringAttribute(DemoConstant.MSG_ATTR_CONF_ID, "");
         String confPassword = message.getStringAttribute(DemoConstant.MSG_ATTR_CONF_PASS,"");
         String extension = message.getStringAttribute(DemoConstant.MSG_ATTR_EXTENSION, "");
-        PushAndMessageHelper.goConference(getContext(), confId, confPassword, extension);
     }
 }

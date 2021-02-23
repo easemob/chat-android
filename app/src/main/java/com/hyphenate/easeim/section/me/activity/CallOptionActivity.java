@@ -85,34 +85,19 @@ public class CallOptionActivity extends BaseInitActivity implements SwitchItemVi
         editMinBitRate.addTextChangedListener(new MyTextChangedListener() {
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                try {
-                    EMClient.getInstance().callManager().getCallOptions().setMinVideoKbps(new Integer(s.toString()).intValue());
-                    PreferenceManager.getInstance().setCallMinVideoKbps(new Integer(s.toString()).intValue());
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
+
             }
         });
         editMaxBitRate.addTextChangedListener(new MyTextChangedListener() {
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                try {
-                    EMClient.getInstance().callManager().getCallOptions().setMaxVideoKbps(new Integer(s.toString()).intValue());
-                    PreferenceManager.getInstance().setCallMaxVideoKbps(new Integer(s.toString()).intValue());
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
+
             }
         });
         editMaxFrameRate.addTextChangedListener(new MyTextChangedListener() {
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                try {
-                    EMClient.getInstance().callManager().getCallOptions().setMaxVideoFrameRate(new Integer(s.toString()).intValue());
-                    PreferenceManager.getInstance().setCallMaxFrameRate(new Integer(s.toString()).intValue());
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
+
             }
         });
         rlSwitchExternalAudioInputResolution.setOnCheckedChangeListener(this);
@@ -218,7 +203,6 @@ public class CallOptionActivity extends BaseInitActivity implements SwitchItemVi
                     }
                     Camera.Size size = sizes.get(position - 1);
                     if (size != null) {
-                        EMClient.getInstance().callManager().getCallOptions().setVideoResolution(size.width, size.height);
                         TextView textVideoResolution = (TextView)findViewById(R.id.text_video_resolution);
                         textVideoResolution.setText(getString(R.string.demo_call_options_set_video_resolution, size.width + "x" + size.height));
 
@@ -231,7 +215,6 @@ public class CallOptionActivity extends BaseInitActivity implements SwitchItemVi
                                 disableOnce.set(true);
                                 frontSpinner.setSelection(0);
                             }
-
                         } else {
                             PreferenceManager.getInstance().setCallFrontCameraResolution(size.width + "x" + size.height);
                             PreferenceManager.getInstance().setCallBackCameraResolution("");
@@ -276,23 +259,6 @@ public class CallOptionActivity extends BaseInitActivity implements SwitchItemVi
         spinnerAudioSampleRate.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
              @Override
              public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                 // Not set
-                 if (position == 0) {
-                     return;
-                 }
-                 String audioSampleRate = sampleRateList.get(position);
-                 if (audioSampleRate != null) {
-                     try {
-                         String data = audioSampleRate.substring(0, audioSampleRate.length() - 2);
-                         int hz = new Integer(data).intValue();
-                         PreferenceManager.getInstance().setCallAudioSampleRate(hz);
-
-                         boolean externalAudioflag  = PreferenceManager.getInstance().isExternalAudioInputResolution();
-                         EMClient.getInstance().callManager().getCallOptions().setExternalAudioParam(externalAudioflag,hz,1);
-                     } catch (Exception e) {
-                         e.printStackTrace();
-                     }
-                 }
              }
 
              @Override
@@ -322,12 +288,8 @@ public class CallOptionActivity extends BaseInitActivity implements SwitchItemVi
     public void onCheckedChanged(SwitchItemView buttonView, boolean isChecked) {
         switch (buttonView.getId()) {
             case R.id.rl_switch_fix_video_resolution:
-                EMClient.getInstance().callManager().getCallOptions().enableFixedVideoResolution(isChecked);
-                PreferenceManager.getInstance().setCallFixedVideoResolution(isChecked);
                 break;
             case R.id.rl_switch_offline_call_push:
-                EMClient.getInstance().callManager().getCallOptions().setIsSendPushIfOffline(isChecked);
-                PreferenceManager.getInstance().setPushCall(isChecked);
                 break;
             case R.id.rl_switch_record_on_server:
                 PreferenceManager.getInstance().setRecordOnServer(isChecked);
@@ -336,12 +298,7 @@ public class CallOptionActivity extends BaseInitActivity implements SwitchItemVi
                 PreferenceManager.getInstance().setMergeStream(isChecked);
                 break;
             case R.id.rl_switch_external_audioInput_resolution:
-                PreferenceManager.getInstance().setExternalAudioInputResolution(isChecked);
-                int hz = PreferenceManager.getInstance().getCallAudioSampleRate();
-                if(hz == -1){
-                    hz = 16000;
-                }
-                EMClient.getInstance().callManager().getCallOptions().setExternalAudioParam(isChecked,hz,1);
+                break;
             case R.id.rl_switch_water_mark:
                 PreferenceManager.getInstance().setWatermarkResolution(isChecked);
             default:

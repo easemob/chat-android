@@ -10,6 +10,9 @@ import com.xiaomi.mipush.sdk.MiPushMessage;
 import org.json.JSONObject;
 
 
+/**
+ * 获取有关小米音视频推送消息
+ */
 public class MiMsgReceiver extends EMMiMsgReceiver {
 
     static private String TAG = "MiMsgReceiver";

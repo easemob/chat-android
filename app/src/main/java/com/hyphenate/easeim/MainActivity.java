@@ -1,7 +1,5 @@
 package com.hyphenate.easeim;
 
-import android.app.NotificationManager;
-import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -14,7 +12,6 @@ import android.view.View;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.core.app.NotificationCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.ViewModelProvider;
@@ -33,7 +30,6 @@ import com.hyphenate.easeim.common.utils.PushUtils;
 import com.hyphenate.easeim.section.MainViewModel;
 import com.hyphenate.easeim.section.base.BaseInitActivity;
 import com.hyphenate.easeim.section.chat.ChatPresenter;
-import com.hyphenate.easeim.section.conference.ConferenceActivity;
 import com.hyphenate.easeim.section.contact.activity.GroupContactManageActivity;
 import com.hyphenate.easeim.section.contact.fragment.ContactListFragment;
 import com.hyphenate.easeim.section.conversation.ConversationListFragment;
@@ -45,12 +41,10 @@ import com.hyphenate.easeim.section.me.AboutMeFragment;
 import com.hyphenate.easeui.model.EaseEvent;
 import com.hyphenate.easeui.ui.base.EaseBaseFragment;
 import com.hyphenate.easeui.widget.EaseTitleBar;
-import com.hyphenate.util.EMLog;
 
 import java.lang.reflect.Method;
 
 import static android.content.Intent.FLAG_ACTIVITY_NEW_TASK;
-import static com.hyphenate.easeim.common.utils.PushUtils.isRtcCall;
 
 
 public class MainActivity extends BaseInitActivity implements BottomNavigationView.OnNavigationItemSelectedListener {
@@ -102,7 +96,6 @@ public class MainActivity extends BaseInitActivity implements BottomNavigationVi
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         switch (item.getItemId()) {
             case R.id.action_video :
-                ConferenceActivity.startConferenceCall(mContext, null);
                 break;
             case R.id.action_group :
                 GroupPrePickActivity.actionStart(mContext);

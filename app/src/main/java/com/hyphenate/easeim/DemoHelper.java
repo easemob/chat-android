@@ -1,7 +1,6 @@
 package com.hyphenate.easeim;
 
 import android.app.Activity;
-import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
@@ -9,21 +8,13 @@ import android.os.AsyncTask;
 import android.os.Process;
 import android.text.TextUtils;
 import android.util.Log;
-import android.view.Gravity;
-import android.view.View;
-import android.view.Window;
-import android.view.WindowManager;
-import android.widget.Button;
-import android.widget.TextView;
 import android.widget.Toast;
 
-import com.baidu.platform.comapi.map.E;
 import com.heytap.msp.push.HeytapPushManager;
 import com.hyphenate.EMCallBack;
 import com.hyphenate.chat.EMChatManager;
 import com.hyphenate.chat.EMChatRoomManager;
 import com.hyphenate.chat.EMClient;
-import com.hyphenate.chat.EMConferenceManager;
 import com.hyphenate.chat.EMContactManager;
 import com.hyphenate.chat.EMConversation;
 import com.hyphenate.chat.EMGroupManager;
@@ -44,7 +35,6 @@ import com.hyphenate.easeim.section.chat.delegates.ChatNotificationAdapterDelega
 import com.hyphenate.easeim.section.chat.delegates.ChatRecallAdapterDelegate;
 import com.hyphenate.easeim.section.chat.delegates.ChatVideoCallAdapterDelegate;
 import com.hyphenate.easeim.section.chat.delegates.ChatVoiceCallAdapterDelegate;
-import com.hyphenate.easeim.section.chat.receiver.CallReceiver;
 import com.hyphenate.easeim.section.conference.ConferenceInviteActivity;
 import com.hyphenate.easeui.EaseIM;
 import com.hyphenate.easeui.delegate.EaseCustomAdapterDelegate;
@@ -93,7 +83,6 @@ import easemob.hyphenate.calluikit.base.EaseCallUserInfo;
 import easemob.hyphenate.calluikit.base.EaseCallEndReason;
 import easemob.hyphenate.calluikit.base.EaseCallKitListener;
 import easemob.hyphenate.calluikit.base.EaseCallType;
-import easemob.hyphenate.calluikit.utils.EaseFileUtils;
 
 import static android.content.Intent.FLAG_ACTIVITY_NEW_TASK;
 
@@ -105,7 +94,6 @@ public class DemoHelper {
 
     public boolean isSDKInit;//SDK是否初始化
     private static DemoHelper mInstance;
-    private CallReceiver callReceiver;
     private DemoModel demoModel = null;
     private Map<String, EaseUser> contactList;
     private UserProfileManager userProManager;
@@ -184,13 +172,6 @@ public class DemoHelper {
         return isSDKInit();
     }
 
-    private void initReceiver(Context context) {
-        IntentFilter callFilter = new IntentFilter(getEMClient().callManager().getIncomingCallBroadcastAction());
-//        if(callReceiver == null) {
-//            callReceiver = new CallReceiver();
-//        }
-//        context.registerReceiver(callReceiver, callFilter);
-    }
 
     /**
      *注册对话类型
@@ -253,13 +234,6 @@ public class DemoHelper {
         return getEMClient().chatroomManager();
     }
 
-    /**
-     * get EMConferenceManager
-     * @return
-     */
-    public EMConferenceManager getConferenceManager() {
-        return getEMClient().conferenceManager();
-    }
 
     /**
      * get EMChatManager
@@ -471,68 +445,6 @@ public class DemoHelper {
         HeadsetReceiver headsetReceiver = new HeadsetReceiver();
         IntentFilter headsetFilter = new IntentFilter(Intent.ACTION_HEADSET_PLUG);
         context.registerReceiver(headsetReceiver, headsetFilter);
-
-        // min video kbps
-        int minBitRate = PreferenceManager.getInstance().getCallMinVideoKbps();
-        if (minBitRate != -1) {
-            EMClient.getInstance().callManager().getCallOptions().setMinVideoKbps(minBitRate);
-        }
-
-        // max video kbps
-        int maxBitRate = PreferenceManager.getInstance().getCallMaxVideoKbps();
-        if (maxBitRate != -1) {
-            EMClient.getInstance().callManager().getCallOptions().setMaxVideoKbps(maxBitRate);
-        }
-
-        // max frame rate
-        int maxFrameRate = PreferenceManager.getInstance().getCallMaxFrameRate();
-        if (maxFrameRate != -1) {
-            EMClient.getInstance().callManager().getCallOptions().setMaxVideoFrameRate(maxFrameRate);
-        }
-
-        // audio sample rate
-        int audioSampleRate = PreferenceManager.getInstance().getCallAudioSampleRate();
-        if (audioSampleRate != -1) {
-            EMClient.getInstance().callManager().getCallOptions().setAudioSampleRate(audioSampleRate);
-        }
-
-        /**
-         * This function is only meaningful when your app need recording
-         * If not, remove it.
-         * This function need be called before the video stream started, so we set it in onCreate function.
-         * This method will set the preferred video record encoding codec.
-         * Using default encoding format, recorded file may not be played by mobile player.
-         */
-        //EMClient.getInstance().callManager().getVideoCallHelper().setPreferMovFormatEnable(true);
-
-        // resolution
-        String resolution = PreferenceManager.getInstance().getCallBackCameraResolution();
-        if (resolution.equals("")) {
-            resolution = PreferenceManager.getInstance().getCallFrontCameraResolution();
-        }
-        String[] wh = resolution.split("x");
-        if (wh.length == 2) {
-            try {
-                EMClient.getInstance().callManager().getCallOptions().setVideoResolution(new Integer(wh[0]).intValue(), new Integer(wh[1]).intValue());
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }
-
-        // enabled fixed sample rate
-        boolean enableFixSampleRate = PreferenceManager.getInstance().isCallFixedVideoResolution();
-        EMClient.getInstance().callManager().getCallOptions().enableFixedVideoResolution(enableFixSampleRate);
-
-        // Offline call push
-        EMClient.getInstance().callManager().getCallOptions().setIsSendPushIfOffline(getModel().isPushCall());
-
-        //init externalAudio
-        int hz = PreferenceManager.getInstance().getCallAudioSampleRate();
-        if(hz == -1){
-            hz = 16000;
-        }
-        boolean isExternalAudio = PreferenceManager.getInstance().isExternalAudioInputResolution();
-        EMClient.getInstance().callManager().getCallOptions().setExternalAudioParam(isExternalAudio,hz,1);
     }
 
     public void initPush(Context context) {
@@ -559,7 +471,6 @@ public class DemoHelper {
      *            callback
      */
     public void logout(boolean unbindDeviceToken, final EMCallBack callback) {
-        endCall();
         Log.d(TAG, "logout: " + unbindDeviceToken);
         EMClient.getInstance().logout(unbindDeviceToken, new EMCallBack() {
 
@@ -605,13 +516,7 @@ public class DemoHelper {
         System.exit(0);
     }
 
-    public void endCall() {
-        try {
-            EMClient.getInstance().callManager().endCall();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
+
 
     /**
      * 退出登录后，需要处理的业务逻辑

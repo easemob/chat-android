@@ -6,10 +6,8 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 
 import com.hyphenate.chat.EMMessage;
-import com.hyphenate.easeim.section.chat.activity.ChatVideoCallActivity;
 import com.hyphenate.easeim.section.chat.views.ChatRowVideoCall;
 import com.hyphenate.easeui.interfaces.MessageListItemClickListener;
-import com.hyphenate.easeui.model.styles.EaseMessageListItemStyle;
 import com.hyphenate.easeui.viewholder.EaseChatRowViewHolder;
 
 public class ChatVideoCallViewHolder extends EaseChatRowViewHolder {
@@ -26,10 +24,5 @@ public class ChatVideoCallViewHolder extends EaseChatRowViewHolder {
     @Override
     public void onBubbleClick(EMMessage message) {
         super.onBubbleClick(message);
-        if(message.direct() == EMMessage.Direct.SEND) {
-            ChatVideoCallActivity.actionStart(getContext(), message.getTo());
-        }else {
-            ChatVideoCallActivity.actionStart(getContext(), message.getFrom());
-        }
-    }
+      }
 }

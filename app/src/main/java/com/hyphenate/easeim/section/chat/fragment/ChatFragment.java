@@ -23,15 +23,12 @@ import com.hyphenate.easeim.R;
 import com.hyphenate.easeim.common.constant.DemoConstant;
 import com.hyphenate.easeim.common.livedatas.LiveDataBus;
 import com.hyphenate.easeim.common.model.EmojiconExampleGroupData;
-import com.hyphenate.easeim.common.utils.ToastUtils;
 import com.hyphenate.easeim.section.base.BaseActivity;
-import com.hyphenate.easeim.section.chat.activity.ChatVideoCallActivity;
-import com.hyphenate.easeim.section.chat.activity.ChatVoiceCallActivity;
 import com.hyphenate.easeim.section.chat.activity.ForwardMessageActivity;
-import com.hyphenate.easeim.section.conference.ConferenceActivity;
 import com.hyphenate.easeim.section.chat.activity.ImageGridActivity;
 import com.hyphenate.easeim.section.chat.activity.PickAtUserActivity;
 import com.hyphenate.easeim.section.chat.viewmodel.MessageViewModel;
+import com.hyphenate.easeim.section.conference.ConferenceInviteActivity;
 import com.hyphenate.easeim.section.dialog.DemoDialogFragment;
 import com.hyphenate.easeim.section.dialog.DemoListDialogFragment;
 import com.hyphenate.easeim.section.dialog.FullEditDialogFragment;
@@ -48,6 +45,10 @@ import com.hyphenate.easeui.modules.menu.EasePopupWindowHelper;
 import com.hyphenate.easeui.modules.menu.MenuItemBean;
 import com.hyphenate.util.EMLog;
 import com.hyphenate.util.UriUtils;
+
+import org.json.JSONException;
+
+import static android.content.Intent.FLAG_ACTIVITY_NEW_TASK;
 
 
 public class ChatFragment extends EaseChatFragment implements OnRecallMessageResultListener {
@@ -201,11 +202,9 @@ public class ChatFragment extends EaseChatFragment implements OnRecallMessageRes
                     public void OnItemClick(View view, int position) {
                         switch (position) {
                             case 0 :
-                               // startVideoCall();conversationId
                                 EaseCallUIKit.getInstance().startSingleCall(EaseCallType.SIGNAL_VIDEO_CALL,conversationId,null);
                                 break;
                             case 1 :
-                                //startVoiceCall();
                                 EaseCallUIKit.getInstance().startSingleCall(EaseCallType.SIGNAL_VOICE_CALL,conversationId,null);
                                 break;
                         }
@@ -260,15 +259,13 @@ public class ChatFragment extends EaseChatFragment implements OnRecallMessageRes
         super.onChatExtendMenuItemClick(view, itemId);
         switch (itemId) {
             case R.id.extend_item_video_call:
-                //startVideoCall();
                 showSelectDialog();
                 break;
-//            case EaseChatInputMenu.ITEM_VOICE_CALL:
-//                showSelectDialog();
-//                break;
             case R.id.extend_item_conference_call:
-                ConferenceActivity.startConferenceCall(getActivity(), conversationId);
-                break;
+                Intent intent = new Intent(getContext(), ConferenceInviteActivity.class).addFlags(FLAG_ACTIVITY_NEW_TASK);
+                intent.putExtra(DemoConstant.EXTRA_CONFERENCE_GROUP_ID, conversationId);
+                 getContext().startActivity(intent);
+                 break;
             case R.id.extend_item_delivery://群消息回执
                 showDeliveryDialog();
                 break;
@@ -331,40 +328,6 @@ public class ChatFragment extends EaseChatFragment implements OnRecallMessageRes
     }
 
     //================================== for video and voice start ====================================
-
-    /**
-     * start video call
-     */
-    protected void startVideoCall() {
-        if (!EMClient.getInstance().isConnected()) {
-            showMsgToast(getResources().getString(com.hyphenate.easeui.R.string.not_connect_to_server));
-        }else {
-            startChatVideoCall();
-        }
-    }
-
-    private void showMsgToast(String string) {
-        ToastUtils.showToast(string);
-    }
-
-    /**
-     * start voice call
-     */
-    protected void startVoiceCall() {
-        if (!EMClient.getInstance().isConnected()) {
-            showMsgToast(getResources().getString(com.hyphenate.easeui.R.string.not_connect_to_server));
-        } else {
-            startChatVoiceCall();
-        }
-    }
-
-    protected void startChatVideoCall() {
-        ChatVideoCallActivity.actionStart(mContext, conversationId);
-    }
-
-    protected void startChatVoiceCall() {
-        ChatVoiceCallActivity.actionStart(mContext, conversationId);
-    }
 
     /**
      * 保存未发送的文本消息内容

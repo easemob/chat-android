@@ -188,7 +188,6 @@ public class ConferenceInviteActivity extends BaseInitActivity implements View.O
                 //用户自定义扩展字段
                 Map<String, Object> params = new HashMap<>();
                 params.put("groupId", groupId);
-//                JSONObject object = EaseCallKitUtils.convertMapToJSONObject(params);
                 //开始邀请人员
                 EaseCallUIKit.getInstance().startInviteMultipleCall(members,params);
                 finish();
