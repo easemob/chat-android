@@ -35,14 +35,6 @@ public class PushAndMessageHelper {
 
     private static boolean isLock;
 
-    private static boolean isDuringMediaCommunication() {
-        UserActivityLifecycleCallbacks lifecycle = DemoApplication.getInstance().getLifecycleCallbacks();
-        String topClassName = lifecycle.current().getClass().getSimpleName();
-        if (lifecycle.count() > 0) {
-            return true;
-        }
-        return false;
-    }
 
     /**
      * 转发消息

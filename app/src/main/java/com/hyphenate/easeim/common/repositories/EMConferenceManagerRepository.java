@@ -22,8 +22,8 @@ import java.util.List;
 
 public class EMConferenceManagerRepository extends BaseEMRepository {
 
-    private String[] existMember;
-    public LiveData<Resource<List<KV<String, Integer>>>> getConferenceMembers(String groupId) {
+
+    public LiveData<Resource<List<KV<String, Integer>>>> getConferenceMembers(String groupId,String[] existMember) {
         return new NetworkOnlyResource<List<KV<String, Integer>>>() {
 
             @Override
@@ -59,7 +59,7 @@ public class EMConferenceManagerRepository extends BaseEMRepository {
                                 && !it.equals(DemoConstant.CHAT_ROOM)
                                 && !it.equals(DemoConstant.CHAT_ROBOT)
                                 && !it.equals(getCurrentUser())) {
-                            if(memberContains(it)){
+                            if(memberContains(existMember,it)){
                                 contacts.add(new KV<>(it, 2));
                             }else {
                                 contacts.add(new KV<>(it, 0));
@@ -74,12 +74,8 @@ public class EMConferenceManagerRepository extends BaseEMRepository {
         }.asLiveData();
     }
 
-    public void SetExistMembers(String[] members) {
-        existMember = members;
-    }
 
-
-    private boolean memberContains(String name) {
+    private boolean memberContains(String[] existMember, String name) {
         if(existMember != null && existMember.length > 0){
             for (String userId : existMember) {
                 if(TextUtils.equals(EasyUtils.useridFromJid(userId), name)) {

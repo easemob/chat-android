@@ -22,8 +22,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import androidx.lifecycle.ViewModelProvider;
-import easemob.hyphenate.calluikit.EaseCallUIKit;
-import easemob.hyphenate.calluikit.utils.EaseCallKitUtils;
+import com.hyphenate.easecallkit.EaseCallKit;
 
 import com.hyphenate.easeim.R;
 import com.hyphenate.easeim.common.constant.DemoConstant;
@@ -34,14 +33,10 @@ import com.hyphenate.easeim.section.chat.viewmodel.ConferenceInviteViewModel;
 import com.hyphenate.easeui.utils.EaseUserUtils;
 import com.hyphenate.easeui.widget.EaseTitleBar;
 
-import org.json.JSONObject;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
-import static easemob.hyphenate.calluikit.utils.EaseMsgUtils.CALL_GROUP_ID;
 
 public class ConferenceInviteActivity extends BaseInitActivity implements View.OnClickListener, EaseTitleBar.OnBackPressListener {
     private static final String TAG = "ConferenceInvite";
@@ -120,8 +115,7 @@ public class ConferenceInviteActivity extends BaseInitActivity implements View.O
                 }
             });
         });
-        viewModel.getConferenceMembers(groupId);
-        viewModel.setExistMembers(exist_member);
+        viewModel.getConferenceMembers(groupId,exist_member);
     }
 
     @Override
@@ -189,7 +183,7 @@ public class ConferenceInviteActivity extends BaseInitActivity implements View.O
                 Map<String, Object> params = new HashMap<>();
                 params.put("groupId", groupId);
                 //开始邀请人员
-                EaseCallUIKit.getInstance().startInviteMultipleCall(members,params);
+                EaseCallKit.getInstance().startInviteMultipleCall(members,params);
                 finish();
                 break;
         }
@@ -198,13 +192,13 @@ public class ConferenceInviteActivity extends BaseInitActivity implements View.O
     @Override
     public void onBackPress(View view) {
         onBackPressed();
-        EaseCallUIKit.getInstance().startInviteMultipleCall(null,null);
+        EaseCallKit.getInstance().startInviteMultipleCall(null,null);
     }
 
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if (keyCode == KeyEvent.KEYCODE_BACK) {
-            EaseCallUIKit.getInstance().startInviteMultipleCall(null,null);
+            EaseCallKit.getInstance().startInviteMultipleCall(null,null);
             return true;
         }
         return super.onKeyDown(keyCode, event);
@@ -226,7 +220,7 @@ public class ConferenceInviteActivity extends BaseInitActivity implements View.O
             } else if (y2 - y1 > 50) {
             } else if (x1 - x2 > 50) {
             } else if (x2 - x1 > 50) {
-                EaseCallUIKit.getInstance().startInviteMultipleCall(null,null);
+              EaseCallKit.getInstance().startInviteMultipleCall(null,null);
             }
         }
         return super.onTouchEvent(event);

@@ -351,20 +351,17 @@
             android:screenOrientation="portrait"/>
         <!--视频通话-->
         <activity
-            android:name="easemob.hyphenate.calluikit.ui.EaseVideoCallActivity"
+            android:name="com.hyphenate.easecallkit.ui.EaseVideoCallActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:excludeFromRecents="true"
             android:launchMode="singleInstance"
             android:screenOrientation="portrait"/>
         <activity
-            android:name="easemob.hyphenate.calluikit.ui.EaseMultipleVideoActivity"
+            android:name="com.hyphenate.easecallkit.ui.EaseMultipleVideoActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:excludeFromRecents="true"
             android:launchMode="singleInstance"
             android:screenOrientation="portrait"/>
-        <!--语音通话-->
-        <!--直播模式-->
-        <!--多人会议-->
         <!--会议成员邀请-->
         <activity
             android:name=".section.conference.ConferenceInviteActivity"

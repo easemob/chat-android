@@ -15,9 +15,9 @@ import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.ViewModelProvider;
-import easemob.hyphenate.calluikit.base.EaseCallType;
-import easemob.hyphenate.calluikit.ui.EaseMultipleVideoActivity;
-import easemob.hyphenate.calluikit.ui.EaseVideoCallActivity;
+import com.hyphenate.easecallkit.base.EaseCallType;
+import com.hyphenate.easecallkit.ui.EaseMultipleVideoActivity;
+import com.hyphenate.easecallkit.ui.EaseVideoCallActivity;
 
 import com.google.android.material.bottomnavigation.BottomNavigationItemView;
 import com.google.android.material.bottomnavigation.BottomNavigationMenuView;
@@ -378,12 +378,6 @@ public class MainActivity extends BaseInitActivity implements BottomNavigationVi
     protected void onResume() {
         super.onResume();
         DemoHelper.getInstance().showNotificationPermissionDialog();
-    }
-
-
-    @Override
-    protected void onPause() {
-        super.onPause();
     }
 
     @Override

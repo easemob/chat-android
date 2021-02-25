@@ -215,11 +215,6 @@ public class PermissionsManager {
     }
     String[] perms = getManifestPermissions(activity);
     requestPermissionsIfNecessaryForResult(activity, perms, action);
-
-    //是否已经授予可以弹出权限
-//    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-//      requestCanDrawOverlays(activity);
-//    }
   }
 
 

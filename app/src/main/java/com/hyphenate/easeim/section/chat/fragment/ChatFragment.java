@@ -12,8 +12,8 @@ import android.view.ViewGroup;
 
 import androidx.annotation.Nullable;
 import androidx.lifecycle.ViewModelProvider;
-import easemob.hyphenate.calluikit.EaseCallUIKit;
-import easemob.hyphenate.calluikit.base.EaseCallType;
+import com.hyphenate.easecallkit.EaseCallKit;
+import com.hyphenate.easecallkit.base.EaseCallType;
 
 import com.hyphenate.chat.EMClient;
 import com.hyphenate.chat.EMGroup;
@@ -45,8 +45,6 @@ import com.hyphenate.easeui.modules.menu.EasePopupWindowHelper;
 import com.hyphenate.easeui.modules.menu.MenuItemBean;
 import com.hyphenate.util.EMLog;
 import com.hyphenate.util.UriUtils;
-
-import org.json.JSONException;
 
 import static android.content.Intent.FLAG_ACTIVITY_NEW_TASK;
 
@@ -202,10 +200,10 @@ public class ChatFragment extends EaseChatFragment implements OnRecallMessageRes
                     public void OnItemClick(View view, int position) {
                         switch (position) {
                             case 0 :
-                                EaseCallUIKit.getInstance().startSingleCall(EaseCallType.SIGNAL_VIDEO_CALL,conversationId,null);
+                                EaseCallKit.getInstance().startSingleCall(EaseCallType.SINGLE_VIDEO_CALL,conversationId,null);
                                 break;
                             case 1 :
-                                EaseCallUIKit.getInstance().startSingleCall(EaseCallType.SIGNAL_VOICE_CALL,conversationId,null);
+                                EaseCallKit.getInstance().startSingleCall(EaseCallType.SINGLE_VOICE_CALL,conversationId,null);
                                 break;
                         }
                     }

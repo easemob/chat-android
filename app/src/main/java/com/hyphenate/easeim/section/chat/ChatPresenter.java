@@ -62,7 +62,6 @@ import java.util.concurrent.ConcurrentLinkedQueue;
 public class ChatPresenter extends EaseChatPresenter {
     private static final String TAG = ChatPresenter.class.getSimpleName();
     private static final int HANDLER_SHOW_TOAST = 0;
-    private static final int HANDLER_START_CONFERENCE = 1;
     private static ChatPresenter instance;
     private LiveDataBus messageChangeLiveData;
     private boolean isGroupsSyncedWithServer = false;
@@ -123,24 +122,7 @@ public class ChatPresenter extends EaseChatPresenter {
                             Toast.makeText(appContext, str, Toast.LENGTH_SHORT).show();
                         }
                         break;
-                    case HANDLER_START_CONFERENCE:
-                        if(!isAppLaunchMain()) {
-                            Message message = Message.obtain(handler, HANDLER_START_CONFERENCE, obj);
-                            handler.sendMessageDelayed(message, 500);
-                            return;
-                        }
-                        if(obj instanceof EMMessage) {
-                            // in background, do not refresh UI, notify it in notification bar
-                            if(!DemoApplication.getInstance().getLifecycleCallbacks().isFront()){
-                                getNotifier().notify((EMMessage) obj);
-                            }
-                            //notify new message
-                            getNotifier().vibrateAndPlayTone((EMMessage) obj);
-                        }
-                        break;
                 }
-
-
             }
         };
         while (!msgQueue.isEmpty()) {
@@ -170,15 +152,6 @@ public class ChatPresenter extends EaseChatPresenter {
         for (EMMessage message : messages) {
             EMLog.d(TAG, "onMessageReceived id : " + message.getMsgId());
             EMLog.d(TAG, "onMessageReceived: " + message.getType());
-            // 判断一下是否是会议邀请
-            String confId = message.getStringAttribute(DemoConstant.MSG_ATTR_CONF_ID, "");
-            if(!TextUtils.isEmpty(confId)){
-                if(!isAppLaunchMain()) {
-                    Message obtain = Message.obtain(handler, HANDLER_START_CONFERENCE, message);
-                    handler.sendMessageDelayed(obtain, 500);
-                    return;
-                }
-            }
             // 如果设置群组离线消息免打扰，则不进行消息通知
             List<String> disabledIds = DemoHelper.getInstance().getPushManager().getNoPushGroups();
             if(disabledIds != null && disabledIds.contains(message.conversationId())) {

@@ -8,6 +8,7 @@ import android.os.AsyncTask;
 import android.os.Process;
 import android.text.TextUtils;
 import android.util.Log;
+import android.util.Pair;
 import android.widget.Toast;
 
 import com.heytap.msp.push.HeytapPushManager;
@@ -21,6 +22,7 @@ import com.hyphenate.chat.EMGroupManager;
 import com.hyphenate.chat.EMMessage;
 import com.hyphenate.chat.EMOptions;
 import com.hyphenate.chat.EMPushManager;
+import com.hyphenate.cloud.EMHttpClient;
 import com.hyphenate.easeim.common.constant.DemoConstant;
 import com.hyphenate.easeim.common.db.DemoDbHelper;
 import com.hyphenate.easeim.common.manager.UserProfileManager;
@@ -30,7 +32,6 @@ import com.hyphenate.easeim.common.receiver.HeadsetReceiver;
 import com.hyphenate.easeim.common.utils.PreferenceManager;
 import com.hyphenate.easeim.section.chat.ChatPresenter;
 import com.hyphenate.easeim.section.chat.delegates.ChatConferenceInviteAdapterDelegate;
-import com.hyphenate.easeim.section.chat.delegates.ChatLiveInviteAdapterDelegate;
 import com.hyphenate.easeim.section.chat.delegates.ChatNotificationAdapterDelegate;
 import com.hyphenate.easeim.section.chat.delegates.ChatRecallAdapterDelegate;
 import com.hyphenate.easeim.section.chat.delegates.ChatVideoCallAdapterDelegate;
@@ -54,6 +55,7 @@ import com.hyphenate.easeui.model.EaseNotifier;
 import com.hyphenate.easeui.provider.EaseEmojiconInfoProvider;
 import com.hyphenate.easeui.provider.EaseSettingsProvider;
 import com.hyphenate.easeui.provider.EaseUserProfileProvider;
+import com.hyphenate.exceptions.HyphenateException;
 import com.hyphenate.push.EMPushConfig;
 import com.hyphenate.push.EMPushHelper;
 import com.hyphenate.push.EMPushType;
@@ -63,12 +65,6 @@ import com.hyphenate.util.EMLog;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.net.HttpURLConnection;
-import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.util.HashMap;
 import java.util.Hashtable;
@@ -76,13 +72,13 @@ import java.util.List;
 import java.util.Map;
 import java.util.TimeZone;
 
-import easemob.hyphenate.calluikit.EaseCallUIKit;
-import easemob.hyphenate.calluikit.base.EaseCallKitConfig;
-import easemob.hyphenate.calluikit.base.EaseCallKitTokenCallback;
-import easemob.hyphenate.calluikit.base.EaseCallUserInfo;
-import easemob.hyphenate.calluikit.base.EaseCallEndReason;
-import easemob.hyphenate.calluikit.base.EaseCallKitListener;
-import easemob.hyphenate.calluikit.base.EaseCallType;
+import com.hyphenate.easecallkit.EaseCallKit;
+import com.hyphenate.easecallkit.base.EaseCallKitConfig;
+import com.hyphenate.easecallkit.base.EaseCallKitTokenCallback;
+import com.hyphenate.easecallkit.base.EaseCallUserInfo;
+import com.hyphenate.easecallkit.base.EaseCallEndReason;
+import com.hyphenate.easecallkit.base.EaseCallKitListener;
+import com.hyphenate.easecallkit.base.EaseCallType;
 
 import static android.content.Intent.FLAG_ACTIVITY_NEW_TASK;
 
@@ -100,7 +96,7 @@ public class DemoHelper {
 
     private EaseCallKitListener callKitListener;
     private Context mianContext;
-    private String tokenUrl = "http://a1-hsb.easemob.com/token/rtcToken?";
+    private String tokenUrl = "http://a1-hsb.easemob.com/token/rtcToken";
 
     private DemoHelper() {}
 
@@ -132,26 +128,36 @@ public class DemoHelper {
             //注册对话类型
             registerConversationType();
 
-            //初始化 calluikit
-            EaseCallKitConfig callKitConfig = new EaseCallKitConfig();
-            //设置默认头像
-//            String headImage = EaseFileUtils.getModelFilePath(context,"watermark.png");
-//            callKitConfig.setDefaultHeadImage(headImage);
-//            //设置振铃文件
-//            String ringFile = EaseFileUtils.getModelFilePath(context,"huahai.mp3");
-//            callKitConfig.setRingFile(ringFile);
-            //设置呼叫超时时间
-            callKitConfig.setCallTimeOut(30 * 1000);
-            //设置声网AgoraAppIdappId
-            callKitConfig.setAgoraAppId("15cb0d28b87b425ea613fc46f7c9f974");
-            Map<String, EaseCallUserInfo> userInfoMap = new HashMap<>();
-            userInfoMap.put("lijian66",new EaseCallUserInfo("环信66",null));
-            userInfoMap.put("lijian88",new EaseCallUserInfo("环信88",null));
-            callKitConfig.setUserInfoMap(userInfoMap);
-            EaseCallUIKit.getInstance().init(context,callKitConfig);
-            addCallkitListener();
+            //callKit初始化
+            InitCallKit(context);
         }
 
+    }
+
+
+    /**
+     * callKit初始化
+     * @param context
+     */
+    private void InitCallKit(Context context){
+        EaseCallKitConfig callKitConfig = new EaseCallKitConfig();
+        //设置默认头像
+//        String headImage = EaseFileUtils.getModelFilePath(context,"watermark.png");
+//        callKitConfig.setDefaultHeadImage(headImage);
+//        //设置振铃文件
+//        String ringFile = EaseFileUtils.getModelFilePath(context,"huahai.mp3");
+//        callKitConfig.setRingFile(ringFile);
+        //设置呼叫超时时间
+        callKitConfig.setCallTimeOut(30 * 1000);
+        //设置声网AgoraAppId
+        callKitConfig.setAgoraAppId("15cb0d28b87b425ea613fc46f7c9f974");
+        Map<String, EaseCallUserInfo> userInfoMap = new HashMap<>();
+        userInfoMap.put("lijian66",new EaseCallUserInfo("环信66",null));
+        userInfoMap.put("lijian88",new EaseCallUserInfo("环信88",null));
+        callKitConfig.setUserInfoMap(userInfoMap);
+        callKitConfig.setEnableRTCToken(true);
+        EaseCallKit.getInstance().init(context,callKitConfig);
+        addCallkitListener();
     }
 
     /**
@@ -184,8 +190,7 @@ public class DemoHelper {
                 .addMessageType(EaseLocationAdapterDelegate.class)         //定位
                 .addMessageType(EaseVideoAdapterDelegate.class)            //视频
                 .addMessageType(EaseVoiceAdapterDelegate.class)            //声音
-                .addMessageType(ChatConferenceInviteAdapterDelegate.class) //会议邀请
-                .addMessageType(ChatLiveInviteAdapterDelegate.class)       //语音邀请
+                .addMessageType(ChatConferenceInviteAdapterDelegate.class) //语音邀请
                 .addMessageType(ChatRecallAdapterDelegate.class)           //消息撤回
                 .addMessageType(ChatVideoCallAdapterDelegate.class)        //视频通话
                 .addMessageType(ChatVoiceCallAdapterDelegate.class)        //语音通话
@@ -725,26 +730,29 @@ public class DemoHelper {
             public void onGenerateToken(String userId, String channelName, String appKey, EaseCallKitTokenCallback callback){
                 EMLog.d(TAG,"onGenerateToken userId:" + userId + " channelName:" + channelName + " appKey:"+ appKey);
                 String url = tokenUrl;
+                url += "?";
                 url += "userAccount=";
                 url += userId;
                 url += "&channelName=";
                 url += channelName;
                 url += "&appkey=";
                 url +=  appKey;
-                getRtcToken(url,callback);
+
+                //获取声网Token
+                getRtcToken(url, callback);
             }
 
             @Override
-            public void onRevivedCall(EaseCallType callType, String fromUserId,JSONObject ext) {
+            public void onReceivedCall(EaseCallType callType, String fromUserId,JSONObject ext) {
                 //收到接听电话
                 EMLog.d(TAG,"onRecivedCall" + callType.name() + " fromUserId:" + fromUserId);
             }
             @Override
-            public  void onCallError(EaseCallUIKit.EaseCallError type, int errorCode, String description){
+            public  void onCallError(EaseCallKit.EaseCallError type, int errorCode, String description){
 
             }
         };
-        EaseCallUIKit.getInstance().setCallKitListener(callKitListener);
+        EaseCallKit.getInstance().setCallKitListener(callKitListener);
     }
 
 
@@ -753,45 +761,38 @@ public class DemoHelper {
      *
      */
     private void getRtcToken(String tokenUrl,EaseCallKitTokenCallback callback){
-        new AsyncTask<String, Void, String>() {
+        new AsyncTask<String, Void, Pair<Integer, String>>(){
             @Override
-            protected String doInBackground(String... params) {
-                String resStr = null;
+            protected Pair<Integer, String> doInBackground(String... str) {
                 try {
-                    String url = params[0];
-                    URL HttpURL = new URL(url);
-                    HttpURLConnection conn = (HttpURLConnection) HttpURL.openConnection();
-                    conn.setRequestProperty("Authorization", "Bearer " + EMClient.getInstance().getAccessToken());
-
-                    conn.setDoInput(true);
-                    conn.connect();
-                    InputStream is = conn.getInputStream();
-                    StringBuilder sb = new StringBuilder();
-                    String line;
-                    BufferedReader br = new BufferedReader(new InputStreamReader(is));
-                    while((line = br.readLine()) != null) {
-                        sb.append(line);
-                    }
-                    resStr = sb.toString();
-                    is.close();
-                } catch (IOException e) {
-                    e.printStackTrace();
+                    Pair<Integer, String> response = EMHttpClient.getInstance().sendRequestWithToken(tokenUrl, null,EMHttpClient.GET);
+                    return response;
+                }catch (HyphenateException exception) {
+                    exception.printStackTrace();
                 }
-                return resStr;
+                return  null;
             }
             @Override
-            protected void onPostExecute(String resStr) {
-                if(resStr != null) {
+            protected void onPostExecute(Pair<Integer, String> response) {
+                if(response != null) {
                     try {
-                        JSONObject object = new JSONObject(resStr);
-                        String code  = object.getString("code");
-                        if(code.equals("RES_0K")){
-                            String token = object.getString("accessToken");
-                            int expireTime = object.getInt("expireTime");
-                            callback.onSetToken(token);
-                        }else{
-                            callback.onSetToken(null);
-                        }
+                          int resCode = response.first;
+                          if(resCode == 200){
+                              String responseInfo = response.second;
+                              if(responseInfo != null && responseInfo.length() > 0){
+                                  try {
+                                      JSONObject object = new JSONObject(responseInfo);
+                                      String token = object.getString("accessToken");
+                                      callback.onSetToken(token);
+                                  }catch (Exception e){
+                                      e.getStackTrace();
+                                  }
+                              }else{
+                                  callback.onGetTokenError(response.first,response.second);
+                              }
+                          }else{
+                              callback.onGetTokenError(response.first,response.second);
+                          }
                     }catch (Exception e){
                         e.printStackTrace();
                     }

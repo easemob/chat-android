@@ -33,12 +33,6 @@ public class MiMsgReceiver extends EMMiMsgReceiver {
         }catch (Exception e){
             e.getStackTrace();
         }
-        Intent msgIntent = context.getPackageManager().getLaunchIntentForPackage(context.getPackageName());
-        msgIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        context.startActivity(msgIntent);
-    }
-
-    public void onReceivePassThroughMessage(Context context, MiPushMessage message) {
-        EMLog.i(TAG, "onReceivePassThroughMessage is called. " + message.toString());
+        super.onNotificationMessageClicked(context, message);
     }
 }
