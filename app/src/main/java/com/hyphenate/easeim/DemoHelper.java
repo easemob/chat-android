@@ -142,7 +142,7 @@ public class DemoHelper {
     private void InitCallKit(Context context){
         EaseCallKitConfig callKitConfig = new EaseCallKitConfig();
         //设置默认头像
-//        String headImage = EaseFileUtils.getModelFilePath(context,"watermark.png");
+//        String headImage = EaseFileUtils.getModelFilePath(context,"test.png");
 //        callKitConfig.setDefaultHeadImage(headImage);
 //        //设置振铃文件
 //        String ringFile = EaseFileUtils.getModelFilePath(context,"huahai.mp3");
@@ -151,10 +151,6 @@ public class DemoHelper {
         callKitConfig.setCallTimeOut(30 * 1000);
         //设置声网AgoraAppId
         callKitConfig.setAgoraAppId("15cb0d28b87b425ea613fc46f7c9f974");
-        Map<String, EaseCallUserInfo> userInfoMap = new HashMap<>();
-        userInfoMap.put("lijian66",new EaseCallUserInfo("环信66",null));
-        userInfoMap.put("lijian88",new EaseCallUserInfo("环信88",null));
-        callKitConfig.setUserInfoMap(userInfoMap);
         callKitConfig.setEnableRTCToken(true);
         EaseCallKit.getInstance().init(context,callKitConfig);
         addCallkitListener();
