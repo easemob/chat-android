@@ -193,13 +193,14 @@ public class ConferenceInviteActivity extends BaseInitActivity implements View.O
     public void onBackPress(View view) {
         onBackPressed();
         EaseCallKit.getInstance().startInviteMultipleCall(null,null);
+        finish();
     }
 
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if (keyCode == KeyEvent.KEYCODE_BACK) {
             EaseCallKit.getInstance().startInviteMultipleCall(null,null);
-            return true;
+            finish();
         }
         return super.onKeyDown(keyCode, event);
     }
@@ -221,6 +222,7 @@ public class ConferenceInviteActivity extends BaseInitActivity implements View.O
             } else if (x1 - x2 > 50) {
             } else if (x2 - x1 > 50) {
               EaseCallKit.getInstance().startInviteMultipleCall(null,null);
+              finish();
             }
         }
         return super.onTouchEvent(event);
