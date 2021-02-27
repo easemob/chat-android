@@ -25,6 +25,7 @@ import com.hyphenate.chat.EMPushManager;
 import com.hyphenate.cloud.EMHttpClient;
 import com.hyphenate.easeim.common.constant.DemoConstant;
 import com.hyphenate.easeim.common.db.DemoDbHelper;
+import com.hyphenate.easeim.common.livedatas.LiveDataBus;
 import com.hyphenate.easeim.common.manager.UserProfileManager;
 import com.hyphenate.easeim.common.model.DemoModel;
 import com.hyphenate.easeim.common.model.EmojiconExampleGroupData;
@@ -51,6 +52,7 @@ import com.hyphenate.easeui.domain.EaseEmojicon;
 import com.hyphenate.easeui.domain.EaseEmojiconGroupEntity;
 import com.hyphenate.easeui.domain.EaseUser;
 import com.hyphenate.easeui.manager.EaseMessageTypeSetManager;
+import com.hyphenate.easeui.model.EaseEvent;
 import com.hyphenate.easeui.model.EaseNotifier;
 import com.hyphenate.easeui.provider.EaseEmojiconInfoProvider;
 import com.hyphenate.easeui.provider.EaseSettingsProvider;
@@ -746,6 +748,11 @@ public class DemoHelper {
             @Override
             public  void onCallError(EaseCallKit.EaseCallError type, int errorCode, String description){
 
+            }
+
+            @Override
+            public void onInViteCallMessageSent(){
+                LiveDataBus.get().with(DemoConstant.MESSAGE_CHANGE_CHANGE).postValue(new EaseEvent(DemoConstant.MESSAGE_CHANGE_CHANGE, EaseEvent.TYPE.MESSAGE));
             }
         };
         EaseCallKit.getInstance().setCallKitListener(callKitListener);

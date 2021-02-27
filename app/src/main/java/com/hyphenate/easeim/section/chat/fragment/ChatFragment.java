@@ -165,6 +165,15 @@ public class ChatFragment extends EaseChatFragment implements OnRecallMessageRes
                 chatLayout.getChatMessageListLayout().refreshMessages();
             }
         });
+
+        LiveDataBus.get().with(DemoConstant.MESSAGE_CHANGE_CHANGE, EaseEvent.class).observe(getViewLifecycleOwner(), event -> {
+            if(event == null) {
+                return;
+            }
+            if(event.isMessageChange()) {
+                chatLayout.getChatMessageListLayout().refreshToLatest();
+            }
+        });
         LiveDataBus.get().with(DemoConstant.CONVERSATION_READ, EaseEvent.class).observe(getViewLifecycleOwner(), event -> {
             if(event == null) {
                 return;

@@ -135,7 +135,7 @@ dependencies {
     implementation 'com.tencent.bugly:nativecrashreport:3.3.1'
 
     // EaseIMKit
-    //api (project(path: ':ease-im-kit')) {exclude group:'com.hyphenate',module:'hyphenate-sdk'}
+    //api (project(path: ':ease-im-kit'))
     implementation 'com.hyphenate:ease-im-kit:3.8.0'
     // EaseIMKit依赖，必须添加环信IM SDK
     //implementation project(path: ':hyphenatechatsdk')
