@@ -12,21 +12,16 @@ import android.widget.Toast;
 import androidx.annotation.StringRes;
 
 import com.hyphenate.EMChatRoomChangeListener;
-import com.hyphenate.EMConferenceListener;
 import com.hyphenate.EMConnectionListener;
 import com.hyphenate.EMContactListener;
 import com.hyphenate.EMConversationListener;
 import com.hyphenate.EMError;
 import com.hyphenate.EMMultiDeviceListener;
 import com.hyphenate.chat.EMClient;
-import com.hyphenate.chat.EMConferenceManager;
-import com.hyphenate.chat.EMConferenceMember;
-import com.hyphenate.chat.EMConferenceStream;
 import com.hyphenate.chat.EMConversation;
 import com.hyphenate.chat.EMGroup;
 import com.hyphenate.chat.EMMessage;
 import com.hyphenate.chat.EMMucSharedFile;
-import com.hyphenate.chat.EMStreamStatistics;
 import com.hyphenate.chat.EMTextMessageBody;
 import com.hyphenate.chat.adapter.EMAChatRoomManagerListener;
 import com.hyphenate.easeim.DemoApplication;
@@ -67,7 +62,6 @@ import java.util.concurrent.ConcurrentLinkedQueue;
 public class ChatPresenter extends EaseChatPresenter {
     private static final String TAG = ChatPresenter.class.getSimpleName();
     private static final int HANDLER_SHOW_TOAST = 0;
-    private static final int HANDLER_START_CONFERENCE = 1;
     private static ChatPresenter instance;
     private LiveDataBus messageChangeLiveData;
     private boolean isGroupsSyncedWithServer = false;
@@ -93,8 +87,6 @@ public class ChatPresenter extends EaseChatPresenter {
         DemoHelper.getInstance().getContactManager().setContactListener(new ChatContactListener());
         //添加聊天室监听
         DemoHelper.getInstance().getChatroomManager().addChatRoomChangeListener(new ChatRoomListener());
-        //添加会议监听
-        DemoHelper.getInstance().getConferenceManager().addConferenceListener(new ChatConferenceListener());
         //添加对会话的监听（监听已读回执）
         DemoHelper.getInstance().getChatManager().addConversationListener(new ChatConversationListener());
     }
@@ -130,25 +122,7 @@ public class ChatPresenter extends EaseChatPresenter {
                             Toast.makeText(appContext, str, Toast.LENGTH_SHORT).show();
                         }
                         break;
-                    case HANDLER_START_CONFERENCE:
-                        if(!isAppLaunchMain()) {
-                            Message message = Message.obtain(handler, HANDLER_START_CONFERENCE, obj);
-                            handler.sendMessageDelayed(message, 500);
-                            return;
-                        }
-                        if(obj instanceof EMMessage) {
-                            startConference((EMMessage) obj);
-                            // in background, do not refresh UI, notify it in notification bar
-                            if(!DemoApplication.getInstance().getLifecycleCallbacks().isFront()){
-                                getNotifier().notify((EMMessage) obj);
-                            }
-                            //notify new message
-                            getNotifier().vibrateAndPlayTone((EMMessage) obj);
-                        }
-                        break;
                 }
-
-
             }
         };
         while (!msgQueue.isEmpty()) {
@@ -178,16 +152,6 @@ public class ChatPresenter extends EaseChatPresenter {
         for (EMMessage message : messages) {
             EMLog.d(TAG, "onMessageReceived id : " + message.getMsgId());
             EMLog.d(TAG, "onMessageReceived: " + message.getType());
-            // 判断一下是否是会议邀请
-            String confId = message.getStringAttribute(DemoConstant.MSG_ATTR_CONF_ID, "");
-            if(!TextUtils.isEmpty(confId)){
-                if(!isAppLaunchMain()) {
-                    Message obtain = Message.obtain(handler, HANDLER_START_CONFERENCE, message);
-                    handler.sendMessageDelayed(obtain, 500);
-                    return;
-                }
-                startConference(message);
-            }
             // 如果设置群组离线消息免打扰，则不进行消息通知
             List<String> disabledIds = DemoHelper.getInstance().getPushManager().getNoPushGroups();
             if(disabledIds != null && disabledIds.contains(message.conversationId())) {
@@ -202,12 +166,7 @@ public class ChatPresenter extends EaseChatPresenter {
         }
     }
 
-    private void startConference(EMMessage message) {
-        String confId = message.getStringAttribute(DemoConstant.MSG_ATTR_CONF_ID, "");
-        String password = message.getStringAttribute(DemoConstant.MSG_ATTR_CONF_PASS, "");
-        String extension = message.getStringAttribute(DemoConstant.MSG_ATTR_EXTENSION, "");
-        PushAndMessageHelper.goConference(context, confId, password, extension);
-    }
+
 
     /**
      * 判断是否已经启动了MainActivity
@@ -345,87 +304,6 @@ public class ChatPresenter extends EaseChatPresenter {
                 LiveDataBus.get().with(DemoConstant.ACCOUNT_CHANGE).postValue(new EaseEvent(event, EaseEvent.TYPE.ACCOUNT));
                 EMLog.i(TAG, event);
             }
-        }
-    }
-
-    private class ChatConferenceListener implements EMConferenceListener {
-
-        @Override
-        public void onMemberJoined(EMConferenceMember member) {
-            EMLog.i(TAG, String.format("member joined username: %s, member: %d", member.memberName,
-                    EMClient.getInstance().conferenceManager().getConferenceMemberList().size()));
-        }
-
-        @Override
-        public void onMemberExited(EMConferenceMember member) {
-            EMLog.i(TAG, String.format("member exited username: %s, member size: %d", member.memberName,
-                    EMClient.getInstance().conferenceManager().getConferenceMemberList().size()));
-        }
-
-        @Override
-        public void onStreamAdded(EMConferenceStream stream) {
-            EMLog.i(TAG, String.format("Stream added streamId: %s, streamName: %s, memberName: %s, username: %s, extension: %s, videoOff: %b, mute: %b",
-                    stream.getStreamId(), stream.getStreamName(), stream.getMemberName(), stream.getUsername(),
-                    stream.getExtension(), stream.isVideoOff(), stream.isAudioOff()));
-            EMLog.i(TAG, String.format("Conference stream subscribable: %d, subscribed: %d",
-                    EMClient.getInstance().conferenceManager().getAvailableStreamMap().size(),
-                    EMClient.getInstance().conferenceManager().getSubscribedStreamMap().size()));
-        }
-
-        @Override
-        public void onStreamRemoved(EMConferenceStream stream) {
-            EMLog.i(TAG, String.format("Stream removed streamId: %s, streamName: %s, memberName: %s, username: %s, extension: %s, videoOff: %b, mute: %b",
-                    stream.getStreamId(), stream.getStreamName(), stream.getMemberName(), stream.getUsername(),
-                    stream.getExtension(), stream.isVideoOff(), stream.isAudioOff()));
-            EMLog.i(TAG, String.format("Conference stream subscribable: %d, subscribed: %d",
-                    EMClient.getInstance().conferenceManager().getAvailableStreamMap().size(),
-                    EMClient.getInstance().conferenceManager().getSubscribedStreamMap().size()));
-        }
-
-        @Override
-        public void onStreamUpdate(EMConferenceStream stream) {
-            EMLog.i(TAG, String.format("Stream added streamId: %s, streamName: %s, memberName: %s, username: %s, extension: %s, videoOff: %b, mute: %b",
-                    stream.getStreamId(), stream.getStreamName(), stream.getMemberName(), stream.getUsername(),
-                    stream.getExtension(), stream.isVideoOff(), stream.isAudioOff()));
-            EMLog.i(TAG, String.format("Conference stream subscribable: %d, subscribed: %d",
-                    EMClient.getInstance().conferenceManager().getAvailableStreamMap().size(),
-                    EMClient.getInstance().conferenceManager().getSubscribedStreamMap().size()));
-        }
-
-        @Override
-        public void onPassiveLeave(int error, String message) {
-            EMLog.i(TAG, String.format("passive leave code: %d, message: %s", error, message));
-        }
-
-        @Override
-        public void onConferenceState(ConferenceState state) {
-            EMLog.i(TAG, String.format("State code=%d", state.ordinal()));
-        }
-
-        @Override
-        public void onStreamStatistics(EMStreamStatistics statistics) {
-            EMLog.d(TAG, statistics.toString());
-        }
-
-        @Override
-        public void onStreamSetup(String streamId) {
-            EMLog.i(TAG, String.format("Stream id - %s", streamId));
-        }
-
-        @Override
-        public void onSpeakers(List<String> speakers) {
-
-        }
-
-        @Override
-        public void onReceiveInvite(String confId, String password, String extension) {
-            EMLog.i(TAG, String.format("Receive conference invite confId: %s, password: %s, extension: %s", confId, password, extension));
-            PushAndMessageHelper.goConference(context, confId, password, extension);
-        }
-
-        @Override
-        public void onRoleChanged(EMConferenceManager.EMConferenceRole role) {
-
         }
     }
 

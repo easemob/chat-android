@@ -5,38 +5,30 @@ import android.app.Dialog;
 import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Color;
-import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.text.TextUtils;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 
-import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.core.content.ContextCompat;
 import androidx.lifecycle.ViewModelProvider;
+import com.hyphenate.easecallkit.EaseCallKit;
+import com.hyphenate.easecallkit.base.EaseCallType;
 
 import com.hyphenate.chat.EMClient;
 import com.hyphenate.chat.EMGroup;
 import com.hyphenate.chat.EMMessage;
-import com.hyphenate.chat.EMTextMessageBody;
 import com.hyphenate.easeim.DemoHelper;
 import com.hyphenate.easeim.R;
 import com.hyphenate.easeim.common.constant.DemoConstant;
 import com.hyphenate.easeim.common.livedatas.LiveDataBus;
 import com.hyphenate.easeim.common.model.EmojiconExampleGroupData;
-import com.hyphenate.easeim.common.utils.ToastUtils;
 import com.hyphenate.easeim.section.base.BaseActivity;
-import com.hyphenate.easeim.section.chat.activity.ChatVideoCallActivity;
-import com.hyphenate.easeim.section.chat.activity.ChatVoiceCallActivity;
 import com.hyphenate.easeim.section.chat.activity.ForwardMessageActivity;
-import com.hyphenate.easeim.section.conference.ConferenceActivity;
 import com.hyphenate.easeim.section.chat.activity.ImageGridActivity;
-import com.hyphenate.easeim.section.chat.activity.LiveActivity;
 import com.hyphenate.easeim.section.chat.activity.PickAtUserActivity;
 import com.hyphenate.easeim.section.chat.viewmodel.MessageViewModel;
+import com.hyphenate.easeim.section.conference.ConferenceInviteActivity;
 import com.hyphenate.easeim.section.dialog.DemoDialogFragment;
 import com.hyphenate.easeim.section.dialog.DemoListDialogFragment;
 import com.hyphenate.easeim.section.dialog.FullEditDialogFragment;
@@ -44,30 +36,17 @@ import com.hyphenate.easeim.section.contact.activity.ContactDetailActivity;
 import com.hyphenate.easeim.section.dialog.SimpleDialogFragment;
 import com.hyphenate.easeim.section.group.GroupHelper;
 import com.hyphenate.easeui.constants.EaseConstant;
-import com.hyphenate.easeui.delegate.EaseExpressionAdapterDelegate;
-import com.hyphenate.easeui.delegate.EaseFileAdapterDelegate;
-import com.hyphenate.easeui.delegate.EaseMessageAdapterDelegate;
-import com.hyphenate.easeui.delegate.EaseTextAdapterDelegate;
 import com.hyphenate.easeui.domain.EaseUser;
-import com.hyphenate.easeui.interfaces.MessageListItemClickListener;
 import com.hyphenate.easeui.model.EaseEvent;
-import com.hyphenate.easeui.model.styles.EaseMessageListItemStyle;
-import com.hyphenate.easeui.modules.chat.EaseChatExtendMenu;
 import com.hyphenate.easeui.modules.chat.EaseChatFragment;
-import com.hyphenate.easeui.modules.chat.EaseChatInputMenu;
-import com.hyphenate.easeui.modules.chat.EaseChatMessageListLayout;
-import com.hyphenate.easeui.modules.chat.EaseInputMenuStyle;
 import com.hyphenate.easeui.modules.chat.interfaces.IChatExtendMenu;
-import com.hyphenate.easeui.modules.chat.interfaces.IChatPrimaryMenu;
-import com.hyphenate.easeui.modules.chat.interfaces.OnMenuChangeListener;
 import com.hyphenate.easeui.modules.chat.interfaces.OnRecallMessageResultListener;
 import com.hyphenate.easeui.modules.menu.EasePopupWindowHelper;
 import com.hyphenate.easeui.modules.menu.MenuItemBean;
-import com.hyphenate.easeui.utils.EaseCommonUtils;
-import com.hyphenate.easeui.viewholder.EaseChatRowViewHolder;
-import com.hyphenate.easeui.widget.chatrow.EaseChatRow;
 import com.hyphenate.util.EMLog;
 import com.hyphenate.util.UriUtils;
+
+import static android.content.Intent.FLAG_ACTIVITY_NEW_TASK;
 
 
 public class ChatFragment extends EaseChatFragment implements OnRecallMessageResultListener {
@@ -186,6 +165,15 @@ public class ChatFragment extends EaseChatFragment implements OnRecallMessageRes
                 chatLayout.getChatMessageListLayout().refreshMessages();
             }
         });
+
+        LiveDataBus.get().with(DemoConstant.MESSAGE_CHANGE_CHANGE, EaseEvent.class).observe(getViewLifecycleOwner(), event -> {
+            if(event == null) {
+                return;
+            }
+            if(event.isMessageChange()) {
+                chatLayout.getChatMessageListLayout().refreshToLatest();
+            }
+        });
         LiveDataBus.get().with(DemoConstant.CONVERSATION_READ, EaseEvent.class).observe(getViewLifecycleOwner(), event -> {
             if(event == null) {
                 return;
@@ -221,10 +209,10 @@ public class ChatFragment extends EaseChatFragment implements OnRecallMessageRes
                     public void OnItemClick(View view, int position) {
                         switch (position) {
                             case 0 :
-                                startVideoCall();
+                                EaseCallKit.getInstance().startSingleCall(EaseCallType.SINGLE_VIDEO_CALL,conversationId,null);
                                 break;
                             case 1 :
-                                startVoiceCall();
+                                EaseCallKit.getInstance().startSingleCall(EaseCallType.SINGLE_VOICE_CALL,conversationId,null);
                                 break;
                         }
                     }
@@ -278,15 +266,13 @@ public class ChatFragment extends EaseChatFragment implements OnRecallMessageRes
         super.onChatExtendMenuItemClick(view, itemId);
         switch (itemId) {
             case R.id.extend_item_video_call:
-                //startVideoCall();
                 showSelectDialog();
                 break;
-//            case EaseChatInputMenu.ITEM_VOICE_CALL:
-//                showSelectDialog();
-//                break;
             case R.id.extend_item_conference_call:
-                ConferenceActivity.startConferenceCall(getActivity(), conversationId);
-                break;
+                Intent intent = new Intent(getContext(), ConferenceInviteActivity.class).addFlags(FLAG_ACTIVITY_NEW_TASK);
+                intent.putExtra(DemoConstant.EXTRA_CONFERENCE_GROUP_ID, conversationId);
+                 getContext().startActivity(intent);
+                 break;
             case R.id.extend_item_delivery://群消息回执
                 showDeliveryDialog();
                 break;
@@ -349,40 +335,6 @@ public class ChatFragment extends EaseChatFragment implements OnRecallMessageRes
     }
 
     //================================== for video and voice start ====================================
-
-    /**
-     * start video call
-     */
-    protected void startVideoCall() {
-        if (!EMClient.getInstance().isConnected()) {
-            showMsgToast(getResources().getString(com.hyphenate.easeui.R.string.not_connect_to_server));
-        }else {
-            startChatVideoCall();
-        }
-    }
-
-    private void showMsgToast(String string) {
-        ToastUtils.showToast(string);
-    }
-
-    /**
-     * start voice call
-     */
-    protected void startVoiceCall() {
-        if (!EMClient.getInstance().isConnected()) {
-            showMsgToast(getResources().getString(com.hyphenate.easeui.R.string.not_connect_to_server));
-        } else {
-            startChatVoiceCall();
-        }
-    }
-
-    protected void startChatVideoCall() {
-        ChatVideoCallActivity.actionStart(mContext, conversationId);
-    }
-
-    protected void startChatVoiceCall() {
-        ChatVoiceCallActivity.actionStart(mContext, conversationId);
-    }
 
     /**
      * 保存未发送的文本消息内容

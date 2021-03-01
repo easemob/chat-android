@@ -23,8 +23,8 @@ public class ConferenceInviteViewModel extends AndroidViewModel {
         conferenceInviteObservable = new SingleSourceLiveData<>();
     }
 
-    public void getConferenceMembers(String groupId) {
-        conferenceInviteObservable.setSource(repository.getConferenceMembers(groupId));
+    public void getConferenceMembers(String groupId,String[] existMember) {
+        conferenceInviteObservable.setSource(repository.getConferenceMembers(groupId,existMember));
     }
 
     public LiveData<Resource<List<KV<String, Integer>>>> getConferenceInvite() {

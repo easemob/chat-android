@@ -268,7 +268,7 @@
 
         </receiver>
 
-        <receiver android:name="com.hyphenate.push.platform.mi.EMMiMsgReceiver">
+        <receiver android:name=".common.receiver.MiMsgReceiver">
             <intent-filter>
                 <action android:name="com.xiaomi.mipush.RECEIVE_MESSAGE" />
             </intent-filter>
@@ -351,32 +351,17 @@
             android:screenOrientation="portrait"/>
         <!--视频通话-->
         <activity
-            android:name=".section.chat.activity.ChatVideoCallActivity"
+            android:name="com.hyphenate.easecallkit.ui.EaseVideoCallActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:excludeFromRecents="true"
             android:launchMode="singleInstance"
             android:screenOrientation="portrait"/>
-        <!--语音通话-->
         <activity
-            android:name=".section.chat.activity.ChatVoiceCallActivity"
+            android:name="com.hyphenate.easecallkit.ui.EaseMultipleVideoActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:excludeFromRecents="true"
             android:launchMode="singleInstance"
             android:screenOrientation="portrait"/>
-        <!--直播模式-->
-        <activity
-            android:name=".section.chat.activity.LiveActivity"
-            android:configChanges="orientation|keyboardHidden|screenSize"
-            android:excludeFromRecents="true"
-            android:screenOrientation="portrait"
-            android:launchMode="singleTask"/>
-        <!--多人会议-->
-        <activity
-            android:name=".section.conference.ConferenceActivity"
-            android:configChanges="orientation|keyboardHidden|screenSize"
-            android:excludeFromRecents="true"
-            android:screenOrientation="portrait"
-            android:launchMode="singleInstance"/>
         <!--会议成员邀请-->
         <activity
             android:name=".section.conference.ConferenceInviteActivity"
@@ -537,9 +522,6 @@
         <!--WebView加载网页-->
         <activity android:name=".section.base.WebViewActivity" />
         <!--捕获屏幕service-->
-        <service android:name=".section.conference.SRForegroundService"
-            android:enabled="true"
-            android:foregroundServiceType="mediaProjection"/>
     </application>
 
 </manifest>

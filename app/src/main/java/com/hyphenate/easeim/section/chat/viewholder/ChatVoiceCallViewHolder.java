@@ -6,10 +6,10 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 
 import com.hyphenate.chat.EMMessage;
-import com.hyphenate.easeim.section.chat.activity.ChatVoiceCallActivity;
+import com.hyphenate.easecallkit.EaseCallKit;
+import com.hyphenate.easecallkit.base.EaseCallType;
 import com.hyphenate.easeim.section.chat.views.ChatRowVoiceCall;
 import com.hyphenate.easeui.interfaces.MessageListItemClickListener;
-import com.hyphenate.easeui.model.styles.EaseMessageListItemStyle;
 import com.hyphenate.easeui.viewholder.EaseChatRowViewHolder;
 
 public class ChatVoiceCallViewHolder extends EaseChatRowViewHolder {
@@ -27,9 +27,9 @@ public class ChatVoiceCallViewHolder extends EaseChatRowViewHolder {
     public void onBubbleClick(EMMessage message) {
         super.onBubbleClick(message);
         if(message.direct() == EMMessage.Direct.SEND) {
-            ChatVoiceCallActivity.actionStart(getContext(), message.getTo());
+            EaseCallKit.getInstance().startSingleCall(EaseCallType.SINGLE_VOICE_CALL,message.getTo(),null);
         }else {
-            ChatVoiceCallActivity.actionStart(getContext(), message.getFrom());
+            EaseCallKit.getInstance().startSingleCall(EaseCallType.SINGLE_VOICE_CALL,message.getFrom(),null);
         }
     }
 }

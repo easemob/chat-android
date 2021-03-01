@@ -6,8 +6,10 @@
     <!-- app层菜单扩展功能id -->
     <!-- 视频通话 -->
     <item name="extend_item_video_call" type="id"/>
+
     <!-- 视频会议 -->
     <item name="extend_item_conference_call" type="id"/>
+
     <!-- 回执 -->
     <item name="extend_item_delivery" type="id"/>
 

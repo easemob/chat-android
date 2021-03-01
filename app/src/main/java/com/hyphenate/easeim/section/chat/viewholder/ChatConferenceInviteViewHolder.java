@@ -27,9 +27,5 @@ public class ChatConferenceInviteViewHolder extends EaseChatRowViewHolder {
     @Override
     public void onBubbleClick(EMMessage message) {
         super.onBubbleClick(message);
-        String confId = message.getStringAttribute(DemoConstant.MSG_ATTR_CONF_ID, "");
-        String confPassword = message.getStringAttribute(DemoConstant.MSG_ATTR_CONF_PASS,"");
-        String extension = message.getStringAttribute(DemoConstant.MSG_ATTR_EXTENSION, "");
-        PushAndMessageHelper.goConference(getContext(), confId, confPassword, extension);
     }
 }
