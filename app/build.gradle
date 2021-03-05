@@ -22,7 +22,7 @@ android {
         minSdkVersion 19
         targetSdkVersion 29
         versionCode 74
-        versionName "3.7.4"
+        versionName "3.7.4.1"
         multiDexEnabled true
         //为了兼容5.0以下使用vector图标
         vectorDrawables.useSupportLibrary = true
