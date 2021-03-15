@@ -64,13 +64,13 @@ public abstract class BaseInitActivity extends BaseActivity {
     @Override
     protected void onRestart(){
         super.onRestart();
-        if(EaseCallKit.getInstance().getCallState() != EaseCallState.CALL_IDLE && !EaseCallFloatWindow.getInstance(getApplicationContext()).isShowing()){
+        if(EaseCallKit.getInstance().getCallState() != EaseCallState.CALL_IDLE && !EaseCallFloatWindow.getInstance(mContext).isShowing()){
             if(EaseCallKit.getInstance().getCallType() == EaseCallType.CONFERENCE_CALL){
-                Intent intent = new Intent(getApplicationContext(), EaseMultipleVideoActivity.class).addFlags(FLAG_ACTIVITY_NEW_TASK);
-                getApplicationContext().startActivity(intent);
+                Intent intent = new Intent(mContext, EaseMultipleVideoActivity.class).addFlags(FLAG_ACTIVITY_NEW_TASK);
+                mContext.startActivity(intent);
             }else{
-                Intent intent = new Intent(getApplicationContext(), EaseVideoCallActivity.class).addFlags(FLAG_ACTIVITY_NEW_TASK);
-                getApplicationContext().startActivity(intent);
+                Intent intent = new Intent(mContext, EaseVideoCallActivity.class).addFlags(FLAG_ACTIVITY_NEW_TASK);
+                mContext.startActivity(intent);
             }
         }
     }
