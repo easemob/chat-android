@@ -12,6 +12,7 @@ import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.text.method.LinkMovementMethod;
 import android.text.style.ClickableSpan;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
@@ -107,6 +108,7 @@ public class LoginFragment extends BaseInitFragment implements View.OnClickListe
             parseResource(response, new OnResourceParseCallback<EaseUser>(true) {
                 @Override
                 public void onSuccess(EaseUser data) {
+                    Log.e("login", "login success");
                     DemoHelper.getInstance().setAutoLogin(true);
                     //跳转到主页
                     MainActivity.startAction(mContext);
@@ -154,9 +156,10 @@ public class LoginFragment extends BaseInitFragment implements View.OnClickListe
 
         });
         DemoDbHelper.getInstance(mContext).getDatabaseCreatedObservable().observe(getViewLifecycleOwner(), response -> {
-            if(response != null && !TextUtils.isEmpty(mUserName) && !TextUtils.isEmpty(mPwd) && isClick) {
-                mFragmentViewModel.login(mUserName, mPwd, isTokenFlag);
-            }
+            Log.i("login", "本地数据库初始化完成");
+            //if(response != null && !TextUtils.isEmpty(mUserName) && !TextUtils.isEmpty(mPwd) && isClick) {
+                //mFragmentViewModel.login(mUserName, mPwd, isTokenFlag);
+            //}
         });
     }
 
@@ -218,7 +221,7 @@ public class LoginFragment extends BaseInitFragment implements View.OnClickListe
         }
         isClick = true;
         //先初始化数据库
-        DemoDbHelper.getInstance(mContext).initDb(mUserName);
+        mFragmentViewModel.login(mUserName, mPwd, isTokenFlag);
     }
 
     @Override

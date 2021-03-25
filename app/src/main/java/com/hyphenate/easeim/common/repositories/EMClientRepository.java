@@ -210,7 +210,7 @@ public class EMClientRepository extends BaseEMRepository{
             @Override
             public void onSuccess(List<EMGroup> value) {
                 //加载完群组信息后，刷新会话列表页面，保证展示群组名称
-                EMLog.i("ChatPresenter", "isGroupsSyncedWithServer success");
+                EMLog.i("ChatPresenter", "login isGroupsSyncedWithServer success");
                 EaseEvent event = EaseEvent.create(DemoConstant.GROUP_CHANGE, EaseEvent.TYPE.GROUP);
                 LiveDataBus.get().with(DemoConstant.GROUP_CHANGE).postValue(event);
             }
