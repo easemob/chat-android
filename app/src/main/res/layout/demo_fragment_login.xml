@@ -3,6 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:background="@color/em_login_color_bg">
 
     <ImageView
@@ -11,9 +12,32 @@
         android:layout_height="82dp"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintBottom_toTopOf="@id/et_login_name"
-        android:layout_marginBottom="38dp"
+        app:layout_constraintBottom_toTopOf="@id/iv_login_company_name"
+        android:layout_marginBottom="20dp"
         android:background="@drawable/em_login_logo"/>
+
+    <ImageView
+        android:id="@+id/iv_login_company_name"
+        android:layout_width="108dp"
+        android:layout_height="30dp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/et_login_name"
+        android:layout_marginBottom="50dp"
+        android:background="@drawable/em_login_company_name"/>
+
+    <TextView
+        android:id="@+id/tv_version"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintLeft_toRightOf="@id/iv_login_company_name"
+        app:layout_constraintTop_toTopOf="@id/iv_login_company_name"
+        android:layout_marginLeft="5dp"
+        android:layout_marginTop="2dp"
+        tools:text="V4.1.0"
+        android:textSize="10sp"
+        android:textColor="@color/white"
+        android:background="@drawable/demo_login_version_bg"/>
 
     <EditText
         android:id="@+id/et_login_name"
@@ -21,7 +45,7 @@
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintVertical_bias="0.3"
+        app:layout_constraintVertical_bias="0.4"
         android:hint="@string/em_login_name_hint"
         style="@style/em_login_et_input" />
 

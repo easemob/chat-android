@@ -243,9 +243,10 @@ public class PushAndMessageHelper {
                 messge = builder.toString();
                 break;
             case BEAPPLYED:
+                messge = String.format(builder.toString(), msg.get(DemoConstant.SYSTEM_MESSAGE_FROM), (String) msg.get(DemoConstant.SYSTEM_MESSAGE_NAME));
+                break;
             case GROUPINVITATION:
-                String name = (String) msg.get(DemoConstant.SYSTEM_MESSAGE_NAME);
-                messge = String.format(builder.toString(), msg.get(DemoConstant.SYSTEM_MESSAGE_INVITER), name);
+                messge = String.format(builder.toString(), msg.get(DemoConstant.SYSTEM_MESSAGE_INVITER), (String) msg.get(DemoConstant.SYSTEM_MESSAGE_NAME));
                 break;
             case GROUPINVITATION_ACCEPTED:
             case GROUPINVITATION_DECLINED:
