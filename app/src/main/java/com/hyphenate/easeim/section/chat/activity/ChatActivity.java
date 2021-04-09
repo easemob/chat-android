@@ -66,6 +66,11 @@ public class ChatActivity extends BaseInitActivity implements EaseTitleBar.OnBac
     protected void initView(Bundle savedInstanceState) {
         super.initView(savedInstanceState);
         titleBarMessage = findViewById(R.id.title_bar_message);
+        initChatFragment();
+        setTitleBarRight();
+    }
+
+    private void initChatFragment() {
         fragment = new ChatFragment();
         Bundle bundle = new Bundle();
         bundle.putString(EaseConstant.EXTRA_CONVERSATION_ID, conversationId);
@@ -74,8 +79,6 @@ public class ChatActivity extends BaseInitActivity implements EaseTitleBar.OnBac
         bundle.putBoolean(EaseConstant.EXTRA_IS_ROAM, DemoHelper.getInstance().getModel().isMsgRoaming());
         fragment.setArguments(bundle);
         getSupportFragmentManager().beginTransaction().replace(R.id.fl_fragment, fragment, "chat").commit();
-
-        setTitleBarRight();
     }
 
     private void setTitleBarRight() {
@@ -99,7 +102,7 @@ public class ChatActivity extends BaseInitActivity implements EaseTitleBar.OnBac
         super.onNewIntent(intent);
         if(intent != null) {
             initIntent(intent);
-            initView(intent.getExtras());
+            initChatFragment();
             initData();
         }
     }

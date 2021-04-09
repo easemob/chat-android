@@ -12,6 +12,7 @@ import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.text.method.LinkMovementMethod;
 import android.text.style.ClickableSpan;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
@@ -26,6 +27,7 @@ import androidx.annotation.Nullable;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.hyphenate.EMError;
+import com.hyphenate.chat.EMClient;
 import com.hyphenate.easeim.DemoHelper;
 import com.hyphenate.easeim.MainActivity;
 import com.hyphenate.easeim.R;
@@ -56,6 +58,7 @@ public class LoginFragment extends BaseInitFragment implements View.OnClickListe
     private Drawable eyeOpen;
     private Drawable eyeClose;
     private boolean isClick;
+    private TextView tvVersion;
 
     @Override
     protected int getLayoutId() {
@@ -73,12 +76,14 @@ public class LoginFragment extends BaseInitFragment implements View.OnClickListe
         mBtnLogin = findViewById(R.id.btn_login);
         tvAgreement = findViewById(R.id.tv_agreement);
         cbSelect = findViewById(R.id.cb_select);
+        tvVersion = findViewById(R.id.tv_version);
         // 保证切换fragment后相关状态正确
         boolean enableTokenLogin = DemoHelper.getInstance().getModel().isEnableTokenLogin();
         mTvLoginToken.setVisibility(enableTokenLogin ? View.VISIBLE : View.GONE);
         if(!TextUtils.isEmpty(DemoHelper.getInstance().getCurrentLoginUser())) {
             mEtLoginName.setText(DemoHelper.getInstance().getCurrentLoginUser());
         }
+        tvVersion.setText("V"+ EMClient.VERSION);
         if(isTokenFlag) {
             switchLogin();
         }
@@ -107,6 +112,7 @@ public class LoginFragment extends BaseInitFragment implements View.OnClickListe
             parseResource(response, new OnResourceParseCallback<EaseUser>(true) {
                 @Override
                 public void onSuccess(EaseUser data) {
+                    Log.e("login", "login success");
                     DemoHelper.getInstance().setAutoLogin(true);
                     //跳转到主页
                     MainActivity.startAction(mContext);
@@ -154,9 +160,7 @@ public class LoginFragment extends BaseInitFragment implements View.OnClickListe
 
         });
         DemoDbHelper.getInstance(mContext).getDatabaseCreatedObservable().observe(getViewLifecycleOwner(), response -> {
-            if(response != null && !TextUtils.isEmpty(mUserName) && !TextUtils.isEmpty(mPwd) && isClick) {
-                mFragmentViewModel.login(mUserName, mPwd, isTokenFlag);
-            }
+            Log.i("login", "本地数据库初始化完成");
         });
     }
 
@@ -183,7 +187,6 @@ public class LoginFragment extends BaseInitFragment implements View.OnClickListe
             case R.id.tv_login_token:
                 isTokenFlag = !isTokenFlag;
                 switchLogin();
-//                TestActivity.startAction(mContext);
                 break;
             case R.id.tv_login_server_set:
                 mViewModel.setPageSelect(2);
@@ -217,8 +220,7 @@ public class LoginFragment extends BaseInitFragment implements View.OnClickListe
             return;
         }
         isClick = true;
-        //先初始化数据库
-        DemoDbHelper.getInstance(mContext).initDb(mUserName);
+        mFragmentViewModel.login(mUserName, mPwd, isTokenFlag);
     }
 
     @Override
