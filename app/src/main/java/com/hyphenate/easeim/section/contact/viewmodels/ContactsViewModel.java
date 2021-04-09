@@ -43,9 +43,10 @@ public class ContactsViewModel extends AndroidViewModel {
         blackObservable.addSource(mRepository.getBlackContactList(), result -> blackObservable.postValue(result));
     }
 
-    public void loadContactList() {
-        contactObservable.setSource(mRepository.getContactList());
+    public void loadContactList(boolean fetchServer) {
+        contactObservable.setSource(mRepository.getContactList(fetchServer));
     }
+
 
     public LiveData<Resource<List<EaseUser>>> getContactObservable() {
         return contactObservable;
@@ -66,5 +67,4 @@ public class ContactsViewModel extends AndroidViewModel {
     public void addUserToBlackList(String username, boolean both) {
         blackResultObservable.setSource(mRepository.addUserToBlackList(username, both));
     }
-
 }

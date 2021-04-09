@@ -17,12 +17,14 @@ import com.hyphenate.EMContactListener;
 import com.hyphenate.EMConversationListener;
 import com.hyphenate.EMError;
 import com.hyphenate.EMMultiDeviceListener;
+import com.hyphenate.EMValueCallBack;
 import com.hyphenate.chat.EMClient;
 import com.hyphenate.chat.EMConversation;
 import com.hyphenate.chat.EMGroup;
 import com.hyphenate.chat.EMMessage;
 import com.hyphenate.chat.EMMucSharedFile;
 import com.hyphenate.chat.EMTextMessageBody;
+import com.hyphenate.chat.EMUserInfo;
 import com.hyphenate.chat.adapter.EMAChatRoomManagerListener;
 import com.hyphenate.easeim.DemoApplication;
 import com.hyphenate.easeim.DemoHelper;
@@ -40,7 +42,6 @@ import com.hyphenate.easeim.common.repositories.EMGroupManagerRepository;
 import com.hyphenate.easeim.common.repositories.EMPushManagerRepository;
 import com.hyphenate.easeim.section.chat.activity.ChatActivity;
 import com.hyphenate.easeim.section.group.GroupHelper;
-import com.hyphenate.easeui.constants.EaseConstant;
 import com.hyphenate.easeui.interfaces.EaseGroupListener;
 import com.hyphenate.easeui.manager.EaseAtMessageHelper;
 import com.hyphenate.easeui.manager.EaseChatPresenter;
@@ -605,15 +606,39 @@ public class ChatPresenter extends EaseChatPresenter {
         @Override
         public void onContactAdded(String username) {
             EMLog.i("ChatContactListener", "onContactAdded");
-            EmUserEntity entity = new EmUserEntity();
-            entity.setUsername(username);
-            DemoHelper.getInstance().getModel().insert(entity);
-            DemoHelper.getInstance().updateContactList();
-            EaseEvent event = EaseEvent.create(DemoConstant.CONTACT_CHANGE, EaseEvent.TYPE.CONTACT);
-            messageChangeLiveData.with(DemoConstant.CONTACT_CHANGE).postValue(event);
+            String[] userId = new String[1];
+            userId[0] = username;
+            EMClient.getInstance().userInfoManager().fetchUserInfoByUserId(userId, new EMValueCallBack<Map<String, EMUserInfo>>() {
+                @Override
+                public void onSuccess(Map<String, EMUserInfo> value) {
+                    EMUserInfo userInfo = value.get(username);
+                    EmUserEntity entity = new EmUserEntity();
+                    entity.setUsername(username);
+                    if(userInfo != null){
+                        entity.setNickname(userInfo.getNickName());
+                        entity.setEmail(userInfo.getEmail());
+                        entity.setAvatar(userInfo.getAvatarUrl());
+                        entity.setBirth(userInfo.getBirth());
+                        entity.setGender(userInfo.getGender());
+                        entity.setExt(userInfo.getExt());
+                        entity.setContact(0);
+                        entity.setSign(userInfo.getSignature());
+                    }
+                    DemoHelper.getInstance().getModel().insert(entity);
+                    DemoHelper.getInstance().updateContactList();
+                    EaseEvent event = EaseEvent.create(DemoConstant.CONTACT_ADD, EaseEvent.TYPE.CONTACT);
+                    event.message = username;
+                    messageChangeLiveData.with(DemoConstant.CONTACT_ADD).postValue(event);
 
-            showToast(context.getString(R.string.demo_contact_listener_onContactAdded, username));
-            EMLog.i(TAG, context.getString(R.string.demo_contact_listener_onContactAdded, username));
+                    showToast(context.getString(R.string.demo_contact_listener_onContactAdded, username));
+                    EMLog.i(TAG, context.getString(R.string.demo_contact_listener_onContactAdded, username));
+                }
+
+                @Override
+                public void onError(int error, String errorMsg) {
+                    EMLog.i(TAG, context.getString(R.string.demo_contact_get_userInfo_failed) +  username + "error:" + error + " errorMsg:" +errorMsg);
+                }
+            });
         }
 
         @Override
@@ -622,8 +647,9 @@ public class ChatPresenter extends EaseChatPresenter {
             boolean deleteUsername = DemoHelper.getInstance().getModel().isDeleteUsername(username);
             int num = DemoHelper.getInstance().deleteContact(username);
             DemoHelper.getInstance().updateContactList();
-            EaseEvent event = EaseEvent.create(DemoConstant.CONTACT_CHANGE, EaseEvent.TYPE.CONTACT);
-            messageChangeLiveData.with(DemoConstant.CONTACT_CHANGE).postValue(event);
+            EaseEvent event = EaseEvent.create(DemoConstant.CONTACT_DELETE, EaseEvent.TYPE.CONTACT);
+            event.message = username;
+            messageChangeLiveData.with(DemoConstant.CONTACT_DELETE).postValue(event);
 
             if(deleteUsername || num == 0) {
                 showToast(context.getString(R.string.demo_contact_listener_onContactDeleted, username));
@@ -633,6 +659,8 @@ public class ChatPresenter extends EaseChatPresenter {
                 EMLog.i(TAG, context.getString(R.string.demo_contact_listener_onContactDeleted_by_other, username));
             }
         }
+
+
 
         @Override
         public void onContactInvited(String username, String reason) {
@@ -705,6 +733,7 @@ public class ChatPresenter extends EaseChatPresenter {
             EMLog.i(TAG, context.getString(InviteMessageStatus.BEREFUSED.getMsgContent(), username));
         }
     }
+
 
     private void updateMessage(EMMessage message) {
         message.setAttribute(DemoConstant.SYSTEM_MESSAGE_STATUS, InviteMessageStatus.BEAGREED.name());

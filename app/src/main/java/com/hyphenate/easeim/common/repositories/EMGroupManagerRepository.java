@@ -335,7 +335,19 @@ public class EMGroupManagerRepository extends BaseEMRepository{
                         if(members.size() < (value.getMemberCount() - value.getAdminList().size() - 1)) {
                             members = getAllGroupMemberByServer(groupId);
                         }
-                        List<EaseUser> users = EmUserEntity.parse(members);
+                        //List<EaseUser> users = EmUserEntity.parse(members);
+                        List<EaseUser> users = new ArrayList<>();
+                        if(members != null && !members.isEmpty()){
+                            for(int i = 0; i < members.size(); i++){
+                               EaseUser user = DemoHelper.getInstance().getUserInfo(members.get(i));
+                               if(user != null){
+                                   users.add(user);
+                               }else{
+                                   EaseUser m_user = new EaseUser(members.get(i));
+                                   users.add(m_user);
+                               }
+                            }
+                        }
                         sortUserData(users);
                         callBack.onSuccess(createLiveData(users));
 

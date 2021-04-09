@@ -82,9 +82,21 @@ public class ChatRoomMemberAuthorityActivity extends GroupMemberAuthorityActivit
             parseResource(response, new OnResourceParseCallback<List<String>>() {
                 @Override
                 public void onSuccess(List<String> data) {
-                    List<EaseUser> parse = EmUserEntity.parse(data);
-                    sortUserData(parse);
-                    adapter.setData(parse);
+                    //List<EaseUser> parse = EmUserEntity.parse(data);
+                    List<EaseUser> users = new ArrayList<>();
+                    if(data != null && !data.isEmpty()){
+                        for(int i = 0; i < data.size(); i++){
+                            EaseUser user = DemoHelper.getInstance().getUserInfo(data.get(i));
+                            if(user != null){
+                                users.add(user);
+                            }else{
+                                EaseUser m_user = new EaseUser(data.get(i));
+                                users.add(m_user);
+                            }
+                        }
+                    }
+                    sortUserData(users);
+                    adapter.setData(users);
                 }
 
                 @Override
@@ -162,6 +174,24 @@ public class ChatRoomMemberAuthorityActivity extends GroupMemberAuthorityActivit
             }
             if(TextUtils.equals(event.event, DemoConstant.CHAT_ROOM_CHANGE)) {
                 viewModel.getChatRoom(roomId);
+            }
+        });
+
+
+        //监听有关用户属性的事件
+        viewModel.getMessageChangeObservable().with(DemoConstant.CONTACT_CHANGE, EaseEvent.class).observe(this, event -> {
+            if(event != null) {
+                refreshData();
+            }
+        });
+        viewModel.getMessageChangeObservable().with(DemoConstant.CONTACT_UPDATE, EaseEvent.class).observe(this, event -> {
+            if(event != null) {
+                refreshData();
+            }
+        });
+        viewModel.getMessageChangeObservable().with(DemoConstant.CONTACT_ADD, EaseEvent.class).observe(this, event -> {
+            if(event != null) {
+                refreshData();
             }
         });
 

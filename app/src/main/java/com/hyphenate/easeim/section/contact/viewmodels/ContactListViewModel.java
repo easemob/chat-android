@@ -28,6 +28,6 @@ public class ContactListViewModel extends AndroidViewModel {
     }
 
     public void getContactList() {
-        contactListObservable.setSource(mRepository.getContactList());
+        contactListObservable.setSource(mRepository.getContactList(false));
     }
 }

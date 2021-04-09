@@ -11,6 +11,11 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.constraintlayout.widget.Group;
 import androidx.lifecycle.ViewModelProvider;
+
+import com.bumptech.glide.Glide;
+import com.hyphenate.EMValueCallBack;
+import com.hyphenate.chat.EMClient;
+import com.hyphenate.chat.EMUserInfo;
 import com.hyphenate.easecallkit.EaseCallKit;
 import com.hyphenate.easecallkit.base.EaseCallType;
 
@@ -18,6 +23,7 @@ import com.hyphenate.easeim.DemoHelper;
 import com.hyphenate.easeim.R;
 import com.hyphenate.easeim.common.constant.DemoConstant;
 import com.hyphenate.easeim.common.db.DemoDbHelper;
+import com.hyphenate.easeim.common.db.entity.EmUserEntity;
 import com.hyphenate.easeim.common.interfaceOrImplement.OnResourceParseCallback;
 import com.hyphenate.easeim.common.livedatas.LiveDataBus;
 import com.hyphenate.easeim.section.base.BaseInitActivity;
@@ -30,10 +36,12 @@ import com.hyphenate.easeim.section.contact.viewmodels.ContactDetailViewModel;
 import com.hyphenate.easeui.constants.EaseConstant;
 import com.hyphenate.easeui.domain.EaseUser;
 import com.hyphenate.easeui.model.EaseEvent;
+import com.hyphenate.easeui.utils.EaseCommonUtils;
 import com.hyphenate.easeui.widget.EaseImageView;
 import com.hyphenate.easeui.widget.EaseTitleBar;
 
 import java.util.List;
+import java.util.Map;
 
 public class ContactDetailActivity extends BaseInitActivity implements EaseTitleBar.OnBackPressListener, View.OnClickListener {
     private EaseTitleBar mEaseTitleBar;
@@ -53,16 +61,24 @@ public class ContactDetailActivity extends BaseInitActivity implements EaseTitle
     private ContactDetailViewModel viewModel;
     private AddContactViewModel addContactViewModel;
     private ContactBlackViewModel blackViewModel;
+    private EMUserInfo userInfo;
+    private LiveDataBus contactChangeLiveData;
 
     public static void actionStart(Context context, EaseUser user) {
         Intent intent = new Intent(context, ContactDetailActivity.class);
-        intent.putExtra("user", user);
+        intent.putExtra("user", (EaseUser)user);
+        if(user.getContact() == 0){
+            intent.putExtra("isFriend", true);
+        }else{
+            intent.putExtra("isFriend", false);
+        }
+
         context.startActivity(intent);
     }
 
     public static void actionStart(Context context, EaseUser user, boolean isFriend) {
         Intent intent = new Intent(context, ContactDetailActivity.class);
-        intent.putExtra("user", user);
+        intent.putExtra("user", (EaseUser)user);
         intent.putExtra("isFriend", isFriend);
         context.startActivity(intent);
     }
@@ -99,12 +115,13 @@ public class ContactDetailActivity extends BaseInitActivity implements EaseTitle
     @Override
     protected void initIntent(Intent intent) {
         super.initIntent(intent);
-        mUser = (EaseUser) getIntent().getSerializableExtra("user");
+        contactChangeLiveData = LiveDataBus.get();
+        mUser = (EaseUser)getIntent().getSerializableExtra("user");
         mIsFriend = getIntent().getBooleanExtra("isFriend", true);
         if(!mIsFriend) {
             List<String> users = null;
             if(DemoDbHelper.getInstance(mContext).getUserDao() != null) {
-                users = DemoDbHelper.getInstance(mContext).getUserDao().loadAllUsers();
+                users = DemoDbHelper.getInstance(mContext).getUserDao().loadContactUsers();
             }
             mIsFriend = users != null && users.contains(mUser.getUsername());
         }
@@ -156,9 +173,7 @@ public class ContactDetailActivity extends BaseInitActivity implements EaseTitle
     @Override
     protected void initData() {
         super.initData();
-        if(mUser != null) {
-            mTvName.setText(mUser.getNickname());
-        }
+        getDetailInfo();
 
         viewModel = new ViewModelProvider(this).get(ContactDetailViewModel.class);
         viewModel.blackObservable().observe(this, response -> {
@@ -224,6 +239,8 @@ public class ContactDetailActivity extends BaseInitActivity implements EaseTitle
         onBackPressed();
     }
 
+
+
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
@@ -259,5 +276,74 @@ public class ContactDetailActivity extends BaseInitActivity implements EaseTitle
                 })
                 .showCancelButton(true)
                 .show();
+    }
+
+    private void getDetailInfo(){
+        String[] userId = new String[1];
+        userId[0] = mUser.getUsername();
+        boolean isSelf = mUser.getUsername().contains(EMClient.getInstance().getCurrentUser());
+        if(isSelf){
+            userId[0] = EMClient.getInstance().getCurrentUser();
+        }
+        EMClient.getInstance().userInfoManager().fetchUserInfoByUserId(userId, new EMValueCallBack<Map<String, EMUserInfo>>() {
+            @Override
+            public void onSuccess(Map<String, EMUserInfo> userInfos) {
+                runOnUiThread(new Runnable() {
+                    public void run() {
+                        if(isSelf){
+                            userInfo = userInfos.get(EMClient.getInstance().getCurrentUser());
+                        }else{
+                            userInfo = userInfos.get(mUser.getUsername());
+                        }
+
+                        if (userInfo != null && userInfo.getNickName() != null && userInfo.getNickName().length() > 0) {
+                            mTvName.setText(userInfo.getNickName());
+                        }else{
+                            mTvName.setText(mUser.getUsername());
+                        }
+                        if (userInfo != null && userInfo.getAvatarUrl() != null && userInfo.getAvatarUrl().length() > 0) {
+                            Glide.with(mContext).load(userInfo.getAvatarUrl()).placeholder(R.drawable.em_login_logo).into(mAvatarUser);
+                        }
+                        //更新本地数据库
+                        warpEMUserInfo(userInfo);
+                    }
+                });
+            }
+
+            @Override
+            public void onError(int error, String errorMsg) {
+                runOnUiThread(new Runnable() {
+                    public void run() {
+                        mTvName.setText(mUser.getUsername());
+                    }
+                });
+            }
+        });
+    }
+
+    private void warpEMUserInfo(EMUserInfo userInfo){
+        if(userInfo != null && mUser != null){
+            EmUserEntity userEntity = new EmUserEntity();
+            userEntity.setUsername(mUser.getUsername());
+            userEntity.setNickname(userInfo.getNickName());
+            userEntity.setEmail(userInfo.getEmail());
+            userEntity.setAvatar(userInfo.getAvatarUrl());
+            userEntity.setBirth(userInfo.getBirth());
+            userEntity.setGender(userInfo.getGender());
+            userEntity.setExt(userInfo.getExt());
+            userEntity.setSign(userInfo.getSignature());
+            EaseCommonUtils.setUserInitialLetter(userEntity);
+            userEntity.setContact(mUser.getContact());
+
+            //更新本地数据库信息
+            DemoHelper.getInstance().update(userEntity);
+
+            //更新本地联系人列表
+            DemoHelper.getInstance().updateContactList();
+            EaseEvent event = EaseEvent.create(DemoConstant.CONTACT_UPDATE, EaseEvent.TYPE.CONTACT);
+            event.message = mUser.getUsername();
+            //发送联系人更新事件
+            contactChangeLiveData.with(DemoConstant.CONTACT_UPDATE).postValue(event);
+        }
     }
 }

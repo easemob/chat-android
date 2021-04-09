@@ -15,6 +15,10 @@ import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.ViewModelProvider;
+
+import com.hyphenate.EMValueCallBack;
+import com.hyphenate.chat.EMClient;
+import com.hyphenate.chat.EMUserInfo;
 import com.hyphenate.easecallkit.base.EaseCallType;
 import com.hyphenate.easecallkit.ui.EaseMultipleVideoActivity;
 import com.hyphenate.easecallkit.ui.EaseVideoCallActivity;
@@ -24,8 +28,10 @@ import com.google.android.material.bottomnavigation.BottomNavigationMenuView;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.hyphenate.easeim.common.constant.DemoConstant;
 import com.hyphenate.easeim.common.enums.SearchType;
+import com.hyphenate.easeim.common.livedatas.LiveDataBus;
 import com.hyphenate.easeim.common.permission.PermissionsManager;
 import com.hyphenate.easeim.common.permission.PermissionsResultAction;
+import com.hyphenate.easeim.common.utils.PreferenceManager;
 import com.hyphenate.easeim.common.utils.PushUtils;
 import com.hyphenate.easeim.section.MainViewModel;
 import com.hyphenate.easeim.section.base.BaseInitActivity;
@@ -41,8 +47,12 @@ import com.hyphenate.easeim.section.me.AboutMeFragment;
 import com.hyphenate.easeui.model.EaseEvent;
 import com.hyphenate.easeui.ui.base.EaseBaseFragment;
 import com.hyphenate.easeui.widget.EaseTitleBar;
+import com.hyphenate.util.EMLog;
+import com.hyphenate.chat.EMUserInfo.*;
 
 import java.lang.reflect.Method;
+import java.util.Map;
+
 
 import static android.content.Intent.FLAG_ACTIVITY_NEW_TASK;
 
@@ -211,7 +221,7 @@ public class MainActivity extends BaseInitActivity implements BottomNavigationVi
 
         //加载联系人
         ContactsViewModel contactsViewModel = new ViewModelProvider(mContext).get(ContactsViewModel.class);
-        contactsViewModel.loadContactList();
+        contactsViewModel.loadContactList(true);
 
         viewModel.messageChangeObservable().with(DemoConstant.GROUP_CHANGE, EaseEvent.class).observe(this, this::checkUnReadMsg);
         viewModel.messageChangeObservable().with(DemoConstant.NOTIFY_CHANGE, EaseEvent.class).observe(this, this::checkUnReadMsg);
@@ -319,6 +329,8 @@ public class MainActivity extends BaseInitActivity implements BottomNavigationVi
         if(mAboutMeFragment == null) {
             mAboutMeFragment = new AboutMeFragment();
         }
+        //获取自己用户信息
+        fetchSelfInfo();
         replace(mAboutMeFragment, "me");
     }
 
@@ -335,6 +347,45 @@ public class MainActivity extends BaseInitActivity implements BottomNavigationVi
                 t.show(fragment).commit();
             }
         }
+    }
+
+    private void fetchSelfInfo(){
+        String[] userId = new String[1];
+        userId[0] = EMClient.getInstance().getCurrentUser();
+        EMUserInfoType[] userInfoTypes = new EMUserInfoType[2];
+        userInfoTypes[0] = EMUserInfoType.NICKNAME;
+        userInfoTypes[1] = EMUserInfoType.AVATAR_URL;
+        EMClient.getInstance().userInfoManager().fetchUserInfoByAttribute(userId, userInfoTypes,new EMValueCallBack<Map<String, EMUserInfo>>() {
+            @Override
+            public void onSuccess(Map<String, EMUserInfo> userInfos) {
+                runOnUiThread(new Runnable() {
+                    public void run() {
+                       EMUserInfo userInfo = userInfos.get(EMClient.getInstance().getCurrentUser());
+                        //昵称
+                        if(userInfo != null && userInfo.getNickName() != null &&
+                                userInfo.getNickName().length() > 0){
+                            EaseEvent event = EaseEvent.create(DemoConstant.NICK_NAME_CHANGE, EaseEvent.TYPE.CONTACT);
+                            event.message = userInfo.getNickName();
+                            LiveDataBus.get().with(DemoConstant.NICK_NAME_CHANGE).postValue(event);
+                            PreferenceManager.getInstance().setCurrentUserNick(userInfo.getNickName());
+                        }
+                        //头像
+                        if(userInfo != null && userInfo.getAvatarUrl() != null && userInfo.getAvatarUrl().length() > 0){
+
+                            EaseEvent event = EaseEvent.create(DemoConstant.AVATAR_CHANGE, EaseEvent.TYPE.CONTACT);
+                            event.message = userInfo.getAvatarUrl();
+                            LiveDataBus.get().with(DemoConstant.AVATAR_CHANGE).postValue(event);
+                            PreferenceManager.getInstance().setCurrentUserAvatar(userInfo.getAvatarUrl());
+                        }
+                    }
+                });
+            }
+
+            @Override
+            public void onError(int error, String errorMsg) {
+                EMLog.e("MainActivity","fetchUserInfoByIds error:" + error + " errorMsg:" + errorMsg);
+            }
+        });
     }
 
     @Override

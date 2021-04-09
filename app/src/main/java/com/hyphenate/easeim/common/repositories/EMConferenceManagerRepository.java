@@ -31,9 +31,9 @@ public class EMConferenceManagerRepository extends BaseEMRepository {
                 EaseThreadManager.getInstance().runOnIOThread(() -> {
                     List<String> contactList = new ArrayList<>();
                     if(TextUtils.isEmpty(groupId)) {
-                        // 直接从本地加载所有的联系人
+                        //从本地加载好友联系人
                         if(getUserDao() != null) {
-                            contactList.addAll(getUserDao().loadAllUsers());
+                            contactList.addAll(getUserDao().loadContactUsers());
                         }
                     }else {
                         // 根据groupId获取群组中所有成员

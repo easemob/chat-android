@@ -99,6 +99,8 @@ public class ChatActivity extends BaseInitActivity implements EaseTitleBar.OnBac
         super.onNewIntent(intent);
         if(intent != null) {
             initIntent(intent);
+            initView(intent.getExtras());
+            initData();
         }
     }
 

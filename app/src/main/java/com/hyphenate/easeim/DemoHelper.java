@@ -30,11 +30,14 @@ import com.hyphenate.easeim.common.manager.UserProfileManager;
 import com.hyphenate.easeim.common.model.DemoModel;
 import com.hyphenate.easeim.common.model.EmojiconExampleGroupData;
 import com.hyphenate.easeim.common.receiver.HeadsetReceiver;
+import com.hyphenate.easeim.common.utils.FetchUserInfoList;
+import com.hyphenate.easeim.common.utils.FetchUserRunnable;
 import com.hyphenate.easeim.common.utils.PreferenceManager;
 import com.hyphenate.easeim.section.chat.ChatPresenter;
 import com.hyphenate.easeim.section.chat.delegates.ChatConferenceInviteAdapterDelegate;
 import com.hyphenate.easeim.section.chat.delegates.ChatNotificationAdapterDelegate;
 import com.hyphenate.easeim.section.chat.delegates.ChatRecallAdapterDelegate;
+import com.hyphenate.easeim.section.chat.delegates.ChatUserCardAdapterDelegate;
 import com.hyphenate.easeim.section.chat.delegates.ChatVideoCallAdapterDelegate;
 import com.hyphenate.easeim.section.chat.delegates.ChatVoiceCallAdapterDelegate;
 import com.hyphenate.easeim.section.conference.ConferenceInviteActivity;
@@ -68,7 +71,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.text.SimpleDateFormat;
-import java.util.HashMap;
 import java.util.Hashtable;
 import java.util.List;
 import java.util.Map;
@@ -77,7 +79,6 @@ import java.util.TimeZone;
 import com.hyphenate.easecallkit.EaseCallKit;
 import com.hyphenate.easecallkit.base.EaseCallKitConfig;
 import com.hyphenate.easecallkit.base.EaseCallKitTokenCallback;
-import com.hyphenate.easecallkit.base.EaseCallUserInfo;
 import com.hyphenate.easecallkit.base.EaseCallEndReason;
 import com.hyphenate.easecallkit.base.EaseCallKitListener;
 import com.hyphenate.easecallkit.base.EaseCallType;
@@ -99,6 +100,11 @@ public class DemoHelper {
     private EaseCallKitListener callKitListener;
     private Context mianContext;
     private String tokenUrl = "http://a1-hsb.easemob.com/token/rtcToken";
+
+    private FetchUserRunnable fetchUserRunnable;
+    private Thread fetchUserTread;
+    private FetchUserInfoList fetchUserInfoList;
+
 
     private DemoHelper() {}
 
@@ -132,6 +138,12 @@ public class DemoHelper {
 
             //callKit初始化
             InitCallKit(context);
+
+            //启动获取用户信息线程
+            fetchUserInfoList = FetchUserInfoList.getInstance();
+            fetchUserRunnable = new FetchUserRunnable();
+            fetchUserTread = new Thread(fetchUserRunnable);
+            fetchUserTread.start();
         }
 
     }
@@ -143,12 +155,6 @@ public class DemoHelper {
      */
     private void InitCallKit(Context context){
         EaseCallKitConfig callKitConfig = new EaseCallKitConfig();
-        //设置默认头像
-//        String headImage = EaseFileUtils.getModelFilePath(context,"test.png");
-//        callKitConfig.setDefaultHeadImage(headImage);
-//        //设置振铃文件
-//        String ringFile = EaseFileUtils.getModelFilePath(context,"huahai.mp3");
-//        callKitConfig.setRingFile(ringFile);
         //设置呼叫超时时间
         callKitConfig.setCallTimeOut(30 * 1000);
         //设置声网AgoraAppId
@@ -168,10 +174,14 @@ public class DemoHelper {
         EMOptions options = initChatOptions(context);
         //配置自定义的rest server和im server
         //options.setRestServer("a1-hsb.easemob.com");
-        //options.setIMServer("116.85.43.118");
+        //options.setIMServer("106.75.100.247");
         //options.setImPort(6717);
         // 初始化SDK
         isSDKInit = EaseIM.getInstance().init(context, options);
+        //设置删除用户属性数据超时时间
+        demoModel.setUserInfoTimeOut(30 * 60 * 1000);
+        //更新过期用户属性列表
+        updateTimeoutUsers();
         mianContext = context;
         return isSDKInit();
     }
@@ -192,8 +202,12 @@ public class DemoHelper {
                 .addMessageType(ChatRecallAdapterDelegate.class)           //消息撤回
                 .addMessageType(ChatVideoCallAdapterDelegate.class)        //视频通话
                 .addMessageType(ChatVoiceCallAdapterDelegate.class)        //语音通话
-                .addMessageType(EaseCustomAdapterDelegate.class)           //自定义消息
+                .addMessageType(EaseCustomAdapterDelegate.class)
+
+ //自定义消息
                 .addMessageType(ChatNotificationAdapterDelegate.class)     //入群等通知消息
+
+                .addMessageType(ChatUserCardAdapterDelegate.class)
                 .setDefaultMessageType(EaseTextAdapterDelegate.class);       //文本
     }
 
@@ -357,13 +371,24 @@ public class DemoHelper {
         return avatarOptions;
     }
 
-    private EaseUser getUserInfo(String username) {
+    public EaseUser getUserInfo(String username) {
         // To get instance of EaseUser, here we get it from the user list in memory
         // You'd better cache it if you get it from your server
         EaseUser user = null;
         if(username.equals(EMClient.getInstance().getCurrentUser()))
             return getUserProfileManager().getCurrentUserInfo();
         user = getContactList().get(username);
+        if(user == null){
+            //找不到更新会话列表 继续查找
+            updateContactList();
+            user = getContactList().get(username);
+            //如果还找不到从服务端异步拉取 然后通知UI刷新列表
+            if(user == null){
+                if(fetchUserInfoList != null){
+                    fetchUserInfoList.addUserId(username);
+                }
+            }
+        }
         return user;
     }
 
@@ -475,6 +500,9 @@ public class DemoHelper {
      */
     public void logout(boolean unbindDeviceToken, final EMCallBack callback) {
         Log.d(TAG, "logout: " + unbindDeviceToken);
+        if(fetchUserTread != null && fetchUserRunnable != null){
+            fetchUserRunnable.setStop(true);
+        }
         EMClient.getInstance().logout(unbindDeviceToken, new EMCallBack() {
 
             @Override
@@ -598,12 +626,35 @@ public class DemoHelper {
     }
 
     /**
+     * update user list
+     * @param users
+     */
+    public void updateUserList(List<EaseUser> users){
+        demoModel.updateContactList(users);
+    }
+
+    /**
+     * 更新过期的用户属性数据
+     */
+    public void updateTimeoutUsers() {
+        List<String> userIds = demoModel.selectTimeOutUsers();
+        if(userIds != null && userIds.size() > 0){
+            if(fetchUserInfoList != null){
+                for(int i = 0; i < userIds.size(); i++){
+                    fetchUserInfoList.addUserId(userIds.get(i));
+                }
+            }
+        }
+    }
+
+    /**
      * get contact list
      *
      * @return
      */
     public Map<String, EaseUser> getContactList() {
         if (isLoggedIn() && contactList == null) {
+            updateTimeoutUsers();
             contactList = demoModel.getContactList();
         }
 
@@ -611,7 +662,6 @@ public class DemoHelper {
         if(contactList == null){
             return new Hashtable<String, EaseUser>();
         }
-
         return contactList;
     }
 
@@ -620,6 +670,7 @@ public class DemoHelper {
      */
     public void updateContactList() {
         if(isLoggedIn()) {
+            updateTimeoutUsers();
             contactList = demoModel.getContactList();
         }
     }

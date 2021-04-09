@@ -45,7 +45,7 @@ public class GroupPickContactsViewModel extends AndroidViewModel {
     }
 
     public void getAllContacts() {
-        contacts.setSource(contactRepository.getContactList());
+        contacts.setSource(contactRepository.getContactList(false));
     }
 
     public LiveData<Resource<Boolean>> getAddMembersObservable() {

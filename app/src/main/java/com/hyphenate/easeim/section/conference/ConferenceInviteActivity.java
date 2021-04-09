@@ -24,12 +24,17 @@ import android.widget.TextView;
 import androidx.lifecycle.ViewModelProvider;
 import com.hyphenate.easecallkit.EaseCallKit;
 
+import com.hyphenate.easeim.DemoHelper;
 import com.hyphenate.easeim.R;
 import com.hyphenate.easeim.common.constant.DemoConstant;
 import com.hyphenate.easeim.common.interfaceOrImplement.OnResourceParseCallback;
+import com.hyphenate.easeim.common.livedatas.LiveDataBus;
+import com.hyphenate.easeim.common.model.DemoModel;
 import com.hyphenate.easeim.section.base.BaseInitActivity;
 import com.hyphenate.easeim.section.chat.model.KV;
 import com.hyphenate.easeim.section.chat.viewmodel.ConferenceInviteViewModel;
+import com.hyphenate.easeui.domain.EaseUser;
+import com.hyphenate.easeui.model.EaseEvent;
 import com.hyphenate.easeui.utils.EaseUserUtils;
 import com.hyphenate.easeui.widget.EaseTitleBar;
 
@@ -114,6 +119,38 @@ public class ConferenceInviteActivity extends BaseInitActivity implements View.O
                     contactsAdapter.setData(contacts);
                 }
             });
+        });
+
+       LiveDataBus.get().with(DemoConstant.CONTACT_ADD, EaseEvent.class).observe(this, event -> {
+            if(event == null) {
+                return;
+            }
+            if(event.isContactChange()) {
+                if(contactsAdapter != null){
+                    contactsAdapter.notifyDataSetChanged();
+                }
+            }
+        });
+
+        LiveDataBus.get().with(DemoConstant.CONTACT_CHANGE, EaseEvent.class).observe(this, event -> {
+            if(event == null) {
+                return;
+            }
+            if(event.isContactChange()) {
+                if(contactsAdapter != null){
+                    contactsAdapter.notifyDataSetChanged();
+                }
+            }
+        });
+        LiveDataBus.get().with(DemoConstant.CONTACT_UPDATE, EaseEvent.class).observe(this, event -> {
+            if(event == null) {
+                return;
+            }
+            if(event.isContactChange()) {
+                if(contactsAdapter != null){
+                    contactsAdapter.notifyDataSetChanged();
+                }
+            }
         });
         viewModel.getConferenceMembers(groupId,exist_member);
     }
@@ -273,6 +310,7 @@ public class ConferenceInviteActivity extends BaseInitActivity implements View.O
 
             KV<String, Integer> contact = filteredContacts.get(position);
             String userName = contact.getFirst();
+            DemoHelper.getInstance().getUserInfo(userName);
             EaseUserUtils.setUserAvatar(mContext, userName, viewHolder.headerImage);
             EaseUserUtils.setUserNick(userName, viewHolder.nameText);
             switch (contact.getSecond()) {
