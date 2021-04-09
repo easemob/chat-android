@@ -161,9 +161,6 @@ public class LoginFragment extends BaseInitFragment implements View.OnClickListe
         });
         DemoDbHelper.getInstance(mContext).getDatabaseCreatedObservable().observe(getViewLifecycleOwner(), response -> {
             Log.i("login", "本地数据库初始化完成");
-            //if(response != null && !TextUtils.isEmpty(mUserName) && !TextUtils.isEmpty(mPwd) && isClick) {
-                //mFragmentViewModel.login(mUserName, mPwd, isTokenFlag);
-            //}
         });
     }
 
@@ -190,7 +187,6 @@ public class LoginFragment extends BaseInitFragment implements View.OnClickListe
             case R.id.tv_login_token:
                 isTokenFlag = !isTokenFlag;
                 switchLogin();
-//                TestActivity.startAction(mContext);
                 break;
             case R.id.tv_login_server_set:
                 mViewModel.setPageSelect(2);
@@ -224,7 +220,6 @@ public class LoginFragment extends BaseInitFragment implements View.OnClickListe
             return;
         }
         isClick = true;
-        //先初始化数据库
         mFragmentViewModel.login(mUserName, mPwd, isTokenFlag);
     }
 
