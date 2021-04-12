@@ -78,7 +78,7 @@ public class ContactDetailActivity extends BaseInitActivity implements EaseTitle
 
     public static void actionStart(Context context, EaseUser user, boolean isFriend) {
         Intent intent = new Intent(context, ContactDetailActivity.class);
-        intent.putExtra("user", (EaseUser)user);
+        intent.putExtra("user", user);
         intent.putExtra("isFriend", isFriend);
         context.startActivity(intent);
     }
@@ -115,7 +115,6 @@ public class ContactDetailActivity extends BaseInitActivity implements EaseTitle
     @Override
     protected void initIntent(Intent intent) {
         super.initIntent(intent);
-        contactChangeLiveData = LiveDataBus.get();
         mUser = (EaseUser)getIntent().getSerializableExtra("user");
         mIsFriend = getIntent().getBooleanExtra("isFriend", true);
         if(!mIsFriend) {
@@ -173,8 +172,8 @@ public class ContactDetailActivity extends BaseInitActivity implements EaseTitle
     @Override
     protected void initData() {
         super.initData();
+        contactChangeLiveData = LiveDataBus.get();
         getDetailInfo();
-
         viewModel = new ViewModelProvider(this).get(ContactDetailViewModel.class);
         viewModel.blackObservable().observe(this, response -> {
             parseResource(response, new OnResourceParseCallback<Boolean>() {

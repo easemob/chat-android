@@ -173,9 +173,9 @@ public class DemoHelper {
         // 根据项目需求对SDK进行配置
         EMOptions options = initChatOptions(context);
         //配置自定义的rest server和im server
-        //options.setRestServer("a1-hsb.easemob.com");
-        //options.setIMServer("106.75.100.247");
-        //options.setImPort(6717);
+        options.setRestServer("a1-hsb.easemob.com");
+        options.setIMServer("106.75.100.247");
+        options.setImPort(6717);
         // 初始化SDK
         isSDKInit = EaseIM.getInstance().init(context, options);
         //设置删除用户属性数据超时时间
@@ -202,12 +202,9 @@ public class DemoHelper {
                 .addMessageType(ChatRecallAdapterDelegate.class)           //消息撤回
                 .addMessageType(ChatVideoCallAdapterDelegate.class)        //视频通话
                 .addMessageType(ChatVoiceCallAdapterDelegate.class)        //语音通话
-                .addMessageType(EaseCustomAdapterDelegate.class)
-
- //自定义消息
+                .addMessageType(ChatUserCardAdapterDelegate.class)         //名片消息
+                .addMessageType(EaseCustomAdapterDelegate.class)           //自定义消息
                 .addMessageType(ChatNotificationAdapterDelegate.class)     //入群等通知消息
-
-                .addMessageType(ChatUserCardAdapterDelegate.class)
                 .setDefaultMessageType(EaseTextAdapterDelegate.class);       //文本
     }
 

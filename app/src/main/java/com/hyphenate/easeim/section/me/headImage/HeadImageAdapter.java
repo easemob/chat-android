@@ -9,6 +9,12 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.FutureTarget;
+import com.bumptech.glide.request.RequestListener;
+import com.bumptech.glide.request.target.BitmapImageViewTarget;
+import com.bumptech.glide.request.target.SimpleTarget;
+import com.bumptech.glide.request.target.Target;
 import com.hyphenate.easeim.R;
 import com.hyphenate.easeui.adapter.EaseBaseRecyclerViewAdapter;
 import com.hyphenate.easeui.utils.EaseCommonUtils;
@@ -97,19 +103,17 @@ public class HeadImageAdapter extends EaseBaseRecyclerViewAdapter<HeadImageInfo>
                 @Override
                 protected Bitmap doInBackground(String... params) {
                     Bitmap bitmap = null;
+                    FutureTarget<Bitmap> futureTarget =
+                            Glide.with(mContext)
+                                    .asBitmap()
+                                    .load(item.getUrl())
+                                    .submit(500, 500);
                     try {
-                        String url = params[0];
-                        URL HttpURL = new URL(url);
-                        HttpURLConnection conn = (HttpURLConnection) HttpURL.openConnection();
-                        conn.setDoInput(true);
-                        conn.connect();
-                        InputStream is = conn.getInputStream();
-                        bitmap = BitmapFactory.decodeStream(is);
-                        is.close();
-                    } catch (IOException e) {
-                        e.printStackTrace();
+                        bitmap = futureTarget.get();
+                    }catch (Exception e){
+                        e.getStackTrace();
                     }
-                    return bitmap;
+                    return  bitmap;
                 }
 
                 @Override

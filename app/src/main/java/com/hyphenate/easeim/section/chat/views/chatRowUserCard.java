@@ -50,11 +50,7 @@ public class chatRowUserCard extends EaseChatRow {
         String nickName = params.get(DemoConstant.USER_CARD_NICK);
         nickNameView.setText(nickName);
         String headUrl = params.get(DemoConstant.USER_CARD_AVATAR);
-        if(headUrl != null && headUrl.length() > 0){
-            Glide.with(getContext()).load(headUrl).placeholder(R.drawable.em_login_logo).into(headImageView);
-        }else{
-            headImageView.setImageResource(R.drawable.em_login_logo);
-        }
+        Glide.with(getContext()).load(headUrl).placeholder(R.drawable.em_login_logo).error(R.drawable.em_login_logo).into(headImageView);
     }
 }
 
