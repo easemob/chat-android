@@ -173,9 +173,9 @@ public class DemoHelper {
         // 根据项目需求对SDK进行配置
         EMOptions options = initChatOptions(context);
         //配置自定义的rest server和im server
-        options.setRestServer("a1-hsb.easemob.com");
-        options.setIMServer("106.75.100.247");
-        options.setImPort(6717);
+        //options.setRestServer("a1-hsb.easemob.com");
+        //options.setIMServer("106.75.100.247");
+        //options.setImPort(6717);
         // 初始化SDK
         isSDKInit = EaseIM.getInstance().init(context, options);
         //设置删除用户属性数据超时时间
