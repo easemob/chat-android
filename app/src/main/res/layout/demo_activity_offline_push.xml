@@ -40,17 +40,5 @@
             android:textColor="#fff"
             android:text="@string/save"
             android:background="@drawable/demo_button_login_bg" />
-
-        <TextView
-            android:id="@+id/tv_nickname_description"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="15dip"
-            android:layout_marginRight="15dip"
-            android:layout_marginTop="20dip"
-            android:text="@string/nickname_description" 
-            android:textColor="#cccccc"
-            android:textSize="14sp"/>
     </LinearLayout>
-
 </LinearLayout>

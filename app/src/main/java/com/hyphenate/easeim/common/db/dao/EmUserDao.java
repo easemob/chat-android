@@ -23,6 +23,9 @@ public interface EmUserDao {
     @Query("select * from em_users where username = :arg0")
     LiveData<List<EaseUser>> loadUserById(String arg0);
 
+    @Query("select * from em_users where username = :arg0")
+    List<EaseUser> loadUserByUserId(String arg0);
+
     @Query("select * from em_users where contact = 0")
     LiveData<List<EaseUser>> loadUsers();
 
@@ -38,6 +41,9 @@ public interface EmUserDao {
     @Query("select username from em_users")
     List<String> loadAllUsers();
 
+    @Query("select username from em_users where contact = 0 or contact = 1")
+    List<String> loadContactUsers();
+
     @Query("select * from em_users")
     List<EaseUser> loadAllEaseUsers();
 
@@ -49,4 +55,13 @@ public interface EmUserDao {
 
     @Query("delete from em_users where username = :arg0")
     int deleteUser(String arg0);
+
+    @Query("update em_users set contact = :arg0  where username = :arg1")
+    int updateContact(int arg0,String arg1);
+
+    @Query("select username from em_users where lastModifyTimestamp + :arg0  <= :arg1")
+    List<String> loadTimeOutEaseUsers(long arg0,long arg1);
+
+    @Query("select username from em_users where lastModifyTimestamp + :arg0  <= :arg1 and contact = 1")
+    List<String> loadTimeOutFriendUser(long arg0,long arg1);
 }

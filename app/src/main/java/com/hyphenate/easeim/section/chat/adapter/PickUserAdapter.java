@@ -12,6 +12,7 @@ import com.hyphenate.easeim.R;
 import com.hyphenate.easeui.adapter.EaseBaseRecyclerViewAdapter;
 import com.hyphenate.easeui.domain.EaseUser;
 import com.hyphenate.easeui.utils.EaseCommonUtils;
+import com.hyphenate.easeui.utils.EaseUserUtils;
 import com.hyphenate.easeui.widget.EaseImageView;
 
 import androidx.annotation.NonNull;
@@ -55,6 +56,7 @@ public class PickUserAdapter extends EaseBaseRecyclerViewAdapter<EaseUser> {
                 }
             }
             mName.setText(item.getNickname());
+            EaseUserUtils.setUserAvatar(mContext, item.getUsername(), mAvatar);
         }
     }
 }

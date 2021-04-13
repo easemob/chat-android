@@ -1,39 +1,36 @@
 {
   "project_info": {
-    "project_number": "921300338324",
-    "firebase_url": "https://chatuidemo-73c38.firebaseio.com",
-    "project_id": "chatuidemo-73c38",
-    "storage_bucket": "chatuidemo-73c38.appspot.com"
+    "project_number": "782795210914",
+    "project_id": "easeim-8eab2",
+    "storage_bucket": "easeim-8eab2.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:921300338324:android:97309bf2bf5a5b61",
+        "mobilesdk_app_id": "1:782795210914:android:62c1cfbbc6469d7a7e17fb",
         "android_client_info": {
           "package_name": "com.hyphenate.easeim"
         }
       },
       "oauth_client": [
         {
-          "client_id": "921300338324-nk4f6lsgl8i33qcl93k495ms6icfssvl.apps.googleusercontent.com",
+          "client_id": "782795210914-r26vgmb30nviaecpp33gmeu77sbtbsst.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyBKsch0tfLf8ydMzGyymPs7XCmV3xGQi-o"
+          "current_key": "AIzaSyAJmZ0RkYRHgxwOpqnoWFgJd2DYRHDs3lg"
         }
       ],
       "services": {
-        "analytics_service": {
-          "status": 1
-        },
         "appinvite_service": {
-          "status": 1,
-          "other_platform_oauth_client": []
-        },
-        "ads_service": {
-          "status": 2
+          "other_platform_oauth_client": [
+            {
+              "client_id": "782795210914-r26vgmb30nviaecpp33gmeu77sbtbsst.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
         }
       }
     }

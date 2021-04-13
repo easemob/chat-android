@@ -39,7 +39,7 @@ import androidx.annotation.Nullable;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
-public class AppKeyManageActivity extends BaseInitActivity implements EaseTitleBar.OnBackPressListener, OnRefreshListener {
+public class AppKeyManageActivity extends BaseInitActivity implements EaseTitleBar.OnBackPressListener, OnRefreshListener, EaseTitleBar.OnRightClickListener {
     private EaseTitleBar titleBar;
     private SmartRefreshLayout srlRefresh;
     private EaseRecyclerView rvList;
@@ -72,6 +72,7 @@ public class AppKeyManageActivity extends BaseInitActivity implements EaseTitleB
         super.initListener();
         titleBar.setOnBackPressListener(this);
         srlRefresh.setOnRefreshListener(this);
+        titleBar.setOnRightClickListener(this);
     }
 
     @Override
@@ -107,7 +108,10 @@ public class AppKeyManageActivity extends BaseInitActivity implements EaseTitleB
         adapter.setOnItemClickListener(new OnItemClickListener() {
             @Override
             public void onItemClick(View view, int position) {
-                showConfirmDialog(position);
+                RadioButton radio = view.findViewById(R.id.iv_arrow);
+                boolean checked = radio.isChecked();
+                radio.setChecked(!checked);
+                showConfirmDialog(view, position);
             }
         });
 
@@ -127,7 +131,7 @@ public class AppKeyManageActivity extends BaseInitActivity implements EaseTitleB
         getData();
     }
 
-    private void showConfirmDialog(int position) {
+    private void showConfirmDialog(View itemView, int position) {
         new SimpleDialogFragment.Builder(mContext)
                 .setTitle(R.string.em_developer_appkey_warning)
                 .setTitleSize(14)
@@ -139,6 +143,29 @@ public class AppKeyManageActivity extends BaseInitActivity implements EaseTitleB
                         String appKey = adapter.getItem(position).getAppKey();
                         DemoHelper.getInstance().getModel().enableCustomAppkey(!TextUtils.isEmpty(appKey));
                         settingsModel.setCustomAppkey(appKey);
+                        viewModel.logout(true);
+                    }
+                })
+                .setOnCancelClickListener(new DemoDialogFragment.onCancelClickListener() {
+                    @Override
+                    public void onCancelClick(View view) {
+                        RadioButton radio = itemView.findViewById(R.id.iv_arrow);
+                        boolean checked = radio.isChecked();
+                        radio.setChecked(!checked);
+                    }
+                })
+                .showCancelButton(true)
+                .show();
+    }
+
+    private void showSetDefaultDialog() {
+        new SimpleDialogFragment.Builder(mContext)
+                .setTitle(R.string.em_developer_appkey_warning)
+                .setTitleSize(14)
+                .setOnConfirmClickListener(R.string.em_developer_appkey_confirm, new DemoDialogFragment.OnConfirmClickListener() {
+                    @Override
+                    public void onConfirmClick(View view) {
+                        DemoHelper.getInstance().getModel().enableCustomAppkey(false);
                         viewModel.logout(true);
                     }
                 })
@@ -162,11 +189,10 @@ public class AppKeyManageActivity extends BaseInitActivity implements EaseTitleB
 
     private void getData() {
         List<AppKeyEntity> appKeys = DemoHelper.getInstance().getModel().getAppKeys();
-        String appkey;
+        String appkey = "";
+        selectedPosition = -1;
         if(settingsModel.isCustomAppkeyEnabled()) {
             appkey = settingsModel.getCutomAppkey();
-        }else {
-            appkey = EMClient.getInstance().getOptions().getAppKey();
         }
         if(appKeys != null && !appKeys.isEmpty()) {
             for(int i = 0; i < appKeys.size(); i++) {
@@ -175,8 +201,8 @@ public class AppKeyManageActivity extends BaseInitActivity implements EaseTitleB
                     selectedPosition = i;
                 }
             }
-            adapter.setData(appKeys);
         }
+        adapter.setData(appKeys);
         if(srlRefresh != null) {
             srlRefresh.finishRefresh();
         }
@@ -198,6 +224,11 @@ public class AppKeyManageActivity extends BaseInitActivity implements EaseTitleB
         if(requestCode == 100 && resultCode == RESULT_OK) {
             getData();
         }
+    }
+
+    @Override
+    public void onRightClick(View view) {
+        showSetDefaultDialog();
     }
 
     private class RvAdapter extends EaseBaseRecyclerViewAdapter<AppKeyEntity> {
@@ -231,10 +262,10 @@ public class AppKeyManageActivity extends BaseInitActivity implements EaseTitleB
             public void setData(AppKeyEntity item, int position) {
                 tvContent.setText(item.getAppKey());
                 if(selectedPosition == position) {
-                    ivArrow.setVisibility(View.VISIBLE);
+                    //ivArrow.setVisibility(View.VISIBLE);
                     ivArrow.setChecked(true);
                 }else {
-                    ivArrow.setVisibility(View.INVISIBLE);
+                    //ivArrow.setVisibility(View.INVISIBLE);
                     ivArrow.setChecked(false);
                 }
             }

@@ -41,7 +41,9 @@ public class SearchFriendsActivity extends SearchActivity {
     protected void initData() {
         super.initData();
         result = new ArrayList<>();
-        mData = DemoDbHelper.getInstance(mContext).getUserDao().loadAllEaseUsers();
+        if(DemoDbHelper.getInstance(mContext).getUserDao() != null) {
+            mData = DemoDbHelper.getInstance(mContext).getUserDao().loadAllEaseUsers();
+        }
     }
 
     @Override

@@ -44,6 +44,12 @@ public class EmUserEntity extends EaseUser {
         entity.setAvatar(user.getAvatar());
         entity.setInitialLetter(user.getInitialLetter());
         entity.setContact(user.getContact());
+        entity.setEmail(user.getEmail());
+        entity.setGender(user.getGender());
+        entity.setBirth(user.getBirth());
+        entity.setPhone(user.getPhone());
+        entity.setSign(user.getSign());
+        entity.setExt(user.getExt());
         return entity;
     }
 }

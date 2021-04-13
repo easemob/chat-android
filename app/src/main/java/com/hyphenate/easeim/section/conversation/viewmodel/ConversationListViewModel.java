@@ -13,6 +13,7 @@ import com.hyphenate.easeim.common.livedatas.SingleSourceLiveData;
 import com.hyphenate.easeim.common.net.ErrorCode;
 import com.hyphenate.easeim.common.net.Resource;
 import com.hyphenate.easeim.common.repositories.EMChatManagerRepository;
+import com.hyphenate.easeui.modules.conversation.model.EaseConversationInfo;
 
 import java.util.List;
 
@@ -20,6 +21,7 @@ public class ConversationListViewModel extends AndroidViewModel {
     private EMChatManagerRepository mRepository;
 
     private SingleSourceLiveData<Resource<List<Object>>> conversationObservable;
+    private SingleSourceLiveData<Resource<List<EaseConversationInfo>>> conversationInfoObservable;
     private SingleSourceLiveData<Resource<Boolean>> deleteConversationObservable;
     private SingleSourceLiveData<Resource<Boolean>> readConversationObservable;
 
@@ -27,6 +29,7 @@ public class ConversationListViewModel extends AndroidViewModel {
         super(application);
         mRepository = new EMChatManagerRepository();
         conversationObservable = new SingleSourceLiveData<>();
+        conversationInfoObservable = new SingleSourceLiveData<>();
         deleteConversationObservable = new SingleSourceLiveData<>();
         readConversationObservable = new SingleSourceLiveData<>();
     }
@@ -40,6 +43,17 @@ public class ConversationListViewModel extends AndroidViewModel {
 
     public LiveData<Resource<List<Object>>> getConversationObservable() {
         return conversationObservable;
+    }
+
+    /**
+     * 从服务器获取聊天列表
+     */
+    public void fetchConversationsFromServer() {
+        conversationInfoObservable.setSource(mRepository.fetchConversationsFromServer());
+    }
+
+    public LiveData<Resource<List<EaseConversationInfo>>> getConversationInfoObservable() {
+        return conversationInfoObservable;
     }
 
     /**
@@ -73,8 +87,12 @@ public class ConversationListViewModel extends AndroidViewModel {
     public void deleteSystemMsg(MsgTypeManageEntity msg) {
         try {
             DemoDbHelper dbHelper = DemoDbHelper.getInstance(DemoApplication.getInstance());
-            dbHelper.getInviteMessageDao().delete("type", msg.getType());
-            dbHelper.getMsgTypeManageDao().delete(msg);
+            if(dbHelper.getInviteMessageDao() != null) {
+                dbHelper.getInviteMessageDao().delete("type", msg.getType());
+            }
+            if(dbHelper.getMsgTypeManageDao() != null) {
+                dbHelper.getMsgTypeManageDao().delete(msg);
+            }
             deleteConversationObservable.postValue(Resource.success(true));
         } catch (Exception e) {
             e.printStackTrace();

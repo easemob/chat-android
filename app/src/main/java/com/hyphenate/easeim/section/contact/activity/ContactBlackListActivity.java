@@ -114,11 +114,19 @@ public class ContactBlackListActivity extends BaseInitActivity implements OnRefr
                 @Override
                 public void onSuccess(Boolean data) {
                     showToast(R.string.em_friends_move_out_blacklist_success);
-                    LiveDataBus.get().with(DemoConstant.CONTACT_CHANGE).postValue(EaseEvent.create(DemoConstant.CONTACT_CHANGE, EaseEvent.TYPE.CONTACT));
+                    LiveDataBus.get().with(DemoConstant.REMOVE_BLACK).postValue(EaseEvent.create(DemoConstant.REMOVE_BLACK, EaseEvent.TYPE.CONTACT));
                 }
             });
         });
-        viewModel.getBlackList();
+
+        LiveDataBus.get().with(DemoConstant.REMOVE_BLACK, EaseEvent.class).observe(this, event -> {
+            if(event == null) {
+                return;
+            }
+            if(event.isContactChange()) {
+                viewModel.getBlackList();
+            }
+        });
 
         LiveDataBus.get().with(DemoConstant.CONTACT_CHANGE, EaseEvent.class).observe(this, event -> {
             if(event == null) {
@@ -128,6 +136,8 @@ public class ContactBlackListActivity extends BaseInitActivity implements OnRefr
                 viewModel.getBlackList();
             }
         });
+
+        viewModel.getBlackList();
 
         adapter.setOnItemClickListener(this);
     }

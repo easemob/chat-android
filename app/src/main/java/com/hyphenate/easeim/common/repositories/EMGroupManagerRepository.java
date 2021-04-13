@@ -81,6 +81,32 @@ public class EMGroupManagerRepository extends BaseEMRepository{
     }
 
     /**
+     * 获取所有群组列表
+     * @param callBack
+     */
+    public void getAllGroups(ResultCallBack<List<EMGroup>> callBack) {
+        if(!isLoggedIn()) {
+            callBack.onError(ErrorCode.EM_NOT_LOGIN);
+            return;
+        }
+        getGroupManager().asyncGetJoinedGroupsFromServer(new EMValueCallBack<List<EMGroup>>() {
+            @Override
+            public void onSuccess(List<EMGroup> value) {
+                if(callBack != null) {
+                    callBack.onSuccess(value);
+                }
+            }
+
+            @Override
+            public void onError(int error, String errorMsg) {
+                if(callBack != null) {
+                    callBack.onError(error, errorMsg);
+                }
+            }
+        });
+    }
+
+    /**
      * 从服务器分页获取加入的群组
      * @param pageIndex
      * @param pageSize
@@ -309,7 +335,19 @@ public class EMGroupManagerRepository extends BaseEMRepository{
                         if(members.size() < (value.getMemberCount() - value.getAdminList().size() - 1)) {
                             members = getAllGroupMemberByServer(groupId);
                         }
-                        List<EaseUser> users = EmUserEntity.parse(members);
+                        //List<EaseUser> users = EmUserEntity.parse(members);
+                        List<EaseUser> users = new ArrayList<>();
+                        if(members != null && !members.isEmpty()){
+                            for(int i = 0; i < members.size(); i++){
+                               EaseUser user = DemoHelper.getInstance().getUserInfo(members.get(i));
+                               if(user != null){
+                                   users.add(user);
+                               }else{
+                                   EaseUser m_user = new EaseUser(members.get(i));
+                                   users.add(m_user);
+                               }
+                            }
+                        }
                         sortUserData(users);
                         callBack.onSuccess(createLiveData(users));
 

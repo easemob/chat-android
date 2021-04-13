@@ -46,6 +46,21 @@
             android:src="@drawable/ease_default_avatar" />
 
         <TextView
+            android:id="@+id/label"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintRight_toRightOf="@id/avatar"
+            app:layout_constraintTop_toTopOf="@id/avatar"
+            android:layout_marginTop="5dp"
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:textColor="@color/em_color_brand"
+            android:textSize="@dimen/em_size_small"
+            android:rotation="45"
+            android:visibility="gone"
+            tools:text="群主"/>
+
+        <TextView
             android:id="@+id/name"
             android:layout_width="0dp"
             android:layout_height="wrap_content"

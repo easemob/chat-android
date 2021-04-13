@@ -21,14 +21,20 @@ public class GroupEditFragment extends BaseDialogFragment implements EaseTitleBa
     private String hint;
     private OnSaveClickListener listener;
     private String title;
+    private boolean canEdit;
 
     public static void showDialog(BaseActivity activity, String title, String content, String hint, OnSaveClickListener listener) {
+        showDialog(activity, title, content, hint, true, listener);
+    }
+
+    public static void showDialog(BaseActivity activity, String title, String content, String hint, boolean canEdit, OnSaveClickListener listener) {
         GroupEditFragment fragment = new GroupEditFragment();
         fragment.setOnSaveClickListener(listener);
         Bundle bundle = new Bundle();
         bundle.putString("title", title);
         bundle.putString("content", content);
         bundle.putString("hint", hint);
+        bundle.putBoolean("canEdit", canEdit);
         fragment.setArguments(bundle);
         FragmentTransaction transaction = activity.getSupportFragmentManager().beginTransaction();
         transaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
@@ -61,6 +67,7 @@ public class GroupEditFragment extends BaseDialogFragment implements EaseTitleBa
             title = bundle.getString("title");
             content = bundle.getString("content");
             hint = bundle.getString("hint");
+            canEdit = bundle.getBoolean("canEdit");
         }
     }
 
@@ -75,6 +82,9 @@ public class GroupEditFragment extends BaseDialogFragment implements EaseTitleBa
         }else {
             etContent.setText(content);
         }
+
+        etContent.setEnabled(canEdit);
+        titleBar.setRightLayoutVisibility(canEdit ? View.VISIBLE : View.GONE);
 
         titleBar.setTitle(title);
     }

@@ -1,17 +1,23 @@
 package com.hyphenate.easeim.section.contact.fragment;
 
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.View;
 
+import androidx.annotation.Nullable;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.hyphenate.chat.EMCursorResult;
+import com.hyphenate.chat.EMGroup;
 import com.hyphenate.chat.EMGroupInfo;
 import com.hyphenate.easeim.R;
+import com.hyphenate.easeim.common.constant.DemoConstant;
 import com.hyphenate.easeim.common.interfaceOrImplement.OnResourceParseCallback;
 import com.hyphenate.easeim.section.base.BaseInitFragment;
+import com.hyphenate.easeim.section.chat.activity.ChatActivity;
+import com.hyphenate.easeim.section.group.GroupHelper;
 import com.hyphenate.easeim.section.group.activity.GroupSimpleDetailActivity;
 import com.hyphenate.easeim.section.contact.adapter.PublicGroupContactAdapter;
 import com.hyphenate.easeim.section.contact.viewmodels.GroupContactViewModel;
@@ -29,6 +35,7 @@ public class GroupPublicContactManageFragment extends BaseInitFragment implement
     private int page_size = 20;
     private String cursor;
     private GroupContactViewModel viewModel;
+    private List<EMGroup> allJoinGroups;
 
     @Override
     protected int getLayoutId() {
@@ -50,7 +57,7 @@ public class GroupPublicContactManageFragment extends BaseInitFragment implement
 
     @Override
     protected void initViewModel() {
-        viewModel = new ViewModelProvider(this).get(GroupContactViewModel.class);
+        viewModel = new ViewModelProvider(mContext).get(GroupContactViewModel.class);
         viewModel.getPublicGroupObservable().observe(getViewLifecycleOwner(), response -> {
             parseResource(response, new OnResourceParseCallback<EMCursorResult<EMGroupInfo>>() {
                 @Override
@@ -89,6 +96,24 @@ public class GroupPublicContactManageFragment extends BaseInitFragment implement
             });
         });
 
+        viewModel.getAllGroupsObservable().observe(getViewLifecycleOwner(), response -> {
+            parseResource(response, new OnResourceParseCallback<List<EMGroup>>() {
+                @Override
+                public void onSuccess(@Nullable List<EMGroup> data) {
+                    allJoinGroups = data;
+                    //获取完加入的群组信息，再请求数据
+                    getData();
+                }
+
+                @Override
+                public void onError(int code, String message) {
+                    super.onError(code, message);
+                    //请求出错后，再请求数据
+                    getData();
+                }
+            });
+        });
+
     }
 
     @Override
@@ -99,7 +124,7 @@ public class GroupPublicContactManageFragment extends BaseInitFragment implement
         rvList.setAdapter(mAdapter);
         mAdapter.setOnItemClickListener(this);
 
-        getData();
+        //getData();
     }
 
     public void getData() {
@@ -121,6 +146,10 @@ public class GroupPublicContactManageFragment extends BaseInitFragment implement
     @Override
     public void onItemClick(View view, int position) {
         EMGroupInfo item = mAdapter.getItem(position);
-        GroupSimpleDetailActivity.actionStart(mContext, item.getGroupId());
+        if(GroupHelper.isJoinedGroup(allJoinGroups, item.getGroupId())) {
+            ChatActivity.actionStart(mContext, item.getGroupId(), DemoConstant.CHATTYPE_GROUP);
+        }else {
+            GroupSimpleDetailActivity.actionStart(mContext, item.getGroupId());
+        }
     }
 }

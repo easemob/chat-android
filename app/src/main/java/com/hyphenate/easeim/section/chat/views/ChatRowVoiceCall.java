@@ -16,7 +16,7 @@ public class ChatRowVoiceCall extends EaseChatRow {
 
     @Override
     protected void onInflateView() {
-        inflater.inflate(isSender ? R.layout.ease_row_sent_voice_call : R.layout.ease_row_received_voice_call, this);
+        inflater.inflate(showSenderType ? R.layout.ease_row_sent_voice_call : R.layout.ease_row_received_voice_call, this);
     }
 
     @Override

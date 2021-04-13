@@ -132,13 +132,13 @@ public class GroupDetailActivity extends BaseInitActivity implements EaseTitleBa
         tvGroupMemberNum.setText(getString(R.string.em_chat_group_detail_member_num, group.getMemberCount()));
         tvGroupRefund.setText(getResources().getString(isOwner() ? R.string.em_chat_group_detail_dissolve : R.string.em_chat_group_detail_refund));
         tvGroupIntroduction.setText(group.getDescription());
-        itemGroupNotDisturb.getSwitch().setChecked(group.isMsgBlocked());
+        //itemGroupNotDisturb.getSwitch().setChecked(group.isMsgBlocked());
         conversation = DemoHelper.getInstance().getConversation(groupId, EMConversation.EMConversationType.GroupChat, true);
         String extField = conversation.getExtField();
         itemGroupTop.getSwitch().setChecked(!TextUtils.isEmpty(extField) && EaseCommonUtils.isTimestamp(extField));
         tvGroupInvite.setVisibility(group.getMemberCount() <= 0 ? View.VISIBLE : View.GONE);
         tvGroupInvite.setVisibility(isCanInvite() ? View.VISIBLE : View.GONE);
-        itemGroupNotDisturb.getSwitch().setChecked(group.isMsgBlocked());
+        //itemGroupNotDisturb.getSwitch().setChecked(group.isMsgBlocked());
         itemGroupMemberManage.setVisibility((isOwner() || isAdmin()) ? View.VISIBLE : View.GONE);
 
         itemGroupIntroduction.getTvContent().setText(group.getDescription());
@@ -147,7 +147,7 @@ public class GroupDetailActivity extends BaseInitActivity implements EaseTitleBa
         makeTextSingleLine(itemGroupIntroduction.getTvContent());
 
         List<String> disabledIds = DemoHelper.getInstance().getPushManager().getNoPushGroups();
-        itemGroupOffPush.getSwitch().setChecked(disabledIds != null && disabledIds.contains(groupId));
+        itemGroupNotDisturb.getSwitch().setChecked(disabledIds != null && disabledIds.contains(groupId));
     }
 
     @Override
@@ -201,7 +201,7 @@ public class GroupDetailActivity extends BaseInitActivity implements EaseTitleBa
             parseResource(response, new OnResourceParseCallback<Boolean>() {
                 @Override
                 public void onSuccess(Boolean data) {
-                    itemGroupNotDisturb.getSwitch().setChecked(true);
+                    //itemGroupNotDisturb.getSwitch().setChecked(true);
                 }
             });
         });
@@ -209,7 +209,7 @@ public class GroupDetailActivity extends BaseInitActivity implements EaseTitleBa
             parseResource(response, new OnResourceParseCallback<Boolean>() {
                 @Override
                 public void onSuccess(Boolean data) {
-                    itemGroupNotDisturb.getSwitch().setChecked(false);
+                    //itemGroupNotDisturb.getSwitch().setChecked(false);
                 }
             });
         });
@@ -304,11 +304,12 @@ public class GroupDetailActivity extends BaseInitActivity implements EaseTitleBa
     public void onCheckedChanged(SwitchItemView buttonView, boolean isChecked) {
         switch (buttonView.getId()) {
             case R.id.item_group_not_disturb ://消息免打扰
-                if(isChecked) {
+                viewModel.updatePushServiceForGroup(groupId, isChecked);
+                /*if(isChecked) {
                     viewModel.blockGroupMessage(groupId);
                 }else {
                     viewModel.unblockGroupMessage(groupId);
-                }
+                }*/
                 break;
             case R.id.item_group_off_push://屏蔽离线消息推送
                 viewModel.updatePushServiceForGroup(groupId, isChecked);
@@ -344,6 +345,7 @@ public class GroupDetailActivity extends BaseInitActivity implements EaseTitleBa
                 getString(R.string.em_chat_group_detail_announcement),
                 group.getAnnouncement(),
                 getString(R.string.em_chat_group_detail_announcement_hint),
+                GroupHelper.isAdmin(group) || GroupHelper.isOwner(group),
                 new GroupEditFragment.OnSaveClickListener() {
                     @Override
                     public void onSaveClick(View view, String content) {
@@ -358,6 +360,7 @@ public class GroupDetailActivity extends BaseInitActivity implements EaseTitleBa
                 getString(R.string.em_chat_group_detail_introduction),
                 group.getDescription(),
                 getString(R.string.em_chat_group_detail_introduction_hint),
+                GroupHelper.isAdmin(group) || GroupHelper.isOwner(group),
                 new GroupEditFragment.OnSaveClickListener() {
                     @Override
                     public void onSaveClick(View view, String content) {

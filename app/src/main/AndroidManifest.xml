@@ -268,7 +268,7 @@
 
         </receiver>
 
-        <receiver android:name="com.hyphenate.push.platform.mi.EMMiMsgReceiver">
+        <receiver android:name=".common.receiver.MiMsgReceiver">
             <intent-filter>
                 <action android:name="com.xiaomi.mipush.RECEIVE_MESSAGE" />
             </intent-filter>
@@ -325,7 +325,7 @@
         <!--聊天页面-->
         <activity
             android:name=".section.chat.activity.ChatActivity"
-            android:windowSoftInputMode="stateHidden|adjustPan"
+            android:windowSoftInputMode="stateHidden|adjustResize"
             android:screenOrientation="portrait"
             android:launchMode="singleTask"/>
         <!--群组列表-->
@@ -351,32 +351,17 @@
             android:screenOrientation="portrait"/>
         <!--视频通话-->
         <activity
-            android:name=".section.chat.activity.ChatVideoCallActivity"
+            android:name="com.hyphenate.easecallkit.ui.EaseVideoCallActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:excludeFromRecents="true"
             android:launchMode="singleInstance"
             android:screenOrientation="portrait"/>
-        <!--语音通话-->
         <activity
-            android:name=".section.chat.activity.ChatVoiceCallActivity"
+            android:name="com.hyphenate.easecallkit.ui.EaseMultipleVideoActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:excludeFromRecents="true"
             android:launchMode="singleInstance"
             android:screenOrientation="portrait"/>
-        <!--直播模式-->
-        <activity
-            android:name=".section.chat.activity.LiveActivity"
-            android:configChanges="orientation|keyboardHidden|screenSize"
-            android:excludeFromRecents="true"
-            android:screenOrientation="portrait"
-            android:launchMode="singleTask"/>
-        <!--多人会议-->
-        <activity
-            android:name=".section.conference.ConferenceActivity"
-            android:configChanges="orientation|keyboardHidden|screenSize"
-            android:excludeFromRecents="true"
-            android:screenOrientation="portrait"
-            android:launchMode="singleInstance"/>
         <!--会议成员邀请-->
         <activity
             android:name=".section.conference.ConferenceInviteActivity"
@@ -505,10 +490,21 @@
             android:screenOrientation="portrait"/>
         <!--聊天历史-->
         <activity android:name=".section.chat.activity.ChatHistoryActivity"
+            android:windowSoftInputMode="stateHidden|adjustResize"
             android:screenOrientation="portrait"/>
         <!--个人资料-->
         <activity android:name=".section.me.activity.UserDetailActivity"
             android:screenOrientation="portrait"/>
+        <!--选择头像 -->
+        <activity
+            android:name=".section.me.activity.ChooseHeadImageActivity"
+            android:label="@string/title_activity_choose_head_image"
+            android:screenOrientation="portrait" />
+        <!--选择用户名片 -->
+        <activity
+            android:name=".section.chat.activity.SelectUserCardActivity"
+            android:label="@string/title_activity_select_user_card"
+            android:screenOrientation="portrait"  />
         <!--意见反馈-->
         <activity android:name=".section.me.activity.FeedbackActivity"
             android:screenOrientation="portrait"/>
@@ -535,11 +531,7 @@
         <activity android:name=".section.me.activity.MessagePushStyleActivity" />
         <!--WebView加载网页-->
         <activity android:name=".section.base.WebViewActivity" />
-
         <!--捕获屏幕service-->
-        <service android:name=".section.conference.SRForegroundService"
-            android:enabled="true"
-            android:foregroundServiceType="mediaProjection"/>
     </application>
 
 </manifest>

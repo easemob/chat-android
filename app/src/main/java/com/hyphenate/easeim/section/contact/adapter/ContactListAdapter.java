@@ -8,17 +8,28 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.core.content.ContextCompat;
 
+import com.bumptech.glide.Glide;
+import com.hyphenate.chat.EMClient;
+import com.hyphenate.easeim.DemoHelper;
 import com.hyphenate.easeim.R;
+import com.hyphenate.easeim.section.group.viewmodels.GroupMemberAuthorityViewModel;
 import com.hyphenate.easeui.adapter.EaseBaseRecyclerViewAdapter;
 import com.hyphenate.easeui.domain.EaseUser;
+import com.hyphenate.easeui.modules.contact.model.EaseContactSetStyle;
 import com.hyphenate.easeui.widget.EaseImageView;
 
 public class ContactListAdapter extends EaseBaseRecyclerViewAdapter<EaseUser> {
 
+    private GroupMemberAuthorityViewModel  viewModel;
     @Override
     public ViewHolder getViewHolder(ViewGroup parent, int viewType) {
         return new MyViewHolder(LayoutInflater.from(mContext).inflate(R.layout.demo_widget_contact_item, parent, false));
+    }
+
+    public void setSettingModel(GroupMemberAuthorityViewModel settingModel) {
+        this.viewModel = settingModel;
     }
 
     @Override
@@ -58,7 +69,19 @@ public class ContactListAdapter extends EaseBaseRecyclerViewAdapter<EaseUser> {
                     mHeader.setText(header);
                 }
             }
-            mName.setText(item.getUsername());
+            //判断是否为自己账号多端登录
+            if(!item.getUsername().contains(EMClient.getInstance().getCurrentUser())){
+                if(item.getNickname() != null && item.getNickname().length() > 0){
+                    mName.setText(item.getNickname());
+                }
+                Glide.with(mContext).load(item.getAvatar()).placeholder(R.drawable.em_login_logo).error(R.drawable.em_login_logo).into(mAvatar);
+            }else{
+                EaseUser user = DemoHelper.getInstance().getUserInfo(EMClient.getInstance().getCurrentUser());
+                if(user.getNickname() != null && user.getNickname().length() > 0){
+                    mName.setText(user.getNickname());
+                }
+                Glide.with(mContext).load(user.getAvatar()).placeholder(R.drawable.em_login_logo).error(R.drawable.em_login_logo).into(mAvatar);
+            }
         }
     }
 }

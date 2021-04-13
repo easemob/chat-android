@@ -58,7 +58,10 @@ public class AddContactActivity extends SearchActivity implements EaseTitleBar.O
 
         });
         //获取本地的好友列表
-        List<String> localUsers = DemoDbHelper.getInstance(mContext).getUserDao().loadAllUsers();
+        List<String> localUsers = null;
+        if(DemoDbHelper.getInstance(mContext).getUserDao() != null) {
+            localUsers = DemoDbHelper.getInstance(mContext).getUserDao().loadAllUsers();
+        }
         ((AddContactAdapter)adapter).addLocalContacts(localUsers);
 
         ((AddContactAdapter)adapter).setOnItemAddClickListener(this);

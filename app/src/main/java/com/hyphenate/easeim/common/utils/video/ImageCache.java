@@ -217,7 +217,6 @@ public class ImageCache {
 			}
 			mMemoryCache.put(data, value);
 		}
-
 	}
 
 	/**

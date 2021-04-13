@@ -28,8 +28,8 @@ public class ChatNotificationAdapterDelegate extends EaseMessageAdapterDelegate<
     }
 
     @Override
-    protected EaseChatRowViewHolder createViewHolder(View view, MessageListItemClickListener itemClickListener, EaseMessageListItemStyle itemStyle) {
-        return new ChatNotificationViewHolder(view, itemClickListener, itemStyle);
+    protected EaseChatRowViewHolder createViewHolder(View view, MessageListItemClickListener itemClickListener) {
+        return new ChatNotificationViewHolder(view, itemClickListener);
     }
 }
 
