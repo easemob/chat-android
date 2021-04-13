@@ -14,12 +14,6 @@ android {
             keyAlias = properties.getProperty('DEBUG_KEY_ALIAS', 'easemob')
             keyPassword properties.getProperty('DEBUG_KEY_PASSWORD', '123456')
         }
-        release {
-            storeFile file(properties.getProperty('DEBUG_STORE_FILE_PATH', './keystore/sdkdemo.jks'))
-            storePassword properties.getProperty('DEBUG_STORE_PASSWORD', '123456')
-            keyAlias = properties.getProperty('DEBUG_KEY_ALIAS', 'easemob')
-            keyPassword properties.getProperty('DEBUG_KEY_PASSWORD', '123456')
-        }
     }
     compileSdkVersion 29
     buildToolsVersion "29.0.3"
@@ -54,7 +48,7 @@ android {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
-            signingConfig signingConfigs.release
+            signingConfig signingConfigs.debug
         }
 
         debug {
