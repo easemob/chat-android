@@ -24,12 +24,4 @@
         android:singleLine="true"
         android:textColor="#000"
         android:textSize="@dimen/adaptive_18sp" />
-
-    <CheckBox
-        android:id="@+id/checkbox"
-        android:layout_width="@dimen/adaptive_40dp"
-        android:layout_height="@dimen/adaptive_40dp"
-        android:layout_alignParentRight="true"
-        android:layout_centerVertical="true"
-        android:layout_marginRight="@dimen/adaptive_12dp" />
 </RelativeLayout>

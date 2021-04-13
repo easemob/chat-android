@@ -53,6 +53,12 @@ public interface DemoConstant extends EaseConstant {
     String CONTACT_ALLOW = "contact_allow";
 
     String CONTACT_CHANGE = "contact_change";
+    String CONTACT_ADD = "contact_add";
+    String CONTACT_DELETE = "contact_delete";
+    String CONTACT_UPDATE = "contact_update";
+    String NICK_NAME_CHANGE = "nick_name_change";
+    String AVATAR_CHANGE = "avatar_change";
+    String REMOVE_BLACK = "remove_black";
 
     String GROUP_CHANGE = "group_change";
     String GROUP_OWNER_TRANSFER = "group_owner_transfer";
@@ -74,5 +80,10 @@ public interface DemoConstant extends EaseConstant {
     String SYSTEM_MESSAGE_GROUP_ID = "groupId";
     String SYSTEM_MESSAGE_NAME = "name";
     String SYSTEM_MESSAGE_INVITER = "inviter";
+
+    String USER_CARD_EVENT = "userCard";
+    String USER_CARD_ID = "uid";
+    String USER_CARD_NICK = "nickname";
+    String USER_CARD_AVATAR = "avatar";
 
 }

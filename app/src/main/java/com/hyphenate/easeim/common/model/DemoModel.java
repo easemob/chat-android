@@ -7,6 +7,7 @@ import android.text.TextUtils;
 import com.hyphenate.chat.EMChatRoom;
 import com.hyphenate.chat.EMClient;
 import com.hyphenate.easeim.DemoApplication;
+import com.hyphenate.easeim.DemoHelper;
 import com.hyphenate.easeim.common.db.DemoDbHelper;
 import com.hyphenate.easeim.common.db.dao.AppKeyDao;
 import com.hyphenate.easeim.common.db.dao.EmUserDao;
@@ -18,6 +19,7 @@ import com.hyphenate.easeim.common.manager.OptionsHelper;
 import com.hyphenate.easeim.common.utils.PreferenceManager;
 import com.hyphenate.easeui.domain.EaseUser;
 import com.hyphenate.easeui.manager.EasePreferenceManager;
+import com.hyphenate.util.EMLog;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -32,13 +34,27 @@ public class DemoModel {
     protected Context context = null;
     protected Map<Key,Object> valueCache = new HashMap<Key,Object>();
     public List<EMChatRoom> chatRooms;
+
+    //用户属性数据过期时间设置
+    public static long userInfoTimeOut =  7 * 24 * 60 * 60 * 1000;
     
     public DemoModel(Context ctx){
         context = ctx;
         PreferenceManager.init(context);
     }
-    
-    public boolean saveContactList(List<EaseUser> contactList) {
+
+    public long getUserInfoTimeOut() {
+        return userInfoTimeOut;
+    }
+
+    public void setUserInfoTimeOut(long userInfoTimeOut) {
+        if(userInfoTimeOut > 0){
+            this.userInfoTimeOut = userInfoTimeOut;
+        }
+    }
+
+
+    public boolean updateContactList(List<EaseUser> contactList) {
         List<EmUserEntity> userEntities = EmUserEntity.parseList(contactList);
         EmUserDao dao = DemoDbHelper.getInstance(context).getUserDao();
         if(dao != null) {
@@ -63,13 +79,45 @@ public class DemoModel {
         return map;
     }
 
+
+    public Map<String, EaseUser> getAllUserList() {
+        EmUserDao dao = DemoDbHelper.getInstance(context).getUserDao();
+        if(dao == null) {
+            return new HashMap<>();
+        }
+        Map<String, EaseUser> map = new HashMap<>();
+        List<EaseUser> users = dao.loadAllEaseUsers();
+        if(users != null && !users.isEmpty()) {
+            for (EaseUser user : users) {
+                map.put(user.getUsername(), user);
+            }
+        }
+        return map;
+    }
+
+
+    public Map<String, EaseUser> getFriendContactList() {
+        EmUserDao dao = DemoDbHelper.getInstance(context).getUserDao();
+        if(dao == null) {
+            return new HashMap<>();
+        }
+        Map<String, EaseUser> map = new HashMap<>();
+        List<EaseUser> users = dao.loadContacts();
+        if(users != null && !users.isEmpty()) {
+            for (EaseUser user : users) {
+                map.put(user.getUsername(), user);
+            }
+        }
+        return map;
+    }
+
     /**
      * 判断是否是联系人
      * @param userId
      * @return
      */
     public boolean isContact(String userId) {
-        Map<String, EaseUser> contactList = getContactList();
+        Map<String, EaseUser> contactList = getFriendContactList();
         return contactList.keySet().contains(userId);
     }
     
@@ -166,6 +214,20 @@ public class DemoModel {
                 dbHelper.getUserDao().insert((EmUserEntity) object);
             }
         }
+    }
+
+
+    /**
+     * 查找有关用户用户属性过期的用户ID
+     *
+     */
+    public List<String> selectTimeOutUsers() {
+        DemoDbHelper dbHelper = getDbHelper();
+        List<String> users = null;
+        if(dbHelper.getUserDao() != null) {
+            users = dbHelper.getUserDao().loadTimeOutEaseUsers(userInfoTimeOut,System.currentTimeMillis());
+        }
+        return users;
     }
     
     /**

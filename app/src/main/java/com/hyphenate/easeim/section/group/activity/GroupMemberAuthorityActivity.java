@@ -10,6 +10,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 
+import com.hyphenate.chat.EMClient;
 import com.hyphenate.chat.EMGroup;
 import com.hyphenate.easeim.DemoHelper;
 import com.hyphenate.easeim.R;
@@ -18,6 +19,7 @@ import com.hyphenate.easeim.common.db.entity.EmUserEntity;
 import com.hyphenate.easeim.common.interfaceOrImplement.OnResourceParseCallback;
 import com.hyphenate.easeim.common.livedatas.LiveDataBus;
 import com.hyphenate.easeim.section.group.GroupHelper;
+import com.hyphenate.easeim.section.me.activity.UserDetailActivity;
 import com.hyphenate.easeui.manager.SidebarPresenter;
 import com.hyphenate.easeim.section.base.BaseInitActivity;
 import com.hyphenate.easeim.section.dialog.DemoDialogFragment;
@@ -192,6 +194,7 @@ public class GroupMemberAuthorityActivity extends BaseInitActivity implements Ea
         super.initData();
         getGroup();
         viewModel = new ViewModelProvider(this).get(GroupMemberAuthorityViewModel.class);
+        adapter.setSettingModel(viewModel);
         getData();
     }
 
@@ -300,6 +303,23 @@ public class GroupMemberAuthorityActivity extends BaseInitActivity implements Ea
                 finish();
             }
         });
+
+        //监听有关用户属性的事件
+        viewModel.getMessageChangeObservable().with(DemoConstant.CONTACT_CHANGE, EaseEvent.class).observe(this, event -> {
+            if(event != null) {
+                refreshData();
+            }
+        });
+        viewModel.getMessageChangeObservable().with(DemoConstant.CONTACT_UPDATE, EaseEvent.class).observe(this, event -> {
+            if(event != null) {
+                refreshData();
+            }
+        });
+        viewModel.getMessageChangeObservable().with(DemoConstant.CONTACT_ADD, EaseEvent.class).observe(this, event -> {
+            if(event != null) {
+                refreshData();
+            }
+        });
         refreshData();
     }
 
@@ -322,7 +342,11 @@ public class GroupMemberAuthorityActivity extends BaseInitActivity implements Ea
     @Override
     public void onItemClick(View view, int position) {
         EaseUser user = adapter.getItem(position);
-        ContactDetailActivity.actionStart(mContext, user, DemoHelper.getInstance().getModel().isContact(user.getUsername()));
+        if(user.getUsername().equals(EMClient.getInstance().getCurrentUser())){
+            UserDetailActivity.actionStart(mContext,null,null);
+        }else{
+            ContactDetailActivity.actionStart(mContext, user, DemoHelper.getInstance().getModel().isContact(user.getUsername()));
+        }
     }
 
     @Override

@@ -3,11 +3,17 @@ package com.hyphenate.easeim.section.me;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.hyphenate.EMCallBack;
+import com.hyphenate.chat.EMClient;
+import com.hyphenate.chat.EMUserInfo;
 import com.hyphenate.easeim.DemoHelper;
 import com.hyphenate.easeim.R;
+import com.hyphenate.easeim.common.constant.DemoConstant;
+import com.hyphenate.easeim.common.livedatas.LiveDataBus;
 import com.hyphenate.easeui.manager.EaseThreadManager;
 import com.hyphenate.easeim.common.widget.ArrowItemView;
 import com.hyphenate.easeim.section.base.BaseInitFragment;
@@ -19,17 +25,22 @@ import com.hyphenate.easeim.section.me.activity.DeveloperSetActivity;
 import com.hyphenate.easeim.section.me.activity.FeedbackActivity;
 import com.hyphenate.easeim.section.me.activity.SetIndexActivity;
 import com.hyphenate.easeim.section.me.activity.UserDetailActivity;
+import com.hyphenate.easeui.model.EaseEvent;
 
 import androidx.constraintlayout.widget.ConstraintLayout;
 
 public class AboutMeFragment extends BaseInitFragment implements View.OnClickListener {
+    static private String TAG =  "AboutMeFragment";
     private ConstraintLayout clUser;
-    private TextView name;
+    private ImageView avatar;
     private ArrowItemView itemCommonSet;
     private ArrowItemView itemFeedback;
     private ArrowItemView itemAboutHx;
     private ArrowItemView itemDeveloperSet;
     private Button mBtnLogout;
+    private TextView nickName_view;
+    private TextView userId_view;
+    private EMUserInfo userInfo;
     @Override
     protected int getLayoutId() {
         return R.layout.demo_fragment_about_me;
@@ -39,14 +50,15 @@ public class AboutMeFragment extends BaseInitFragment implements View.OnClickLis
     protected void initView(Bundle savedInstanceState) {
         super.initView(savedInstanceState);
         clUser = findViewById(R.id.cl_user);
-        name = findViewById(R.id.name);
+        nickName_view = findViewById(R.id.tv_nickName);
+        userId_view = findViewById(R.id.tv_userId);
+        avatar = findViewById(R.id.avatar);
         itemCommonSet = findViewById(R.id.item_common_set);
         itemFeedback = findViewById(R.id.item_feedback);
         itemAboutHx = findViewById(R.id.item_about_hx);
         itemDeveloperSet = findViewById(R.id.item_developer_set);
         mBtnLogout = findViewById(R.id.btn_logout);
-
-        name.setText(DemoHelper.getInstance().getCurrentUser());
+        nickName_view.setText("账号：" + DemoHelper.getInstance().getCurrentUser());
     }
 
     @Override
@@ -67,7 +79,11 @@ public class AboutMeFragment extends BaseInitFragment implements View.OnClickLis
                 logout();
                 break;
             case R.id.cl_user:
-                UserDetailActivity.actionStart(mContext);
+                if(userInfo != null){
+                    UserDetailActivity.actionStart(mContext,userInfo.getNickName(),userInfo.getAvatarUrl());
+                }else{
+                    UserDetailActivity.actionStart(mContext,null,null);
+                }
                 break;
             case R.id.item_common_set:
                 SetIndexActivity.actionStart(mContext);
@@ -111,5 +127,33 @@ public class AboutMeFragment extends BaseInitFragment implements View.OnClickLis
                     }
                 })
                 .show();
+    }
+
+
+    @Override
+    public void initData(){
+        super.initData();
+        addLiveDataObserver();
+    }
+
+
+    protected void addLiveDataObserver() {
+        LiveDataBus.get().with(DemoConstant.AVATAR_CHANGE, EaseEvent.class).observe(this, event -> {
+            if (event != null) {
+                Glide.with(mContext).load(event.message).placeholder(R.drawable.em_login_logo).into(avatar);
+                if(userInfo != null){
+                    userInfo.setAvatarUrl(event.message);
+                }
+            }
+        });
+        LiveDataBus.get().with(DemoConstant.NICK_NAME_CHANGE, EaseEvent.class).observe(this, event -> {
+            if (event != null) {
+                nickName_view.setText("昵称：" + event.message);
+                userId_view.setText("账号：" + EMClient.getInstance().getCurrentUser());
+                if(userInfo != null){
+                    userInfo.setNickName(event.message);
+                }
+            }
+        });
     }
 }

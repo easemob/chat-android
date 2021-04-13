@@ -20,4 +20,6 @@
     <item name="contact_header_item_group_list" type="id"/>
     <!-- 聊天室 -->
     <item name="contact_header_item_chat_room_list" type="id"/>
+    <!-- 名片 -->
+    <item name="extend_item_user_card" type="id"/>
 </resources>

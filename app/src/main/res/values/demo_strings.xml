@@ -18,6 +18,7 @@
     <string name="em_main_title_friends">通讯录</string>
     <string name="em_main_title_discover">发现</string>
     <string name="em_main_title_me">我</string>
+    <string name="attach_user_card">名片</string>
 
     <string name="demo_title_image_grid">拍摄及视频</string>
 
@@ -377,7 +378,7 @@
     <string name="push_no_disturb_off">关闭</string>
     <string name="push_saving_settings">正在保存...</string>
     <string name="push_save_failed">保存失败</string>
-    <string name="push_nick">iOS离线推送昵称</string>
+    <string name="push_nick">昵称</string>
     <string name="input_new_nick_hint">输入新昵称</string>
     <string name="nickname_description">设置此昵称以后，在与iOS客户端demo聊天过程中，iOS一侧会显示此昵称而不是环信ID，如果对方使用安卓客户端则此设置不生效</string>
     <string name="yangshengqi">使用扬声器播放语音</string>
@@ -386,7 +387,12 @@
     <string name="offline_push_no_disturb">推送消息免打扰</string>
     <string name="offline_default_time_range">22:00~07:00</string>
     <string name="offline_time_rang_error">起止时间不能相同</string>
-    <string name="demo_offline_nickname_update_success">推送昵称已更新</string>
+    <string name="demo_offline_nickname_update_success">昵称已修改成功</string>
+    <string name="demo_offline_nickname_update_failed">昵称修改失败</string>
+    <string name="demo_offline_nickname_is_empty">昵称为空,请重新输入</string>
+    <string name="demo_head_image_update_success">头像已修改成功</string>
+    <string name="demo_head_image_update_failed">头像修改失败</string>
+
 
     <string name="title_msg_typing">显示输入状态</string>
     <string name="chatroom_allow_owner_leave"> 允许聊天室群主离开</string>
@@ -413,6 +419,7 @@
     <string name="call_open_float_permission">是否前往打开悬浮窗权限?</string>
 
     <string name="button_start_video_conference">开始视频会议 (%1$d)</string>
+    <string name="button_send_user_card">发送名片 </string>
     <string name="search">搜索</string>
 
     <string name="em_map_title">位置信息</string>
@@ -552,4 +559,9 @@
     <string name="demo_call_options_watermark">水印</string>
     <string name="demo_call_options_set_video_resolution">设置视频分辨率：%1$s</string>
     <string name="demo_grid_file_null">没有获取到文件内容</string>
+
+    <string name="title_activity_select_user_card">选择好友</string>
+    <string name="title_activity_choose_head_image">选择头像</string>
+    <string name="demo_contact_get_userInfo_failed">获取用户属性失败</string>
+
 </resources>

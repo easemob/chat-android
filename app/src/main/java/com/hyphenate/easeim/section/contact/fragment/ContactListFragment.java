@@ -1,14 +1,19 @@
 package com.hyphenate.easeim.section.contact.fragment;
 
+import android.annotation.SuppressLint;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.os.AsyncTask;
 import android.os.Bundle;
+import android.util.Pair;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ImageView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.StringRes;
-import androidx.core.content.ContextCompat;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
@@ -31,10 +36,8 @@ import com.hyphenate.easeui.domain.EaseUser;
 import com.hyphenate.easeui.interfaces.OnItemClickListener;
 import com.hyphenate.easeui.model.EaseEvent;
 import com.hyphenate.easeui.modules.contact.EaseContactListFragment;
-import com.hyphenate.easeui.modules.contact.EaseContactListLayout;
 import com.hyphenate.easeui.modules.contact.model.EaseContactCustomBean;
 import com.hyphenate.easeui.modules.menu.EasePopupMenuHelper;
-import com.hyphenate.easeui.utils.EaseCommonUtils;
 import com.hyphenate.easeui.widget.EaseSearchTextView;
 
 import java.util.List;
@@ -111,6 +114,7 @@ public class ContactListFragment extends EaseContactListFragment implements View
         contactLayout.getSwipeRefreshLayout().setOnRefreshListener(this);
         tvSearch.setOnClickListener(this);
         contactLayout.getContactList().setOnCustomItemClickListener(new OnItemClickListener() {
+            @SuppressLint("NonConstantResourceId")
             @Override
             public void onItemClick(View view, int position) {
                 EaseContactCustomBean item = contactLayout.getContactList().getCustomAdapter().getItem(position);
@@ -144,9 +148,7 @@ public class ContactListFragment extends EaseContactListFragment implements View
                     super.onLoading(data);
                     contactLayout.getContactList().setData(data);
                 }
-
             });
-
         });
 
         mViewModel.resultObservable().observe(this, response -> {
@@ -154,7 +156,7 @@ public class ContactListFragment extends EaseContactListFragment implements View
                 @Override
                 public void onSuccess(Boolean data) {
                     showToast(R.string.em_friends_move_into_blacklist_success);
-                    mViewModel.loadContactList();
+                    mViewModel.loadContactList(false);
                 }
             });
         });
@@ -163,7 +165,7 @@ public class ContactListFragment extends EaseContactListFragment implements View
             parseResource(response, new OnResourceParseCallback<Boolean>() {
                 @Override
                 public void onSuccess(Boolean data) {
-                    mViewModel.loadContactList();
+                    mViewModel.loadContactList(false);
                 }
             });
         });
@@ -173,11 +175,50 @@ public class ContactListFragment extends EaseContactListFragment implements View
                 return;
             }
             if(event.isContactChange()) {
-                mViewModel.loadContactList();
+                mViewModel.loadContactList(false);
             }
         });
 
-        mViewModel.loadContactList();
+        mViewModel.messageChangeObservable().with(DemoConstant.REMOVE_BLACK, EaseEvent.class).observe(this, event -> {
+            if(event == null) {
+                return;
+            }
+            if(event.isContactChange()) {
+                mViewModel.loadContactList(true);
+            }
+        });
+
+
+        mViewModel.messageChangeObservable().with(DemoConstant.CONTACT_ADD, EaseEvent.class).observe(this, event -> {
+            if(event == null) {
+                return;
+            }
+            if(event.isContactChange()) {
+                mViewModel.loadContactList(false);
+            }
+        });
+
+
+        mViewModel.messageChangeObservable().with(DemoConstant.CONTACT_DELETE, EaseEvent.class).observe(this, event -> {
+            if(event == null) {
+                return;
+            }
+            if(event.isContactChange()) {
+                mViewModel.loadContactList(false);
+            }
+        });
+
+        mViewModel.messageChangeObservable().with(DemoConstant.CONTACT_UPDATE, EaseEvent.class).observe(this, event -> {
+            if(event == null) {
+                return;
+            }
+            if(event.isContactChange()) {
+                mViewModel.loadContactList(false);
+            }
+        });
+
+
+        mViewModel.loadContactList(true);
     }
 
     @Override
@@ -239,6 +280,6 @@ public class ContactListFragment extends EaseContactListFragment implements View
 
     @Override
     public void onRefresh() {
-        mViewModel.loadContactList();
+        mViewModel.loadContactList(true);
     }
 }

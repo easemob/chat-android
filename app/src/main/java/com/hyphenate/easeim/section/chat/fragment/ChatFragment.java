@@ -12,6 +12,10 @@ import android.view.ViewGroup;
 
 import androidx.annotation.Nullable;
 import androidx.lifecycle.ViewModelProvider;
+
+import com.hyphenate.EMValueCallBack;
+import com.hyphenate.chat.EMUserInfo;
+import com.hyphenate.chat.adapter.EMAUserInfoManager;
 import com.hyphenate.easecallkit.EaseCallKit;
 import com.hyphenate.easecallkit.base.EaseCallType;
 
@@ -27,6 +31,7 @@ import com.hyphenate.easeim.section.base.BaseActivity;
 import com.hyphenate.easeim.section.chat.activity.ForwardMessageActivity;
 import com.hyphenate.easeim.section.chat.activity.ImageGridActivity;
 import com.hyphenate.easeim.section.chat.activity.PickAtUserActivity;
+import com.hyphenate.easeim.section.chat.activity.SelectUserCardActivity;
 import com.hyphenate.easeim.section.chat.viewmodel.MessageViewModel;
 import com.hyphenate.easeim.section.conference.ConferenceInviteActivity;
 import com.hyphenate.easeim.section.dialog.DemoDialogFragment;
@@ -35,6 +40,7 @@ import com.hyphenate.easeim.section.dialog.FullEditDialogFragment;
 import com.hyphenate.easeim.section.contact.activity.ContactDetailActivity;
 import com.hyphenate.easeim.section.dialog.SimpleDialogFragment;
 import com.hyphenate.easeim.section.group.GroupHelper;
+import com.hyphenate.easeim.section.me.activity.UserDetailActivity;
 import com.hyphenate.easeui.constants.EaseConstant;
 import com.hyphenate.easeui.domain.EaseUser;
 import com.hyphenate.easeui.model.EaseEvent;
@@ -45,6 +51,11 @@ import com.hyphenate.easeui.modules.menu.EasePopupWindowHelper;
 import com.hyphenate.easeui.modules.menu.MenuItemBean;
 import com.hyphenate.util.EMLog;
 import com.hyphenate.util.UriUtils;
+
+import org.json.JSONException;
+
+import java.util.List;
+import java.util.Map;
 
 import static android.content.Intent.FLAG_ACTIVITY_NEW_TASK;
 
@@ -109,6 +120,7 @@ public class ChatFragment extends EaseChatFragment implements OnRecallMessageRes
         chatExtendMenu.registerMenuItem(R.string.attach_picture, R.drawable.ease_chat_image_selector, R.id.extend_item_picture);
         chatExtendMenu.registerMenuItem(R.string.attach_take_pic, R.drawable.ease_chat_takepic_selector, R.id.extend_item_take_picture);
         chatExtendMenu.registerMenuItem(R.string.attach_video, R.drawable.em_chat_video_selector, R.id.extend_item_video);
+
         //添加扩展槽
         if(chatType == EaseConstant.CHATTYPE_SINGLE){
             //inputMenu.registerExtendMenuItem(R.string.attach_voice_call, R.drawable.em_chat_voice_call_selector, EaseChatInputMenu.ITEM_VOICE_CALL, this);
@@ -121,6 +133,8 @@ public class ChatFragment extends EaseChatFragment implements OnRecallMessageRes
         }
         chatExtendMenu.registerMenuItem(R.string.attach_location, R.drawable.ease_chat_location_selector, R.id.extend_item_location);
         chatExtendMenu.registerMenuItem(R.string.attach_file, R.drawable.em_chat_file_selector, R.id.extend_item_file);
+        //名片扩展
+        chatExtendMenu.registerMenuItem(R.string.attach_user_card, R.drawable.em_chat_user_card_selector, R.id.extend_item_user_card);
         //群组类型，开启消息回执，且是owner
         if(chatType == EaseConstant.CHATTYPE_GROUP && EMClient.getInstance().getOptions().getRequireAck()) {
             EMGroup group = DemoHelper.getInstance().getGroupManager().getGroup(conversationId);
@@ -182,6 +196,25 @@ public class ChatFragment extends EaseChatFragment implements OnRecallMessageRes
                 chatLayout.getChatMessageListLayout().refreshMessages();
             }
         });
+
+        //更新用户属性刷新列表
+        LiveDataBus.get().with(DemoConstant.CONTACT_ADD, EaseEvent.class).observe(getViewLifecycleOwner(), event -> {
+            if(event == null) {
+                return;
+            }
+            if(event != null) {
+                chatLayout.getChatMessageListLayout().refreshMessages();
+            }
+        });
+
+        LiveDataBus.get().with(DemoConstant.CONTACT_UPDATE, EaseEvent.class).observe(getViewLifecycleOwner(), event -> {
+            if(event == null) {
+                return;
+            }
+            if(event != null) {
+                chatLayout.getChatMessageListLayout().refreshMessages();
+            }
+        });
     }
 
     private void showDeliveryDialog() {
@@ -223,9 +256,19 @@ public class ChatFragment extends EaseChatFragment implements OnRecallMessageRes
     @Override
     public void onUserAvatarClick(String username) {
         if(!TextUtils.equals(username, DemoHelper.getInstance().getCurrentUser())) {
-            EaseUser user = new EaseUser();
-            user.setUsername(username);
-            ContactDetailActivity.actionStart(mContext, user);
+            EaseUser user = DemoHelper.getInstance().getUserInfo(username);
+            if(user == null){
+                    user = new EaseUser(username);
+                }
+                boolean isFriend =  DemoHelper.getInstance().getModel().isContact(username);
+                if(isFriend){
+                    user.setContact(0);
+                }else{
+                    user.setContact(3);
+                }
+                ContactDetailActivity.actionStart(mContext, user);
+        }else{
+            UserDetailActivity.actionStart(mContext,null,null);
         }
     }
 
@@ -275,6 +318,12 @@ public class ChatFragment extends EaseChatFragment implements OnRecallMessageRes
                  break;
             case R.id.extend_item_delivery://群消息回执
                 showDeliveryDialog();
+                break;
+            case R.id.extend_item_user_card:
+                EMLog.d(TAG,"select user card");
+                Intent userCardIntent = new Intent(this.getContext(), SelectUserCardActivity.class).addFlags(FLAG_ACTIVITY_NEW_TASK);
+                userCardIntent.putExtra("toUser",conversationId);
+                this.getContext().startActivity(userCardIntent);
                 break;
         }
     }

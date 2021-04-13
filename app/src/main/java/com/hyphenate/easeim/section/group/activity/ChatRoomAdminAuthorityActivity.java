@@ -8,11 +8,13 @@ import android.view.Menu;
 import android.view.View;
 
 import com.hyphenate.chat.EMChatRoom;
+import com.hyphenate.easeim.DemoHelper;
 import com.hyphenate.easeim.R;
 import com.hyphenate.easeim.common.constant.DemoConstant;
 import com.hyphenate.easeim.common.db.entity.EmUserEntity;
 import com.hyphenate.easeim.common.interfaceOrImplement.OnResourceParseCallback;
 import com.hyphenate.easeim.section.group.GroupHelper;
+import com.hyphenate.easeui.domain.EaseUser;
 import com.hyphenate.easeui.model.EaseEvent;
 
 import java.util.ArrayList;
@@ -48,7 +50,20 @@ public class ChatRoomAdminAuthorityActivity extends ChatRoomMemberAuthorityActiv
                         adminList = new ArrayList<>();
                     }
                     adminList.add(group.getOwner());
-                    adapter.setData(EmUserEntity.parse(adminList));
+                    //adapter.setData(EmUserEntity.parse(adminList));
+                    List<EaseUser> users = new ArrayList<>();
+                    if(adminList != null && !adminList.isEmpty()){
+                        for(int i = 0; i < adminList.size(); i++){
+                            EaseUser user = DemoHelper.getInstance().getUserInfo(adminList.get(i));
+                            if(user != null){
+                                users.add(user);
+                            }else{
+                                EaseUser m_user = new EaseUser(adminList.get(i));
+                                users.add(m_user);
+                            }
+                        }
+                    }
+                    adapter.setData(users);
                 }
 
                 @Override

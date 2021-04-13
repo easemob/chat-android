@@ -495,6 +495,16 @@
         <!--个人资料-->
         <activity android:name=".section.me.activity.UserDetailActivity"
             android:screenOrientation="portrait"/>
+        <!--选择头像 -->
+        <activity
+            android:name=".section.me.activity.ChooseHeadImageActivity"
+            android:label="@string/title_activity_choose_head_image"
+            android:screenOrientation="portrait" />
+        <!--选择用户名片 -->
+        <activity
+            android:name=".section.chat.activity.SelectUserCardActivity"
+            android:label="@string/title_activity_select_user_card"
+            android:screenOrientation="portrait"  />
         <!--意见反馈-->
         <activity android:name=".section.me.activity.FeedbackActivity"
             android:screenOrientation="portrait"/>

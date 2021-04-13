@@ -101,13 +101,9 @@ public class ChatActivity extends BaseInitActivity implements EaseTitleBar.OnBac
     protected void onNewIntent(Intent intent) {
         super.onNewIntent(intent);
         if(intent != null) {
-            String preConversationId = conversationId;
             initIntent(intent);
-            //如果conversationId发送变化，则需要对页面进行重新加载
-            if(!TextUtils.equals(preConversationId, conversationId)) {
-                initChatFragment();
-                initData();
-            }
+            initChatFragment();
+            initData();
         }
     }
 

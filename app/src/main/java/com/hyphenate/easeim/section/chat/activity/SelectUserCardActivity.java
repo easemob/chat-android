@@ -1,68 +1,70 @@
-package com.hyphenate.easeim.section.conference;
+package com.hyphenate.easeim.section.chat.activity;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import androidx.lifecycle.ViewModelProvider;
+
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
+import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.BaseAdapter;
-import android.widget.CheckBox;
-import android.widget.CompoundButton;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Filter;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import androidx.lifecycle.ViewModelProvider;
-import com.hyphenate.easecallkit.EaseCallKit;
-
+import com.bumptech.glide.Glide;
+import com.hyphenate.EMCallBack;
+import com.hyphenate.chat.EMClient;
+import com.hyphenate.chat.EMConversation;
+import com.hyphenate.chat.EMCustomMessageBody;
+import com.hyphenate.chat.EMMessage;
 import com.hyphenate.easeim.DemoHelper;
 import com.hyphenate.easeim.R;
 import com.hyphenate.easeim.common.constant.DemoConstant;
 import com.hyphenate.easeim.common.interfaceOrImplement.OnResourceParseCallback;
 import com.hyphenate.easeim.common.livedatas.LiveDataBus;
-import com.hyphenate.easeim.common.model.DemoModel;
 import com.hyphenate.easeim.section.base.BaseInitActivity;
 import com.hyphenate.easeim.section.chat.model.KV;
 import com.hyphenate.easeim.section.chat.viewmodel.ConferenceInviteViewModel;
+import com.hyphenate.easeim.section.conference.ConferenceInviteActivity;
 import com.hyphenate.easeui.domain.EaseUser;
+import com.hyphenate.easeui.interfaces.OnItemClickListener;
 import com.hyphenate.easeui.model.EaseEvent;
 import com.hyphenate.easeui.utils.EaseUserUtils;
 import com.hyphenate.easeui.widget.EaseTitleBar;
+import com.hyphenate.util.EMLog;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class ConferenceInviteActivity extends BaseInitActivity implements View.OnClickListener, EaseTitleBar.OnBackPressListener {
-    private static final String TAG = "ConferenceInvite";
-    private static final int STATE_UNCHECKED = 0;
-    private static final int STATE_CHECKED = 1;
-    private static final int STATE_CHECKED_UNCHANGEABLE = 2;
+
+public class SelectUserCardActivity extends BaseInitActivity implements  EaseTitleBar.OnBackPressListener {
+    private static final String TAG = SelectUserCardActivity.class.getSimpleName();
 
     private List<KV<String, Integer>> contacts = new ArrayList<>();
-    private ContactsAdapter contactsAdapter;
+    private SelectUserCardActivity.ContactsAdapter contactsAdapter;
     private EaseTitleBar mTitleBar;
-    private TextView mBtnStart;
     private ListView mListView;
+    private TextView start_btn;
     private static String groupId;
     private String[] exist_member;
-
-    //手指按下的点为(x1, y1)手指离开屏幕的点为(x2, y2)
-    private float x1 = 0;
-    private float x2 = 0;
-    private float y1 = 0;
-    private float y2 = 0;
-
+    private String toUser;
+    private int selectIndex = -1;
 
     @Override
     protected int getLayoutId() {
@@ -72,23 +74,28 @@ public class ConferenceInviteActivity extends BaseInitActivity implements View.O
     @Override
     protected void initIntent(Intent intent) {
         super.initIntent(intent);
-        String group = intent.getStringExtra(DemoConstant.EXTRA_CONFERENCE_GROUP_ID);
-        if(group != null){
-            groupId = group;
-            exist_member = intent.getStringArrayExtra(DemoConstant.EXTRA_CONFERENCE_GROUP_EXIST_MEMBERS);
-        }
+        toUser = intent.getStringExtra("toUser");
     }
 
     @Override
     protected void initView(Bundle savedInstanceState) {
         super.initView(savedInstanceState);
         mTitleBar = findViewById(R.id.title_bar);
-        mBtnStart = findViewById(R.id.btn_start);
-        mBtnStart.setText(String.format(getString(R.string.button_start_video_conference), 0));
 
-        contactsAdapter = new ContactsAdapter(mContext, contacts);
+        contactsAdapter = new SelectUserCardActivity.ContactsAdapter(mContext, contacts);
+
+        contactsAdapter.setOnItemClickListener(new OnItemClickListener() {
+            @Override
+            public void onItemClick(View view, int position) {
+                selectIndex = position;
+                contactsAdapter.notifyActual();
+            }
+        });
+
         mListView = findViewById(R.id.listView);
         mListView.setAdapter(contactsAdapter);
+        start_btn= findViewById(R.id.btn_start);
+        start_btn.setVisibility(View.GONE);
 
         addHeader();
     }
@@ -96,14 +103,6 @@ public class ConferenceInviteActivity extends BaseInitActivity implements View.O
     @Override
     protected void initListener() {
         super.initListener();
-        contactsAdapter.checkItemChangeCallback = new ICheckItemChangeCallback() {
-            @Override
-            public void onCheckedItemChanged(View v, String username, int state) {
-                int count = getSelectMembers().length;
-                mBtnStart.setText(String.format(getString(R.string.button_start_video_conference), count));
-            }
-        };
-        mBtnStart.setOnClickListener(this);
         mTitleBar.setOnBackPressListener(this);
     }
 
@@ -121,7 +120,7 @@ public class ConferenceInviteActivity extends BaseInitActivity implements View.O
             });
         });
 
-       LiveDataBus.get().with(DemoConstant.CONTACT_ADD, EaseEvent.class).observe(this, event -> {
+        LiveDataBus.get().with(DemoConstant.CONTACT_ADD, EaseEvent.class).observe(this, event -> {
             if(event == null) {
                 return;
             }
@@ -161,16 +160,6 @@ public class ConferenceInviteActivity extends BaseInitActivity implements View.O
         super.onBackPressed();
     }
 
-    private String[] getSelectMembers() {
-        List<String> results = new ArrayList<>();
-        for(int i = 0; i < contacts.size(); i++) {
-            KV<String, Integer> item = contacts.get(i);
-            if(item.getSecond() == STATE_CHECKED) {
-                results.add(item.getFirst());
-            }
-        }
-        return results.toArray(new String[0]);
-    }
 
     private void addHeader() {
         View headerView = LayoutInflater.from(mContext).inflate(R.layout.ease_search_bar, null);
@@ -207,62 +196,100 @@ public class ConferenceInviteActivity extends BaseInitActivity implements View.O
         mListView.addHeaderView(headerView);
     }
 
-    @Override
-    public void onClick(View v) {
-        switch (v.getId()) {
-            case R.id.btn_start :
-                String[] members = getSelectMembers();
-                if(members.length == 0) {
-                    showToast(R.string.tips_select_contacts_first);
-                    return;
-                }
-                //用户自定义扩展字段
-                Map<String, Object> params = new HashMap<>();
-                params.put("groupId", groupId);
-                //开始邀请人员
-                EaseCallKit.getInstance().startInviteMultipleCall(members,params);
-                finish();
-                break;
-        }
-    }
 
     @Override
     public void onBackPress(View view) {
         onBackPressed();
-        EaseCallKit.getInstance().startInviteMultipleCall(null,null);
         finish();
     }
 
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if (keyCode == KeyEvent.KEYCODE_BACK) {
-            EaseCallKit.getInstance().startInviteMultipleCall(null,null);
             finish();
         }
         return super.onKeyDown(keyCode, event);
     }
 
-    @Override
-    public boolean onTouchEvent(MotionEvent event) {
-        //继承了Activity的onTouchEvent方法，直接监听点击事件
-        if (event.getAction() == MotionEvent.ACTION_DOWN) {
-            //当手指按下的时候
-            x1 = event.getX();
-            y1 = event.getY();
+
+    /**
+     * 发送名片提示框
+     */
+    private void sendUserCardDisplay(String userId) {
+        EMLog.i(TAG, " sendUserCardDisplay user:" + toUser);
+        AlertDialog.Builder builder = new AlertDialog.Builder(SelectUserCardActivity.this);
+        final AlertDialog dialog = builder.create();
+        View dialogView = View.inflate(SelectUserCardActivity.this, R.layout.demo_activity_send_user_card, null);
+        Button send_btn = dialogView.findViewById(R.id.btn_send);
+        Button cancel_btn = dialogView.findViewById(R.id.btn_cancel);
+
+        TextView userNickView = dialogView.findViewById(R.id.user_nick_name);
+        TextView userIdView = dialogView.findViewById(R.id.userId_view);
+        ImageView headView = dialogView.findViewById(R.id.head_view);
+        EaseUser user = DemoHelper.getInstance().getUserInfo(userId);
+
+        if(user != null){
+            userNickView.setText(user.getNickname());
+            Glide.with(mContext).load(user.getAvatar()).placeholder(R.drawable.em_login_logo).into(headView);
+        }else{
+            userNickView.setText(user.getUsername());
         }
-        if (event.getAction() == MotionEvent.ACTION_UP) {
-            //当手指离开的时候
-            x2 = event.getX();
-            y2 = event.getY();
-            if (y1 - y2 > 50) {
-            } else if (y2 - y1 > 50) {
-            } else if (x1 - x2 > 50) {
-            } else if (x2 - x1 > 50) {
-              EaseCallKit.getInstance().startInviteMultipleCall(null,null);
-              finish();
+        userIdView.setText("[个人名片] " + userId);
+
+        dialog.setView(dialogView);
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        WindowManager.LayoutParams wmlp = dialog.getWindow().getAttributes();
+        wmlp.gravity = Gravity.CENTER | Gravity.CENTER;
+        dialog.show();
+
+
+        send_btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                EMMessage message = EMMessage.createSendMessage(EMMessage.Type.CUSTOM);
+                EMCustomMessageBody body = new EMCustomMessageBody(DemoConstant.USER_CARD_EVENT);
+                Map<String,String> params = new HashMap<>();
+                params.put(DemoConstant.USER_CARD_ID,userId);
+                params.put(DemoConstant.USER_CARD_NICK,user.getNickname());
+                params.put(DemoConstant.USER_CARD_AVATAR,user.getAvatar());
+                body.setParams(params);
+                message.setBody(body);
+                message.setTo(toUser);
+
+                final EMConversation conversation = EMClient.getInstance().chatManager().getConversation(userId, EMConversation.EMConversationType.Chat, true);
+                message.setMessageStatusCallback(new EMCallBack() {
+                    @Override
+                    public void onSuccess() {
+                        EMLog.d(TAG, "sendCustomMsg user card success");
+                        showToast("发送用户名片成功");
+                        LiveDataBus.get().with(DemoConstant.MESSAGE_CHANGE_CHANGE).postValue(new EaseEvent(DemoConstant.MESSAGE_CHANGE_CHANGE, EaseEvent.TYPE.MESSAGE));
+                         dialog.dismiss();
+                         finish();
+                    }
+
+                    @Override
+                    public void onError(int code, String error) {
+                        EMLog.d(TAG, "sendCustomMsg user card failed code:"+ code + "  errorMsg:"+ error );
+                        showToast("发送用户名片失败");
+                        LiveDataBus.get().with(DemoConstant.MESSAGE_CHANGE_CHANGE).postValue(new EaseEvent(DemoConstant.MESSAGE_CHANGE_CHANGE, EaseEvent.TYPE.MESSAGE));
+                        dialog.dismiss();
+                    }
+
+                    @Override
+                    public void onProgress(int progress, String status) {
+
+                    }
+                });
+                EMClient.getInstance().chatManager().sendMessage(message);
             }
-        }
-        return super.onTouchEvent(event);
+        });
+
+        cancel_btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                dialog.dismiss();
+            }
+        });
     }
 
 
@@ -270,14 +297,20 @@ public class ConferenceInviteActivity extends BaseInitActivity implements View.O
         private Context context;
         private List<KV<String, Integer>> filteredContacts = new ArrayList<>();
         private List<KV<String, Integer>> contacts = new ArrayList<>();
-        private ContactFilter mContactFilter;
-        public ICheckItemChangeCallback checkItemChangeCallback;
+
+        private SelectUserCardActivity.ContactsAdapter.ContactFilter mContactFilter;
+        public ConferenceInviteActivity.ICheckItemChangeCallback checkItemChangeCallback;
+        private OnItemClickListener mOnItemClickListener;
 
 
         public ContactsAdapter(Context context, List<KV<String, Integer>> contacts) {
             this.context = context;
             this.contacts = contacts;
             filteredContacts.addAll(contacts);
+        }
+
+        public void setOnItemClickListener(OnItemClickListener listener) {
+            mOnItemClickListener = listener;
         }
 
         @Override
@@ -298,47 +331,25 @@ public class ConferenceInviteActivity extends BaseInitActivity implements View.O
         @Override
         public View getView(int position, View convertView, ViewGroup parent) {
             View contentView = convertView;
-            ViewHolder viewHolder = null;
+            SelectUserCardActivity.ContactsAdapter.ViewHolder viewHolder = null;
             if(contentView == null) {
-                contentView = LayoutInflater.from(mContext).inflate(R.layout.demo_contact_item, null);
-                viewHolder = new ViewHolder(contentView);
+                contentView = LayoutInflater.from(mContext).inflate(R.layout.demo_usercard_item, null);
+                viewHolder = new SelectUserCardActivity.ContactsAdapter.ViewHolder(contentView,position);
+                viewHolder.setmOnItemClickListener(mOnItemClickListener);
                 contentView.setTag(viewHolder);
             }else {
-                viewHolder = (ViewHolder) contentView.getTag();
+                viewHolder = (SelectUserCardActivity.ContactsAdapter.ViewHolder) contentView.getTag();
+                viewHolder.setmOnItemClickListener(mOnItemClickListener);
             }
-            viewHolder.reset();
+            //viewHolder.reset();
 
             KV<String, Integer> contact = filteredContacts.get(position);
             String userName = contact.getFirst();
-            DemoHelper.getInstance().getUserInfo(userName);
             EaseUserUtils.setUserAvatar(mContext, userName, viewHolder.headerImage);
             EaseUserUtils.setUserNick(userName, viewHolder.nameText);
-            switch (contact.getSecond()) {
-                case STATE_CHECKED_UNCHANGEABLE :
-                    viewHolder.checkBox.setButtonDrawable(R.drawable.demo_checkbox_bg_gray_selector);
-                    viewHolder.checkBox.setChecked(true);
-                    viewHolder.checkBox.setClickable(false);
-                    break;
-                default:
-                    ViewHolder finalViewHolder = viewHolder;
-                    contentView.setOnClickListener(view -> {
-                        finalViewHolder.checkBox.toggle();
-                    });
-                    viewHolder.checkBox.setButtonDrawable(R.drawable.demo_checkbox_bg_selector);
-                    viewHolder.checkBox.setChecked(contact.getSecond() == STATE_CHECKED);
-                    viewHolder.checkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-                        @Override
-                        public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                            contact.setSecond(isChecked ? STATE_CHECKED : STATE_UNCHECKED);
-                            if(checkItemChangeCallback != null) {
-                                checkItemChangeCallback.onCheckedItemChanged(buttonView, contact.getFirst(), contact.getSecond());
-                            }
-                        }
-                    });
-
-                    break;
+            if(position == selectIndex){
+                sendUserCardDisplay(userName);
             }
-
             return contentView;
         }
 
@@ -361,12 +372,14 @@ public class ConferenceInviteActivity extends BaseInitActivity implements View.O
             notifyDataSetChanged();
         }
 
+
+
         void filter(CharSequence constraint) {
             if(mContactFilter == null) {
-                mContactFilter = new ContactFilter(contacts);
+                mContactFilter = new SelectUserCardActivity.ContactsAdapter.ContactFilter(contacts);
             }
 
-            mContactFilter.filter(constraint, new IFilterCallback() {
+            mContactFilter.filter(constraint, new SelectUserCardActivity.IFilterCallback() {
                 @Override
                 public void onFilter(List<KV<String, Integer>> filtered) {
                     filteredContacts.clear();
@@ -384,32 +397,38 @@ public class ConferenceInviteActivity extends BaseInitActivity implements View.O
             View view;
             ImageView headerImage;
             TextView nameText;
-            CheckBox checkBox;
+            int position;
+            private OnItemClickListener mOnItemClickListener;
 
-            public ViewHolder(View view) {
+            public ViewHolder(View view,int position) {
                 this.view = view;
+                this.position = position;
                 headerImage = view.findViewById(R.id.head_icon);
                 nameText = view.findViewById(R.id.name);
-                checkBox = view.findViewById(R.id.checkbox);
+                view.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        if(mOnItemClickListener != null){
+                            mOnItemClickListener.onItemClick(v, position);
+                        }
+                    }
+                });
             }
 
-            public void reset() {
-                view.setOnClickListener(null);
-                nameText.setText(null);
-                checkBox.setOnCheckedChangeListener(null);
-                checkBox.setChecked(false);
+            public void setmOnItemClickListener(OnItemClickListener mOnItemClickListener) {
+                this.mOnItemClickListener = mOnItemClickListener;
             }
         }
 
         private class ContactFilter extends Filter {
-            private IFilterCallback mFilterCallback;
+            private SelectUserCardActivity.IFilterCallback mFilterCallback;
             private List<KV<String, Integer>> contacts;
 
             public ContactFilter(List<KV<String, Integer>> contacts) {
                 this.contacts = contacts;
             }
 
-            public void filter(CharSequence constraint, IFilterCallback callback) {
+            public void filter(CharSequence constraint, SelectUserCardActivity.IFilterCallback callback) {
                 this.mFilterCallback = callback;
                 super.filter(constraint);
             }
@@ -474,5 +493,4 @@ public class ConferenceInviteActivity extends BaseInitActivity implements View.O
     public interface ICheckItemChangeCallback {
         void onCheckedItemChanged(View v, String username, int state);
     }
-
 }
