@@ -74,17 +74,13 @@ public class ContactListAdapter extends EaseBaseRecyclerViewAdapter<EaseUser> {
                 if(item.getNickname() != null && item.getNickname().length() > 0){
                     mName.setText(item.getNickname());
                 }
-                if(item.getAvatar() != null && item.getAvatar().length() > 0){
-                    Glide.with(mContext).load(item.getAvatar()).placeholder(R.drawable.em_login_logo).into(mAvatar);
-                }
+                Glide.with(mContext).load(item.getAvatar()).placeholder(R.drawable.em_login_logo).error(R.drawable.em_login_logo).into(mAvatar);
             }else{
                 EaseUser user = DemoHelper.getInstance().getUserInfo(EMClient.getInstance().getCurrentUser());
                 if(user.getNickname() != null && user.getNickname().length() > 0){
                     mName.setText(user.getNickname());
                 }
-                if(user.getAvatar() != null && user.getAvatar().length() > 0){
-                    Glide.with(mContext).load(user.getAvatar()).placeholder(R.drawable.em_login_logo).into(mAvatar);
-                }
+                Glide.with(mContext).load(user.getAvatar()).placeholder(R.drawable.em_login_logo).error(R.drawable.em_login_logo).into(mAvatar);
             }
         }
     }
