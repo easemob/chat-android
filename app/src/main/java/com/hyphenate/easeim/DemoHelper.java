@@ -99,7 +99,7 @@ public class DemoHelper {
 
     private EaseCallKitListener callKitListener;
     private Context mianContext;
-    private String tokenUrl = "http://a1-hsb.easemob.com/token/rtcToken";
+    private String tokenUrl = "http://a1.easemob.com/token/rtcToken";
 
     private FetchUserRunnable fetchUserRunnable;
     private Thread fetchUserTread;
