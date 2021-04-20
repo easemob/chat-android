@@ -122,7 +122,7 @@ dependencies {
     // hms push
     implementation 'com.huawei.hms:push:4.0.2.300'
     // meizu push
-    implementation 'com.meizu.flyme.internet:push-internal:3.7.0@aar'//配置集成sdk
+    implementation 'com.meizu.flyme.internet:push-internal:4.0.4@aar'//配置集成sdk
     //oppo push
     implementation (name:'oppo_push_v2.1.0',ext:'aar')
     // Google firebase cloud messaging
