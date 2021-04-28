@@ -106,9 +106,9 @@ public class DemoHelper {
     private EaseCallKitListener callKitListener;
     private Context mianContext;
 
-    private String tokenUrl = "http://a1.easemob.com/token/rtcToken";
+    private String tokenUrl = "http://a1.easemob.com/token/rtcToken/v1";
     private String uIdUrl = "http://a1.easemob.com/channel/mapper";
-
+    
     private FetchUserRunnable fetchUserRunnable;
     private Thread fetchUserTread;
     private FetchUserInfoList fetchUserInfoList;
