@@ -49,13 +49,9 @@ import com.hyphenate.easeui.modules.chat.interfaces.IChatExtendMenu;
 import com.hyphenate.easeui.modules.chat.interfaces.OnRecallMessageResultListener;
 import com.hyphenate.easeui.modules.menu.EasePopupWindowHelper;
 import com.hyphenate.easeui.modules.menu.MenuItemBean;
+import com.hyphenate.util.EMFileHelper;
 import com.hyphenate.util.EMLog;
-import com.hyphenate.util.UriUtils;
 
-import org.json.JSONException;
-
-import java.util.List;
-import java.util.Map;
 
 import static android.content.Intent.FLAG_ACTIVITY_NEW_TASK;
 
@@ -161,7 +157,6 @@ public class ChatFragment extends EaseChatFragment implements OnRecallMessageRes
         chatLayout.getChatInputMenu().getPrimaryMenu().getEditText().setText(getUnSendMsg());
         chatLayout.turnOnTypingMonitor(DemoHelper.getInstance().getModel().isShowMsgTyping());
 
-        LiveDataBus.get().with(DemoConstant.MESSAGE_CHANGE_CHANGE).postValue(new EaseEvent(DemoConstant.MESSAGE_CHANGE_CHANGE, EaseEvent.TYPE.MESSAGE));
         LiveDataBus.get().with(DemoConstant.MESSAGE_CALL_SAVE, Boolean.class).observe(getViewLifecycleOwner(), event -> {
             if(event == null) {
                 return;
@@ -362,7 +357,7 @@ public class ChatFragment extends EaseChatFragment implements OnRecallMessageRes
                         if(!TextUtils.isEmpty(videoPath)) {
                             chatLayout.sendVideoMessage(Uri.parse(videoPath), duration);
                         }else {
-                            Uri videoUri = UriUtils.getLocalUriFromString(uriString);
+                            Uri videoUri = EMFileHelper.getInstance().formatInUri(uriString);
                             chatLayout.sendVideoMessage(videoUri, duration);
                         }
                     }
