@@ -149,7 +149,7 @@ dependencies {
 
     //EaseCallKit依赖，必须添加环信IM SDK
     //api project(':ease-call-kit')
-    implementation 'io.hyphenate:ease-call-kit:3.8.1'
+    implementation 'io.hyphenate:ease-call-kit:3.8.1.1'
 }
 
 // ADD THIS AT THE BOTTOM
