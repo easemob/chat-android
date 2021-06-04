@@ -315,7 +315,7 @@ public class PreferenceManager {
 
 	public void enableCustomServer(boolean enable){
 		editor.putBoolean(SHARED_KEY_ENABLE_CUSTOM_SERVER, enable);
-		editor.apply();
+		editor.commit();
 	}
 
 	public boolean isCustomServerEnable(){
@@ -328,12 +328,12 @@ public class PreferenceManager {
 
 	public void enableCustomSet(boolean enable){
 		editor.putBoolean(SHARED_KEY_ENABLE_CUSTOM_SET, enable);
-		editor.apply();
+		editor.commit();
 	}
 
 	public void enableCustomAppkey(boolean enable) {
 		editor.putBoolean(SHARED_KEY_ENABLE_CUSTOM_APPKEY, enable);
-		editor.apply();
+		editor.commit();
 	}
 
 	public boolean isCustomAppkeyEnabled() {
@@ -346,7 +346,7 @@ public class PreferenceManager {
 
 	public void setCustomAppkey(String appkey) {
 		editor.putString(SHARED_KEY_CUSTOM_APPKEY, appkey);
-		editor.apply();
+		editor.commit();
 	}
 
 	public void removeCurrentUserInfo() {
@@ -379,7 +379,7 @@ public class PreferenceManager {
 	 */
 	public void setAutoLogin(boolean autoLogin) {
 		editor.putBoolean(SHARED_KEY_AUTO_LOGIN, autoLogin);
-		editor.apply();
+		editor.commit();
 	}
 
 	/**
@@ -396,7 +396,7 @@ public class PreferenceManager {
 	 */
 	public void setUsingHttpsOnly(boolean usingHttpsOnly) {
 		editor.putBoolean(SHARED_KEY_HTTPS_ONLY, usingHttpsOnly);
-		editor.apply();
+		editor.commit();
 	}
 
 	/**

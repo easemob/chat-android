@@ -12,8 +12,8 @@ import com.hyphenate.easeim.common.livedatas.SingleSourceLiveData;
 import com.hyphenate.easeim.common.net.ErrorCode;
 import com.hyphenate.easeim.common.net.Resource;
 import com.hyphenate.easeim.common.repositories.EMGroupManagerRepository;
+import com.hyphenate.easeui.utils.EaseFileUtils;
 import com.hyphenate.util.PathUtil;
-import com.hyphenate.util.UriUtils;
 
 import java.io.File;
 import java.util.List;
@@ -88,7 +88,7 @@ public class SharedFilesViewModel extends AndroidViewModel {
      * @param uri
      */
     public void uploadFileByUri(String groupId, Uri uri) {
-        if(!UriUtils.isFileExistByUri(application, uri)) {
+        if(!EaseFileUtils.isFileExistByUri(application, uri)) {
             refreshFiles.postValue(Resource.error(ErrorCode.EM_ERR_FILE_NOT_EXIST, null));
             return;
         }

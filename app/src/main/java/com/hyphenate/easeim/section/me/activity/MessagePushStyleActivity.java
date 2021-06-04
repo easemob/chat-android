@@ -98,8 +98,8 @@ public class MessagePushStyleActivity extends BaseInitActivity implements EaseTi
                 }
 
                 @Override
-                public void onLoading() {
-                    super.onLoading();
+                public void onLoading(Boolean data) {
+                    super.onLoading(data);
                     showLoading();
                 }
 

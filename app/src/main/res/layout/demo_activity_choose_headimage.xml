@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@color/common_bg"
+    android:orientation="vertical">
+
+    <com.hyphenate.easeui.widget.EaseTitleBar
+        android:id="@+id/title_bar"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/em_common_title_bar_height"
+        app:titleBarTitle="@string/em_user_detail_avatar"
+        android:background="@color/white"
+        app:titleBarDisplayHomeAsUpEnabled="true"/>
+
+    <com.hyphenate.easeui.widget.EaseRecyclerView
+        android:id="@+id/headImage_ListView"
+        android:background="@color/transparent"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:id="@+id/btn_headImage_save"
+        android:background="@drawable/demo_headimage_save"
+        android:gravity="center"
+        android:layout_marginLeft="25dp"
+        android:layout_marginRight="25dp"
+        android:layout_below="@+id/headImage_ListView"
+        android:layout_marginTop="24dp"
+        android:orientation="vertical"
+        android:layout_gravity="center"
+        android:textColor="#FFFFFF"
+        android:text="保存"
+        android:textSize="16sp" />
+</LinearLayout>

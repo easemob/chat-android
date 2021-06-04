@@ -22,204 +22,17 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
-            <RelativeLayout
-                android:id="@+id/rl_switch_min_video_kbps"
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/em_common_item_height"
-                android:background="@drawable/demo_btn_bottom_selector"
-                android:padding="10dip" >
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_centerVertical="true"
-                    android:paddingLeft="10dip"
-                    android:text="@string/demo_call_options_min_video_kbps"
-                    android:textColor="@color/em_color_common_text_black"
-                    android:textSize="14sp"/>
-
-                <EditText
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:minWidth="80dp"
-                    android:id="@+id/edit_min_bit_rate"
-                    android:layout_alignParentRight="true"
-                    android:layout_centerVertical="true"
-                    android:textSize="@dimen/em_size_normal"
-                    android:text="@string/demo_call_options_not_set"/>
-            </RelativeLayout>
-
-            <RelativeLayout
-                android:id="@+id/rl_switch_max_video_kbps"
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/em_common_item_height"
-                android:background="@drawable/demo_btn_bottom_selector"
-                android:padding="10dip" >
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_centerVertical="true"
-                    android:paddingLeft="10dip"
-                    android:text="@string/demo_call_options_max_video_kbps"
-                    android:textColor="@color/em_color_common_text_black"
-                    android:textSize="14sp"/>
-
-                <EditText
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:minWidth="80dp"
-                    android:id="@+id/edit_max_bit_rate"
-                    android:layout_alignParentRight="true"
-                    android:layout_centerVertical="true"
-                    android:textSize="@dimen/em_size_normal"
-                    android:text="@string/demo_call_options_not_set"/>
-            </RelativeLayout>
-
-
-            <RelativeLayout
-                android:id="@+id/rl_switch_max_frame_rate"
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/em_common_item_height"
-                android:background="@drawable/demo_btn_bottom_selector"
-                android:padding="10dip" >
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_centerVertical="true"
-                    android:paddingLeft="10dip"
-                    android:text="@string/demo_call_options_max_frame_rate"
-                    android:textColor="@color/em_color_common_text_black"
-                    android:textSize="14sp"/>
-
-                <EditText
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:minWidth="80dp"
-                    android:id="@+id/edit_max_frame_rate"
-                    android:layout_alignParentRight="true"
-                    android:layout_centerVertical="true"
-                    android:textSize="@dimen/em_size_normal"
-                    android:text="@string/demo_call_options_not_set"/>
-            </RelativeLayout>
-
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1dip"
-                android:layout_marginLeft="10dp"
-                android:layout_marginRight="10dp"
-                android:background="@color/btn_gray_normal" />
-
-            <com.hyphenate.easeim.common.widget.SwitchItemView
-                android:id="@+id/rl_switch_external_audioInput_resolution"
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/em_common_item_height"
-                app:switchItemTitle="@string/demo_call_options_external_audio_input"
-                app:switchItemTitleSize="14sp"/>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/em_common_item_height"
-                android:gravity="center_vertical"
-                android:padding="10dp">
-                <TextView
-                    android:layout_width="80dp"
-                    android:layout_height="wrap_content"
-                    android:text="@string/demo_call_options_audio_sample_rate"
-                    android:layout_gravity="center_vertical"
-                    android:layout_marginLeft="@dimen/em_margin_10"
-                    android:textSize="@dimen/em_size_normal"
-                    android:textColor="@color/em_color_common_text_black"/>
-
-                <Spinner
-                    android:id="@+id/spinner_audio_sample_rate"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:textAlignment="center"/>
-            </LinearLayout>
-
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical">
-
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="1dip"
                     android:layout_marginLeft="10dp"
                     android:layout_marginRight="10dp"
                     android:background="@color/btn_gray_normal" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/text_video_resolution"
-                    android:paddingTop="10dp"
-                    android:layout_centerInParent="true"
-                    android:layout_gravity="center"
-                    tools:text="Not Set Video resolution"
-                    android:textColor="@color/em_color_common_text_black"
-                    android:textSize="18sp" />
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="@dimen/em_common_item_height"
-                    android:gravity="center_vertical"
-                    android:padding="10dp">
-                    <TextView
-                        android:layout_width="80dp"
-                        android:layout_height="wrap_content"
-                        android:layout_marginLeft="@dimen/em_margin_10"
-                        android:text="@string/demo_call_options_back_camera"
-                        android:textColor="@color/em_color_common_text_black"
-                        android:textSize="@dimen/em_size_normal"
-                        android:layout_gravity="center"/>
-
-                    <Spinner
-                        android:id="@+id/spinner_video_resolution_back"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:textAlignment="center"/>
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="@dimen/em_common_item_height"
-                    android:gravity="center_vertical"
-                    android:padding="10dp">
-
-                    <TextView
-                        android:layout_width="80dp"
-                        android:layout_height="wrap_content"
-                        android:text="@string/demo_call_options_front_camera"
-                        android:layout_marginLeft="@dimen/em_margin_10"
-                        android:textColor="@color/em_color_common_text_black"
-                        android:textSize="@dimen/em_size_normal"
-                        android:layout_gravity="center"/>
-
-                    <Spinner
-                        android:id="@+id/spinner_video_resolution_front"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:textAlignment="center"/>
-                </LinearLayout>
-
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="1dip"
-                    android:layout_marginLeft="10dp"
-                    android:layout_marginRight="10dp"
-                    android:background="@color/btn_gray_normal" />
-
             </LinearLayout>
-
-            <com.hyphenate.easeim.common.widget.SwitchItemView
-                android:id="@+id/rl_switch_fix_video_resolution"
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/em_common_item_height"
-                app:switchItemTitle="@string/demo_call_options_fix_video_resolution"
-                app:switchItemTitleSize="14sp"/>
 
             <com.hyphenate.easeim.common.widget.SwitchItemView
                 android:id="@+id/rl_switch_offline_call_push"
@@ -227,30 +40,6 @@
                 android:layout_height="@dimen/em_common_item_height"
                 app:switchItemTitle="@string/offline_call_push"
                 app:switchItemTitleSize="14sp"/>
-
-            <com.hyphenate.easeim.common.widget.SwitchItemView
-                android:id="@+id/rl_switch_record_on_server"
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/em_common_item_height"
-                app:switchItemTitle="@string/demo_call_options_record_on_server"
-                app:switchItemTitleSize="14sp"/>
-
-            <com.hyphenate.easeim.common.widget.SwitchItemView
-                android:id="@+id/rl_switch_merge_stream"
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/em_common_item_height"
-                app:switchItemTitle="@string/demo_call_options_merge_stream"
-                app:switchItemTitleSize="14sp"/>
-
-            <com.hyphenate.easeim.common.widget.SwitchItemView
-                android:id="@+id/rl_switch_water_mark"
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/em_common_item_height"
-                app:switchItemTitle="@string/demo_call_options_watermark"
-                app:switchItemTitleSize="14sp"/>
-
         </LinearLayout>
-
     </androidx.core.widget.NestedScrollView>
-
 </LinearLayout>

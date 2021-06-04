@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:gravity="center_horizontal"
+    android:orientation="vertical"
+    android:paddingTop="13dp">
+
+    <TextView
+        android:id="@+id/timestamp"
+        style="@style/chat_text_date_style"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/margin_chat_activity" >
+
+        <com.hyphenate.easeui.widget.EaseImageView
+            android:id="@+id/iv_userhead"
+            style="@style/ease_row_sent_iv_userhead_style"/>
+
+        <RelativeLayout
+            android:id="@+id/bubble"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="@dimen/margin_chat_activity"
+            android:layout_toLeftOf="@id/iv_userhead"
+            android:layout_below="@id/tv_userid"
+            android:padding="8dp"
+            android:minHeight="120dp"
+            android:layout_marginTop="2dp"
+            android:layout_alignParentLeft="true"
+            android:layout_marginLeft="50dp"
+            android:background="@drawable/ease_chat_bubble_send_bg" >
+
+            <ImageView
+                android:layout_marginLeft="10dp"
+                android:layout_alignParentLeft="true"
+                android:id="@+id/head_Image_view"
+                android:layout_marginTop="14dp"
+                android:layout_width="48dp"
+                android:layout_height="48dp"/>
+            <TextView
+                android:id="@+id/user_nick_name"
+                android:layout_width="match_parent"
+                android:layout_marginLeft="77dp"
+                android:layout_alignParentLeft="true"
+                android:layout_marginTop="20dp"
+                android:layout_height="24dp"
+                android:gravity="left|center_vertical"
+                android:textSize="20sp"
+                android:textColor="#333333"/>
+
+            <TextView
+                android:id="@+id/user_id"
+                android:layout_width="match_parent"
+                android:layout_marginLeft="77dp"
+                android:layout_alignParentLeft="true"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="45dp"
+                android:layout_height="15dp"
+                android:gravity="left|center_vertical"
+                android:textSize="12sp"
+                android:textColor="#999999"/>
+            <TextView
+                android:id="@+id/show_line"
+                android:layout_width="220dp"
+                android:layout_height="2dp"
+                android:layout_alignParentLeft="true"
+                android:layout_centerHorizontal="true"
+                android:layout_marginLeft="13dp"
+                android:layout_marginTop="75dp"
+                android:gravity="left|center_vertical"
+                android:background="#1A000000" />
+            <TextView
+                android:id="@+id/user_card"
+                android:layout_width="186dp"
+                android:layout_marginLeft="15dp"
+                android:layout_alignParentLeft="true"
+                android:layout_marginTop="85dp"
+                android:layout_height="15dp"
+                android:textColor="#ff999999"
+                android:gravity="left|center_vertical"
+                android:textSize="12sp"
+                android:text="[个人名片]" />
+        </RelativeLayout>
+
+        <ImageView
+            android:id="@+id/msg_status"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_toLeftOf="@id/bubble"
+            android:layout_marginRight="@dimen/ease_chat_ack_margin_bubble"
+            android:clickable="true"
+            android:src="@drawable/ease_msg_state_failed_resend"
+            android:visibility="invisible" />
+
+        <TextView
+            android:id="@+id/tv_ack"
+            style="@style/chat_text_name_style"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_toLeftOf="@id/bubble"
+            android:layout_marginRight="@dimen/ease_chat_ack_margin_bubble"
+            android:text="@string/text_ack_msg"
+            android:textSize="12sp"
+            android:visibility="invisible" />
+
+        <TextView
+            android:id="@+id/tv_delivered"
+            style="@style/chat_text_name_style"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_toLeftOf="@id/bubble"
+            android:layout_marginRight="@dimen/ease_chat_ack_margin_bubble"
+            android:text="@string/text_delivered_msg"
+            android:textSize="12sp"
+            android:visibility="invisible" />
+        <TextView
+            android:id="@+id/tv_userid"
+            style="@style/chat_text_name_style"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="@dimen/chat_nick_margin_left"
+            android:textSize="@dimen/chat_nick_text_size"
+            android:layout_toLeftOf="@id/iv_userhead"
+            android:visibility="gone" />
+    </RelativeLayout>
+</LinearLayout>

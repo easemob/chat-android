@@ -13,6 +13,7 @@ import com.hyphenate.chat.EMGroup;
 import com.hyphenate.easeim.DemoHelper;
 import com.hyphenate.easeim.R;
 import com.hyphenate.easeim.common.interfaceOrImplement.OnResourceParseCallback;
+import com.hyphenate.easeim.section.chat.adapter.PickAllUserAdapter;
 import com.hyphenate.easeui.manager.EaseThreadManager;
 import com.hyphenate.easeim.section.base.BaseInitActivity;
 import com.hyphenate.easeim.section.chat.adapter.PickUserAdapter;
@@ -27,11 +28,13 @@ import com.scwang.smartrefresh.layout.SmartRefreshLayout;
 import com.scwang.smartrefresh.layout.api.RefreshLayout;
 import com.scwang.smartrefresh.layout.listener.OnRefreshListener;
 
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.recyclerview.widget.ConcatAdapter;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 public class PickAtUserActivity extends BaseInitActivity implements OnRefreshListener, OnItemClickListener, EaseSidebar.OnTouchEventListener, EaseTitleBar.OnBackPressListener {
@@ -43,6 +46,8 @@ public class PickAtUserActivity extends BaseInitActivity implements OnRefreshLis
     private String mGroupId;
     private GroupContactViewModel mViewModel;
     protected PickUserAdapter mAdapter;
+    private ConcatAdapter baseAdapter;
+    private PickAllUserAdapter headerAdapter;
 
     public static void actionStartForResult(Fragment fragment, String groupId, int requestCode) {
         Intent starter = new Intent(fragment.getContext(), PickAtUserActivity.class);
@@ -71,8 +76,10 @@ public class PickAtUserActivity extends BaseInitActivity implements OnRefreshLis
         mFloatingHeader = findViewById(R.id.floating_header);
 
         mRvPickUserList.setLayoutManager(new LinearLayoutManager(mContext));
+        baseAdapter = new ConcatAdapter();
         mAdapter = new PickUserAdapter();
-        mRvPickUserList.setAdapter(mAdapter);
+        baseAdapter.addAdapter(mAdapter);
+        mRvPickUserList.setAdapter(baseAdapter);
     }
 
     @Override
@@ -135,21 +142,25 @@ public class PickAtUserActivity extends BaseInitActivity implements OnRefreshLis
     }
 
     private void AddHeader() {
-        View view = LayoutInflater.from(this).inflate(R.layout.demo_widget_contact_item, mRvPickUserList, false);
-        ImageView avatarView = (ImageView) view.findViewById(R.id.avatar);
-        TextView textView = (TextView) view.findViewById(R.id.name);
-        textView.setText(getString(R.string.all_members));
-        avatarView.setImageResource(R.drawable.ease_groups_icon);
-        mRvPickUserList.removeHeaderViews();
-        mRvPickUserList.addHeaderView(view);
+        if( headerAdapter == null) {
+            headerAdapter = new PickAllUserAdapter();
+            EaseUser user = new EaseUser(getString(R.string.all_members));
+            user.setAvatar(R.drawable.ease_groups_icon+"");
+            List<EaseUser> users = new ArrayList<>();
+            users.add(user);
+            headerAdapter.setData(users);
+        }
+        if(!baseAdapter.getAdapters().contains(headerAdapter)) {
+            baseAdapter.addAdapter(0, headerAdapter);
 
-        view.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                setResult(RESULT_OK, new Intent().putExtra("username", getString(R.string.all_members)));
-                finish();
-            }
-        });
+            headerAdapter.setOnItemClickListener(new OnItemClickListener() {
+                @Override
+                public void onItemClick(View view, int position) {
+                    setResult(RESULT_OK, new Intent().putExtra("username", headerAdapter.getItem(position).getUsername()));
+                    finish();
+                }
+            });
+        }
 
     }
 

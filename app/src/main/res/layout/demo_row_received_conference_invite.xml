@@ -30,6 +30,7 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="@dimen/margin_chat_activity"
             android:layout_toRightOf="@id/iv_userhead"
+            android:layout_below="@id/tv_userid"
             android:layout_marginRight="20dp"
             android:background="@drawable/ease_chat_bubble_receive_bg">
 
@@ -48,6 +49,16 @@
                 style="@style/chat_text_date_style" />
 
         </RelativeLayout>
+
+        <TextView
+            android:id="@+id/tv_userid"
+            style="@style/chat_text_name_style"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/chat_nick_margin_left"
+            android:textSize="@dimen/chat_nick_text_size"
+            android:layout_toRightOf="@id/iv_userhead"
+            android:visibility="gone" />
 
     </RelativeLayout>
 </LinearLayout>

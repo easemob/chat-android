@@ -15,6 +15,7 @@ public interface DemoConstant extends EaseConstant {
     String EXTRA_CONFERENCE_INVITER = "inviter";
     String EXTRA_CONFERENCE_IS_CREATOR = "is_creator";
     String EXTRA_CONFERENCE_GROUP_ID = "group_id";
+    String EXTRA_CONFERENCE_GROUP_EXIST_MEMBERS = "exist_members";
 
     String OP_INVITE = "invite";
     String OP_REQUEST_TOBE_SPEAKER = "request_tobe_speaker";
@@ -52,6 +53,12 @@ public interface DemoConstant extends EaseConstant {
     String CONTACT_ALLOW = "contact_allow";
 
     String CONTACT_CHANGE = "contact_change";
+    String CONTACT_ADD = "contact_add";
+    String CONTACT_DELETE = "contact_delete";
+    String CONTACT_UPDATE = "contact_update";
+    String NICK_NAME_CHANGE = "nick_name_change";
+    String AVATAR_CHANGE = "avatar_change";
+    String REMOVE_BLACK = "remove_black";
 
     String GROUP_CHANGE = "group_change";
     String GROUP_OWNER_TRANSFER = "group_owner_transfer";
@@ -63,8 +70,20 @@ public interface DemoConstant extends EaseConstant {
     String REFRESH_NICKNAME = "refresh_nickname";
 
     String CONVERSATION_DELETE = "conversation_delete";
+    String CONVERSATION_READ = "conversation_read";
 
     String MESSAGE_NOT_SEND = "message_not_send";
-    String MESSAGE_FORWARD = "message_forward";
+
+    String SYSTEM_MESSAGE_FROM = "from";
+    String SYSTEM_MESSAGE_REASON = "reason";
+    String SYSTEM_MESSAGE_STATUS = "status";
+    String SYSTEM_MESSAGE_GROUP_ID = "groupId";
+    String SYSTEM_MESSAGE_NAME = "name";
+    String SYSTEM_MESSAGE_INVITER = "inviter";
+
+    String USER_CARD_EVENT = "userCard";
+    String USER_CARD_ID = "uid";
+    String USER_CARD_NICK = "nickname";
+    String USER_CARD_AVATAR = "avatar";
 
 }

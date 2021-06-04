@@ -28,7 +28,7 @@ public class ChatRecallAdapterDelegate extends EaseMessageAdapterDelegate<EMMess
     }
 
     @Override
-    protected EaseChatRowViewHolder createViewHolder(View view, MessageListItemClickListener itemClickListener, EaseMessageListItemStyle itemStyle) {
-        return new ChatRecallViewHolder(view, itemClickListener, itemStyle);
+    protected EaseChatRowViewHolder createViewHolder(View view, MessageListItemClickListener itemClickListener) {
+        return new ChatRecallViewHolder(view, itemClickListener);
     }
 }

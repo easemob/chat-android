@@ -1,5 +1,6 @@
 package com.hyphenate.easeim.section.contact.adapter;
 
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -7,6 +8,7 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 
+import com.hyphenate.chat.EMClient;
 import com.hyphenate.chat.EMGroup;
 import com.hyphenate.easeim.R;
 import com.hyphenate.easeui.adapter.EaseBaseRecyclerViewAdapter;
@@ -23,6 +25,7 @@ public class GroupContactAdapter extends EaseBaseRecyclerViewAdapter<EMGroup> {
         private EaseImageView mAvatar;
         private TextView mName;
         private TextView mSignature;
+        private TextView mLabel;
         private TextView mUnreadMsgNumber;
 
         public GroupViewHolder(@NonNull View itemView) {
@@ -35,6 +38,7 @@ public class GroupContactAdapter extends EaseBaseRecyclerViewAdapter<EMGroup> {
             mAvatar = findViewById(R.id.avatar);
             mName = findViewById(R.id.name);
             mSignature = findViewById(R.id.signature);
+            mLabel = findViewById(R.id.label);
             mUnreadMsgNumber = findViewById(R.id.unread_msg_number);
         }
 
@@ -44,6 +48,15 @@ public class GroupContactAdapter extends EaseBaseRecyclerViewAdapter<EMGroup> {
             mSignature.setVisibility(View.VISIBLE);
             mName.setText(item.getGroupName());
             mSignature.setText(item.getGroupId()+"");
+            mLabel.setVisibility(View.GONE);
+            if(isOwner(item.getOwner())) {
+                mLabel.setVisibility(View.VISIBLE);
+                mLabel.setText(R.string.group_owner);
+            }
         }
+    }
+
+    private boolean isOwner(String owner) {
+        return TextUtils.equals(EMClient.getInstance().getCurrentUser(), owner);
     }
 }

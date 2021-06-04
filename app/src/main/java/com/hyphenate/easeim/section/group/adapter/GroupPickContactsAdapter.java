@@ -7,7 +7,7 @@ import android.view.ViewGroup;
 import android.widget.CheckBox;
 import android.widget.TextView;
 
-import com.bumptech.glide.Glide;
+//import com.bumptech.glide.Glide;
 import com.hyphenate.easeim.DemoHelper;
 import com.hyphenate.easeim.R;
 import com.hyphenate.easeui.adapter.EaseBaseRecyclerViewAdapter;
@@ -85,7 +85,8 @@ public class GroupPickContactsAdapter extends EaseBaseRecyclerViewAdapter<EaseUs
         public void setData(EaseUser item, int position) {
             String username = getRealUsername(item.getUsername());
             name.setText(item.getNickname());
-            Glide.with(mContext).load(R.drawable.ease_default_avatar).into(avatar);
+            //Glide.with(mContext).load(R.drawable.ease_default_avatar).into(avatar);
+            avatar.setImageResource(R.drawable.ease_default_avatar);
             String header = item.getInitialLetter();
 
             if (position == 0 || header != null && !header.equals(getItem(position - 1).getInitialLetter())) {

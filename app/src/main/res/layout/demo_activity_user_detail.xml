@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -33,6 +34,7 @@
             android:text="@string/em_user_detail_avatar"/>
 
         <com.hyphenate.easeui.widget.EaseImageView
+            android:id="@+id/tv_headImage_view"
             android:layout_width="36dp"
             android:layout_height="36dp"
             android:layout_marginRight="42dp"
@@ -54,18 +56,11 @@
         android:background="@drawable/demo_default_divider_list"/>
 
     <com.hyphenate.easeim.common.widget.ArrowItemView
-        android:id="@+id/item_hx_id"
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/em_common_item_height"
-        app:arrowItemTitle="@string/em_user_detail_id"
-        android:background="@color/white"
-        app:arrowItemShowArrow="false"/>
-
-    <com.hyphenate.easeim.common.widget.ArrowItemView
         android:id="@+id/item_nickname"
         android:layout_width="match_parent"
         android:layout_height="@dimen/em_common_item_height"
         app:arrowItemTitle="@string/em_user_detail_nickname"
-        android:background="@color/white"/>
+        android:background="@color/white">
+    </com.hyphenate.easeim.common.widget.ArrowItemView>
 
 </LinearLayout>

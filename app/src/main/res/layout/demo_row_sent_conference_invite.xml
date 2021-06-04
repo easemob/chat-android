@@ -30,6 +30,7 @@
             android:layout_height="wrap_content"
             android:layout_marginRight="@dimen/margin_chat_activity"
             android:layout_toLeftOf="@id/iv_userhead"
+            android:layout_below="@id/tv_userid"
             android:layout_marginLeft="20dp"
             android:background="@drawable/ease_chat_bubble_send_bg">
 
@@ -40,7 +41,7 @@
                 android:gravity="center"
                 android:layout_marginLeft="8dip"
                 android:layout_marginRight="8dip"
-                android:minHeight="40dp"
+                android:minHeight="@dimen/ease_chat_text_min_height"
                 android:padding="8dp"
                 android:text="@string/msg_conference_invite"
                 android:textColor="#ff000000"
@@ -48,6 +49,16 @@
                 style="@style/chat_text_date_style" />
 
         </RelativeLayout>
+
+        <TextView
+            android:id="@+id/tv_userid"
+            style="@style/chat_text_name_style"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="@dimen/chat_nick_margin_left"
+            android:textSize="@dimen/chat_nick_text_size"
+            android:layout_toLeftOf="@id/iv_userhead"
+            android:visibility="gone" />
 
     </RelativeLayout>
 </LinearLayout>

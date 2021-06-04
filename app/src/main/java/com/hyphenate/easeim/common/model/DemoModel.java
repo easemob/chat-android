@@ -2,10 +2,12 @@ package com.hyphenate.easeim.common.model;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.text.TextUtils;
 
 import com.hyphenate.chat.EMChatRoom;
 import com.hyphenate.chat.EMClient;
 import com.hyphenate.easeim.DemoApplication;
+import com.hyphenate.easeim.DemoHelper;
 import com.hyphenate.easeim.common.db.DemoDbHelper;
 import com.hyphenate.easeim.common.db.dao.AppKeyDao;
 import com.hyphenate.easeim.common.db.dao.EmUserDao;
@@ -17,6 +19,7 @@ import com.hyphenate.easeim.common.manager.OptionsHelper;
 import com.hyphenate.easeim.common.utils.PreferenceManager;
 import com.hyphenate.easeui.domain.EaseUser;
 import com.hyphenate.easeui.manager.EasePreferenceManager;
+import com.hyphenate.util.EMLog;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -31,13 +34,27 @@ public class DemoModel {
     protected Context context = null;
     protected Map<Key,Object> valueCache = new HashMap<Key,Object>();
     public List<EMChatRoom> chatRooms;
+
+    //用户属性数据过期时间设置
+    public static long userInfoTimeOut =  7 * 24 * 60 * 60 * 1000;
     
     public DemoModel(Context ctx){
         context = ctx;
         PreferenceManager.init(context);
     }
-    
-    public boolean saveContactList(List<EaseUser> contactList) {
+
+    public long getUserInfoTimeOut() {
+        return userInfoTimeOut;
+    }
+
+    public void setUserInfoTimeOut(long userInfoTimeOut) {
+        if(userInfoTimeOut > 0){
+            this.userInfoTimeOut = userInfoTimeOut;
+        }
+    }
+
+
+    public boolean updateContactList(List<EaseUser> contactList) {
         List<EmUserEntity> userEntities = EmUserEntity.parseList(contactList);
         EmUserDao dao = DemoDbHelper.getInstance(context).getUserDao();
         if(dao != null) {
@@ -62,13 +79,45 @@ public class DemoModel {
         return map;
     }
 
+
+    public Map<String, EaseUser> getAllUserList() {
+        EmUserDao dao = DemoDbHelper.getInstance(context).getUserDao();
+        if(dao == null) {
+            return new HashMap<>();
+        }
+        Map<String, EaseUser> map = new HashMap<>();
+        List<EaseUser> users = dao.loadAllEaseUsers();
+        if(users != null && !users.isEmpty()) {
+            for (EaseUser user : users) {
+                map.put(user.getUsername(), user);
+            }
+        }
+        return map;
+    }
+
+
+    public Map<String, EaseUser> getFriendContactList() {
+        EmUserDao dao = DemoDbHelper.getInstance(context).getUserDao();
+        if(dao == null) {
+            return new HashMap<>();
+        }
+        Map<String, EaseUser> map = new HashMap<>();
+        List<EaseUser> users = dao.loadContacts();
+        if(users != null && !users.isEmpty()) {
+            for (EaseUser user : users) {
+                map.put(user.getUsername(), user);
+            }
+        }
+        return map;
+    }
+
     /**
      * 判断是否是联系人
      * @param userId
      * @return
      */
     public boolean isContact(String userId) {
-        Map<String, EaseUser> contactList = getContactList();
+        Map<String, EaseUser> contactList = getFriendContactList();
         return contactList.keySet().contains(userId);
     }
     
@@ -86,14 +135,12 @@ public class DemoModel {
             return new ArrayList<>();
         }
         String defAppkey = OptionsHelper.getInstance().getDefAppkey();
-        List<AppKeyEntity> keys = dao.queryKey(defAppkey);
-        if(keys == null || keys.isEmpty()) {
-            dao.insert(new AppKeyEntity(defAppkey));
-        }
         String appKey = EMClient.getInstance().getOptions().getAppKey();
-        List<AppKeyEntity> appKeys = dao.queryKey(appKey);
-        if(appKeys == null || appKeys.isEmpty()) {
-            dao.insert(new AppKeyEntity(appKey));
+        if(!TextUtils.equals(defAppkey, appKey)) {
+            List<AppKeyEntity> appKeys = dao.queryKey(appKey);
+            if(appKeys == null || appKeys.isEmpty()) {
+                dao.insert(new AppKeyEntity(appKey));
+            }
         }
         return dao.loadAllAppKeys();
     }
@@ -106,10 +153,6 @@ public class DemoModel {
         AppKeyDao dao = DemoDbHelper.getInstance(context).getAppKeyDao();
         if(dao == null) {
             return;
-        }
-        List<AppKeyEntity> keys = dao.loadAllAppKeys();
-        if(keys == null || keys.isEmpty()) {
-            dao.insert(new AppKeyEntity(OptionsHelper.getInstance().getDefAppkey()));
         }
         AppKeyEntity entity = new AppKeyEntity(appKey);
         dao.insert(entity);
@@ -138,11 +181,17 @@ public class DemoModel {
     public void insert(Object object) {
         DemoDbHelper dbHelper = getDbHelper();
         if(object instanceof InviteMessage) {
-            dbHelper.getInviteMessageDao().insert((InviteMessage) object);
+            if(dbHelper.getInviteMessageDao() != null) {
+                dbHelper.getInviteMessageDao().insert((InviteMessage) object);
+            }
         }else if(object instanceof MsgTypeManageEntity) {
-            dbHelper.getMsgTypeManageDao().insert((MsgTypeManageEntity) object);
+            if(dbHelper.getMsgTypeManageDao() != null) {
+                dbHelper.getMsgTypeManageDao().insert((MsgTypeManageEntity) object);
+            }
         }else if(object instanceof EmUserEntity) {
-            dbHelper.getUserDao().insert((EmUserEntity) object);
+            if(dbHelper.getUserDao() != null) {
+                dbHelper.getUserDao().insert((EmUserEntity) object);
+            }
         }
     }
 
@@ -153,12 +202,32 @@ public class DemoModel {
     public void update(Object object) {
         DemoDbHelper dbHelper = getDbHelper();
         if(object instanceof InviteMessage) {
-            dbHelper.getInviteMessageDao().update((InviteMessage) object);
+            if(dbHelper.getInviteMessageDao() != null) {
+                dbHelper.getInviteMessageDao().update((InviteMessage) object);
+            }
         }else if(object instanceof MsgTypeManageEntity) {
-            dbHelper.getMsgTypeManageDao().update((MsgTypeManageEntity) object);
+            if(dbHelper.getMsgTypeManageDao() != null) {
+                dbHelper.getMsgTypeManageDao().update((MsgTypeManageEntity) object);
+            }
         }else if(object instanceof EmUserEntity) {
-            dbHelper.getUserDao().insert((EmUserEntity) object);
+            if(dbHelper.getUserDao() != null) {
+                dbHelper.getUserDao().insert((EmUserEntity) object);
+            }
         }
+    }
+
+
+    /**
+     * 查找有关用户用户属性过期的用户ID
+     *
+     */
+    public List<String> selectTimeOutUsers() {
+        DemoDbHelper dbHelper = getDbHelper();
+        List<String> users = null;
+        if(dbHelper.getUserDao() != null) {
+            users = dbHelper.getUserDao().loadTimeOutEaseUsers(userInfoTimeOut,System.currentTimeMillis());
+        }
+        return users;
     }
     
     /**
@@ -690,6 +759,43 @@ public class DemoModel {
 
     public String getUnSendMsg(String toChatUsername) {
         return EasePreferenceManager.getInstance().getUnSendMsgInfo(toChatUsername);
+    }
+
+    /**
+     * 检查是否是第一次安装登录
+     * 默认值是true, 需要在用api拉取完会话列表后，就其置为false.
+     * @return
+     */
+    public boolean isFirstInstall() {
+        SharedPreferences preferences = DemoApplication.getInstance().getSharedPreferences("first_install", Context.MODE_PRIVATE);
+        return preferences.getBoolean("is_first_install", true);
+    }
+
+    /**
+     * 将状态置为非第一次安装，在调用获取会话列表的api后调用
+     * 并将会话列表是否来自服务器置为true
+     */
+    public void makeNotFirstInstall() {
+        SharedPreferences preferences = DemoApplication.getInstance().getSharedPreferences("first_install", Context.MODE_PRIVATE);
+        preferences.edit().putBoolean("is_first_install", false).apply();
+        preferences.edit().putBoolean("is_conversation_come_from_server", true).apply();
+    }
+
+    /**
+     * 检查会话列表是否从服务器返回数据
+     * @return
+     */
+    public boolean isConComeFromServer() {
+        SharedPreferences preferences = DemoApplication.getInstance().getSharedPreferences("first_install", Context.MODE_PRIVATE);
+        return preferences.getBoolean("is_conversation_come_from_server", false);
+    }
+
+    /**
+     * 将会话列表从服务器取数据的状态置为false，即后面应该采用本地数据库数据。
+     */
+    public void modifyConComeFromStatus() {
+        SharedPreferences preferences = DemoApplication.getInstance().getSharedPreferences("first_install", Context.MODE_PRIVATE);
+        preferences.edit().putBoolean("is_conversation_come_from_server", false).apply();
     }
 
     enum Key{

@@ -4,6 +4,8 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.hyphenate.chat.EMMessage;
+import com.hyphenate.easecallkit.base.EaseCallType;
+import com.hyphenate.easecallkit.utils.EaseMsgUtils;
 import com.hyphenate.easeim.common.constant.DemoConstant;
 import com.hyphenate.easeim.section.chat.viewholder.ChatVoiceCallViewHolder;
 import com.hyphenate.easeim.section.chat.views.ChatRowVoiceCall;
@@ -18,7 +20,9 @@ import static com.hyphenate.chat.EMMessage.Type.TXT;
 public class ChatVoiceCallAdapterDelegate extends EaseMessageAdapterDelegate<EMMessage, EaseChatRowViewHolder> {
     @Override
     public boolean isForViewType(EMMessage item, int position) {
-        return item.getType() == TXT && item.getBooleanAttribute(DemoConstant.MESSAGE_ATTR_IS_VOICE_CALL, false);
+        boolean isRtcCall =item.getStringAttribute(EaseMsgUtils.CALL_MSG_TYPE,"").equals(EaseMsgUtils.CALL_MSG_INFO)?true:false;
+        boolean isVoiceCall = item.getIntAttribute(EaseMsgUtils.CALL_TYPE,0) == EaseCallType.SINGLE_VOICE_CALL.code?true:false;
+        return item.getType() == TXT && isRtcCall && isVoiceCall;
     }
 
     @Override
@@ -27,7 +31,7 @@ public class ChatVoiceCallAdapterDelegate extends EaseMessageAdapterDelegate<EMM
     }
 
     @Override
-    protected EaseChatRowViewHolder createViewHolder(View view, MessageListItemClickListener itemClickListener, EaseMessageListItemStyle itemStyle) {
-        return new ChatVoiceCallViewHolder(view, itemClickListener, itemStyle);
+    protected EaseChatRowViewHolder createViewHolder(View view, MessageListItemClickListener itemClickListener) {
+        return new ChatVoiceCallViewHolder(view, itemClickListener);
     }
 }

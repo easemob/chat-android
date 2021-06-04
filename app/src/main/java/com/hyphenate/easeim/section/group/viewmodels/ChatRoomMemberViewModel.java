@@ -14,6 +14,7 @@ import java.util.Map;
 import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
+import androidx.lifecycle.Transformations;
 
 public class ChatRoomMemberViewModel extends AndroidViewModel {
     private EMChatRoomManagerRepository repository;
@@ -92,7 +93,8 @@ public class ChatRoomMemberViewModel extends AndroidViewModel {
     }
 
     public void blockUser(String roomId, List<String> username) {
-        chatRoomObservable.setSource(repository.blockUser(roomId, username));
+        LiveData<Resource<EMChatRoom>> block = repository.blockUser(roomId, username);
+        chatRoomObservable.setSource(Transformations.switchMap(block, response -> repository.removeUserFromChatRoom(roomId, username)));
     }
 
     public void unblockUser(String roomId, List<String> username) {

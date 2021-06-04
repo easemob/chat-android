@@ -28,6 +28,7 @@ public class LoginFragmentViewModel extends AndroidViewModel {
      * @param isTokenFlag
      */
     public void login(String userName, String pwd, boolean isTokenFlag) {
+
         loginObservable.addSource(mRepository.loginToServer(userName, pwd, isTokenFlag), response -> {
             loginObservable.setValue(response);
         });

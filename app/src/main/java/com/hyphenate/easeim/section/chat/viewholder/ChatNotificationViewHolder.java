@@ -10,8 +10,8 @@ import com.hyphenate.easeui.viewholder.EaseChatRowViewHolder;
 
 public class ChatNotificationViewHolder extends EaseChatRowViewHolder {
 
-    public ChatNotificationViewHolder(@NonNull View itemView, MessageListItemClickListener itemClickListener, EaseMessageListItemStyle itemStyle) {
-        super(itemView, itemClickListener, itemStyle);
+    public ChatNotificationViewHolder(@NonNull View itemView, MessageListItemClickListener itemClickListener) {
+        super(itemView, itemClickListener);
     }
 }
 

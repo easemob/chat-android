@@ -18,15 +18,16 @@ import com.hyphenate.chat.EMMessage;
 import com.hyphenate.easeim.DemoHelper;
 import com.hyphenate.easeim.R;
 import com.hyphenate.easeim.common.db.entity.InviteMessage;
+import com.hyphenate.easeim.common.db.entity.InviteMessageStatus;
 import com.hyphenate.easeim.common.db.entity.MsgTypeManageEntity;
 import com.hyphenate.easeim.common.manager.PushAndMessageHelper;
 import com.hyphenate.easeui.adapter.EaseBaseRecyclerViewAdapter;
 import com.hyphenate.easeui.manager.EaseAtMessageHelper;
 import com.hyphenate.easeui.utils.EaseCommonUtils;
+import com.hyphenate.easeui.utils.EaseDateUtils;
 import com.hyphenate.easeui.utils.EaseSmileUtils;
 import com.hyphenate.easeui.widget.EaseImageView;
 import com.hyphenate.util.DateUtils;
-import com.hyphenate.easeim.common.db.entity.InviteMessage.InviteMessageStatus;
 
 import java.util.Date;
 
@@ -87,7 +88,7 @@ public class HomeAdapter extends EaseBaseRecyclerViewAdapter<Object> {
                     EMGroup group = DemoHelper.getInstance().getGroupManager().getGroup(username);
                     name.setText(group != null ? group.getGroupName() : username);
                 }else if(item.getType() == EMConversation.EMConversationType.ChatRoom) {
-                    avatar.setImageResource(R.drawable.ease_group_icon);
+                    avatar.setImageResource(R.drawable.ease_chat_room_icon);
                     EMChatRoom chatRoom = DemoHelper.getInstance().getChatroomManager().getChatRoom(username);
                     name.setText(chatRoom != null && !TextUtils.isEmpty(chatRoom.getName()) ? chatRoom.getName() : username);
                 }else {
@@ -105,7 +106,7 @@ public class HomeAdapter extends EaseBaseRecyclerViewAdapter<Object> {
                 if(item.getAllMsgCount() != 0) {
                     EMMessage lastMessage = item.getLastMessage();
                     message.setText(EaseSmileUtils.getSmiledText(mContext, EaseCommonUtils.getMessageDigest(lastMessage, mContext)));
-                    time.setText(DateUtils.getTimestampString(new Date(lastMessage.getMsgTime())));
+                    time.setText(EaseDateUtils.getTimestampString(mContext, new Date(lastMessage.getMsgTime())));
                     if (lastMessage.direct() == EMMessage.Direct.SEND && lastMessage.status() == EMMessage.Status.FAIL) {
                         mMsgState.setVisibility(View.VISIBLE);
                     } else {
@@ -142,8 +143,8 @@ public class HomeAdapter extends EaseBaseRecyclerViewAdapter<Object> {
                     mUnreadMsgNumber.setVisibility(View.GONE);
                 }
                 if(lastMsg instanceof InviteMessage) {
-                    time.setText(DateUtils.getTimestampString(new Date(((InviteMessage) lastMsg).getTime())));
-                    InviteMessage.InviteMessageStatus status = ((InviteMessage) lastMsg).getStatusEnum();
+                    time.setText(EaseDateUtils.getTimestampString(mContext, new Date(((InviteMessage) lastMsg).getTime())));
+                    InviteMessageStatus status = ((InviteMessage) lastMsg).getStatusEnum();
                     if(status == null) {
                         return;
                     }

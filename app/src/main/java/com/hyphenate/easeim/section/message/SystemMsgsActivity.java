@@ -3,14 +3,14 @@ package com.hyphenate.easeim.section.message;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.text.TextUtils;
 import android.view.ContextMenu;
 import android.view.MenuItem;
 import android.view.View;
 
+import com.hyphenate.chat.EMMessage;
 import com.hyphenate.easeim.R;
 import com.hyphenate.easeim.common.constant.DemoConstant;
-import com.hyphenate.easeim.common.db.entity.InviteMessage;
+import com.hyphenate.easeim.common.db.entity.InviteMessageStatus;
 import com.hyphenate.easeim.common.interfaceOrImplement.OnResourceParseCallback;
 import com.hyphenate.easeim.common.livedatas.LiveDataBus;
 import com.hyphenate.easeim.section.base.BaseInitActivity;
@@ -21,10 +21,10 @@ import com.hyphenate.easeim.section.message.viewmodels.NewFriendsViewModel;
 import com.hyphenate.easeui.model.EaseEvent;
 import com.hyphenate.easeui.widget.EaseRecyclerView;
 import com.hyphenate.easeui.widget.EaseTitleBar;
+import com.hyphenate.exceptions.HyphenateException;
 import com.scwang.smartrefresh.layout.SmartRefreshLayout;
 import com.scwang.smartrefresh.layout.api.RefreshLayout;
 import com.scwang.smartrefresh.layout.listener.OnRefreshLoadMoreListener;
-import com.hyphenate.easeim.common.db.entity.InviteMessage.InviteMessageStatus;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.ViewModelProvider;
@@ -73,8 +73,17 @@ public class SystemMsgsActivity extends BaseInitActivity implements OnRefreshLoa
         super.onCreateContextMenu(menu, v, menuInfo);
         getMenuInflater().inflate(R.menu.demo_invite_list_menu, menu);
         int position = ((EaseRecyclerView.RecyclerViewContextMenuInfo) menuInfo).position;
-        InviteMessage item = adapter.getItem(position);
-        InviteMessage.InviteMessageStatus statusEnum = item.getStatusEnum();
+        EMMessage item = adapter.getItem(position);
+        String statusParams = null;
+        try {
+            statusParams = item.getStringAttribute(DemoConstant.SYSTEM_MESSAGE_STATUS);
+        } catch (HyphenateException e) {
+            e.printStackTrace();
+        }
+        if(statusParams == null) {
+            return;
+        }
+        InviteMessageStatus statusEnum = InviteMessageStatus.valueOf(statusParams);
         if(statusEnum == InviteMessageStatus.BEINVITEED ||
                 statusEnum == InviteMessageStatus.BEAPPLYED ||
                 statusEnum == InviteMessageStatus.GROUPINVITATION) {
@@ -86,7 +95,7 @@ public class SystemMsgsActivity extends BaseInitActivity implements OnRefreshLoa
     @Override
     public boolean onContextItemSelected(@NonNull MenuItem item) {
         int position = ((EaseRecyclerView.RecyclerViewContextMenuInfo) item.getMenuInfo()).position;
-        InviteMessage message = adapter.getItem(position);
+        EMMessage message = adapter.getItem(position);
         switch (item.getItemId()) {
             case R.id.action_invite_agree :
                 viewModel.agreeInvite(message);
@@ -158,14 +167,25 @@ public class SystemMsgsActivity extends BaseInitActivity implements OnRefreshLoa
                 }
             });
         });
+        LiveDataBus bus = LiveDataBus.get();
+        bus.with(DemoConstant.NOTIFY_CHANGE, EaseEvent.class).observe(this, this::loadData);
+        bus.with(DemoConstant.MESSAGE_CHANGE_CHANGE, EaseEvent.class).observe(this, this::loadData);
+        bus.with(DemoConstant.GROUP_CHANGE, EaseEvent.class).observe(this, this::loadData);
+        bus.with(DemoConstant.CHAT_ROOM_CHANGE, EaseEvent.class).observe(this, this::loadData);
+        bus.with(DemoConstant.CONTACT_CHANGE, EaseEvent.class).observe(this, this::loadData);
         viewModel.makeAllMsgRead();
+        viewModel.loadMessages(limit);
+    }
+
+    private void loadData(EaseEvent easeEvent) {
         viewModel.loadMessages(limit);
     }
 
     @Override
     public void onLoadMore(RefreshLayout refreshLayout) {
         offset += limit;
-        viewModel.loadMoreMessages(limit, offset);
+        EMMessage message = adapter.getData().get(adapter.getData().size() - 1);
+        viewModel.loadMoreMessages(message.getMsgId(), limit);
     }
 
     @Override
@@ -186,12 +206,12 @@ public class SystemMsgsActivity extends BaseInitActivity implements OnRefreshLoa
     }
 
     @Override
-    public void onInviteAgree(View view, InviteMessage msg) {
+    public void onInviteAgree(View view, EMMessage msg) {
         viewModel.agreeInvite(msg);
     }
 
     @Override
-    public void onInviteRefuse(View view, InviteMessage msg) {
+    public void onInviteRefuse(View view, EMMessage msg) {
         viewModel.refuseInvite(msg);
     }
 

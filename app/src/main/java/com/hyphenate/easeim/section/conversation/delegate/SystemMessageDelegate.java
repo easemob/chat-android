@@ -12,14 +12,14 @@ import androidx.core.content.ContextCompat;
 
 import com.hyphenate.easeim.R;
 import com.hyphenate.easeim.common.db.entity.InviteMessage;
+import com.hyphenate.easeim.common.db.entity.InviteMessageStatus;
 import com.hyphenate.easeim.common.db.entity.MsgTypeManageEntity;
 import com.hyphenate.easeim.common.manager.PushAndMessageHelper;
-import com.hyphenate.easeui.EaseUI;
+import com.hyphenate.easeui.EaseIM;
 import com.hyphenate.easeui.adapter.EaseBaseDelegate;
 import com.hyphenate.easeui.adapter.EaseBaseRecyclerViewAdapter;
+import com.hyphenate.easeui.utils.EaseDateUtils;
 import com.hyphenate.easeui.widget.EaseImageView;
-import com.hyphenate.util.DateUtils;
-import com.hyphenate.easeim.common.db.entity.InviteMessage.InviteMessageStatus;
 
 import java.util.Date;
 
@@ -65,7 +65,7 @@ public class SystemMessageDelegate extends EaseBaseDelegate<MsgTypeManageEntity,
             mMsgState = findViewById(com.hyphenate.easeui.R.id.msg_state);
             mentioned = findViewById(com.hyphenate.easeui.R.id.mentioned);
             message = findViewById(com.hyphenate.easeui.R.id.message);
-            avatar.setShapeType(EaseUI.getInstance().getAvatarOptions().getAvatarShape());
+            avatar.setShapeType(EaseIM.getInstance().getAvatarOptions().getAvatarShape());
         }
 
         @Override
@@ -90,8 +90,8 @@ public class SystemMessageDelegate extends EaseBaseDelegate<MsgTypeManageEntity,
                 mUnreadMsgNumber.setVisibility(View.GONE);
             }
             if(lastMsg instanceof InviteMessage) {
-                time.setText(DateUtils.getTimestampString(new Date(((InviteMessage) lastMsg).getTime())));
-                InviteMessage.InviteMessageStatus status = ((InviteMessage) lastMsg).getStatusEnum();
+                time.setText(EaseDateUtils.getTimestampString(mContext, new Date(((InviteMessage) lastMsg).getTime())));
+                InviteMessageStatus status = ((InviteMessage) lastMsg).getStatusEnum();
                 if(status == null) {
                     return;
                 }
