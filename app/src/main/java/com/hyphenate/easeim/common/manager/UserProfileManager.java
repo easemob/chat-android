@@ -139,6 +139,12 @@ public class UserProfileManager {
 		}
 		return avatarUrl;
 	}
+	public String updateUserAvatar(String avatarUrl) {
+		if (avatarUrl != null) {
+			setCurrentUserAvatar(avatarUrl);
+		}
+		return avatarUrl;
+	}
 
 	public void asyncGetCurrentUserInfo() {
 		ParseManager.getInstance().asyncGetCurrentUserInfo(new EMValueCallBack<EaseUser>() {
