@@ -304,7 +304,9 @@ public class ContactDetailActivity extends BaseInitActivity implements EaseTitle
                             Glide.with(mContext).load(userInfo.getAvatarUrl()).placeholder(R.drawable.em_login_logo).into(mAvatarUser);
                         }
                         //更新本地数据库
-                        warpEMUserInfo(userInfo);
+                        if(mIsFriend) {//是朋友关系时才更新
+                            warpEMUserInfo(userInfo);
+                        }
                     }
                 });
             }
