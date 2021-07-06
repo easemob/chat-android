@@ -14,22 +14,20 @@ import com.bumptech.glide.Glide;
 import com.hyphenate.chat.EMClient;
 import com.hyphenate.easeim.DemoHelper;
 import com.hyphenate.easeim.R;
+import com.hyphenate.easeim.common.manager.UserProfileManager;
 import com.hyphenate.easeim.section.group.viewmodels.GroupMemberAuthorityViewModel;
+import com.hyphenate.easeui.EaseIM;
 import com.hyphenate.easeui.adapter.EaseBaseRecyclerViewAdapter;
 import com.hyphenate.easeui.domain.EaseUser;
 import com.hyphenate.easeui.modules.contact.model.EaseContactSetStyle;
+import com.hyphenate.easeui.provider.EaseUserProfileProvider;
 import com.hyphenate.easeui.widget.EaseImageView;
 
 public class ContactListAdapter extends EaseBaseRecyclerViewAdapter<EaseUser> {
 
-    private GroupMemberAuthorityViewModel  viewModel;
     @Override
     public ViewHolder getViewHolder(ViewGroup parent, int viewType) {
         return new MyViewHolder(LayoutInflater.from(mContext).inflate(R.layout.demo_widget_contact_item, parent, false));
-    }
-
-    public void setSettingModel(GroupMemberAuthorityViewModel settingModel) {
-        this.viewModel = settingModel;
     }
 
     @Override
@@ -70,18 +68,29 @@ public class ContactListAdapter extends EaseBaseRecyclerViewAdapter<EaseUser> {
                 }
             }
             //判断是否为自己账号多端登录
-            if(!item.getUsername().contains(EMClient.getInstance().getCurrentUser())){
-                if(item.getNickname() != null && item.getNickname().length() > 0){
-                    mName.setText(item.getNickname());
-                }
-                Glide.with(mContext).load(item.getAvatar()).placeholder(R.drawable.em_login_logo).error(R.drawable.em_login_logo).into(mAvatar);
-            }else{
-                EaseUser user = DemoHelper.getInstance().getUserInfo(EMClient.getInstance().getCurrentUser());
-                if(user.getNickname() != null && user.getNickname().length() > 0){
-                    mName.setText(user.getNickname());
-                }
-                Glide.with(mContext).load(user.getAvatar()).placeholder(R.drawable.em_login_logo).error(R.drawable.em_login_logo).into(mAvatar);
+            String username = item.getUsername();
+            String nickname = item.getNickname();
+            if(username.contains("/") && username.contains(EMClient.getInstance().getCurrentUser())) {
+                username = EMClient.getInstance().getCurrentUser();
             }
+            EaseUserProfileProvider userProvider = EaseIM.getInstance().getUserProvider();
+            if(userProvider != null) {
+                EaseUser user = userProvider.getUser(username);
+                if(user != null) {
+                    nickname = user.getNickname();
+                    Glide.with(mAvatar)
+                            .load(user.getAvatar())
+                            .placeholder(R.drawable.ease_default_avatar)
+                            .error(R.drawable.ease_default_avatar)
+                            .into(mAvatar);
+                }
+            }
+            String postfix = "";
+            if(username.contains("/") && username.contains(EMClient.getInstance().getCurrentUser())) {
+                postfix = "/"+username.split("/")[1];
+                nickname = nickname+postfix;
+            }
+            mName.setText(nickname);
         }
     }
 }
