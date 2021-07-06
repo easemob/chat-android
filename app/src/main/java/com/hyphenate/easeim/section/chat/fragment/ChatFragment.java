@@ -14,6 +14,7 @@ import androidx.annotation.Nullable;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.hyphenate.EMValueCallBack;
+import com.hyphenate.chat.EMCustomMessageBody;
 import com.hyphenate.chat.EMUserInfo;
 import com.hyphenate.chat.adapter.EMAUserInfoManager;
 import com.hyphenate.easecallkit.EaseCallKit;
@@ -53,11 +54,15 @@ import com.hyphenate.util.EMFileHelper;
 import com.hyphenate.util.EMLog;
 
 
+import java.util.HashMap;
+import java.util.Map;
+
 import static android.content.Intent.FLAG_ACTIVITY_NEW_TASK;
 
 
 public class ChatFragment extends EaseChatFragment implements OnRecallMessageResultListener {
     private static final String TAG = ChatFragment.class.getSimpleName();
+    private static final int REQUEST_CODE_SELECT_USER_CARD = 20;
     private MessageViewModel viewModel;
     protected ClipboardManager clipboard;
 
@@ -316,9 +321,9 @@ public class ChatFragment extends EaseChatFragment implements OnRecallMessageRes
                 break;
             case R.id.extend_item_user_card:
                 EMLog.d(TAG,"select user card");
-                Intent userCardIntent = new Intent(this.getContext(), SelectUserCardActivity.class).addFlags(FLAG_ACTIVITY_NEW_TASK);
+                Intent userCardIntent = new Intent(this.getContext(), SelectUserCardActivity.class);
                 userCardIntent.putExtra("toUser",conversationId);
-                this.getContext().startActivity(userCardIntent);
+                startActivityForResult(userCardIntent, REQUEST_CODE_SELECT_USER_CARD);
                 break;
         }
     }
@@ -362,8 +367,33 @@ public class ChatFragment extends EaseChatFragment implements OnRecallMessageRes
                         }
                     }
                     break;
+                case REQUEST_CODE_SELECT_USER_CARD:
+                    if(data != null) {
+                        EaseUser user = (EaseUser) data.getSerializableExtra("user");
+                        if(user != null) {
+                            sendUserCardMessage(user);
+                        }
+                    }
+                    break;
             }
         }
+    }
+
+    /**
+     * Send user card message
+     * @param user
+     */
+    private void sendUserCardMessage(EaseUser user) {
+        EMMessage message = EMMessage.createSendMessage(EMMessage.Type.CUSTOM);
+        EMCustomMessageBody body = new EMCustomMessageBody(DemoConstant.USER_CARD_EVENT);
+        Map<String,String> params = new HashMap<>();
+        params.put(DemoConstant.USER_CARD_ID,user.getUsername());
+        params.put(DemoConstant.USER_CARD_NICK,user.getNickname());
+        params.put(DemoConstant.USER_CARD_AVATAR,user.getAvatar());
+        body.setParams(params);
+        message.setBody(body);
+        message.setTo(conversationId);
+        chatLayout.sendMessage(message);
     }
 
     @Override
