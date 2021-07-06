@@ -22,6 +22,7 @@ import com.hyphenate.easeim.common.net.Resource;
 import com.hyphenate.easeui.manager.EaseThreadManager;
 import com.hyphenate.easeui.domain.EaseUser;
 import com.hyphenate.easeui.model.EaseEvent;
+import com.hyphenate.easeui.utils.EaseCommonUtils;
 import com.hyphenate.exceptions.HyphenateException;
 import com.hyphenate.util.EMLog;
 
@@ -553,5 +554,73 @@ public class EMContactManagerRepository extends BaseEMRepository{
 
             }
         }.asLiveData();
+    }
+
+    public LiveData<Resource<EaseUser>> getUserInfoById(final String username) {
+        return new NetworkBoundResource<EaseUser, EaseUser>() {
+            @Override
+            protected boolean shouldFetch(EaseUser data) {
+                return true;
+            }
+
+            @Override
+            protected LiveData<EaseUser> loadFromDb() {
+                List<EaseUser> users = getUserDao().loadUserByUserId(username);
+                return createLiveData(users.get(0));
+            }
+
+            @Override
+            protected void createCall(ResultCallBack<LiveData<EaseUser>> callBack) {
+                String userId = username;
+                if(DemoHelper.getInstance().isCurrentUserFromOtherDevice(username)) {
+                    userId = EMClient.getInstance().getCurrentUser();
+                }
+                String[] userIds = new String[]{userId};
+                String finalUserId = userId;
+                EMClient.getInstance().userInfoManager().fetchUserInfoByUserId(userIds, new EMValueCallBack<Map<String, EMUserInfo>>() {
+                    @Override
+                    public void onSuccess(Map<String, EMUserInfo> value) {
+                        if(callBack != null) {
+                            callBack.onSuccess(createLiveData(transformEMUserInfo(value.get(finalUserId))));
+                        }
+                    }
+
+                    @Override
+                    public void onError(int error, String errorMsg) {
+                        if(callBack != null) {
+                            callBack.onError(error, errorMsg);
+                        }
+                    }
+                });
+            }
+
+            @Override
+            protected void saveCallResult(EaseUser item) {
+                getUserDao().insert(EmUserEntity.parseParent(item));
+            }
+        }.asLiveData();
+    }
+
+    private EaseUser transformEMUserInfo(EMUserInfo info) {
+        if(info != null){
+            List<EaseUser> users = getUserDao().loadUserByUserId(info.getUserId());
+            EaseUser user = null;
+            if(users != null && users.size() > 0) {
+                user = users.get(0);
+            }
+            EaseUser userEntity = new EaseUser();
+            userEntity.setUsername(user != null ? user.getUsername() : info.getUserId());
+            userEntity.setNickname(info.getNickName());
+            userEntity.setEmail(info.getEmail());
+            userEntity.setAvatar(info.getAvatarUrl());
+            userEntity.setBirth(info.getBirth());
+            userEntity.setGender(info.getGender());
+            userEntity.setExt(info.getExt());
+            userEntity.setSign(info.getSignature());
+            EaseCommonUtils.setUserInitialLetter(userEntity);
+            userEntity.setContact(user != null ? user.getContact() : 0);
+            return userEntity;
+        }
+        return null;
     }
 }

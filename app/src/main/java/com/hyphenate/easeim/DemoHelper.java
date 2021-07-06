@@ -746,6 +746,21 @@ public class DemoHelper {
         return getModel().isConComeFromServer();
     }
 
+    /**
+     * Determine if it is from the current user account of another device
+     * @param username
+     * @return
+     */
+    public boolean isCurrentUserFromOtherDevice(String username) {
+        if(TextUtils.isEmpty(username)) {
+            return false;
+        }
+        if(username.contains("/") && username.contains(EMClient.getInstance().getCurrentUser())) {
+            return true;
+        }
+        return false;
+    }
+
 
     /**
      * 增加EaseCallkit监听
