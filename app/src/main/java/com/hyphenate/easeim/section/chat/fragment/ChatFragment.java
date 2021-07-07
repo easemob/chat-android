@@ -162,6 +162,8 @@ public class ChatFragment extends EaseChatFragment implements OnRecallMessageRes
         chatLayout.getChatInputMenu().getPrimaryMenu().getEditText().setText(getUnSendMsg());
         chatLayout.turnOnTypingMonitor(DemoHelper.getInstance().getModel().isShowMsgTyping());
 
+        LiveDataBus.get().with(DemoConstant.MESSAGE_CHANGE_CHANGE).postValue(new EaseEvent(DemoConstant.MESSAGE_CHANGE_CHANGE, EaseEvent.TYPE.MESSAGE));
+
         LiveDataBus.get().with(DemoConstant.MESSAGE_CALL_SAVE, Boolean.class).observe(getViewLifecycleOwner(), event -> {
             if(event == null) {
                 return;
