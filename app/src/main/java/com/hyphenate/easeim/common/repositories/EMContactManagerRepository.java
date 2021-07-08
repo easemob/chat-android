@@ -121,7 +121,7 @@ public class EMContactManagerRepository extends BaseEMRepository{
                                 //删除之前的多端在线
                                 if(exitUsers != null){
                                     for(String userId:exitUsers){
-                                        if(userId.contains(EMClient.getInstance().getCurrentUser())){
+                                        if(DemoHelper.getInstance().isCurrentUserFromOtherDevice(userId)){
                                             getUserDao().deleteUser(userId);
                                         }
                                     }
@@ -229,7 +229,7 @@ public class EMContactManagerRepository extends BaseEMRepository{
                             user.setContact(0);
                         }
 
-                        if(user.getUsername().contains(EMClient.getInstance().getCurrentUser())){
+                        if(DemoHelper.getInstance().isCurrentUserFromOtherDevice(user.getUsername())){
                             EMUserInfo selfInfo =  value.get(EMClient.getInstance().getCurrentUser());
                             if(selfInfo != null){
                                 user.setNickname(selfInfo.getNickName());
