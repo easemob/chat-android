@@ -913,13 +913,15 @@ public class ChatPresenter extends EaseChatPresenter {
                     break;
                 case GROUP_KICK:
                     // TODO: person, reason from ext
-                    saveGroupNotification(groupId, /*groupName*/"",  /*person*/usernames.get(0), /*reason*/"", InviteMessageStatus.MULTI_DEVICE_GROUP_INVITE_DECLINE);
+                    saveGroupNotification(groupId, /*groupName*/"",  /*person*/usernames.get(0), /*reason*/"", InviteMessageStatus.MULTI_DEVICE_GROUP_KICK);
+                    message = DemoConstant.GROUP_CHANGE;
 
                     showToast("GROUP_KICK");
                     break;
                 case GROUP_BAN:
                     // TODO: person from ext
                     saveGroupNotification(groupId, /*groupName*/"",  /*person*/usernames.get(0), /*reason*/"", InviteMessageStatus.MULTI_DEVICE_GROUP_BAN);
+                    message = DemoConstant.GROUP_CHANGE;
 
                     showToast("GROUP_BAN");
                     break;
@@ -949,12 +951,14 @@ public class ChatPresenter extends EaseChatPresenter {
                 case GROUP_ADD_ADMIN:
                     // TODO: person from ext
                     saveGroupNotification(groupId, /*groupName*/"",  /*person*/usernames.get(0), /*reason*/"", InviteMessageStatus.MULTI_DEVICE_GROUP_ADD_ADMIN);
+                    message = DemoConstant.GROUP_CHANGE;
 
                     showToast("GROUP_ADD_ADMIN");
                     break;
                 case GROUP_REMOVE_ADMIN:
                     // TODO: person from ext
                     saveGroupNotification(groupId, /*groupName*/"",  /*person*/usernames.get(0), /*reason*/"", InviteMessageStatus.MULTI_DEVICE_GROUP_REMOVE_ADMIN);
+                    message = DemoConstant.GROUP_CHANGE;
 
                     showToast("GROUP_REMOVE_ADMIN");
                     break;
