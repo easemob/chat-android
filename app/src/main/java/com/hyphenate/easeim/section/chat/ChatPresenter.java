@@ -32,6 +32,7 @@ import com.hyphenate.easeim.MainActivity;
 import com.hyphenate.easeim.R;
 import com.hyphenate.easeim.common.constant.DemoConstant;
 import com.hyphenate.easeim.common.db.DemoDbHelper;
+import com.hyphenate.easeim.common.db.dao.EmUserDao;
 import com.hyphenate.easeim.common.db.entity.EmUserEntity;
 import com.hyphenate.easeim.common.db.entity.InviteMessageStatus;
 import com.hyphenate.easeim.common.interfaceOrImplement.ResultCallBack;
@@ -42,6 +43,7 @@ import com.hyphenate.easeim.common.repositories.EMGroupManagerRepository;
 import com.hyphenate.easeim.common.repositories.EMPushManagerRepository;
 import com.hyphenate.easeim.section.chat.activity.ChatActivity;
 import com.hyphenate.easeim.section.group.GroupHelper;
+import com.hyphenate.easeui.domain.EaseUser;
 import com.hyphenate.easeui.interfaces.EaseGroupListener;
 import com.hyphenate.easeui.manager.EaseAtMessageHelper;
 import com.hyphenate.easeui.manager.EaseChatPresenter;
@@ -266,7 +268,21 @@ public class ChatPresenter extends EaseChatPresenter {
             }
             if(!isContactsSyncedWithServer) {
                 EMLog.i(TAG, "isContactsSyncedWithServer");
-                new EMContactManagerRepository().getContactList(null);
+                new EMContactManagerRepository().getContactList(new ResultCallBack<List<EaseUser>>() {
+                    @Override
+                    public void onSuccess(List<EaseUser> value) {
+                        EmUserDao userDao = DemoDbHelper.getInstance(DemoApplication.getInstance()).getUserDao();
+                        if(userDao != null) {
+                            userDao.clearUsers();
+                            userDao.insert(EmUserEntity.parseList(value));
+                        }
+                    }
+
+                    @Override
+                    public void onError(int error, String errorMsg) {
+
+                    }
+                });
                 isContactsSyncedWithServer = true;
             }
             if(!isBlackListSyncedWithServer) {
@@ -897,13 +913,15 @@ public class ChatPresenter extends EaseChatPresenter {
                     break;
                 case GROUP_KICK:
                     // TODO: person, reason from ext
-                    saveGroupNotification(groupId, /*groupName*/"",  /*person*/usernames.get(0), /*reason*/"", InviteMessageStatus.MULTI_DEVICE_GROUP_INVITE_DECLINE);
+                    saveGroupNotification(groupId, /*groupName*/"",  /*person*/usernames.get(0), /*reason*/"", InviteMessageStatus.MULTI_DEVICE_GROUP_KICK);
+                    message = DemoConstant.GROUP_CHANGE;
 
                     showToast("GROUP_KICK");
                     break;
                 case GROUP_BAN:
                     // TODO: person from ext
                     saveGroupNotification(groupId, /*groupName*/"",  /*person*/usernames.get(0), /*reason*/"", InviteMessageStatus.MULTI_DEVICE_GROUP_BAN);
+                    message = DemoConstant.GROUP_CHANGE;
 
                     showToast("GROUP_BAN");
                     break;
@@ -933,12 +951,14 @@ public class ChatPresenter extends EaseChatPresenter {
                 case GROUP_ADD_ADMIN:
                     // TODO: person from ext
                     saveGroupNotification(groupId, /*groupName*/"",  /*person*/usernames.get(0), /*reason*/"", InviteMessageStatus.MULTI_DEVICE_GROUP_ADD_ADMIN);
+                    message = DemoConstant.GROUP_CHANGE;
 
                     showToast("GROUP_ADD_ADMIN");
                     break;
                 case GROUP_REMOVE_ADMIN:
                     // TODO: person from ext
                     saveGroupNotification(groupId, /*groupName*/"",  /*person*/usernames.get(0), /*reason*/"", InviteMessageStatus.MULTI_DEVICE_GROUP_REMOVE_ADMIN);
+                    message = DemoConstant.GROUP_CHANGE;
 
                     showToast("GROUP_REMOVE_ADMIN");
                     break;

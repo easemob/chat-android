@@ -13,6 +13,7 @@ import com.hyphenate.easeim.DemoApplication;
 import com.hyphenate.easeim.DemoHelper;
 import com.hyphenate.easeim.common.constant.DemoConstant;
 import com.hyphenate.easeim.common.db.DemoDbHelper;
+import com.hyphenate.easeim.common.db.entity.EmUserEntity;
 import com.hyphenate.easeim.common.interfaceOrImplement.DemoEmCallBack;
 import com.hyphenate.easeim.common.livedatas.LiveDataBus;
 import com.hyphenate.easeim.common.net.ErrorCode;
@@ -199,10 +200,29 @@ public class EMClientRepository extends BaseEMRepository{
         loadAllConversationsAndGroups();
         //从服务器拉取加入的群，防止进入会话页面只显示id
         getAllJoinGroup();
+        // get contacts from server
+        getContactsFromServer();
         // get current user id
         String currentUser = EMClient.getInstance().getCurrentUser();
         EaseUser user = new EaseUser(currentUser);
         callBack.onSuccess(new MutableLiveData<>(user));
+    }
+
+    private void getContactsFromServer() {
+        new EMContactManagerRepository().getContactList(new ResultCallBack<List<EaseUser>>() {
+            @Override
+            public void onSuccess(List<EaseUser> value) {
+                if(getUserDao() != null) {
+                    getUserDao().clearUsers();
+                    getUserDao().insert(EmUserEntity.parseList(value));
+                }
+            }
+
+            @Override
+            public void onError(int error, String errorMsg) {
+
+            }
+        });
     }
 
     private void getAllJoinGroup() {
