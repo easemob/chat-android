@@ -660,7 +660,7 @@ public class DemoHelper {
     public Map<String, EaseUser> getContactList() {
         if (isLoggedIn() && contactList == null) {
             updateTimeoutUsers();
-            contactList = demoModel.getContactList();
+            contactList = demoModel.getAllUserList();
         }
 
         // return a empty non-null object to avoid app crash
@@ -744,6 +744,21 @@ public class DemoHelper {
      */
     public boolean isConComeFromServer() {
         return getModel().isConComeFromServer();
+    }
+
+    /**
+     * Determine if it is from the current user account of another device
+     * @param username
+     * @return
+     */
+    public boolean isCurrentUserFromOtherDevice(String username) {
+        if(TextUtils.isEmpty(username)) {
+            return false;
+        }
+        if(username.contains("/") && username.contains(EMClient.getInstance().getCurrentUser())) {
+            return true;
+        }
+        return false;
     }
 
 

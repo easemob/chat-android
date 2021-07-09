@@ -42,7 +42,7 @@ public class SearchFriendsActivity extends SearchActivity {
         super.initData();
         result = new ArrayList<>();
         if(DemoDbHelper.getInstance(mContext).getUserDao() != null) {
-            mData = DemoDbHelper.getInstance(mContext).getUserDao().loadAllEaseUsers();
+            mData = DemoDbHelper.getInstance(mContext).getUserDao().loadAllContactUsers();
         }
     }
 

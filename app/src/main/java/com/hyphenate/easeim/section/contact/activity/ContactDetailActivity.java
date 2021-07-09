@@ -61,7 +61,6 @@ public class ContactDetailActivity extends BaseInitActivity implements EaseTitle
     private ContactDetailViewModel viewModel;
     private AddContactViewModel addContactViewModel;
     private ContactBlackViewModel blackViewModel;
-    private EMUserInfo userInfo;
     private LiveDataBus contactChangeLiveData;
 
     public static void actionStart(Context context, EaseUser user) {
@@ -155,6 +154,7 @@ public class ContactDetailActivity extends BaseInitActivity implements EaseTitle
             mGroupFriend.setVisibility(View.GONE);
             mBtnAddContact.setVisibility(View.VISIBLE);
         }
+        updateLayout();
     }
 
     @Override
@@ -173,7 +173,6 @@ public class ContactDetailActivity extends BaseInitActivity implements EaseTitle
     protected void initData() {
         super.initData();
         contactChangeLiveData = LiveDataBus.get();
-        getDetailInfo();
         viewModel = new ViewModelProvider(this).get(ContactDetailViewModel.class);
         viewModel.blackObservable().observe(this, response -> {
             parseResource(response, new OnResourceParseCallback<Boolean>() {
@@ -190,6 +189,16 @@ public class ContactDetailActivity extends BaseInitActivity implements EaseTitle
                 public void onSuccess(Boolean data) {
                     LiveDataBus.get().with(DemoConstant.CONTACT_CHANGE).postValue(EaseEvent.create(DemoConstant.CONTACT_CHANGE, EaseEvent.TYPE.CONTACT));
                     finish();
+                }
+            });
+        });
+        viewModel.userInfoObservable().observe(this, response -> {
+            parseResource(response, new OnResourceParseCallback<EaseUser>() {
+                @Override
+                public void onSuccess(EaseUser data) {
+                    mUser = data;
+                    updateLayout();
+                    sendEvent();
                 }
             });
         });
@@ -218,6 +227,26 @@ public class ContactDetailActivity extends BaseInitActivity implements EaseTitle
                 }
             });
         });
+
+        viewModel.getUserInfoById(mUser.getUsername());
+    }
+
+    private void sendEvent() {
+        //更新本地联系人列表
+        DemoHelper.getInstance().updateContactList();
+        EaseEvent event = EaseEvent.create(DemoConstant.CONTACT_UPDATE, EaseEvent.TYPE.CONTACT);
+        event.message = mUser.getUsername();
+        //发送联系人更新事件
+        contactChangeLiveData.with(DemoConstant.CONTACT_UPDATE).postValue(event);
+    }
+
+    private void updateLayout() {
+        mTvName.setText(mUser.getNickname());
+        Glide.with(mContext)
+                .load(mUser.getAvatar())
+                .placeholder(R.drawable.ease_default_avatar)
+                .error(R.drawable.ease_default_avatar)
+                .into(mAvatarUser);
     }
 
     private void showDeleteDialog(EaseUser user) {
@@ -277,72 +306,4 @@ public class ContactDetailActivity extends BaseInitActivity implements EaseTitle
                 .show();
     }
 
-    private void getDetailInfo(){
-        String[] userId = new String[1];
-        userId[0] = mUser.getUsername();
-        boolean isSelf = mUser.getUsername().contains(EMClient.getInstance().getCurrentUser());
-        if(isSelf){
-            userId[0] = EMClient.getInstance().getCurrentUser();
-        }
-        EMClient.getInstance().userInfoManager().fetchUserInfoByUserId(userId, new EMValueCallBack<Map<String, EMUserInfo>>() {
-            @Override
-            public void onSuccess(Map<String, EMUserInfo> userInfos) {
-                runOnUiThread(new Runnable() {
-                    public void run() {
-                        if(isSelf){
-                            userInfo = userInfos.get(EMClient.getInstance().getCurrentUser());
-                        }else{
-                            userInfo = userInfos.get(mUser.getUsername());
-                        }
-
-                        if (userInfo != null && userInfo.getNickName() != null && userInfo.getNickName().length() > 0) {
-                            mTvName.setText(userInfo.getNickName());
-                        }else{
-                            mTvName.setText(mUser.getUsername());
-                        }
-                        if (userInfo != null && userInfo.getAvatarUrl() != null && userInfo.getAvatarUrl().length() > 0) {
-                            Glide.with(mContext).load(userInfo.getAvatarUrl()).placeholder(R.drawable.em_login_logo).into(mAvatarUser);
-                        }
-                        //更新本地数据库
-                        warpEMUserInfo(userInfo);
-                    }
-                });
-            }
-
-            @Override
-            public void onError(int error, String errorMsg) {
-                runOnUiThread(new Runnable() {
-                    public void run() {
-                        mTvName.setText(mUser.getUsername());
-                    }
-                });
-            }
-        });
-    }
-
-    private void warpEMUserInfo(EMUserInfo userInfo){
-        if(userInfo != null && mUser != null){
-            EmUserEntity userEntity = new EmUserEntity();
-            userEntity.setUsername(mUser.getUsername());
-            userEntity.setNickname(userInfo.getNickName());
-            userEntity.setEmail(userInfo.getEmail());
-            userEntity.setAvatar(userInfo.getAvatarUrl());
-            userEntity.setBirth(userInfo.getBirth());
-            userEntity.setGender(userInfo.getGender());
-            userEntity.setExt(userInfo.getExt());
-            userEntity.setSign(userInfo.getSignature());
-            EaseCommonUtils.setUserInitialLetter(userEntity);
-            userEntity.setContact(mUser.getContact());
-
-            //更新本地数据库信息
-            DemoHelper.getInstance().update(userEntity);
-
-            //更新本地联系人列表
-            DemoHelper.getInstance().updateContactList();
-            EaseEvent event = EaseEvent.create(DemoConstant.CONTACT_UPDATE, EaseEvent.TYPE.CONTACT);
-            event.message = mUser.getUsername();
-            //发送联系人更新事件
-            contactChangeLiveData.with(DemoConstant.CONTACT_UPDATE).postValue(event);
-        }
-    }
 }

@@ -81,7 +81,7 @@ public class DeveloperSetActivity extends BaseInitActivity implements EaseTitleB
     @Override
     protected void initData() {
         super.initData();
-        itemVersion.getTvContent().setText("V"+ BuildConfig.VERSION_NAME);
+        itemVersion.getTvContent().setText("V"+ EMClient.VERSION);
 
         settingsModel = DemoHelper.getInstance().getModel();
         options = EMClient.getInstance().getOptions();

@@ -70,7 +70,7 @@ public class DemoModel {
             return new HashMap<>();
         }
         Map<String, EaseUser> map = new HashMap<>();
-        List<EaseUser> users = dao.loadAllEaseUsers();
+        List<EaseUser> users = dao.loadAllContactUsers();
         if(users != null && !users.isEmpty()) {
             for (EaseUser user : users) {
                 map.put(user.getUsername(), user);
