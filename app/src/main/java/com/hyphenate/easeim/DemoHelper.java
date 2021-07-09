@@ -660,7 +660,7 @@ public class DemoHelper {
     public Map<String, EaseUser> getContactList() {
         if (isLoggedIn() && contactList == null) {
             updateTimeoutUsers();
-            contactList = demoModel.getContactList();
+            contactList = demoModel.getAllUserList();
         }
 
         // return a empty non-null object to avoid app crash
