@@ -28,6 +28,7 @@ import com.hyphenate.easeim.R;
 import com.hyphenate.easeim.common.constant.DemoConstant;
 import com.hyphenate.easeim.common.livedatas.LiveDataBus;
 import com.hyphenate.easeim.common.model.EmojiconExampleGroupData;
+import com.hyphenate.easeim.section.av.VideoCallActivity;
 import com.hyphenate.easeim.section.base.BaseActivity;
 import com.hyphenate.easeim.section.chat.activity.ForwardMessageActivity;
 import com.hyphenate.easeim.section.chat.activity.ImageGridActivity;
@@ -244,10 +245,10 @@ public class ChatFragment extends EaseChatFragment implements OnRecallMessageRes
                     public void OnItemClick(View view, int position) {
                         switch (position) {
                             case 0 :
-                                EaseCallKit.getInstance().startSingleCall(EaseCallType.SINGLE_VIDEO_CALL,conversationId,null);
+                                EaseCallKit.getInstance().startSingleCall(EaseCallType.SINGLE_VIDEO_CALL,conversationId,null, VideoCallActivity.class);
                                 break;
                             case 1 :
-                                EaseCallKit.getInstance().startSingleCall(EaseCallType.SINGLE_VOICE_CALL,conversationId,null);
+                                EaseCallKit.getInstance().startSingleCall(EaseCallType.SINGLE_VOICE_CALL,conversationId,null, VideoCallActivity.class);
                                 break;
                         }
                     }

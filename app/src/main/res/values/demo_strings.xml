@@ -564,4 +564,7 @@
     <string name="title_activity_choose_head_image">选择头像</string>
     <string name="demo_contact_get_userInfo_failed">获取用户属性失败</string>
 
+    <string name="demo_activity_label_video_call">video_call</string>
+    <string name="demo_activity_label_multi_call">multi_call</string>
+
 </resources>

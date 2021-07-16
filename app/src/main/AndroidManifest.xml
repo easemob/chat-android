@@ -351,16 +351,18 @@
             android:screenOrientation="portrait"/>
         <!--视频通话-->
         <activity
-            android:name="com.hyphenate.easecallkit.ui.EaseVideoCallActivity"
+            android:name=".section.av.VideoCallActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:excludeFromRecents="true"
             android:launchMode="singleInstance"
+            android:label="@string/demo_activity_label_video_call"
             android:screenOrientation="portrait"/>
         <activity
-            android:name="com.hyphenate.easecallkit.ui.EaseMultipleVideoActivity"
+            android:name=".section.av.MultipleVideoActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:excludeFromRecents="true"
             android:launchMode="singleInstance"
+            android:label="@string/demo_activity_label_multi_call"
             android:screenOrientation="portrait"/>
         <!--会议成员邀请-->
         <activity
@@ -531,7 +533,6 @@
         <activity android:name=".section.me.activity.MessagePushStyleActivity" />
         <!--WebView加载网页-->
         <activity android:name=".section.base.WebViewActivity" />
-        <!--捕获屏幕service-->
     </application>
 
 </manifest>
