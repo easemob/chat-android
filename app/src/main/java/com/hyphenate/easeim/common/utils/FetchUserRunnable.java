@@ -100,6 +100,7 @@ public class FetchUserRunnable implements Runnable{
     private void warpEMUserInfo(Map<String, EMUserInfo> userInfos){
         Iterator<String> it_user = userInfos.keySet().iterator();
         List<EaseUser> userEntities = new ArrayList<>();
+        boolean refreshContact = false;
         Map<String, EaseUser> exitUsers = DemoHelper.getInstance().getContactList();
         while(it_user.hasNext()) {
             String userId = it_user.next();
@@ -120,6 +121,9 @@ public class FetchUserRunnable implements Runnable{
                 if(exitUsers.containsKey(userInfo.getUserId())) {
                     EaseUser user = exitUsers.get(userInfo.getUserId());
                     if(user != null) {
+                        if(user.getContact() == 0 || user.getContact() == 1) {
+                            refreshContact = true;
+                        }
                         userEntity.setContact(user.getContact());
                     }else {
                         userEntity.setContact(3);
@@ -142,12 +146,14 @@ public class FetchUserRunnable implements Runnable{
         //更新本地联系人列表
         DemoHelper.getInstance().updateContactList();
 
-        //通知UI刷新列表
-        EaseEvent event = EaseEvent.create(DemoConstant.CONTACT_ADD, EaseEvent.TYPE.CONTACT);
-        event.message = userInfos.keySet().toString();
+        if(refreshContact) {
+            //通知UI刷新列表
+            EaseEvent event = EaseEvent.create(DemoConstant.CONTACT_UPDATE, EaseEvent.TYPE.CONTACT);
+            event.message = userInfos.keySet().toString();
 
-        //发送联系人更新事件
-        LiveDataBus.get().with(DemoConstant.CONTACT_ADD).postValue(event);
+            //发送联系人更新事件
+            LiveDataBus.get().with(DemoConstant.CONTACT_UPDATE).postValue(event);
+        }
         EMLog.e(TAG," warpEMUserInfo userId:" + userInfos.keySet().toString() + "  end");
     }
 }

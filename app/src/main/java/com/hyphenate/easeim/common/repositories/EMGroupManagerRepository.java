@@ -26,6 +26,8 @@ import com.hyphenate.easeui.domain.EaseUser;
 import com.hyphenate.easeui.utils.EaseCommonUtils;
 import com.hyphenate.exceptions.HyphenateException;
 
+import org.json.JSONObject;
+
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -327,36 +329,22 @@ public class EMGroupManagerRepository extends BaseEMRepository{
                     callBack.onError(ErrorCode.EM_NOT_LOGIN);
                     return;
                 }
-                DemoHelper.getInstance().getGroupManager().asyncGetGroupFromServer(groupId, new EMValueCallBack<EMGroup>() {
-                    @Override
-                    public void onSuccess(EMGroup value) {
-                        List<String> members = value.getMembers();
-                        Log.e("TAG", "memberCount = "+value.getMemberCount());
-                        if(members.size() < (value.getMemberCount() - value.getAdminList().size() - 1)) {
-                            members = getAllGroupMemberByServer(groupId);
-                        }
-                        //List<EaseUser> users = EmUserEntity.parse(members);
-                        List<EaseUser> users = new ArrayList<>();
-                        if(members != null && !members.isEmpty()){
-                            for(int i = 0; i < members.size(); i++){
-                               EaseUser user = DemoHelper.getInstance().getUserInfo(members.get(i));
-                               if(user != null){
-                                   users.add(user);
-                               }else{
-                                   EaseUser m_user = new EaseUser(members.get(i));
-                                   users.add(m_user);
-                               }
+                runOnIOThread(()-> {
+                    List<String> members = getAllGroupMemberByServer(groupId);
+                    List<EaseUser> users = new ArrayList<>();
+                    if(members != null && !members.isEmpty()){
+                        for(int i = 0; i < members.size(); i++){
+                            EaseUser user = DemoHelper.getInstance().getUserInfo(members.get(i));
+                            if(user != null){
+                                users.add(user);
+                            }else{
+                                EaseUser m_user = new EaseUser(members.get(i));
+                                users.add(m_user);
                             }
                         }
-                        sortUserData(users);
-                        callBack.onSuccess(createLiveData(users));
-
                     }
-
-                    @Override
-                    public void onError(int error, String errorMsg) {
-                        callBack.onError(error, errorMsg);
-                    }
+                    sortUserData(users);
+                    callBack.onSuccess(createLiveData(users));
                 });
             }
 
@@ -409,26 +397,35 @@ public class EMGroupManagerRepository extends BaseEMRepository{
             protected void createCall(@NonNull ResultCallBack<LiveData<List<String>>> callBack) {
                 EaseThreadManager.getInstance().runOnIOThread(() -> {
                     List<String> list = null;
-                    List<String> result = new ArrayList<>();
-                    int pageSize = 200;
-                    do{
-                        try {
-                            list = getGroupManager().fetchGroupBlackList(groupId, 0, pageSize);
-                        } catch (HyphenateException e) {
-                            e.printStackTrace();
-                            callBack.onError(e.getErrorCode(), e.getMessage());
-                            break;
-                        }
-                        if(list != null) {
-                            result.addAll(list);
-                        }
-                    }while (list != null && list.size() >= 200);
-                    callBack.onSuccess(createLiveData(result));
+                    try {
+                        list = fetchGroupBlacklistFromServer(groupId);
+                    } catch (HyphenateException e) {
+                        e.printStackTrace();
+                        callBack.onError(e.getErrorCode(), e.getMessage());
+                        return;
+                    }
+                    if(list == null) {
+                        list = new ArrayList<>();
+                    }
+                    callBack.onSuccess(createLiveData(list));
                 });
 
             }
 
         }.asLiveData();
+    }
+
+    private List<String> fetchGroupBlacklistFromServer(String groupId) throws HyphenateException {
+        int pageSize = 200;
+        List<String> list = null;
+        List<String> result = new ArrayList<>();
+        do{
+            list = getGroupManager().fetchGroupBlackList(groupId, 0, pageSize);
+            if(list != null) {
+                result.addAll(list);
+            }
+        }while (list != null && list.size() >= pageSize);
+        return result;
     }
 
     /**

@@ -47,6 +47,9 @@ public interface EmUserDao {
     @Query("select * from em_users")
     List<EaseUser> loadAllEaseUsers();
 
+    @Query("select * from em_users where contact = 0 or contact = 1")
+    List<EaseUser> loadAllContactUsers();
+
     @Query("delete from em_users")
     int clearUsers();
 

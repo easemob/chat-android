@@ -20,8 +20,8 @@ import com.hyphenate.easeim.common.livedatas.LiveDataBus;
 import com.hyphenate.easeui.constants.EaseConstant;
 import com.hyphenate.easeui.model.EaseEvent;
 import com.hyphenate.easeui.utils.EaseCommonUtils;
+import com.hyphenate.easeui.utils.EaseFileUtils;
 import com.hyphenate.exceptions.HyphenateException;
-import com.hyphenate.util.UriUtils;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -77,11 +77,11 @@ public class PushAndMessageHelper {
         }
         Uri localUri = body.getLocalUri();
         Context context = DemoApplication.getInstance().getApplicationContext();
-        if(UriUtils.isFileExistByUri(context, localUri)) {
+        if(EaseFileUtils.isFileExistByUri(context, localUri)) {
             return localUri;
         }
         localUri = body.thumbnailLocalUri();
-        if(UriUtils.isFileExistByUri(context, localUri)) {
+        if(EaseFileUtils.isFileExistByUri(context, localUri)) {
             return localUri;
         }
         return null;

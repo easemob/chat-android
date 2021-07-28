@@ -1,20 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="wrap_content"
+    android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical">
+
     <RelativeLayout
-        android:layout_width="343dp"
+        android:layout_width="match_parent"
         android:layout_height="251dp"
         android:layout_gravity="center"
         android:background="#FFFFFF"
         android:orientation="vertical"
         android:radius="8dp">
+
         <TextView
             android:id="@+id/info_view"
             android:layout_width="80dp"
             android:layout_height="28dp"
-            android:layout_marginLeft="16dp"
+            android:layout_marginStart="16dp"
             android:layout_marginTop="16dp"
             android:gravity="center"
             android:text="发送给:"
@@ -24,57 +27,61 @@
             android:id="@+id/head_view"
             android:layout_width="60dp"
             android:layout_height="60dp"
-            android:layout_marginLeft="17dp"
-            android:layout_marginTop="59dp"
+            android:layout_marginTop="20dp"
+            android:layout_alignStart="@id/info_view"
+            android:layout_marginStart="2dp"
+            android:layout_below="@id/info_view"
             android:src="@drawable/em_login_logo"/>
         <TextView
             android:id="@+id/user_nick_name"
             android:layout_width="150dp"
             android:layout_height="24dp"
-            android:layout_marginLeft="89dp"
-            android:layout_marginTop="77dp"
-            android:gravity="left"
-            android:hint="用户姓名"
+            android:layout_below="@id/info_view"
+            android:layout_toEndOf="@id/head_view"
+            android:layout_marginStart="15dp"
+            android:layout_marginTop="35dp"
+            tools:hint="用户姓名"
             android:textColor="#333333"
             android:textSize="16sp" />
         <TextView
             android:id="@+id/userId_view"
             android:layout_width="276dp"
             android:layout_height="20dp"
-            android:layout_marginLeft="34dp"
-            android:layout_marginTop="151dp"
-            android:gravity="left"
-            android:hint="[个人名片]"
+            android:layout_alignStart="@id/info_view"
+            android:layout_marginStart="25dp"
+            android:layout_below="@id/head_view"
+            android:layout_marginTop="30dp"
+            tools:hint="[个人名片]"
             android:textColor="#999999"
             android:textSize="16sp" />
-        <RelativeLayout
+
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="22dp"
             android:layout_marginTop="212dp">
+
             <Button
                 android:id="@+id/btn_cancel"
-                android:layout_width="32dp"
+                android:layout_width="0dp"
+                android:layout_weight="1"
                 android:layout_height="match_parent"
-                android:layout_alignParentLeft="true"
-                android:layout_marginLeft="70dp"
                 android:background="@color/transparent"
-                android:text="取消"
+                android:text="@string/cancel"
                 android:gravity="center"
                 android:textColor="#333333"
                 android:textSize="16sp" />
             <Button
                 android:id="@+id/btn_send"
-                android:layout_width="32dp"
+                android:layout_width="0dp"
+                android:layout_weight="1"
                 android:layout_height="match_parent"
-                android:layout_alignParentRight="true"
-                android:layout_marginRight="80dp"
                 android:gravity="center"
                 android:background="@color/transparent"
-                android:text="确定"
+                android:text="@string/confirm"
                 android:textColor="#04AEF0"
                 android:textSize="16sp" />
-        </RelativeLayout>
-
+        </LinearLayout>
 
     </RelativeLayout>
+
 </LinearLayout>
