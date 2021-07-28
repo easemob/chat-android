@@ -2,15 +2,14 @@ package com.hyphenate.easeim.section.contact.viewmodels;
 
 import android.app.Application;
 
-import com.hyphenate.easeim.common.db.entity.EmUserEntity;
+import androidx.annotation.NonNull;
+import androidx.lifecycle.AndroidViewModel;
+import androidx.lifecycle.LiveData;
+
 import com.hyphenate.easeim.common.livedatas.SingleSourceLiveData;
 import com.hyphenate.easeim.common.net.Resource;
 import com.hyphenate.easeim.common.repositories.EMContactManagerRepository;
 import com.hyphenate.easeui.domain.EaseUser;
-
-import androidx.annotation.NonNull;
-import androidx.lifecycle.AndroidViewModel;
-import androidx.lifecycle.LiveData;
 
 public class ContactDetailViewModel extends AndroidViewModel {
     private EMContactManagerRepository repository;
@@ -46,8 +45,8 @@ public class ContactDetailViewModel extends AndroidViewModel {
         blackObservable.setSource(repository.addUserToBlackList(username, both));
     }
 
-    public void getUserInfoById(String username) {
-        userInfoObservable.setSource(repository.getUserInfoById(username));
+    public void getUserInfoById(String username, boolean mIsFriend) {
+        userInfoObservable.setSource(repository.getUserInfoById(username,mIsFriend));
     }
 
 }
