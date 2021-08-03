@@ -18,9 +18,9 @@ import com.hyphenate.easeim.common.widget.ArrowItemView;
 import com.hyphenate.easeim.common.widget.SwitchItemView;
 import com.hyphenate.easeim.section.base.BaseInitActivity;
 import com.hyphenate.easeim.section.chat.viewmodel.ChatViewModel;
+import com.hyphenate.easeim.section.contact.activity.ContactDetailActivity;
 import com.hyphenate.easeim.section.dialog.DemoDialogFragment;
 import com.hyphenate.easeim.section.dialog.SimpleDialogFragment;
-import com.hyphenate.easeim.section.contact.activity.ContactDetailActivity;
 import com.hyphenate.easeim.section.search.SearchSingleChatActivity;
 import com.hyphenate.easeui.constants.EaseConstant;
 import com.hyphenate.easeui.domain.EaseUser;
@@ -28,12 +28,15 @@ import com.hyphenate.easeui.model.EaseEvent;
 import com.hyphenate.easeui.utils.EaseCommonUtils;
 import com.hyphenate.easeui.widget.EaseTitleBar;
 
+import java.util.List;
+
 public class SingleChatSetActivity extends BaseInitActivity implements EaseTitleBar.OnBackPressListener, View.OnClickListener, SwitchItemView.OnCheckedChangeListener {
     private EaseTitleBar titleBar;
     private ArrowItemView itemUserInfo;
     private ArrowItemView itemSearchHistory;
     private ArrowItemView itemClearHistory;
     private SwitchItemView itemSwitchTop;
+    private SwitchItemView itemUserNotDisturb;
 
     private ChatViewModel viewModel;
     private String toChatUsername;
@@ -64,6 +67,7 @@ public class SingleChatSetActivity extends BaseInitActivity implements EaseTitle
         itemSearchHistory = findViewById(R.id.item_search_history);
         itemClearHistory = findViewById(R.id.item_clear_history);
         itemSwitchTop = findViewById(R.id.item_switch_top);
+        itemUserNotDisturb = findViewById(R.id.item_user_not_disturb);
     }
 
     @Override
@@ -74,6 +78,7 @@ public class SingleChatSetActivity extends BaseInitActivity implements EaseTitle
         itemSearchHistory.setOnClickListener(this);
         itemClearHistory.setOnClickListener(this);
         itemSwitchTop.setOnCheckedChangeListener(this);
+        itemUserNotDisturb.setOnCheckedChangeListener(this);
     }
 
     @Override
@@ -96,7 +101,33 @@ public class SingleChatSetActivity extends BaseInitActivity implements EaseTitle
                 }
             });
         });
+        viewModel.getNoPushUsersObservable().observe(this, response -> {
+            parseResource(response, new OnResourceParseCallback<List<String>>() {
+                @Override
+                public void onSuccess(List<String> noPushUsers) {
+                    if (noPushUsers.contains(toChatUsername)) {
+                        itemUserNotDisturb.getSwitch().setChecked(true);
+                    }else{
+                        itemUserNotDisturb.getSwitch().setChecked(false);
+                    }
+                }
+            });
+        });
+        viewModel.setNoPushUsersObservable().observe(this, response -> {
+            parseResource(response, new OnResourceParseCallback<Boolean>() {
+                @Override
+                public void onSuccess(Boolean bool) {
+                    //设置免打扰成功
+                }
+                @Override
+                public void onError(int code, String message){
+                    //可根据需求做出提示
+                    //ToastUtils.showFailToast("设置用户免打扰失败");
 
+                }
+            });
+        });
+        viewModel.getNoPushUsers();
     }
 
     @Override
@@ -107,15 +138,15 @@ public class SingleChatSetActivity extends BaseInitActivity implements EaseTitle
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
-            case R.id.item_user_info :
+            case R.id.item_user_info:
                 EaseUser user = new EaseUser();
                 user.setUsername(toChatUsername);
                 ContactDetailActivity.actionStart(mContext, user);
                 break;
-            case R.id.item_search_history :
+            case R.id.item_search_history:
                 SearchSingleChatActivity.actionStart(mContext, toChatUsername);
                 break;
-            case R.id.item_clear_history :
+            case R.id.item_clear_history:
                 clearHistory();
                 break;
         }
@@ -138,9 +169,12 @@ public class SingleChatSetActivity extends BaseInitActivity implements EaseTitle
     @Override
     public void onCheckedChanged(SwitchItemView buttonView, boolean isChecked) {
         switch (buttonView.getId()) {
-            case R.id.item_switch_top :
-                conversation.setExtField(isChecked ? (System.currentTimeMillis()+"") : "");
+            case R.id.item_switch_top:
+                conversation.setExtField(isChecked ? (System.currentTimeMillis() + "") : "");
                 LiveDataBus.get().with(DemoConstant.MESSAGE_CHANGE_CHANGE).postValue(new EaseEvent(DemoConstant.MESSAGE_CHANGE_CHANGE, EaseEvent.TYPE.MESSAGE));
+                break;
+            case R.id.item_user_not_disturb:
+                viewModel.setUserNotDisturb(toChatUsername, isChecked);
                 break;
         }
     }

@@ -225,4 +225,55 @@ public class EMChatManagerRepository extends BaseEMRepository{
             }
         }.asLiveData();
     }
+
+    /**
+     * 设置单聊用户聊天免打扰
+     *
+     * @param userId 用户名
+     * @param noPush 是否免打扰
+     */
+    public LiveData<Resource<Boolean>> setUserNotDisturb(String userId, boolean noPush) {
+        return new NetworkOnlyResource<Boolean>() {
+            @Override
+            protected void createCall(@NonNull ResultCallBack<LiveData<Boolean>> callBack) {
+                runOnIOThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        List<String> onPushList = new ArrayList<>();
+                        onPushList.add(userId);
+                        try {
+                            getPushManager().updatePushServiceForUsers(onPushList, noPush);
+                            callBack.onSuccess(createLiveData(true));
+                        } catch (HyphenateException e) {
+                            e.printStackTrace();
+                            callBack.onError(e.getErrorCode(), e.getDescription());
+                        }
+                    }
+                });
+
+            }
+        }.asLiveData();
+    }
+
+    /**
+     * 获取聊天免打扰用户
+     */
+    public LiveData<Resource<List<String>>> getNoPushUsers() {
+        return new NetworkOnlyResource<List<String>>() {
+            @Override
+            protected void createCall(@NonNull ResultCallBack<LiveData<List<String>>> callBack) {
+                runOnIOThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        List<String> noPushUsers = getPushManager().getNoPushUsers();
+                        if (noPushUsers != null && noPushUsers.size() != 0) {
+                            callBack.onSuccess(createLiveData(noPushUsers));
+                        }
+                    }
+                });
+
+            }
+        }.asLiveData();
+    }
+
 }

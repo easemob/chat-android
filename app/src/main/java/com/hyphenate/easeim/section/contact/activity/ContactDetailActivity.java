@@ -13,35 +13,28 @@ import androidx.constraintlayout.widget.Group;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.bumptech.glide.Glide;
-import com.hyphenate.EMValueCallBack;
-import com.hyphenate.chat.EMClient;
-import com.hyphenate.chat.EMUserInfo;
 import com.hyphenate.easecallkit.EaseCallKit;
 import com.hyphenate.easecallkit.base.EaseCallType;
-
 import com.hyphenate.easeim.DemoHelper;
 import com.hyphenate.easeim.R;
 import com.hyphenate.easeim.common.constant.DemoConstant;
 import com.hyphenate.easeim.common.db.DemoDbHelper;
-import com.hyphenate.easeim.common.db.entity.EmUserEntity;
 import com.hyphenate.easeim.common.interfaceOrImplement.OnResourceParseCallback;
 import com.hyphenate.easeim.common.livedatas.LiveDataBus;
 import com.hyphenate.easeim.section.base.BaseInitActivity;
 import com.hyphenate.easeim.section.chat.activity.ChatActivity;
-import com.hyphenate.easeim.section.dialog.DemoDialogFragment;
-import com.hyphenate.easeim.section.dialog.SimpleDialogFragment;
 import com.hyphenate.easeim.section.contact.viewmodels.AddContactViewModel;
 import com.hyphenate.easeim.section.contact.viewmodels.ContactBlackViewModel;
 import com.hyphenate.easeim.section.contact.viewmodels.ContactDetailViewModel;
+import com.hyphenate.easeim.section.dialog.DemoDialogFragment;
+import com.hyphenate.easeim.section.dialog.SimpleDialogFragment;
 import com.hyphenate.easeui.constants.EaseConstant;
 import com.hyphenate.easeui.domain.EaseUser;
 import com.hyphenate.easeui.model.EaseEvent;
-import com.hyphenate.easeui.utils.EaseCommonUtils;
 import com.hyphenate.easeui.widget.EaseImageView;
 import com.hyphenate.easeui.widget.EaseTitleBar;
 
 import java.util.List;
-import java.util.Map;
 
 public class ContactDetailActivity extends BaseInitActivity implements EaseTitleBar.OnBackPressListener, View.OnClickListener {
     private EaseTitleBar mEaseTitleBar;
@@ -228,7 +221,7 @@ public class ContactDetailActivity extends BaseInitActivity implements EaseTitle
             });
         });
 
-        viewModel.getUserInfoById(mUser.getUsername());
+        viewModel.getUserInfoById(mUser.getUsername(),mIsFriend);
     }
 
     private void sendEvent() {
@@ -305,5 +298,5 @@ public class ContactDetailActivity extends BaseInitActivity implements EaseTitle
                 .showCancelButton(true)
                 .show();
     }
-
+    
 }

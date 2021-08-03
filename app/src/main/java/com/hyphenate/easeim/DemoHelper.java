@@ -23,6 +23,12 @@ import com.hyphenate.chat.EMMessage;
 import com.hyphenate.chat.EMOptions;
 import com.hyphenate.chat.EMPushManager;
 import com.hyphenate.cloud.EMHttpClient;
+import com.hyphenate.easecallkit.EaseCallKit;
+import com.hyphenate.easecallkit.base.EaseCallEndReason;
+import com.hyphenate.easecallkit.base.EaseCallKitConfig;
+import com.hyphenate.easecallkit.base.EaseCallKitListener;
+import com.hyphenate.easecallkit.base.EaseCallKitTokenCallback;
+import com.hyphenate.easecallkit.base.EaseCallType;
 import com.hyphenate.easecallkit.base.EaseCallUserInfo;
 import com.hyphenate.easecallkit.base.EaseGetUserAccountCallback;
 import com.hyphenate.easecallkit.base.EaseUserAccount;
@@ -44,7 +50,6 @@ import com.hyphenate.easeim.section.chat.delegates.ChatUserCardAdapterDelegate;
 import com.hyphenate.easeim.section.chat.delegates.ChatVideoCallAdapterDelegate;
 import com.hyphenate.easeim.section.chat.delegates.ChatVoiceCallAdapterDelegate;
 import com.hyphenate.easeim.section.conference.ConferenceInviteActivity;
-import com.hyphenate.easeim.section.me.headImage.HeadImageInfo;
 import com.hyphenate.easeui.EaseIM;
 import com.hyphenate.easeui.delegate.EaseCustomAdapterDelegate;
 import com.hyphenate.easeui.delegate.EaseExpressionAdapterDelegate;
@@ -81,13 +86,6 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.TimeZone;
-
-import com.hyphenate.easecallkit.EaseCallKit;
-import com.hyphenate.easecallkit.base.EaseCallKitConfig;
-import com.hyphenate.easecallkit.base.EaseCallKitTokenCallback;
-import com.hyphenate.easecallkit.base.EaseCallEndReason;
-import com.hyphenate.easecallkit.base.EaseCallKitListener;
-import com.hyphenate.easecallkit.base.EaseCallType;
 
 import static android.content.Intent.FLAG_ACTIVITY_NEW_TASK;
 
@@ -413,8 +411,6 @@ public class DemoHelper {
         options.setRequireAck(true);
         // 设置是否需要接受方送达确认,默认false
         options.setRequireDeliveryAck(false);
-
-        options.setUseRtcConfig(true);
 
         // 设置是否使用 fcm，有些华为设备本身带有 google 服务，
         options.setUseFCM(demoModel.isUseFCM());

@@ -1,7 +1,6 @@
 package com.hyphenate.easeim.common.repositories;
 
 import android.text.TextUtils;
-import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.LiveData;
@@ -12,16 +11,13 @@ import com.hyphenate.EMValueCallBack;
 import com.hyphenate.chat.EMClient;
 import com.hyphenate.chat.EMUserInfo;
 import com.hyphenate.easeim.DemoHelper;
-import com.hyphenate.easeim.common.constant.DemoConstant;
-import com.hyphenate.easeim.common.db.DemoDbHelper;
 import com.hyphenate.easeim.common.db.entity.EmUserEntity;
 import com.hyphenate.easeim.common.interfaceOrImplement.ResultCallBack;
 import com.hyphenate.easeim.common.model.DemoModel;
 import com.hyphenate.easeim.common.net.ErrorCode;
 import com.hyphenate.easeim.common.net.Resource;
-import com.hyphenate.easeui.manager.EaseThreadManager;
 import com.hyphenate.easeui.domain.EaseUser;
-import com.hyphenate.easeui.model.EaseEvent;
+import com.hyphenate.easeui.manager.EaseThreadManager;
 import com.hyphenate.easeui.utils.EaseCommonUtils;
 import com.hyphenate.exceptions.HyphenateException;
 import com.hyphenate.util.EMLog;
@@ -556,7 +552,7 @@ public class EMContactManagerRepository extends BaseEMRepository{
         }.asLiveData();
     }
 
-    public LiveData<Resource<EaseUser>> getUserInfoById(final String username) {
+    public LiveData<Resource<EaseUser>> getUserInfoById(final String username, boolean mIsFriend) {
         return new NetworkBoundResource<EaseUser, EaseUser>() {
             @Override
             protected boolean shouldFetch(EaseUser data) {
@@ -581,7 +577,9 @@ public class EMContactManagerRepository extends BaseEMRepository{
                     @Override
                     public void onSuccess(Map<String, EMUserInfo> value) {
                         if(callBack != null) {
-                            callBack.onSuccess(createLiveData(transformEMUserInfo(value.get(finalUserId))));
+                            if(mIsFriend) {
+                                callBack.onSuccess(createLiveData(transformEMUserInfo(value.get(finalUserId))));
+                            }
                         }
                     }
 
@@ -596,7 +594,9 @@ public class EMContactManagerRepository extends BaseEMRepository{
 
             @Override
             protected void saveCallResult(EaseUser item) {
-                getUserDao().insert(EmUserEntity.parseParent(item));
+                if(mIsFriend) {
+                    getUserDao().insert(EmUserEntity.parseParent(item));
+                }
             }
         }.asLiveData();
     }
