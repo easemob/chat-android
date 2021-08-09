@@ -42,6 +42,8 @@ import com.hyphenate.easeim.common.receiver.HeadsetReceiver;
 import com.hyphenate.easeim.common.utils.FetchUserInfoList;
 import com.hyphenate.easeim.common.utils.FetchUserRunnable;
 import com.hyphenate.easeim.common.utils.PreferenceManager;
+import com.hyphenate.easeim.section.av.MultipleVideoActivity;
+import com.hyphenate.easeim.section.av.VideoCallActivity;
 import com.hyphenate.easeim.section.chat.ChatPresenter;
 import com.hyphenate.easeim.section.chat.delegates.ChatConferenceInviteAdapterDelegate;
 import com.hyphenate.easeim.section.chat.delegates.ChatNotificationAdapterDelegate;
@@ -167,6 +169,9 @@ public class DemoHelper {
         callKitConfig.setAgoraAppId("15cb0d28b87b425ea613fc46f7c9f974");
         callKitConfig.setEnableRTCToken(true);
         EaseCallKit.getInstance().init(context,callKitConfig);
+        // Register the activities which you have registered in manifest
+        EaseCallKit.getInstance().registerVideoCallClass(VideoCallActivity.class);
+        EaseCallKit.getInstance().registerMultipleVideoClass(MultipleVideoActivity.class);
         addCallkitListener();
     }
 
@@ -782,7 +787,7 @@ public class DemoHelper {
 
             @Override
             public void onEndCallWithReason(EaseCallType callType, String channelName, EaseCallEndReason reason, long callTime) {
-                EMLog.d(TAG,"onEndCallWithReason" + callType.name() + " reason:" + reason + " time:"+ callTime);
+                EMLog.d(TAG,"onEndCallWithReason" + (callType != null ? callType.name() : " callType is null ") + " reason:" + reason + " time:"+ callTime);
                 SimpleDateFormat formatter = new SimpleDateFormat("mm:ss");
                 formatter.setTimeZone(TimeZone.getTimeZone("UTC"));
                 String callString = "通话时长 ";
