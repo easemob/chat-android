@@ -16,6 +16,12 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.ViewModelProvider;
 
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.GoogleApiAvailabilityLight;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.analytics.FirebaseAnalytics;
+import com.google.firebase.messaging.FirebaseMessaging;
 import com.hyphenate.EMValueCallBack;
 import com.hyphenate.chat.EMClient;
 import com.hyphenate.chat.EMUserInfo;
@@ -193,6 +199,28 @@ public class MainActivity extends BaseInitActivity implements BottomNavigationVi
                 getApplicationContext().startActivity(intent);
             }
             PushUtils.isRtcCall  = false;
+        }
+
+        // 启用 FCM 自动初始化
+        if(!FirebaseMessaging.getInstance().isAutoInitEnabled()){
+            FirebaseMessaging.getInstance().setAutoInitEnabled(true);
+            FirebaseAnalytics.getInstance(this).setAnalyticsCollectionEnabled(true);
+        }
+        // 获取FCM 推送 token 并上传
+        if(EMClient.getInstance().getOptions().isUseFCM() && GoogleApiAvailabilityLight.getInstance().isGooglePlayServicesAvailable(this) == ConnectionResult.SUCCESS){
+            FirebaseMessaging.getInstance().getToken().addOnCompleteListener(new OnCompleteListener<String>() {
+                @Override
+                public void onComplete(@NonNull Task<String> task) {
+                    if (!task.isSuccessful()) {
+                        EMLog.d("FCM", "Fetching FCM registration token failed:"+task.getException());
+                        return;
+                    }
+                    // Get new FCM registration token
+                    String token = task.getResult();
+                    EMLog.d("FCM", token);
+                    EMClient.getInstance().sendFCMTokenToServer(token);
+                }
+            });
         }
     }
 

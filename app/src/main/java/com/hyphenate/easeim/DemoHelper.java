@@ -11,6 +11,8 @@ import android.util.Log;
 import android.util.Pair;
 import android.widget.Toast;
 
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.GoogleApiAvailabilityLight;
 import com.heytap.msp.push.HeytapPushManager;
 import com.hyphenate.EMCallBack;
 import com.hyphenate.chat.EMChatManager;
@@ -486,6 +488,16 @@ public class DemoHelper {
                 public void onError(EMPushType pushType, long errorCode) {
                     // TODO: 返回的errorCode仅9xx为环信内部错误，可从EMError中查询，其他错误请根据pushType去相应第三方推送网站查询。
                     EMLog.e("PushClient", "Push client occur a error: " + pushType + " - " + errorCode);
+                }
+
+                @Override
+                public boolean isSupportPush(EMPushType pushType, EMPushConfig pushConfig) {
+                    // 由外部实现代码判断设备是否支持FCM推送
+                    if(pushType == EMPushType.FCM){
+                        EMLog.d("FCM", "GooglePlayServiceCode:"+GoogleApiAvailabilityLight.getInstance().isGooglePlayServicesAvailable(context));
+                        return EMClient.getInstance().getOptions().isUseFCM() && GoogleApiAvailabilityLight.getInstance().isGooglePlayServicesAvailable(context) == ConnectionResult.SUCCESS;
+                    }
+                    return super.isSupportPush(pushType, pushConfig);
                 }
             });
         }
