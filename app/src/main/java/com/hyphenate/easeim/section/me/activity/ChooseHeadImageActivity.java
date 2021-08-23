@@ -4,14 +4,17 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
-
 import android.util.Pair;
 import android.view.View;
 import android.widget.TextView;
 
+import androidx.recyclerview.widget.GridLayoutManager;
+
 import com.hyphenate.EMValueCallBack;
 import com.hyphenate.chat.EMClient;
+import com.hyphenate.chat.EMUserInfo.EMUserInfoType;
 import com.hyphenate.cloud.EMHttpClient;
+import com.hyphenate.easeim.DemoHelper;
 import com.hyphenate.easeim.R;
 import com.hyphenate.easeim.common.constant.DemoConstant;
 import com.hyphenate.easeim.common.livedatas.LiveDataBus;
@@ -26,15 +29,12 @@ import com.hyphenate.easeui.widget.EaseRecyclerView;
 import com.hyphenate.easeui.widget.EaseTitleBar;
 import com.hyphenate.exceptions.HyphenateException;
 import com.hyphenate.util.EMLog;
-import com.hyphenate.chat.EMUserInfo.*;
 
 import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
-
-import androidx.recyclerview.widget.GridLayoutManager;
 
 
 /**
@@ -102,6 +102,7 @@ public class ChooseHeadImageActivity extends BaseInitActivity implements View.On
                         EMLog.d(TAG, "updateOwnInfoByAttribute :" + value);
                         showToast(R.string.demo_head_image_update_success);
                         PreferenceManager.getInstance().setCurrentUserAvatar(selectHeadUrl);
+                        DemoHelper.getInstance().getUserProfileManager().updateUserAvatar(selectHeadUrl);
                         EaseEvent event = EaseEvent.create(DemoConstant.AVATAR_CHANGE, EaseEvent.TYPE.CONTACT);
                         //发送联系人更新事件
                         event.message = selectHeadUrl;

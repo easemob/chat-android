@@ -237,50 +237,20 @@ public class SelectUserCardActivity extends BaseInitActivity implements  EaseTit
         userIdView.setText("[个人名片] " + userId);
 
         dialog.setView(dialogView);
-        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-        WindowManager.LayoutParams wmlp = dialog.getWindow().getAttributes();
-        wmlp.gravity = Gravity.CENTER | Gravity.CENTER;
+//        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+//        WindowManager.LayoutParams wmlp = dialog.getWindow().getAttributes();
+//        wmlp.gravity = Gravity.CENTER | Gravity.CENTER;
         dialog.show();
 
 
         send_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                EMMessage message = EMMessage.createSendMessage(EMMessage.Type.CUSTOM);
-                EMCustomMessageBody body = new EMCustomMessageBody(DemoConstant.USER_CARD_EVENT);
-                Map<String,String> params = new HashMap<>();
-                params.put(DemoConstant.USER_CARD_ID,userId);
-                params.put(DemoConstant.USER_CARD_NICK,user.getNickname());
-                params.put(DemoConstant.USER_CARD_AVATAR,user.getAvatar());
-                body.setParams(params);
-                message.setBody(body);
-                message.setTo(toUser);
-
-                final EMConversation conversation = EMClient.getInstance().chatManager().getConversation(userId, EMConversation.EMConversationType.Chat, true);
-                message.setMessageStatusCallback(new EMCallBack() {
-                    @Override
-                    public void onSuccess() {
-                        EMLog.d(TAG, "sendCustomMsg user card success");
-                        showToast("发送用户名片成功");
-                        LiveDataBus.get().with(DemoConstant.MESSAGE_CHANGE_CHANGE).postValue(new EaseEvent(DemoConstant.MESSAGE_CHANGE_CHANGE, EaseEvent.TYPE.MESSAGE));
-                         dialog.dismiss();
-                         finish();
-                    }
-
-                    @Override
-                    public void onError(int code, String error) {
-                        EMLog.d(TAG, "sendCustomMsg user card failed code:"+ code + "  errorMsg:"+ error );
-                        showToast("发送用户名片失败");
-                        LiveDataBus.get().with(DemoConstant.MESSAGE_CHANGE_CHANGE).postValue(new EaseEvent(DemoConstant.MESSAGE_CHANGE_CHANGE, EaseEvent.TYPE.MESSAGE));
-                        dialog.dismiss();
-                    }
-
-                    @Override
-                    public void onProgress(int progress, String status) {
-
-                    }
-                });
-                EMClient.getInstance().chatManager().sendMessage(message);
+                Intent intent = getIntent();
+                intent.putExtra("user", user);
+                setResult(RESULT_OK, intent);
+                dialog.dismiss();
+                finish();
             }
         });
 

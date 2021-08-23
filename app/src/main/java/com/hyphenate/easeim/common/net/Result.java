@@ -1,13 +1,12 @@
 package com.hyphenate.easeim.common.net;
 
 
-import com.hyphenate.chat.EMBase;
 
 /**
  * 结果基础类
  * @param <T> 请求结果的实体类
  */
-public class Result<T> extends EMBase<T> {
+public class Result<T> {
     public int code;
     public T result;
 
