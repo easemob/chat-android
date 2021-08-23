@@ -2,6 +2,8 @@ package com.hyphenate.easeim.common.fcm;
 
 import android.util.Log;
 
+import androidx.annotation.NonNull;
+
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
 import com.hyphenate.easeim.DemoHelper;
@@ -20,5 +22,11 @@ public class EMFCMMSGService extends FirebaseMessagingService {
             Log.i(TAG, "onMessageReceived: " + message);
             DemoHelper.getInstance().getNotifier().notify(message);
         }
+    }
+
+    @Override
+    public void onNewToken(@NonNull String token) {
+        super.onNewToken(token);
+        Log.i(TAG, "onNewToken: " + token);
     }
 }
