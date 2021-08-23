@@ -6,6 +6,7 @@ import androidx.annotation.NonNull;
 
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
+import com.hyphenate.chat.EMClient;
 import com.hyphenate.easeim.DemoHelper;
 
 /**
@@ -28,5 +29,6 @@ public class EMFCMMSGService extends FirebaseMessagingService {
     public void onNewToken(@NonNull String token) {
         super.onNewToken(token);
         Log.i(TAG, "onNewToken: " + token);
+        EMClient.getInstance().sendFCMTokenToServer(token);
     }
 }

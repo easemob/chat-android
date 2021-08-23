@@ -24,11 +24,10 @@ import com.hyphenate.easeui.widget.EaseTitleBar;
  * Created by wei on 2016/12/6.
  */
 
-public class OfflinePushSettingsActivity extends BaseInitActivity implements EaseTitleBar.OnBackPressListener, SwitchItemView.OnCheckedChangeListener, View.OnClickListener {
+public class OfflinePushSettingsActivity extends BaseInitActivity implements EaseTitleBar.OnBackPressListener, View.OnClickListener {
     EMPushConfigs mPushConfigs;
     DemoModel settingsModel;
     private EaseTitleBar titleBar;
-    private SwitchItemView rlCustomServer;
     private SwitchItemView switchPushNoDisturb;
     private ArrowItemView itemPushTimeRange;
     private OfflinePushSetViewModel viewModel;
@@ -53,7 +52,6 @@ public class OfflinePushSettingsActivity extends BaseInitActivity implements Eas
         titleBar = (EaseTitleBar) findViewById(R.id.title_bar);
         switchPushNoDisturb = findViewById(R.id.switch_push_no_disturb);
         itemPushTimeRange = findViewById(R.id.item_push_time_range);
-        rlCustomServer = findViewById(R.id.rl_custom_server);
     }
 
     @Override
@@ -61,7 +59,6 @@ public class OfflinePushSettingsActivity extends BaseInitActivity implements Eas
         super.initListener();
         titleBar.setOnBackPressListener(this);
         switchPushNoDisturb.setOnClickListener(this);
-        rlCustomServer.setOnCheckedChangeListener(this);
         itemPushTimeRange.setOnClickListener(this);
     }
 
@@ -69,7 +66,6 @@ public class OfflinePushSettingsActivity extends BaseInitActivity implements Eas
     protected void initData() {
         super.initData();
         settingsModel = DemoHelper.getInstance().getModel();
-        rlCustomServer.getSwitch().setChecked(settingsModel.isUseFCM());
 
         viewModel = new ViewModelProvider(this).get(OfflinePushSetViewModel.class);
         viewModel.getConfigsObservable().observe(this, response -> {
@@ -143,17 +139,6 @@ public class OfflinePushSettingsActivity extends BaseInitActivity implements Eas
     }
 
     @Override
-    public void onCheckedChanged(SwitchItemView buttonView, boolean isChecked) {
-        switch (buttonView.getId()) {
-            case R.id.rl_custom_server :
-                settingsModel.setUseFCM(isChecked);
-                EMClient.getInstance().getOptions().setUseFCM(isChecked);
-                break;
-        }
-
-    }
-
-    @Override
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.switch_push_no_disturb :
@@ -177,7 +162,6 @@ public class OfflinePushSettingsActivity extends BaseInitActivity implements Eas
 
     private void setOptionsVisible(boolean visible) {
         itemPushTimeRange.setVisibility(visible ? View.VISIBLE : View.GONE);
-        rlCustomServer.setVisibility(visible ? View.VISIBLE : View.GONE);
     }
 
     private void showTimePicker() {

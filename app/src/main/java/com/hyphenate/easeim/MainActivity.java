@@ -201,7 +201,7 @@ public class MainActivity extends BaseInitActivity implements BottomNavigationVi
             PushUtils.isRtcCall  = false;
         }
 
-        if(EMClient.getInstance().getOptions().isUseFCM() && GoogleApiAvailabilityLight.getInstance().isGooglePlayServicesAvailable(this) == ConnectionResult.SUCCESS){
+        if(GoogleApiAvailabilityLight.getInstance().isGooglePlayServicesAvailable(this) == ConnectionResult.SUCCESS){
             // 启用 FCM 自动初始化
             if(!FirebaseMessaging.getInstance().isAutoInitEnabled()){
                 FirebaseMessaging.getInstance().setAutoInitEnabled(true);

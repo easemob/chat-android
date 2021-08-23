@@ -414,9 +414,6 @@ public class DemoHelper {
         // 设置是否需要接受方送达确认,默认false
         options.setRequireDeliveryAck(false);
 
-        // 设置是否使用 fcm，有些华为设备本身带有 google 服务，
-        options.setUseFCM(demoModel.isUseFCM());
-
         /**
          * NOTE:你需要设置自己申请的账号来使用三方推送功能，详见集成文档
          */
@@ -495,7 +492,7 @@ public class DemoHelper {
                     // 由外部实现代码判断设备是否支持FCM推送
                     if(pushType == EMPushType.FCM){
                         EMLog.d("FCM", "GooglePlayServiceCode:"+GoogleApiAvailabilityLight.getInstance().isGooglePlayServicesAvailable(context));
-                        return EMClient.getInstance().getOptions().isUseFCM() && GoogleApiAvailabilityLight.getInstance().isGooglePlayServicesAvailable(context) == ConnectionResult.SUCCESS;
+                        return GoogleApiAvailabilityLight.getInstance().isGooglePlayServicesAvailable(context) == ConnectionResult.SUCCESS;
                     }
                     return super.isSupportPush(pushType, pushConfig);
                 }
