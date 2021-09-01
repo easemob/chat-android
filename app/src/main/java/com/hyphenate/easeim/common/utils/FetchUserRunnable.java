@@ -131,7 +131,7 @@ public class FetchUserRunnable implements Runnable{
 
                 //通知callKit更新头像昵称
                 EaseCallUserInfo info = new EaseCallUserInfo(userInfo.getNickName(),userInfo.getAvatarUrl());
-                info.setUserId(info.getUserId());
+                info.setUserId(userInfo.getUserId());
                 EaseLiveDataBus.get().with(EaseCallKitUtils.UPDATE_USERINFO).postValue(info);
             }
         }
