@@ -126,8 +126,13 @@ dependencies {
     //oppo push
     implementation (name:'oppo_push_v2.1.0',ext:'aar')
     // Google firebase cloud messaging
-    implementation 'com.google.android.gms:play-services-base:11.4.0'
-    implementation 'com.google.firebase:firebase-messaging:11.4.0'
+    // Import the BoM for the Firebase platform
+    implementation platform('com.google.firebase:firebase-bom:28.2.1')
+
+    // Declare the dependencies for the Firebase Cloud Messaging and Analytics libraries
+    // When using the BoM, you don't specify versions in Firebase library dependencies
+    implementation 'com.google.firebase:firebase-messaging'
+    implementation 'com.google.firebase:firebase-analytics'
     // fresh and load more
     api 'com.scwang.smartrefresh:SmartRefreshLayout:1.0.5.1'
     implementation 'androidx.swiperefreshlayout:swiperefreshlayout:1.1.0'
