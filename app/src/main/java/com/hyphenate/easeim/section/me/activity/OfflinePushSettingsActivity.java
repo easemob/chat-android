@@ -147,7 +147,6 @@ public class OfflinePushSettingsActivity extends BaseInitActivity implements Eas
         switch (buttonView.getId()) {
             case R.id.rl_custom_server :
                 settingsModel.setUseFCM(isChecked);
-                EMClient.getInstance().getOptions().setUseFCM(isChecked);
                 break;
         }
 
