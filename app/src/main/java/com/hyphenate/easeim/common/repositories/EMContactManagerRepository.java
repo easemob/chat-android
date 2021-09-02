@@ -1,7 +1,6 @@
 package com.hyphenate.easeim.common.repositories;
 
 import android.text.TextUtils;
-import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.LiveData;
@@ -12,16 +11,14 @@ import com.hyphenate.EMValueCallBack;
 import com.hyphenate.chat.EMClient;
 import com.hyphenate.chat.EMUserInfo;
 import com.hyphenate.easeim.DemoHelper;
-import com.hyphenate.easeim.common.constant.DemoConstant;
-import com.hyphenate.easeim.common.db.DemoDbHelper;
 import com.hyphenate.easeim.common.db.entity.EmUserEntity;
 import com.hyphenate.easeim.common.interfaceOrImplement.ResultCallBack;
 import com.hyphenate.easeim.common.model.DemoModel;
 import com.hyphenate.easeim.common.net.ErrorCode;
 import com.hyphenate.easeim.common.net.Resource;
-import com.hyphenate.easeui.manager.EaseThreadManager;
 import com.hyphenate.easeui.domain.EaseUser;
-import com.hyphenate.easeui.model.EaseEvent;
+import com.hyphenate.easeui.manager.EaseThreadManager;
+import com.hyphenate.easeui.utils.EaseCommonUtils;
 import com.hyphenate.exceptions.HyphenateException;
 import com.hyphenate.util.EMLog;
 
@@ -120,7 +117,7 @@ public class EMContactManagerRepository extends BaseEMRepository{
                                 //删除之前的多端在线
                                 if(exitUsers != null){
                                     for(String userId:exitUsers){
-                                        if(userId.contains(EMClient.getInstance().getCurrentUser())){
+                                        if(DemoHelper.getInstance().isCurrentUserFromOtherDevice(userId)){
                                             getUserDao().deleteUser(userId);
                                         }
                                     }
@@ -228,7 +225,7 @@ public class EMContactManagerRepository extends BaseEMRepository{
                             user.setContact(0);
                         }
 
-                        if(user.getUsername().contains(EMClient.getInstance().getCurrentUser())){
+                        if(DemoHelper.getInstance().isCurrentUserFromOtherDevice(user.getUsername())){
                             EMUserInfo selfInfo =  value.get(EMClient.getInstance().getCurrentUser());
                             if(selfInfo != null){
                                 user.setNickname(selfInfo.getNickName());
@@ -553,5 +550,77 @@ public class EMContactManagerRepository extends BaseEMRepository{
 
             }
         }.asLiveData();
+    }
+
+    public LiveData<Resource<EaseUser>> getUserInfoById(final String username, boolean mIsFriend) {
+        return new NetworkBoundResource<EaseUser, EaseUser>() {
+            @Override
+            protected boolean shouldFetch(EaseUser data) {
+                return true;
+            }
+
+            @Override
+            protected LiveData<EaseUser> loadFromDb() {
+                List<EaseUser> users = getUserDao().loadUserByUserId(username);
+                return createLiveData(users.get(0));
+            }
+
+            @Override
+            protected void createCall(ResultCallBack<LiveData<EaseUser>> callBack) {
+                String userId = username;
+                if(DemoHelper.getInstance().isCurrentUserFromOtherDevice(username)) {
+                    userId = EMClient.getInstance().getCurrentUser();
+                }
+                String[] userIds = new String[]{userId};
+                String finalUserId = userId;
+                EMClient.getInstance().userInfoManager().fetchUserInfoByUserId(userIds, new EMValueCallBack<Map<String, EMUserInfo>>() {
+                    @Override
+                    public void onSuccess(Map<String, EMUserInfo> value) {
+                        if(callBack != null) {
+                            if(mIsFriend) {
+                                callBack.onSuccess(createLiveData(transformEMUserInfo(value.get(finalUserId))));
+                            }
+                        }
+                    }
+
+                    @Override
+                    public void onError(int error, String errorMsg) {
+                        if(callBack != null) {
+                            callBack.onError(error, errorMsg);
+                        }
+                    }
+                });
+            }
+
+            @Override
+            protected void saveCallResult(EaseUser item) {
+                if(mIsFriend) {
+                    getUserDao().insert(EmUserEntity.parseParent(item));
+                }
+            }
+        }.asLiveData();
+    }
+
+    private EaseUser transformEMUserInfo(EMUserInfo info) {
+        if(info != null){
+            List<EaseUser> users = getUserDao().loadUserByUserId(info.getUserId());
+            EaseUser user = null;
+            if(users != null && users.size() > 0) {
+                user = users.get(0);
+            }
+            EaseUser userEntity = new EaseUser();
+            userEntity.setUsername(user != null ? user.getUsername() : info.getUserId());
+            userEntity.setNickname(info.getNickName());
+            userEntity.setEmail(info.getEmail());
+            userEntity.setAvatar(info.getAvatarUrl());
+            userEntity.setBirth(info.getBirth());
+            userEntity.setGender(info.getGender());
+            userEntity.setExt(info.getExt());
+            userEntity.setSign(info.getSignature());
+            EaseCommonUtils.setUserInitialLetter(userEntity);
+            userEntity.setContact(user != null ? user.getContact() : 0);
+            return userEntity;
+        }
+        return null;
     }
 }

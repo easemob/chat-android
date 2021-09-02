@@ -194,7 +194,6 @@ public class GroupMemberAuthorityActivity extends BaseInitActivity implements Ea
         super.initData();
         getGroup();
         viewModel = new ViewModelProvider(this).get(GroupMemberAuthorityViewModel.class);
-        adapter.setSettingModel(viewModel);
         getData();
     }
 

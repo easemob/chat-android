@@ -51,6 +51,12 @@ public class CallOptionActivity extends BaseInitActivity implements SwitchItemVi
     @Override
     protected void initListener() {
         super.initListener();
+        titleBar.setOnBackPressListener(new EaseTitleBar.OnBackPressListener() {
+            @Override
+            public void onBackPress(View view) {
+                onBackPressed();
+            }
+        });
         rlSwitchOfflineCallPush.setOnCheckedChangeListener(this);
     }
 
