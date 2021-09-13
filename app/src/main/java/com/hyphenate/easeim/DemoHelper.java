@@ -11,6 +11,8 @@ import android.util.Log;
 import android.util.Pair;
 import android.widget.Toast;
 
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.GoogleApiAvailabilityLight;
 import com.heytap.msp.push.HeytapPushManager;
 import com.hyphenate.EMCallBack;
 import com.hyphenate.chat.EMChatManager;
@@ -417,9 +419,6 @@ public class DemoHelper {
         // 设置是否需要接受方送达确认,默认false
         options.setRequireDeliveryAck(false);
 
-        // 设置是否使用 fcm，有些华为设备本身带有 google 服务，
-        options.setUseFCM(demoModel.isUseFCM());
-
         /**
          * NOTE:你需要设置自己申请的账号来使用三方推送功能，详见集成文档
          */
@@ -491,6 +490,16 @@ public class DemoHelper {
                 public void onError(EMPushType pushType, long errorCode) {
                     // TODO: 返回的errorCode仅9xx为环信内部错误，可从EMError中查询，其他错误请根据pushType去相应第三方推送网站查询。
                     EMLog.e("PushClient", "Push client occur a error: " + pushType + " - " + errorCode);
+                }
+
+                @Override
+                public boolean isSupportPush(EMPushType pushType, EMPushConfig pushConfig) {
+                    // 由外部实现代码判断设备是否支持FCM推送
+                    if(pushType == EMPushType.FCM){
+                        EMLog.d("FCM", "GooglePlayServiceCode:"+GoogleApiAvailabilityLight.getInstance().isGooglePlayServicesAvailable(context));
+                        return demoModel.isUseFCM() && GoogleApiAvailabilityLight.getInstance().isGooglePlayServicesAvailable(context) == ConnectionResult.SUCCESS;
+                    }
+                    return super.isSupportPush(pushType, pushConfig);
                 }
             });
         }
