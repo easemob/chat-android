@@ -27,8 +27,8 @@ android {
         applicationId "com.hyphenate.easeim"
         minSdkVersion 19
         targetSdkVersion 29
-        versionCode 84
-        versionName "3.8.4"
+        versionCode 85
+        versionName "3.8.5"
         multiDexEnabled true
         //为了兼容5.0以下使用vector图标
         vectorDrawables.useSupportLibrary = true
@@ -126,8 +126,13 @@ dependencies {
     //oppo push
     implementation (name:'oppo_push_v2.1.0',ext:'aar')
     // Google firebase cloud messaging
-    implementation 'com.google.android.gms:play-services-base:11.4.0'
-    implementation 'com.google.firebase:firebase-messaging:11.4.0'
+    // Import the BoM for the Firebase platform
+    implementation platform('com.google.firebase:firebase-bom:28.2.1')
+
+    // Declare the dependencies for the Firebase Cloud Messaging and Analytics libraries
+    // When using the BoM, you don't specify versions in Firebase library dependencies
+    implementation 'com.google.firebase:firebase-messaging'
+    implementation 'com.google.firebase:firebase-analytics'
     // fresh and load more
     api 'com.scwang.smartrefresh:SmartRefreshLayout:1.0.5.1'
     implementation 'androidx.swiperefreshlayout:swiperefreshlayout:1.1.0'
@@ -142,14 +147,14 @@ dependencies {
 
     // EaseIMKit
     //api (project(path: ':ease-im-kit'))
-    implementation 'io.hyphenate:ease-im-kit:3.8.4'
+    implementation 'io.hyphenate:ease-im-kit:3.8.5'
     // EaseIMKit依赖，必须添加环信IM SDK
     //implementation project(path: ':hyphenatechatsdk')
-    implementation 'io.hyphenate:hyphenate-chat:3.8.4'
+    implementation 'io.hyphenate:hyphenate-chat:3.8.5'
 
     //EaseCallKit依赖，必须添加环信IM SDK
     //api project(':ease-call-kit')
-    implementation 'io.hyphenate:ease-call-kit:3.8.4'
+    implementation 'io.hyphenate:ease-call-kit:3.8.5'
 }
 
 // ADD THIS AT THE BOTTOM
