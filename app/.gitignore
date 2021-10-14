@@ -39,3 +39,10 @@ proguard/
 /.idea/libraries
 /.idea/modules.xml
 /.idea/workspace.xml
+
+.cxx/
+debug/
+obj/
+prod/
+release/
+schemas
