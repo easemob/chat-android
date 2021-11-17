@@ -73,6 +73,8 @@ import com.hyphenate.easeui.model.EaseNotifier;
 import com.hyphenate.easeui.provider.EaseEmojiconInfoProvider;
 import com.hyphenate.easeui.provider.EaseSettingsProvider;
 import com.hyphenate.easeui.provider.EaseUserProfileProvider;
+import com.hyphenate.chat.translator.EMTranslateParams;
+import com.hyphenate.chat.translator.EMTranslationManager;
 import com.hyphenate.exceptions.HyphenateException;
 import com.hyphenate.push.EMPushConfig;
 import com.hyphenate.push.EMPushHelper;
@@ -148,6 +150,9 @@ public class DemoHelper {
 
             //callKit初始化
             InitCallKit(context);
+
+            //Translation Manager 初始化
+            initTranslationManager();
 
             //启动获取用户信息线程
             fetchUserInfoList = FetchUserInfoList.getInstance();
@@ -375,6 +380,12 @@ public class DemoHelper {
                 });
     }
 
+    private void initTranslationManager() {
+        EMTranslateParams params = new EMTranslateParams("46c34219512d4f09ae6f8e04c083b7a3", "https://api.cognitive.microsofttranslator.com");
+
+        EMTranslationManager.getInstance().init(params);
+    }
+
     /**
      * 统一配置头像
      * @return
@@ -575,6 +586,7 @@ public class DemoHelper {
         Log.d(TAG, "logout: onSuccess");
         setAutoLogin(false);
         DemoDbHelper.getInstance(DemoApplication.getInstance()).closeDb();
+        EMTranslationManager.getInstance().logout();
     }
 
     public EaseAvatarOptions getEaseAvatarOptions() {

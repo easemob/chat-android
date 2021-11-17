@@ -80,6 +80,8 @@ public class PreferenceManager {
 
 	private static String SHARED_KEY_ENABLE_TOKEN_LOGIN = "enable_token_login";
 
+	private static String SHARED_KEY_TARGET_LANGUAGE = "shared_key_target_language";
+
 	@SuppressLint("CommitPrefEdits")
 	private PreferenceManager(Context cxt) {
 		mSharedPreferences = cxt.getSharedPreferences(PREFERENCE_NAME, Context.MODE_PRIVATE);
@@ -570,4 +572,16 @@ public class PreferenceManager {
 		return mSharedPreferences.getBoolean(SHARED_KEY_ENABLE_TOKEN_LOGIN, false);
 	}
 
+	/**
+	 * 翻译目标语言
+	 * @param languageCode
+	 */
+	public void setTargetLanguage(String languageCode) {
+		editor.putString(SHARED_KEY_TARGET_LANGUAGE, languageCode);
+		editor.apply();
+	}
+
+	public String getTargetLanguage() {
+		return mSharedPreferences.getString(SHARED_KEY_TARGET_LANGUAGE, "en");
+	}
 }
