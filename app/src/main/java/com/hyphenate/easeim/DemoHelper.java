@@ -24,6 +24,7 @@ import com.hyphenate.chat.EMGroupManager;
 import com.hyphenate.chat.EMMessage;
 import com.hyphenate.chat.EMOptions;
 import com.hyphenate.chat.EMPushManager;
+import com.hyphenate.chat.EMTranslateParams;
 import com.hyphenate.cloud.EMHttpClient;
 import com.hyphenate.easecallkit.EaseCallKit;
 import com.hyphenate.easecallkit.base.EaseCallEndReason;
@@ -375,6 +376,13 @@ public class DemoHelper {
                 });
     }
 
+    //Translation Manager 初始化
+    public void initTranslationManager() {
+        EMTranslateParams params = new EMTranslateParams("46c34219512d4f09ae6f8e04c083b7a3", "https://api.cognitive.microsofttranslator.com", 500);
+
+        EMClient.getInstance().translationManager().init(params);
+    }
+
     /**
      * 统一配置头像
      * @return
@@ -575,6 +583,7 @@ public class DemoHelper {
         Log.d(TAG, "logout: onSuccess");
         setAutoLogin(false);
         DemoDbHelper.getInstance(DemoApplication.getInstance()).closeDb();
+        EMClient.getInstance().translationManager().logout();
     }
 
     public EaseAvatarOptions getEaseAvatarOptions() {

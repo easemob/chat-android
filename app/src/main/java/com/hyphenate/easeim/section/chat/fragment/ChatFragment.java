@@ -103,6 +103,7 @@ public class ChatFragment extends EaseChatFragment implements OnRecallMessageRes
         //    primaryMenu.setMenuShowType(EaseInputMenuStyle.ONLY_TEXT);
         //}
 
+        chatLayout.setTargetLanguageCode(DemoHelper.getInstance().getModel().getTargetLanguage());
     }
 
     private void addItemMenuAction() {
@@ -421,7 +422,7 @@ public class ChatFragment extends EaseChatFragment implements OnRecallMessageRes
     }
 
     @Override
-    public void onPreMenu(EasePopupWindowHelper helper, EMMessage message) {
+    public void onPreMenu(EasePopupWindowHelper helper, EMMessage message, View v) {
         //默认两分钟后，即不可撤回
         if(System.currentTimeMillis() - message.getMsgTime() > 2 * 60 * 1000) {
             helper.findItemVisible(R.id.action_chat_recall, false);
@@ -433,6 +434,9 @@ public class ChatFragment extends EaseChatFragment implements OnRecallMessageRes
                 if(!message.getBooleanAttribute(DemoConstant.MESSAGE_ATTR_IS_VIDEO_CALL, false)
                         && !message.getBooleanAttribute(DemoConstant.MESSAGE_ATTR_IS_VOICE_CALL, false)) {
                     helper.findItemVisible(R.id.action_chat_forward, true);
+                }
+                if(v.getId() == R.id.subBubble){
+                    helper.findItemVisible(R.id.action_chat_forward, false);
                 }
                 break;
             case IMAGE:

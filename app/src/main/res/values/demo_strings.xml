@@ -566,5 +566,7 @@
 
     <string name="demo_activity_label_video_call">video_call</string>
     <string name="demo_activity_label_multi_call">multi_call</string>
+    <string name="language_settings">设置语言</string>
+    <string name="multilingual">多语言</string>
 
 </resources>

@@ -27,6 +27,7 @@ public class CommonSettingsActivity extends BaseInitActivity implements View.OnC
     private SwitchItemView itemAutoDownload;
     private SwitchItemView itemAutoAcceptGroup;
     private SwitchItemView itemSwitchChatroomDeleteMsg;
+    private ArrowItemView itemLanguage;
 
     private DemoModel settingsModel;
     private EMOptions chatOptions;
@@ -55,6 +56,7 @@ public class CommonSettingsActivity extends BaseInitActivity implements View.OnC
         itemAutoDownload = findViewById(R.id.item_switch_auto_download);
         itemAutoAcceptGroup = findViewById(R.id.item_switch_auto_accept_group);
         itemSwitchChatroomDeleteMsg = findViewById(R.id.item_switch_chatroom_delete_msg);
+        itemLanguage = findViewById(R.id.item_language);
     }
 
     @Override
@@ -71,6 +73,7 @@ public class CommonSettingsActivity extends BaseInitActivity implements View.OnC
         itemAutoDownload.setOnCheckedChangeListener(this);
         itemAutoAcceptGroup.setOnCheckedChangeListener(this);
         itemSwitchChatroomDeleteMsg.setOnCheckedChangeListener(this);
+        itemLanguage.setOnClickListener(this);
     }
 
     @Override
@@ -97,6 +100,9 @@ public class CommonSettingsActivity extends BaseInitActivity implements View.OnC
                 break;
             case R.id.item_call_option :
                 CallOptionActivity.actionStart(mContext);
+                break;
+            case R.id.item_language:
+                LanguageActivity.actionStart(mContext);
                 break;
         }
 
