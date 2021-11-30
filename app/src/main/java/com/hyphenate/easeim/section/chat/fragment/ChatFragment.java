@@ -1,9 +1,11 @@
 package com.hyphenate.easeim.section.chat.fragment;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.ClipboardManager;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.text.TextUtils;
@@ -462,6 +464,16 @@ public class ChatFragment extends EaseChatFragment implements OnRecallMessageRes
                 showProgressBar();
                 chatLayout.recallMessage(message);
                 return true;
+            case R.id.action_chat_reTranslate:
+                new AlertDialog.Builder(getContext())
+                        .setTitle(mContext.getString(R.string.using_translate))
+                        .setMessage(mContext.getString(R.string.retranslate_prompt))
+                        .setPositiveButton(mContext.getString(R.string.confirm), new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int which) {
+                                chatLayout.translateMessage(message, false);
+                            }
+                        }).show();
+                return true;
         }
         return false;
     }
@@ -512,5 +524,17 @@ public class ChatFragment extends EaseChatFragment implements OnRecallMessageRes
         void onChatError(int code, String errorMsg);
 
         void onOtherTyping(String action);
+    }
+
+    @Override
+    public void translateMessageFail(EMMessage message, int code, String error) {
+        new AlertDialog.Builder(getContext())
+                .setTitle(mContext.getString(R.string.unable_translate))
+                .setMessage(error+".")
+                .setPositiveButton(mContext.getString(R.string.confirm), new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                    }
+                }).show();
     }
 }

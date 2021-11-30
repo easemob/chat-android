@@ -568,5 +568,8 @@
     <string name="demo_activity_label_multi_call">multi_call</string>
     <string name="language_settings">设置语言</string>
     <string name="multilingual">多语言</string>
+    <string name="unable_translate">翻译失败</string>
+    <string name="using_translate">使用翻译</string>
+    <string name="retranslate_prompt">每个翻译只能重译一次，译文仅供参考。</string>
 
 </resources>
