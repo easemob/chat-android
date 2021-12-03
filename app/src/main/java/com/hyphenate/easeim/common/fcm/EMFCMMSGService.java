@@ -20,7 +20,7 @@ public class EMFCMMSGService extends FirebaseMessagingService {
         super.onMessageReceived(remoteMessage);
         if (remoteMessage.getData().size() > 0) {
             String message = remoteMessage.getData().get("alert");
-            Log.i(TAG, "onMessageReceived: " + message);
+            Log.d(TAG, "onMessageReceived: " + message);
             DemoHelper.getInstance().getNotifier().notify(message);
         }
     }
@@ -28,7 +28,7 @@ public class EMFCMMSGService extends FirebaseMessagingService {
     @Override
     public void onNewToken(@NonNull String token) {
         super.onNewToken(token);
-        Log.i(TAG, "onNewToken: " + token);
+        Log.d(TAG, "onNewToken: " + token);
         EMClient.getInstance().sendFCMTokenToServer(token);
     }
 }

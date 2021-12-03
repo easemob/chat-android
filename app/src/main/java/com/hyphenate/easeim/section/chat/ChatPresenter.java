@@ -308,7 +308,7 @@ public class ChatPresenter extends EaseChatPresenter {
             String event = null;
             if (error == EMError.USER_REMOVED) {
                 event = DemoConstant.ACCOUNT_REMOVED;
-            } else if (error == EMError.USER_LOGIN_ANOTHER_DEVICE) {
+            } else if (error == EMError.USER_LOGIN_ANOTHER_DEVICE || error == EMError.USER_DEVICE_CHANGED) {
                 event = DemoConstant.ACCOUNT_CONFLICT;
             } else if (error == EMError.SERVER_SERVICE_RESTRICTED) {
                 event = DemoConstant.ACCOUNT_FORBIDDEN;
