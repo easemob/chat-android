@@ -1,5 +1,7 @@
 package com.hyphenate.easeim;
 
+import static android.content.Intent.FLAG_ACTIVITY_NEW_TASK;
+
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
@@ -90,8 +92,6 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.TimeZone;
-
-import static android.content.Intent.FLAG_ACTIVITY_NEW_TASK;
 
 /**
  * 作为hyphenate-sdk的入口控制类，获取sdk下的基础类均通过此类
@@ -575,6 +575,7 @@ public class DemoHelper {
         Log.d(TAG, "logout: onSuccess");
         setAutoLogin(false);
         DemoDbHelper.getInstance(DemoApplication.getInstance()).closeDb();
+        getUserProfileManager().reset();
     }
 
     public EaseAvatarOptions getEaseAvatarOptions() {
