@@ -812,7 +812,7 @@ public class DemoHelper {
                 EMLog.d(TAG,"onEndCallWithReason" + (callType != null ? callType.name() : " callType is null ") + " reason:" + reason + " time:"+ callTime);
                 SimpleDateFormat formatter = new SimpleDateFormat("mm:ss");
                 formatter.setTimeZone(TimeZone.getTimeZone("UTC"));
-                String callString = "通话时长 ";
+                String callString = mianContext.getString(R.string.call_duration);
                 callString += formatter.format(callTime);
 
                 Toast.makeText(mianContext,callString,Toast.LENGTH_SHORT).show();

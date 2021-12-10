@@ -234,7 +234,7 @@ public class SelectUserCardActivity extends BaseInitActivity implements  EaseTit
         }else{
             userNickView.setText(user.getUsername());
         }
-        userIdView.setText("[个人名片] " + userId);
+        userIdView.setText(getApplicationContext().getString(R.string.personal_card) + userId);
 
         dialog.setView(dialogView);
 //        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);

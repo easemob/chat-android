@@ -70,7 +70,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintTop_toBottomOf="@id/picker_start"
             android:gravity="center"
-            android:text="取消"
+            android:text="@string/cancel"
             android:textColor="@color/black" />
 
         <TextView
@@ -81,7 +81,7 @@
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toTopOf="@id/btn_cancel"
             android:gravity="center"
-            android:text="确定"
+            android:text="@string/confirm"
             android:textColor="@color/em_color_brand" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
