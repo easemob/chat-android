@@ -583,6 +583,7 @@ public class DemoHelper {
         Log.d(TAG, "logout: onSuccess");
         setAutoLogin(false);
         DemoDbHelper.getInstance(DemoApplication.getInstance()).closeDb();
+        getUserProfileManager().reset();
         EMClient.getInstance().translationManager().logout();
     }
 
