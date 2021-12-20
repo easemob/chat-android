@@ -35,6 +35,7 @@ import com.hyphenate.easecallkit.base.EaseCallType;
 import com.hyphenate.easecallkit.base.EaseCallUserInfo;
 import com.hyphenate.easecallkit.base.EaseGetUserAccountCallback;
 import com.hyphenate.easecallkit.base.EaseUserAccount;
+import com.hyphenate.easecallkit.event.CallCancelEvent;
 import com.hyphenate.easeim.common.constant.DemoConstant;
 import com.hyphenate.easeim.common.db.DemoDbHelper;
 import com.hyphenate.easeim.common.livedatas.LiveDataBus;
@@ -530,32 +531,76 @@ public class DemoHelper {
         if(fetchUserTread != null && fetchUserRunnable != null){
             fetchUserRunnable.setStop(true);
         }
-        EMClient.getInstance().logout(unbindDeviceToken, new EMCallBack() {
 
+        CallCancelEvent cancelEvent = new CallCancelEvent();
+        EaseCallKit.getInstance().sendCmdMsg(cancelEvent, EaseCallKit.getInstance().getFromUserId(), new EMCallBack() {
             @Override
             public void onSuccess() {
-                logoutSuccess();
-                //reset();
-                if (callback != null) {
-                    callback.onSuccess();
-                }
+                EMClient.getInstance().logout(unbindDeviceToken, new EMCallBack() {
 
-            }
+                    @Override
+                    public void onSuccess() {
+                        logoutSuccess();
+                        //reset();
+                        if (callback != null) {
+                            callback.onSuccess();
+                        }
 
-            @Override
-            public void onProgress(int progress, String status) {
-                if (callback != null) {
-                    callback.onProgress(progress, status);
-                }
+                    }
+
+                    @Override
+                    public void onProgress(int progress, String status) {
+                        if (callback != null) {
+                            callback.onProgress(progress, status);
+                        }
+                    }
+
+                    @Override
+                    public void onError(int code, String error) {
+                        Log.d(TAG, "logout: onSuccess");
+                        //reset();
+                        if (callback != null) {
+                            callback.onError(code, error);
+                        }
+                    }
+                });
             }
 
             @Override
             public void onError(int code, String error) {
-                Log.d(TAG, "logout: onSuccess");
-                //reset();
-                if (callback != null) {
-                    callback.onError(code, error);
-                }
+                EMClient.getInstance().logout(unbindDeviceToken, new EMCallBack() {
+
+                    @Override
+                    public void onSuccess() {
+                        logoutSuccess();
+                        //reset();
+                        if (callback != null) {
+                            callback.onSuccess();
+                        }
+
+                    }
+
+                    @Override
+                    public void onProgress(int progress, String status) {
+                        if (callback != null) {
+                            callback.onProgress(progress, status);
+                        }
+                    }
+
+                    @Override
+                    public void onError(int code, String error) {
+                        Log.d(TAG, "logout: onSuccess");
+                        //reset();
+                        if (callback != null) {
+                            callback.onError(code, error);
+                        }
+                    }
+                });
+            }
+
+            @Override
+            public void onProgress(int progress, String status) {
+
             }
         });
     }
