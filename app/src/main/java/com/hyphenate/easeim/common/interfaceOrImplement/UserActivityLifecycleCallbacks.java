@@ -8,8 +8,13 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.util.Log;
 
+
+import com.hyphenate.easecallkit.base.EaseCallFloatWindow;
+import com.hyphenate.easeim.R;
+import com.hyphenate.easeim.section.login.activity.SplashActivity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -35,6 +40,7 @@ public class UserActivityLifecycleCallbacks implements Application.ActivityLifec
 
     @Override
     public void onActivityResumed(Activity activity) {
+        Log.e("ActivityLifecycle", "onActivityResumed activity's taskId = "+activity.getTaskId() + " name: "+activity.getLocalClassName());
         if (!resumeActivity.contains(activity)) {
             resumeActivity.add(activity);
             if(resumeActivity.size() == 1) {
@@ -54,6 +60,10 @@ public class UserActivityLifecycleCallbacks implements Application.ActivityLifec
         Log.e("ActivityLifecycle", "onActivityStopped "+activity.getLocalClassName());
         resumeActivity.remove(activity);
         if(resumeActivity.isEmpty()) {
+            Activity a = getOtherTaskSingleInstanceActivity(activity.getTaskId());
+            if(isTargetSingleInstance(a) && !EaseCallFloatWindow.getInstance().isShowing()) {
+                makeTaskToFront(a);
+            }
             Log.e("ActivityLifecycle", "在后台了");
         }
     }
@@ -137,17 +147,34 @@ public class UserActivityLifecycleCallbacks implements Application.ActivityLifec
             return;
         }
         //刚启动，或者从桌面返回app
+        if(resumeActivity.size() == 1 && resumeActivity.get(0) instanceof SplashActivity) {
+            return;
+        }
         //至少需要activityList中至少两个activity
-        if(resumeActivity.size() == 1 && activityList.size() > 1) {
-            Activity topActivity = activityList.get(0);
-            if(!topActivity.isFinishing() //没有正在finish
-                    && topActivity != activity //当前activity和列表中首个activity不相同
-                    && topActivity.getTaskId() != activity.getTaskId()
+        if(resumeActivity.size() >= 1 && activityList.size() > 1) {
+            Activity a = getOtherTaskSingleInstanceActivity(resumeActivity.get(0).getTaskId());
+            if(a != null && !a.isFinishing() //没有正在finish
+                    && a != activity //当前activity和列表中首个activity不相同
+                    && a.getTaskId() != activity.getTaskId()
+                    && !EaseCallFloatWindow.getInstance().isShowing()
             ){
-                Log.e("ActivityLifecycle", "启动了activity = "+topActivity.getClass().getName());
-                activity.startActivity(new Intent(activity, topActivity.getClass()));
+                Log.e("ActivityLifecycle", "启动了activity = "+a.getClass().getName());
+                activity.startActivity(new Intent(activity, a.getClass()));
             }
         }
+    }
+
+    private Activity getOtherTaskSingleInstanceActivity(int taskId) {
+        if(taskId != 0 && activityList.size() > 1) {
+            for (Activity activity : activityList) {
+                if(activity.getTaskId() != taskId) {
+                    if(isTargetSingleInstance(activity)) {
+                        return activity;
+                    }
+                }
+            }
+        }
+        return null;
     }
 
     /**
@@ -180,5 +207,23 @@ public class UserActivityLifecycleCallbacks implements Application.ActivityLifec
                 }
             }
         }
+    }
+    
+    private boolean isTargetSingleInstance(Activity activity) {
+        if(activity == null) {
+            return false;
+        }
+        CharSequence title = activity.getTitle();
+        if(TextUtils.equals(title, activity.getString(R.string.demo_activity_label_video_call))
+                || TextUtils.equals(title, activity.getString(R.string.demo_activity_label_multi_call))) {
+            return true;
+        }
+        return false;
+    }
+    
+    private void makeTaskToFront(Activity activity) {
+        Log.e("ActivityLifecycle", "makeTaskToFront activity: "+activity.getLocalClassName());
+        ActivityManager manager = (ActivityManager) activity.getSystemService(Context.ACTIVITY_SERVICE);
+        manager.moveTaskToFront(activity.getTaskId(), ActivityManager.MOVE_TASK_WITH_HOME);
     }
 }

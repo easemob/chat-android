@@ -16,7 +16,7 @@ import com.hyphenate.util.EMLog;
 
 public class SplashActivity extends BaseInitActivity {
     private ImageView ivSplash;
-    private TextView tvProduct;
+    private ImageView ivProduct;
     private SplashViewModel model;
 
     @Override
@@ -33,7 +33,7 @@ public class SplashActivity extends BaseInitActivity {
     protected void initView(Bundle savedInstanceState) {
         super.initView(savedInstanceState);
         ivSplash = findViewById(R.id.iv_splash);
-        tvProduct = findViewById(R.id.tv_product);
+        ivProduct = findViewById(R.id.iv_product);
     }
 
     @Override
@@ -66,7 +66,7 @@ public class SplashActivity extends BaseInitActivity {
                 })
                 .start();
 
-        tvProduct.animate()
+        ivProduct.animate()
                 .alpha(1)
                 .setDuration(500)
                 .start();

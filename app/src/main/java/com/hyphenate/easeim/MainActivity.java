@@ -26,8 +26,6 @@ import com.hyphenate.EMValueCallBack;
 import com.hyphenate.chat.EMClient;
 import com.hyphenate.chat.EMUserInfo;
 import com.hyphenate.easecallkit.base.EaseCallType;
-import com.hyphenate.easecallkit.ui.EaseMultipleVideoActivity;
-import com.hyphenate.easecallkit.ui.EaseVideoCallActivity;
 
 import com.google.android.material.bottomnavigation.BottomNavigationItemView;
 import com.google.android.material.bottomnavigation.BottomNavigationMenuView;
@@ -40,6 +38,8 @@ import com.hyphenate.easeim.common.permission.PermissionsResultAction;
 import com.hyphenate.easeim.common.utils.PreferenceManager;
 import com.hyphenate.easeim.common.utils.PushUtils;
 import com.hyphenate.easeim.section.MainViewModel;
+import com.hyphenate.easeim.section.av.MultipleVideoActivity;
+import com.hyphenate.easeim.section.av.VideoCallActivity;
 import com.hyphenate.easeim.section.base.BaseInitActivity;
 import com.hyphenate.easeim.section.chat.ChatPresenter;
 import com.hyphenate.easeim.section.contact.activity.GroupContactManageActivity;
@@ -124,7 +124,7 @@ public class MainActivity extends BaseInitActivity implements BottomNavigationVi
                 GroupContactManageActivity.actionStart(mContext, true);
                 break;
             case R.id.action_scan :
-                showToast("扫一扫");
+                showToast(mContext.getString(R.string.em_conversation_menu_scan));
                 break;
         }
         return true;
@@ -169,6 +169,8 @@ public class MainActivity extends BaseInitActivity implements BottomNavigationVi
         switchToHome();
         checkIfShowSavedFragment(savedInstanceState);
         addTabBadge();
+        //Translation Manager 初始化
+        DemoHelper.getInstance().initTranslationManager();
     }
 
     @Override
@@ -190,12 +192,10 @@ public class MainActivity extends BaseInitActivity implements BottomNavigationVi
         //判断是否为来电推送
         if(PushUtils.isRtcCall){
             if (EaseCallType.getfrom(PushUtils.type) != EaseCallType.CONFERENCE_CALL) {
-                    EaseVideoCallActivity callActivity = new EaseVideoCallActivity();
-                    Intent intent = new Intent(getApplicationContext(), callActivity.getClass()).addFlags(FLAG_ACTIVITY_NEW_TASK);
+                    Intent intent = new Intent(getApplicationContext(), VideoCallActivity.class).addFlags(FLAG_ACTIVITY_NEW_TASK);
                 getApplicationContext().startActivity(intent);
                 } else {
-                    EaseMultipleVideoActivity callActivity = new EaseMultipleVideoActivity();
-                    Intent intent = new Intent(getApplication().getApplicationContext(), callActivity.getClass()).addFlags(FLAG_ACTIVITY_NEW_TASK);
+                    Intent intent = new Intent(getApplication().getApplicationContext(), MultipleVideoActivity.class).addFlags(FLAG_ACTIVITY_NEW_TASK);
                 getApplicationContext().startActivity(intent);
             }
             PushUtils.isRtcCall  = false;

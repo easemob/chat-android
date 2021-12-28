@@ -10,3 +10,6 @@ include ':app'
 //easecalluikit 内部使用，emo直接依赖aar，不需要依赖下面的module, release时需要把下面的include相关的
 //include ':ease-call-kit'
 //project(':ease-call-kit').projectDir = new File('../easecallkitui-android/ease-call-kit')
+
+//include ':ease-linux'
+//project(':ease-linux').projectDir = new File('../emclient-linux')

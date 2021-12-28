@@ -20,7 +20,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="27dp"
-        android:text="正在撤回消息"
+        android:text="@string/retracting_message"
         android:textSize="14sp"
         android:textColor="@color/white" />
 

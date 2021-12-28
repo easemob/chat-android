@@ -6,9 +6,9 @@ import android.os.Bundle;
 import com.hyphenate.easecallkit.EaseCallKit;
 import com.hyphenate.easecallkit.base.EaseCallFloatWindow;
 import com.hyphenate.easecallkit.base.EaseCallType;
-import com.hyphenate.easecallkit.ui.EaseMultipleVideoActivity;
-import com.hyphenate.easecallkit.ui.EaseVideoCallActivity;
 import com.hyphenate.easecallkit.utils.EaseCallState;
+import com.hyphenate.easeim.section.av.MultipleVideoActivity;
+import com.hyphenate.easeim.section.av.VideoCallActivity;
 
 import androidx.annotation.Nullable;
 
@@ -66,10 +66,10 @@ public abstract class BaseInitActivity extends BaseActivity {
         super.onRestart();
         if(EaseCallKit.getInstance().getCallState() != EaseCallState.CALL_IDLE && !EaseCallFloatWindow.getInstance(mContext).isShowing()){
             if(EaseCallKit.getInstance().getCallType() == EaseCallType.CONFERENCE_CALL){
-                Intent intent = new Intent(mContext, EaseMultipleVideoActivity.class).addFlags(FLAG_ACTIVITY_NEW_TASK);
+                Intent intent = new Intent(mContext, MultipleVideoActivity.class).addFlags(FLAG_ACTIVITY_NEW_TASK);
                 mContext.startActivity(intent);
             }else{
-                Intent intent = new Intent(mContext, EaseVideoCallActivity.class).addFlags(FLAG_ACTIVITY_NEW_TASK);
+                Intent intent = new Intent(mContext, VideoCallActivity.class).addFlags(FLAG_ACTIVITY_NEW_TASK);
                 mContext.startActivity(intent);
             }
         }

@@ -21,6 +21,7 @@ import com.hyphenate.easeim.common.constant.DemoConstant;
 import com.hyphenate.easeim.common.db.DemoDbHelper;
 import com.hyphenate.easeim.common.interfaceOrImplement.OnResourceParseCallback;
 import com.hyphenate.easeim.common.livedatas.LiveDataBus;
+import com.hyphenate.easeim.section.av.VideoCallActivity;
 import com.hyphenate.easeim.section.base.BaseInitActivity;
 import com.hyphenate.easeim.section.chat.activity.ChatActivity;
 import com.hyphenate.easeim.section.contact.viewmodels.AddContactViewModel;
@@ -266,16 +267,16 @@ public class ContactDetailActivity extends BaseInitActivity implements EaseTitle
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.tv_note :
-                showToast("跳转到备注设置");
+                showToast(mContext.getString(R.string.intent_to_setting));
                 break;
             case R.id.btn_chat :
                 ChatActivity.actionStart(mContext, mUser.getUsername(), EaseConstant.CHATTYPE_SINGLE);
                 break;
             case R.id.btn_voice :
-                EaseCallKit.getInstance().startSingleCall(EaseCallType.SINGLE_VOICE_CALL,mUser.getUsername(),null);
+                EaseCallKit.getInstance().startSingleCall(EaseCallType.SINGLE_VOICE_CALL,mUser.getUsername(),null, VideoCallActivity.class);
                 break;
             case R.id.btn_video :
-                EaseCallKit.getInstance().startSingleCall(EaseCallType.SINGLE_VIDEO_CALL,mUser.getUsername(),null);
+                EaseCallKit.getInstance().startSingleCall(EaseCallType.SINGLE_VIDEO_CALL,mUser.getUsername(),null, VideoCallActivity.class);
                 break;
             case R.id.btn_add_contact :
                 addContactViewModel.addContact(mUser.getUsername(), getResources().getString(R.string.em_add_contact_add_a_friend));
