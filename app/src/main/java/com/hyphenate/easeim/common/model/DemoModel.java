@@ -798,6 +798,20 @@ public class DemoModel {
         preferences.edit().putBoolean("is_conversation_come_from_server", false).apply();
     }
 
+    /**
+     *  获取目标翻译语言
+     */
+    public String getTargetLanguage() {
+        return PreferenceManager.getInstance().getTargetLanguage();
+    }
+
+    /**
+     *  设置目标翻译语言
+     */
+    public void setTargetLanguage(String languageCode) {
+        PreferenceManager.getInstance().setTargetLanguage(languageCode);
+    }
+
     enum Key{
         VibrateAndPlayToneOn,
         VibrateOn,

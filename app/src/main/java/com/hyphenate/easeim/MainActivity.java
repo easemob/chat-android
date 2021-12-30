@@ -124,7 +124,7 @@ public class MainActivity extends BaseInitActivity implements BottomNavigationVi
                 GroupContactManageActivity.actionStart(mContext, true);
                 break;
             case R.id.action_scan :
-                showToast("扫一扫");
+                showToast(mContext.getString(R.string.em_conversation_menu_scan));
                 break;
         }
         return true;
@@ -169,6 +169,8 @@ public class MainActivity extends BaseInitActivity implements BottomNavigationVi
         switchToHome();
         checkIfShowSavedFragment(savedInstanceState);
         addTabBadge();
+        //Translation Manager 初始化
+        DemoHelper.getInstance().initTranslationManager();
     }
 
     @Override

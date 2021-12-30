@@ -255,7 +255,7 @@ public class NewGroupActivity extends BaseInitActivity implements EaseTitleBar.O
                             maxUsers = Integer.valueOf(content);
                             if(maxUsers > MAX_GROUP_USERS) {
                                 maxUsers = Integer.valueOf(itemGroupMaxUsers.getTvContent().getText().toString().trim());
-                                showToast("建群最大人数不能超过3000！");
+                                showToast(mContext.getString(R.string.maximum_of_group));
                                 return;
                             }
                             itemGroupMaxUsers.getTvContent().setText(content);

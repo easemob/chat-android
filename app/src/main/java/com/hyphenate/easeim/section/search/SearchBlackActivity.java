@@ -85,7 +85,7 @@ public class SearchBlackActivity extends SearchFriendsActivity {
 
     @Override
     protected void onChildItemClick(View view, int position) {
-        showToast("请长按条目移除黑名单");
+        showToast(mContext.getString(R.string.long_press_entry_to_remove_blacklist));
     }
 
     private void loadData() {

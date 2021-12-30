@@ -86,7 +86,7 @@
                 android:textColor="#ff999999"
                 android:gravity="left|center_vertical"
                 android:textSize="12sp"
-                android:text="[个人名片]" />
+                android:text="@string/personal_card" />
         </RelativeLayout>
 
         <TextView

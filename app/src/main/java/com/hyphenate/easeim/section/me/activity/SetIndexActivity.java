@@ -115,7 +115,7 @@ public class SetIndexActivity extends BaseInitActivity implements EaseTitleBar.O
                     @Override
                     public void run() {
                         pd.dismiss();
-                        Toast.makeText(mContext, "unbind devicetokens failed", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(mContext, mContext.getString(R.string.unbind_failed), Toast.LENGTH_SHORT).show();
                     }
                 });
             }

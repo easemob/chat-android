@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.widget.Toast;
 
+import com.hyphenate.easeim.R;
 import com.hyphenate.util.EMLog;
 
 /**
@@ -21,7 +22,7 @@ public class HeadsetReceiver extends BroadcastReceiver {
         String name = intent.getStringExtra("name");
         // 耳机是否带有麦克风 0 没有，1 有
         boolean mic = intent.getIntExtra("microphone", 0) == 0 ? false : true;
-        String headsetChange = String.format("耳机插入: %b, 有麦克风: %b", state, mic);
+        String headsetChange = String.format(context.getString(R.string.headset_insert), state, mic);
         EMLog.d("HeadsetReceiver", headsetChange);
         Toast.makeText(context, headsetChange, Toast.LENGTH_SHORT).show();
     }

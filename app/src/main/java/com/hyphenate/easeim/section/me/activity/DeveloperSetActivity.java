@@ -13,6 +13,7 @@ import androidx.annotation.Nullable;
 import com.hyphenate.chat.EMClient;
 import com.hyphenate.chat.EMOptions;
 import com.hyphenate.easeim.BuildConfig;
+import com.hyphenate.easeim.DemoApplication;
 import com.hyphenate.easeim.DemoHelper;
 import com.hyphenate.easeim.R;
 import com.hyphenate.easeim.common.manager.OptionsHelper;
@@ -37,7 +38,7 @@ public class DeveloperSetActivity extends BaseInitActivity implements EaseTitleB
     private DemoModel settingsModel;
     private EMOptions options;
 
-    private String sortType[] = new String[]{"按接收顺序", "按服务器时间"};
+    private String sortType[] = new String[]{DemoApplication.getInstance().getApplicationContext().getString(R.string.in_order_of_reception), DemoApplication.getInstance().getApplicationContext().getString(R.string.by_server_time)};
 
     public static void actionStart(Context context) {
         Intent starter = new Intent(context, DeveloperSetActivity.class);
@@ -120,7 +121,7 @@ public class DeveloperSetActivity extends BaseInitActivity implements EaseTitleB
 
     private void showSelectDialog() {
         new AlertDialog.Builder(this)
-                    .setTitle("选择")
+                    .setTitle(R.string.choose)
                     .setItems(sortType, new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {

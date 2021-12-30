@@ -267,7 +267,7 @@ public class ContactDetailActivity extends BaseInitActivity implements EaseTitle
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.tv_note :
-                showToast("跳转到备注设置");
+                showToast(mContext.getString(R.string.intent_to_setting));
                 break;
             case R.id.btn_chat :
                 ChatActivity.actionStart(mContext, mUser.getUsername(), EaseConstant.CHATTYPE_SINGLE);

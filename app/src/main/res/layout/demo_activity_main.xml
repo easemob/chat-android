@@ -14,7 +14,7 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toTopOf="@id/fl_main_fragment"
         android:layout_marginTop="@dimen/em_margin_30"
-        app:titleBarTitle="会话"
+        app:titleBarTitle="@string/em_main_title_home"
         app:titleBarMenuResource="@drawable/em_home_menu_add"
         app:titleBarDisplayHomeAsUpEnabled="false"/>
 

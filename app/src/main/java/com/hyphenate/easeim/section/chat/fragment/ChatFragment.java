@@ -1,9 +1,11 @@
 package com.hyphenate.easeim.section.chat.fragment;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.ClipboardManager;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.text.TextUtils;
@@ -19,6 +21,7 @@ import com.hyphenate.chat.EMGroup;
 import com.hyphenate.chat.EMMessage;
 import com.hyphenate.easecallkit.EaseCallKit;
 import com.hyphenate.easecallkit.base.EaseCallType;
+import com.hyphenate.easeim.DemoApplication;
 import com.hyphenate.easeim.DemoHelper;
 import com.hyphenate.easeim.R;
 import com.hyphenate.easeim.common.constant.DemoConstant;
@@ -63,7 +66,7 @@ public class ChatFragment extends EaseChatFragment implements OnRecallMessageRes
     protected ClipboardManager clipboard;
 
     private static final int REQUEST_CODE_SELECT_AT_USER = 15;
-    private static final String[] calls = {"视频通话", "语音通话"};
+    private static final String[] calls = {DemoApplication.getInstance().getApplicationContext().getString(R.string.video_call), DemoApplication.getInstance().getApplicationContext().getString(R.string.voice_call)};
     private OnFragmentInfoListener infoListener;
     private Dialog dialog;
 
@@ -103,6 +106,7 @@ public class ChatFragment extends EaseChatFragment implements OnRecallMessageRes
         //    primaryMenu.setMenuShowType(EaseInputMenuStyle.ONLY_TEXT);
         //}
 
+        chatLayout.setTargetLanguageCode(DemoHelper.getInstance().getModel().getTargetLanguage());
     }
 
     private void addItemMenuAction() {
@@ -421,7 +425,7 @@ public class ChatFragment extends EaseChatFragment implements OnRecallMessageRes
     }
 
     @Override
-    public void onPreMenu(EasePopupWindowHelper helper, EMMessage message) {
+    public void onPreMenu(EasePopupWindowHelper helper, EMMessage message, View v) {
         //默认两分钟后，即不可撤回
         if(System.currentTimeMillis() - message.getMsgTime() > 2 * 60 * 1000) {
             helper.findItemVisible(R.id.action_chat_recall, false);
@@ -433,6 +437,9 @@ public class ChatFragment extends EaseChatFragment implements OnRecallMessageRes
                 if(!message.getBooleanAttribute(DemoConstant.MESSAGE_ATTR_IS_VIDEO_CALL, false)
                         && !message.getBooleanAttribute(DemoConstant.MESSAGE_ATTR_IS_VOICE_CALL, false)) {
                     helper.findItemVisible(R.id.action_chat_forward, true);
+                }
+                if(v.getId() == R.id.subBubble){
+                    helper.findItemVisible(R.id.action_chat_forward, false);
                 }
                 break;
             case IMAGE:
@@ -457,6 +464,16 @@ public class ChatFragment extends EaseChatFragment implements OnRecallMessageRes
             case R.id.action_chat_recall :
                 showProgressBar();
                 chatLayout.recallMessage(message);
+                return true;
+            case R.id.action_chat_reTranslate:
+                new AlertDialog.Builder(getContext())
+                        .setTitle(mContext.getString(R.string.using_translate))
+                        .setMessage(mContext.getString(R.string.retranslate_prompt))
+                        .setPositiveButton(mContext.getString(R.string.confirm), new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int which) {
+                                chatLayout.translateMessage(message, false);
+                            }
+                        }).show();
                 return true;
         }
         return false;
@@ -508,5 +525,17 @@ public class ChatFragment extends EaseChatFragment implements OnRecallMessageRes
         void onChatError(int code, String errorMsg);
 
         void onOtherTyping(String action);
+    }
+
+    @Override
+    public void translateMessageFail(EMMessage message, int code, String error) {
+        new AlertDialog.Builder(getContext())
+                .setTitle(mContext.getString(R.string.unable_translate))
+                .setMessage(error+".")
+                .setPositiveButton(mContext.getString(R.string.confirm), new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                    }
+                }).show();
     }
 }

@@ -74,7 +74,7 @@ public class BaseFragment extends EaseBaseFragment {
         new AlertDialog.Builder(mContext)
                     .setTitle(title)
                     .setMessage(message)
-                    .setPositiveButton("确定", new DialogInterface.OnClickListener() {
+                    .setPositiveButton(mContext.getString(R.string.confirm), new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
                             if(callBack != null) {
@@ -82,7 +82,7 @@ public class BaseFragment extends EaseBaseFragment {
                             }
                         }
                     })
-                    .setNegativeButton("取消", null)
+                    .setNegativeButton(mContext.getString(R.string.cancel), null)
                     .show();
     }
 
