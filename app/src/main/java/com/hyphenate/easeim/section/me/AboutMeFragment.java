@@ -58,7 +58,7 @@ public class AboutMeFragment extends BaseInitFragment implements View.OnClickLis
         itemAboutHx = findViewById(R.id.item_about_hx);
         itemDeveloperSet = findViewById(R.id.item_developer_set);
         mBtnLogout = findViewById(R.id.btn_logout);
-        nickName_view.setText("账号：" + DemoHelper.getInstance().getCurrentUser());
+        nickName_view.setText(mContext.getString(R.string.account) + DemoHelper.getInstance().getCurrentUser());
     }
 
     @Override
@@ -148,8 +148,8 @@ public class AboutMeFragment extends BaseInitFragment implements View.OnClickLis
         });
         LiveDataBus.get().with(DemoConstant.NICK_NAME_CHANGE, EaseEvent.class).observe(this, event -> {
             if (event != null) {
-                nickName_view.setText("昵称：" + event.message);
-                userId_view.setText("账号：" + EMClient.getInstance().getCurrentUser());
+                nickName_view.setText(mContext.getString(R.string.push_nick) + ": " + event.message);
+                userId_view.setText(mContext.getString(R.string.account) + EMClient.getInstance().getCurrentUser());
                 if(userInfo != null){
                     userInfo.setNickName(event.message);
                 }

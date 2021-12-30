@@ -147,7 +147,7 @@ public class MultiDeviceActivity extends BaseInitActivity {
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
-                            Toast.makeText(MultiDeviceActivity.this, "get logged in devices failed", Toast.LENGTH_LONG).show();
+                            Toast.makeText(MultiDeviceActivity.this, mContext.getString(R.string.get_logged_failed), Toast.LENGTH_LONG).show();
                         }
                     });
                 }

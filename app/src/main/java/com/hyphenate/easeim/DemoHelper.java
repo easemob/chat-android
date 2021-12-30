@@ -1,7 +1,5 @@
 package com.hyphenate.easeim;
 
-import static android.content.Intent.FLAG_ACTIVITY_NEW_TASK;
-
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
@@ -26,6 +24,7 @@ import com.hyphenate.chat.EMGroupManager;
 import com.hyphenate.chat.EMMessage;
 import com.hyphenate.chat.EMOptions;
 import com.hyphenate.chat.EMPushManager;
+import com.hyphenate.chat.EMTranslateParams;
 import com.hyphenate.cloud.EMHttpClient;
 import com.hyphenate.easecallkit.EaseCallKit;
 import com.hyphenate.easecallkit.base.EaseCallEndReason;
@@ -36,6 +35,7 @@ import com.hyphenate.easecallkit.base.EaseCallType;
 import com.hyphenate.easecallkit.base.EaseCallUserInfo;
 import com.hyphenate.easecallkit.base.EaseGetUserAccountCallback;
 import com.hyphenate.easecallkit.base.EaseUserAccount;
+import com.hyphenate.easecallkit.event.CallCancelEvent;
 import com.hyphenate.easeim.common.constant.DemoConstant;
 import com.hyphenate.easeim.common.db.DemoDbHelper;
 import com.hyphenate.easeim.common.livedatas.LiveDataBus;
@@ -92,6 +92,8 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.TimeZone;
+
+import static android.content.Intent.FLAG_ACTIVITY_NEW_TASK;
 
 /**
  * 作为hyphenate-sdk的入口控制类，获取sdk下的基础类均通过此类
@@ -375,6 +377,13 @@ public class DemoHelper {
                 });
     }
 
+    //Translation Manager 初始化
+    public void initTranslationManager() {
+        EMTranslateParams params = new EMTranslateParams("46c34219512d4f09ae6f8e04c083b7a3", "https://api.cognitive.microsofttranslator.com", 500);
+
+        EMClient.getInstance().translationManager().init(params);
+    }
+
     /**
      * 统一配置头像
      * @return
@@ -522,32 +531,76 @@ public class DemoHelper {
         if(fetchUserTread != null && fetchUserRunnable != null){
             fetchUserRunnable.setStop(true);
         }
-        EMClient.getInstance().logout(unbindDeviceToken, new EMCallBack() {
 
+        CallCancelEvent cancelEvent = new CallCancelEvent();
+        EaseCallKit.getInstance().sendCmdMsg(cancelEvent, EaseCallKit.getInstance().getFromUserId(), new EMCallBack() {
             @Override
             public void onSuccess() {
-                logoutSuccess();
-                //reset();
-                if (callback != null) {
-                    callback.onSuccess();
-                }
+                EMClient.getInstance().logout(unbindDeviceToken, new EMCallBack() {
 
-            }
+                    @Override
+                    public void onSuccess() {
+                        logoutSuccess();
+                        //reset();
+                        if (callback != null) {
+                            callback.onSuccess();
+                        }
 
-            @Override
-            public void onProgress(int progress, String status) {
-                if (callback != null) {
-                    callback.onProgress(progress, status);
-                }
+                    }
+
+                    @Override
+                    public void onProgress(int progress, String status) {
+                        if (callback != null) {
+                            callback.onProgress(progress, status);
+                        }
+                    }
+
+                    @Override
+                    public void onError(int code, String error) {
+                        Log.d(TAG, "logout: onSuccess");
+                        //reset();
+                        if (callback != null) {
+                            callback.onError(code, error);
+                        }
+                    }
+                });
             }
 
             @Override
             public void onError(int code, String error) {
-                Log.d(TAG, "logout: onSuccess");
-                //reset();
-                if (callback != null) {
-                    callback.onError(code, error);
-                }
+                EMClient.getInstance().logout(unbindDeviceToken, new EMCallBack() {
+
+                    @Override
+                    public void onSuccess() {
+                        logoutSuccess();
+                        //reset();
+                        if (callback != null) {
+                            callback.onSuccess();
+                        }
+
+                    }
+
+                    @Override
+                    public void onProgress(int progress, String status) {
+                        if (callback != null) {
+                            callback.onProgress(progress, status);
+                        }
+                    }
+
+                    @Override
+                    public void onError(int code, String error) {
+                        Log.d(TAG, "logout: onSuccess");
+                        //reset();
+                        if (callback != null) {
+                            callback.onError(code, error);
+                        }
+                    }
+                });
+            }
+
+            @Override
+            public void onProgress(int progress, String status) {
+
             }
         });
     }
@@ -576,6 +629,7 @@ public class DemoHelper {
         setAutoLogin(false);
         DemoDbHelper.getInstance(DemoApplication.getInstance()).closeDb();
         getUserProfileManager().reset();
+        EMClient.getInstance().translationManager().logout();
     }
 
     public EaseAvatarOptions getEaseAvatarOptions() {
@@ -804,7 +858,7 @@ public class DemoHelper {
                 EMLog.d(TAG,"onEndCallWithReason" + (callType != null ? callType.name() : " callType is null ") + " reason:" + reason + " time:"+ callTime);
                 SimpleDateFormat formatter = new SimpleDateFormat("mm:ss");
                 formatter.setTimeZone(TimeZone.getTimeZone("UTC"));
-                String callString = "通话时长 ";
+                String callString = mianContext.getString(R.string.call_duration);
                 callString += formatter.format(callTime);
 
                 Toast.makeText(mianContext,callString,Toast.LENGTH_SHORT).show();

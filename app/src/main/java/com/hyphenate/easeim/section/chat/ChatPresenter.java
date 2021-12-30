@@ -1205,7 +1205,7 @@ public class ChatPresenter extends EaseChatPresenter {
         }
         String content = sb.toString();
         if(content.contains(EMClient.getInstance().getCurrentUser())) {
-            content = "您";
+            content = context.getString(R.string.you);
         }
         return content;
     }

@@ -51,7 +51,7 @@
             android:layout_marginStart="25dp"
             android:layout_below="@id/head_view"
             android:layout_marginTop="30dp"
-            tools:hint="[个人名片]"
+            tools:hint="@string/personal_card"
             android:textColor="#999999"
             android:textSize="16sp" />
 

@@ -65,7 +65,7 @@ public class PushAndMessageHelper {
                     sendImageMessage(toChatUsername, uri);
                 }else {
                     LiveDataBus.get().with(DemoConstant.MESSAGE_FORWARD)
-                            .postValue(new EaseEvent("不存在图片资源", EaseEvent.TYPE.MESSAGE));
+                            .postValue(new EaseEvent(DemoApplication.getInstance().getApplicationContext().getString(R.string.no_image_resource), EaseEvent.TYPE.MESSAGE));
                 }
                 break;
         }

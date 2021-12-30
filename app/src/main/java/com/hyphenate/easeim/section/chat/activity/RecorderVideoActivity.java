@@ -545,7 +545,7 @@ public class RecorderVideoActivity extends EaseBaseActivity implements
 		EMLog.e("video", "recording onError:");
 		stopRecording();
 		Toast.makeText(this,
-				"Recording error has occurred. Stopping the recording",
+				getApplicationContext().getString(R.string.recording_error),
 				Toast.LENGTH_SHORT).show();
 
 	}
@@ -601,7 +601,7 @@ public class RecorderVideoActivity extends EaseBaseActivity implements
 	private void showNoSDCardDialog() {
 	    new AlertDialog.Builder(this)
         .setTitle(R.string.prompt)
-        .setMessage("No sd card!")
+        .setMessage(R.string.no_sd_card)
         .setPositiveButton(R.string.ok,
                 new DialogInterface.OnClickListener() {
 

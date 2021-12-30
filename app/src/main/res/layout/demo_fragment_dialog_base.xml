@@ -37,7 +37,7 @@
             android:textSize="20sp"
             android:textColor="#424242"
             android:gravity="center"
-            android:maxLines="2"
+            android:maxLines="3"
             android:ellipsize="end"
             tools:text="标题"/>
 
@@ -60,7 +60,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintTop_toTopOf="@id/btn_dialog_confirm"
             android:background="@drawable/demo_dialog_btn_left_selector"
-            android:text="@string/em_dialog_btn_cancel"
+            android:text="@string/cancel"
             android:textColor="@color/demo_dialog_btn_text_color_selector"/>
 
         <Button
@@ -72,7 +72,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintTop_toBottomOf="@id/rl_dialog_middle"
             android:background="@drawable/demo_dialog_btn_selector"
-            android:text="@string/em_dialog_btn_confirm"
+            android:text="@string/confirm"
             android:textColor="@color/demo_dialog_btn_text_color_selector"/>
 
         <androidx.constraintlayout.widget.Group

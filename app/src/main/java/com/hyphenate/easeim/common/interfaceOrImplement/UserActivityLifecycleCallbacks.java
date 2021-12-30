@@ -12,6 +12,7 @@ import android.text.TextUtils;
 import android.util.Log;
 
 
+import com.hyphenate.easecallkit.base.EaseCallFloatWindow;
 import com.hyphenate.easeim.R;
 import com.hyphenate.easeim.section.login.activity.SplashActivity;
 
@@ -60,7 +61,7 @@ public class UserActivityLifecycleCallbacks implements Application.ActivityLifec
         resumeActivity.remove(activity);
         if(resumeActivity.isEmpty()) {
             Activity a = getOtherTaskSingleInstanceActivity(activity.getTaskId());
-            if(isTargetSingleInstance(a)) {
+            if(isTargetSingleInstance(a) && !EaseCallFloatWindow.getInstance().isShowing()) {
                 makeTaskToFront(a);
             }
             Log.e("ActivityLifecycle", "在后台了");
@@ -155,6 +156,7 @@ public class UserActivityLifecycleCallbacks implements Application.ActivityLifec
             if(a != null && !a.isFinishing() //没有正在finish
                     && a != activity //当前activity和列表中首个activity不相同
                     && a.getTaskId() != activity.getTaskId()
+                    && !EaseCallFloatWindow.getInstance().isShowing()
             ){
                 Log.e("ActivityLifecycle", "启动了activity = "+a.getClass().getName());
                 activity.startActivity(new Intent(activity, a.getClass()));

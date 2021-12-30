@@ -276,7 +276,7 @@ public class LoginFragment extends BaseInitFragment implements View.OnClickListe
         spanStr.setSpan(new MyClickableSpan() {
             @Override
             public void onClick(@NonNull View widget) {
-                showToast("跳转到服务条款");
+                showToast(mContext.getString(R.string.intent_to_service));
             }
         }, 2, 10, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
 
@@ -284,7 +284,7 @@ public class LoginFragment extends BaseInitFragment implements View.OnClickListe
         spanStr.setSpan(new MyClickableSpan() {
             @Override
             public void onClick(@NonNull View widget) {
-                showToast("跳转到隐私协议");
+                showToast(mContext.getString(R.string.intent_to_privacy_protocol));
             }
         }, 11, spanStr.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
         return spanStr;
