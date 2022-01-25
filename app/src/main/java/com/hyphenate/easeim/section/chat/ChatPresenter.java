@@ -205,14 +205,21 @@ public class ChatPresenter extends EaseChatPresenter {
 
     @Override
     public void onMessageRecalled(List<EMMessage> messages) {
-        EaseEvent event = EaseEvent.create(DemoConstant.MESSAGE_CHANGE_RECALL, EaseEvent.TYPE.MESSAGE);
-        messageChangeLiveData.with(DemoConstant.MESSAGE_CHANGE_CHANGE).postValue(event);
+
         for (EMMessage msg : messages) {
             if(msg.getChatType() == EMMessage.ChatType.GroupChat && EaseAtMessageHelper.get().isAtMeMsg(msg)){
                 EaseAtMessageHelper.get().removeAtMeGroup(msg.getTo());
             }
             EMMessage msgNotification = EMMessage.createReceiveMessage(EMMessage.Type.TXT);
-            EMTextMessageBody txtBody = new EMTextMessageBody(String.format(context.getString(R.string.msg_recall_by_user), msg.getFrom()));
+            String text=null;
+            String recaller = msg.getRecaller();
+            String from = msg.getFrom();
+            if( (!TextUtils.isEmpty(recaller))&&!TextUtils.equals(recaller, from)) {
+                text = String.format(context.getString(R.string.msg_recall_by_another), recaller, from);
+            }else{
+                text = String.format(context.getString(R.string.msg_recall_by_user), from);
+            }
+            EMTextMessageBody txtBody = new EMTextMessageBody(text);
             msgNotification.addBody(txtBody);
             msgNotification.setFrom(msg.getFrom());
             msgNotification.setTo(msg.getTo());
@@ -222,8 +229,12 @@ public class ChatPresenter extends EaseChatPresenter {
             msgNotification.setChatType(msg.getChatType());
             msgNotification.setAttribute(DemoConstant.MESSAGE_TYPE_RECALL, true);
             msgNotification.setStatus(EMMessage.Status.SUCCESS);
+            msgNotification.setRecaller(msg.getRecaller());
             EMClient.getInstance().chatManager().saveMessage(msgNotification);
         }
+
+        EaseEvent event = EaseEvent.create(DemoConstant.MESSAGE_CHANGE_RECALL, EaseEvent.TYPE.MESSAGE);
+        messageChangeLiveData.with(DemoConstant.MESSAGE_CHANGE_CHANGE).postValue(event);
     }
 
     private class ChatConversationListener implements EMConversationListener {
