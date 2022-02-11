@@ -221,6 +221,7 @@ public class ChatPresenter extends EaseChatPresenter {
             }
             EMTextMessageBody txtBody = new EMTextMessageBody(text);
             msgNotification.addBody(txtBody);
+            msgNotification.setDirection(msg.direct());
             msgNotification.setFrom(msg.getFrom());
             msgNotification.setTo(msg.getTo());
             msgNotification.setUnread(false);
@@ -228,8 +229,8 @@ public class ChatPresenter extends EaseChatPresenter {
             msgNotification.setLocalTime(msg.getMsgTime());
             msgNotification.setChatType(msg.getChatType());
             msgNotification.setAttribute(DemoConstant.MESSAGE_TYPE_RECALL, true);
+            msgNotification.setAttribute(DemoConstant.MESSAGE_TYPE_RECALLER, recaller);
             msgNotification.setStatus(EMMessage.Status.SUCCESS);
-            msgNotification.setRecaller(msg.getRecaller());
             EMClient.getInstance().chatManager().saveMessage(msgNotification);
         }
 

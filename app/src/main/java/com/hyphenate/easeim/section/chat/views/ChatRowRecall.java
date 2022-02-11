@@ -1,5 +1,7 @@
 package com.hyphenate.easeim.section.chat.views;
 
+import static com.hyphenate.easeui.constants.EaseConstant.MESSAGE_TYPE_RECALLER;
+
 import android.content.Context;
 import android.text.TextUtils;
 import android.widget.TextView;
@@ -29,7 +31,7 @@ public class ChatRowRecall extends EaseChatRow {
     protected void onSetUpView() {
         // 设置显示内容
         String messageStr = null;
-        String recaller = message.getRecaller();
+        String recaller = message.getStringAttribute(MESSAGE_TYPE_RECALLER,"");
         String from = message.getFrom();
         if (message.direct() == EMMessage.Direct.SEND) {
             messageStr = String.format(context.getString(R.string.msg_recall_by_self));
