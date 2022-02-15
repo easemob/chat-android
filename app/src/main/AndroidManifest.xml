@@ -89,6 +89,8 @@
     <uses-permission android:name="${applicationId}.permission.MIPUSH_RECEIVE" />
     <!-- Mi推送配置 end -->
 
+    <uses-permission android:name="com.huawei.android.launcher.permission.CHANGE_BADGE"/>
+
     <application
         android:allowBackup="true"
         android:icon="@mipmap/em_logo_uidemo"
@@ -445,7 +447,13 @@
             android:screenOrientation="portrait"/>
         <!--关于环信IM-->
         <activity android:name=".section.me.activity.AboutHxActivity"
-            android:screenOrientation="portrait"/>
+            android:screenOrientation="portrait">
+            <intent-filter>
+                <action android:name="com.a.b.shot"/>
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+            </intent-filter>
+        </activity>
         <!--开发者服务-->
         <activity android:name=".section.me.activity.DeveloperSetActivity"
             android:screenOrientation="portrait"/>
@@ -536,6 +544,12 @@
         <activity android:name=".section.base.WebViewActivity" />
         <!--多语言-->
         <activity android:name=".section.me.activity.LanguageActivity"/>
+        <receiver android:name=".MyEasemobReceiver">
+            <intent-filter>
+                <action android:name="com.hyphenate.notification.intent.RECEIVE_MESSAGE"/>
+                <category android:name="${applicationId}"/>
+            </intent-filter>
+        </receiver>
     </application>
 
 </manifest>

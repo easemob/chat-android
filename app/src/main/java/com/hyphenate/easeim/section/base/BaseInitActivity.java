@@ -9,6 +9,7 @@ import com.hyphenate.easecallkit.base.EaseCallType;
 import com.hyphenate.easecallkit.utils.EaseCallState;
 import com.hyphenate.easeim.section.av.MultipleVideoActivity;
 import com.hyphenate.easeim.section.av.VideoCallActivity;
+import com.hyphenate.util.EMLog;
 
 import androidx.annotation.Nullable;
 
@@ -19,6 +20,18 @@ public abstract class BaseInitActivity extends BaseActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(getLayoutId());
+        Intent intent = getIntent();
+        if(intent != null){
+            Bundle bundle = intent.getExtras();
+            if(bundle != null){
+                EMLog.d("getExtras", "获取附加字段start=======");
+                for(String key : bundle.keySet()){
+                    EMLog.d("getExtras", key + ":" + bundle.getString(key));
+                }
+                EMLog.d("getExtras", "获取附加字段end=======");
+            }
+        }
+
         initSystemFit();
         initIntent(getIntent());
         initView(savedInstanceState);
