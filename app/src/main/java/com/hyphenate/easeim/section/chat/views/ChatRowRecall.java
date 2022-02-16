@@ -33,7 +33,7 @@ public class ChatRowRecall extends EaseChatRow {
         String messageStr = null;
         String recaller = message.getStringAttribute(MESSAGE_TYPE_RECALLER,"");
         String from = message.getFrom();
-        if (message.direct() == EMMessage.Direct.SEND) {
+        if (message.direct() == EMMessage.Direct.SEND&&(TextUtils.isEmpty(recaller)||((!TextUtils.isEmpty(recaller))&&TextUtils.equals(recaller, from)))) {
             messageStr = String.format(context.getString(R.string.msg_recall_by_self));
         } else if( (!TextUtils.isEmpty(recaller))&&!TextUtils.equals(recaller, from)) {
             messageStr = String.format(context.getString(R.string.msg_recall_by_another), recaller, from);
