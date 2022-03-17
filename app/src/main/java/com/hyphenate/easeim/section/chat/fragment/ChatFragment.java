@@ -1,5 +1,7 @@
 package com.hyphenate.easeim.section.chat.fragment;
 
+import static android.content.Intent.FLAG_ACTIVITY_NEW_TASK;
+
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
@@ -7,7 +9,6 @@ import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.net.Uri;
 import android.text.TextUtils;
 import android.view.View;
 import android.view.ViewGroup;
@@ -30,7 +31,6 @@ import com.hyphenate.easeim.common.model.EmojiconExampleGroupData;
 import com.hyphenate.easeim.section.av.VideoCallActivity;
 import com.hyphenate.easeim.section.base.BaseActivity;
 import com.hyphenate.easeim.section.chat.activity.ForwardMessageActivity;
-import com.hyphenate.easeim.section.chat.activity.ImageGridActivity;
 import com.hyphenate.easeim.section.chat.activity.PickAtUserActivity;
 import com.hyphenate.easeim.section.chat.activity.SelectUserCardActivity;
 import com.hyphenate.easeim.section.chat.viewmodel.MessageViewModel;
@@ -50,13 +50,10 @@ import com.hyphenate.easeui.modules.chat.interfaces.IChatExtendMenu;
 import com.hyphenate.easeui.modules.chat.interfaces.OnRecallMessageResultListener;
 import com.hyphenate.easeui.modules.menu.EasePopupWindowHelper;
 import com.hyphenate.easeui.modules.menu.MenuItemBean;
-import com.hyphenate.util.EMFileHelper;
 import com.hyphenate.util.EMLog;
 
 import java.util.HashMap;
 import java.util.Map;
-
-import static android.content.Intent.FLAG_ACTIVITY_NEW_TASK;
 
 
 public class ChatFragment extends EaseChatFragment implements OnRecallMessageResultListener {
@@ -295,13 +292,6 @@ public class ChatFragment extends EaseChatFragment implements OnRecallMessageRes
     }
 
     @Override
-    protected void selectVideoFromLocal() {
-        super.selectVideoFromLocal();
-        Intent intent = new Intent(getActivity(), ImageGridActivity.class);
-        startActivityForResult(intent, REQUEST_CODE_SELECT_VIDEO);
-    }
-
-    @Override
     public boolean onBubbleClick(EMMessage message) {
         return false;
     }
@@ -353,20 +343,6 @@ public class ChatFragment extends EaseChatFragment implements OnRecallMessageRes
                     if(data != null){
                         String username = data.getStringExtra("username");
                         chatLayout.inputAtUsername(username, false);
-                    }
-                    break;
-                case REQUEST_CODE_SELECT_VIDEO: //send the video
-                    if (data != null) {
-                        int duration = data.getIntExtra("dur", 0);
-                        String videoPath = data.getStringExtra("path");
-                        String uriString = data.getStringExtra("uri");
-                        EMLog.d(TAG, "path = "+videoPath + " uriString = "+uriString);
-                        if(!TextUtils.isEmpty(videoPath)) {
-                            chatLayout.sendVideoMessage(Uri.parse(videoPath), duration);
-                        }else {
-                            Uri videoUri = EMFileHelper.getInstance().formatInUri(uriString);
-                            chatLayout.sendVideoMessage(videoUri, duration);
-                        }
                     }
                     break;
                 case REQUEST_CODE_SELECT_USER_CARD:
