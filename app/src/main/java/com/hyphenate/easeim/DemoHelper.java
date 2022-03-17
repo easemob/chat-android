@@ -762,7 +762,7 @@ public class DemoHelper {
     public void showNotificationPermissionDialog() {
         EMPushType pushType = EMPushHelper.getInstance().getPushType();
         // oppo
-        if(pushType == EMPushType.OPPOPUSH && HeytapPushManager.isSupportPush()) {
+        if(pushType == EMPushType.OPPOPUSH && HeytapPushManager.isSupportPush(mianContext)) {
             HeytapPushManager.requestNotificationPermission();
         }
     }

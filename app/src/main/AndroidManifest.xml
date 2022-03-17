@@ -163,9 +163,15 @@
         <!-- huawei push end -->
 
         <!-- VIVO推送配置 start -->
+        <!--Vivo Push SDK的版本信息-->
+        <meta-data
+            android:name="sdk_version_vivo"
+            android:value="484"/>
+        <!--Vivo Push需要配置的service、activity-->
         <service
             android:name="com.vivo.push.sdk.service.CommandClientService"
-            android:exported="true" />
+            android:permission="com.push.permission.UPSTAGESERVICE"
+            android:exported="true"/>
         <activity
             android:name="com.vivo.push.sdk.LinkProxyClientActivity"
             android:exported="false"
