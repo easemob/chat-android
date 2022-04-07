@@ -108,7 +108,7 @@ public class DemoHelper {
     private UserProfileManager userProManager;
 
     private EaseCallKitListener callKitListener;
-    private Context mianContext;
+    private Context mainContext;
 
     private String tokenUrl = "http://a1.easemob.com/token/rtcToken/v1";
     private String uIdUrl = "http://a1.easemob.com/channel/mapper";
@@ -201,7 +201,7 @@ public class DemoHelper {
         demoModel.setUserInfoTimeOut(30 * 60 * 1000);
         //更新过期用户属性列表
         updateTimeoutUsers();
-        mianContext = context;
+        mainContext = context;
         return isSDKInit();
     }
 
@@ -762,7 +762,7 @@ public class DemoHelper {
     public void showNotificationPermissionDialog() {
         EMPushType pushType = EMPushHelper.getInstance().getPushType();
         // oppo
-        if(pushType == EMPushType.OPPOPUSH && HeytapPushManager.isSupportPush()) {
+        if(pushType == EMPushType.OPPOPUSH && HeytapPushManager.isSupportPush(mainContext)) {
             HeytapPushManager.requestNotificationPermission();
         }
     }
@@ -858,10 +858,10 @@ public class DemoHelper {
                 EMLog.d(TAG,"onEndCallWithReason" + (callType != null ? callType.name() : " callType is null ") + " reason:" + reason + " time:"+ callTime);
                 SimpleDateFormat formatter = new SimpleDateFormat("mm:ss");
                 formatter.setTimeZone(TimeZone.getTimeZone("UTC"));
-                String callString = mianContext.getString(R.string.call_duration);
+                String callString = mainContext.getString(R.string.call_duration);
                 callString += formatter.format(callTime);
 
-                Toast.makeText(mianContext,callString,Toast.LENGTH_SHORT).show();
+                Toast.makeText(mainContext,callString,Toast.LENGTH_SHORT).show();
             }
 
             @Override
