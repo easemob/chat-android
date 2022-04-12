@@ -27,8 +27,8 @@ android {
         applicationId "com.hyphenate.easeim"
         minSdkVersion 19
         targetSdkVersion 29
-        versionCode 90
-        versionName "3.8.9"
+        versionCode 91
+        versionName "3.9.0"
         multiDexEnabled true
         //为了兼容5.0以下使用vector图标
         vectorDrawables.useSupportLibrary = true
@@ -151,7 +151,11 @@ dependencies {
     // meizu push
     implementation 'com.meizu.flyme.internet:push-internal:4.0.4@aar'//配置集成sdk
     //oppo push
-    implementation (name:'oppo_push_v2.1.0',ext:'aar')
+    implementation (name:'oppo_push_3.0.0',ext:'aar')
+    //oppo push需添加以下依赖
+    implementation 'com.google.code.gson:gson:2.6.2'
+    implementation 'commons-codec:commons-codec:1.6'
+    implementation 'androidx.annotation:annotation:1.1.0'
     // Google firebase cloud messaging
     // Import the BoM for the Firebase platform
     implementation platform('com.google.firebase:firebase-bom:28.2.1')
@@ -174,14 +178,14 @@ dependencies {
 
     // EaseIMKit
 //    api (project(path: ':ease-im-kit'))
-    implementation 'io.hyphenate:ease-im-kit:3.8.9'
+    implementation 'io.hyphenate:ease-im-kit:3.9.0'
     // EaseIMKit依赖，必须添加环信IM SDK
 //    implementation project(path: ':hyphenatechatsdk')
-    implementation 'io.hyphenate:hyphenate-chat:3.8.9'
+    implementation 'io.hyphenate:hyphenate-chat:3.9.0'
 
     //EaseCallKit依赖，必须添加环信IM SDK
 //    api project(':ease-call-kit')
-    implementation 'io.hyphenate:ease-call-kit:3.8.9'
+    implementation 'io.hyphenate:ease-call-kit:3.9.0'
 
 }
 
