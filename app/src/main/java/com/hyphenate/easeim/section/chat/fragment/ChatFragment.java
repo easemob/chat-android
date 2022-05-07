@@ -12,10 +12,12 @@ import android.content.Intent;
 import android.text.TextUtils;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.lifecycle.ViewModelProvider;
 
+import com.hyphenate.EMCallBack;
 import com.hyphenate.chat.EMClient;
 import com.hyphenate.chat.EMCustomMessageBody;
 import com.hyphenate.chat.EMGroup;
@@ -39,6 +41,7 @@ import com.hyphenate.easeim.section.contact.activity.ContactDetailActivity;
 import com.hyphenate.easeim.section.dialog.DemoDialogFragment;
 import com.hyphenate.easeim.section.dialog.DemoListDialogFragment;
 import com.hyphenate.easeim.section.dialog.FullEditDialogFragment;
+import com.hyphenate.easeim.section.dialog.LabelEditDialogFragment;
 import com.hyphenate.easeim.section.dialog.SimpleDialogFragment;
 import com.hyphenate.easeim.section.group.GroupHelper;
 import com.hyphenate.easeim.section.me.activity.UserDetailActivity;
@@ -64,6 +67,15 @@ public class ChatFragment extends EaseChatFragment implements OnRecallMessageRes
 
     private static final int REQUEST_CODE_SELECT_AT_USER = 15;
     private static final String[] calls = {DemoApplication.getInstance().getApplicationContext().getString(R.string.video_call), DemoApplication.getInstance().getApplicationContext().getString(R.string.voice_call)};
+    private static final String[] labels = {
+            DemoApplication.getInstance().getApplicationContext().getString(R.string.tab_politics),
+            DemoApplication.getInstance().getApplicationContext().getString(R.string.tab_yellow_related),
+            DemoApplication.getInstance().getApplicationContext().getString(R.string.tab_advertisement),
+            DemoApplication.getInstance().getApplicationContext().getString(R.string.tab_abuse),
+            DemoApplication.getInstance().getApplicationContext().getString(R.string.tab_violent),
+            DemoApplication.getInstance().getApplicationContext().getString(R.string.tab_contraband),
+            DemoApplication.getInstance().getApplicationContext().getString(R.string.tab_other),
+    };
     private OnFragmentInfoListener infoListener;
     private Dialog dialog;
 
@@ -110,6 +122,10 @@ public class ChatFragment extends EaseChatFragment implements OnRecallMessageRes
         MenuItemBean itemMenu = new MenuItemBean(0, R.id.action_chat_forward, 11, getString(R.string.action_forward));
         itemMenu.setResourceId(R.drawable.ease_chat_item_menu_forward);
         chatLayout.addItemMenu(itemMenu );
+        MenuItemBean itemMenu1 = new MenuItemBean(0,R.id.action_chat_label,12,getString(R.string.action_label));
+        itemMenu1.setResourceId(R.drawable.ease_chat_item_menu_copy);
+        chatLayout.addItemMenu(itemMenu1 );
+//        chatLayout.setReportYourSelf(false);
     }
 
     private void resetChatExtendMenu() {
@@ -451,6 +467,9 @@ public class ChatFragment extends EaseChatFragment implements OnRecallMessageRes
                             }
                         }).show();
                 return true;
+            case R.id.action_chat_label:
+                showLabelDialog(message);
+                return true;
         }
         return false;
     }
@@ -477,6 +496,68 @@ public class ChatFragment extends EaseChatFragment implements OnRecallMessageRes
                 })
                 .showCancelButton(true)
                 .show();
+    }
+
+    private void showLabelDialog(EMMessage message){
+        new DemoListDialogFragment.Builder((BaseActivity) mContext)
+                .setData(labels)
+                .setCancelColorRes(R.color.black)
+                .setWindowAnimations(R.style.animate_dialog)
+                .setOnItemClickListener(new DemoListDialogFragment.OnDialogItemClickListener() {
+                    @Override
+                    public void OnItemClick(View view, int position) {
+                        showLabelDialog(message,labels[position]);
+                    }
+                })
+                .show();
+    }
+
+    private void showLabelDialog(EMMessage message, String label){
+        new LabelEditDialogFragment.Builder((BaseActivity) mContext)
+            .setOnConfirmClickListener(new LabelEditDialogFragment.OnConfirmClickListener() {
+                @Override
+                public void onConfirm(View view, String reason) {
+                EMLog.e("ReportMessage：", "msgId: "+message.getMsgId() + "label: " + label +  " reason: " + reason);
+                new SimpleDialogFragment.Builder((BaseActivity) mContext)
+                        .setTitle(getString(R.string.report_delete_title))
+                        .setConfirmColor(R.color.em_color_brand)
+                        .setOnConfirmClickListener(getString(R.string.confirm), new DemoDialogFragment.OnConfirmClickListener() {
+                            @Override
+                            public void onConfirmClick(View view) {
+                                EMClient.getInstance().chatManager().asyncReportMessage(message.getMsgId(), label, reason, new EMCallBack() {
+                                    @Override
+                                    public void onSuccess() {
+                                        EMLog.e("ReportMessage：","onSuccess 举报成功");
+                                        runOnUiThread(new Runnable() {
+                                            @Override
+                                            public void run() {
+                                                Toast.makeText(getContext(),"举报成功",Toast.LENGTH_SHORT).show();
+                                            }
+                                        });
+                                    }
+
+                                    @Override
+                                    public void onError(int code, String error) {
+                                        EMLog.e("ReportMessage：","onError 举报失败: code " + code + "  : " + error);
+                                        runOnUiThread(new Runnable() {
+                                            @Override
+                                            public void run() {
+                                                Toast.makeText(getContext(),"举报失败： code: " + code + " desc: " + error,Toast.LENGTH_SHORT).show();
+                                            }
+                                        });
+                                    }
+
+                                    @Override
+                                    public void onProgress(int progress, String status) {
+
+                                    }
+                                });
+                            }
+                        })
+                        .showCancelButton(true)
+                        .show();
+                }
+            }).show();
     }
 
     public void setOnFragmentInfoListener(OnFragmentInfoListener listener) {
