@@ -443,7 +443,7 @@ public class DemoHelper {
                 .enableOppoPush("0bb597c5e9234f3ab9f821adbeceecdb",
                         "cd93056d03e1418eaa6c3faf10fd7537")
                 .enableHWPush() // 需要在AndroidManifest.xml中配置appId
-                .enableFCM("921300338324");
+                .enableFCM("782795210914");
         options.setPushConfig(builder.build());
 
         //set custom servers, commonly used in private deployment
