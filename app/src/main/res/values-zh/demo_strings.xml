@@ -600,4 +600,14 @@
     <string name="using_translate">使用翻译</string>
     <string name="retranslate_prompt">每个翻译只能重译一次，译文仅供参考。</string>
 
+    <string name="tab_politics">涉政</string>
+    <string name="tab_yellow_related">涉黄</string>
+    <string name="tab_advertisement">广告</string>
+    <string name="tab_abuse">辱骂</string>
+    <string name="tab_violent">暴恐</string>
+    <string name="tab_contraband">违禁</string>
+    <string name="tab_other">其他</string>
+
+    <string name="report_delete_title">确定举报？</string>
+
 </resources>

@@ -27,8 +27,8 @@ android {
         applicationId "com.hyphenate.easeim"
         minSdkVersion 21
         targetSdkVersion 29
-        versionCode 92
-        versionName "3.9.1"
+        versionCode 94
+        versionName "3.9.2"
         multiDexEnabled true
         //为了兼容5.0以下使用vector图标
         vectorDrawables.useSupportLibrary = true
@@ -49,17 +49,16 @@ android {
                                 VIVO_PUSH_APPID: properties.getProperty("VIVO_PUSH_APPID", "******"),
                                 BAIDU_LOCATION_APPKEY: properties.getProperty("BAIDU_LOCATION_APPKEY", "******")
         ]
-        //        ndk {
-//            abiFilters "armeabi-v7a"
-//        }
+        ndk {
+            abiFilters  "arm64-v8a","armeabi-v7a","x86","x86_64"
+        }
         //用于设置使用as打包so时指定输出目录
-//
-//        externalNativeBuild {
-//            ndkBuild {
-////                arguments "NDK_LIBS_OUT=libs", "all"
-//                abiFilters  "arm64-v8a"
-//            }
-//        }
+        externalNativeBuild {
+            ndkBuild {
+//                arguments "NDK_LIBS_OUT=libs", "all"
+                abiFilters  "arm64-v8a","armeabi-v7a","x86","x86_64"
+            }
+        }
     }
     buildTypes {
         release {
@@ -73,20 +72,6 @@ android {
             signingConfig signingConfigs.debug
         }
     }
-
-//    flavorDimensions "min"
-//    productFlavors {
-//        dev {
-//            minSdkVersion 21
-//            dimension "min"
-//        }
-//
-//        prod {
-//            minSdkVersion 19
-//            dimension "min"
-//        }
-//    }
-
     sourceSets {
         main {
             //jniLibs.srcDirs = ['libs']
@@ -113,16 +98,6 @@ android {
         pickFirst 'lib/x86_64/libhyphenate.so'
         pickFirst 'lib/armeabi-v7a/libhyphenate.so'
         pickFirst 'lib/arm64-v8a/libhyphenate.so'
-
-//        pickFirst 'lib/x86/libcrypto.so'
-//        pickFirst 'lib/x86_64/libcrypto.so'
-//        pickFirst 'lib/armeabi-v7a/libcrypto.so'
-//        pickFirst 'lib/arm64-v8a/libcrypto.so'
-//
-//        pickFirst 'lib/x86/libssl.so'
-//        pickFirst 'lib/x86_64/libssl.so'
-//        pickFirst 'lib/armeabi-v7a/libssl.so'
-//        pickFirst 'lib/arm64-v8a/libssl.so'
     }
     //打开注释后，可以直接在studio里查看和编辑emclient-linux里的代码
 //    externalNativeBuild {
@@ -178,14 +153,14 @@ dependencies {
 
     // EaseIMKit
 //    api (project(path: ':ease-im-kit'))
-    implementation 'io.hyphenate:ease-im-kit:3.9.1'
+    implementation 'io.hyphenate:ease-im-kit:3.9.2'
     // EaseIMKit依赖，必须添加环信IM SDK
 //    implementation project(path: ':hyphenatechatsdk')
-    implementation 'io.hyphenate:hyphenate-chat:3.9.1'
+    implementation 'io.hyphenate:hyphenate-chat:3.9.2'
 
     //EaseCallKit依赖，必须添加环信IM SDK
 //    api project(':ease-call-kit')
-    implementation 'io.hyphenate:ease-call-kit:3.9.1'
+    implementation 'io.hyphenate:ease-call-kit:3.9.2'
 
 }
 
