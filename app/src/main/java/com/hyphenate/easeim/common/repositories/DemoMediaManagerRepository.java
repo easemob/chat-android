@@ -141,7 +141,17 @@ public class DemoMediaManagerRepository extends BaseEMRepository {
         Collections.sort(mList, new Comparator<VideoEntity>() {
             @Override
             public int compare(VideoEntity o1, VideoEntity o2) {
-                return (int) (o2.lastModified - o1.lastModified);
+                if(o1 == null && o2 == null) {
+                    return 0;
+                }
+                if(o1 == null) {
+                    return 1;
+                }
+                if(o2 == null) {
+                    return -1;
+                }
+                long result = o2.lastModified - o1.lastModified;
+                return result == 0 ? 0 : (result > 0 ? 1 : -1) ;
             }
         });
     }

@@ -3,4 +3,5 @@
     <string name="em_dialog_btn_cancel">取消</string>
     <string name="em_dialog_btn_confirm">确定</string>
     <string name="em_dialog_btn_confirm_warning">确认移交</string>
+    <string name="em_label_title">请输入举报内容</string>
 </resources>

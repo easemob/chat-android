@@ -609,4 +609,14 @@
     <string name="loaded">加载完成</string>
     <string name="load_failed">加载失败</string>
 
+    <string name="tab_politics">涉政</string>
+    <string name="tab_yellow_related">涉黄</string>
+    <string name="tab_advertisement">广告</string>
+    <string name="tab_abuse">辱骂</string>
+    <string name="tab_violent">暴恐</string>
+    <string name="tab_contraband">违禁</string>
+    <string name="tab_other">其他</string>
+
+    <string name="report_delete_title">确定举报？</string>
+
 </resources>

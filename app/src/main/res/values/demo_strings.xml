@@ -608,5 +608,16 @@
     <string name="last_update">M-d HH:mm</string>
     <string name="loaded">Loaded</string>
     <string name="load_failed">Load failed</string>
-    
+
+
+    <string name="tab_politics">politics</string>
+    <string name="tab_yellow_related">yellow_related</string>
+    <string name="tab_advertisement">advertisement</string>
+    <string name="tab_abuse">abuse</string>
+    <string name="tab_violent">violent</string>
+    <string name="tab_contraband">contraband</string>
+    <string name="tab_other">other</string>
+
+    <string name="report_delete_title">Confirm the report?</string>
+
 </resources>
