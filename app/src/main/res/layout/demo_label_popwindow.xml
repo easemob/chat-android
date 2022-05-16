@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/layout"
+    android:orientation="vertical"
+    android:gravity="center"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="@dimen/adaptive_10dp"
+        android:layout_margin="@dimen/adaptive_10dp"
+        android:orientation="vertical"
+        android:background="@drawable/demo_dialog_report_edit_shape">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/em_margin_20"
+            android:layout_marginEnd="@dimen/em_margin_20"
+            android:layout_marginBottom="@dimen/adaptive_3dp"
+            android:text="@string/em_label_title"
+            android:padding="@dimen/adaptive_6dp"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            />
+
+        <EditText
+            android:id="@+id/et_content"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:minHeight="180dp"
+            android:maxHeight="180dp"
+            android:layout_marginLeft="@dimen/em_margin_30"
+            android:layout_marginRight="@dimen/em_margin_30"
+            android:layout_marginStart="@dimen/em_margin_20"
+            android:layout_marginEnd="@dimen/em_margin_20"
+            android:padding="@dimen/adaptive_8dp"
+            android:gravity="left|top"
+            android:maxLength="500"
+            android:textSize="@dimen/adaptive_16sp"
+            android:background="@drawable/demo_bg_window_edit"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/adaptive_40dp"
+            android:layout_marginStart="@dimen/em_margin_20"
+            android:layout_marginEnd="@dimen/em_margin_20"
+            android:layout_marginTop="@dimen/adaptive_15dp"
+            android:layout_marginBottom="@dimen/adaptive_5dp"
+            android:orientation="horizontal">
+
+            <Button
+                android:id="@+id/confirm"
+                android:layout_weight="1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="@dimen/adaptive_5dp"
+                android:background="@drawable/demo_bg_window_confirm"
+                android:text="@string/em_dialog_btn_confirm"
+                />
+
+            <Button
+                android:id="@+id/cancel"
+                android:layout_weight="1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/adaptive_5dp"
+                android:background="@drawable/demo_bg_window_cancel"
+                android:text="@string/em_dialog_btn_cancel"/>
+
+        </LinearLayout>
+
+
+    </LinearLayout>
+
+
+</LinearLayout>

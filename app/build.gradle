@@ -25,10 +25,10 @@ android {
     buildToolsVersion "29.0.3"
     defaultConfig {
         applicationId "com.hyphenate.easeim"
-        minSdkVersion 19
+        minSdkVersion 21
         targetSdkVersion 29
-        versionCode 89
-        versionName "3.8.8"
+        versionCode 94
+        versionName "3.9.2"
         multiDexEnabled true
         //为了兼容5.0以下使用vector图标
         vectorDrawables.useSupportLibrary = true
@@ -49,17 +49,16 @@ android {
                                 VIVO_PUSH_APPID: properties.getProperty("VIVO_PUSH_APPID", "******"),
                                 BAIDU_LOCATION_APPKEY: properties.getProperty("BAIDU_LOCATION_APPKEY", "******")
         ]
-        //        ndk {
-//            abiFilters "armeabi-v7a"
-//        }
+        ndk {
+            abiFilters  "arm64-v8a","armeabi-v7a","x86","x86_64"
+        }
         //用于设置使用as打包so时指定输出目录
-//
-//        externalNativeBuild {
-//            ndkBuild {
-////                arguments "NDK_LIBS_OUT=libs", "all"
-//                abiFilters  "arm64-v8a"
-//            }
-//        }
+        externalNativeBuild {
+            ndkBuild {
+//                arguments "NDK_LIBS_OUT=libs", "all"
+                abiFilters  "arm64-v8a","armeabi-v7a","x86","x86_64"
+            }
+        }
     }
     buildTypes {
         release {
@@ -73,20 +72,6 @@ android {
             signingConfig signingConfigs.debug
         }
     }
-
-//    flavorDimensions "min"
-//    productFlavors {
-//        dev {
-//            minSdkVersion 21
-//            dimension "min"
-//        }
-//
-//        prod {
-//            minSdkVersion 19
-//            dimension "min"
-//        }
-//    }
-
     sourceSets {
         main {
             //jniLibs.srcDirs = ['libs']
@@ -111,18 +96,8 @@ android {
         pickFirst 'lib/arm64-v8a/libsqlite.so'
         pickFirst 'lib/x86/libhyphenate.so'
         pickFirst 'lib/x86_64/libhyphenate.so'
-//        pickFirst 'lib/armeabi-v7a/libhyphenate.so'
-//        pickFirst 'lib/arm64-v8a/libhyphenate.so'
-
-//        pickFirst 'lib/x86/libcrypto.so'
-//        pickFirst 'lib/x86_64/libcrypto.so'
-//        pickFirst 'lib/armeabi-v7a/libcrypto.so'
-//        pickFirst 'lib/arm64-v8a/libcrypto.so'
-//
-//        pickFirst 'lib/x86/libssl.so'
-//        pickFirst 'lib/x86_64/libssl.so'
-//        pickFirst 'lib/armeabi-v7a/libssl.so'
-//        pickFirst 'lib/arm64-v8a/libssl.so'
+        pickFirst 'lib/armeabi-v7a/libhyphenate.so'
+        pickFirst 'lib/arm64-v8a/libhyphenate.so'
     }
     //打开注释后，可以直接在studio里查看和编辑emclient-linux里的代码
 //    externalNativeBuild {
@@ -151,7 +126,11 @@ dependencies {
     // meizu push
     implementation 'com.meizu.flyme.internet:push-internal:4.0.4@aar'//配置集成sdk
     //oppo push
-    implementation (name:'oppo_push_v2.1.0',ext:'aar')
+    implementation (name:'oppo_push_3.0.0',ext:'aar')
+    //oppo push需添加以下依赖
+    implementation 'com.google.code.gson:gson:2.6.2'
+    implementation 'commons-codec:commons-codec:1.6'
+    implementation 'androidx.annotation:annotation:1.1.0'
     // Google firebase cloud messaging
     // Import the BoM for the Firebase platform
     implementation platform('com.google.firebase:firebase-bom:28.2.1')
@@ -164,8 +143,8 @@ dependencies {
     api 'com.scwang.smartrefresh:SmartRefreshLayout:1.0.5.1'
     implementation 'androidx.swiperefreshlayout:swiperefreshlayout:1.1.0'
     // room
-    implementation "androidx.room:room-runtime:2.2.5"
-    annotationProcessor "androidx.room:room-compiler:2.2.5"
+    implementation "androidx.room:room-runtime:2.4.0-alpha04"
+    annotationProcessor "androidx.room:room-compiler:2.4.0-alpha04"
     // parse
     implementation 'com.parse:parse-android:1.13.1'
     // bugly
@@ -174,14 +153,14 @@ dependencies {
 
     // EaseIMKit
 //    api (project(path: ':ease-im-kit'))
-    implementation 'io.hyphenate:ease-im-kit:3.8.8'
+    implementation 'io.hyphenate:ease-im-kit:3.9.2'
     // EaseIMKit依赖，必须添加环信IM SDK
 //    implementation project(path: ':hyphenatechatsdk')
-    implementation 'io.hyphenate:hyphenate-chat:3.8.8'
+    implementation 'io.hyphenate:hyphenate-chat:3.9.2'
 
     //EaseCallKit依赖，必须添加环信IM SDK
 //    api project(':ease-call-kit')
-    implementation 'io.hyphenate:ease-call-kit:3.8.8'
+    implementation 'io.hyphenate:ease-call-kit:3.9.2'
 
 }
 
