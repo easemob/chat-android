@@ -1,5 +1,7 @@
 package com.hyphenate.easeim;
 
+import static android.content.Intent.FLAG_ACTIVITY_NEW_TASK;
+
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
@@ -92,8 +94,6 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.TimeZone;
-
-import static android.content.Intent.FLAG_ACTIVITY_NEW_TASK;
 
 /**
  * 作为hyphenate-sdk的入口控制类，获取sdk下的基础类均通过此类
@@ -195,6 +195,7 @@ public class DemoHelper {
 //        options.setRestServer("a41.easemob.com");
 //        options.setIMServer("msync-im-41-tls-test.easemob.com");
 //        options.setImPort(6717);
+
         // 初始化SDK
         isSDKInit = EaseIM.getInstance().init(context, options);
         //设置删除用户属性数据超时时间
@@ -431,6 +432,8 @@ public class DemoHelper {
         options.setRequireAck(true);
         // 设置是否需要接受方送达确认,默认false
         options.setRequireDeliveryAck(false);
+        //设置fpa开关，默认false
+        options.setFpaEnable(true);
 
         /**
          * NOTE:你需要设置自己申请的账号来使用三方推送功能，详见集成文档
