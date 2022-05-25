@@ -27,8 +27,8 @@ android {
         applicationId "com.hyphenate.easeim"
         minSdkVersion 21
         targetSdkVersion 29
-        versionCode 95
-        versionName "3.9.2.1"
+        versionCode 96
+        versionName "3.9.3"
         multiDexEnabled true
         //为了兼容5.0以下使用vector图标
         vectorDrawables.useSupportLibrary = true
