@@ -27,8 +27,8 @@ android {
         applicationId "com.hyphenate.easeim"
         minSdkVersion 21
         targetSdkVersion 29
-        versionCode 95
-        versionName "3.9.2.1"
+        versionCode 96
+        versionName "3.9.3"
         multiDexEnabled true
         //为了兼容5.0以下使用vector图标
         vectorDrawables.useSupportLibrary = true
@@ -143,8 +143,8 @@ dependencies {
     api 'com.scwang.smartrefresh:SmartRefreshLayout:1.0.5.1'
     implementation 'androidx.swiperefreshlayout:swiperefreshlayout:1.1.0'
     // room
-    implementation "androidx.room:room-runtime:2.2.5"
-    annotationProcessor "androidx.room:room-compiler:2.2.5"
+    implementation "androidx.room:room-runtime:2.4.0-alpha04"
+    annotationProcessor "androidx.room:room-compiler:2.4.0-alpha04"
     // parse
     implementation 'com.parse:parse-android:1.13.1'
     // bugly
@@ -153,14 +153,14 @@ dependencies {
 
     // EaseIMKit
 //    api (project(path: ':ease-im-kit'))
-    implementation 'io.hyphenate:ease-im-kit:3.9.2.1'
+    implementation 'io.hyphenate:ease-im-kit:3.9.3'
     // EaseIMKit依赖，必须添加环信IM SDK
 //    implementation project(path: ':hyphenatechatsdk')
-    implementation 'io.hyphenate:hyphenate-chat:3.9.2.1'
+    implementation 'io.hyphenate:hyphenate-chat:3.9.3'
 
     //EaseCallKit依赖，必须添加环信IM SDK
 //    api project(':ease-call-kit')
-    implementation 'io.hyphenate:ease-call-kit:3.9.2.1'
+    implementation 'io.hyphenate:ease-call-kit:3.9.3'
 
 }
 

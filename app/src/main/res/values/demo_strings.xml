@@ -599,6 +599,16 @@
     <string name="unable_translate">Unable to Translate</string>
     <string name="using_translate">Using Translate</string>
     <string name="retranslate_prompt">Each translation can be retranslated only once. The translation provided is for reference only.</string>
+    <string name="pull_down">drop-down refresh</string>
+    <string name="refreshing">Is refreshing...</string>
+    <string name="be_loading">Being loaded...</string>
+    <string name="release_refresh">Release the refresh</string>
+    <string name="refresh_finish">Refresh to complete</string>
+    <string name="refresh_failed">Refresh the failure</string>
+    <string name="last_update">M-d HH:mm</string>
+    <string name="loaded">Loaded</string>
+    <string name="load_failed">Load failed</string>
+
 
     <string name="tab_politics">politics</string>
     <string name="tab_yellow_related">yellow_related</string>

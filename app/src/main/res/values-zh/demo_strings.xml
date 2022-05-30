@@ -599,6 +599,15 @@
     <string name="unable_translate">翻译失败</string>
     <string name="using_translate">使用翻译</string>
     <string name="retranslate_prompt">每个翻译只能重译一次，译文仅供参考。</string>
+    <string name="pull_down">下拉可以刷新</string>
+    <string name="refreshing">正在刷新...</string>
+    <string name="be_loading">正在加载...</string>
+    <string name="release_refresh">释放立即刷新</string>
+    <string name="refresh_finish">刷新完成</string>
+    <string name="refresh_failed">刷新失败</string>
+    <string name="last_update">上次更新 M-d HH:mm</string>
+    <string name="loaded">加载完成</string>
+    <string name="load_failed">加载失败</string>
 
     <string name="tab_politics">涉政</string>
     <string name="tab_yellow_related">涉黄</string>
