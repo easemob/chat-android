@@ -128,7 +128,9 @@ public class MessageReceiveSetActivity extends BaseInitActivity implements Switc
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.item_push_message_style :
-                MessagePushStyleActivity.actionStartForResult(mContext, displayStyle.ordinal(), 100);
+                if(displayStyle != null) {
+                    MessagePushStyleActivity.actionStartForResult(mContext, displayStyle.ordinal(), 100);
+                }
                 break;
         }
     }
