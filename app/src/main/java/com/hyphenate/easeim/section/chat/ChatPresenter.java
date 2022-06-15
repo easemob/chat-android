@@ -73,6 +73,12 @@ public class ChatPresenter extends EaseChatPresenter {
     private boolean isPushConfigsWithServer = false;
     private Context appContext;
     protected Handler handler;
+    private ChatConnectionListener connectionListener;
+    private ChatMultiDeviceListener multiDeviceListener;
+    private ChatGroupListener groupListener;
+    private ChatContactListener contactListener;
+    private ChatRoomListener chatRoomListener;
+    private ChatConversationListener conversationListener;
 
     Queue<String> msgQueue = new ConcurrentLinkedQueue<>();
 
@@ -80,18 +86,24 @@ public class ChatPresenter extends EaseChatPresenter {
         appContext = DemoApplication.getInstance();
         initHandler(appContext.getMainLooper());
         messageChangeLiveData = LiveDataBus.get();
+        connectionListener = new ChatConnectionListener();
+        multiDeviceListener = new ChatMultiDeviceListener();
+        groupListener = new ChatGroupListener();
+        contactListener = new ChatContactListener();
+        chatRoomListener = new ChatRoomListener();
+        conversationListener = new ChatConversationListener();
         //添加网络连接状态监听
-        DemoHelper.getInstance().getEMClient().addConnectionListener(new ChatConnectionListener());
+        DemoHelper.getInstance().getEMClient().addConnectionListener(connectionListener);
         //添加多端登录监听
-        DemoHelper.getInstance().getEMClient().addMultiDeviceListener(new ChatMultiDeviceListener());
+        DemoHelper.getInstance().getEMClient().addMultiDeviceListener(multiDeviceListener);
         //添加群组监听
-        DemoHelper.getInstance().getGroupManager().addGroupChangeListener(new ChatGroupListener());
+        DemoHelper.getInstance().getGroupManager().addGroupChangeListener(groupListener);
         //添加联系人监听
-        DemoHelper.getInstance().getContactManager().setContactListener(new ChatContactListener());
+        DemoHelper.getInstance().getContactManager().setContactListener(contactListener);
         //添加聊天室监听
-        DemoHelper.getInstance().getChatroomManager().addChatRoomChangeListener(new ChatRoomListener());
+        DemoHelper.getInstance().getChatroomManager().addChatRoomChangeListener(chatRoomListener);
         //添加对会话的监听（监听已读回执）
-        DemoHelper.getInstance().getChatManager().addConversationListener(new ChatConversationListener());
+        DemoHelper.getInstance().getChatManager().addConversationListener(conversationListener);
     }
 
     public static ChatPresenter getInstance() {
@@ -110,6 +122,31 @@ public class ChatPresenter extends EaseChatPresenter {
      */
     public void init() {
 
+    }
+
+    public void clear() {
+        if(connectionListener != null) {
+            DemoHelper.getInstance().getEMClient().removeConnectionListener(connectionListener);
+        }
+        if(multiDeviceListener != null) {
+            DemoHelper.getInstance().getEMClient().removeMultiDeviceListener(multiDeviceListener);
+        }
+        if(groupListener != null) {
+            DemoHelper.getInstance().getGroupManager().removeGroupChangeListener(groupListener);
+        }
+        if(contactListener != null) {
+            DemoHelper.getInstance().getContactManager().removeContactListener(contactListener);
+        }
+        if(chatRoomListener != null) {
+            DemoHelper.getInstance().getChatroomManager().removeChatRoomListener(chatRoomListener);
+        }
+        if(conversationListener != null) {
+            DemoHelper.getInstance().getChatManager().removeConversationListener(conversationListener);
+        }
+        if(handler != null) {
+            handler.removeCallbacksAndMessages(null);
+        }
+        instance = null;
     }
 
     public void initHandler(Looper looper) {
