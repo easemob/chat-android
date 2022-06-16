@@ -13,6 +13,7 @@ import com.hyphenate.easeim.DemoHelper;
 import com.hyphenate.easeim.R;
 import com.hyphenate.easeim.common.widget.ArrowItemView;
 import com.hyphenate.easeim.section.base.BaseInitActivity;
+import com.hyphenate.easeim.section.chat.ChatPresenter;
 import com.hyphenate.easeim.section.login.activity.LoginActivity;
 import com.hyphenate.easeui.widget.EaseTitleBar;
 
@@ -95,6 +96,7 @@ public class SetIndexActivity extends BaseInitActivity implements EaseTitleBar.O
                 runOnUiThread(new Runnable() {
                     public void run() {
                         pd.dismiss();
+                        ChatPresenter.getInstance().clear();
                         // show login screen
                         finishOtherActivities();
                         startActivity(new Intent(mContext, LoginActivity.class));
