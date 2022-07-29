@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <com.hyphenate.easeui.widget.EaseTitleBar
+        android:id="@+id/title_bar"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/ease_common_title_bar_height"
+        app:titleBarTitle="Developer Test Functions"/>
+
+    <EditText
+        android:id="@+id/et_mute_group_member"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/adaptive_50dp"
+        android:layout_marginStart="10dp"
+        android:layout_marginEnd="10dp"
+        android:hint="Input username"/>
+
+    <EditText
+        android:id="@+id/et_mute_group_id"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/adaptive_50dp"
+        android:layout_marginStart="10dp"
+        android:layout_marginEnd="10dp"
+        android:hint="Input group id"/>
+
+    <Button
+        android:id="@+id/btn_mute_group_member"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:layout_marginEnd="10dp"
+        android:text="Mute group member"
+        android:background="@color/btn_blue_normal"/>
+
+    <EditText
+        android:id="@+id/et_presence_username"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:layout_marginStart="10dp"
+        android:layout_marginEnd="10dp"
+        android:hint="Input username"/>
+
+    <Button
+        android:id="@+id/btn_presence_username"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:layout_marginEnd="10dp"
+        android:text="presence user"
+        android:background="@color/btn_blue_normal"/>
+
+</LinearLayout>
