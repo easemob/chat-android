@@ -282,6 +282,7 @@
     <string name="em_about_me_feedback">Feedback</string>
     <string name="em_about_me_hx">About Easemob IM</string>
     <string name="em_about_me_developer">Developer Services</string>
+    <string name="em_about_me_developer_test">Developer Test</string>
     <string name="em_set_security">Account and Security</string>
     <string name="em_set_privacy">Privacy</string>
     <string name="em_set_message_set">New Messages</string>
@@ -351,6 +352,7 @@
     <string name="em_public_group_add">Join group chat</string>
     <string name="send_the_request_is">Request sent. Please wait for the group owner to approve your request. </string>
     <string name="Join_the_group_chat">You\'ve joined the group chat</string>
+    <string name="group_disabled">-disabled</string>
 
     <string name="em_account_logoff_notification">Offline notification</string>
     <string name="em_account_connect_conflict">This account is already logged in on another device</string>

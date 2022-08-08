@@ -53,6 +53,9 @@ public class GroupContactAdapter extends EaseBaseRecyclerViewAdapter<EMGroup> {
                 mLabel.setVisibility(View.VISIBLE);
                 mLabel.setText(R.string.group_owner);
             }
+            if(item.isDisabled()) {
+                mName.setText(mName.getText().toString().trim() + mContext.getString(R.string.group_disabled));
+            }
         }
     }
 

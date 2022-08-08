@@ -12,7 +12,6 @@ import androidx.annotation.Nullable;
 
 import com.hyphenate.chat.EMClient;
 import com.hyphenate.chat.EMOptions;
-import com.hyphenate.easeim.BuildConfig;
 import com.hyphenate.easeim.DemoApplication;
 import com.hyphenate.easeim.DemoHelper;
 import com.hyphenate.easeim.R;
@@ -21,6 +20,7 @@ import com.hyphenate.easeim.common.model.DemoModel;
 import com.hyphenate.easeim.common.widget.ArrowItemView;
 import com.hyphenate.easeim.common.widget.SwitchItemView;
 import com.hyphenate.easeim.section.base.BaseInitActivity;
+import com.hyphenate.easeim.section.me.test.TestFunctionsIndexActivity;
 import com.hyphenate.easeui.widget.EaseTitleBar;
 
 public class DeveloperSetActivity extends BaseInitActivity implements EaseTitleBar.OnBackPressListener, View.OnClickListener, SwitchItemView.OnCheckedChangeListener {
@@ -35,10 +35,13 @@ public class DeveloperSetActivity extends BaseInitActivity implements EaseTitleB
     private ArrowItemView itemMsgSort;
     private ArrowItemView itemPushNick;
     private ArrowItemView itemMsgServiceDiagnose;
+    private ArrowItemView itemTest;
     private DemoModel settingsModel;
     private EMOptions options;
 
     private String sortType[] = new String[]{DemoApplication.getInstance().getApplicationContext().getString(R.string.in_order_of_reception), DemoApplication.getInstance().getApplicationContext().getString(R.string.by_server_time)};
+    private long preTimestamp;
+    private int clickTimes;
 
     public static void actionStart(Context context) {
         Intent starter = new Intent(context, DeveloperSetActivity.class);
@@ -63,6 +66,7 @@ public class DeveloperSetActivity extends BaseInitActivity implements EaseTitleB
         itemMsgSort = findViewById(R.id.item_msg_sort);
         itemPushNick = findViewById(R.id.item_push_nick);
         itemMsgServiceDiagnose = findViewById(R.id.item_msg_service_diagnose);
+        itemTest = findViewById(R.id.item_test);
     }
 
     @Override
@@ -77,6 +81,8 @@ public class DeveloperSetActivity extends BaseInitActivity implements EaseTitleB
         itemMsgSort.setOnClickListener(this);
         itemPushNick.setOnClickListener(this);
         itemMsgServiceDiagnose.setOnClickListener(this);
+        itemTest.setOnClickListener(this);
+        itemVersion.setOnClickListener(this);
     }
 
     @Override
@@ -104,6 +110,9 @@ public class DeveloperSetActivity extends BaseInitActivity implements EaseTitleB
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
+            case R.id.item_version:
+                showTestItem();
+                break;
             case R.id.item_appkey :
                 AppKeyManageActivity.actionStartForResult(mContext, APPKEY_REQUEST_CODE);
                 break;
@@ -116,7 +125,27 @@ public class DeveloperSetActivity extends BaseInitActivity implements EaseTitleB
             case R.id.item_msg_service_diagnose :
                 DiagnoseActivity.actionStart(mContext);
                 break;
+            case R.id.item_test:
+                TestFunctionsIndexActivity.actionStart(mContext);
+                break;
         }
+    }
+
+    private void showTestItem() {
+        if(itemTest.getVisibility() == View.VISIBLE) {
+            return;
+        }
+        clickTimes++;
+        long currentTimestamp = System.currentTimeMillis();
+        if(currentTimestamp - preTimestamp > 1000 && clickTimes > 0) {
+            clickTimes = 0;
+        }
+        if(clickTimes >= 7) {
+            itemTest.setVisibility(View.VISIBLE);
+            clickTimes = 0;
+            showToast("Show test item");
+        }
+        preTimestamp = currentTimestamp;
     }
 
     private void showSelectDialog() {
