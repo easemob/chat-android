@@ -2,6 +2,7 @@ package com.hyphenate.easeim.section.base;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
 
 import com.hyphenate.easecallkit.EaseCallKit;
 import com.hyphenate.easecallkit.base.EaseCallFloatWindow;
@@ -18,7 +19,12 @@ public abstract class BaseInitActivity extends BaseActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(getLayoutId());
+        int layoutId = getLayoutId();
+        if(layoutId != 0) {
+            setContentView(layoutId);
+        }else {
+            setContentView(getContentView());
+        }
         initSystemFit();
         initIntent(getIntent());
         initView(savedInstanceState);
@@ -34,7 +40,13 @@ public abstract class BaseInitActivity extends BaseActivity {
      * get layout id
      * @return
      */
-    protected abstract int getLayoutId();
+    protected int getLayoutId() {
+        return 0;
+    }
+
+    protected View getContentView() {
+        return null;
+    }
 
     /**
      * init intent

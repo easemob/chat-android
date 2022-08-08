@@ -282,6 +282,7 @@
     <string name="em_about_me_feedback">意见反馈</string>
     <string name="em_about_me_hx">关于环信IM</string>
     <string name="em_about_me_developer">开发者服务</string>
+    <string name="em_about_me_developer_test">开发者测试</string>
     <string name="em_set_security">账号与安全</string>
     <string name="em_set_privacy">隐私</string>
     <string name="em_set_message_set">新消息提醒</string>
@@ -351,6 +352,7 @@
     <string name="em_public_group_add">加入群聊</string>
     <string name="send_the_request_is">发送请求成功，等待群主同意</string>
     <string name="Join_the_group_chat">加入群聊成功</string>
+    <string name="group_disabled">-已禁用</string>
 
     <string name="em_account_logoff_notification">下线通知</string>
     <string name="em_account_connect_conflict">同一帐号已在其他设备登录</string>
