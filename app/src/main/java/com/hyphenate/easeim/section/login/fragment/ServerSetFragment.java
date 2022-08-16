@@ -1,6 +1,5 @@
 package com.hyphenate.easeim.section.login.fragment;
 
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextUtils;
@@ -14,8 +13,8 @@ import android.widget.Switch;
 import android.widget.TextView;
 
 import androidx.constraintlayout.widget.Group;
-import androidx.core.content.ContextCompat;
 
+import com.hyphenate.chat.EMClient;
 import com.hyphenate.easeim.DemoHelper;
 import com.hyphenate.easeim.R;
 import com.hyphenate.easeim.common.model.DemoServerSetBean;
@@ -23,6 +22,7 @@ import com.hyphenate.easeim.section.base.BaseInitFragment;
 import com.hyphenate.easeim.section.dialog.DemoDialogFragment;
 import com.hyphenate.easeim.section.dialog.SimpleDialogFragment;
 import com.hyphenate.easeui.widget.EaseTitleBar;
+import com.hyphenate.exceptions.HyphenateException;
 
 public class ServerSetFragment extends BaseInitFragment implements EaseTitleBar.OnBackPressListener, CompoundButton.OnCheckedChangeListener, TextWatcher, View.OnClickListener {
     private EaseTitleBar mToolbarServer;
@@ -106,13 +106,12 @@ public class ServerSetFragment extends BaseInitFragment implements EaseTitleBar.
         mGroupServerSet.setVisibility(mSwitchServer.isChecked() ? View.VISIBLE : View.GONE);
         setResetButtonVisible(mSwitchServer.isChecked(), isInited);
         //设置是否可用
-        mEtServerHint.setVisibility(isInited ? View.VISIBLE : View.GONE);
-        mEtAppkey.setEnabled(!isInited);
-        mSwitchSpecifyServer.setEnabled(!isInited);
-        mEtServerAddress.setEnabled(!isInited && mCustomServerEnable);
-        mEtServerPort.setEnabled(!isInited && mCustomServerEnable);
-        mEtServerRest.setEnabled(!isInited && mCustomServerEnable);
-        mSwitchHttpsSet.setEnabled(!isInited && mCustomServerEnable);
+//        mEtAppkey.setEnabled(!isInited);
+//        mSwitchSpecifyServer.setEnabled(!isInited);
+        mEtServerAddress.setEnabled(mCustomServerEnable);
+        mEtServerPort.setEnabled(mCustomServerEnable);
+        mEtServerRest.setEnabled(mCustomServerEnable);
+        mSwitchHttpsSet.setEnabled(mCustomServerEnable);
         checkButtonEnable();
     }
 
@@ -184,11 +183,11 @@ public class ServerSetFragment extends BaseInitFragment implements EaseTitleBar.
         }else {
             setButtonEnable(!TextUtils.isEmpty(mAppkey));
         }
-        boolean isInited = DemoHelper.getInstance().isSDKInit();
+//        boolean isInited = DemoHelper.getInstance().isSDKInit();
         //如果sdk已经初始化完成，则应该显示初始化完成后的数据
-        if(isInited) {
-            mBtnServer.setEnabled(false);
-        }
+//        if(isInited) {
+//            mBtnServer.setEnabled(false);
+//        }
     }
 
     @Override
@@ -206,6 +205,7 @@ public class ServerSetFragment extends BaseInitFragment implements EaseTitleBar.
                             mEtServerAddress.setText(set.getImServer());
                             mEtServerPort.setText(set.getImPort()+"");
                             mEtServerRest.setText(set.getRestServer());
+                            DemoHelper.getInstance().getModel().setDeveloperMode(false);
                         }
                     })
                     .showCancelButton(true)
@@ -237,6 +237,9 @@ public class ServerSetFragment extends BaseInitFragment implements EaseTitleBar.
         if(!TextUtils.isEmpty(mAppkey)) {
             DemoHelper.getInstance().getModel().enableCustomAppkey(mSwitchServer.isChecked());
             DemoHelper.getInstance().getModel().setCustomAppkey(mAppkey);
+            DemoHelper.getInstance().getModel().setDeveloperMode(true);
+        }else {
+            DemoHelper.getInstance().getModel().setDeveloperMode(false);
         }
         if(!TextUtils.isEmpty(mServerAddress)) {
             DemoHelper.getInstance().getModel().setIMServer(mServerAddress);
@@ -250,7 +253,7 @@ public class ServerSetFragment extends BaseInitFragment implements EaseTitleBar.
         DemoHelper.getInstance().getModel().enableCustomServer(mCustomServerEnable);
         DemoHelper.getInstance().getModel().setUsingHttpsOnly(mSwitchHttpsSet.isChecked());
 
-        //保存成功后，回退到生一个页面
+        //保存成功后，回退到上一个页面
         onBackPress();
     }
 

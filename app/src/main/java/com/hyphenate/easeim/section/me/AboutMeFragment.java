@@ -1,10 +1,13 @@
 package com.hyphenate.easeim.section.me;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.hyphenate.EMCallBack;
@@ -14,6 +17,9 @@ import com.hyphenate.easeim.DemoHelper;
 import com.hyphenate.easeim.R;
 import com.hyphenate.easeim.common.constant.DemoConstant;
 import com.hyphenate.easeim.common.livedatas.LiveDataBus;
+import com.hyphenate.easeim.section.base.BaseActivity;
+import com.hyphenate.easeim.section.dialog.FullEditDialogFragment;
+import com.hyphenate.easeim.section.dialog.LabelEditDialogFragment;
 import com.hyphenate.easeui.manager.EaseThreadManager;
 import com.hyphenate.easeim.common.widget.ArrowItemView;
 import com.hyphenate.easeim.section.base.BaseInitFragment;
@@ -26,6 +32,7 @@ import com.hyphenate.easeim.section.me.activity.FeedbackActivity;
 import com.hyphenate.easeim.section.me.activity.SetIndexActivity;
 import com.hyphenate.easeim.section.me.activity.UserDetailActivity;
 import com.hyphenate.easeui.model.EaseEvent;
+import com.hyphenate.util.EMLog;
 
 import androidx.constraintlayout.widget.ConstraintLayout;
 
@@ -37,6 +44,7 @@ public class AboutMeFragment extends BaseInitFragment implements View.OnClickLis
     private ArrowItemView itemFeedback;
     private ArrowItemView itemAboutHx;
     private ArrowItemView itemDeveloperSet;
+    private ArrowItemView itemEmail;
     private Button mBtnLogout;
     private TextView nickName_view;
     private TextView userId_view;
@@ -58,6 +66,7 @@ public class AboutMeFragment extends BaseInitFragment implements View.OnClickLis
         itemAboutHx = findViewById(R.id.item_about_hx);
         itemDeveloperSet = findViewById(R.id.item_developer_set);
         mBtnLogout = findViewById(R.id.btn_logout);
+        itemEmail = findViewById(R.id.item_email);
         nickName_view.setText(mContext.getString(R.string.account) + DemoHelper.getInstance().getCurrentUser());
     }
 
@@ -70,6 +79,7 @@ public class AboutMeFragment extends BaseInitFragment implements View.OnClickLis
         itemFeedback.setOnClickListener(this);
         itemAboutHx.setOnClickListener(this);
         itemDeveloperSet.setOnClickListener(this);
+        itemEmail.setOnClickListener(this);
     }
 
     @Override
@@ -97,6 +107,9 @@ public class AboutMeFragment extends BaseInitFragment implements View.OnClickLis
             case R.id.item_developer_set:
                 DeveloperSetActivity.actionStart(mContext);
                 break;
+            case R.id.item_email:
+                showDialog();
+                break;
         }
     }
 
@@ -110,6 +123,7 @@ public class AboutMeFragment extends BaseInitFragment implements View.OnClickLis
                         DemoHelper.getInstance().logout(true, new EMCallBack() {
                             @Override
                             public void onSuccess() {
+                                DemoHelper.getInstance().getModel().setPhoneNumber("");
                                 LoginActivity.startAction(mContext);
                                 mContext.finish();
                             }
@@ -155,5 +169,36 @@ public class AboutMeFragment extends BaseInitFragment implements View.OnClickLis
                 }
             }
         });
+    }
+
+    private void showDialog(){
+        new FullEditDialogFragment.Builder((BaseActivity) mContext)
+                .setTitle(R.string.em_about_email)
+                .setOnConfirmClickListener(R.string.em_chat_group_read_ack_send, new FullEditDialogFragment.OnSaveClickListener() {
+                    @Override
+                    public void onSaveClick(View view, String reason) {
+                        sendEmail(reason);
+                    }
+                })
+                .setConfirmColor(R.color.em_color_brand)
+                .show();
+    }
+
+    private void sendEmail(String content) {
+        Intent email = new Intent(android.content.Intent.ACTION_SEND);
+        //邮件发送类型：无附件，纯文本
+        email.setType("plain/text");
+        //邮件接收者（数组，可以是多位接收者）
+        String[] emailReciver = new String[]{"yunying@easemob.com"};
+
+        String  emailTitle = "投诉建议";
+        //设置邮件地址
+        email.putExtra(android.content.Intent.EXTRA_EMAIL, emailReciver);
+        //设置邮件标题
+        email.putExtra(android.content.Intent.EXTRA_SUBJECT, emailTitle);
+        //设置发送的内容
+        email.putExtra(android.content.Intent.EXTRA_TEXT, content);
+        //调用系统的邮件系统
+        startActivity(Intent.createChooser(email, "请选择邮件发送软件"));
     }
 }

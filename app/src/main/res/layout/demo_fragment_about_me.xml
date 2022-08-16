@@ -53,26 +53,26 @@
             android:textColor="@color/ease_conversation_color_item_name"
             tools:text="ss"/>
 
-        <TextView
-            android:id="@+id/message"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            app:layout_constraintTop_toBottomOf="@id/name"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintLeft_toRightOf="@id/avatar"
-            app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintHorizontal_bias="0"
-            android:layout_marginRight="20dp"
-            android:layout_marginEnd="20dp"
-            android:layout_marginBottom="5dp"
-            android:layout_marginLeft="4dp"
-            android:maxLines="1"
-            android:ellipsize="end"
-            android:padding="7dp"
-            android:textColor="@color/ease_conversation_color_item_message"
-            android:textSize="14sp"
-            android:visibility="gone"
-            tools:text="ssdd"/>
+<!--        <TextView-->
+<!--            android:id="@+id/message"-->
+<!--            android:layout_width="0dp"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            app:layout_constraintTop_toBottomOf="@id/name"-->
+<!--            app:layout_constraintBottom_toBottomOf="parent"-->
+<!--            app:layout_constraintLeft_toRightOf="@id/avatar"-->
+<!--            app:layout_constraintRight_toRightOf="parent"-->
+<!--            app:layout_constraintHorizontal_bias="0"-->
+<!--            android:layout_marginRight="20dp"-->
+<!--            android:layout_marginEnd="20dp"-->
+<!--            android:layout_marginBottom="5dp"-->
+<!--            android:layout_marginLeft="4dp"-->
+<!--            android:maxLines="1"-->
+<!--            android:ellipsize="end"-->
+<!--            android:padding="7dp"-->
+<!--            android:textColor="@color/ease_conversation_color_item_message"-->
+<!--            android:textSize="14sp"-->
+<!--            android:visibility="gone"-->
+<!--            tools:text="ssdd"/>-->
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -146,6 +146,22 @@
             app:arrowItemAvatarWidth="@dimen/em_about_me_avatar_size"
             app:arrowItemShowAvatar="true"
             app:arrowItemTitle="@string/em_about_me_developer"
+            app:arrowItemTitleSize="14sp"
+            android:background="@color/white"
+            android:foreground="@drawable/demo_ripple_click_gray"/>
+
+        <com.hyphenate.easeim.common.widget.ArrowItemView
+            android:id="@+id/item_email"
+            android:layout_width="0dp"
+            android:layout_height="@dimen/em_common_item_height"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/item_developer_set"
+            app:arrowItemAvatarSrc="@drawable/d_report_email"
+            app:arrowItemAvatarHeight="@dimen/em_about_me_avatar_size"
+            app:arrowItemAvatarWidth="@dimen/em_about_me_avatar_size"
+            app:arrowItemShowAvatar="true"
+            app:arrowItemTitle="@string/em_about_email"
             app:arrowItemTitleSize="14sp"
             android:background="@color/white"
             android:foreground="@drawable/demo_ripple_click_gray"/>

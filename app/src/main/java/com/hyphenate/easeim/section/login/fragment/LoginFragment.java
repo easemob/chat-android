@@ -3,6 +3,7 @@ package com.hyphenate.easeim.section.login.fragment;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.os.SystemClock;
 import android.text.Editable;
 import android.text.InputType;
 import android.text.SpannableString;
@@ -26,6 +27,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.lifecycle.ViewModelProvider;
 
+import com.hyphenate.EMCallBack;
 import com.hyphenate.EMError;
 import com.hyphenate.chat.EMClient;
 import com.hyphenate.easeim.DemoHelper;
@@ -45,7 +47,7 @@ public class LoginFragment extends BaseInitFragment implements View.OnClickListe
     private EditText mEtLoginPwd;
     private TextView mTvLoginRegister;
     private TextView mTvLoginToken;
-    private TextView mTvLoginServerSet;
+    private TextView mTvResetPassword;
     private Button mBtnLogin;
     private CheckBox cbSelect;
     private TextView tvAgreement;
@@ -59,6 +61,9 @@ public class LoginFragment extends BaseInitFragment implements View.OnClickListe
     private Drawable eyeClose;
     private boolean isClick;
     private TextView tvVersion;
+    private int COUNTS = 5 ;
+    private long DURATION = (long) (3 * 1000);
+    private long[] mHits= new long[COUNTS];
 
     @Override
     protected int getLayoutId() {
@@ -72,11 +77,11 @@ public class LoginFragment extends BaseInitFragment implements View.OnClickListe
         mEtLoginPwd = findViewById(R.id.et_login_pwd);
         mTvLoginRegister = findViewById(R.id.tv_login_register);
         mTvLoginToken = findViewById(R.id.tv_login_token);
-        mTvLoginServerSet = findViewById(R.id.tv_login_server_set);
         mBtnLogin = findViewById(R.id.btn_login);
         tvAgreement = findViewById(R.id.tv_agreement);
         cbSelect = findViewById(R.id.cb_select);
         tvVersion = findViewById(R.id.tv_version);
+        mTvResetPassword = findViewById(R.id.tv_login_reset_password);
         // 保证切换fragment后相关状态正确
         boolean enableTokenLogin = DemoHelper.getInstance().getModel().isEnableTokenLogin();
         mTvLoginToken.setVisibility(enableTokenLogin ? View.VISIBLE : View.GONE);
@@ -96,8 +101,9 @@ public class LoginFragment extends BaseInitFragment implements View.OnClickListe
         mEtLoginPwd.addTextChangedListener(this);
         mTvLoginRegister.setOnClickListener(this);
         mTvLoginToken.setOnClickListener(this);
-        mTvLoginServerSet.setOnClickListener(this);
+        tvVersion.setOnClickListener(this);
         mBtnLogin.setOnClickListener(this);
+        mTvResetPassword.setOnClickListener(this);
         cbSelect.setOnCheckedChangeListener(this);
         mEtLoginPwd.setOnEditorActionListener(this);
         EaseEditTextUtils.clearEditTextListener(mEtLoginName);
@@ -108,6 +114,52 @@ public class LoginFragment extends BaseInitFragment implements View.OnClickListe
         super.onCreate(savedInstanceState);
         setRetainInstance(true);
         mFragmentViewModel = new ViewModelProvider(this).get(LoginFragmentViewModel.class);
+        mFragmentViewModel.getLoginFromAppServeObservable().observe(this, response -> {
+            parseResource(response, new OnResourceParseCallback<String>(true) {
+                @Override
+                public void onSuccess(String data) {
+                    Log.e("login", "login success");
+                    EMClient.getInstance().loginWithToken(mUserName, data, new EMCallBack() {
+                        @Override
+                        public void onSuccess() {
+                            DemoHelper.getInstance().setAutoLogin(true);
+                            //跳转到主页
+                            MainActivity.startAction(mContext);
+                            mContext.finish();
+                        }
+
+                        @Override
+                        public void onError(int code, String error) {
+
+                        }
+                    });
+                }
+
+                @Override
+                public void onError(int code, String message) {
+                    super.onError(code, message);
+                    if(code == EMError.USER_AUTHENTICATION_FAILED) {
+                        ToastUtils.showToast(R.string.demo_error_user_authentication_failed);
+                    }else {
+                        ToastUtils.showToast(message);
+                    }
+                }
+
+                @Override
+                public void onLoading(String data) {
+                    super.onLoading(data);
+                    showLoading();
+                }
+
+                @Override
+                public void hideLoading() {
+                    super.hideLoading();
+                    LoginFragment.this.dismissLoading();
+                }
+            });
+
+        });
+
         mFragmentViewModel.getLoginObservable().observe(this, response -> {
             parseResource(response, new OnResourceParseCallback<EaseUser>(true) {
                 @Override
@@ -188,12 +240,19 @@ public class LoginFragment extends BaseInitFragment implements View.OnClickListe
                 isTokenFlag = !isTokenFlag;
                 switchLogin();
                 break;
-            case R.id.tv_login_server_set:
-                mViewModel.setPageSelect(2);
+            case R.id.tv_version:
+                System.arraycopy(mHits, 1, mHits, 0, mHits.length - 1);
+                mHits[mHits.length - 1] =  SystemClock.uptimeMillis();
+                if (mHits[0] >= SystemClock.uptimeMillis() - DURATION) {
+                    mViewModel.setPageSelect(2);
+                }
                 break;
             case R.id.btn_login:
                 hideKeyboard();
                 loginToServer();
+                break;
+            case R.id.tv_login_reset_password:
+                mViewModel.setPageSelect(3);
                 break;
         }
     }
@@ -220,7 +279,11 @@ public class LoginFragment extends BaseInitFragment implements View.OnClickListe
             return;
         }
         isClick = true;
-        mFragmentViewModel.login(mUserName, mPwd, isTokenFlag);
+        if (DemoHelper.getInstance().getModel().isDeveloperMode()){
+            mFragmentViewModel.login(mUserName,mPwd,isTokenFlag);
+        }else {
+            mFragmentViewModel.loginFromAppServe(mUserName, mPwd);
+        }
     }
 
     @Override

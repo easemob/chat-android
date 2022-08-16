@@ -7,7 +7,6 @@ import android.text.TextUtils;
 import com.hyphenate.chat.EMChatRoom;
 import com.hyphenate.chat.EMClient;
 import com.hyphenate.easeim.DemoApplication;
-import com.hyphenate.easeim.DemoHelper;
 import com.hyphenate.easeim.common.db.DemoDbHelper;
 import com.hyphenate.easeim.common.db.dao.AppKeyDao;
 import com.hyphenate.easeim.common.db.dao.EmUserDao;
@@ -19,7 +18,6 @@ import com.hyphenate.easeim.common.manager.OptionsHelper;
 import com.hyphenate.easeim.common.utils.PreferenceManager;
 import com.hyphenate.easeui.domain.EaseUser;
 import com.hyphenate.easeui.manager.EasePreferenceManager;
-import com.hyphenate.util.EMLog;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -810,6 +808,22 @@ public class DemoModel {
      */
     public void setTargetLanguage(String languageCode) {
         PreferenceManager.getInstance().setTargetLanguage(languageCode);
+    }
+
+    public boolean isDeveloperMode(){
+        return PreferenceManager.getInstance().isDeveloperMode();
+    }
+
+    public void setDeveloperMode(boolean isDeveloper){
+        PreferenceManager.getInstance().setDeveloperMode(isDeveloper);
+    }
+
+    public void setPhoneNumber(String phoneNumber){
+        PreferenceManager.getInstance().setPhoneNumber(phoneNumber);
+    }
+
+    public String getPhoneNumber(){
+        return PreferenceManager.getInstance().getPhoneNumber();
     }
 
     enum Key{

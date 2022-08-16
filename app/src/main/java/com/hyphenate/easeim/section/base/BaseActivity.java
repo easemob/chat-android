@@ -84,6 +84,7 @@ public class BaseActivity extends AppCompatActivity {
                 DemoHelper.getInstance().logout(false, new EMCallBack() {
                     @Override
                     public void onSuccess() {
+                        DemoHelper.getInstance().getModel().setPhoneNumber("");
                         finishOtherActivities();
                         startActivity(new Intent(mContext, LoginActivity.class));
                         finish();
@@ -103,6 +104,7 @@ public class BaseActivity extends AppCompatActivity {
             }else if(TextUtils.equals(accountEvent, DemoConstant.ACCOUNT_CONFLICT)
                     || TextUtils.equals(accountEvent, DemoConstant.ACCOUNT_REMOVED)
                     || TextUtils.equals(accountEvent, DemoConstant.ACCOUNT_FORBIDDEN)) {
+                DemoHelper.getInstance().getModel().setPhoneNumber("");
                 DemoHelper.getInstance().logout(false, null);
                 showExceptionDialog(accountEvent);
             }

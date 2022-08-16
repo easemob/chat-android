@@ -9,6 +9,7 @@ import androidx.lifecycle.ViewModelProvider;
 import com.hyphenate.easeim.R;
 import com.hyphenate.easeim.section.base.BaseFragment;
 import com.hyphenate.easeim.section.base.BaseInitActivity;
+import com.hyphenate.easeim.section.login.fragment.ChangePwdFragment;
 import com.hyphenate.easeim.section.login.fragment.LoginFragment;
 import com.hyphenate.easeim.section.login.fragment.RegisterFragment;
 import com.hyphenate.easeim.section.login.fragment.ServerSetFragment;
@@ -52,6 +53,8 @@ public class LoginActivity extends BaseInitActivity {
                 replace(new RegisterFragment());
             }else if(page == 2) {
                 replace(new ServerSetFragment());
+            }else if(page == 3){
+                replace(new ChangePwdFragment());
             }
 
         });

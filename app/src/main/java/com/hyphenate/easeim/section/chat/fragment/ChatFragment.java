@@ -49,6 +49,7 @@ import com.hyphenate.easeui.constants.EaseConstant;
 import com.hyphenate.easeui.domain.EaseUser;
 import com.hyphenate.easeui.model.EaseEvent;
 import com.hyphenate.easeui.modules.chat.EaseChatFragment;
+import com.hyphenate.easeui.modules.chat.EaseChatMessageListLayout;
 import com.hyphenate.easeui.modules.chat.interfaces.IChatExtendMenu;
 import com.hyphenate.easeui.modules.chat.interfaces.OnRecallMessageResultListener;
 import com.hyphenate.easeui.modules.menu.EasePopupWindowHelper;
@@ -85,10 +86,10 @@ public class ChatFragment extends EaseChatFragment implements OnRecallMessageRes
         clipboard = (ClipboardManager) getActivity().getSystemService(Context.CLIPBOARD_SERVICE);
         viewModel = new ViewModelProvider(this).get(MessageViewModel.class);
 
-        //获取到聊天列表控件
-        //EaseChatMessageListLayout messageListLayout = chatLayout.getChatMessageListLayout();
+        EaseChatMessageListLayout messageListLayout = chatLayout.getChatMessageListLayout();
         //设置聊天列表背景
-        //messageListLayout.setBackground(new ColorDrawable(Color.parseColor("#DA5A4D")));
+//      messageListLayout.setBackground(new ColorDrawable(Color.parseColor("#DA5A4D")));
+        messageListLayout.setBackgroundResource(R.drawable.demo_caht_bitmap_bg);
         //设置默认头像
         //messageListLayout.setAvatarDefaultSrc(ContextCompat.getDrawable(mContext, R.drawable.ease_default_avatar));
         //设置头像形状
@@ -123,7 +124,7 @@ public class ChatFragment extends EaseChatFragment implements OnRecallMessageRes
         itemMenu.setResourceId(R.drawable.ease_chat_item_menu_forward);
         chatLayout.addItemMenu(itemMenu );
         MenuItemBean itemMenu1 = new MenuItemBean(0,R.id.action_chat_label,12,getString(R.string.action_label));
-        itemMenu1.setResourceId(R.drawable.ease_chat_item_menu_copy);
+        itemMenu1.setResourceId(R.drawable.d_exclamationmark_in_triangle);
         chatLayout.addItemMenu(itemMenu1 );
 //        chatLayout.setReportYourSelf(false);
     }

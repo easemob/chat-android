@@ -22,6 +22,7 @@ import com.hyphenate.easeui.interfaces.OnItemClickListener;
 import com.hyphenate.easeui.utils.EaseCommonUtils;
 import com.hyphenate.easeui.widget.EaseSidebar;
 import com.hyphenate.easeui.widget.EaseTitleBar;
+import com.hyphenate.util.EMLog;
 import com.scwang.smartrefresh.layout.SmartRefreshLayout;
 import com.scwang.smartrefresh.layout.api.RefreshLayout;
 import com.scwang.smartrefresh.layout.listener.OnRefreshListener;
@@ -90,6 +91,7 @@ public class ForwardMessageActivity extends BaseInitActivity implements OnRefres
             parseResource(response, new OnResourceParseCallback<List<EaseUser>>() {
                 @Override
                 public void onSuccess(List<EaseUser> data) {
+                    EMLog.e("getContactListObservable",data.get(0).getUsername());
                     mAdapter.setData(data);
                 }
 

@@ -95,6 +95,7 @@ public class SetIndexActivity extends BaseInitActivity implements EaseTitleBar.O
             public void onSuccess() {
                 runOnUiThread(new Runnable() {
                     public void run() {
+                        DemoHelper.getInstance().getModel().setPhoneNumber("");
                         pd.dismiss();
                         ChatPresenter.getInstance().clear();
                         // show login screen

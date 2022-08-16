@@ -546,6 +546,10 @@
         <!--多语言-->
         <activity android:name=".section.me.activity.LanguageActivity"/>
         <activity android:name=".section.me.test.TestFunctionsIndexActivity" />
+        <!--修改密码-->
+        <activity android:name=".section.login.activity.ChangePwdActivity"
+            android:windowSoftInputMode="stateHidden|adjustResize"
+            android:screenOrientation="portrait"/>
     </application>
 
 </manifest>

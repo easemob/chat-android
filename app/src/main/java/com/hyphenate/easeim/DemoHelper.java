@@ -543,6 +543,7 @@ public class DemoHelper {
 
                     @Override
                     public void onSuccess() {
+                        DemoHelper.getInstance().getModel().setPhoneNumber("");
                         logoutSuccess();
                         //reset();
                         if (callback != null) {
@@ -575,6 +576,7 @@ public class DemoHelper {
 
                     @Override
                     public void onSuccess() {
+                        DemoHelper.getInstance().getModel().setPhoneNumber("");
                         logoutSuccess();
                         //reset();
                         if (callback != null) {

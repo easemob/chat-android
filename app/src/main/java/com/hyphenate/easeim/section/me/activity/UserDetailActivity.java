@@ -3,12 +3,16 @@ package com.hyphenate.easeim.section.me.activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.View;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.hyphenate.EMValueCallBack;
 import com.hyphenate.chat.EMClient;
 import com.hyphenate.chat.EMUserInfo;
+import com.hyphenate.easeim.DemoHelper;
 import com.hyphenate.easeim.R;
 import com.hyphenate.easeim.common.constant.DemoConstant;
 import com.hyphenate.easeim.common.livedatas.LiveDataBus;
@@ -32,6 +36,8 @@ public class UserDetailActivity extends BaseInitActivity {
     private EaseImageView headImageView;
     private String headImageUrl = null;
     private String nickName;
+    private TextView mPhoneNum;
+    private LinearLayout mLayoutPhone;
 
     public static void actionStart(Context context,String nickName,String url) {
         Intent intent = new Intent(context, UserDetailActivity.class);
@@ -63,6 +69,8 @@ public class UserDetailActivity extends BaseInitActivity {
         titleBar = findViewById(R.id.title_bar);
         itemNickname = findViewById(R.id.item_nickname);
         headImageView = findViewById(R.id.tv_headImage_view);
+        mPhoneNum =  findViewById(R.id.phone_number);
+        mLayoutPhone = findViewById(R.id.layout_phone);
     }
 
     @Override
@@ -101,7 +109,11 @@ public class UserDetailActivity extends BaseInitActivity {
         if(headImageUrl == null || nickName == null){
             intSelfDate();
         }
-
+        if (!TextUtils.isEmpty(DemoHelper.getInstance().getModel().getPhoneNumber())){
+            mPhoneNum.setText(DemoHelper.getInstance().getModel().getPhoneNumber());
+        }else {
+            mLayoutPhone.setVisibility(View.GONE);
+        }
         //增加数据变化监听
         addLiveDataObserver();
     }

@@ -63,4 +63,42 @@
         android:background="@color/white">
     </com.hyphenate.easeim.common.widget.ArrowItemView>
 
+    <com.hyphenate.easeim.common.widget.ArrowItemView
+
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/em_common_item_height"
+        app:arrowItemTitle="@string/em_user_detail_nickname"
+        android:background="@color/white">
+    </com.hyphenate.easeim.common.widget.ArrowItemView>
+
+    <LinearLayout
+        android:id="@+id/layout_phone"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/em_common_item_height"
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        android:background="@color/white">
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/em_margin_20"
+            android:layout_marginStart="@dimen/em_margin_20"
+            android:textSize="@dimen/em_size_big"
+            android:textColor="@color/em_color_common_text_black"
+            android:text="@string/phone_number"/>
+
+        <TextView
+            android:id="@+id/phone_number"
+            android:layout_width="wrap_content"
+            android:layout_height="36dp"
+            android:gravity="center"
+            android:layout_marginRight="20dp"
+            android:textSize="@dimen/adaptive_18sp"
+            android:hint="+86 17343453455"
+            />
+
+    </LinearLayout>
+
 </LinearLayout>

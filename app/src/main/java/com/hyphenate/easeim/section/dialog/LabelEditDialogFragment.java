@@ -168,6 +168,7 @@ public class LabelEditDialogFragment extends BaseDialogFragment {
                 }
             }
         };
+        if (rootView != null)
         rootView.getViewTreeObserver().addOnGlobalLayoutListener(layoutListener);
     }
 

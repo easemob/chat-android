@@ -141,6 +141,13 @@
         <item name="android:textColor">@color/demo_login_tv_click_selector</item>
     </style>
 
+    <style name="em_login_bottom_layout">
+        <item name="android:gravity">center</item>
+        <item name="android:layout_marginBottom">54dp</item>
+        <item name="android:textSize">12sp</item>
+        <item name="android:textColor">@color/demo_login_tv_click_selector</item>
+    </style>
+
     <style name="em_login_btn">
         <item name="android:layout_width">0dp</item>
         <item name="android:layout_height">wrap_content</item>

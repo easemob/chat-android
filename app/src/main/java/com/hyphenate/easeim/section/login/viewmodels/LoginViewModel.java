@@ -14,12 +14,19 @@ public class LoginViewModel extends AndroidViewModel {
     private EMClientRepository mRepository;
     private SingleSourceLiveData<Resource<String>> registerObservable;
     private SingleSourceLiveData<Integer> pageObservable;
+    private SingleSourceLiveData<Resource<Boolean>> verificationCodeObservable;
+    private SingleSourceLiveData<Resource<String>> imgVerificationCodeObservable;
+    private SingleSourceLiveData<Resource<Boolean>> registerFromAppServeObservable;
+
 
     public LoginViewModel(@NonNull Application application) {
         super(application);
         mRepository = new EMClientRepository();
         registerObservable = new SingleSourceLiveData<>();
         pageObservable = new SingleSourceLiveData<>();
+        verificationCodeObservable =  new SingleSourceLiveData<>();
+        registerFromAppServeObservable = new SingleSourceLiveData<>();
+        imgVerificationCodeObservable = new SingleSourceLiveData<>();
     }
 
     /**
@@ -52,11 +59,52 @@ public class LoginViewModel extends AndroidViewModel {
         return registerObservable;
     }
 
+    public LiveData<Resource<Boolean>> getVerificationCodeObservable(){
+        return verificationCodeObservable;
+    }
+
+    public LiveData<Resource<String>> getImgVerificationCodeObservable(){
+        return imgVerificationCodeObservable;
+    }
+
+    public LiveData<Resource<Boolean>> getRegisterFromAppServeObservable(){
+        return registerFromAppServeObservable;
+    }
+
+
     /**
      * 清理注册信息
      */
     public void clearRegisterInfo() {
         registerObservable.setValue(null);
     }
+
+    /**
+     * 获取短信验证码
+     */
+    public void postVerificationCode(String phoneNumber,String image_id,String imageCode){
+        verificationCodeObservable.setSource(mRepository.getVerificationCode(phoneNumber,image_id,imageCode));
+    }
+
+    /**
+     * 获取图片验证码
+     */
+    public void getImageVerificationCode(){
+        imgVerificationCodeObservable.setSource(mRepository.getImgVerificationCode());
+    }
+
+    /**
+     * 通过AppServe注册
+     * @param userName
+     * @param userPassword
+     * @param phoneNumber
+     * @param smsCode
+     * @param imageId
+     * @param imageCode
+     */
+    public void registerFromAppServe(String userName, String userPassword,String phoneNumber,String smsCode,String imageId,String imageCode) {
+        registerFromAppServeObservable.setSource(mRepository.registerFromServe(userName,userPassword,phoneNumber,smsCode,imageId,imageCode));
+    }
+
 
 }

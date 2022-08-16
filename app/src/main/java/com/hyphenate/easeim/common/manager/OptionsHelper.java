@@ -4,18 +4,23 @@ import android.content.Context;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.util.Log;
 
+import com.hyphenate.chat.EMClient;
+import com.hyphenate.chat.EMOptions;
 import com.hyphenate.easeim.DemoApplication;
+import com.hyphenate.easeim.DemoHelper;
 import com.hyphenate.easeim.common.model.DemoServerSetBean;
 import com.hyphenate.easeim.common.utils.AppMetaDataHelper;
 import com.hyphenate.easeim.common.utils.PreferenceManager;
+import com.hyphenate.exceptions.HyphenateException;
 
 public class OptionsHelper {
     private String DEF_APPKEY = "";
-    private static final String DEF_IM_SERVER = "msync-im1.sandbox.easemob.com";
+    private static final String DEF_IM_SERVER = "106.75.100.247";
     private static final int DEF_IM_PORT = 6717;
-    private static final String DEF_REST_SERVER = "a1.sdb.easemob.com";
+    private static final String DEF_REST_SERVER = "a1-hsb.easemob.com";
 
     private static OptionsHelper instance;
 
@@ -302,6 +307,41 @@ public class OptionsHelper {
         bean.setHttpsOnly(getUsingHttpsOnly());
         bean.setCustomServerEnable(isCustomServerEnable());
         return bean;
+    }
+
+    public void checkChangeServe(){
+        if (!EMClient.getInstance().isLoggedIn()){
+            try {
+                EMOptions options = EMClient.getInstance().getOptions();
+                options.enableDNSConfig(true);
+                if (DemoHelper.getInstance().getModel().isCustomSetEnable()){
+                    if (DemoHelper.getInstance().getModel().isCustomServerEnable()){
+                        options.enableDNSConfig(false);
+                        if (!TextUtils.isEmpty(DemoHelper.getInstance().getModel().getIMServer())){
+                            options.setIMServer(DemoHelper.getInstance().getModel().getIMServer());
+                            if(DemoHelper.getInstance().getModel().getIMServer().contains(":")) {
+                                options.setIMServer(DemoHelper.getInstance().getModel().getIMServer().split(":")[0]);
+                                // 设置im server 端口号，默认443
+                                options.setImPort(Integer.parseInt(DemoHelper.getInstance().getModel().getIMServer().split(":")[1]));
+                            }else {
+                                //如果不包含端口号
+                                if(DemoHelper.getInstance().getModel().getIMServerPort() != 0) {
+                                    options.setImPort(DemoHelper.getInstance().getModel().getIMServerPort());
+                                }
+                            }
+                        }
+                        if (!TextUtils.isEmpty(DemoHelper.getInstance().getModel().getRestServer())){
+                            options.setRestServer(DemoHelper.getInstance().getModel().getRestServer());
+                        }
+                    }
+                    EMClient.getInstance().changeAppkey(DemoHelper.getInstance().getModel().getCutomAppkey());
+                }else {
+                    EMClient.getInstance().changeAppkey(OptionsHelper.getInstance().getDefAppkey());
+                }
+            } catch (HyphenateException e) {
+                e.printStackTrace();
+            }
+        }
     }
 
 }

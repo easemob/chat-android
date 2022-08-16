@@ -79,6 +79,8 @@ public class PreferenceManager {
 	private static String SHARED_KEY_SORT_MESSAGE_BY_SERVER_TIME = "sort_message_by_server_time";
 
 	private static String SHARED_KEY_ENABLE_TOKEN_LOGIN = "enable_token_login";
+	private static String SHARED_IS_DEVELOPER = "shared_is_developer";
+	private static String DEMO_PHONE_NUMBER = "demo_phone_number";
 
 	private static String SHARED_KEY_TARGET_LANGUAGE = "shared_key_target_language";
 
@@ -584,5 +586,24 @@ public class PreferenceManager {
 	public String getTargetLanguage() {
 		return mSharedPreferences.getString(SHARED_KEY_TARGET_LANGUAGE, "en");
 	}
+
+	public void setDeveloperMode(boolean isDeveloper){
+		editor.putBoolean(SHARED_IS_DEVELOPER, isDeveloper);
+		editor.apply();
+	}
+
+	public boolean isDeveloperMode(){
+		return mSharedPreferences.getBoolean(SHARED_IS_DEVELOPER, false);
+	}
+
+	public void setPhoneNumber(String phoneNumber){
+		editor.putString(DEMO_PHONE_NUMBER, phoneNumber);
+		editor.apply();
+	}
+
+	public String getPhoneNumber() {
+		return mSharedPreferences.getString(DEMO_PHONE_NUMBER, "");
+	}
+
 
 }
