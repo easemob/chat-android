@@ -15,6 +15,7 @@ import com.hyphenate.easeim.common.model.DemoServerSetBean;
 import com.hyphenate.easeim.common.utils.AppMetaDataHelper;
 import com.hyphenate.easeim.common.utils.PreferenceManager;
 import com.hyphenate.exceptions.HyphenateException;
+import com.hyphenate.util.EMLog;
 
 public class OptionsHelper {
     private String DEF_APPKEY = "";
@@ -313,8 +314,9 @@ public class OptionsHelper {
         if (!EMClient.getInstance().isLoggedIn()){
             try {
                 EMOptions options = EMClient.getInstance().getOptions();
-                options.enableDNSConfig(true);
-                if (DemoHelper.getInstance().getModel().isCustomSetEnable()){
+                // 首先看是否开启自定义配置
+                EMLog.e("checkChangeServe",DemoHelper.getInstance().getModel().isCustomSetEnable()+"");
+                if (DemoHelper.getInstance().getModel().isCustomSetEnable()){ //开启自定义配置
                     if (DemoHelper.getInstance().getModel().isCustomServerEnable()){
                         options.enableDNSConfig(false);
                         if (!TextUtils.isEmpty(DemoHelper.getInstance().getModel().getIMServer())){
@@ -335,7 +337,8 @@ public class OptionsHelper {
                         }
                     }
                     EMClient.getInstance().changeAppkey(DemoHelper.getInstance().getModel().getCutomAppkey());
-                }else {
+                }else {//未开启自定义配置 直接设置默认appkey
+                    options.enableDNSConfig(true);
                     EMClient.getInstance().changeAppkey(OptionsHelper.getInstance().getDefAppkey());
                 }
             } catch (HyphenateException e) {

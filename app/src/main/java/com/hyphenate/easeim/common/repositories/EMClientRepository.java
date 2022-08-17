@@ -423,6 +423,7 @@ public class EMClientRepository extends BaseEMRepository{
             @Override
             protected void createCall(@NonNull ResultCallBack<LiveData<String>> callBack) {
                 DemoHelper.getInstance().init(DemoApplication.getInstance());
+                OptionsHelper.getInstance().checkChangeServe();
                 LoginFromAppServe(userName, userPassword, new ResultCallBack<String>() {
                     @Override
                     public void onSuccess(String value) {

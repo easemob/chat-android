@@ -191,7 +191,7 @@ public class AboutMeFragment extends BaseInitFragment implements View.OnClickLis
         //邮件接收者（数组，可以是多位接收者）
         String[] emailReciver = new String[]{"yunying@easemob.com"};
 
-        String  emailTitle = "投诉建议";
+        String  emailTitle = "环信Demo投诉建议";
         //设置邮件地址
         email.putExtra(android.content.Intent.EXTRA_EMAIL, emailReciver);
         //设置邮件标题

@@ -15,8 +15,10 @@ import android.widget.TextView;
 import androidx.constraintlayout.widget.Group;
 
 import com.hyphenate.chat.EMClient;
+import com.hyphenate.chat.EMOptions;
 import com.hyphenate.easeim.DemoHelper;
 import com.hyphenate.easeim.R;
+import com.hyphenate.easeim.common.manager.OptionsHelper;
 import com.hyphenate.easeim.common.model.DemoServerSetBean;
 import com.hyphenate.easeim.section.base.BaseInitFragment;
 import com.hyphenate.easeim.section.dialog.DemoDialogFragment;
@@ -138,8 +140,9 @@ public class ServerSetFragment extends BaseInitFragment implements EaseTitleBar.
                 DemoHelper.getInstance().getModel().enableCustomAppkey(!TextUtils.isEmpty(mEtAppkey.getText().toString().trim()) && isChecked);
                 mGroupServerSet.setVisibility(isChecked ? View.VISIBLE : View.GONE);
                 setResetButtonVisible(isChecked, DemoHelper.getInstance().isSDKInit());
-                if (isChecked == false)
+                if (isChecked == false){
                     DemoHelper.getInstance().getModel().setDeveloperMode(false);
+                }
                 break;
             case R.id.switch_specify_server :
                 DemoHelper.getInstance().getModel().enableCustomServer(isChecked);
