@@ -138,6 +138,8 @@ public class ServerSetFragment extends BaseInitFragment implements EaseTitleBar.
                 DemoHelper.getInstance().getModel().enableCustomAppkey(!TextUtils.isEmpty(mEtAppkey.getText().toString().trim()) && isChecked);
                 mGroupServerSet.setVisibility(isChecked ? View.VISIBLE : View.GONE);
                 setResetButtonVisible(isChecked, DemoHelper.getInstance().isSDKInit());
+                if (isChecked == false)
+                    DemoHelper.getInstance().getModel().setDeveloperMode(false);
                 break;
             case R.id.switch_specify_server :
                 DemoHelper.getInstance().getModel().enableCustomServer(isChecked);

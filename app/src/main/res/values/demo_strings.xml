@@ -633,4 +633,6 @@
     <string name="phone_number">Phone Number</string>
     <string name="localLogin">Internal Login</string>
 
+    <string name="action_report_label">report</string>
+
 </resources>

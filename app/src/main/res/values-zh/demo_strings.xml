@@ -633,4 +633,5 @@
     <string name="phone_number">手机号</string>
     <string name="localLogin">账号密码登录</string>
 
+    <string name="action_report_label">举报</string>
 </resources>

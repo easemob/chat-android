@@ -31,7 +31,7 @@
             android:id="@+id/et_content"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:minHeight="140dp"
+            android:minHeight="135dp"
             android:maxHeight="140dp"
             android:layout_marginLeft="@dimen/em_margin_30"
             android:layout_marginRight="@dimen/em_margin_30"

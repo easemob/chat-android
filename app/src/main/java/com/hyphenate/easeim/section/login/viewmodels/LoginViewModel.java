@@ -77,6 +77,9 @@ public class LoginViewModel extends AndroidViewModel {
      */
     public void clearRegisterInfo() {
         registerObservable.setValue(null);
+        verificationCodeObservable.setValue(null);
+        registerFromAppServeObservable.setValue(null);
+        imgVerificationCodeObservable.setValue(null);
     }
 
     /**

@@ -123,7 +123,7 @@ public class ChatFragment extends EaseChatFragment implements OnRecallMessageRes
         MenuItemBean itemMenu = new MenuItemBean(0, R.id.action_chat_forward, 11, getString(R.string.action_forward));
         itemMenu.setResourceId(R.drawable.ease_chat_item_menu_forward);
         chatLayout.addItemMenu(itemMenu );
-        MenuItemBean itemMenu1 = new MenuItemBean(0,R.id.action_chat_label,12,getString(R.string.action_label));
+        MenuItemBean itemMenu1 = new MenuItemBean(0,R.id.action_chat_label,12,getString(R.string.action_report_label));
         itemMenu1.setResourceId(R.drawable.d_exclamationmark_in_triangle);
         chatLayout.addItemMenu(itemMenu1 );
 //        chatLayout.setReportYourSelf(false);

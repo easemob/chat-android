@@ -395,7 +395,7 @@ public class EMClientRepository extends BaseEMRepository{
                 request.putOpt("userPassword", userPassword);
                 request.putOpt("phoneNumber", phoneNumber);
                 request.putOpt("smsCode", smsCode);
-                String url = BuildConfig.APP_SERVER_PROTOCOL + "://" + BuildConfig.APP_SERVER_DOMAIN + BuildConfig.APP_SERVER_REGISTER ;
+                String url = BuildConfig.APP_SERVER_PROTOCOL + "://" + BuildConfig.APP_SERVER_DOMAIN + BuildConfig.APP_BASE_USER + BuildConfig.APP_SERVER_REGISTER ;
                 EMLog.d("registerToAppServer url : ", url);
                 HttpResponse response = HttpClientManager.httpExecute(url, headers, request.toString(), Method_POST);
                 int code = response.code;

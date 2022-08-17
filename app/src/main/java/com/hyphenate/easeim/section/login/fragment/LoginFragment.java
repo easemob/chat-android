@@ -95,6 +95,18 @@ public class LoginFragment extends BaseInitFragment implements View.OnClickListe
     }
 
     @Override
+    public void onResume() {
+        super.onResume();
+        if (DemoHelper.getInstance().getModel().isDeveloperMode()){
+            mTvLoginRegister.setVisibility(View.GONE);
+            mTvResetPassword.setVisibility(View.GONE);
+        }else {
+            mTvLoginRegister.setVisibility(View.VISIBLE);
+            mTvResetPassword.setVisibility(View.VISIBLE);
+        }
+    }
+
+    @Override
     protected void initListener() {
         super.initListener();
         mEtLoginName.addTextChangedListener(this);
@@ -252,6 +264,7 @@ public class LoginFragment extends BaseInitFragment implements View.OnClickListe
                 loginToServer();
                 break;
             case R.id.tv_login_reset_password:
+                mViewModel.clearRegisterInfo();
                 mViewModel.setPageSelect(3);
                 break;
         }

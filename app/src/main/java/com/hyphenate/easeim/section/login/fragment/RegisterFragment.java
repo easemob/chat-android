@@ -136,8 +136,9 @@ public class RegisterFragment extends BaseInitFragment implements TextWatcher, V
                     if(code == EMError.USER_ALREADY_EXIST) {
                         ToastUtils.showToast(R.string.demo_error_user_already_exist);
                     }else {
-                        ToastUtils.showToast(message);
+                        ToastUtils.showToast("code: " + code + " "+message);
                     }
+                    EMLog.e("RegisterFragment","注册失败： code: " + code + " message: "+ message);
                 }
 
                 @Override
@@ -159,14 +160,14 @@ public class RegisterFragment extends BaseInitFragment implements TextWatcher, V
             parseResource(response, new OnResourceParseCallback<Boolean>() {
                 @Override
                 public void onSuccess(@Nullable Boolean data) {
-                    ToastUtils.showToast("发送验证码成功");
+                    ToastUtils.showToast("发送短信验证码成功");
                 }
 
                 @Override
                 public void onError(int code, String message) {
                     super.onError(code, message);
                     ToastUtils.showToast("发送验证码失败： code: " + code + " message: "+ message);
-                    EMLog.e("mViewModel","发送验证码失败： code: " + code + " message: "+ message);
+                    EMLog.e("RegisterFragment","发送短信验证码失败： code: " + code + " message: "+ message);
                 }
 
             });
@@ -185,6 +186,12 @@ public class RegisterFragment extends BaseInitFragment implements TextWatcher, V
                             .error(R.drawable.ease_default_image))
                             .diskCacheStrategy(DiskCacheStrategy.ALL)
                             .into(mImgCodeView);
+                }
+
+                @Override
+                public void onError(int code, String message) {
+                    super.onError(code, message);
+                    EMLog.e("RegisterFragment","获取图片验证码失败： code: " + code + " message: "+ message);
                 }
             });
         });
