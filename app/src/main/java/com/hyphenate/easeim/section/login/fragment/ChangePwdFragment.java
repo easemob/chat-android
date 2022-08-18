@@ -81,12 +81,12 @@ public class ChangePwdFragment extends BaseInitFragment implements EaseTitleBar.
         areaCode.setAdapter(adapter);
         mViewModel = new ViewModelProvider(mContext).get(LoginViewModel.class);
         mChangeViewModel = new ViewModelProvider(mContext).get(ChangePwdViewModel.class);
+        mChangeViewModel.clearRegisterInfo();
         mViewModel.getVerificationCodeObservable().observe(this, response -> {
             parseResource(response, new OnResourceParseCallback<Boolean>() {
                 @Override
                 public void onSuccess(@Nullable Boolean data) {
                     ToastUtils.showToast("发送验证码成功");
-                    mViewModel.getImageVerificationCode();
                 }
 
                 @Override
@@ -179,7 +179,7 @@ public class ChangePwdFragment extends BaseInitFragment implements EaseTitleBar.
                     ToastUtils.showToast("请输入图片验证码");
                     break;
                 }
-                CountDownTimerUtils count = new CountDownTimerUtils(mBtnGetCode, 10000, 1000);
+                CountDownTimerUtils count = new CountDownTimerUtils(mBtnGetCode, 60000, 1000);
                 count.start();
                 mViewModel.postVerificationCode(String.valueOf(mEtPhoneNum.getText()),image_id,imageCode);
                 break;

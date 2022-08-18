@@ -16,12 +16,14 @@ import com.hyphenate.easeim.common.interfaceOrImplement.OnResourceParseCallback;
 import com.hyphenate.easeim.common.utils.ToastUtils;
 import com.hyphenate.easeim.section.base.BaseInitActivity;
 import com.hyphenate.easeim.section.login.viewmodels.ChangePwdViewModel;
+import com.hyphenate.easeui.widget.EaseTitleBar;
 
-public class ChangePwdActivity extends BaseInitActivity implements View.OnClickListener , TextWatcher {
+public class ChangePwdActivity extends BaseInitActivity implements View.OnClickListener , TextWatcher, EaseTitleBar.OnBackPressListener {
 
     private EditText mEtChangePassword;
     private EditText mEtChangeConfirmPassword;
     private Button mBtnConfirm;
+    private EaseTitleBar mTitleBar;
     private ChangePwdViewModel viewModel;
     private String mNewPassword = "";
     private String mConfirmPwd = "";
@@ -40,6 +42,7 @@ public class ChangePwdActivity extends BaseInitActivity implements View.OnClickL
     @Override
     protected void initView(Bundle savedInstanceState) {
         super.initView(savedInstanceState);
+        mTitleBar = findViewById(R.id.toolbar_register);
         mEtChangePassword = findViewById(R.id.et_login_pwd);
         mEtChangeConfirmPassword = findViewById(R.id.et_login_pwd_confirm);
         mBtnConfirm = findViewById(R.id.btn_confirm);
@@ -72,6 +75,7 @@ public class ChangePwdActivity extends BaseInitActivity implements View.OnClickL
         mBtnConfirm.setOnClickListener(this);
         mEtChangePassword.addTextChangedListener(this);
         mEtChangeConfirmPassword.addTextChangedListener(this);
+        mTitleBar.setOnBackPressListener(this);
     }
 
     @Override
@@ -111,5 +115,10 @@ public class ChangePwdActivity extends BaseInitActivity implements View.OnClickL
         }else {
             mBtnConfirm.setEnabled(false);
         }
+    }
+
+    @Override
+    public void onBackPress(View view) {
+        onBackPressed();
     }
 }

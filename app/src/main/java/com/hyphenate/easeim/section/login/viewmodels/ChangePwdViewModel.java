@@ -38,4 +38,12 @@ public class ChangePwdViewModel extends AndroidViewModel {
     public void checkObservable(String userName,String phoneNumber,String smsCode){
         checkObservable.setSource(mRepository.checkIdentity(userName,phoneNumber,smsCode));
     }
+
+    /**
+     * 清理注册信息
+     */
+    public void clearRegisterInfo() {
+        changeObservable.setValue(null);
+        checkObservable.setValue(null);
+    }
 }
