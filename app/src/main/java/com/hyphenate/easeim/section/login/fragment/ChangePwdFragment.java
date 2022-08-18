@@ -86,11 +86,13 @@ public class ChangePwdFragment extends BaseInitFragment implements EaseTitleBar.
                 @Override
                 public void onSuccess(@Nullable Boolean data) {
                     ToastUtils.showToast("发送验证码成功");
+                    mViewModel.getImageVerificationCode();
                 }
 
                 @Override
                 public void onError(int code, String message) {
                     super.onError(code, message);
+                    mViewModel.getImageVerificationCode();
                     ToastUtils.showToast("发送验证码失败： code: " + code + " message: "+ message);
                     EMLog.e("mViewModel","发送验证码失败： code: " + code + " message: "+ message);
                 }

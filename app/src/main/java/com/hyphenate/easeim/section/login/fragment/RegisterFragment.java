@@ -161,11 +161,13 @@ public class RegisterFragment extends BaseInitFragment implements TextWatcher, V
                 @Override
                 public void onSuccess(@Nullable Boolean data) {
                     ToastUtils.showToast("发送短信验证码成功");
+                    mViewModel.getImageVerificationCode();
                 }
 
                 @Override
                 public void onError(int code, String message) {
                     super.onError(code, message);
+                    mViewModel.getImageVerificationCode();
                     ToastUtils.showToast("发送验证码失败： code: " + code + " message: "+ message);
                     EMLog.e("RegisterFragment","发送短信验证码失败： code: " + code + " message: "+ message);
                 }
