@@ -291,6 +291,7 @@
     <string name="em_about_me_developer">开发者服务</string>
     <string name="em_about_me_developer_test">开发者测试</string>
     <string name="em_about_email">投诉建议</string>
+    <string name="em_about_email_hint">请输入您的投诉建议</string>
     <string name="em_set_security">账号与安全</string>
     <string name="em_set_privacy">隐私</string>
     <string name="em_set_message_set">新消息提醒</string>

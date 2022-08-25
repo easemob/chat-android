@@ -11,13 +11,13 @@
         android:layout_height="@dimen/em_common_title_bar_height"
         app:titleBarTitle="@string/em_group_member_type_title"/>
 
-    <com.hyphenate.easeim.common.widget.ArrowItemView
+    <com.hyphenate.chatdemo.common.widget.ArrowItemView
         android:id="@+id/item_admin"
         android:layout_width="match_parent"
         android:layout_height="@dimen/em_common_item_height"
         app:arrowItemTitle="@string/em_group_member_type_admin"/>
 
-    <com.hyphenate.easeim.common.widget.ArrowItemView
+    <com.hyphenate.chatdemo.common.widget.ArrowItemView
         android:id="@+id/item_member"
         android:layout_width="match_parent"
         android:layout_height="@dimen/em_common_item_height"

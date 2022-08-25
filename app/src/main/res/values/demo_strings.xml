@@ -290,6 +290,7 @@
     <string name="em_about_me_developer">Developer Services</string>
     <string name="em_about_me_developer_test">Developer Test</string>
     <string name="em_about_email">Complaints and suggestions</string>
+    <string name="em_about_email_hint">Please enter your complaint suggestions</string>
     <string name="em_set_security">Account and Security</string>
     <string name="em_set_privacy">Privacy</string>
     <string name="em_set_message_set">New Messages</string>

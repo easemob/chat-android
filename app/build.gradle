@@ -24,7 +24,7 @@ android {
     compileSdkVersion 30
     buildToolsVersion "30.0.3"
     defaultConfig {
-        applicationId "com.hyphenate.easeim"
+        applicationId "com.hyphenate.chatdemo"
         minSdkVersion 21
         targetSdkVersion 30
         versionCode 96
@@ -62,13 +62,13 @@ android {
                                 BAIDU_LOCATION_APPKEY: properties.getProperty("BAIDU_LOCATION_APPKEY", "******")
         ]
         ndk {
-            abiFilters  "arm64-v8a","armeabi-v7a","x86","x86_64"
+            abiFilters  "arm64-v8a","armeabi-v7a"
         }
         //用于设置使用as打包so时指定输出目录
         externalNativeBuild {
             ndkBuild {
 //                arguments "NDK_LIBS_OUT=libs", "all"
-                abiFilters  "arm64-v8a","armeabi-v7a","x86","x86_64"
+                abiFilters  "arm64-v8a","armeabi-v7a"
             }
         }
     }
@@ -139,7 +139,7 @@ dependencies {
     // resolve 64k limit
     implementation 'com.android.support:multidex:1.0.3'
     // hms push
-    implementation 'com.huawei.hms:push:4.0.2.300'
+    implementation 'com.huawei.hms:push:6.3.0.302'
     // meizu push
     implementation 'com.meizu.flyme.internet:push-internal:4.0.4@aar'//配置集成sdk
     //oppo push
