@@ -545,6 +545,7 @@
         <activity android:name=".section.base.WebViewActivity" />
         <!--多语言-->
         <activity android:name=".section.me.activity.LanguageActivity"/>
+        <activity android:name=".section.me.test.TestFunctionsIndexActivity" />
     </application>
 
 </manifest>
