@@ -19,6 +19,7 @@ import com.hyphenate.easeim.common.livedatas.LiveDataBus;
 import com.hyphenate.easeim.common.net.ErrorCode;
 import com.hyphenate.easeim.common.net.Resource;
 import com.hyphenate.easeim.common.interfaceOrImplement.ResultCallBack;
+import com.hyphenate.easeim.common.utils.MD5;
 import com.hyphenate.easeim.common.utils.PreferenceManager;
 import com.hyphenate.easeui.domain.EaseUser;
 import com.hyphenate.easeui.model.EaseEvent;
@@ -131,7 +132,13 @@ public class EMClientRepository extends BaseEMRepository{
                         }
                     });
                 }else {
-                    EMClient.getInstance().login(userName, pwd, new DemoEmCallBack() {
+                    Long tsLong = System.currentTimeMillis()/1000;
+                    String token = "v1:" + userName + ":" + tsLong;
+                    String input = userName + tsLong + "easemob";
+                    String key = MD5.encrypt2MD5(input);
+                    token += ":" + key;
+                    EMLog.d("login with token: ", token + key);
+                    EMClient.getInstance().loginWithToken(userName, token, new DemoEmCallBack() {
                         @Override
                         public void onSuccess() {
                             successForCallBack(callBack);

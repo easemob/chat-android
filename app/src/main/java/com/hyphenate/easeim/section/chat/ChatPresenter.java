@@ -11,6 +11,7 @@ import android.widget.Toast;
 
 import androidx.annotation.StringRes;
 
+import com.hyphenate.EMCallBack;
 import com.hyphenate.EMChatRoomChangeListener;
 import com.hyphenate.EMConnectionListener;
 import com.hyphenate.EMContactListener;
@@ -18,6 +19,7 @@ import com.hyphenate.EMConversationListener;
 import com.hyphenate.EMError;
 import com.hyphenate.EMMultiDeviceListener;
 import com.hyphenate.EMValueCallBack;
+import com.hyphenate.chat.EMChatRoom;
 import com.hyphenate.chat.EMClient;
 import com.hyphenate.chat.EMConversation;
 import com.hyphenate.chat.EMGroup;
@@ -94,6 +96,28 @@ public class ChatPresenter extends EaseChatPresenter {
         conversationListener = new ChatConversationListener();
         //添加网络连接状态监听
         DemoHelper.getInstance().getEMClient().addConnectionListener(connectionListener);
+        EMClient.getInstance().addConnectionListener(new EMConnectionListener() {
+            @Override
+            public void onConnected() {
+                // join cached chatroom here
+                EMClient.getInstance().chatroomManager().joinChatRoom("191380240531457", new EMValueCallBack<EMChatRoom>() {
+                    @Override
+                    public void onSuccess(EMChatRoom value) {
+                        EMLog.d(TAG, "join room success");
+                    }
+
+                    @Override
+                    public void onError(int error, String errorMsg) {
+                        EMLog.d(TAG, "join room fail: " + errorMsg);
+                    }
+                });
+            }
+
+            @Override
+            public void onDisconnected(int errorCode) {
+
+            }
+        });
         //添加多端登录监听
         DemoHelper.getInstance().getEMClient().addMultiDeviceListener(multiDeviceListener);
         //添加群组监听
