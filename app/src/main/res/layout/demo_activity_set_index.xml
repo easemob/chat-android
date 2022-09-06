@@ -16,7 +16,7 @@
         android:background="@color/white"
         app:titleBarDisplayHomeAsUpEnabled="true"/>
 
-    <com.hyphenate.easeim.common.widget.ArrowItemView
+    <com.hyphenate.chatdemo.common.widget.ArrowItemView
         android:id="@+id/item_security"
         android:layout_width="0dp"
         android:layout_height="@dimen/em_common_item_height"
@@ -30,7 +30,7 @@
         android:foreground="@drawable/demo_ripple_click_gray"
         android:background="@color/white"/>
 
-    <com.hyphenate.easeim.common.widget.ArrowItemView
+    <com.hyphenate.chatdemo.common.widget.ArrowItemView
         android:id="@+id/item_notification"
         android:layout_width="0dp"
         android:layout_height="@dimen/em_common_item_height"
@@ -44,7 +44,7 @@
         android:foreground="@drawable/demo_ripple_click_gray"
         android:background="@color/white"/>
 
-    <com.hyphenate.easeim.common.widget.ArrowItemView
+    <com.hyphenate.chatdemo.common.widget.ArrowItemView
         android:id="@+id/item_common_set"
         android:layout_width="0dp"
         android:layout_height="@dimen/em_common_item_height"
@@ -59,7 +59,7 @@
         android:foreground="@drawable/demo_ripple_click_gray"
         android:background="@color/white"/>
 
-    <com.hyphenate.easeim.common.widget.ArrowItemView
+    <com.hyphenate.chatdemo.common.widget.ArrowItemView
         android:id="@+id/item_privacy"
         android:layout_width="0dp"
         android:layout_height="@dimen/em_common_item_height"

@@ -14,14 +14,14 @@
         app:titleBarTitle="@string/em_chat_group_detail_member_manage"
         android:background="@color/white"/>
 
-    <com.hyphenate.easeim.common.widget.ArrowItemView
+    <com.hyphenate.chatdemo.common.widget.ArrowItemView
         android:id="@+id/item_black_manager"
         android:layout_width="match_parent"
         android:layout_height="@dimen/em_common_item_height"
         app:arrowItemTitle="@string/em_chat_group_black_manage"
         android:background="@color/white"/>
 
-    <com.hyphenate.easeim.common.widget.ArrowItemView
+    <com.hyphenate.chatdemo.common.widget.ArrowItemView
         android:id="@+id/item_mute_manage"
         android:layout_width="match_parent"
         android:layout_height="@dimen/em_common_item_height"

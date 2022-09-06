@@ -9,7 +9,7 @@
         android:layout_height="fill_parent"
         android:background="#fff">
 
-		<com.hyphenate.easeim.common.widget.RecyclingImageView
+		<com.hyphenate.chatdemo.common.widget.RecyclingImageView
 			android:id="@+id/imageView"
 			android:layout_width="fill_parent"
 			android:layout_height="fill_parent" />

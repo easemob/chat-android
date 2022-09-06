@@ -69,4 +69,5 @@
     <color name="btn_pressed_green_solid">#B6DA53</color>
     <color name="btn_logout_normal">#d33f3f</color>
     <color name="btn_logout_pressed">#DA5A4D</color>
+    <color name="bg_chat_risk_statement">#2E000000</color>
 </resources>

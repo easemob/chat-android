@@ -35,7 +35,7 @@
     <string name="em_login_tv_register">Register</string>
     <string name="em_login_tv_token">Log in with token</string>
     <string name="em_login_tv_pwd">Log in with password</string>
-    <string name="em_login_tv_server_set">Server configuration</string>
+    <string name="em_login_tv_reset_password">Reset Password</string>
     <string name="em_login_btn_info_incomplete">Username or password cannot be empty.</string>
     <string name="em_login_failed">Login failed</string>
     <string name="em_login_agreement">I agree to the Easemob Terms of Service and Easemob Privacy Policy</string>
@@ -48,6 +48,12 @@
     <string name="em_register_service_agreement_url">http://www.easemob.com/agreement</string>
 
     <string name="em_password_confirm_error">The passwords don\'t match. Please enter them again. </string>
+    <string name="em_change_pwd_next">Next Step</string>
+    <string name="em_change_pwd_title">Change PassWord</string>
+    <string name="em_change_complete">complete</string>
+    <string name="em_new_pwd">New Password</string>
+    <string name="em_change_pwd">Change Password</string>
+    <string name="em_check_pwd">The passwords you entered are inconsistent</string>
 
     <string name="em_error_network_error">Network unavailable</string>
     <string name="em_error_not_login">You haven\'t logged in to Easemob</string>
@@ -283,6 +289,8 @@
     <string name="em_about_me_hx">About Easemob IM</string>
     <string name="em_about_me_developer">Developer Services</string>
     <string name="em_about_me_developer_test">Developer Test</string>
+    <string name="em_about_email">Complaints and suggestions</string>
+    <string name="em_about_email_hint">Please enter your complaint suggestions</string>
     <string name="em_set_security">Account and Security</string>
     <string name="em_set_privacy">Privacy</string>
     <string name="em_set_message_set">New Messages</string>
@@ -613,7 +621,7 @@
 
 
     <string name="tab_politics">politics</string>
-    <string name="tab_yellow_related">yellow_related</string>
+    <string name="tab_yellow_related">pornography</string>
     <string name="tab_advertisement">advertisement</string>
     <string name="tab_abuse">abuse</string>
     <string name="tab_violent">violent</string>
@@ -621,5 +629,11 @@
     <string name="tab_other">other</string>
 
     <string name="report_delete_title">Confirm the report?</string>
+
+    <string name="register_phone_number">Please enter your phone number</string>
+    <string name="phone_number">Phone Number</string>
+    <string name="localLogin">Internal Login</string>
+
+    <string name="action_report_label">report</string>
 
 </resources>
