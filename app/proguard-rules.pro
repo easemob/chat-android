@@ -118,8 +118,8 @@
 #easeui
 -keep class com.hyphenate.easeui.model.** { *; }
 #app
--keep class com.hyphenate.easeim.common.model.** { *; }
--keep class com.hyphenate.easeim.common.db.entity.** { *; }
+-keep class com.hyphenate.chatdemo.common.model.** { *; }
+-keep class com.hyphenate.chatdemo.common.db.entity.** { *; }
 
 #jar包
 -libraryjars libs/mi_push_v3.6.12.jar
