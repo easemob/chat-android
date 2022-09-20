@@ -166,7 +166,7 @@
                 android:layout_marginEnd="@dimen/em_margin_15"
                 android:background="@drawable/demo_default_divider_list"/>
 
-            <com.hyphenate.easeim.common.widget.ArrowItemView
+            <com.hyphenate.chatdemo.common.widget.ArrowItemView
                 android:id="@+id/item_group_name"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toRightOf="parent"
@@ -175,7 +175,7 @@
                 app:arrowItemTitle="@string/em_chat_group_detail_name"
                 style="@style/em_group_arrow_item" />
 
-            <com.hyphenate.easeim.common.widget.ArrowItemView
+            <com.hyphenate.chatdemo.common.widget.ArrowItemView
                 android:id="@+id/item_group_share_file"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toRightOf="parent"
@@ -183,7 +183,7 @@
                 app:arrowItemTitle="@string/em_chat_group_detail_share_file"
                 style="@style/em_group_arrow_item"/>
 
-            <com.hyphenate.easeim.common.widget.ArrowItemView
+            <com.hyphenate.chatdemo.common.widget.ArrowItemView
                 android:id="@+id/item_group_notice"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toRightOf="parent"
@@ -191,7 +191,7 @@
                 app:arrowItemTitle="@string/em_chat_group_detail_announcement"
                 style="@style/em_group_arrow_item"/>
 
-            <com.hyphenate.easeim.common.widget.ArrowItemView
+            <com.hyphenate.chatdemo.common.widget.ArrowItemView
                 android:id="@+id/item_group_introduction"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toRightOf="parent"
@@ -199,7 +199,7 @@
                 app:arrowItemTitle="@string/em_chat_group_detail_introduction"
                 style="@style/em_group_arrow_item"/>
 
-            <com.hyphenate.easeim.common.widget.ArrowItemView
+            <com.hyphenate.chatdemo.common.widget.ArrowItemView
                 android:id="@+id/item_group_member_manage"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toRightOf="parent"
@@ -208,7 +208,7 @@
                 app:arrowItemShowDivider="false"
                 style="@style/em_group_arrow_item"/>
 
-            <com.hyphenate.easeim.common.widget.ArrowItemView
+            <com.hyphenate.chatdemo.common.widget.ArrowItemView
                 android:id="@+id/item_group_history"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toRightOf="parent"
@@ -217,7 +217,7 @@
                 app:arrowItemTitle="@string/em_chat_group_detail_history"
                 style="@style/em_group_arrow_item"/>
 
-            <com.hyphenate.easeim.common.widget.SwitchItemView
+            <com.hyphenate.chatdemo.common.widget.SwitchItemView
                 android:id="@+id/item_group_not_disturb"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toRightOf="parent"
@@ -226,7 +226,7 @@
                 app:switchItemTitle="@string/em_chat_group_detail_not_disturb"
                 style="@style/em_group_arrow_item"/>
 
-            <com.hyphenate.easeim.common.widget.SwitchItemView
+            <com.hyphenate.chatdemo.common.widget.SwitchItemView
                 android:id="@+id/item_group_off_push"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toRightOf="parent"
@@ -235,7 +235,7 @@
                 style="@style/em_group_arrow_item"
                 android:visibility="gone"/>
 
-            <com.hyphenate.easeim.common.widget.SwitchItemView
+            <com.hyphenate.chatdemo.common.widget.SwitchItemView
                 android:id="@+id/item_group_top"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toRightOf="parent"
@@ -244,7 +244,7 @@
                 app:switchItemTitle="@string/em_chat_group_detail_top"
                 style="@style/em_group_arrow_item"/>
 
-            <com.hyphenate.easeim.common.widget.ArrowItemView
+            <com.hyphenate.chatdemo.common.widget.ArrowItemView
                 android:id="@+id/item_group_clear_history"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toRightOf="parent"

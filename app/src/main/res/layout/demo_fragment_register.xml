@@ -22,7 +22,7 @@
         android:layout_height="wrap_content"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintBottom_toTopOf="@id/et_login_name"
+        app:layout_constraintTop_toBottomOf="@+id/toolbar_register"
         android:layout_marginBottom="20dp"
         android:text="@string/em_login_tv_register"
         android:textSize="18sp"
@@ -40,59 +40,184 @@
 
     <EditText
         android:id="@+id/et_login_pwd"
+        style="@style/em_login_et_input"
+        android:hint="@string/em_login_password_hint"
+        android:inputType="textPassword"
+        android:layout_marginTop="20dp"
+        app:layout_constraintBottom_toTopOf="@id/et_login_pwd_confirm"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/et_login_name"
-        app:layout_constraintBottom_toTopOf="@id/et_login_pwd_confirm"
-        android:layout_marginTop="20dp"
-        android:inputType="textPassword"
-        android:hint="@string/em_login_password_hint"
-        style="@style/em_login_et_input"/>
+        app:layout_constraintTop_toBottomOf="@id/et_login_name" />
 
     <EditText
         android:id="@+id/et_login_pwd_confirm"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toBottomOf="@id/et_login_pwd"
-        app:layout_constraintBottom_toTopOf="@id/cb_select"
+        app:layout_constraintBottom_toTopOf="@id/layout_area_code"
         android:layout_marginTop="20dp"
         android:inputType="textPassword"
         android:hint="@string/em_register_password_confirm_hint"
         style="@style/em_login_et_input"/>
 
-    <CheckBox
-        android:id="@+id/cb_select"
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/layout_area_code"
         android:layout_width="wrap_content"
-        android:layout_height="30dp"
-        android:padding="3dp"
-        android:layout_marginTop="@dimen/em_margin_10"
+        android:layout_height="40dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginLeft="@dimen/em_login_margin_left"
+        android:layout_marginRight="@dimen/em_login_margin_right"
         app:layout_constraintTop_toBottomOf="@id/et_login_pwd_confirm"
         app:layout_constraintLeft_toLeftOf="parent"
-        android:button="@drawable/demo_cb_agreement_select"
-        android:textSize="12sp"
-        android:textColor="@color/white"
-        android:layout_marginLeft="50dp"/>
+        android:background="@drawable/demo_bg_register_area_code"
+        >
+
+        <Spinner
+            android:id="@+id/areaCode"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            android:entries="@array/areaCode"
+            />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+    <EditText
+        android:id="@+id/et_phone_number"
+        android:layout_width="0dp"
+        android:layout_height="40dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginLeft="15dp"
+        android:layout_marginRight="33dp"
+        app:layout_constraintTop_toBottomOf="@id/et_login_pwd_confirm"
+        app:layout_constraintLeft_toRightOf="@+id/layout_area_code"
+        app:layout_constraintRight_toRightOf="parent"
+        android:background="@drawable/demo_login_et_bg"
+        android:maxLines="1"
+        android:inputType="number"
+        android:textSize="@dimen/em_size_normal"
+        android:paddingLeft="@dimen/em_login_padding_left"
+        android:paddingRight="@dimen/em_login_padding_right"
+        android:hint="@string/register_phone_number"
+        />
+
+    <EditText
+        android:id="@+id/et_img_verification_code"
+        android:layout_width="0dp"
+        android:layout_height="40dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginLeft="33dp"
+        app:layout_constraintTop_toBottomOf="@id/et_phone_number"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toLeftOf="@+id/img_code"
+        android:background="@drawable/demo_login_et_bg"
+        android:maxLines="1"
+        android:textSize="@dimen/em_size_normal"
+        android:paddingLeft="@dimen/em_login_padding_left"
+        android:paddingRight="@dimen/em_login_padding_right"
+        android:hint="请输入图片验证码"
+        />
+
+    <ImageView
+        android:id="@+id/img_code"
+        android:layout_width="100dp"
+        android:layout_height="40dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="33dp"
+        android:onClick="onClick"
+        app:layout_constraintTop_toBottomOf="@id/et_phone_number"
+        app:layout_constraintLeft_toRightOf="@+id/et_img_verification_code"
+        app:layout_constraintRight_toRightOf="parent"
+        />
+
+
+    <EditText
+        android:id="@+id/et_verification_code"
+        android:layout_width="0dp"
+        android:layout_height="40dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginLeft="33dp"
+        app:layout_constraintTop_toBottomOf="@id/et_img_verification_code"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toLeftOf="@+id/bt_get_code"
+        android:background="@drawable/demo_login_et_bg"
+        android:maxLines="1"
+        android:inputType="number"
+        android:textSize="@dimen/em_size_normal"
+        android:paddingLeft="@dimen/em_login_padding_left"
+        android:paddingRight="@dimen/em_login_padding_right"
+        android:hint="请输入短信验证码"
+        />
 
     <TextView
-        android:id="@+id/tv_agreement"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:layout_constraintLeft_toRightOf="@id/cb_select"
-        app:layout_constraintTop_toTopOf="@id/cb_select"
-        app:layout_constraintBottom_toBottomOf="@id/cb_select"
-        android:layout_marginLeft="5dp"
-        android:text="@string/em_login_agreement"
-        android:maxWidth="300dp"
-        android:textSize="12sp"
-        android:textColor="@color/white"/>
+        android:id="@+id/bt_get_code"
+        android:layout_width="100dp"
+        android:layout_height="40dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="33dp"
+        android:gravity="center"
+        android:onClick="onClick"
+        app:layout_constraintTop_toBottomOf="@id/et_img_verification_code"
+        app:layout_constraintLeft_toRightOf="@+id/et_verification_code"
+        app:layout_constraintRight_toRightOf="parent"
+        android:maxLines="1"
+        android:text="获取验证码"
+        android:background="@drawable/demo_button_selector_shape"
+        android:textColor="@color/demo_login_tv_click_selector"
+        />
 
     <Button
         android:id="@+id/btn_login"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/tv_agreement"
+        app:layout_constraintTop_toBottomOf="@id/et_verification_code"
         style="@style/em_login_btn"
         android:text="@string/em_register_btn"
         android:layout_marginTop="@dimen/em_margin_20"/>
+
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="wrap_content"
+        android:layout_height="100dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        android:layout_marginBottom="10dp"
+        >
+
+        <CheckBox
+            android:id="@+id/bottom_select"
+            android:layout_width="wrap_content"
+            android:layout_height="30dp"
+            android:padding="3dp"
+            android:gravity="center"
+            android:textSize="@dimen/adaptive_14sp"
+            android:textColor="@color/demo_login_tv_click_selector"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintLeft_toRightOf="@+id/tv_agreement"
+            android:button="@drawable/demo_cb_agreement_select"
+            />
+
+        <TextView
+            android:id="@+id/tv_agreement"
+            android:layout_width="wrap_content"
+            android:layout_height="30dp"
+            android:gravity="center"
+            android:textSize="@dimen/adaptive_14sp"
+            android:textColor="@color/demo_login_tv_click_selector"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintLeft_toRightOf="@+id/bottom_select"
+            android:text="请查看并确认《服务条款》和《隐私协议》" />
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

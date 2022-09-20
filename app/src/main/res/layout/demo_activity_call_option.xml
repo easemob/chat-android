@@ -34,7 +34,7 @@
                     android:background="@color/btn_gray_normal" />
             </LinearLayout>
 
-            <com.hyphenate.easeim.common.widget.SwitchItemView
+            <com.hyphenate.chatdemo.common.widget.SwitchItemView
                 android:id="@+id/rl_switch_offline_call_push"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/em_common_item_height"
