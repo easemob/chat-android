@@ -170,14 +170,14 @@ dependencies {
 
     // EaseIMKit
 //    api (project(path: ':ease-im-kit'))
-    implementation 'io.hyphenate:ease-im-kit:3.9.6'
+    implementation 'io.hyphenate:ease-im-kit:3.9.6.1'
     // EaseIMKit依赖，必须添加环信IM SDK
 //    implementation project(path: ':hyphenatechatsdk')
-    implementation 'io.hyphenate:hyphenate-chat:3.9.6'
+    implementation 'io.hyphenate:hyphenate-chat:3.9.6.1'
 
     //EaseCallKit依赖，必须添加环信IM SDK
 //    api project(':ease-call-kit')
-    implementation 'io.hyphenate:ease-call-kit:3.9.6'
+    implementation 'io.hyphenate:ease-call-kit:3.9.6.1'
 
 }
 
