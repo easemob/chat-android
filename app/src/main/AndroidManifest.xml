@@ -29,14 +29,8 @@
     <uses-permission android:name="android.permission.CAMERA" />
     <!-- 获取运营商信息，用于支持提供运营商信息相关的接口-->
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
-    <!-- 写入扩展存储权限-->
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
-    <!-- 允许装载和卸载文件系统权限（系统权限） -->
-    <!--<uses-permission android:name="android.permission.MOUNT_UNMOUNT_FILESYSTEMS" />-->
     <!-- 这个权限用于访问GPS定位(用于定位消息，如果不用定位相关可以移除) -->
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
-    <!-- api 21后被标记为deprecated -->
-    <uses-permission android:name="android.permission.GET_TASKS" />
     <!-- 用于访问wifi网络信息-->
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE"/>
     <!-- 用于获取wifi的获取权限 -->
@@ -45,10 +39,6 @@
     <uses-permission android:name="android.permission.WAKE_LOCK" />
     <!-- 允许程序修改声音设置信息 -->
     <uses-permission android:name="android.permission.MODIFY_AUDIO_SETTINGS" />
-    <!-- 允许程序访问电话状态 -->
-    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
-    <!-- 允许程序开机自动运行 -->
-    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
     <!-- 捕获屏幕所需权限，Q后新增权限(多人音视频屏幕分享使用) -->
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE"/>
     <!-- IM SDK required end -->
@@ -90,7 +80,6 @@
     <!-- Mi推送配置 end -->
 
     <application
-        android:allowBackup="true"
         android:icon="@mipmap/em_logo_uidemo"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/em_logo_uidemo"
