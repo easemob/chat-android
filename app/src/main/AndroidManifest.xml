@@ -365,14 +365,14 @@
         <activity
             android:name=".section.av.VideoCallActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
-            android:excludeFromRecents="true"
+            android:excludeFromRecents="false"
             android:launchMode="singleInstance"
             android:label="@string/demo_activity_label_video_call"
             android:screenOrientation="portrait"/>
         <activity
             android:name=".section.av.MultipleVideoActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
-            android:excludeFromRecents="true"
+            android:excludeFromRecents="false"
             android:launchMode="singleInstance"
             android:label="@string/demo_activity_label_multi_call"
             android:screenOrientation="portrait"/>
