@@ -15,7 +15,14 @@ public abstract class BaseInitFragment extends BaseFragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(getLayoutId(), container, false);
+        int layoutId = getLayoutId();
+        View view;
+        if(layoutId == 0) {
+            view = getLayoutView(inflater, container);
+        }else {
+            view = inflater.inflate(layoutId, container, false);
+        }
+
         initArgument();
         return view;
     }
@@ -34,11 +41,17 @@ public abstract class BaseInitFragment extends BaseFragment {
         initData();
     }
 
+    protected View getLayoutView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container) {
+        return null;
+    }
+
     /**
      * 获取布局id
      * @return
      */
-    protected abstract int getLayoutId();
+    protected int getLayoutId() {
+        return 0;
+    }
 
     /**
      * 获取传递参数

@@ -546,6 +546,7 @@
         <!--多语言-->
         <activity android:name=".section.me.activity.LanguageActivity"/>
         <activity android:name=".section.me.test.TestFunctionsIndexActivity" />
+        <activity android:name=".section.me.test.TestFunctionsActivity" />
     </application>
 
 </manifest>
