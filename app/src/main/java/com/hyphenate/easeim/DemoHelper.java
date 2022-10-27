@@ -434,7 +434,8 @@ public class DemoHelper {
         options.setRequireDeliveryAck(false);
         //设置fpa开关，默认false
         options.setFpaEnable(true);
-        options.setEnableMessageStatistics(true);
+        // 开启本地消息流量统计
+        options.setEnableStatistics(true);
 
         /**
          * NOTE:你需要设置自己申请的账号来使用三方推送功能，详见集成文档

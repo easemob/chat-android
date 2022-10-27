@@ -12,14 +12,34 @@
         <EditText
             android:id="@+id/et_start_time"
             android:layout_width="match_parent"
-            android:layout_height="40dp"
+            android:layout_height="wrap_content"
+            android:hint="Please input start timestamp or select from below spinner"
+            android:textSize="12sp"
             android:inputType="number"/>
+
+        <Spinner
+            android:id="@+id/spinner_start_time"
+            android:layout_width="200dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:spinnerMode="dropdown"
+            android:dropDownVerticalOffset="45dp"/>
 
         <EditText
             android:id="@+id/et_end_time"
             android:layout_width="match_parent"
-            android:layout_height="40dp"
+            android:layout_height="wrap_content"
+            android:hint="Please input end timestamp or select from below spinner"
+            android:textSize="12sp"
             android:inputType="number"/>
+
+        <Spinner
+            android:id="@+id/spinner_end_time"
+            android:layout_width="200dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:spinnerMode="dropdown"
+            android:dropDownVerticalOffset="45dp"/>
 
         <Spinner
             android:id="@+id/spinner_direct"
@@ -76,7 +96,9 @@
         <EditText
             android:id="@+id/tv_search_msg"
             android:layout_width="match_parent"
-            android:layout_height="30dp"
+            android:layout_height="wrap_content"
+            android:hint="Please input message id which you want to search"
+            android:textSize="12sp"
             android:layout_marginTop="10dp"
             android:layout_marginStart="10dp"
             android:layout_marginEnd="10dp"/>
