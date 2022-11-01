@@ -69,7 +69,7 @@ public class TestFunctionsIndexActivity extends BaseInitActivity implements View
         }
         List<String> usernames = new ArrayList<>();
         usernames.add(username);
-        EMClient.getInstance().groupManager().aysncMuteGroupMembers(groupId, usernames, 1000000, new EMValueCallBack<EMGroup>() {
+        EMClient.getInstance().groupManager().asyncMuteGroupMembers(groupId, usernames, 1000000, new EMValueCallBack<EMGroup>() {
             @Override
             public void onSuccess(EMGroup value) {
                 showToast("Mute user: "+username+" in group: "+groupId+" success");

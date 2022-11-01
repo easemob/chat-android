@@ -278,7 +278,7 @@ public class ChatPresenter extends EaseChatPresenter {
     private class ChatConversationListener implements EMConversationListener {
 
         @Override
-        public void onCoversationUpdate() {
+        public void onConversationUpdate() {
 
         }
 
