@@ -1000,7 +1000,7 @@ public class EMGroupManagerRepository extends BaseEMRepository{
         return new NetworkOnlyResource<String>() {
             @Override
             protected void createCall(@NonNull ResultCallBack<LiveData<String>> callBack) {
-                getGroupManager().aysncMuteGroupMembers(groupId, usernames, duration, new EMValueCallBack<EMGroup>() {
+                getGroupManager().asyncMuteGroupMembers(groupId, usernames, duration, new EMValueCallBack<EMGroup>() {
                     @Override
                     public void onSuccess(EMGroup value) {
                         callBack.onSuccess(createLiveData(getContext().getString(R.string.demo_group_member_mute, usernames.get(0))));
