@@ -11,6 +11,7 @@ import com.hyphenate.easeim.databinding.DemoActivityTestFunctionsBinding;
 import com.hyphenate.easeim.section.base.BaseFragment;
 import com.hyphenate.easeim.section.base.BaseInitActivity;
 import com.hyphenate.easeim.section.me.test.fragment.TestGroupFragment;
+import com.hyphenate.easeim.section.me.test.fragment.TestInputListenerFragment;
 import com.hyphenate.easeim.section.me.test.fragment.TestPresenceFragment;
 import com.hyphenate.easeim.section.me.test.fragment.TestStatisticsFragment;
 import com.hyphenate.easeui.widget.EaseTitleBar;
@@ -48,6 +49,10 @@ public class TestFunctionsActivity extends BaseInitActivity {
             case "statistics" :
                 fragment = new TestStatisticsFragment();
                 binding.titleBar.setTitle("Test statistics functions");
+                break;
+            case "typingListener" :
+                fragment = new TestInputListenerFragment();
+                binding.titleBar.setTitle("Test typing listener");
                 break;
         }
 
