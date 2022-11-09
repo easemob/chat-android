@@ -24,11 +24,11 @@ android {
     compileSdkVersion 30
     buildToolsVersion "30.0.3"
     defaultConfig {
-        applicationId "com.hyphenate.easeim"
+        applicationId "com.hyphenate.chatdemo"
         minSdkVersion 21
         targetSdkVersion 30
-        versionCode 96
-        versionName "3.9.5"
+        versionCode 97
+        versionName "3.9.7"
         multiDexEnabled true
         //为了兼容5.0以下使用vector图标
         vectorDrawables.useSupportLibrary = true
@@ -43,6 +43,18 @@ android {
                         "room.expandProjection":"true"]
             }
         }
+        // If you use your own Agora Chat appkey, you should deploy your own App Server.
+        // See:verification code
+        buildConfigField ("String", "APP_SERVER_PROTOCOL", "\"https\"")
+        buildConfigField ("String", "APP_SERVER_DOMAIN", "\"a1.easemob.com\"")
+        buildConfigField ("String", "APP_BASE_USER", "\"/inside/app/user/\"")
+        buildConfigField ("String", "APP_SERVER_LOGIN", "\"login\"")
+        buildConfigField ("String", "APP_SERVER_REGISTER", "\"register\"")
+        buildConfigField ("String", "APP_SERVE_CHECK_RESET", "\"reset/password\"")
+        buildConfigField ("String", "APP_SERVE_CHANGE_PWD", "\"/password\"")
+        buildConfigField ("String", "APP_SEND_SMS_FROM_SERVER", "\"/inside/app/sms/send\"")
+        buildConfigField ("String", "APP_VERIFICATION_CODE", "\"/inside/app/image/\"")
+
 
         manifestPlaceholders = [EASEMOB_APPKEY: properties.getProperty("EASEMOB_APPKEY", "******"),
                                 VIVO_PUSH_APPKEY: properties.getProperty("VIVO_PUSH_APPKEY", "******"),
@@ -50,13 +62,13 @@ android {
                                 BAIDU_LOCATION_APPKEY: properties.getProperty("BAIDU_LOCATION_APPKEY", "******")
         ]
         ndk {
-            abiFilters  "arm64-v8a","armeabi-v7a","x86","x86_64"
+            abiFilters  "arm64-v8a","armeabi-v7a"
         }
         //用于设置使用as打包so时指定输出目录
         externalNativeBuild {
             ndkBuild {
 //                arguments "NDK_LIBS_OUT=libs", "all"
-                abiFilters  "arm64-v8a","armeabi-v7a","x86","x86_64"
+                abiFilters  "arm64-v8a","armeabi-v7a"
             }
         }
     }
@@ -127,7 +139,7 @@ dependencies {
     // resolve 64k limit
     implementation 'com.android.support:multidex:1.0.3'
     // hms push
-    implementation 'com.huawei.hms:push:4.0.2.300'
+    implementation 'com.huawei.hms:push:6.3.0.302'
     // meizu push
     implementation 'com.meizu.flyme.internet:push-internal:4.0.4@aar'//配置集成sdk
     //oppo push
@@ -158,14 +170,14 @@ dependencies {
 
     // EaseIMKit
 //    api (project(path: ':ease-im-kit'))
-    implementation 'io.hyphenate:ease-im-kit:3.9.5'
+    implementation 'io.hyphenate:ease-im-kit:3.9.7'
     // EaseIMKit依赖，必须添加环信IM SDK
 //    implementation project(path: ':hyphenatechatsdk')
-    implementation 'io.hyphenate:hyphenate-chat:3.9.5'
+    implementation 'io.hyphenate:hyphenate-chat:3.9.7'
 
     //EaseCallKit依赖，必须添加环信IM SDK
 //    api project(':ease-call-kit')
-    implementation 'io.hyphenate:ease-call-kit:3.9.5'
+    implementation 'io.hyphenate:ease-call-kit:3.9.7'
 
 }
 

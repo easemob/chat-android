@@ -16,7 +16,7 @@
         app:titleBarDisplayHomeAsUpEnabled="true"
         android:background="@color/white"/>
 
-    <com.hyphenate.easeim.common.widget.ArrowItemView
+    <com.hyphenate.chatdemo.common.widget.ArrowItemView
         android:id="@+id/item_user_info"
         android:layout_width="0dp"
         android:layout_height="80dp"
@@ -31,7 +31,7 @@
         android:background="@color/white"
         android:foreground="@drawable/demo_ripple_click_gray"/>
 
-    <com.hyphenate.easeim.common.widget.ArrowItemView
+    <com.hyphenate.chatdemo.common.widget.ArrowItemView
         android:id="@+id/item_search_history"
         android:layout_width="0dp"
         android:layout_height="50dp"
@@ -43,7 +43,7 @@
         android:background="@color/white"
         android:foreground="@drawable/demo_ripple_click_gray"/>
 
-    <com.hyphenate.easeim.common.widget.SwitchItemView
+    <com.hyphenate.chatdemo.common.widget.SwitchItemView
         android:id="@+id/item_switch_top"
         android:layout_width="0dp"
         android:layout_height="50dp"
@@ -54,7 +54,7 @@
         app:switchItemShowDivider="false"
         android:background="@color/white"
         app:switchItemTitle="@string/em_single_conversation_top"/>
-    <com.hyphenate.easeim.common.widget.SwitchItemView
+    <com.hyphenate.chatdemo.common.widget.SwitchItemView
         android:id="@+id/item_user_not_disturb"
         android:layout_width="0dp"
         android:layout_height="50dp"
@@ -66,7 +66,7 @@
         android:background="@color/white"
         app:switchItemTitle="@string/push_settings"/>
 
-    <com.hyphenate.easeim.common.widget.ArrowItemView
+    <com.hyphenate.chatdemo.common.widget.ArrowItemView
         android:id="@+id/item_clear_history"
         android:layout_width="0dp"
         android:layout_height="50dp"

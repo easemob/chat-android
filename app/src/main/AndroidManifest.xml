@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.hyphenate.easeim">
+    package="com.hyphenate.chatdemo">
 
     <!-- 允许程序改变网络连接状态 -->
     <uses-permission android:name="android.permission.CHANGE_NETWORK_STATE" />
@@ -29,14 +29,8 @@
     <uses-permission android:name="android.permission.CAMERA" />
     <!-- 获取运营商信息，用于支持提供运营商信息相关的接口-->
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
-    <!-- 写入扩展存储权限-->
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
-    <!-- 允许装载和卸载文件系统权限（系统权限） -->
-    <!--<uses-permission android:name="android.permission.MOUNT_UNMOUNT_FILESYSTEMS" />-->
     <!-- 这个权限用于访问GPS定位(用于定位消息，如果不用定位相关可以移除) -->
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
-    <!-- api 21后被标记为deprecated -->
-    <uses-permission android:name="android.permission.GET_TASKS" />
     <!-- 用于访问wifi网络信息-->
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE"/>
     <!-- 用于获取wifi的获取权限 -->
@@ -45,10 +39,6 @@
     <uses-permission android:name="android.permission.WAKE_LOCK" />
     <!-- 允许程序修改声音设置信息 -->
     <uses-permission android:name="android.permission.MODIFY_AUDIO_SETTINGS" />
-    <!-- 允许程序访问电话状态 -->
-    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
-    <!-- 允许程序开机自动运行 -->
-    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
     <!-- 捕获屏幕所需权限，Q后新增权限(多人音视频屏幕分享使用) -->
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE"/>
     <!-- IM SDK required end -->
@@ -90,7 +80,6 @@
     <!-- Mi推送配置 end -->
 
     <application
-        android:allowBackup="true"
         android:icon="@mipmap/em_logo_uidemo"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/em_logo_uidemo"
@@ -127,7 +116,7 @@
             </intent-filter>
         </receiver>
 
-        <!-- 适配Android 7.0, 需要将下方的com.hyphenate.easeim替换为你的app包名 -->
+        <!-- 适配Android 7.0, 需要将下方的com.hyphenate.chatdemo替换为你的app包名 -->
         <provider
             android:name="androidx.core.content.FileProvider"
             android:authorities="${applicationId}.fileProvider"
@@ -295,7 +284,9 @@
         <service
             android:name="com.baidu.location.f"
             android:enabled="true"
-            android:process=":remote" />
+            android:process=":remote">
+        </service>
+
         <meta-data
             android:name="com.baidu.lbsapi.API_KEY"
             android:value="${BAIDU_LOCATION_APPKEY}" />
@@ -363,14 +354,14 @@
         <activity
             android:name=".section.av.VideoCallActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
-            android:excludeFromRecents="true"
+            android:excludeFromRecents="false"
             android:launchMode="singleInstance"
             android:label="@string/demo_activity_label_video_call"
             android:screenOrientation="portrait"/>
         <activity
             android:name=".section.av.MultipleVideoActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
-            android:excludeFromRecents="true"
+            android:excludeFromRecents="false"
             android:launchMode="singleInstance"
             android:label="@string/demo_activity_label_multi_call"
             android:screenOrientation="portrait"/>
@@ -546,6 +537,10 @@
         <!--多语言-->
         <activity android:name=".section.me.activity.LanguageActivity"/>
         <activity android:name=".section.me.test.TestFunctionsIndexActivity" />
+        <!--修改密码-->
+        <activity android:name=".section.login.activity.ChangePwdActivity"
+            android:windowSoftInputMode="stateHidden|adjustResize"
+            android:screenOrientation="portrait"/>
         <activity android:name=".section.me.test.TestFunctionsActivity" />
     </application>
 

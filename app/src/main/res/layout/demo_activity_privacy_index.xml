@@ -16,7 +16,7 @@
         app:layout_constraintTop_toTopOf="parent"
         android:background="@color/white"/>
     
-    <com.hyphenate.easeim.common.widget.ArrowItemView
+    <com.hyphenate.chatdemo.common.widget.ArrowItemView
         android:id="@+id/item_black_manager"
         android:layout_width="0dp"
         android:layout_height="@dimen/em_common_item_height"
@@ -27,7 +27,7 @@
         android:foreground="@drawable/demo_ripple_click_gray"
         android:background="@color/white"/>
 
-    <com.hyphenate.easeim.common.widget.ArrowItemView
+    <com.hyphenate.chatdemo.common.widget.ArrowItemView
         android:id="@+id/item_equipment_manager"
         android:layout_width="0dp"
         android:layout_height="@dimen/em_common_item_height"
