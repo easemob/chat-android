@@ -1,4 +1,4 @@
-package com.hyphenate.easeim.section.me.test.fragment;
+package com.hyphenate.chatdemo.section.me.test.fragment;
 
 import android.text.TextUtils;
 import android.view.LayoutInflater;
@@ -11,9 +11,9 @@ import androidx.annotation.Nullable;
 import com.hyphenate.EMValueCallBack;
 import com.hyphenate.chat.EMClient;
 import com.hyphenate.chat.EMPresence;
-import com.hyphenate.easeim.R;
-import com.hyphenate.easeim.databinding.DemoFragmentTestPresenceBinding;
-import com.hyphenate.easeim.section.base.BaseInitFragment;
+import com.hyphenate.chatdemo.R;
+import com.hyphenate.chatdemo.databinding.DemoFragmentTestPresenceBinding;
+import com.hyphenate.chatdemo.section.base.BaseInitFragment;
 import com.hyphenate.util.EMLog;
 
 import java.util.ArrayList;

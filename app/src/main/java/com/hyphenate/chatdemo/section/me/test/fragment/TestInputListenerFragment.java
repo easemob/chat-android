@@ -1,4 +1,4 @@
-package com.hyphenate.easeim.section.me.test.fragment;
+package com.hyphenate.chatdemo.section.me.test.fragment;
 
 import android.os.Bundle;
 import android.os.Handler;
@@ -19,8 +19,8 @@ import com.hyphenate.EMMessageListener;
 import com.hyphenate.chat.EMClient;
 import com.hyphenate.chat.EMCmdMessageBody;
 import com.hyphenate.chat.EMMessage;
-import com.hyphenate.easeim.databinding.DemoFragmentTestInputListenerBinding;
-import com.hyphenate.easeim.section.base.BaseInitFragment;
+import com.hyphenate.chatdemo.databinding.DemoFragmentTestInputListenerBinding;
+import com.hyphenate.chatdemo.section.base.BaseInitFragment;
 
 import java.util.List;
 

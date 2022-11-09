@@ -1,4 +1,4 @@
-package com.hyphenate.easeim.section.me.test;
+package com.hyphenate.chatdemo.section.me.test;
 
 import android.content.Context;
 import android.content.Intent;
@@ -6,14 +6,14 @@ import android.os.Bundle;
 import android.view.View;
 
 
-import com.hyphenate.easeim.R;
-import com.hyphenate.easeim.databinding.DemoActivityTestFunctionsBinding;
-import com.hyphenate.easeim.section.base.BaseFragment;
-import com.hyphenate.easeim.section.base.BaseInitActivity;
-import com.hyphenate.easeim.section.me.test.fragment.TestGroupFragment;
-import com.hyphenate.easeim.section.me.test.fragment.TestInputListenerFragment;
-import com.hyphenate.easeim.section.me.test.fragment.TestPresenceFragment;
-import com.hyphenate.easeim.section.me.test.fragment.TestStatisticsFragment;
+import com.hyphenate.chatdemo.R;
+import com.hyphenate.chatdemo.databinding.DemoActivityTestFunctionsBinding;
+import com.hyphenate.chatdemo.section.base.BaseFragment;
+import com.hyphenate.chatdemo.section.base.BaseInitActivity;
+import com.hyphenate.chatdemo.section.me.test.fragment.TestGroupFragment;
+import com.hyphenate.chatdemo.section.me.test.fragment.TestInputListenerFragment;
+import com.hyphenate.chatdemo.section.me.test.fragment.TestPresenceFragment;
+import com.hyphenate.chatdemo.section.me.test.fragment.TestStatisticsFragment;
 import com.hyphenate.easeui.widget.EaseTitleBar;
 
 public class TestFunctionsActivity extends BaseInitActivity {

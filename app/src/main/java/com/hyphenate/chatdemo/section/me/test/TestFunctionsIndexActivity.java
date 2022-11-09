@@ -1,4 +1,4 @@
-package com.hyphenate.easeim.section.me.test;
+package com.hyphenate.chatdemo.section.me.test;
 
 import android.content.Context;
 import android.content.Intent;
@@ -11,9 +11,9 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
-import com.hyphenate.easeim.R;
-import com.hyphenate.easeim.databinding.ActivityTestFunctionsIndexBinding;
-import com.hyphenate.easeim.section.base.BaseInitActivity;
+import com.hyphenate.chatdemo.R;
+import com.hyphenate.chatdemo.databinding.ActivityTestFunctionsIndexBinding;
+import com.hyphenate.chatdemo.section.base.BaseInitActivity;
 import com.hyphenate.easeui.adapter.EaseBaseRecyclerViewAdapter;
 import com.hyphenate.easeui.interfaces.OnItemClickListener;
 import com.hyphenate.easeui.widget.EaseTitleBar;

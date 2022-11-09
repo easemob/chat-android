@@ -1,4 +1,4 @@
-package com.hyphenate.easeim.section.me.test.fragment;
+package com.hyphenate.chatdemo.section.me.test.fragment;
 
 import android.text.TextUtils;
 import android.view.LayoutInflater;
@@ -14,9 +14,9 @@ import com.hyphenate.chat.EMClient;
 import com.hyphenate.chat.EMMessageStatistics;
 import com.hyphenate.chat.EMStatisticsManager.EMSearchMessageDirect;
 import com.hyphenate.chat.EMStatisticsManager.EMSearchMessageType;
-import com.hyphenate.easeim.R;
-import com.hyphenate.easeim.databinding.DemoFragmentTestStatisticsBinding;
-import com.hyphenate.easeim.section.base.BaseInitFragment;
+import com.hyphenate.chatdemo.R;
+import com.hyphenate.chatdemo.databinding.DemoFragmentTestStatisticsBinding;
+import com.hyphenate.chatdemo.section.base.BaseInitFragment;
 
 public class TestStatisticsFragment extends BaseInitFragment implements View.OnClickListener {
 

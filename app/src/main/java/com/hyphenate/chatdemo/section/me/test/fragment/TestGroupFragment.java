@@ -1,4 +1,4 @@
-package com.hyphenate.easeim.section.me.test.fragment;
+package com.hyphenate.chatdemo.section.me.test.fragment;
 
 import android.text.TextUtils;
 import android.view.LayoutInflater;
@@ -11,9 +11,9 @@ import androidx.annotation.Nullable;
 import com.hyphenate.EMValueCallBack;
 import com.hyphenate.chat.EMClient;
 import com.hyphenate.chat.EMGroup;
-import com.hyphenate.easeim.R;
-import com.hyphenate.easeim.databinding.DemoFragmentTestGroupBinding;
-import com.hyphenate.easeim.section.base.BaseInitFragment;
+import com.hyphenate.chatdemo.R;
+import com.hyphenate.chatdemo.databinding.DemoFragmentTestGroupBinding;
+import com.hyphenate.chatdemo.section.base.BaseInitFragment;
 import com.hyphenate.util.EMLog;
 
 import java.util.ArrayList;
@@ -55,7 +55,7 @@ public class TestGroupFragment extends BaseInitFragment implements View.OnClickL
         }
         List<String> usernames = new ArrayList<>();
         usernames.add(username);
-        EMClient.getInstance().groupManager().aysncMuteGroupMembers(groupId, usernames, 1000000, new EMValueCallBack<EMGroup>() {
+        EMClient.getInstance().groupManager().asyncMuteGroupMembers(groupId, usernames, 1000000, new EMValueCallBack<EMGroup>() {
             @Override
             public void onSuccess(EMGroup value) {
                 showToast("Mute user: "+username+" in group: "+groupId+" success");
