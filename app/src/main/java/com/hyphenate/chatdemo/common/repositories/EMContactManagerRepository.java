@@ -51,7 +51,7 @@ public class EMContactManagerRepository extends BaseEMRepository{
                     callBack.onError(ErrorCode.EM_FRIEND_ERROR);
                     return;
                 }
-                getContactManager().aysncAddContact(username, reason, new EMCallBack() {
+                getContactManager().asyncAddContact(username, reason, new EMCallBack() {
                     @Override
                     public void onSuccess() {
                         callBack.onSuccess(new MutableLiveData<>(true));
@@ -353,7 +353,7 @@ public class EMContactManagerRepository extends BaseEMRepository{
                     callBack.onError(ErrorCode.EM_NOT_LOGIN);
                     return;
                 }
-                getContactManager().aysncGetBlackListFromServer(new EMValueCallBack<List<String>>() {
+                getContactManager().asyncGetBlackListFromServer(new EMValueCallBack<List<String>>() {
                     @Override
                     public void onSuccess(List<String> value) {
                         if(value != null && value.size()> 0) {
@@ -414,7 +414,7 @@ public class EMContactManagerRepository extends BaseEMRepository{
             callBack.onError(ErrorCode.EM_NOT_LOGIN);
             return;
         }
-        getContactManager().aysncGetBlackListFromServer(new EMValueCallBack<List<String>>() {
+        getContactManager().asyncGetBlackListFromServer(new EMValueCallBack<List<String>>() {
             @Override
             public void onSuccess(List<String> value) {
                 List<EaseUser> users = EmUserEntity.parse(value);
@@ -447,7 +447,7 @@ public class EMContactManagerRepository extends BaseEMRepository{
             @Override
             protected void createCall(@NonNull ResultCallBack<LiveData<Boolean>> callBack) {
                 DemoHelper.getInstance().getModel().deleteUsername(username, true);
-                getContactManager().aysncDeleteContact(username, new EMCallBack() {
+                getContactManager().asyncDeleteContact(username, new EMCallBack() {
                     @Override
                     public void onSuccess() {
                         DemoHelper.getInstance().deleteContact(username);
@@ -479,7 +479,7 @@ public class EMContactManagerRepository extends BaseEMRepository{
         return new NetworkOnlyResource<Boolean>() {
             @Override
             protected void createCall(@NonNull ResultCallBack<LiveData<Boolean>> callBack) {
-                getContactManager().aysncAddUserToBlackList(username, both, new EMCallBack() {
+                getContactManager().asyncAddUserToBlackList(username, both, new EMCallBack() {
                     @Override
                     public void onSuccess() {
                         int res = getUserDao().updateContact(1,username);
@@ -509,7 +509,7 @@ public class EMContactManagerRepository extends BaseEMRepository{
         return new NetworkOnlyResource<Boolean>() {
             @Override
             protected void createCall(@NonNull ResultCallBack<LiveData<Boolean>> callBack) {
-                getContactManager().aysncRemoveUserFromBlackList(username, new EMCallBack() {
+                getContactManager().asyncRemoveUserFromBlackList(username, new EMCallBack() {
                     @Override
                     public void onSuccess() {
                         int res = getUserDao().updateContact(0,username);
