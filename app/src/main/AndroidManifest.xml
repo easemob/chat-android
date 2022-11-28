@@ -541,6 +541,7 @@
         <activity android:name=".section.login.activity.ChangePwdActivity"
             android:windowSoftInputMode="stateHidden|adjustResize"
             android:screenOrientation="portrait"/>
+        <activity android:name=".section.me.test.TestFunctionsActivity" />
     </application>
 
 </manifest>
