@@ -6,32 +6,24 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:background="@color/em_login_color_bg">
 
-    <ImageView
-        android:id="@+id/iv_login_icon"
-        android:layout_width="82dp"
-        android:layout_height="82dp"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintBottom_toTopOf="@id/iv_login_company_name"
-        android:layout_marginBottom="20dp"
-        android:background="@drawable/em_login_logo"/>
 
-    <ImageView
-        android:id="@+id/iv_login_company_name"
+    <TextView
+        android:id="@+id/tv_login_im"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintBottom_toTopOf="@id/et_login_name"
-        android:layout_marginBottom="50dp"
-        android:background="@drawable/em_login_company_name"/>
+        app:layout_constraintLeft_toLeftOf="@id/et_login_phone"
+        app:layout_constraintBottom_toTopOf="@id/et_login_phone"
+        android:layout_marginBottom="27dp"
+        android:textSize="24sp"
+        android:textColor="@color/white"
+        android:text="@string/em_login_im"/>
 
     <TextView
         android:id="@+id/tv_version"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:layout_constraintLeft_toRightOf="@id/iv_login_company_name"
-        app:layout_constraintTop_toTopOf="@id/iv_login_company_name"
+        app:layout_constraintLeft_toRightOf="@id/tv_login_im"
+        app:layout_constraintTop_toTopOf="@id/tv_login_im"
         android:layout_marginLeft="5dp"
         android:layout_marginTop="2dp"
         tools:text="V4.1.0"
@@ -40,60 +32,87 @@
         android:background="@drawable/demo_login_version_bg"/>
 
     <EditText
-        android:id="@+id/et_login_name"
+        android:id="@+id/et_login_phone"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintVertical_bias="0.4"
-        android:hint="@string/em_login_name_hint"
-        style="@style/em_login_et_input" />
+        app:layout_constraintVertical_bias="0.3"
+        android:hint="@string/register_phone_number"
+        style="@style/em_login_et_input"
+        android:inputType="phone"/>
 
-    <EditText
-        android:id="@+id/et_login_pwd"
+    <LinearLayout
+        android:id="@+id/ll_login_code"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/et_login_name"
-        app:layout_constraintBottom_toTopOf="@id/cb_select"
-        android:layout_marginTop="20dp"
-        android:hint="@string/em_login_password_hint"
-        android:inputType="textPassword"
-        style="@style/em_login_et_input"/>
+        app:layout_constraintTop_toBottomOf="@id/et_login_phone"
+        app:layout_constraintBottom_toTopOf="@id/btn_login"
+        android:layout_marginTop="24dp"
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        style="@style/em_login_et_input">
+
+        <EditText
+            android:id="@+id/et_login_code"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:hint="@string/em_login_input_verification_code"
+            android:inputType="number"
+            android:textSize="@dimen/em_login_text_size"
+            android:gravity="center_vertical"
+            android:background="@color/transparent"/>
+
+        <TextView
+            android:id="@+id/tv_get_code"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="10dp"
+            android:paddingEnd="2dp"
+            android:textSize="14sp"
+            android:textColor="#009FFF"
+            android:text="@string/em_login_get_verification_code" />
+
+    </LinearLayout>
+
+    <Button
+        android:id="@+id/btn_login"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/ll_login_code"
+        android:text="@string/em_login_btn"
+        style="@style/em_login_btn"
+        android:layout_marginTop="24dp"/>
 
     <CheckBox
         android:id="@+id/cb_select"
         android:layout_width="wrap_content"
         android:layout_height="30dp"
         android:padding="3dp"
-        android:layout_marginTop="@dimen/em_margin_10"
-        app:layout_constraintTop_toBottomOf="@id/et_login_pwd"
-        app:layout_constraintLeft_toLeftOf="parent"
+        android:layout_marginTop="15dp"
+        app:layout_constraintTop_toBottomOf="@id/btn_login"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/tv_agreement"
         android:button="@drawable/demo_cb_agreement_select"
         android:textSize="12sp"
-        android:visibility="invisible"
         android:textColor="@color/white"
-        android:layout_marginLeft="50dp"/>
+        android:layout_marginStart="40dp"/>
 
     <TextView
         android:id="@+id/tv_agreement"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        app:layout_constraintLeft_toRightOf="@id/cb_select"
-        app:layout_constraintTop_toTopOf="@id/cb_select"
-        app:layout_constraintBottom_toBottomOf="@id/cb_select"
-        android:layout_marginLeft="5dp"
-        android:visibility="invisible"
+        android:layout_marginTop="@dimen/em_margin_20"
+        app:layout_constraintTop_toBottomOf="@id/btn_login"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/cb_select"
+        android:layout_marginStart="5dp"
+        android:layout_marginEnd="40dp"
+        android:lineSpacingExtra="10dp"
+        android:textColor="@color/white"
         android:text="@string/em_login_agreement"
         android:textSize="12sp"/>
-
-    <Button
-        android:id="@+id/btn_login"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/cb_select"
-        android:text="@string/em_login_btn"
-        style="@style/em_login_btn"
-        android:layout_marginTop="@dimen/em_margin_15"/>
 
     <TextView
         android:id="@+id/tv_login_register"
@@ -104,6 +123,7 @@
         android:layout_marginLeft="44dp"
         android:layout_marginStart="33dp"
         android:layout_marginTop="8dp"
+        android:visibility="gone"
         android:text="@string/em_login_tv_register"
         style="@style/em_login_tv_other" />
 
@@ -116,6 +136,7 @@
         android:layout_marginRight="44dp"
         app:layout_goneMarginEnd="33dp"
         android:layout_marginTop="8dp"
+        android:visibility="gone"
         style="@style/em_login_tv_other"/>
 
     <TextView

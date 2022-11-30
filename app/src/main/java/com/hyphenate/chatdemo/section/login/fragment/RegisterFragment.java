@@ -34,7 +34,7 @@ import com.hyphenate.EMError;
 import com.hyphenate.chatdemo.BuildConfig;
 import com.hyphenate.chatdemo.R;
 import com.hyphenate.chatdemo.common.interfaceOrImplement.OnResourceParseCallback;
-import com.hyphenate.chatdemo.common.utils.CountDownTimerUtils;
+import com.hyphenate.chatdemo.common.utils.CustomCountDownTimer;
 import com.hyphenate.chatdemo.section.base.WebViewActivity;
 import com.hyphenate.easeui.utils.EaseEditTextUtils;
 import com.hyphenate.chatdemo.common.utils.ToastUtils;
@@ -71,7 +71,7 @@ public class RegisterFragment extends BaseInitFragment implements TextWatcher, V
     private String phoneNum = "";
     private String smsCode = "";
     private String imageCode = "";
-    private CountDownTimerUtils count;
+    private CustomCountDownTimer count;
 
     @Override
     protected int getLayoutId() {
@@ -82,8 +82,8 @@ public class RegisterFragment extends BaseInitFragment implements TextWatcher, V
     protected void initView(Bundle savedInstanceState) {
         super.initView(savedInstanceState);
         mToolbarRegister = findViewById(R.id.toolbar_register);
-        mEtLoginName = findViewById(R.id.et_login_name);
-        mEtLoginPwd = findViewById(R.id.et_login_pwd);
+        mEtLoginName = findViewById(R.id.et_login_phone);
+        mEtLoginPwd = findViewById(R.id.ll_login_code);
         mEtLoginPwdConfirm = findViewById(R.id.et_login_pwd_confirm);
         mEtLoginPhoneNumber = findViewById(R.id.et_phone_number);
         mEtLoginVerificationCode = findViewById(R.id.et_verification_code);
@@ -259,8 +259,8 @@ public class RegisterFragment extends BaseInitFragment implements TextWatcher, V
                     ToastUtils.showToast("请输入图片验证码");
                     break;
                 }
-                count = new CountDownTimerUtils(mBtnGetCode, 60000, 1000);
-                mViewModel.postVerificationCode(String.valueOf(mEtLoginPhoneNumber.getText()),image_id,imageCode);
+                count = new CustomCountDownTimer(mBtnGetCode, 60000, 1000);
+                //mViewModel.postVerificationCode(String.valueOf(mEtLoginPhoneNumber.getText()),image_id,imageCode);
                 break;
             case R.id.img_code:
                 mViewModel.getImageVerificationCode();

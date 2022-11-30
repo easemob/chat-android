@@ -38,7 +38,20 @@
     <string name="em_login_tv_reset_password">重置密码</string>
     <string name="em_login_btn_info_incomplete">用户名或者密码不能为空</string>
     <string name="em_login_failed">登录失败</string>
-    <string name="em_login_agreement">请查看并确认《服务条款》和《隐私协议》</string>
+    <string name="em_login_agreement">请选择同意《环信服务条款》与《环信隐私协议》</string>
+    <string name="em_login_im">登录环信IM</string>
+    <string name="em_login_input_verification_code">请输入验证码</string>
+    <string name="em_login_get_verification_code">获取验证码</string>
+    <string name="em_login_phone_empty">请输入手机号</string>
+    <string name="em_login_code_empty">请输入验证码</string>
+    <string name="em_login_phone_illegal">请输入正确的手机号</string>
+    <string name="em_login_illegal_code">验证码错误</string>
+    <string name="em_login_post_code">验证码已发送</string>
+    <string name="em_login_get_code_again">重新获取</string>
+    <string name="em_login_get_code_again_time">重新获取(%1$ds)</string>
+    <string name="em_login_not_select_agreement">请选择服务条款和隐私协议</string>
+    <string name="em_login_error_send_code_later">请稍后再发</string>
+    <string name="em_login_error_send_code_limit">获取已达上限</string>
 
     <string name="em_register_btn">注\u0020册</string>
     <string name="em_register_password_confirm_hint">确认密码</string>

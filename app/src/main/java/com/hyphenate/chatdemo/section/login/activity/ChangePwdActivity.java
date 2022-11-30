@@ -43,7 +43,7 @@ public class ChangePwdActivity extends BaseInitActivity implements View.OnClickL
     protected void initView(Bundle savedInstanceState) {
         super.initView(savedInstanceState);
         mTitleBar = findViewById(R.id.toolbar_register);
-        mEtChangePassword = findViewById(R.id.et_login_pwd);
+        mEtChangePassword = findViewById(R.id.ll_login_code);
         mEtChangeConfirmPassword = findViewById(R.id.et_login_pwd_confirm);
         mBtnConfirm = findViewById(R.id.btn_confirm);
     }

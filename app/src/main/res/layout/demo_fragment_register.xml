@@ -29,7 +29,7 @@
         android:textColor="@color/em_login_color_text"/>
 
     <EditText
-        android:id="@+id/et_login_name"
+        android:id="@+id/et_login_phone"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent"
@@ -39,7 +39,7 @@
         style="@style/em_login_et_input" />
 
     <EditText
-        android:id="@+id/et_login_pwd"
+        android:id="@+id/ll_login_code"
         style="@style/em_login_et_input"
         android:hint="@string/em_login_password_hint"
         android:inputType="textPassword"
@@ -47,13 +47,13 @@
         app:layout_constraintBottom_toTopOf="@id/et_login_pwd_confirm"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/et_login_name" />
+        app:layout_constraintTop_toBottomOf="@id/et_login_phone" />
 
     <EditText
         android:id="@+id/et_login_pwd_confirm"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/et_login_pwd"
+        app:layout_constraintTop_toBottomOf="@id/ll_login_code"
         app:layout_constraintBottom_toTopOf="@id/layout_area_code"
         android:layout_marginTop="20dp"
         android:inputType="textPassword"
