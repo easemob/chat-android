@@ -34,6 +34,7 @@ import com.hyphenate.easeui.model.EaseEvent;
 import com.hyphenate.exceptions.HyphenateException;
 import com.hyphenate.util.EMLog;
 
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.HashMap;
@@ -295,12 +296,18 @@ public class EMClientRepository extends BaseEMRepository{
                     callBack.onSuccess();
                 } else {
                     if (responseInfo != null && responseInfo.length() > 0) {
-                        JSONObject object = new JSONObject(responseInfo);
-                        String errorInfo = object.getString("errorInfo");
-                        if(errorInfo.contains("wait a moment while trying to send")) {
-                            errorInfo = getContext().getString(R.string.em_login_error_send_code_later);
-                        }else if(errorInfo.contains("exceed the limit of")) {
-                            errorInfo = getContext().getString(R.string.em_login_error_send_code_limit);
+                        String errorInfo = null;
+                        try {
+                            JSONObject object = new JSONObject(responseInfo);
+                            errorInfo = object.getString("errorInfo");
+                            if(errorInfo.contains("wait a moment while trying to send")) {
+                                errorInfo = getContext().getString(R.string.em_login_error_send_code_later);
+                            }else if(errorInfo.contains("exceed the limit of")) {
+                                errorInfo = getContext().getString(R.string.em_login_error_send_code_limit);
+                            }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                            errorInfo = responseInfo;
                         }
                         callBack.onError(code, errorInfo);
                     }else {
@@ -465,12 +472,18 @@ public class EMClientRepository extends BaseEMRepository{
                     callBack.onSuccess(object.getString("token"));
                 } else {
                     if (responseInfo != null && responseInfo.length() > 0) {
-                        JSONObject object = new JSONObject(responseInfo);
-                        String errorInfo = object.getString("errorInfo");
-                        if(errorInfo.contains("phone number illegal")) {
-                            errorInfo = getContext().getString(R.string.em_login_phone_illegal);
-                        }else if(errorInfo.contains("verification code error") || errorInfo.contains("send SMS to get mobile phone verification code")) {
-                            errorInfo = getContext().getString(R.string.em_login_illegal_code);
+                        String errorInfo = null;
+                        try {
+                            JSONObject object = new JSONObject(responseInfo);
+                            errorInfo = object.getString("errorInfo");
+                            if(errorInfo.contains("phone number illegal")) {
+                                errorInfo = getContext().getString(R.string.em_login_phone_illegal);
+                            }else if(errorInfo.contains("verification code error") || errorInfo.contains("send SMS to get mobile phone verification code")) {
+                                errorInfo = getContext().getString(R.string.em_login_illegal_code);
+                            }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                            errorInfo = responseInfo;
                         }
                         callBack.onError(code, errorInfo);
                     }else {
