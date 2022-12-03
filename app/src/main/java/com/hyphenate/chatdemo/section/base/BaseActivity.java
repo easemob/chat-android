@@ -5,6 +5,9 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
+import android.graphics.ColorMatrix;
+import android.graphics.ColorMatrixColorFilter;
+import android.graphics.Paint;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
@@ -62,8 +65,24 @@ public class BaseActivity extends AppCompatActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mContext = this;
+        setGrayWhiteModel();
         clearFragmentsBeforeCreate();
         registerAccountObservable();
+    }
+
+    /**
+     * 设置为灰白蒙层模式
+     */
+    private void setGrayWhiteModel() {
+        boolean enableGrayWhiteModel = getResources().getBoolean(R.bool.enable_gray_white_model);
+        if(!enableGrayWhiteModel) {
+            return;
+        }
+        Paint paint = new Paint();
+        ColorMatrix cm = new ColorMatrix();
+        cm.setSaturation(0);
+        paint.setColorFilter(new ColorMatrixColorFilter(cm));
+        getWindow().getDecorView().setLayerType(View.LAYER_TYPE_HARDWARE, paint);
     }
 
     /**
