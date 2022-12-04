@@ -42,6 +42,7 @@ import com.hyphenate.chatdemo.common.interfaceOrImplement.OnResourceParseCallbac
 import com.hyphenate.chatdemo.common.interfaceOrImplement.UserActivityLifecycleCallbacks;
 import com.hyphenate.chatdemo.common.livedatas.LiveDataBus;
 import com.hyphenate.chatdemo.common.net.Resource;
+import com.hyphenate.chatdemo.common.utils.DateUtils;
 import com.hyphenate.chatdemo.common.utils.ToastUtils;
 import com.hyphenate.chatdemo.common.widget.EaseProgressDialog;
 import com.hyphenate.chatdemo.section.login.activity.LoginActivity;
@@ -76,6 +77,9 @@ public class BaseActivity extends AppCompatActivity {
     private void setGrayWhiteModel() {
         boolean enableGrayWhiteModel = getResources().getBoolean(R.bool.enable_gray_white_model);
         if(!enableGrayWhiteModel) {
+            return;
+        }
+        if(!DateUtils.isGrayWhiteDate(mContext)) {
             return;
         }
         Paint paint = new Paint();
