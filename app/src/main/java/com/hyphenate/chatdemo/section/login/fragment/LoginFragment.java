@@ -1,5 +1,6 @@
 package com.hyphenate.chatdemo.section.login.fragment;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
@@ -49,6 +50,7 @@ import com.hyphenate.chatdemo.section.base.BaseInitFragment;
 import com.hyphenate.chatdemo.section.login.viewmodels.LoginFragmentViewModel;
 import com.hyphenate.chatdemo.section.login.viewmodels.LoginViewModel;
 import com.hyphenate.easeui.domain.EaseUser;
+import com.hyphenate.util.EMLog;
 
 import java.util.Locale;
 
@@ -77,6 +79,7 @@ public class LoginFragment extends BaseInitFragment implements View.OnClickListe
     private CustomCountDownTimer countDownTimer;
     private TextView mTvLoginDeveloper;
     private boolean isDeveloperMode;
+    private boolean isShowingDialog;
 
     @Override
     protected int getLayoutId() {
@@ -288,7 +291,8 @@ public class LoginFragment extends BaseInitFragment implements View.OnClickListe
             case R.id.tv_version:
                 System.arraycopy(mHits, 1, mHits, 0, mHits.length - 1);
                 mHits[mHits.length - 1] =  SystemClock.uptimeMillis();
-                if (mHits[0] >= SystemClock.uptimeMillis() - DURATION) {
+                if (mHits[0] >= SystemClock.uptimeMillis() - DURATION && !isShowingDialog) {
+                    isShowingDialog = true;
                     showOpenDeveloperDialog();
                 }
                 break;
@@ -485,7 +489,14 @@ public class LoginFragment extends BaseInitFragment implements View.OnClickListe
                         resetView(isDeveloperMode);
                     }
                 })
+                .setOnDismissListener(new DialogInterface.OnDismissListener() {
+                    @Override
+                    public void onDismiss(DialogInterface dialog) {
+                        isShowingDialog = false;
+                    }
+                })
                 .showCancelButton(true)
+                .setCanceledOnTouchOutside(false)
                 .show();
     }
 
