@@ -2,23 +2,26 @@ package com.hyphenate.chatdemo.section.me.test;
 
 import android.content.Context;
 import android.content.Intent;
-import android.text.TextUtils;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
+import android.widget.TextView;
 
-import com.hyphenate.EMValueCallBack;
-import com.hyphenate.chat.EMClient;
-import com.hyphenate.chat.EMGroup;
-import com.hyphenate.chat.EMPresence;
+import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.DividerItemDecoration;
+import androidx.recyclerview.widget.LinearLayoutManager;
+
 import com.hyphenate.chatdemo.R;
 import com.hyphenate.chatdemo.databinding.ActivityTestFunctionsIndexBinding;
 import com.hyphenate.chatdemo.section.base.BaseInitActivity;
+import com.hyphenate.easeui.adapter.EaseBaseRecyclerViewAdapter;
+import com.hyphenate.easeui.interfaces.OnItemClickListener;
 import com.hyphenate.easeui.widget.EaseTitleBar;
-import com.hyphenate.util.EMLog;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class TestFunctionsIndexActivity extends BaseInitActivity implements View.OnClickListener {
+public class TestFunctionsIndexActivity extends BaseInitActivity {
 
     private ActivityTestFunctionsIndexBinding viewBinding;
 
@@ -36,8 +39,6 @@ public class TestFunctionsIndexActivity extends BaseInitActivity implements View
     @Override
     protected void initListener() {
         super.initListener();
-        viewBinding.btnMuteGroupMember.setOnClickListener(this);
-        viewBinding.btnPresenceUsername.setOnClickListener(this);
         viewBinding.titleBar.setOnBackPressListener(new EaseTitleBar.OnBackPressListener() {
             @Override
             public void onBackPress(View view) {
@@ -47,61 +48,55 @@ public class TestFunctionsIndexActivity extends BaseInitActivity implements View
     }
 
     @Override
-    public void onClick(View v) {
-        if(v.getId() == R.id.btn_mute_group_member ) {
-            muteGroupMember();
-        }else if(v.getId() == R.id.btn_presence_username) {
-            presenceUsername();
-        }
+    protected void initData() {
+        super.initData();
+        viewBinding.rvList.setLayoutManager(new LinearLayoutManager(mContext));
+        IndexItemAdapter adapter = new IndexItemAdapter();
+        viewBinding.rvList.setAdapter(adapter);
+        viewBinding.rvList.addItemDecoration(new DividerItemDecoration(mContext, DividerItemDecoration.VERTICAL));
 
-    }
+        List<String> items = new ArrayList<>();
+        items.add("group");
+        items.add("presence");
+        items.add("statistics");
+        items.add("typingListener");
 
-    private void muteGroupMember() {
-        String username = viewBinding.etMuteGroupMember.getText().toString().trim();
-        String groupId = viewBinding.etMuteGroupId.getText().toString().trim();
-        if(TextUtils.isEmpty(username)) {
-            showToast("Username should not be null");
-            return;
-        }
-        if(TextUtils.isEmpty(groupId)) {
-            showToast("GroupId should not be null");
-            return;
-        }
-        List<String> usernames = new ArrayList<>();
-        usernames.add(username);
-        EMClient.getInstance().groupManager().asyncMuteGroupMembers(groupId, usernames, 1000000, new EMValueCallBack<EMGroup>() {
+        adapter.setData(items);
+
+        adapter.setOnItemClickListener(new OnItemClickListener() {
             @Override
-            public void onSuccess(EMGroup value) {
-                showToast("Mute user: "+username+" in group: "+groupId+" success");
-            }
-
-            @Override
-            public void onError(int error, String errorMsg) {
-                showToast("Mute failed, error: "+error+" errormsg: "+errorMsg);
-                EMLog.e("TAG", "Mute failed, error: "+error+" errormsg: "+errorMsg);
+            public void onItemClick(View view, int position) {
+                String item = items.get(position);
+                TestFunctionsActivity.actionStart(mContext, item);
             }
         });
     }
 
-    private void presenceUsername() {
-        String username = viewBinding.etPresenceUsername.getText().toString().trim();
-        if(TextUtils.isEmpty(username)) {
-            showToast("Username should not be null");
-            return;
+    private static class IndexItemAdapter extends EaseBaseRecyclerViewAdapter<String> {
+
+        @Override
+        public ViewHolder getViewHolder(ViewGroup parent, int viewType) {
+            View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.demo_item_test_index, parent, false);
+            return new IndexItemViewHolder(view);
         }
-        List<String> usernames = new ArrayList<>();
-        usernames.add(username);
-        EMClient.getInstance().presenceManager().subscribePresences(usernames, 100000, new EMValueCallBack<List<EMPresence>>() {
-            @Override
-            public void onSuccess(List<EMPresence> value) {
-                showToast("Presence user: "+username+" success");
+
+        private class IndexItemViewHolder extends ViewHolder<String> {
+
+            private TextView tv_content;
+
+            public IndexItemViewHolder(@NonNull View itemView) {
+                super(itemView);
             }
 
             @Override
-            public void onError(int error, String errorMsg) {
-                showToast("Presence failed, error: "+error+" errormsg: "+errorMsg);
-                EMLog.e("TAG", "Presence failed, error: "+error+" errormsg: "+errorMsg);
+            public void initView(View itemView) {
+                tv_content = findViewById(R.id.tv_content);
             }
-        });
+
+            @Override
+            public void setData(String item, int position) {
+                tv_content.setText(item);
+            }
+        }
     }
 }

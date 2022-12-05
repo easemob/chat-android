@@ -436,6 +436,8 @@ public class DemoHelper {
         options.setRequireDeliveryAck(false);
         //设置fpa开关，默认false
         options.setFpaEnable(true);
+        // 开启本地消息流量统计
+        options.setEnableStatistics(true);
 
         /**
          * NOTE:你需要设置自己申请的账号来使用三方推送功能，详见集成文档
@@ -537,77 +539,53 @@ public class DemoHelper {
             fetchUserRunnable.setStop(true);
         }
 
-        CallCancelEvent cancelEvent = new CallCancelEvent();
-        EaseCallKit.getInstance().sendCmdMsg(cancelEvent, EaseCallKit.getInstance().getFromUserId(), new EMCallBack() {
+        if(!TextUtils.isEmpty(EaseCallKit.getInstance().getFromUserId())) {
+            CallCancelEvent cancelEvent = new CallCancelEvent();
+            EaseCallKit.getInstance().sendCmdMsg(cancelEvent, EaseCallKit.getInstance().getFromUserId(), new EMCallBack() {
+                @Override
+                public void onSuccess() {
+                    logoutFromIM(unbindDeviceToken, callback);
+                }
+
+                @Override
+                public void onError(int code, String error) {
+                    logoutFromIM(unbindDeviceToken, callback);
+                }
+            });
+        }else {
+            logoutFromIM(unbindDeviceToken, callback);
+        }
+
+    }
+
+    private void logoutFromIM(boolean unbindDeviceToken, final EMCallBack callback) {
+        EMClient.getInstance().logout(unbindDeviceToken, new EMCallBack() {
+
             @Override
             public void onSuccess() {
-                EMClient.getInstance().logout(unbindDeviceToken, new EMCallBack() {
+                DemoHelper.getInstance().getModel().setPhoneNumber("");
+                logoutSuccess();
+                //reset();
+                if (callback != null) {
+                    callback.onSuccess();
+                }
 
-                    @Override
-                    public void onSuccess() {
-                        DemoHelper.getInstance().getModel().setPhoneNumber("");
-                        logoutSuccess();
-                        //reset();
-                        if (callback != null) {
-                            callback.onSuccess();
-                        }
-
-                    }
-
-                    @Override
-                    public void onProgress(int progress, String status) {
-                        if (callback != null) {
-                            callback.onProgress(progress, status);
-                        }
-                    }
-
-                    @Override
-                    public void onError(int code, String error) {
-                        Log.d(TAG, "logout: onSuccess");
-                        //reset();
-                        if (callback != null) {
-                            callback.onError(code, error);
-                        }
-                    }
-                });
-            }
-
-            @Override
-            public void onError(int code, String error) {
-                EMClient.getInstance().logout(unbindDeviceToken, new EMCallBack() {
-
-                    @Override
-                    public void onSuccess() {
-                        DemoHelper.getInstance().getModel().setPhoneNumber("");
-                        logoutSuccess();
-                        //reset();
-                        if (callback != null) {
-                            callback.onSuccess();
-                        }
-
-                    }
-
-                    @Override
-                    public void onProgress(int progress, String status) {
-                        if (callback != null) {
-                            callback.onProgress(progress, status);
-                        }
-                    }
-
-                    @Override
-                    public void onError(int code, String error) {
-                        Log.d(TAG, "logout: onSuccess");
-                        //reset();
-                        if (callback != null) {
-                            callback.onError(code, error);
-                        }
-                    }
-                });
             }
 
             @Override
             public void onProgress(int progress, String status) {
+                if (callback != null) {
+                    callback.onProgress(progress, status);
+                }
+            }
 
+            @Override
+            public void onError(int code, String error) {
+                Log.d(TAG, "logout: onSuccess");
+                //reset();
+                if (callback != null) {
+                    callback.onError(code, error);
+                }
             }
         });
     }
