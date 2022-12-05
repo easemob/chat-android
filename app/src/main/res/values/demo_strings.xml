@@ -52,6 +52,7 @@
     <string name="em_login_not_select_agreement">Please confirm Terms &amp; Policy</string>
     <string name="em_login_error_send_code_later">Please wait a moment while trying to send</string>
     <string name="em_login_error_send_code_limit">Access limit reached</string>
+    <string name="em_login_server_configure">Server Configure</string>
 
     <string name="em_register_btn">Register \u0020</string>
     <string name="em_register_password_confirm_hint">Confirm password</string>
@@ -101,6 +102,8 @@
     <string name="em_server_set_im_server_empty_hint">Set the IM server address</string>
     <string name="em_server_set_im_port_empty_hint">Set the IM port number</string>
     <string name="em_server_set_rest_server_empty_hint">Set the RESTful server address</string>
+    <string name="em_server_open_develop_mode">Open develop mode?</string>
+    <string name="em_server_close_develop_mode">Close develop mode?</string>
 
     <string name="em_empty_layout_content">Find Yourself, Be Yourself</string>
 

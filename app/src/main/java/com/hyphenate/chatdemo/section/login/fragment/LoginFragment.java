@@ -41,7 +41,8 @@ import com.hyphenate.chatdemo.common.db.DemoDbHelper;
 import com.hyphenate.chatdemo.common.interfaceOrImplement.OnResourceParseCallback;
 import com.hyphenate.chatdemo.common.utils.CustomCountDownTimer;
 import com.hyphenate.chatdemo.common.utils.PhoneNumberUtils;
-import com.hyphenate.easeui.utils.EaseCommonUtils;
+import com.hyphenate.chatdemo.section.dialog.DemoDialogFragment;
+import com.hyphenate.chatdemo.section.dialog.SimpleDialogFragment;
 import com.hyphenate.easeui.utils.EaseEditTextUtils;
 import com.hyphenate.chatdemo.common.utils.ToastUtils;
 import com.hyphenate.chatdemo.section.base.BaseInitFragment;
@@ -68,13 +69,14 @@ public class LoginFragment extends BaseInitFragment implements View.OnClickListe
     private Drawable clear;
     private Drawable eyeOpen;
     private Drawable eyeClose;
-    private boolean isClick;
     private TextView tvVersion;
     private int COUNTS = 5 ;
     private long DURATION = (long) (3 * 1000);
     private long[] mHits= new long[COUNTS];
     private TextView mTvGetCode;
     private CustomCountDownTimer countDownTimer;
+    private TextView mTvLoginDeveloper;
+    private boolean isDeveloperMode;
 
     @Override
     protected int getLayoutId() {
@@ -94,8 +96,8 @@ public class LoginFragment extends BaseInitFragment implements View.OnClickListe
         tvVersion = findViewById(R.id.tv_version);
         mTvResetPassword = findViewById(R.id.tv_login_reset_password);
         mTvGetCode = findViewById(R.id.tv_get_code);
+        mTvLoginDeveloper = findViewById(R.id.tv_login_developer);
     }
-
 
     @Override
     protected void initListener() {
@@ -108,6 +110,7 @@ public class LoginFragment extends BaseInitFragment implements View.OnClickListe
         mBtnLogin.setOnClickListener(this);
         mTvGetCode.setOnClickListener(this);
         mTvResetPassword.setOnClickListener(this);
+        mTvLoginDeveloper.setOnClickListener(this);
         cbSelect.setOnCheckedChangeListener(this);
         mEtLoginCode.setOnEditorActionListener(this);
         EaseEditTextUtils.clearEditTextListener(mEtLoginPhone);
@@ -261,8 +264,14 @@ public class LoginFragment extends BaseInitFragment implements View.OnClickListe
         tvAgreement.setText(getSpannable());
         tvAgreement.setMovementMethod(LinkMovementMethod.getInstance());
         //切换密码可见不可见的两张图片
+        eyeClose = getResources().getDrawable(R.drawable.d_pwd_hide);
+        eyeOpen = getResources().getDrawable(R.drawable.d_pwd_show);
+        //切换密码可见不可见的两张图片
         clear = getResources().getDrawable(R.drawable.d_clear);
         EaseEditTextUtils.showRightDrawable(mEtLoginPhone, clear);
+
+        isDeveloperMode = DemoHelper.getInstance().getModel().isDeveloperMode();
+        resetView(isDeveloperMode);
     }
 
     @Override
@@ -280,7 +289,7 @@ public class LoginFragment extends BaseInitFragment implements View.OnClickListe
                 System.arraycopy(mHits, 1, mHits, 0, mHits.length - 1);
                 mHits[mHits.length - 1] =  SystemClock.uptimeMillis();
                 if (mHits[0] >= SystemClock.uptimeMillis() - DURATION) {
-                    mViewModel.setPageSelect(2);
+                    showOpenDeveloperDialog();
                 }
                 break;
             case R.id.btn_login:
@@ -293,6 +302,9 @@ public class LoginFragment extends BaseInitFragment implements View.OnClickListe
                 break;
             case R.id.tv_get_code:
                 getVerificationCode();
+                break;
+            case R.id.tv_login_developer:
+                mViewModel.setPageSelect(2);
                 break;
         }
     }
@@ -329,30 +341,37 @@ public class LoginFragment extends BaseInitFragment implements View.OnClickListe
     }
 
     private void loginToServer() {
-        if(TextUtils.isEmpty(mUserPhone)) {
-            ToastUtils.showToast(mContext.getString(R.string.em_login_phone_empty));
-            return;
-        }
-        if(!PhoneNumberUtils.isPhoneNumber(mUserPhone)) {
-            ToastUtils.showToast(mContext.getString(R.string.em_login_phone_illegal));
-            return;
-        }
-        if(TextUtils.isEmpty(mCode)) {
-            ToastUtils.showToast(R.string.em_login_code_empty);
-            return;
-        }
-        if(!PhoneNumberUtils.isNumber(mCode)) {
-            ToastUtils.showToast(mContext.getString(R.string.em_login_illegal_code));
-            return;
-        }
-        if(!cbSelect.isChecked()) {
-            ToastUtils.showToast(mContext.getString(R.string.em_login_not_select_agreement));
-            return;
-        }
-        isClick = true;
-        if (DemoHelper.getInstance().getModel().isDeveloperMode()){
-            mFragmentViewModel.login(mUserPhone, mCode,isTokenFlag);
+        if(isDeveloperMode) {
+            if(TextUtils.isEmpty(mUserPhone) || TextUtils.isEmpty(mCode)) {
+                ToastUtils.showToast(mContext.getString(R.string.em_login_btn_info_incomplete));
+                return;
+            }
+            if(!cbSelect.isChecked()) {
+                ToastUtils.showToast(mContext.getString(R.string.em_login_not_select_agreement));
+                return;
+            }
+            mFragmentViewModel.login(mUserPhone, mCode, isTokenFlag);
         }else {
+            if(TextUtils.isEmpty(mUserPhone)) {
+                ToastUtils.showToast(mContext.getString(R.string.em_login_phone_empty));
+                return;
+            }
+            if(!PhoneNumberUtils.isPhoneNumber(mUserPhone)) {
+                ToastUtils.showToast(mContext.getString(R.string.em_login_phone_illegal));
+                return;
+            }
+            if(TextUtils.isEmpty(mCode)) {
+                ToastUtils.showToast(R.string.em_login_code_empty);
+                return;
+            }
+            if(!PhoneNumberUtils.isNumber(mCode)) {
+                ToastUtils.showToast(mContext.getString(R.string.em_login_illegal_code));
+                return;
+            }
+            if(!cbSelect.isChecked()) {
+                ToastUtils.showToast(mContext.getString(R.string.em_login_not_select_agreement));
+                return;
+            }
             mFragmentViewModel.loginFromAppServe(mUserPhone, mCode);
         }
     }
@@ -372,7 +391,9 @@ public class LoginFragment extends BaseInitFragment implements View.OnClickListe
         mUserPhone = mEtLoginPhone.getText().toString().trim();
         mCode = mEtLoginCode.getText().toString().trim();
         EaseEditTextUtils.showRightDrawable(mEtLoginPhone, clear);
-        EaseEditTextUtils.showRightDrawable(mEtLoginCode, isTokenFlag ? null : eyeClose);
+        if(isDeveloperMode) {
+            EaseEditTextUtils.showRightDrawable(mEtLoginCode, isTokenFlag ? null : eyeClose);
+        }
         setButtonEnable(!TextUtils.isEmpty(mUserPhone) && !TextUtils.isEmpty(mCode));
     }
 
@@ -451,6 +472,47 @@ public class LoginFragment extends BaseInitFragment implements View.OnClickListe
         return false;
     }
 
+    private void showOpenDeveloperDialog() {
+        new SimpleDialogFragment.Builder(mContext)
+                .setTitle(isDeveloperMode ? getString(R.string.em_server_close_develop_mode) : getString(R.string.em_server_open_develop_mode))
+                .setConfirmColor(R.color.blue)
+                .setOnConfirmClickListener(getString(R.string.confirm), new DemoDialogFragment.OnConfirmClickListener() {
+                    @Override
+                    public void onConfirmClick(View view) {
+                        isDeveloperMode = !isDeveloperMode;
+                        DemoHelper.getInstance().getModel().setDeveloperMode(isDeveloperMode);
+                        mEtLoginPhone.setText("");
+                        resetView(isDeveloperMode);
+                    }
+                })
+                .showCancelButton(true)
+                .show();
+    }
+
+    private void resetView(boolean isDeveloperMode) {
+        mEtLoginCode.setText("");
+        if(isDeveloperMode) {
+            mEtLoginPhone.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_NORMAL);
+            mEtLoginCode.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
+            mEtLoginCode.setHint(R.string.em_login_password_hint);
+            mEtLoginPhone.setHint(R.string.em_login_name_hint);
+            mTvGetCode.setVisibility(View.GONE);
+            mTvLoginDeveloper.setVisibility(View.VISIBLE);
+
+            EaseEditTextUtils.changePwdDrawableRight(mEtLoginCode, eyeClose, eyeOpen, null, null, null);
+        }else {
+            mEtLoginPhone.setInputType(InputType.TYPE_CLASS_PHONE);
+            mEtLoginCode.setInputType(InputType.TYPE_CLASS_NUMBER);
+            mEtLoginCode.setHint(R.string.em_login_input_verification_code);
+            mEtLoginPhone.setHint(R.string.register_phone_number);
+            mTvGetCode.setVisibility(View.VISIBLE);
+            mTvLoginDeveloper.setVisibility(View.GONE);
+
+            EaseEditTextUtils.showRightDrawable(mEtLoginCode, null);
+            EaseEditTextUtils.clearEditTextListener(mEtLoginCode);
+        }
+    }
+
     private void jumpToAgreement() {
         Uri uri = Uri.parse("http://www.easemob.com/agreement");
         Intent it = new Intent(Intent.ACTION_VIEW, uri);
@@ -470,12 +532,6 @@ public class LoginFragment extends BaseInitFragment implements View.OnClickListe
             super.updateDrawState(ds);
             ds.bgColor = Color.TRANSPARENT;
         }
-    }
-
-    @Override
-    public void onStop() {
-        super.onStop();
-        isClick = false;
     }
 
 }

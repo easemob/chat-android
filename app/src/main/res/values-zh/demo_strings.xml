@@ -52,6 +52,7 @@
     <string name="em_login_not_select_agreement">请选择服务条款和隐私协议</string>
     <string name="em_login_error_send_code_later">请稍后再发</string>
     <string name="em_login_error_send_code_limit">获取已达上限</string>
+    <string name="em_login_server_configure">服务器配置</string>
 
     <string name="em_register_btn">注\u0020册</string>
     <string name="em_register_password_confirm_hint">确认密码</string>
@@ -102,6 +103,8 @@
     <string name="em_server_set_im_server_empty_hint">请设置IM服务器地址</string>
     <string name="em_server_set_im_port_empty_hint">请设置IM端口号</string>
     <string name="em_server_set_rest_server_empty_hint">请设置REST服务器地址</string>
+    <string name="em_server_open_develop_mode">开启开发者模式？</string>
+    <string name="em_server_close_develop_mode">关闭开发者模式？</string>
 
     <string name="em_empty_layout_content">寻找自我 保持本色</string>
 
