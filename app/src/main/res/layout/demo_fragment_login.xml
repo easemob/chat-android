@@ -98,29 +98,31 @@
     <TextView
         android:id="@+id/tv_login_register"
         app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintRight_toLeftOf="@id/tv_login_server_set"
+        app:layout_constraintTop_toBottomOf="@id/btn_login"
+        app:layout_constraintRight_toLeftOf="@id/tv_login_reset_password"
         app:layout_constraintHorizontal_chainStyle="spread_inside"
-        android:layout_marginLeft="33dp"
+        android:layout_marginLeft="44dp"
         android:layout_marginStart="33dp"
+        android:layout_marginTop="8dp"
         android:text="@string/em_login_tv_register"
         style="@style/em_login_tv_other" />
 
     <TextView
-        android:id="@+id/tv_login_server_set"
+        android:id="@+id/tv_login_reset_password"
         app:layout_constraintLeft_toRightOf="@id/tv_login_register"
-        app:layout_constraintRight_toLeftOf="@id/tv_login_token"
-        app:layout_constraintBottom_toBottomOf="parent"
-        android:text="@string/em_login_tv_server_set"
-        app:layout_goneMarginRight="33dp"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/btn_login"
+        android:text="@string/em_login_tv_reset_password"
+        android:layout_marginRight="44dp"
         app:layout_goneMarginEnd="33dp"
+        android:layout_marginTop="8dp"
         style="@style/em_login_tv_other"/>
 
     <TextView
         android:id="@+id/tv_login_token"
-        app:layout_constraintLeft_toRightOf="@id/tv_login_server_set"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
         android:layout_marginRight="33dp"
         android:layout_marginEnd="33dp"
         android:text="@string/em_login_tv_token"
