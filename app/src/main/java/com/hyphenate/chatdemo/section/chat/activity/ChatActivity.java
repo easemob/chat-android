@@ -193,7 +193,7 @@ public class ChatActivity extends BaseInitActivity implements EaseTitleBar.OnBac
             if(group == null || TextUtils.isEmpty(group.getExtension())) {
                 groupDetailViewModel.getGroup(conversationId);
             }else {
-                if(TextUtils.equals("default", extension)) {
+                if(!TextUtils.equals("default", extension)) {
                     subTitle.setText(R.string.chat_temp_hint);
                     subTitle.setVisibility(View.VISIBLE);
                 }
