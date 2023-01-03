@@ -85,8 +85,8 @@ public class LoginViewModel extends AndroidViewModel {
     /**
      * 获取短信验证码
      */
-    public void postVerificationCode(String phoneNumber,String image_id,String imageCode){
-        verificationCodeObservable.setSource(mRepository.getVerificationCode(phoneNumber,image_id,imageCode));
+    public void postVerificationCode(String phoneNumber){
+        verificationCodeObservable.setSource(mRepository.getVerificationCode(phoneNumber));
     }
 
     /**

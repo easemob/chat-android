@@ -13,6 +13,7 @@ import com.hyphenate.EMCallBack;
 import com.hyphenate.EMError;
 import com.hyphenate.chat.EMClient;
 import com.hyphenate.chat.EMGroup;
+import com.hyphenate.chatdemo.R;
 import com.hyphenate.cloud.HttpClientManager;
 import com.hyphenate.cloud.HttpResponse;
 import com.hyphenate.chatdemo.BuildConfig;
@@ -33,6 +34,7 @@ import com.hyphenate.easeui.model.EaseEvent;
 import com.hyphenate.exceptions.HyphenateException;
 import com.hyphenate.util.EMLog;
 
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.HashMap;
@@ -261,11 +263,11 @@ public class EMClientRepository extends BaseEMRepository{
     }
 
 
-    public LiveData<Resource<Boolean>> getVerificationCode(String phoneNumber,String image_id,String imageCode){
+    public LiveData<Resource<Boolean>> getVerificationCode(String phoneNumber){
         return new NetworkOnlyResource<Boolean>() {
             @Override
             protected void createCall(@NonNull ResultCallBack<LiveData<Boolean>> callBack) {
-                getVerificationCodeFromServe(phoneNumber,image_id,imageCode, new EMCallBack() {
+                getVerificationCodeFromServe(phoneNumber, new EMCallBack() {
                     @Override
                     public void onSuccess() {
                         callBack.onSuccess(createLiveData(true));
@@ -280,33 +282,40 @@ public class EMClientRepository extends BaseEMRepository{
         }.asLiveData();
     }
 
-    private void getVerificationCodeFromServe(String phoneNumber,String image_id,String imageCode ,EMCallBack callBack) {
+    private void getVerificationCodeFromServe(String phoneNumber, EMCallBack callBack) {
         runOnIOThread(() -> {
             try {
                 Map<String, String> headers = new HashMap<>();
                 headers.put("Content-Type", "application/json");
-                JSONObject request = new JSONObject();
-                request.putOpt("phoneNumber", phoneNumber);
-                request.putOpt("imageId", image_id);
-                request.putOpt("imageCode", imageCode);
-                String url = BuildConfig.APP_SERVER_PROTOCOL + "://" + BuildConfig.APP_SERVER_DOMAIN + BuildConfig.APP_SEND_SMS_FROM_SERVER ;
+                String url = BuildConfig.APP_SERVER_PROTOCOL + "://" + BuildConfig.APP_SERVER_DOMAIN + BuildConfig.APP_SEND_SMS_FROM_SERVER + "/" + phoneNumber + "/" ;
                 EMLog.d("getVerificationCodeFromServe url : ", url);
-                HttpResponse response = HttpClientManager.httpExecute(url, headers, request.toString(), Method_POST);
+                HttpResponse response = HttpClientManager.httpExecute(url, headers, null, Method_POST);
                 int code = response.code;
                 String responseInfo = response.content;
                 if (code == 200) {
-                    EMLog.e("getVerificationCodeFromServe success : ", responseInfo);
                     callBack.onSuccess();
                 } else {
                     if (responseInfo != null && responseInfo.length() > 0) {
-                        JSONObject object = new JSONObject(responseInfo);
-                        callBack.onError(code, object.getString("errorInfo"));
+                        String errorInfo = null;
+                        try {
+                            JSONObject object = new JSONObject(responseInfo);
+                            errorInfo = object.getString("errorInfo");
+                            if(errorInfo.contains("wait a moment while trying to send")) {
+                                errorInfo = getContext().getString(R.string.em_login_error_send_code_later);
+                            }else if(errorInfo.contains("exceed the limit of")) {
+                                errorInfo = getContext().getString(R.string.em_login_error_send_code_limit);
+                            }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                            errorInfo = responseInfo;
+                        }
+                        callBack.onError(code, errorInfo);
                     }else {
                         callBack.onError(code, responseInfo);
                     }
                 }
             } catch (Exception e) {
-                callBack.onError(2, e.getMessage());
+                callBack.onError(EMError.NETWORK_ERROR, e.getMessage());
             }
         });
     }
@@ -447,8 +456,8 @@ public class EMClientRepository extends BaseEMRepository{
                 headers.put("Content-Type", "application/json");
 
                 JSONObject request = new JSONObject();
-                request.putOpt("userId", userName);
-                request.putOpt("userPassword", userPassword);
+                request.putOpt("phoneNumber", userName);
+                request.putOpt("smsCode", userPassword);
 
                 String url = BuildConfig.APP_SERVER_PROTOCOL + "://" + BuildConfig.APP_SERVER_DOMAIN + BuildConfig.APP_BASE_USER + BuildConfig.APP_SERVER_LOGIN ;
                 EMLog.d("LoginToAppServer url : ", url);
@@ -463,8 +472,20 @@ public class EMClientRepository extends BaseEMRepository{
                     callBack.onSuccess(object.getString("token"));
                 } else {
                     if (responseInfo != null && responseInfo.length() > 0) {
-                        JSONObject object = new JSONObject(responseInfo);
-                        callBack.onError(code, object.getString("errorInfo"));
+                        String errorInfo = null;
+                        try {
+                            JSONObject object = new JSONObject(responseInfo);
+                            errorInfo = object.getString("errorInfo");
+                            if(errorInfo.contains("phone number illegal")) {
+                                errorInfo = getContext().getString(R.string.em_login_phone_illegal);
+                            }else if(errorInfo.contains("verification code error") || errorInfo.contains("send SMS to get mobile phone verification code")) {
+                                errorInfo = getContext().getString(R.string.em_login_illegal_code);
+                            }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                            errorInfo = responseInfo;
+                        }
+                        callBack.onError(code, errorInfo);
                     }else {
                         callBack.onError(code, responseInfo);
                     }

@@ -23,7 +23,7 @@ import com.bumptech.glide.request.RequestOptions;
 import com.hyphenate.chatdemo.BuildConfig;
 import com.hyphenate.chatdemo.R;
 import com.hyphenate.chatdemo.common.interfaceOrImplement.OnResourceParseCallback;
-import com.hyphenate.chatdemo.common.utils.CountDownTimerUtils;
+import com.hyphenate.chatdemo.common.utils.CustomCountDownTimer;
 import com.hyphenate.chatdemo.common.utils.ToastUtils;
 import com.hyphenate.chatdemo.section.base.BaseInitFragment;
 import com.hyphenate.chatdemo.section.login.activity.ChangePwdActivity;
@@ -51,7 +51,7 @@ public class ChangePwdFragment extends BaseInitFragment implements EaseTitleBar.
     private String userName = "";
     private String imageCode = "";
     private String image_id ="";
-    private CountDownTimerUtils count;
+    private CustomCountDownTimer count;
     public  String imgBaseUrl = BuildConfig.APP_SERVER_PROTOCOL + "://" + BuildConfig.APP_SERVER_DOMAIN + BuildConfig.APP_VERIFICATION_CODE;
 
 
@@ -64,7 +64,7 @@ public class ChangePwdFragment extends BaseInitFragment implements EaseTitleBar.
     protected void initView(Bundle savedInstanceState) {
         super.initView(savedInstanceState);
         mToolbarRegister = findViewById(R.id.toolbar_register);
-        mEtLoginName = findViewById(R.id.et_login_name);
+        mEtLoginName = findViewById(R.id.et_login_phone);
         mEtPhoneNum = findViewById(R.id.et_phone_number);
         mEtLoginVerificationCode = findViewById(R.id.et_verification_code);
         mEtImgVerificationCode = findViewById(R.id.et_img_verification_code);
@@ -181,8 +181,8 @@ public class ChangePwdFragment extends BaseInitFragment implements EaseTitleBar.
                     ToastUtils.showToast("请输入图片验证码");
                     break;
                 }
-                count = new CountDownTimerUtils(mBtnGetCode, 60000, 1000);
-                mViewModel.postVerificationCode(String.valueOf(mEtPhoneNum.getText()),image_id,imageCode);
+                count = new CustomCountDownTimer(mBtnGetCode, 60000, 1000);
+                //mViewModel.postVerificationCode(String.valueOf(mEtPhoneNum.getText()),image_id,imageCode);
                 break;
         }
     }

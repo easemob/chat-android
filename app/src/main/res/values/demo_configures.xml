@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <bool name="enable_gray_white_model">false</bool>
+    <string-array name="gray_white_days">
+        <item>2022.11.30-2022.12.06</item>
+        <item>12.13</item>
+    </string-array>
+</resources>
