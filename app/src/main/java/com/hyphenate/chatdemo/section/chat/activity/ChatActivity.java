@@ -174,7 +174,7 @@ public class ChatActivity extends BaseInitActivity implements EaseTitleBar.OnBac
                 @Override
                 public void onSuccess(@Nullable EMGroup data) {
                     String extension = data.getExtension();
-                    if(!TextUtils.isEmpty(extension) && !TextUtils.equals("default", extension)) {
+                    if(!TextUtils.equals("default", extension)) {
                         subTitle.setText(R.string.chat_temp_hint);
                         subTitle.setVisibility(View.VISIBLE);
                     }
@@ -189,11 +189,10 @@ public class ChatActivity extends BaseInitActivity implements EaseTitleBar.OnBac
     private void checkGroupInfo() {
         if(chatType == DemoConstant.CHATTYPE_GROUP) {
             EMGroup group = EMClient.getInstance().groupManager().getGroup(conversationId);
-            String extension = group.getExtension();
             if(group == null || TextUtils.isEmpty(group.getExtension())) {
                 groupDetailViewModel.getGroup(conversationId);
             }else {
-                if(!TextUtils.equals("default", extension)) {
+                if(!TextUtils.equals("default", group.getExtension())) {
                     subTitle.setText(R.string.chat_temp_hint);
                     subTitle.setVisibility(View.VISIBLE);
                 }
