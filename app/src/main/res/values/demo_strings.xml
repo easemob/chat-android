@@ -651,5 +651,6 @@
     <string name="localLogin">Internal Login</string>
 
     <string name="action_report_label">report</string>
+    <string name="chat_temp_hint">For trial only, will be deleted after 72 hours</string>
 
 </resources>
