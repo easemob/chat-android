@@ -27,8 +27,8 @@ android {
         applicationId "com.hyphenate.easeim"
         minSdkVersion 21
         targetSdkVersion 29
-        versionCode 96
-        versionName "3.9.4"
+        versionCode 97
+        versionName "3.9.4.3"
         multiDexEnabled true
         //为了兼容5.0以下使用vector图标
         vectorDrawables.useSupportLibrary = true
@@ -153,14 +153,14 @@ dependencies {
 
     // EaseIMKit
 //    api (project(path: ':ease-im-kit'))
-    implementation 'io.hyphenate:ease-im-kit:3.9.4'
+    implementation 'io.hyphenate:ease-im-kit:3.9.4.3'
     // EaseIMKit依赖，必须添加环信IM SDK
 //    implementation project(path: ':hyphenatechatsdk')
-    implementation 'io.hyphenate:hyphenate-chat:3.9.4'
+    implementation 'io.hyphenate:hyphenate-chat:3.9.4.3'
 
     //EaseCallKit依赖，必须添加环信IM SDK
 //    api project(':ease-call-kit')
-    implementation 'io.hyphenate:ease-call-kit:3.9.4'
+    implementation 'io.hyphenate:ease-call-kit:3.9.4.3'
 
 }
 
