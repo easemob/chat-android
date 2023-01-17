@@ -84,6 +84,8 @@ public class PreferenceManager {
 
 	private static String SHARED_KEY_TARGET_LANGUAGE = "shared_key_target_language";
 
+	private static String SHARED_KEY_AGREE_AGREEMENT =  "shared_key_agree_agreement";
+
 	@SuppressLint("CommitPrefEdits")
 	private PreferenceManager(Context cxt) {
 		mSharedPreferences = cxt.getSharedPreferences(PREFERENCE_NAME, Context.MODE_PRIVATE);
@@ -603,6 +605,15 @@ public class PreferenceManager {
 
 	public String getPhoneNumber() {
 		return mSharedPreferences.getString(DEMO_PHONE_NUMBER, "");
+	}
+
+	public void setAgreeAgreement(boolean isAgreed){
+		editor.putBoolean(SHARED_KEY_AGREE_AGREEMENT, isAgreed);
+		editor.apply();
+	}
+
+	public boolean isAgreeAgreement() {
+		return mSharedPreferences.getBoolean(SHARED_KEY_AGREE_AGREEMENT, false);
 	}
 
 

@@ -53,6 +53,11 @@
     <string name="em_login_error_send_code_later">Please wait a moment while trying to send</string>
     <string name="em_login_error_send_code_limit">Access limit reached</string>
     <string name="em_login_server_configure">Server Configure</string>
+    <string name="demo_login_dialog_content">Easemob attaches great importance to protecting your privacy. Please read the following Service and Privacy Policy carefully. If you agree, please click the "OK" button. If you do not agree, please click "Deny" to exit the app.</string>
+    <string name="demo_login_dialog_content_privacy">Read the complete Service and Privacy Policy for details.</string>
+    <string name="demo_login_dialog_cancel">Deny</string>
+    <string name="demo_login_dialog_confirm">OK</string>
+    <string name="demo_login_dialog_title">Service and Privacy Policy</string>
 
     <string name="em_register_btn">Register \u0020</string>
     <string name="em_register_password_confirm_hint">Confirm password</string>
@@ -110,6 +115,13 @@
     <string name="were_mentioned">[@Mentioning me]</string>
     <string name="were_not_send_msg">[Draft]</string>
     <string name="em_chat_et_hint">The entered content</string>
+    <string name="demo_chat_request_camera_permission">Camera permission is required to use the camera, please authorize</string>
+    <string name="demo_chat_request_read_external_storage_permission">Read external storage permission is required to use %1$s, please authorize</string>
+    <string name="demo_chat_request_location_permission">LOCATION permission is required to send location message, please authorize</string>
+    <string name="demo_chat_request_audio_permission">Audio permission is required to send voice message, please authorize</string>
+    <string name="demo_chat_file">file</string>
+    <string name="demo_chat_photo">photo album</string>
+    <string name="demo_chat_video">video</string>
 
     <string name="em_search_text_hint">Search</string>
 

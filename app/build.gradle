@@ -168,6 +168,8 @@ dependencies {
     implementation 'com.tencent.bugly:crashreport:2.6.6.1'
     implementation 'com.tencent.bugly:nativecrashreport:3.3.1'
 
+    implementation 'pub.devrel:easypermissions:3.0.0'
+
     // EaseIMKit
 //    api (project(path: ':ease-im-kit'))
     implementation 'io.hyphenate:ease-im-kit:3.9.9'

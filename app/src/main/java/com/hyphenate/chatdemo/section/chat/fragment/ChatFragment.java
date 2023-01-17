@@ -2,6 +2,8 @@ package com.hyphenate.chatdemo.section.chat.fragment;
 
 import static android.content.Intent.FLAG_ACTIVITY_NEW_TASK;
 
+import android.Manifest;
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
@@ -10,10 +12,12 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.text.TextUtils;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.lifecycle.ViewModelProvider;
 
@@ -57,12 +61,21 @@ import com.hyphenate.easeui.modules.menu.MenuItemBean;
 import com.hyphenate.util.EMLog;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
+import pub.devrel.easypermissions.EasyPermissions;
 
-public class ChatFragment extends EaseChatFragment implements OnRecallMessageResultListener {
+
+public class ChatFragment extends EaseChatFragment implements OnRecallMessageResultListener, EasyPermissions.PermissionCallbacks {
     private static final String TAG = ChatFragment.class.getSimpleName();
     private static final int REQUEST_CODE_SELECT_USER_CARD = 20;
+    private static final int REQUEST_CODE_CAMERA = 110;
+    private static final int REQUEST_CODE_STORAGE_PICTURE = 111;
+    private static final int REQUEST_CODE_STORAGE_VIDEO = 112;
+    private static final int REQUEST_CODE_STORAGE_FILE = 113;
+    private static final int REQUEST_CODE_LOCATION = 114;
+    private static final int REQUEST_CODE_VOICE = 115;
     private MessageViewModel viewModel;
     protected ClipboardManager clipboard;
 
@@ -313,10 +326,35 @@ public class ChatFragment extends EaseChatFragment implements OnRecallMessageRes
         return false;
     }
 
+    @SuppressLint("NonConstantResourceId")
     @Override
     public void onChatExtendMenuItemClick(View view, int itemId) {
-        super.onChatExtendMenuItemClick(view, itemId);
         switch (itemId) {
+            case R.id.extend_item_take_picture :
+                if(checkIfHasPermissions(Manifest.permission.CAMERA, REQUEST_CODE_CAMERA)) {
+                    selectPicFromCamera();
+                }
+                break;
+            case R.id.extend_item_picture :
+                if(checkIfHasPermissions(Manifest.permission.READ_EXTERNAL_STORAGE, REQUEST_CODE_STORAGE_PICTURE)) {
+                    selectPicFromLocal();
+                }
+                break;
+            case R.id.extend_item_location :
+                if(checkIfHasPermissions(Manifest.permission.ACCESS_COARSE_LOCATION, REQUEST_CODE_LOCATION)) {
+                    startMapLocation(REQUEST_CODE_MAP);
+                }
+                break;
+            case R.id.extend_item_video :
+                if(checkIfHasPermissions(Manifest.permission.READ_EXTERNAL_STORAGE, REQUEST_CODE_STORAGE_VIDEO)) {
+                    selectVideoFromLocal();
+                }
+                break;
+            case R.id.extend_item_file :
+                if(checkIfHasPermissions(Manifest.permission.READ_EXTERNAL_STORAGE, REQUEST_CODE_STORAGE_FILE)) {
+                    selectFileFromLocal();
+                }
+                break;
             case R.id.extend_item_video_call:
                 showSelectDialog();
                 break;
@@ -337,6 +375,28 @@ public class ChatFragment extends EaseChatFragment implements OnRecallMessageRes
         }
     }
 
+    private boolean checkIfHasPermissions(String permission, int requestCode) {
+        if(!EasyPermissions.hasPermissions(mContext, permission)) {
+            String rationale = "";
+            if(requestCode == REQUEST_CODE_CAMERA) {
+                rationale = getString(R.string.demo_chat_request_camera_permission);
+            }else if(requestCode == REQUEST_CODE_STORAGE_PICTURE) {
+                rationale = getString(R.string.demo_chat_request_read_external_storage_permission, getString(R.string.demo_chat_photo));
+            }else if(requestCode == REQUEST_CODE_STORAGE_VIDEO) {
+                rationale = getString(R.string.demo_chat_request_read_external_storage_permission, getString(R.string.demo_chat_video));
+            }else if(requestCode == REQUEST_CODE_STORAGE_FILE) {
+                rationale = getString(R.string.demo_chat_request_read_external_storage_permission, getString(R.string.demo_chat_file));
+            }else if(requestCode == REQUEST_CODE_LOCATION) {
+                rationale = getString(R.string.demo_chat_request_location_permission);
+            }else if(requestCode == REQUEST_CODE_VOICE) {
+                rationale = getString(R.string.demo_chat_request_audio_permission);
+            }
+            EasyPermissions.requestPermissions(this, rationale, requestCode, permission);
+            return false;
+        }
+        return true;
+    }
+
     @Override
     public void onChatError(int code, String errorMsg) {
         if(infoListener != null) {
@@ -349,6 +409,14 @@ public class ChatFragment extends EaseChatFragment implements OnRecallMessageRes
         if(infoListener != null) {
             infoListener.onOtherTyping(action);
         }
+    }
+
+    @Override
+    public boolean onRecordTouch(View v, MotionEvent event) {
+        if(!checkIfHasPermissions(Manifest.permission.RECORD_AUDIO, REQUEST_CODE_VOICE)) {
+            return false;
+        }
+        return super.onRecordTouch(v, event);
     }
 
     @Override
@@ -596,4 +664,31 @@ public class ChatFragment extends EaseChatFragment implements OnRecallMessageRes
                     }
                 }).show();
     }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        EasyPermissions.onRequestPermissionsResult(requestCode, permissions, grantResults, this);
+    }
+
+    @Override
+    public void onPermissionsGranted(int requestCode, @NonNull List<String> perms) {
+        if(requestCode == REQUEST_CODE_CAMERA) {
+            selectPicFromCamera();
+        }else if(requestCode == REQUEST_CODE_STORAGE_PICTURE) {
+            selectPicFromLocal();
+        }else if(requestCode == REQUEST_CODE_STORAGE_VIDEO) {
+            selectVideoFromLocal();
+        }else if(requestCode == REQUEST_CODE_STORAGE_FILE) {
+            selectFileFromLocal();
+        }else if(requestCode == REQUEST_CODE_LOCATION) {
+            startMapLocation(REQUEST_CODE_MAP);
+        }
+    }
+
+    @Override
+    public void onPermissionsDenied(int requestCode, @NonNull List<String> perms) {
+
+    }
+
 }

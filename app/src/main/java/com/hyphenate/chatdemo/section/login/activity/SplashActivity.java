@@ -2,14 +2,19 @@ package com.hyphenate.chatdemo.section.login.activity;
 
 import android.animation.Animator;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.ImageView;
 
 import androidx.lifecycle.ViewModelProvider;
 
+import com.hyphenate.chatdemo.DemoApplication;
 import com.hyphenate.chatdemo.MainActivity;
 import com.hyphenate.chatdemo.R;
 import com.hyphenate.chatdemo.common.interfaceOrImplement.OnResourceParseCallback;
+import com.hyphenate.chatdemo.common.utils.PreferenceManager;
 import com.hyphenate.chatdemo.section.base.BaseInitActivity;
+import com.hyphenate.chatdemo.section.dialog.DemoAgreementDialogFragment;
+import com.hyphenate.chatdemo.section.dialog.DemoDialogFragment;
 import com.hyphenate.chatdemo.section.login.viewmodels.SplashViewModel;
 import com.hyphenate.util.EMLog;
 
@@ -50,7 +55,7 @@ public class SplashActivity extends BaseInitActivity {
 
                     @Override
                     public void onAnimationEnd(Animator animation) {
-                        loginSDK();
+                        checkIfAgreePrivacy();
                     }
 
                     @Override
@@ -70,6 +75,35 @@ public class SplashActivity extends BaseInitActivity {
                 .setDuration(500)
                 .start();
 
+    }
+
+    private void checkIfAgreePrivacy() {
+        if(PreferenceManager.getInstance().isAgreeAgreement()) {
+            loginSDK();
+        }else {
+            showPrivacyDialog();
+        }
+    }
+
+    private void showPrivacyDialog() {
+        new DemoAgreementDialogFragment.Builder(mContext)
+                .setTitle(R.string.demo_login_dialog_title)
+                .setOnConfirmClickListener(R.string.demo_login_dialog_confirm, new DemoDialogFragment.OnConfirmClickListener() {
+                    @Override
+                    public void onConfirmClick(View view) {
+                        PreferenceManager.getInstance().setAgreeAgreement(true);
+                        DemoApplication.getInstance().initSDK();
+                        loginSDK();
+                    }
+                })
+                .setConfirmColor(R.color.red)
+                .setOnCancelClickListener(R.string.demo_login_dialog_cancel, new DemoDialogFragment.onCancelClickListener() {
+                    @Override
+                    public void onCancelClick(View view) {
+                        System.exit(1);
+                    }
+                })
+                .show();
     }
 
     private void loginSDK() {

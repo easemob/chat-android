@@ -275,6 +275,7 @@ public class DemoDialogFragment extends BaseDialogFragment implements View.OnCli
         private OnConfirmClickListener listener;
         private onCancelClickListener cancelClickListener;
         private DialogInterface.OnDismissListener dismissListener;
+        private DemoDialogFragment currentFragment;
         protected final Bundle bundle;
 
         public Builder(BaseActivity context) {

@@ -53,6 +53,11 @@
     <string name="em_login_error_send_code_later">请稍后再发</string>
     <string name="em_login_error_send_code_limit">获取已达上限</string>
     <string name="em_login_server_configure">服务器配置</string>
+    <string name="demo_login_dialog_content">环信非常重视保护您的隐私，请您仔细阅读下面的《环信服务条款》与《环信隐私协议》，如果您同意请点击"同意并继续"按钮，如果您不同意，请点击"不同意"退出应用。</string>
+    <string name="demo_login_dialog_content_privacy">阅读完整的《环信服务条款》与《环信隐私协议》了解详细内容。</string>
+    <string name="demo_login_dialog_cancel">不同意</string>
+    <string name="demo_login_dialog_confirm">同意并继续</string>
+    <string name="demo_login_dialog_title">用户协议与隐私政策</string>
 
     <string name="em_register_btn">注\u0020册</string>
     <string name="em_register_password_confirm_hint">确认密码</string>
@@ -111,6 +116,13 @@
     <string name="were_mentioned">[有人@我]</string>
     <string name="were_not_send_msg">[草稿]</string>
     <string name="em_chat_et_hint">输入了什么东西</string>
+    <string name="demo_chat_request_camera_permission">使用相机需要相机权限，请进行授权</string>
+    <string name="demo_chat_request_read_external_storage_permission">使用%1$s需要读取SD卡权限，请进行授权</string>
+    <string name="demo_chat_request_location_permission">使用定位功能需要定位权限，请进行授权</string>
+    <string name="demo_chat_request_audio_permission">发送语音消息需要使用麦克风权限，请进行授权</string>
+    <string name="demo_chat_file">文件</string>
+    <string name="demo_chat_photo">相册</string>
+    <string name="demo_chat_video">视频</string>
 
     <string name="em_search_text_hint">搜索</string>
 

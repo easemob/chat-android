@@ -34,8 +34,6 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.hyphenate.chatdemo.common.constant.DemoConstant;
 import com.hyphenate.chatdemo.common.enums.SearchType;
 import com.hyphenate.chatdemo.common.livedatas.LiveDataBus;
-import com.hyphenate.chatdemo.common.permission.PermissionsManager;
-import com.hyphenate.chatdemo.common.permission.PermissionsResultAction;
 import com.hyphenate.chatdemo.common.utils.PreferenceManager;
 import com.hyphenate.chatdemo.common.utils.PushUtils;
 import com.hyphenate.chatdemo.section.MainViewModel;
@@ -184,7 +182,6 @@ public class MainActivity extends BaseInitActivity implements BottomNavigationVi
     protected void initData() {
         super.initData();
         initViewModel();
-        requestPermissions();
         checkUnreadMsg();
         ChatPresenter.getInstance().init();
         // 获取华为 HMS 推送 token
@@ -312,25 +309,6 @@ public class MainActivity extends BaseInitActivity implements BottomNavigationVi
                 }
             }
         }
-    }
-
-    /**
-     * 申请权限
-     */
-    // TODO: 2019/12/19 0019 有必要修改一下
-    private void requestPermissions() {
-        PermissionsManager.getInstance()
-                .requestAllManifestPermissionsIfNecessary(mContext, new PermissionsResultAction() {
-                    @Override
-                    public void onGranted() {
-
-                    }
-
-                    @Override
-                    public void onDenied(String permission) {
-
-                    }
-                });
     }
 
     private void switchToHome() {
