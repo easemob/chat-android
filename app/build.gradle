@@ -48,7 +48,7 @@ android {
         buildConfigField ("String", "APP_SERVER_PROTOCOL", "\"https\"")
         buildConfigField ("String", "APP_SERVER_DOMAIN", "\"a1.easemob.com\"")
         buildConfigField ("String", "APP_BASE_USER", "\"/inside/app/user/\"")
-        buildConfigField ("String", "APP_SERVER_LOGIN", "\"login/V1\"")
+        buildConfigField ("String", "APP_SERVER_LOGIN", "\"login/V2\"")
         buildConfigField ("String", "APP_SERVER_REGISTER", "\"register\"")
         buildConfigField ("String", "APP_SERVE_CHECK_RESET", "\"reset/password\"")
         buildConfigField ("String", "APP_SERVE_CHANGE_PWD", "\"/password\"")

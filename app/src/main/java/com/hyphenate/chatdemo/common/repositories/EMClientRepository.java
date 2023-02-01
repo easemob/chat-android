@@ -14,6 +14,7 @@ import com.hyphenate.EMError;
 import com.hyphenate.chat.EMClient;
 import com.hyphenate.chat.EMGroup;
 import com.hyphenate.chatdemo.R;
+import com.hyphenate.chatdemo.common.model.LoginResult;
 import com.hyphenate.cloud.HttpClientManager;
 import com.hyphenate.cloud.HttpResponse;
 import com.hyphenate.chatdemo.BuildConfig;
@@ -427,16 +428,16 @@ public class EMClientRepository extends BaseEMRepository{
     }
 
 
-    public LiveData<Resource<String>> loginFromServe(String userName, String userPassword){
-        return new NetworkOnlyResource<String>() {
+    public LiveData<Resource<LoginResult>> loginFromServe(String userName, String userPassword){
+        return new NetworkOnlyResource<LoginResult>() {
             @Override
-            protected void createCall(@NonNull ResultCallBack<LiveData<String>> callBack) {
+            protected void createCall(@NonNull ResultCallBack<LiveData<LoginResult>> callBack) {
                 DemoHelper.getInstance().init(DemoApplication.getInstance());
                 DemoHelper.getInstance().getModel().setCurrentUserName(userName);
                 OptionsHelper.getInstance().checkChangeServe();
-                LoginFromAppServe(userName, userPassword, new ResultCallBack<String>() {
+                LoginFromAppServe(userName, userPassword, new ResultCallBack<LoginResult>() {
                     @Override
-                    public void onSuccess(String value) {
+                    public void onSuccess(LoginResult value) {
                         callBack.onSuccess(createLiveData(value));
                     }
 
@@ -449,7 +450,7 @@ public class EMClientRepository extends BaseEMRepository{
         }.asLiveData();
     }
 
-    private void LoginFromAppServe(String userName,String userPassword ,ResultCallBack<String> callBack){
+    private void LoginFromAppServe(String userName,String userPassword ,ResultCallBack<LoginResult> callBack){
         runOnIOThread(() -> {
             try {
                 Map<String, String> headers = new HashMap<>();
@@ -465,11 +466,16 @@ public class EMClientRepository extends BaseEMRepository{
                 int code = response.code;
                 String responseInfo = response.content;
                 if (code == 200) {
-                    JSONObject object = new JSONObject(responseInfo);
                     EMLog.d("LoginToAppServer success : ", responseInfo);
+                    JSONObject object = new JSONObject(responseInfo);
+                    LoginResult result = new LoginResult();
                     String phoneNumber = object.getString("phoneNumber");
                     DemoHelper.getInstance().getModel().setPhoneNumber(phoneNumber);
-                    callBack.onSuccess(object.getString("token"));
+                    result.setPhone(phoneNumber);
+                    result.setToken(object.getString("token"));
+                    result.setUsername(object.getString("chatUserName"));
+                    result.setCode(code);
+                    callBack.onSuccess(result);
                 } else {
                     if (responseInfo != null && responseInfo.length() > 0) {
                         String errorInfo = null;
