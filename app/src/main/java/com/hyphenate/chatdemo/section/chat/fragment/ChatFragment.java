@@ -341,7 +341,7 @@ public class ChatFragment extends EaseChatFragment implements OnRecallMessageRes
                 }
                 break;
             case R.id.extend_item_location :
-                if(checkIfHasPermissions(Manifest.permission.ACCESS_COARSE_LOCATION, REQUEST_CODE_LOCATION)) {
+                if(checkIfHasPermissions(Manifest.permission.ACCESS_FINE_LOCATION, REQUEST_CODE_LOCATION)) {
                     startMapLocation(REQUEST_CODE_MAP);
                 }
                 break;
