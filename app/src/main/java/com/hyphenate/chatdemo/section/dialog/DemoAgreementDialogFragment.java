@@ -34,6 +34,15 @@ public class DemoAgreementDialogFragment extends DemoDialogFragment{
         tv_privacy.setMovementMethod(LinkMovementMethod.getInstance());
     }
 
+    @Override
+    public void initData() {
+        super.initData();
+        if(getDialog() != null) {
+            getDialog().setCancelable(false);
+            getDialog().setCanceledOnTouchOutside(false);
+        }
+    }
+
     private SpannableString getSpannable() {
         String language = Locale.getDefault().getLanguage();
         boolean isZh = language.startsWith("zh");
