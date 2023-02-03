@@ -141,7 +141,7 @@ public class LoginFragment extends BaseInitFragment implements View.OnClickListe
 
                         @Override
                         public void onError(int code, String error) {
-
+                            showToast(error);
                         }
                     });
                 }
