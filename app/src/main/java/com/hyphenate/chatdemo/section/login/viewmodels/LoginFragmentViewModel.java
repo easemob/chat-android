@@ -8,6 +8,7 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MediatorLiveData;
 
 import com.hyphenate.chatdemo.common.livedatas.SingleSourceLiveData;
+import com.hyphenate.chatdemo.common.model.LoginResult;
 import com.hyphenate.chatdemo.common.net.Resource;
 import com.hyphenate.chatdemo.common.repositories.EMClientRepository;
 import com.hyphenate.easeui.domain.EaseUser;
@@ -15,7 +16,7 @@ import com.hyphenate.easeui.domain.EaseUser;
 public class LoginFragmentViewModel extends AndroidViewModel {
     private EMClientRepository mRepository;
     private MediatorLiveData<Resource<EaseUser>> loginObservable;
-    private SingleSourceLiveData<Resource<String>> loginFromAppServeObservable;
+    private SingleSourceLiveData<Resource<LoginResult>> loginFromAppServeObservable;
 
     public LoginFragmentViewModel(@NonNull Application application) {
         super(application);
@@ -41,7 +42,7 @@ public class LoginFragmentViewModel extends AndroidViewModel {
         return loginObservable;
     }
 
-    public LiveData<Resource<String>> getLoginFromAppServeObservable(){
+    public LiveData<Resource<LoginResult>> getLoginFromAppServeObservable(){
         return loginFromAppServeObservable;
     }
 

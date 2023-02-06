@@ -36,11 +36,13 @@ public class DemoApplication extends Application implements Thread.UncaughtExcep
         super.onCreate();
         instance = this;
         initThrowableHandler();
-        initHx();
+        // 初始化PreferenceManager
+        PreferenceManager.init(this);
         registerActivityLifecycleCallbacks();
         closeAndroidPDialog();
-        LocationClient.setAgreePrivacy(true);
-        SDKInitializer.setAgreePrivacy(getApplicationContext(),true);
+        if(PreferenceManager.getInstance().isAgreeAgreement()) {
+            initSDK();
+        }
     }
 
     private void initThrowableHandler() {
@@ -48,14 +50,17 @@ public class DemoApplication extends Application implements Thread.UncaughtExcep
     }
 
     private void initHx() {
-        // 初始化PreferenceManager
-        PreferenceManager.init(this);
         // init hx sdk
         if(DemoHelper.getInstance().getAutoLogin()) {
             EMLog.i("DemoApplication", "application initHx");
             DemoHelper.getInstance().init(this);
         }
+    }
 
+    public void initSDK() {
+        initHx();
+        LocationClient.setAgreePrivacy(true);
+        SDKInitializer.setAgreePrivacy(getApplicationContext(),true);
     }
 
     private void registerActivityLifecycleCallbacks() {

@@ -40,6 +40,7 @@ import com.hyphenate.chatdemo.MainActivity;
 import com.hyphenate.chatdemo.R;
 import com.hyphenate.chatdemo.common.db.DemoDbHelper;
 import com.hyphenate.chatdemo.common.interfaceOrImplement.OnResourceParseCallback;
+import com.hyphenate.chatdemo.common.model.LoginResult;
 import com.hyphenate.chatdemo.common.utils.CustomCountDownTimer;
 import com.hyphenate.chatdemo.common.utils.PhoneNumberUtils;
 import com.hyphenate.chatdemo.section.dialog.DemoDialogFragment;
@@ -50,7 +51,6 @@ import com.hyphenate.chatdemo.section.base.BaseInitFragment;
 import com.hyphenate.chatdemo.section.login.viewmodels.LoginFragmentViewModel;
 import com.hyphenate.chatdemo.section.login.viewmodels.LoginViewModel;
 import com.hyphenate.easeui.domain.EaseUser;
-import com.hyphenate.util.EMLog;
 
 import java.util.Locale;
 
@@ -125,11 +125,11 @@ public class LoginFragment extends BaseInitFragment implements View.OnClickListe
         setRetainInstance(true);
         mFragmentViewModel = new ViewModelProvider(this).get(LoginFragmentViewModel.class);
         mFragmentViewModel.getLoginFromAppServeObservable().observe(this, response -> {
-            parseResource(response, new OnResourceParseCallback<String>(true) {
+            parseResource(response, new OnResourceParseCallback<LoginResult>(true) {
                 @Override
-                public void onSuccess(String data) {
+                public void onSuccess(LoginResult result) {
                     Log.e("login", "login success");
-                    EMClient.getInstance().loginWithToken(mUserPhone, data, new EMCallBack() {
+                    EMClient.getInstance().loginWithToken(result.getUsername(), result.getToken(), new EMCallBack() {
                         @Override
                         public void onSuccess() {
                             DemoDbHelper.getInstance(DemoApplication.getInstance()).initDb(mUserPhone);
@@ -141,7 +141,7 @@ public class LoginFragment extends BaseInitFragment implements View.OnClickListe
 
                         @Override
                         public void onError(int code, String error) {
-
+                            showToast(error);
                         }
                     });
                 }
@@ -157,7 +157,7 @@ public class LoginFragment extends BaseInitFragment implements View.OnClickListe
                 }
 
                 @Override
-                public void onLoading(String data) {
+                public void onLoading(LoginResult data) {
                     super.onLoading(data);
                     showLoading();
                 }
