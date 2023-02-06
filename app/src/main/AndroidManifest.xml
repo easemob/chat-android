@@ -106,18 +106,6 @@
             android:permission="android.permission.BIND_JOB_SERVICE"
             android:exported="true"
             />
-        <!-- 声明SDK所需的receiver -->
-        <receiver android:name="com.hyphenate.chat.EMMonitorReceiver">
-            <intent-filter>
-                <action android:name="android.intent.action.PACKAGE_REMOVED"/>
-                <data android:scheme="package"/>
-            </intent-filter>
-            <!-- 可选filter -->
-            <intent-filter>
-                <action android:name="android.intent.action.BOOT_COMPLETED"/>
-                <action android:name="android.intent.action.USER_PRESENT" />
-            </intent-filter>
-        </receiver>
 
         <!-- 适配Android 7.0, 需要将下方的com.hyphenate.chatdemo替换为你的app包名 -->
         <provider

@@ -27,8 +27,8 @@ android {
         applicationId "com.hyphenate.chatdemo"
         minSdkVersion 21
         targetSdkVersion 30
-        versionCode 99
-        versionName "3.9.9"
+        versionCode 100
+        versionName "4.0.0"
         multiDexEnabled true
         //为了兼容5.0以下使用vector图标
         vectorDrawables.useSupportLibrary = true
@@ -48,7 +48,7 @@ android {
         buildConfigField ("String", "APP_SERVER_PROTOCOL", "\"https\"")
         buildConfigField ("String", "APP_SERVER_DOMAIN", "\"a1.easemob.com\"")
         buildConfigField ("String", "APP_BASE_USER", "\"/inside/app/user/\"")
-        buildConfigField ("String", "APP_SERVER_LOGIN", "\"login/V1\"")
+        buildConfigField ("String", "APP_SERVER_LOGIN", "\"login/V2\"")
         buildConfigField ("String", "APP_SERVER_REGISTER", "\"register\"")
         buildConfigField ("String", "APP_SERVE_CHECK_RESET", "\"reset/password\"")
         buildConfigField ("String", "APP_SERVE_CHANGE_PWD", "\"/password\"")
@@ -168,16 +168,18 @@ dependencies {
     implementation 'com.tencent.bugly:crashreport:2.6.6.1'
     implementation 'com.tencent.bugly:nativecrashreport:3.3.1'
 
+    implementation 'pub.devrel:easypermissions:3.0.0'
+
     // EaseIMKit
 //    api (project(path: ':ease-im-kit'))
-    implementation 'io.hyphenate:ease-im-kit:3.9.9'
+    implementation 'io.hyphenate:ease-im-kit:4.0.0'
     // EaseIMKit依赖，必须添加环信IM SDK
 //    implementation project(path: ':hyphenatechatsdk')
-    implementation 'io.hyphenate:hyphenate-chat:3.9.9'
+    implementation 'io.hyphenate:hyphenate-chat:4.0.0'
 
     //EaseCallKit依赖，必须添加环信IM SDK
 //    api project(':ease-call-kit')
-    implementation 'io.hyphenate:ease-call-kit:3.9.9'
+    implementation 'io.hyphenate:ease-call-kit:4.0.0'
 
 }
 

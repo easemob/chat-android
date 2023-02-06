@@ -192,6 +192,10 @@ public class GroupSharedFilesActivity extends BaseInitActivity implements OnRefr
     }
 
     private void deleteFile(EMMucSharedFile file) {
+        if(file == null) {
+            showToast(R.string.em_err_file_not_exist);
+            return;
+        }
         viewModel.deleteFile(groupId, file);
     }
 
