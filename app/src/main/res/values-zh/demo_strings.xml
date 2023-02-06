@@ -193,6 +193,9 @@
     <string name="em_chat_group_detail_clear_history">清空聊天记录</string>
     <string name="em_chat_group_detail_clear_history_warning">您确认要清空所有聊天记录吗？</string>
     <string name="em_chat_group_detail_member_manage">群组管理</string>
+    <string name="em_chat_group_detail_member_attribute">我在群里的昵称</string>
+    <string name="em_chat_group_detail_member_input">请在这里输入内容</string>
+    <string name="em_chat_group_detail_member_tips">昵称修改后，只会在此群内显示，群内成员都可以看见。</string>
     <string name="em_chat_group_detail_introduction">群介绍</string>
     <string name="em_chat_group_detail_introduction_hint">请输入群介绍</string>
     <string name="em_chat_group_detail_not_disturb">消息免打扰</string>

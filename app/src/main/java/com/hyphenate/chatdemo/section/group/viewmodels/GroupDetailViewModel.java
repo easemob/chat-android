@@ -14,11 +14,13 @@ import com.hyphenate.chatdemo.common.net.Resource;
 import com.hyphenate.chatdemo.common.repositories.EMChatManagerRepository;
 import com.hyphenate.chatdemo.common.repositories.EMGroupManagerRepository;
 import com.hyphenate.chatdemo.common.repositories.EMPushManagerRepository;
+import com.hyphenate.chatdemo.section.group.MemberAttributeBean;
 import com.hyphenate.easeui.manager.EaseThreadManager;
 import com.hyphenate.exceptions.HyphenateException;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 public class GroupDetailViewModel extends AndroidViewModel {
     private EMGroupManagerRepository repository;
@@ -31,6 +33,10 @@ public class GroupDetailViewModel extends AndroidViewModel {
     private SingleSourceLiveData<Resource<Boolean>> unblockGroupMessage;
     private SingleSourceLiveData<Resource<Boolean>> clearHistoryObservable;
     private SingleSourceLiveData<Boolean> offPushObservable;
+    private SingleSourceLiveData<Resource<Map<String,MemberAttributeBean>>> groupMemberAttributeObservable;
+    private SingleSourceLiveData<Resource<Map<String,MemberAttributeBean>>> fetchMemberAttributeObservable;
+    private SingleSourceLiveData<Resource<Map<String,MemberAttributeBean>>> fetchMemberAttributesObservable;
+
 
 
     public GroupDetailViewModel(@NonNull Application application) {
@@ -45,6 +51,9 @@ public class GroupDetailViewModel extends AndroidViewModel {
         unblockGroupMessage = new SingleSourceLiveData<>();
         clearHistoryObservable = new SingleSourceLiveData<>();
         offPushObservable = new SingleSourceLiveData<>();
+        groupMemberAttributeObservable = new SingleSourceLiveData<>();
+        fetchMemberAttributeObservable = new SingleSourceLiveData<>();
+        fetchMemberAttributesObservable = new SingleSourceLiveData<>();
     }
 
     public LiveDataBus getMessageChangeObservable() {
@@ -64,6 +73,18 @@ public class GroupDetailViewModel extends AndroidViewModel {
         return announcementObservable;
     }
 
+    public LiveData<Resource<Map<String,MemberAttributeBean>>> getFetchMemberAttributeObservable() {
+        return fetchMemberAttributeObservable;
+    }
+
+    public LiveData<Resource<Map<String,MemberAttributeBean>>> getFetchMemberAttributesObservable() {
+        return fetchMemberAttributesObservable;
+    }
+
+    public LiveData<Resource<Map<String,MemberAttributeBean>>> setMemberAttributeObservable() {
+        return groupMemberAttributeObservable;
+    }
+
     public void getGroupAnnouncement(String groupId) {
         announcementObservable.setSource(repository.getGroupAnnouncement(groupId));
     }
@@ -78,6 +99,18 @@ public class GroupDetailViewModel extends AndroidViewModel {
 
     public void setGroupAnnouncement(String groupId, String announcement) {
         refreshObservable.setSource(repository.setGroupAnnouncement(groupId, announcement));
+    }
+
+    public void setGroupMemberNickName(String groupId, String userId,String nickName){
+        groupMemberAttributeObservable.setSource(repository.setGroupMemberNickName(groupId,userId,nickName));
+    }
+
+    public void fetchGroupMemberAttribute(String groupId, String userId){
+        fetchMemberAttributeObservable.setSource(repository.fetchGroupMemberDetail(groupId,userId));
+    }
+
+    public void fetchGroupMemberAttribute(String groupId, List<String> userList){
+        fetchMemberAttributesObservable.setSource(repository.fetchGroupMemberDetail(groupId,userList));
     }
 
     public void setGroupDescription(String groupId, String description) {

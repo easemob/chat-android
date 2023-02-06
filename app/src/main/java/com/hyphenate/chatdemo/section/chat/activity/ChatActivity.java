@@ -12,7 +12,10 @@ import androidx.lifecycle.ViewModelProvider;
 import com.google.android.material.snackbar.Snackbar;
 import com.hyphenate.chat.EMChatRoom;
 import com.hyphenate.chat.EMClient;
+import com.hyphenate.chat.EMCmdMessageBody;
 import com.hyphenate.chat.EMConversation;
+import com.hyphenate.chat.EMCustomMessageBody;
+import com.hyphenate.chat.EMMessage;
 import com.hyphenate.chatdemo.DemoHelper;
 import com.hyphenate.chatdemo.R;
 import com.hyphenate.chatdemo.common.constant.DemoConstant;
@@ -22,22 +25,37 @@ import com.hyphenate.chatdemo.section.chat.fragment.ChatFragment;
 import com.hyphenate.chatdemo.section.chat.viewmodel.ChatViewModel;
 import com.hyphenate.chatdemo.section.chat.viewmodel.MessageViewModel;
 import com.hyphenate.chatdemo.section.group.GroupHelper;
+import com.hyphenate.chatdemo.section.group.MemberAttributeBean;
 import com.hyphenate.chatdemo.section.group.activity.ChatRoomDetailActivity;
 import com.hyphenate.chatdemo.section.group.activity.GroupDetailActivity;
+import com.hyphenate.chatdemo.section.group.viewmodels.GroupDetailViewModel;
 import com.hyphenate.easeui.EaseIM;
 import com.hyphenate.easeui.constants.EaseConstant;
 import com.hyphenate.easeui.domain.EaseUser;
 import com.hyphenate.easeui.model.EaseEvent;
+import com.hyphenate.easeui.modules.chat.EaseChatMessageListLayout;
 import com.hyphenate.easeui.provider.EaseUserProfileProvider;
 import com.hyphenate.easeui.widget.EaseTitleBar;
+import com.hyphenate.util.EMLog;
 
-public class ChatActivity extends BaseInitActivity implements EaseTitleBar.OnBackPressListener, EaseTitleBar.OnRightClickListener, ChatFragment.OnFragmentInfoListener {
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+public class ChatActivity extends BaseInitActivity implements EaseTitleBar.OnBackPressListener, EaseTitleBar.OnRightClickListener, ChatFragment.OnFragmentInfoListener, EaseChatMessageListLayout.OnChatListSlideListener, ChatFragment.OnRangeListener, ChatFragment.onChatLayoutLifeCycle {
     private EaseTitleBar titleBarMessage;
     private String conversationId;
     private int chatType;
     private ChatFragment fragment;
     private String historyMsgId;
     private ChatViewModel viewModel;
+    private GroupDetailViewModel groupViewModel;
+    private final List<String> userList = new ArrayList<>();
+    private final List<String> defaultUserList = new ArrayList<>();
+    private final Map<String,String> userMap  = new HashMap<>();
+    private final Map<String,String> defaultUserMap = new HashMap<>();
+    private EMConversation conversation;
 
     public static void actionStart(Context context, String conversationId, int chatType) {
         Intent intent = new Intent(context, ChatActivity.class);
@@ -92,6 +110,8 @@ public class ChatActivity extends BaseInitActivity implements EaseTitleBar.OnBac
         titleBarMessage.setOnBackPressListener(this);
         titleBarMessage.setOnRightClickListener(this);
         fragment.setOnFragmentInfoListener(this);
+        fragment.setOnCurrentScreenRangeListener(this);
+        fragment.setOnChatLayoutReadyListener(this);
     }
 
     @Override
@@ -107,8 +127,9 @@ public class ChatActivity extends BaseInitActivity implements EaseTitleBar.OnBac
     @Override
     protected void initData() {
         super.initData();
-        EMConversation conversation = EMClient.getInstance().chatManager().getConversation(conversationId);
+        conversation = EMClient.getInstance().chatManager().getConversation(conversationId);
         MessageViewModel messageViewModel = new ViewModelProvider(this).get(MessageViewModel.class);
+        groupViewModel = new ViewModelProvider(this).get(GroupDetailViewModel.class);
         viewModel = new ViewModelProvider(this).get(ChatViewModel.class);
         viewModel.getDeleteObservable().observe(this, response -> {
             parseResource(response, new OnResourceParseCallback<Boolean>() {
@@ -117,6 +138,22 @@ public class ChatActivity extends BaseInitActivity implements EaseTitleBar.OnBac
                     finish();
                     EaseEvent event = EaseEvent.create(DemoConstant.CONVERSATION_DELETE, EaseEvent.TYPE.MESSAGE);
                     messageViewModel.setMessageChange(event);
+                }
+            });
+        });
+        groupViewModel.getFetchMemberAttributesObservable().observe(this,response ->{
+            parseResource(response, new OnResourceParseCallback<Map<String,MemberAttributeBean>>() {
+                @Override
+                public void onSuccess(@Nullable Map<String,MemberAttributeBean> bean) {
+                    if (bean != null){
+                        for (Map.Entry<String, MemberAttributeBean> entry : bean.entrySet()) {
+                            DemoHelper.getInstance().saveMemberAttribute(conversationId,entry.getKey(),entry.getValue());
+                        }
+                    }
+                    clear();
+                    if (fragment != null && fragment.chatLayout != null && fragment.chatLayout.getChatMessageListLayout() != null){
+                        fragment.chatLayout.getChatMessageListLayout().refreshMessages();
+                    }
                 }
             });
         });
@@ -226,6 +263,88 @@ public class ChatActivity extends BaseInitActivity implements EaseTitleBar.OnBac
             titleBarMessage.setTitle(getString(com.hyphenate.easeui.R.string.alert_during_typing));
         }else if(TextUtils.equals(action, "TypingEnd")) {
             setDefaultTitle();
+        }
+    }
+
+    @Override
+    public void onCurrentScreenRange(int start, int end) {
+        MemberAttributeBean bean;
+        for (int i = start; i <= end; i++) {
+            EMMessage message = fragment.chatLayout.getChatMessageListLayout().getMessageAdapter().getItem(i);
+            if (message != null && message.getBody() != null){
+                if (message.getBody() instanceof EMCmdMessageBody || message.getBody() instanceof EMCustomMessageBody) break;
+                bean = DemoHelper.getInstance().getMemberAttribute(conversationId,message.getFrom());
+                if (bean == null){
+                    userMap.put(message.getFrom(),"nickName");
+                }else{
+                    if (TextUtils.isEmpty(bean.getNickName())){
+                        userMap.put(message.getFrom(),"nickName");
+                    }
+                }
+            }
+        }
+        for (Map.Entry<String, String> entry : userMap.entrySet()) {
+            userList.add(entry.getKey());
+        }
+        EMLog.d("ChatActivity", "userList : " + conversationId + " - "+ userList.toString());
+        if (userList.size() == 0) return;
+        groupViewModel.fetchGroupMemberAttribute(conversationId,userList);
+    }
+
+    private void getDefaultMemberData(){
+        int count = 10;
+        if (conversation != null){
+            List<EMMessage> messages = conversation.getAllMessages();
+            if (messages != null && messages.size() > 0){
+                if (messages.size() <= count){
+                    for (EMMessage message : messages) {
+                        if (message.getBody() instanceof EMCmdMessageBody || message.getBody() instanceof EMCustomMessageBody) break;
+                        parseMessage(message,defaultUserMap);
+                    }
+                }else {
+                    for (int i = 1; i <= count; i++) {
+                        EMMessage message = messages.get(messages.size()-i);
+                        if (message != null){
+                            if (message.getBody() instanceof EMCmdMessageBody || message.getBody() instanceof EMCustomMessageBody) break;
+                            parseMessage(message,defaultUserMap);
+                        }
+                    }
+                }
+            }
+        }
+        for (Map.Entry<String, String> entry : defaultUserMap.entrySet()) {
+            defaultUserList.add(entry.getKey());
+        }
+        EMLog.d("ChatActivity", "defaultUserList : " + conversationId + " - "+ defaultUserList.toString());
+        if (defaultUserList.size() == 0) return;
+        groupViewModel.fetchGroupMemberAttribute(conversationId,defaultUserList);
+    }
+
+    private void parseMessage(EMMessage message, Map<String,String> defaultUserMap){
+        MemberAttributeBean bean;
+        bean = DemoHelper.getInstance().getMemberAttribute(conversationId,message.getFrom());
+        if (bean == null){
+            defaultUserMap.put(message.getFrom(),"nickName");
+        }else{
+            if (TextUtils.isEmpty(bean.getNickName())){
+                defaultUserMap.put(message.getFrom(),"nickName");
+            }
+        }
+    }
+
+    private void clear(){
+        userList.clear();
+        userMap.clear();
+        defaultUserList.clear();
+        defaultUserMap.clear();
+    }
+
+    @Override
+    public void onFragmentReady() {
+        EMLog.d("ChatActivity","onFragmentReady");
+        if (conversation != null && conversation.getType() == EMConversation.EMConversationType.GroupChat
+                && DemoHelper.getInstance().isFirstTabByGroup(conversationId)){
+            getDefaultMemberData();
         }
     }
 }

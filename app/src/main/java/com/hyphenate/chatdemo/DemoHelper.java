@@ -13,8 +13,6 @@ import android.util.Log;
 import android.util.Pair;
 import android.widget.Toast;
 
-import com.baidu.location.LocationClient;
-import com.baidu.mapapi.SDKInitializer;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailabilityLight;
 import com.heytap.msp.push.HeytapPushManager;
@@ -29,6 +27,8 @@ import com.hyphenate.chat.EMMessage;
 import com.hyphenate.chat.EMOptions;
 import com.hyphenate.chat.EMPushManager;
 import com.hyphenate.chat.EMTranslateParams;
+import com.hyphenate.chatdemo.section.group.GroupHelper;
+import com.hyphenate.chatdemo.section.group.MemberAttributeBean;
 import com.hyphenate.cloud.EMHttpClient;
 import com.hyphenate.easecallkit.EaseCallKit;
 import com.hyphenate.easecallkit.base.EaseCallEndReason;
@@ -118,6 +118,7 @@ public class DemoHelper {
     private FetchUserRunnable fetchUserRunnable;
     private Thread fetchUserTread;
     private FetchUserInfoList fetchUserInfoList;
+    private String currentGroupId;
 
 
     private DemoHelper() {}
@@ -401,8 +402,14 @@ public class DemoHelper {
         // To get instance of EaseUser, here we get it from the user list in memory
         // You'd better cache it if you get it from your server
         EaseUser user = null;
-        if(username.equals(EMClient.getInstance().getCurrentUser()))
-            return getUserProfileManager().getCurrentUserInfo();
+        MemberAttributeBean groupBean = DemoHelper.getInstance().getMemberAttribute(currentGroupId,username);
+        if(username.equals(EMClient.getInstance().getCurrentUser())){
+            user = getUserProfileManager().getCurrentUserInfo();
+            if (groupBean != null && !TextUtils.isEmpty(groupBean.getNickName())){
+                user.setNickname(groupBean.getNickName());
+            }
+            return user;
+        }
         user = getContactList().get(username);
         if(user == null){
             //找不到更新会话列表 继续查找
@@ -413,7 +420,11 @@ public class DemoHelper {
                 if(fetchUserInfoList != null){
                     fetchUserInfoList.addUserId(username);
                 }
+                user = new EaseUser(username);
             }
+        }
+        if (groupBean != null && !TextUtils.isEmpty(groupBean.getNickName())){
+            user.setNickname(groupBean.getNickName());
         }
         return user;
     }
@@ -615,6 +626,7 @@ public class DemoHelper {
         DemoDbHelper.getInstance(DemoApplication.getInstance()).closeDb();
         getUserProfileManager().reset();
         EMClient.getInstance().translationManager().logout();
+        DemoHelper.getInstance().clearAllMemberAttribute();
     }
 
     public EaseAvatarOptions getEaseAvatarOptions() {
@@ -1044,5 +1056,33 @@ public class DemoHelper {
          * @param success true：data sync successful，false: failed to sync data
          */
         void onSyncComplete(boolean success);
+    }
+
+    public void saveMemberAttribute(String groupId,String userName,MemberAttributeBean bean){
+        GroupHelper.saveMemberAttribute(groupId,userName,bean);
+    }
+
+    public MemberAttributeBean getMemberAttribute(String groupId,String userName){
+        return GroupHelper.getMemberAttribute(groupId,userName);
+    }
+
+    public void clearGroupMemberAttribute(String groupId){
+        GroupHelper.clearGroupMemberAttribute(groupId);
+    }
+
+    public void clearAllMemberAttribute(){
+        GroupHelper.clearAllMemberAttribute();
+    }
+
+    public boolean isFirstTabByGroup(String groupId){
+        return GroupHelper.isFirstTabByGroup(groupId);
+    }
+
+    public void setFirstTab(String groupId){
+        GroupHelper.setFirstTab(groupId);
+    }
+
+    public void setCurrentGroupId(String groupId){
+        this.currentGroupId = groupId;
     }
 }

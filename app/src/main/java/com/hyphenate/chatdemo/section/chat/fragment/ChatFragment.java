@@ -60,7 +60,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 
-public class ChatFragment extends EaseChatFragment implements OnRecallMessageResultListener {
+public class ChatFragment extends EaseChatFragment implements OnRecallMessageResultListener, EaseChatMessageListLayout.OnChatListSlideListener {
     private static final String TAG = ChatFragment.class.getSimpleName();
     private static final int REQUEST_CODE_SELECT_USER_CARD = 20;
     private MessageViewModel viewModel;
@@ -78,6 +78,8 @@ public class ChatFragment extends EaseChatFragment implements OnRecallMessageRes
             DemoApplication.getInstance().getApplicationContext().getString(R.string.tab_other),
     };
     private OnFragmentInfoListener infoListener;
+    private OnRangeListener rangeListener;
+    private onChatLayoutLifeCycle chatLayoutLifeCycle;
     private Dialog dialog;
 
     @Override
@@ -90,6 +92,8 @@ public class ChatFragment extends EaseChatFragment implements OnRecallMessageRes
         //设置聊天列表背景
 //      messageListLayout.setBackground(new ColorDrawable(Color.parseColor("#DA5A4D")));
         messageListLayout.setBackgroundResource(R.drawable.demo_caht_bitmap_bg);
+        //设置是否显示昵称
+        messageListLayout.showNickname(true);
         //设置默认头像
         //messageListLayout.setAvatarDefaultSrc(ContextCompat.getDrawable(mContext, R.drawable.ease_default_avatar));
         //设置头像形状
@@ -165,6 +169,7 @@ public class ChatFragment extends EaseChatFragment implements OnRecallMessageRes
     public void initListener() {
         super.initListener();
         chatLayout.setOnRecallMessageResultListener(this);
+        chatLayout.getChatMessageListLayout().setCurrentScreenRangeListener(this);
     }
 
     @Override
@@ -172,6 +177,12 @@ public class ChatFragment extends EaseChatFragment implements OnRecallMessageRes
         super.initData();
         resetChatExtendMenu();
         addItemMenuAction();
+
+        if (chatType == EaseConstant.CHATTYPE_GROUP){
+            DemoHelper.getInstance().setCurrentGroupId(conversationId);
+        }else {
+            DemoHelper.getInstance().setCurrentGroupId("");
+        }
 
         chatLayout.getChatInputMenu().getPrimaryMenu().getEditText().setText(getUnSendMsg());
         chatLayout.turnOnTypingMonitor(DemoHelper.getInstance().getModel().isShowMsgTyping());
@@ -231,6 +242,17 @@ public class ChatFragment extends EaseChatFragment implements OnRecallMessageRes
                 chatLayout.getChatMessageListLayout().refreshMessages();
             }
         });
+
+        LiveDataBus.get().with(DemoConstant.GROUP_MEMBER_ATTRIBUTE_CHANGE, EaseEvent.class).observe(getViewLifecycleOwner(), event -> {
+            if(event == null) {
+                return;
+            }
+            if(event != null) {
+                chatLayout.getChatMessageListLayout().refreshMessages();
+            }
+        });
+        if (chatLayoutLifeCycle != null)
+        chatLayoutLifeCycle.onFragmentReady();
     }
 
     private void showDeliveryDialog() {
@@ -561,6 +583,10 @@ public class ChatFragment extends EaseChatFragment implements OnRecallMessageRes
             }).show();
     }
 
+    public void setOnCurrentScreenRangeListener(OnRangeListener listener){
+        this.rangeListener = listener;
+    }
+
     public void setOnFragmentInfoListener(OnFragmentInfoListener listener) {
         this.infoListener = listener;
     }
@@ -577,6 +603,23 @@ public class ChatFragment extends EaseChatFragment implements OnRecallMessageRes
         if(dialog != null && dialog.isShowing()) {
             dialog.dismiss();
         }
+    }
+
+    @Override
+    public void onCurrentScreenRange(int start, int end) {
+        rangeListener.onCurrentScreenRange(start,end);
+    }
+
+    public interface OnRangeListener{
+        void onCurrentScreenRange(int start, int end);
+    }
+
+    public void setOnChatLayoutReadyListener(onChatLayoutLifeCycle listener){
+        this.chatLayoutLifeCycle = listener;
+    }
+
+    public interface onChatLayoutLifeCycle{
+        void onFragmentReady();
     }
 
     public interface OnFragmentInfoListener {

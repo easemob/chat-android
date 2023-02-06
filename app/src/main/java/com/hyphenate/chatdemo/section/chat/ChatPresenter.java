@@ -41,8 +41,10 @@ import com.hyphenate.chatdemo.common.manager.PushAndMessageHelper;
 import com.hyphenate.chatdemo.common.repositories.EMContactManagerRepository;
 import com.hyphenate.chatdemo.common.repositories.EMGroupManagerRepository;
 import com.hyphenate.chatdemo.common.repositories.EMPushManagerRepository;
+import com.hyphenate.chatdemo.common.utils.GsonTools;
 import com.hyphenate.chatdemo.section.chat.activity.ChatActivity;
 import com.hyphenate.chatdemo.section.group.GroupHelper;
+import com.hyphenate.chatdemo.section.group.MemberAttributeBean;
 import com.hyphenate.easeui.domain.EaseUser;
 import com.hyphenate.easeui.interfaces.EaseGroupListener;
 import com.hyphenate.easeui.manager.EaseAtMessageHelper;
@@ -52,6 +54,9 @@ import com.hyphenate.easeui.model.EaseEvent;
 import com.hyphenate.exceptions.HyphenateException;
 import com.hyphenate.util.EMLog;
 
+import org.json.JSONObject;
+
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Queue;
@@ -667,6 +672,18 @@ public class ChatPresenter extends EaseChatPresenter {
             showToast(context.getString(R.string.demo_group_listener_onSharedFileDeleted, fileId));
             EMLog.i(TAG, context.getString(R.string.demo_group_listener_onSharedFileDeleted, fileId));
         }
+
+        @Override
+        public void onMetaChangedOfGroupMember(String groupId, Map<String, String> attribute, String from) {
+            if ( attribute != null && attribute.size() > 0){
+                EMLog.d(TAG,"onMetaChangedOfGroupMember: " + groupId +" - "+ attribute.toString());
+                MemberAttributeBean bean = GsonTools.changeGsonToBean(new JSONObject(attribute).toString(),MemberAttributeBean.class);
+                if (bean != null && bean.getNickName() != null){
+                    DemoHelper.getInstance().saveMemberAttribute(groupId,from,bean);
+                }
+                LiveDataBus.get().with(DemoConstant.GROUP_MEMBER_ATTRIBUTE_CHANGE).postValue(EaseEvent.create(DemoConstant.GROUP_MEMBER_ATTRIBUTE_CHANGE, EaseEvent.TYPE.MESSAGE));
+            }
+        }
     }
 
     private class ChatContactListener implements EMContactListener {
@@ -1025,6 +1042,25 @@ public class ChatPresenter extends EaseChatPresenter {
                     saveGroupNotification(groupId, /*groupName*/"",  /*person*/usernames.get(0), /*reason*/"", InviteMessageStatus.MULTI_DEVICE_GROUP_REMOVE_MUTE);
 
                     showToast("GROUP_REMOVE_MUTE");
+                    break;
+                case GROUP_METADATA_CHANGED:
+                    List<String> list = new ArrayList<>();
+                    list.add("nickName");
+                    EMClient.getInstance().groupManager().asyncFetchMembersAttributes(groupId, usernames,list,new EMValueCallBack<Map<String, Map<String, String>>>() {
+                        @Override
+                        public void onSuccess(Map<String, Map<String, String>> value) {
+                            for (Map.Entry<String, Map<String, String>> entry : value.entrySet()) {
+                                MemberAttributeBean bean = GsonTools.changeGsonToBean(new JSONObject(entry.getValue()).toString(),MemberAttributeBean.class);
+                                if (bean != null && !TextUtils.isEmpty(bean.getNickName()))
+                                DemoHelper.getInstance().saveMemberAttribute(groupId,entry.getKey(),bean);
+                            }
+                        }
+
+                        @Override
+                        public void onError(int code, String error) {
+                            EMLog.d(TAG,"asyncFetchMembersAttributes onError" + code +" "+error );
+                        }
+                    });
                     break;
                 default:
                     break;

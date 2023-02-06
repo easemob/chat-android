@@ -17,6 +17,7 @@ import com.hyphenate.chatdemo.R;
 import com.hyphenate.chatdemo.common.constant.DemoConstant;
 import com.hyphenate.chatdemo.common.interfaceOrImplement.OnResourceParseCallback;
 import com.hyphenate.chatdemo.common.livedatas.LiveDataBus;
+import com.hyphenate.chatdemo.common.utils.FastClickUtils;
 import com.hyphenate.chatdemo.common.widget.ArrowItemView;
 import com.hyphenate.chatdemo.common.widget.SwitchItemView;
 import com.hyphenate.chatdemo.section.base.BaseInitActivity;
@@ -24,7 +25,9 @@ import com.hyphenate.chatdemo.section.dialog.DemoDialogFragment;
 import com.hyphenate.chatdemo.section.dialog.EditTextDialogFragment;
 import com.hyphenate.chatdemo.section.dialog.SimpleDialogFragment;
 import com.hyphenate.chatdemo.section.group.GroupHelper;
+import com.hyphenate.chatdemo.section.group.MemberAttributeBean;
 import com.hyphenate.chatdemo.section.group.fragment.GroupEditFragment;
+import com.hyphenate.chatdemo.section.group.fragment.GroupMemberDetailFragment;
 import com.hyphenate.chatdemo.section.group.viewmodels.GroupDetailViewModel;
 import com.hyphenate.chatdemo.section.search.SearchGroupChatActivity;
 import com.hyphenate.easeui.model.EaseEvent;
@@ -33,6 +36,7 @@ import com.hyphenate.easeui.widget.EaseImageView;
 import com.hyphenate.easeui.widget.EaseTitleBar;
 
 import java.util.List;
+import java.util.Map;
 
 public class GroupDetailActivity extends BaseInitActivity implements EaseTitleBar.OnBackPressListener, View.OnClickListener, SwitchItemView.OnCheckedChangeListener {
     private static final int REQUEST_CODE_ADD_USER = 0;
@@ -48,6 +52,7 @@ public class GroupDetailActivity extends BaseInitActivity implements EaseTitleBa
     private ArrowItemView itemGroupNotice;
     private ArrowItemView itemGroupIntroduction;
     private ArrowItemView itemGroupMemberManage;
+    private ArrowItemView itemGroupMemberAttribute;
     private ArrowItemView itemGroupHistory;
     private ArrowItemView itemGroupClearHistory;
     private SwitchItemView itemGroupNotDisturb;
@@ -58,6 +63,7 @@ public class GroupDetailActivity extends BaseInitActivity implements EaseTitleBa
     private EMGroup group;
     private GroupDetailViewModel viewModel;
     private EMConversation conversation;
+    private MemberAttributeBean memberAttributeBean;
 
     public static void actionStart(Context context, String groupId) {
         Intent intent = new Intent(context, GroupDetailActivity.class);
@@ -97,9 +103,11 @@ public class GroupDetailActivity extends BaseInitActivity implements EaseTitleBa
         itemGroupTop = findViewById(R.id.item_group_top);
         tvGroupRefund = findViewById(R.id.tv_group_refund);
         itemGroupMemberManage = findViewById(R.id.item_group_member_manage);
+        itemGroupMemberAttribute = findViewById(R.id.item_group_member_attribute);
 
         group = DemoHelper.getInstance().getGroupManager().getGroup(groupId);
         initGroupView();
+        memberAttributeBean = DemoHelper.getInstance().getMemberAttribute(groupId,DemoHelper.getInstance().getCurrentUser());
     }
 
     @Override
@@ -120,6 +128,7 @@ public class GroupDetailActivity extends BaseInitActivity implements EaseTitleBa
         itemGroupTop.setOnCheckedChangeListener(this);
         tvGroupRefund.setOnClickListener(this);
         itemGroupMemberManage.setOnClickListener(this);
+        itemGroupMemberAttribute.setOnClickListener(this);
     }
 
     private void initGroupView() {
@@ -193,6 +202,7 @@ public class GroupDetailActivity extends BaseInitActivity implements EaseTitleBa
                 @Override
                 public void onSuccess(Boolean data) {
                     finish();
+                    DemoHelper.getInstance().clearGroupMemberAttribute(groupId);
                     LiveDataBus.get().with(DemoConstant.GROUP_CHANGE).postValue(EaseEvent.create(DemoConstant.GROUP_LEAVE, EaseEvent.TYPE.GROUP, groupId));
                 }
             });
@@ -226,12 +236,42 @@ public class GroupDetailActivity extends BaseInitActivity implements EaseTitleBa
                 }
             });
         });
+        viewModel.getFetchMemberAttributeObservable().observe(this,response ->{
+            parseResource(response, new OnResourceParseCallback<Map<String,MemberAttributeBean>>() {
+                @Override
+                public void onSuccess(@Nullable Map<String,MemberAttributeBean> data) {
+                    if (data != null){
+                        DemoHelper.getInstance().setFirstTab(groupId);
+                        for (Map.Entry<String, MemberAttributeBean> entry : data.entrySet()) {
+                            DemoHelper.getInstance().saveMemberAttribute(groupId,entry.getKey(),entry.getValue());
+                            memberAttributeBean = DemoHelper.getInstance().getMemberAttribute(groupId,entry.getKey());
+                        }
+                    }
+                }
+            });
+        });
+        viewModel.setMemberAttributeObservable().observe(this,response -> {
+            parseResource(response, new OnResourceParseCallback<Map<String,MemberAttributeBean>>() {
+                @Override
+                public void onSuccess(@Nullable Map<String,MemberAttributeBean> data) {
+                    if (data != null){
+                        for (Map.Entry<String, MemberAttributeBean> entry : data.entrySet()) {
+                            DemoHelper.getInstance().saveMemberAttribute(groupId,entry.getKey(),entry.getValue());
+                            memberAttributeBean = DemoHelper.getInstance().getMemberAttribute(groupId,entry.getKey());
+                        }
+                    }
+                }
+            });
+        });
         loadGroup();
     }
 
     private void loadGroup() {
         viewModel.getGroup(groupId);
         viewModel.getGroupAnnouncement(groupId);
+        if (DemoHelper.getInstance().isFirstTabByGroup(groupId)){
+            viewModel.fetchGroupMemberAttribute(groupId,DemoHelper.getInstance().getCurrentUser());
+        }
     }
 
     @Override
@@ -266,6 +306,8 @@ public class GroupDetailActivity extends BaseInitActivity implements EaseTitleBa
                 break;
             case R.id.item_group_member_manage://群组管理
                 GroupManageIndexActivity.actionStart(mContext, groupId);
+            case R.id.item_group_member_attribute://我在群里的昵称
+                showGroupMemberDetailDialog();
                 break;
         }
     }
@@ -354,6 +396,20 @@ public class GroupDetailActivity extends BaseInitActivity implements EaseTitleBa
                     }
                 });
     }
+
+    private void showGroupMemberDetailDialog() {
+        GroupMemberDetailFragment.showDialog(mContext,
+                getString(R.string.em_chat_group_detail_member_attribute),
+                memberAttributeBean != null ? memberAttributeBean.getNickName() : "",
+                getString(R.string.em_chat_group_detail_member_input),
+                (view, content) -> {
+                    if (FastClickUtils.isFastClick(view,1000)) return;
+                    //修改我在群里的昵称
+                    viewModel.setGroupMemberNickName(groupId,DemoHelper.getInstance().getCurrentUser(), content);
+                }
+        );
+    }
+
 
     private void showIntroductionDialog() {
         GroupEditFragment.showDialog(mContext,

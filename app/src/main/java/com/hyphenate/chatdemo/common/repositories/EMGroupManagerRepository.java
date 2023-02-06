@@ -19,11 +19,14 @@ import com.hyphenate.chatdemo.common.db.entity.EmUserEntity;
 import com.hyphenate.chatdemo.common.interfaceOrImplement.ResultCallBack;
 import com.hyphenate.chatdemo.common.net.ErrorCode;
 import com.hyphenate.chatdemo.common.net.Resource;
+import com.hyphenate.chatdemo.common.utils.GsonTools;
+import com.hyphenate.chatdemo.section.group.MemberAttributeBean;
 import com.hyphenate.easeui.manager.EaseThreadManager;
 import com.hyphenate.easeui.domain.EaseUser;
 import com.hyphenate.easeui.utils.EaseCommonUtils;
 import com.hyphenate.exceptions.HyphenateException;
 
+import org.json.JSONObject;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -622,6 +625,104 @@ public class EMGroupManagerRepository extends BaseEMRepository{
                     @Override
                     public void onProgress(int progress, String status) {
 
+                    }
+                });
+            }
+        }.asLiveData();
+    }
+
+    /**
+     * 设置我在群里的昵称
+     * @param groupId
+     * @param userId
+     * @param nickName
+     * @return
+     */
+    public LiveData<Resource<Map<String,MemberAttributeBean>>> setGroupMemberNickName(String groupId, String userId,String nickName) {
+        return new NetworkOnlyResource<Map<String,MemberAttributeBean>>() {
+            @Override
+            protected void createCall(@NonNull ResultCallBack<LiveData<Map<String,MemberAttributeBean>>> callBack) {
+                getGroupManager().asyncSetMemberAttribute(groupId, userId, "nickName", nickName, new EMCallBack() {
+                    @Override
+                    public void onSuccess() {
+                        Map<String,MemberAttributeBean> result = new HashMap<>();
+                        MemberAttributeBean bean = new MemberAttributeBean();
+                        bean.setNickName(nickName);
+                        result.put(userId,bean);
+                        callBack.onSuccess(createLiveData(result));
+                    }
+
+                    @Override
+                    public void onError(int code, String error) {
+                        callBack.onError(code, error);
+                    }
+                });
+            }
+        }.asLiveData();
+    }
+
+    /**
+     * 获取我在群里的属性
+     * @param groupId
+     * @param userId
+     * @return
+     */
+    public LiveData<Resource<Map<String,MemberAttributeBean>>> fetchGroupMemberDetail(String groupId, String userId) {
+        return new NetworkOnlyResource<Map<String,MemberAttributeBean>>() {
+            @Override
+            protected void createCall(@NonNull ResultCallBack<LiveData<Map<String,MemberAttributeBean>>> callBack) {
+                getGroupManager().asyncFetchMemberAllAttribute(groupId, userId, new EMValueCallBack<Map<String, Map<String, String>>>() {
+                    @Override
+                    public void onSuccess(Map<String, Map<String, String>> value) {
+                        if (value != null){
+                            Map<String,MemberAttributeBean> result = new HashMap<>();
+                            Map<String, String> map = value.get(userId);
+                            if (map != null){
+                                result.put(userId,GsonTools.changeGsonToBean(new JSONObject(map).toString(),MemberAttributeBean.class));
+                                callBack.onSuccess(createLiveData(result));
+                            }
+                        }
+                    }
+
+                    @Override
+                    public void onError(int code, String error) {
+                        callBack.onError(code, error);
+                    }
+                });
+            }
+        }.asLiveData();
+    }
+
+    /**
+     * 获取多个成员在群里的昵称属性
+     * @param groupId
+     * @param userList
+     * @return
+     */
+    public LiveData<Resource<Map<String,MemberAttributeBean>>> fetchGroupMemberDetail(String groupId,List<String> userList ) {
+        return new NetworkOnlyResource<Map<String,MemberAttributeBean>>() {
+            @Override
+            protected void createCall(@NonNull ResultCallBack<LiveData<Map<String,MemberAttributeBean>>> callBack) {
+                List<String> keyList = new ArrayList<>();
+                keyList.add("nickName");
+                Map<String,MemberAttributeBean> result = new HashMap<>();
+                getGroupManager().asyncFetchMembersAttributes(groupId, userList,keyList, new EMValueCallBack<Map<String, Map<String, String>>>() {
+                    @Override
+                    public void onSuccess(Map<String, Map<String, String>> value) {
+                        if (value != null){
+                            for (String user : userList) {
+                                Map<String,String> map = value.get(user);
+                                if (map != null){
+                                    result.put(user,GsonTools.changeGsonToBean(new JSONObject(map).toString(),MemberAttributeBean.class));
+                                }
+                            }
+                            callBack.onSuccess(createLiveData(result));
+                        }
+                    }
+
+                    @Override
+                    public void onError(int code, String error) {
+                        callBack.onError(code, error);
                     }
                 });
             }

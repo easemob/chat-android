@@ -6,10 +6,16 @@ import com.hyphenate.chat.EMChatRoom;
 import com.hyphenate.chat.EMClient;
 import com.hyphenate.chat.EMGroup;
 import com.hyphenate.chatdemo.DemoHelper;
+import com.hyphenate.util.EMLog;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class GroupHelper {
+    private static final Map<String,Boolean> isFirstTab = new HashMap<>();
+    private static final Map<String,Map<String,MemberAttributeBean>> groupMemberAttribute = new HashMap<>();
+    private static final Map<String,MemberAttributeBean> map = new HashMap<>();
 
     /**
      * 是否是群主
@@ -143,4 +149,79 @@ public class GroupHelper {
         }
         return false;
     }
+
+    /**
+     * 存储群组成员属性
+     * @param groupId
+     * @param userName
+     * @param bean
+     */
+    public static void saveMemberAttribute(String groupId,String userName,MemberAttributeBean bean){
+        map.put(userName,bean);
+        for (Map.Entry<String, MemberAttributeBean> entry : map.entrySet()) {
+            EMLog.d("apex-wt","saveMap:  \n"+  "userId: " +entry.getKey() + " getNickName: " + entry.getValue().getNickName());
+        }
+        groupMemberAttribute.put(groupId,map);
+    }
+
+    /**
+     * 获取群组成员属性
+     * @param groupId
+     * @param userId
+     * @return
+     */
+    public static MemberAttributeBean getMemberAttribute(String groupId,String userId){
+        MemberAttributeBean attributeBean = null;
+        for (Map.Entry<String, Map<String, MemberAttributeBean>> entry : groupMemberAttribute.entrySet()) {
+            Map<String, MemberAttributeBean> map = entry.getValue();
+            String key = entry.getKey();
+            for (Map.Entry<String, MemberAttributeBean> beanEntry : map.entrySet()) {
+                EMLog.d("apex-wt", "groupMemberAttribute: " + "\n" + "groupId: " + key+ " userId: " + beanEntry.getKey() + " getNickName: " + beanEntry.getValue().getNickName());
+            }
+        }
+        if (!TextUtils.isEmpty(groupId) && !TextUtils.isEmpty(userId)){
+            for (Map.Entry<String, Map<String, MemberAttributeBean>> entry : groupMemberAttribute.entrySet()) {
+                EMLog.d("apex-wt","groupMemberAttribute key: " + entry.getKey());
+            }
+            if (groupMemberAttribute.containsKey(groupId)){
+                Map<String,MemberAttributeBean> map = groupMemberAttribute.get(groupId);
+                if (map != null ){
+                    if (map.containsKey(userId)){
+                        attributeBean = map.get(userId);
+                    }
+                }
+            }
+        }
+        return attributeBean;
+    }
+
+    /**
+     * 清除指定群组成员属性
+     * @param groupId
+     */
+    public static void clearGroupMemberAttribute(String groupId){
+        groupMemberAttribute.remove(groupId);
+    }
+
+    public static void clearAllMemberAttribute(){
+        groupMemberAttribute.clear();
+    }
+
+    /**
+     * 设置标记 （单进程第一次进入群组获取信息）
+     * @param groupId
+     */
+    public static void setFirstTab(String groupId){
+        isFirstTab.put(groupId,true);
+    }
+
+    /**
+     * 获取标记
+     * @param groupId
+     * @return
+     */
+    public static boolean isFirstTabByGroup(String groupId){
+        return !isFirstTab.containsKey(groupId);
+    }
+
 }
