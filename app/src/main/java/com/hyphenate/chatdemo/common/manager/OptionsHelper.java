@@ -313,26 +313,9 @@ public class OptionsHelper {
                 if (DemoHelper.getInstance().getModel().isCustomSetEnable()){ //开启自定义配置
                     if (DemoHelper.getInstance().getModel().isCustomServerEnable()){
                         options.enableDNSConfig(false);
-                        if (!TextUtils.isEmpty(DemoHelper.getInstance().getModel().getIMServer())){
-                            options.setIMServer(DemoHelper.getInstance().getModel().getIMServer());
-                            if(DemoHelper.getInstance().getModel().getIMServer().contains(":")) {
-                                options.setIMServer(DemoHelper.getInstance().getModel().getIMServer().split(":")[0]);
-                                // 设置im server 端口号，默认443
-                                options.setImPort(Integer.parseInt(DemoHelper.getInstance().getModel().getIMServer().split(":")[1]));
-                            }else {
-                                //如果不包含端口号
-                                if(DemoHelper.getInstance().getModel().getIMServerPort() != 0) {
-                                    options.setImPort(DemoHelper.getInstance().getModel().getIMServerPort());
-                                }
-                            }
-                        }
-                        if (!TextUtils.isEmpty(DemoHelper.getInstance().getModel().getRestServer())){
-                            options.setRestServer(DemoHelper.getInstance().getModel().getRestServer());
-                        }
                     }
                     EMClient.getInstance().changeAppkey(DemoHelper.getInstance().getModel().getCutomAppkey());
                 }else {//未开启自定义配置 直接设置默认appkey
-                    options.enableDNSConfig(true);
                     EMClient.getInstance().changeAppkey(OptionsHelper.getInstance().getDefAppkey());
                 }
             } catch (HyphenateException e) {

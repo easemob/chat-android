@@ -1,7 +1,9 @@
 package com.hyphenate.chatdemo.common.utils;
 
 import android.content.Context;
+import android.os.Build;
 import android.os.Handler;
+import android.os.Looper;
 import android.os.Message;
 import android.text.TextUtils;
 import android.view.Gravity;
@@ -12,6 +14,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.StringRes;
 
 import com.hyphenate.chatdemo.DemoApplication;
@@ -30,6 +33,24 @@ public class ToastUtils {
     private static final int FAIL = 2;
     private static final int TOAST_LAST_TIME = 1000;
     private static Toast toast;
+    private static final int DISMISS = 2;
+
+    private static final Handler handler = new Handler(Looper.getMainLooper()) {
+        @Override
+        public void handleMessage(@NonNull Message msg) {
+            super.handleMessage(msg);
+            switch (msg.what) {
+                case DISMISS:
+                    synchronized (ToastUtils.class) {
+                        if(toast != null) {
+                            toast.cancel();
+                            toast = null;
+                        }
+                    }
+                    break;
+            }
+        }
+    };
 
     /**
      * 弹出成功的toast
@@ -269,13 +290,16 @@ public class ToastUtils {
         }
         //保证在主线程中展示toast
         EaseThreadManager.getInstance().runOnMainThread(() -> {
-            if(toast != null) {
-                toast.cancel();
+            synchronized (ToastUtils.class) {
+                if(toast != null) {
+                    toast.cancel();
+                }
+                toast = getToast(context, title, message, type, duration, gravity);
+                toast.show();
+                handler.removeCallbacksAndMessages(null);
+                handler.sendEmptyMessageDelayed(DISMISS, 2000);
             }
-            toast = getToast(context, title, message, type, duration, gravity);
-            toast.show();
         });
-
     }
 
     private static Toast getToast(Context context, String title, String message, int type, int duration, int gravity) {
@@ -319,6 +343,9 @@ public class ToastUtils {
      * @param toast
      */
     private static void hookToast(Toast toast) {
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+            return;
+        }
         Class<Toast> cToast = Toast.class;
         try {
             //TN是private的

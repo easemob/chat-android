@@ -1,5 +1,6 @@
 package com.hyphenate.chatdemo.section.dialog;
 
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.TypedValue;
@@ -28,6 +29,7 @@ import com.hyphenate.chatdemo.section.base.BaseDialogFragment;
 import com.hyphenate.easeui.utils.EaseCommonUtils;
 
 import java.lang.reflect.Field;
+import java.util.Objects;
 
 public class DemoDialogFragment extends BaseDialogFragment implements View.OnClickListener {
     public TextView mTvDialogTitle;
@@ -35,15 +37,10 @@ public class DemoDialogFragment extends BaseDialogFragment implements View.OnCli
     public Button mBtnDialogConfirm;
     public OnConfirmClickListener mOnConfirmClickListener;
     public onCancelClickListener mOnCancelClickListener;
+    public DialogInterface.OnDismissListener dismissListener;
     public Group mGroupMiddle;
 
     public String title;
-    private int confirmColor;
-    private String confirm;
-    private boolean showCancel;
-    private int titleColor;
-    private String cancel;
-    private float titleSize;
     public String content;
 
     @Override
@@ -145,26 +142,48 @@ public class DemoDialogFragment extends BaseDialogFragment implements View.OnCli
         mBtnDialogConfirm = findViewById(R.id.btn_dialog_confirm);
         mGroupMiddle = findViewById(R.id.group_middle);
 
-        if(!TextUtils.isEmpty(title)) {
-            mTvDialogTitle.setText(title);
-        }
-        if(titleColor != 0) {
-            mTvDialogTitle.setTextColor(titleColor);
-        }
-        if(titleSize != 0) {
-            mTvDialogTitle.setTextSize(TypedValue.COMPLEX_UNIT_SP, titleSize);
-        }
-        if(!TextUtils.isEmpty(confirm)) {
-            mBtnDialogConfirm.setText(confirm);
-        }
-        if(confirmColor != 0) {
-            mBtnDialogConfirm.setTextColor(confirmColor);
-        }
-        if(!TextUtils.isEmpty(cancel)) {
-            mBtnDialogCancel.setText(cancel);
-        }
-        if(showCancel) {
-            mGroupMiddle.setVisibility(View.VISIBLE);
+        Bundle bundle = getArguments();
+        if(bundle != null) {
+            title = bundle.getString(ParameterName.titleString);
+            if(!TextUtils.isEmpty(title)) {
+                mTvDialogTitle.setText(title);
+            }
+
+            content = bundle.getString(ParameterName.contentString);
+
+            int titleColor = bundle.getInt(ParameterName.titleColorInt, 0);
+            if(titleColor != 0) {
+                mTvDialogTitle.setTextColor(titleColor);
+            }
+
+            int titleSize = bundle.getInt(ParameterName.titleSize, 0);
+            if(titleSize != 0) {
+                mTvDialogTitle.setTextSize(TypedValue.COMPLEX_UNIT_SP, titleSize);
+            }
+
+            String confirm = bundle.getString(ParameterName.confirmString);
+            if(!TextUtils.isEmpty(confirm)) {
+                mBtnDialogConfirm.setText(confirm);
+            }
+            int confirmColor = bundle.getInt(ParameterName.confirmColorInt, 0);
+            if(confirmColor != 0) {
+                mBtnDialogConfirm.setTextColor(confirmColor);
+            }
+
+            String cancel = bundle.getString(ParameterName.cancelString);
+            if(!TextUtils.isEmpty(cancel)) {
+                mBtnDialogCancel.setText(cancel);
+            }
+
+            boolean showCancel = bundle.getBoolean(ParameterName.showCancel, false);
+            if(showCancel) {
+                mGroupMiddle.setVisibility(View.VISIBLE);
+            }
+
+            boolean canceledOnTouchOutside = bundle.getBoolean(ParameterName.canceledOnTouchOutside, false);
+            if(getDialog() != null) {
+                getDialog().setCanceledOnTouchOutside(canceledOnTouchOutside);
+            }
         }
     }
 
@@ -187,6 +206,14 @@ public class DemoDialogFragment extends BaseDialogFragment implements View.OnCli
         }
     }
 
+    @Override
+    public void dismiss() {
+        super.dismiss();
+        if(dismissListener != null) {
+            dismissListener.onDismiss(getDialog());
+        }
+    }
+
     /**
      * 设置确定按钮的点击事件
      * @param listener
@@ -201,6 +228,10 @@ public class DemoDialogFragment extends BaseDialogFragment implements View.OnCli
      */
     public void setOnCancelClickListener(onCancelClickListener cancelClickListener) {
         this.mOnCancelClickListener = cancelClickListener;
+    }
+
+    private void setOnDismissListener(DialogInterface.OnDismissListener dismissListener) {
+        this.dismissListener = dismissListener;
     }
 
     /**
@@ -241,70 +272,70 @@ public class DemoDialogFragment extends BaseDialogFragment implements View.OnCli
 
     public static class Builder {
         public BaseActivity context;
-        private String title;
-        private int titleColor;
-        private float titleSize;
-        private boolean showCancel;
-        private String confirmText;
         private OnConfirmClickListener listener;
         private onCancelClickListener cancelClickListener;
-        private int confirmColor;
-        private Bundle bundle;
-        private String cancel;
-        private String content;
+        private DialogInterface.OnDismissListener dismissListener;
+        private DemoDialogFragment currentFragment;
+        protected final Bundle bundle;
 
         public Builder(BaseActivity context) {
             this.context = context;
+            this.bundle = new Bundle();
         }
 
         public Builder setTitle(@StringRes int title) {
-            this.title = context.getString(title);
+            this.bundle.putString(ParameterName.titleString, context.getString(title));
             return this;
         }
 
         public Builder setTitle(String title) {
-            this.title = title;
+            this.bundle.putString(ParameterName.titleString, title);
             return this;
         }
 
         public Builder setTitleColor(@ColorRes int color) {
-            this.titleColor = ContextCompat.getColor(context, color);
+            this.bundle.putInt(ParameterName.titleColorInt, ContextCompat.getColor(context, color));
             return this;
         }
 
         public Builder setTitleColorInt(@ColorInt int color) {
-            this.titleColor = color;
+            this.bundle.putInt(ParameterName.titleColorInt, color);
             return this;
         }
 
         public Builder setTitleSize(float size) {
-            this.titleSize = size;
+            this.bundle.putFloat(ParameterName.titleSize, size);
             return this;
         }
 
         public Builder setContent(@StringRes int content) {
-            this.content = context.getString(content);
+            this.bundle.putString(ParameterName.contentString, context.getString(content));
             return this;
         }
 
         public Builder setContent(String content) {
-            this.content = content;
+            this.bundle.putString(ParameterName.contentString, content);
             return this;
         }
 
         public Builder showCancelButton(boolean showCancel) {
-            this.showCancel = showCancel;
+            this.bundle.putBoolean(ParameterName.showCancel, showCancel);
+            return this;
+        }
+
+        public Builder setCanceledOnTouchOutside(boolean cancel) {
+            this.bundle.putBoolean(ParameterName.canceledOnTouchOutside, cancel);
             return this;
         }
 
         public Builder setOnConfirmClickListener(@StringRes int confirm, OnConfirmClickListener listener) {
-            this.confirmText = context.getString(confirm);
+            this.bundle.putString(ParameterName.confirmString, context.getString(confirm));
             this.listener = listener;
             return this;
         }
 
         public Builder setOnConfirmClickListener(String confirm, OnConfirmClickListener listener) {
-            this.confirmText = confirm;
+            this.bundle.putString(ParameterName.confirmString, confirm);
             this.listener = listener;
             return this;
         }
@@ -315,23 +346,23 @@ public class DemoDialogFragment extends BaseDialogFragment implements View.OnCli
         }
 
         public Builder setConfirmColor(@ColorRes int color) {
-            this.confirmColor = ContextCompat.getColor(context, color);
+            this.bundle.putInt(ParameterName.confirmColorInt, ContextCompat.getColor(context, color));
             return this;
         }
 
         public Builder setConfirmColorInt(@ColorInt int color) {
-            this.confirmColor = color;
+            this.bundle.putInt(ParameterName.confirmColorInt, color);
             return this;
         }
 
         public Builder setOnCancelClickListener(@StringRes int cancel, onCancelClickListener listener) {
-            this.cancel = context.getString(cancel);
+            this.bundle.putString(ParameterName.cancelString, context.getString(cancel));
             this.cancelClickListener = listener;
             return this;
         }
 
         public Builder setOnCancelClickListener(String cancel, onCancelClickListener listener) {
-            this.cancel = cancel;
+            this.bundle.putString(ParameterName.cancelString, cancel);
             this.cancelClickListener = listener;
             return this;
         }
@@ -341,23 +372,23 @@ public class DemoDialogFragment extends BaseDialogFragment implements View.OnCli
             return this;
         }
 
+        public Builder setOnDismissListener(DialogInterface.OnDismissListener listener) {
+            this.dismissListener = listener;
+            return this;
+        }
+
         public Builder setArgument(Bundle bundle) {
-            this.bundle = bundle;
+            if(bundle != null) {
+                this.bundle.putAll(bundle);
+            }
             return this;
         }
 
         public DemoDialogFragment build() {
             DemoDialogFragment fragment = getFragment();
-            fragment.setTitle(title);
-            fragment.setTitleColor(titleColor);
-            fragment.setTitleSize(titleSize);
-            fragment.setContent(content);
-            fragment.showCancelButton(showCancel);
-            fragment.setConfirmText(confirmText);
             fragment.setOnConfirmClickListener(this.listener);
-            fragment.setConfirmColor(confirmColor);
-            fragment.setCancelText(cancel);
             fragment.setOnCancelClickListener(cancelClickListener);
+            fragment.setOnDismissListener(this.dismissListener);
             fragment.setArguments(bundle);
             return fragment;
         }
@@ -375,35 +406,15 @@ public class DemoDialogFragment extends BaseDialogFragment implements View.OnCli
         }
     }
 
-    private void setTitleSize(float titleSize) {
-        this.titleSize = titleSize;
-    }
-
-    private void setCancelText(String cancel) {
-        this.cancel = cancel;
-    }
-
-    private void setTitleColor(int titleColor) {
-        this.titleColor = titleColor;
-    }
-
-    private void showCancelButton(boolean showCancel) {
-        this.showCancel = showCancel;
-    }
-
-    private void setConfirmText(String confirmText) {
-        this.confirm = confirmText;
-    }
-
-    private void setConfirmColor(int confirmColor) {
-        this.confirmColor = confirmColor;
-    }
-
-    private void setTitle(String title) {
-        this.title = title;
-    }
-
-    private void setContent(String content) {
-        this.content = content;
+    private static final class ParameterName {
+        public static final String titleString = "titleString";
+        public static final String titleColorInt = "titleColorInt";
+        public static final String titleSize = "titleSize";
+        public static final String contentString = "contentString";
+        public static final String showCancel = "showCancel";
+        public static final String canceledOnTouchOutside = "canceledOnTouchOutside";
+        public static final String confirmString = "confirmString";
+        public static final String confirmColorInt = "confirmColorInt";
+        public static final String cancelString = "cancelString";
     }
 }

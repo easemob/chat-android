@@ -31,14 +31,33 @@
     <string name="em_login_name_hint">Username</string>
     <string name="em_login_password_hint">Password</string>
     <string name="em_login_token_hint">Token</string>
-    <string name="em_login_btn">Log in \u0020</string>
+    <string name="em_login_btn">Login</string>
     <string name="em_login_tv_register">Register</string>
     <string name="em_login_tv_token">Log in with token</string>
     <string name="em_login_tv_pwd">Log in with password</string>
     <string name="em_login_tv_reset_password">Reset Password</string>
     <string name="em_login_btn_info_incomplete">Username or password cannot be empty.</string>
     <string name="em_login_failed">Login failed</string>
-    <string name="em_login_agreement">I agree to the Easemob Terms of Service and Easemob Privacy Policy</string>
+    <string name="em_login_agreement">By joining, you agree to our Terms of Service and Privacy Policy</string>
+    <string name="em_login_im">Login Easemob IM</string>
+    <string name="em_login_input_verification_code">Verification Code</string>
+    <string name="em_login_get_verification_code">Get Code</string>
+    <string name="em_login_phone_empty">Please enter mobile number</string>
+    <string name="em_login_code_empty">Please enter verification code</string>
+    <string name="em_login_phone_illegal">Please enter correct mobile number</string>
+    <string name="em_login_illegal_code">Incorrect Code</string>
+    <string name="em_login_post_code">Code Sent</string>
+    <string name="em_login_get_code_again">Get Code</string>
+    <string name="em_login_get_code_again_time">Get After(%1$ds)</string>
+    <string name="em_login_not_select_agreement">Please confirm Terms &amp; Policy</string>
+    <string name="em_login_error_send_code_later">Please wait a moment while trying to send</string>
+    <string name="em_login_error_send_code_limit">Access limit reached</string>
+    <string name="em_login_server_configure">Server Configure</string>
+    <string name="demo_login_dialog_content">Easemob attaches great importance to protecting your privacy. Please read the following Service and Privacy Policy carefully. Please click "OK" button to agree, and click "Deny" to exit the app.</string>
+    <string name="demo_login_dialog_content_privacy">Read the complete Service and Privacy Policy for more details.</string>
+    <string name="demo_login_dialog_cancel">Deny</string>
+    <string name="demo_login_dialog_confirm">OK</string>
+    <string name="demo_login_dialog_title">Service and Privacy Policy</string>
 
     <string name="em_register_btn">Register \u0020</string>
     <string name="em_register_password_confirm_hint">Confirm password</string>
@@ -88,12 +107,21 @@
     <string name="em_server_set_im_server_empty_hint">Set the IM server address</string>
     <string name="em_server_set_im_port_empty_hint">Set the IM port number</string>
     <string name="em_server_set_rest_server_empty_hint">Set the RESTful server address</string>
+    <string name="em_server_open_develop_mode">Open develop mode?</string>
+    <string name="em_server_close_develop_mode">Close develop mode?</string>
 
     <string name="em_empty_layout_content">Find Yourself, Be Yourself</string>
 
     <string name="were_mentioned">[@Mentioning me]</string>
     <string name="were_not_send_msg">[Draft]</string>
     <string name="em_chat_et_hint">The entered content</string>
+    <string name="demo_chat_request_camera_permission">Camera permission is required to use the camera, please authorize</string>
+    <string name="demo_chat_request_read_external_storage_permission">Read external storage permission is required to use %1$s, please authorize</string>
+    <string name="demo_chat_request_location_permission">Location permission is required to send location message, please authorize</string>
+    <string name="demo_chat_request_audio_permission">Audio permission is required to send voice message, please authorize</string>
+    <string name="demo_chat_file">file</string>
+    <string name="demo_chat_photo">photo album</string>
+    <string name="demo_chat_video">video</string>
 
     <string name="em_search_text_hint">Search</string>
 
@@ -635,5 +663,6 @@
     <string name="localLogin">Internal Login</string>
 
     <string name="action_report_label">report</string>
+    <string name="chat_temp_hint">For trial only, will be deleted after 72 hours</string>
 
 </resources>
