@@ -60,6 +60,7 @@ public class TestFunctionsIndexActivity extends BaseInitActivity {
         items.add("presence");
         items.add("statistics");
         items.add("typingListener");
+        items.add("database");
 
         adapter.setData(items);
 

@@ -10,6 +10,7 @@ import com.hyphenate.chatdemo.R;
 import com.hyphenate.chatdemo.databinding.DemoActivityTestFunctionsBinding;
 import com.hyphenate.chatdemo.section.base.BaseFragment;
 import com.hyphenate.chatdemo.section.base.BaseInitActivity;
+import com.hyphenate.chatdemo.section.me.test.fragment.TestDatabaseFragment;
 import com.hyphenate.chatdemo.section.me.test.fragment.TestGroupFragment;
 import com.hyphenate.chatdemo.section.me.test.fragment.TestInputListenerFragment;
 import com.hyphenate.chatdemo.section.me.test.fragment.TestPresenceFragment;
@@ -53,6 +54,10 @@ public class TestFunctionsActivity extends BaseInitActivity {
             case "typingListener" :
                 fragment = new TestInputListenerFragment();
                 binding.titleBar.setTitle("Test typing listener");
+                break;
+            case "database" :
+                fragment = new TestDatabaseFragment();
+                binding.titleBar.setTitle("Test database functions");
                 break;
         }
 
