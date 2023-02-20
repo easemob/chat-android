@@ -29,6 +29,7 @@ import com.hyphenate.chat.EMMessage;
 import com.hyphenate.chat.EMOptions;
 import com.hyphenate.chat.EMPushManager;
 import com.hyphenate.chat.EMTranslateParams;
+import com.hyphenate.chatdemo.common.manager.SmartHeartManager;
 import com.hyphenate.cloud.EMHttpClient;
 import com.hyphenate.easecallkit.EaseCallKit;
 import com.hyphenate.easecallkit.base.EaseCallEndReason;
@@ -189,6 +190,7 @@ public class DemoHelper {
     private boolean initSDK(Context context) {
         // 根据项目需求对SDK进行配置
         EMOptions options = initChatOptions(context);
+        options.setFixedHBInterval(30);
         //配置自定义的rest server和im server
 //        options.setRestServer("a1-hsb.easemob.com");
 //        options.setIMServer("106.75.100.247");
@@ -200,6 +202,9 @@ public class DemoHelper {
 
         // 初始化SDK
         isSDKInit = EaseIM.getInstance().init(context, options);
+        SmartHeartManager manager = new SmartHeartManager();
+        manager.init(context);
+        manager.start();
         //设置删除用户属性数据超时时间
         demoModel.setUserInfoTimeOut(30 * 60 * 1000);
         //更新过期用户属性列表
