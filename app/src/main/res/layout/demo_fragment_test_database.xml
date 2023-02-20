@@ -27,4 +27,69 @@
         android:layout_marginStart="10dp"
         android:layout_marginEnd="20dp" />
 
+    <Button
+        android:id="@+id/btn_remove_messages"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@id/btn_message_count"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/et_message_count"
+        app:layout_constraintHorizontal_chainStyle="packed"
+        app:layout_constraintHorizontal_bias="0"
+        android:layout_marginTop="20dp"
+        android:layout_marginStart="10dp"
+        android:text="Remove message"
+        android:background="@color/btn_blue_normal"/>
+
+    <EditText
+        android:id="@+id/et_message_count"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="20dp"
+        android:layout_marginEnd="20dp"
+        app:layout_constraintStart_toEndOf="@id/btn_remove_messages"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@id/btn_remove_messages"
+        app:layout_constrainedWidth="true"
+        android:inputType="number"
+        android:hint="Input the count to remain"/>
+
+    <Button
+        android:id="@+id/btn_generate_message"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@id/btn_remove_messages"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/et_conversation_id"
+        app:layout_constraintHorizontal_chainStyle="packed"
+        app:layout_constraintHorizontal_bias="0"
+        android:layout_marginTop="20dp"
+        android:layout_marginStart="10dp"
+        android:text="Generate messages"
+        android:background="@color/btn_blue_normal"/>
+
+    <EditText
+        android:id="@+id/et_conversation_id"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="20dp"
+        android:layout_marginEnd="20dp"
+        app:layout_constraintStart_toEndOf="@id/btn_generate_message"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@id/btn_generate_message"
+        app:layout_constrainedWidth="true"
+        android:hint="Input conversation id"/>
+
+    <TextView
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@id/btn_generate_message"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="10dp"
+        android:layout_marginStart="10dp"
+        android:layout_marginEnd="10dp"
+        android:textSize="14sp"
+        android:text="Generate message 需要输入会话id，点击一次随机生成1万条消息"/>
+
 </androidx.constraintlayout.widget.ConstraintLayout>

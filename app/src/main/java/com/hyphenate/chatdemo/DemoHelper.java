@@ -438,6 +438,8 @@ public class DemoHelper {
         options.setFpaEnable(true);
         // 开启本地消息流量统计
         options.setEnableStatistics(true);
+        // 快速启动
+        options.enableMessageCountInConversation(false);
 
         /**
          * NOTE:你需要设置自己申请的账号来使用三方推送功能，详见集成文档
