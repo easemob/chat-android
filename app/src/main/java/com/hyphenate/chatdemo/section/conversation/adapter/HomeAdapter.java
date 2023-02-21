@@ -102,8 +102,8 @@ public class HomeAdapter extends EaseBaseRecyclerViewAdapter<Object> {
                     mUnreadMsgNumber.setVisibility(View.GONE);
                 }
 
-                if(item.getAllMsgCount() != 0) {
-                    EMMessage lastMessage = item.getLastMessage();
+                EMMessage lastMessage = item.getLastMessage();
+                if(lastMessage != null) {
                     message.setText(EaseSmileUtils.getSmiledText(mContext, EaseCommonUtils.getMessageDigest(lastMessage, mContext)));
                     time.setText(EaseDateUtils.getTimestampString(mContext, new Date(lastMessage.getMsgTime())));
                     if (lastMessage.direct() == EMMessage.Direct.SEND && lastMessage.status() == EMMessage.Status.FAIL) {
@@ -111,6 +111,10 @@ public class HomeAdapter extends EaseBaseRecyclerViewAdapter<Object> {
                     } else {
                         mMsgState.setVisibility(View.GONE);
                     }
+                }else {
+                    message.setText("");
+                    time.setText("");
+                    mMsgState.setVisibility(View.GONE);
                 }
 
                 if(mentioned.getVisibility() != View.VISIBLE) {
