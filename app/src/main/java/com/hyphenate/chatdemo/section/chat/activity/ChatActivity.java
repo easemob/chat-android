@@ -56,9 +56,7 @@ public class ChatActivity extends BaseInitActivity implements EaseTitleBar.OnBac
     private TextView tvTitle;
     private TextView subTitle;
     private final List<String> userList = new ArrayList<>();
-    private final List<String> defaultUserList = new ArrayList<>();
     private final Map<String,String> userMap  = new HashMap<>();
-    private final Map<String,String> defaultUserMap = new HashMap<>();
     private EMConversation conversation;
 
     public static void actionStart(Context context, String conversationId, int chatType) {
@@ -151,11 +149,6 @@ public class ChatActivity extends BaseInitActivity implements EaseTitleBar.OnBac
             parseResource(response, new OnResourceParseCallback<Map<String,MemberAttributeBean>>() {
                 @Override
                 public void onSuccess(@Nullable Map<String,MemberAttributeBean> bean) {
-                    if (bean != null){
-                        for (Map.Entry<String, MemberAttributeBean> entry : bean.entrySet()) {
-                            DemoHelper.getInstance().saveMemberAttribute(conversationId,entry.getKey(),entry.getValue());
-                        }
-                    }
                     clear();
                     if (fragment != null && fragment.chatLayout != null && fragment.chatLayout.getChatMessageListLayout() != null){
                         fragment.chatLayout.getChatMessageListLayout().refreshMessages();
@@ -301,29 +294,33 @@ public class ChatActivity extends BaseInitActivity implements EaseTitleBar.OnBac
 
     @Override
     public void onCurrentScreenRange(int start, int end) {
-        MemberAttributeBean bean;
-        for (int i = start; i <= end; i++) {
-            EMMessage message = fragment.chatLayout.getChatMessageListLayout().getMessageAdapter().getItem(i);
-            if (message != null && message.getBody() != null){
-                if (message.getBody() instanceof EMCmdMessageBody || message.getBody() instanceof EMCustomMessageBody) break;
-                bean = DemoHelper.getInstance().getMemberAttribute(conversationId,message.getFrom());
-                if (bean == null){
-                    userMap.put(message.getFrom(),"nickName");
-                }else{
-                    if (TextUtils.isEmpty(bean.getNickName())){
+        if (start < end && end > 0 && chatType == DemoConstant.CHATTYPE_GROUP){
+            for (int i = start; i <= end; i++) {
+                EMMessage message = fragment.chatLayout.getChatMessageListLayout().getMessageAdapter().getItem(i);
+                if (message != null && message.getBody() != null){
+                    if (message.getBody() instanceof EMCmdMessageBody || message.getBody() instanceof EMCustomMessageBody) break;
+                    MemberAttributeBean bean = DemoHelper.getInstance().getMemberAttribute(conversationId,message.getFrom());
+                    if (bean == null){
+                        //当从本地获取bean对象为空时 默认创建bean对象 并赋值nickName为userId
+                        MemberAttributeBean emptyBean = new MemberAttributeBean();
+                        emptyBean.setNickName(message.getFrom());
+                        DemoHelper.getInstance().saveMemberAttribute(conversationId,message.getFrom(),emptyBean);
                         userMap.put(message.getFrom(),"nickName");
                     }
                 }
             }
+            onDataAcquisition();
         }
-        for (Map.Entry<String, String> entry : userMap.entrySet()) {
-            userList.add(entry.getKey());
-        }
-        EMLog.d("ChatActivity", "userList : " + conversationId + " - "+ userList.toString());
-        if (userList.size() == 0) return;
-        groupDetailViewModel.fetchGroupMemberAttribute(conversationId,userList);
     }
 
+    @Override
+    public void onDefaultScreenRange(int start, int end) {
+        EMLog.d("apex-wt","onDefaultScreenRange: " + start + " - " +end);
+    }
+
+    /**
+     * 默认进入聊天页面 获取10条消息的id 先查本地缓存过滤后获取群组的成员属性
+     */
     private void getDefaultMemberData(){
         int count = 10;
         if (conversation != null){
@@ -332,51 +329,54 @@ public class ChatActivity extends BaseInitActivity implements EaseTitleBar.OnBac
                 if (messages.size() <= count){
                     for (EMMessage message : messages) {
                         if (message.getBody() instanceof EMCmdMessageBody || message.getBody() instanceof EMCustomMessageBody) break;
-                        parseMessage(message,defaultUserMap);
+                        parseMessage(message);
                     }
                 }else {
                     for (int i = 1; i <= count; i++) {
                         EMMessage message = messages.get(messages.size()-i);
                         if (message != null){
                             if (message.getBody() instanceof EMCmdMessageBody || message.getBody() instanceof EMCustomMessageBody) break;
-                            parseMessage(message,defaultUserMap);
+                            parseMessage(message);
                         }
                     }
                 }
             }
+            onDataAcquisition();
         }
-        for (Map.Entry<String, String> entry : defaultUserMap.entrySet()) {
-            defaultUserList.add(entry.getKey());
-        }
-        EMLog.d("ChatActivity", "defaultUserList : " + conversationId + " - "+ defaultUserList.toString());
-        if (defaultUserList.size() == 0) return;
-        groupDetailViewModel.fetchGroupMemberAttribute(conversationId,defaultUserList);
     }
 
-    private void parseMessage(EMMessage message, Map<String,String> defaultUserMap){
-        MemberAttributeBean bean;
-        bean = DemoHelper.getInstance().getMemberAttribute(conversationId,message.getFrom());
-        if (bean == null){
-            defaultUserMap.put(message.getFrom(),"nickName");
-        }else{
-            if (TextUtils.isEmpty(bean.getNickName())){
-                defaultUserMap.put(message.getFrom(),"nickName");
-            }
+    private void parseMessage(EMMessage message){
+        MemberAttributeBean bean = DemoHelper.getInstance().getMemberAttribute(conversationId,message.getFrom());
+        if (bean == null ){
+            //当从本地获取bean对象为空时 默认创建bean对象 并赋值nickName为userId
+            MemberAttributeBean emptyBean = new MemberAttributeBean();
+            emptyBean.setNickName(message.getFrom());
+            DemoHelper.getInstance().saveMemberAttribute(conversationId,message.getFrom(),emptyBean);
+            userMap.put(message.getFrom(),"nickName");
         }
+    }
+
+    private void onDataAcquisition(){
+            for (Map.Entry<String, String> entry : userMap.entrySet()) {
+                userList.add(entry.getKey());
+            }
+            if (userList.size() == 0) return;
+                groupDetailViewModel.fetchGroupMemberAttribute(conversationId,userList);
+        EMLog.d("ChatActivity",
+                "\n" + "conversationId: "+ conversationId
+                + "\n" + "userList: " + userList
+                + "\n" + "userMap: " + userMap);
     }
 
     private void clear(){
         userList.clear();
         userMap.clear();
-        defaultUserList.clear();
-        defaultUserMap.clear();
     }
 
     @Override
     public void onFragmentReady() {
         EMLog.d("ChatActivity","onFragmentReady");
-        if (conversation != null && conversation.getType() == EMConversation.EMConversationType.GroupChat
-                && DemoHelper.getInstance().isFirstTabByGroup(conversationId)){
+        if (conversation != null && conversation.getType() == EMConversation.EMConversationType.GroupChat){
             getDefaultMemberData();
         }
     }

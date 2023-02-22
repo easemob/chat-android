@@ -463,6 +463,7 @@ public class ChatPresenter extends EaseChatPresenter {
 
         @Override
         public void onUserRemoved(String groupId, String groupName) {
+            DemoHelper.getInstance().clearGroupMemberAttribute(groupId);
             EaseEvent easeEvent = new EaseEvent(DemoConstant.GROUP_CHANGE, EaseEvent.TYPE.GROUP_LEAVE);
             easeEvent.message = groupId;
             messageChangeLiveData.with(DemoConstant.GROUP_CHANGE).postValue(easeEvent);
@@ -648,6 +649,7 @@ public class ChatPresenter extends EaseChatPresenter {
 
         @Override
         public void onMemberExited(String groupId, String member) {
+            DemoHelper.getInstance().clearGroupMemberAttributeByUserId(groupId,member);
             LiveDataBus.get().with(DemoConstant.GROUP_CHANGE).postValue(EaseEvent.create(DemoConstant.GROUP_CHANGE, EaseEvent.TYPE.GROUP));
             showToast(context.getString(R.string.demo_group_listener_onMemberExited, member));
             EMLog.i(TAG, context.getString(R.string.demo_group_listener_onMemberExited, member));
@@ -674,14 +676,15 @@ public class ChatPresenter extends EaseChatPresenter {
         }
 
         @Override
-        public void onMetaChangedOfGroupMember(String groupId, Map<String, String> attribute, String from) {
+        public void onGroupMemberAttributeChanged(String groupId,String userId,Map<String, String> attribute, String from) {
             if ( attribute != null && attribute.size() > 0){
-                EMLog.d(TAG,"onMetaChangedOfGroupMember: " + groupId +" - "+ attribute.toString());
+                EMLog.d(TAG,"onGroupMemberAttributeChanged: " + groupId +" - "+ attribute.toString());
                 MemberAttributeBean bean = GsonTools.changeGsonToBean(new JSONObject(attribute).toString(),MemberAttributeBean.class);
                 if (bean != null && bean.getNickName() != null){
+                    EMLog.d("apex-wt","saveMemberAttribute1");
                     DemoHelper.getInstance().saveMemberAttribute(groupId,from,bean);
+                    LiveDataBus.get().with(DemoConstant.GROUP_MEMBER_ATTRIBUTE_CHANGE).postValue(EaseEvent.create(DemoConstant.GROUP_MEMBER_ATTRIBUTE_CHANGE, EaseEvent.TYPE.MESSAGE));
                 }
-                LiveDataBus.get().with(DemoConstant.GROUP_MEMBER_ATTRIBUTE_CHANGE).postValue(EaseEvent.create(DemoConstant.GROUP_MEMBER_ATTRIBUTE_CHANGE, EaseEvent.TYPE.MESSAGE));
             }
         }
     }
@@ -1044,23 +1047,8 @@ public class ChatPresenter extends EaseChatPresenter {
                     showToast("GROUP_REMOVE_MUTE");
                     break;
                 case GROUP_METADATA_CHANGED:
-                    List<String> list = new ArrayList<>();
-                    list.add("nickName");
-                    EMClient.getInstance().groupManager().asyncFetchMembersAttributes(groupId, usernames,list,new EMValueCallBack<Map<String, Map<String, String>>>() {
-                        @Override
-                        public void onSuccess(Map<String, Map<String, String>> value) {
-                            for (Map.Entry<String, Map<String, String>> entry : value.entrySet()) {
-                                MemberAttributeBean bean = GsonTools.changeGsonToBean(new JSONObject(entry.getValue()).toString(),MemberAttributeBean.class);
-                                if (bean != null && !TextUtils.isEmpty(bean.getNickName()))
-                                DemoHelper.getInstance().saveMemberAttribute(groupId,entry.getKey(),bean);
-                            }
-                        }
-
-                        @Override
-                        public void onError(int code, String error) {
-                            EMLog.d(TAG,"asyncFetchMembersAttributes onError" + code +" "+error );
-                        }
-                    });
+                    EMLog.d(TAG,"EVENT GROUP_METADATA_CHANGED");
+                    new EMGroupManagerRepository().fetchGroupMemberDetail(groupId,usernames);
                     break;
                 default:
                     break;

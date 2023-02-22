@@ -191,12 +191,6 @@ public class ChatFragment extends EaseChatFragment implements OnRecallMessageRes
         resetChatExtendMenu();
         addItemMenuAction();
 
-        if (chatType == EaseConstant.CHATTYPE_GROUP){
-            DemoHelper.getInstance().setCurrentGroupId(conversationId);
-        }else {
-            DemoHelper.getInstance().setCurrentGroupId("");
-        }
-
         chatLayout.getChatInputMenu().getPrimaryMenu().getEditText().setText(getUnSendMsg());
         chatLayout.turnOnTypingMonitor(DemoHelper.getInstance().getModel().isShowMsgTyping());
 
@@ -317,7 +311,12 @@ public class ChatFragment extends EaseChatFragment implements OnRecallMessageRes
                 }else{
                     user.setContact(3);
                 }
-                ContactDetailActivity.actionStart(mContext, user);
+                if (chatType == EaseConstant.CHATTYPE_GROUP){
+                    ContactDetailActivity.actionStart(mContext, user ,conversationId);
+                }else {
+                    ContactDetailActivity.actionStart(mContext, user);
+                }
+
         }else{
             UserDetailActivity.actionStart(mContext,null,null);
         }
@@ -675,11 +674,21 @@ public class ChatFragment extends EaseChatFragment implements OnRecallMessageRes
 
     @Override
     public void onCurrentScreenRange(int start, int end) {
-        rangeListener.onCurrentScreenRange(start,end);
+        if (rangeListener != null){
+            rangeListener.onCurrentScreenRange(start,end);
+        }
+    }
+
+    @Override
+    public void onDefaultScreenRange(int start, int end) {
+        if (rangeListener != null){
+            rangeListener.onDefaultScreenRange(start,end);
+        }
     }
 
     public interface OnRangeListener{
         void onCurrentScreenRange(int start, int end);
+        void onDefaultScreenRange(int start, int end);
     }
 
     public void setOnChatLayoutReadyListener(onChatLayoutLifeCycle listener){

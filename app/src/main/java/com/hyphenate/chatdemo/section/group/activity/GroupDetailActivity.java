@@ -34,6 +34,7 @@ import com.hyphenate.easeui.model.EaseEvent;
 import com.hyphenate.easeui.utils.EaseCommonUtils;
 import com.hyphenate.easeui.widget.EaseImageView;
 import com.hyphenate.easeui.widget.EaseTitleBar;
+import com.hyphenate.util.EMLog;
 
 import java.util.List;
 import java.util.Map;
@@ -241,9 +242,9 @@ public class GroupDetailActivity extends BaseInitActivity implements EaseTitleBa
                 @Override
                 public void onSuccess(@Nullable Map<String,MemberAttributeBean> data) {
                     if (data != null){
-                        DemoHelper.getInstance().setFirstTab(groupId);
                         for (Map.Entry<String, MemberAttributeBean> entry : data.entrySet()) {
-                            DemoHelper.getInstance().saveMemberAttribute(groupId,entry.getKey(),entry.getValue());
+                            EMLog.d("apex-wt","saveMemberAttribute4");
+                            //此页面获取的也是单个userId的群成员属性
                             memberAttributeBean = DemoHelper.getInstance().getMemberAttribute(groupId,entry.getKey());
                         }
                     }
@@ -256,7 +257,8 @@ public class GroupDetailActivity extends BaseInitActivity implements EaseTitleBa
                 public void onSuccess(@Nullable Map<String,MemberAttributeBean> data) {
                     if (data != null){
                         for (Map.Entry<String, MemberAttributeBean> entry : data.entrySet()) {
-                            DemoHelper.getInstance().saveMemberAttribute(groupId,entry.getKey(),entry.getValue());
+                            EMLog.d("apex-wt","saveMemberAttribute5");
+                            // map中只有一条数据 此页面设置只提供设置单个id
                             memberAttributeBean = DemoHelper.getInstance().getMemberAttribute(groupId,entry.getKey());
                         }
                     }
@@ -269,9 +271,8 @@ public class GroupDetailActivity extends BaseInitActivity implements EaseTitleBa
     private void loadGroup() {
         viewModel.getGroup(groupId);
         viewModel.getGroupAnnouncement(groupId);
-        if (DemoHelper.getInstance().isFirstTabByGroup(groupId)){
-            viewModel.fetchGroupMemberAttribute(groupId,DemoHelper.getInstance().getCurrentUser());
-        }
+        //低频操作 每次进入详情都获取自己在群组的成员属性
+        viewModel.fetchGroupMemberAttribute(groupId,DemoHelper.getInstance().getCurrentUser());
     }
 
     @Override
@@ -405,7 +406,7 @@ public class GroupDetailActivity extends BaseInitActivity implements EaseTitleBa
                 (view, content) -> {
                     if (FastClickUtils.isFastClick(view,1000)) return;
                     //修改我在群里的昵称
-                    viewModel.setGroupMemberNickName(groupId,DemoHelper.getInstance().getCurrentUser(), content);
+                    viewModel.setGroupMemberAttributes(groupId,DemoHelper.getInstance().getCurrentUser(), content);
                 }
         );
     }

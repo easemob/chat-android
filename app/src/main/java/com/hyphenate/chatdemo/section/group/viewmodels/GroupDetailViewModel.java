@@ -19,6 +19,7 @@ import com.hyphenate.easeui.manager.EaseThreadManager;
 import com.hyphenate.exceptions.HyphenateException;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -101,8 +102,10 @@ public class GroupDetailViewModel extends AndroidViewModel {
         refreshObservable.setSource(repository.setGroupAnnouncement(groupId, announcement));
     }
 
-    public void setGroupMemberNickName(String groupId, String userId,String nickName){
-        groupMemberAttributeObservable.setSource(repository.setGroupMemberNickName(groupId,userId,nickName));
+    public void setGroupMemberAttributes(String groupId, String userId,String nickName){
+        Map<String,String> map = new HashMap<>();
+        map.put("nickName",nickName);
+        groupMemberAttributeObservable.setSource(repository.setGroupMemberAttributes(groupId,userId,map));
     }
 
     public void fetchGroupMemberAttribute(String groupId, String userId){

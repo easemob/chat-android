@@ -15,7 +15,7 @@ import java.util.Map;
 public class GroupHelper {
     private static final Map<String,Boolean> isFirstTab = new HashMap<>();
     private static final Map<String,Map<String,MemberAttributeBean>> groupMemberAttribute = new HashMap<>();
-    private static final Map<String,MemberAttributeBean> map = new HashMap<>();
+    private static final Map<String,MemberAttributeBean> attributeMap = new HashMap<>();
 
     /**
      * 是否是群主
@@ -157,11 +157,11 @@ public class GroupHelper {
      * @param bean
      */
     public static void saveMemberAttribute(String groupId,String userName,MemberAttributeBean bean){
-        map.put(userName,bean);
-        for (Map.Entry<String, MemberAttributeBean> entry : map.entrySet()) {
-            EMLog.d("apex-wt","saveMap:  \n"+  "userId: " +entry.getKey() + " getNickName: " + entry.getValue().getNickName());
-        }
-        groupMemberAttribute.put(groupId,map);
+        attributeMap.put(userName,bean);
+//        for (Map.Entry<String, MemberAttributeBean> entry : attributeMap.entrySet()) {
+//            EMLog.d("apex-wt","saveMap:  \n"+  "userId: " +entry.getKey() + " getNickName: " + entry.getValue().getNickName());
+//        }
+        groupMemberAttribute.put(groupId,attributeMap);
     }
 
     /**
@@ -172,17 +172,17 @@ public class GroupHelper {
      */
     public static MemberAttributeBean getMemberAttribute(String groupId,String userId){
         MemberAttributeBean attributeBean = null;
-        for (Map.Entry<String, Map<String, MemberAttributeBean>> entry : groupMemberAttribute.entrySet()) {
-            Map<String, MemberAttributeBean> map = entry.getValue();
-            String key = entry.getKey();
-            for (Map.Entry<String, MemberAttributeBean> beanEntry : map.entrySet()) {
-                EMLog.d("apex-wt", "groupMemberAttribute: " + "\n" + "groupId: " + key+ " userId: " + beanEntry.getKey() + " getNickName: " + beanEntry.getValue().getNickName());
-            }
-        }
+//        for (Map.Entry<String, Map<String, MemberAttributeBean>> entry : groupMemberAttribute.entrySet()) {
+//            Map<String, MemberAttributeBean> map = entry.getValue();
+//            String key = entry.getKey();
+//            for (Map.Entry<String, MemberAttributeBean> beanEntry : map.entrySet()) {
+//                EMLog.d("apex-wt", "groupMemberAttribute: " + "\n" + "groupId: " + key+ " userId: " + beanEntry.getKey() + " getNickName: " + beanEntry.getValue().getNickName());
+//            }
+//        }
         if (!TextUtils.isEmpty(groupId) && !TextUtils.isEmpty(userId)){
-            for (Map.Entry<String, Map<String, MemberAttributeBean>> entry : groupMemberAttribute.entrySet()) {
-                EMLog.d("apex-wt","groupMemberAttribute key: " + entry.getKey());
-            }
+//            for (Map.Entry<String, Map<String, MemberAttributeBean>> entry : groupMemberAttribute.entrySet()) {
+//                EMLog.d("apex-wt","groupMemberAttribute key: " + entry.getKey());
+//            }
             if (groupMemberAttribute.containsKey(groupId)){
                 Map<String,MemberAttributeBean> map = groupMemberAttribute.get(groupId);
                 if (map != null ){
@@ -196,32 +196,34 @@ public class GroupHelper {
     }
 
     /**
-     * 清除指定群组成员属性
+     * 移除指定群组成员属性 用于自己退出群组
      * @param groupId
      */
     public static void clearGroupMemberAttribute(String groupId){
         groupMemberAttribute.remove(groupId);
+        attributeMap.clear();
     }
 
-    public static void clearAllMemberAttribute(){
+    /**
+     * 移除所有群组成员属性 用于退出登录
+     */
+    public static void clearAllGroupMemberAttribute(){
         groupMemberAttribute.clear();
+        attributeMap.clear();
     }
 
     /**
-     * 设置标记 （单进程第一次进入群组获取信息）
+     * 移除指定群组指定成员的属性 用于成员被踢出群组或者有成员离开群组时
      * @param groupId
+     * @param userId
      */
-    public static void setFirstTab(String groupId){
-        isFirstTab.put(groupId,true);
+    public static void clearGroupMemberAttributeByUserId(String groupId,String userId){
+        if (groupMemberAttribute.containsKey(groupId)){
+           Map<String,MemberAttributeBean> map = groupMemberAttribute.get(groupId);
+           if (map != null){
+               map.remove(userId);
+               attributeMap.remove(userId);
+           }
+        }
     }
-
-    /**
-     * 获取标记
-     * @param groupId
-     * @return
-     */
-    public static boolean isFirstTabByGroup(String groupId){
-        return !isFirstTab.containsKey(groupId);
-    }
-
 }

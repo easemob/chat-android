@@ -118,7 +118,6 @@ public class DemoHelper {
     private FetchUserRunnable fetchUserRunnable;
     private Thread fetchUserTread;
     private FetchUserInfoList fetchUserInfoList;
-    private String currentGroupId;
 
 
     private DemoHelper() {}
@@ -378,6 +377,10 @@ public class DemoHelper {
                         return getUserInfo(username);
                     }
 
+                    @Override
+                    public EaseUser getGroupUser(String groupId, String userId) {
+                        return getGroupUserInfo(groupId,userId);
+                    }
                 });
     }
 
@@ -398,16 +401,21 @@ public class DemoHelper {
         return avatarOptions;
     }
 
+    public EaseUser getGroupUserInfo(String groupId,String username) {
+        MemberAttributeBean groupBean = DemoHelper.getInstance().getMemberAttribute(groupId,username);
+        EaseUser user = getUserInfo(username);
+        if (groupBean != null && !TextUtils.equals(groupBean.getNickName(),username)){
+            user.setNickname(groupBean.getNickName());
+        }
+        return user;
+    }
+
     public EaseUser getUserInfo(String username) {
         // To get instance of EaseUser, here we get it from the user list in memory
         // You'd better cache it if you get it from your server
         EaseUser user = null;
-        MemberAttributeBean groupBean = DemoHelper.getInstance().getMemberAttribute(currentGroupId,username);
         if(username.equals(EMClient.getInstance().getCurrentUser())){
             user = getUserProfileManager().getCurrentUserInfo();
-            if (groupBean != null && !TextUtils.isEmpty(groupBean.getNickName())){
-                user.setNickname(groupBean.getNickName());
-            }
             return user;
         }
         user = getContactList().get(username);
@@ -422,9 +430,6 @@ public class DemoHelper {
                 }
                 user = new EaseUser(username);
             }
-        }
-        if (groupBean != null && !TextUtils.isEmpty(groupBean.getNickName())){
-            user.setNickname(groupBean.getNickName());
         }
         return user;
     }
@@ -1067,23 +1072,18 @@ public class DemoHelper {
         return GroupHelper.getMemberAttribute(groupId,userName);
     }
 
+    //清除指定群组所有成员属性缓存
     public void clearGroupMemberAttribute(String groupId){
         GroupHelper.clearGroupMemberAttribute(groupId);
     }
 
+    //清除当前登录userId 所有群组成员属性缓存
     public void clearAllMemberAttribute(){
-        GroupHelper.clearAllMemberAttribute();
+        GroupHelper.clearAllGroupMemberAttribute();
     }
 
-    public boolean isFirstTabByGroup(String groupId){
-        return GroupHelper.isFirstTabByGroup(groupId);
-    }
-
-    public void setFirstTab(String groupId){
-        GroupHelper.setFirstTab(groupId);
-    }
-
-    public void setCurrentGroupId(String groupId){
-        this.currentGroupId = groupId;
+    //清除userId 在指定群组内的群组成员属性缓存
+    public void clearGroupMemberAttributeByUserId(String groupId,String userId){
+        GroupHelper.clearGroupMemberAttributeByUserId(groupId,userId);
     }
 }

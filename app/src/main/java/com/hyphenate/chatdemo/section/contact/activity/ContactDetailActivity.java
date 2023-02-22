@@ -3,16 +3,20 @@ package com.hyphenate.chatdemo.section.contact.activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.constraintlayout.widget.Group;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.bumptech.glide.Glide;
+import com.hyphenate.chatdemo.section.group.MemberAttributeBean;
+import com.hyphenate.chatdemo.section.group.viewmodels.GroupDetailViewModel;
 import com.hyphenate.easecallkit.EaseCallKit;
 import com.hyphenate.easecallkit.base.EaseCallType;
 import com.hyphenate.chatdemo.DemoHelper;
@@ -36,6 +40,7 @@ import com.hyphenate.easeui.widget.EaseImageView;
 import com.hyphenate.easeui.widget.EaseTitleBar;
 
 import java.util.List;
+import java.util.Map;
 
 public class ContactDetailActivity extends BaseInitActivity implements EaseTitleBar.OnBackPressListener, View.OnClickListener {
     private EaseTitleBar mEaseTitleBar;
@@ -56,6 +61,7 @@ public class ContactDetailActivity extends BaseInitActivity implements EaseTitle
     private AddContactViewModel addContactViewModel;
     private ContactBlackViewModel blackViewModel;
     private LiveDataBus contactChangeLiveData;
+    private String groupId;
 
     public static void actionStart(Context context, EaseUser user) {
         Intent intent = new Intent(context, ContactDetailActivity.class);
@@ -73,6 +79,13 @@ public class ContactDetailActivity extends BaseInitActivity implements EaseTitle
         Intent intent = new Intent(context, ContactDetailActivity.class);
         intent.putExtra("user", user);
         intent.putExtra("isFriend", isFriend);
+        context.startActivity(intent);
+    }
+
+    public static void actionStart(Context context,EaseUser user,String groupId){
+        Intent intent = new Intent(context, ContactDetailActivity.class);
+        intent.putExtra("user", user);
+        intent.putExtra("groupId", groupId);
         context.startActivity(intent);
     }
 
@@ -110,6 +123,9 @@ public class ContactDetailActivity extends BaseInitActivity implements EaseTitle
         super.initIntent(intent);
         mUser = (EaseUser)getIntent().getSerializableExtra("user");
         mIsFriend = getIntent().getBooleanExtra("isFriend", true);
+        if (getIntent().hasExtra("groupId")){
+            groupId = getIntent().getStringExtra("groupId");
+        }
         if(!mIsFriend) {
             List<String> users = null;
             if(DemoDbHelper.getInstance(mContext).getUserDao() != null) {
@@ -168,6 +184,26 @@ public class ContactDetailActivity extends BaseInitActivity implements EaseTitle
         super.initData();
         contactChangeLiveData = LiveDataBus.get();
         viewModel = new ViewModelProvider(this).get(ContactDetailViewModel.class);
+        GroupDetailViewModel groupDetailViewModel = new ViewModelProvider(this).get(GroupDetailViewModel.class);
+
+        groupDetailViewModel.getFetchMemberAttributeObservable().observe(this,response ->{
+            parseResource(response, new OnResourceParseCallback<Map<String, MemberAttributeBean>>() {
+                @Override
+                public void onSuccess(@Nullable Map<String,MemberAttributeBean> data) {
+                    if (data != null){
+                        for (Map.Entry<String, MemberAttributeBean> entry : data.entrySet()) {
+                            //此页面获取的也是单个userId的群成员属性
+                            MemberAttributeBean memberAttributeBean = DemoHelper.getInstance().getMemberAttribute(groupId,entry.getKey());
+                            if (!TextUtils.isEmpty(memberAttributeBean.getNickName())){
+                                mTvName.setText(memberAttributeBean.getNickName());
+                            }else {
+                                mTvName.setText(mUser.getNickname());
+                            }
+                        }
+                    }
+                }
+            });
+        });
         viewModel.blackObservable().observe(this, response -> {
             parseResource(response, new OnResourceParseCallback<Boolean>() {
                 @Override
@@ -223,6 +259,12 @@ public class ContactDetailActivity extends BaseInitActivity implements EaseTitle
         });
 
         viewModel.getUserInfoById(mUser.getUsername(),mIsFriend);
+
+        //低频操作 从聊天列表点击头像进入 获取该userId的群组成员属性
+        if (!TextUtils.isEmpty(groupId)){
+            groupDetailViewModel.fetchGroupMemberAttribute(groupId,mUser.getUsername());
+        }
+
     }
 
     private void sendEvent() {
@@ -235,7 +277,9 @@ public class ContactDetailActivity extends BaseInitActivity implements EaseTitle
     }
 
     private void updateLayout() {
-        mTvName.setText(mUser.getNickname());
+        if (TextUtils.isEmpty(groupId)){
+            mTvName.setText(mUser.getNickname());
+        }
         Glide.with(mContext)
                 .load(mUser.getAvatar())
                 .placeholder(R.drawable.ease_default_avatar)

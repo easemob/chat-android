@@ -641,20 +641,26 @@ public class EMGroupManagerRepository extends BaseEMRepository{
      * 设置我在群里的昵称
      * @param groupId
      * @param userId
-     * @param nickName
+     * @param attributeMap
      * @return
      */
-    public LiveData<Resource<Map<String,MemberAttributeBean>>> setGroupMemberNickName(String groupId, String userId,String nickName) {
+    public LiveData<Resource<Map<String,MemberAttributeBean>>> setGroupMemberAttributes(String groupId,String userId,Map<String,String> attributeMap) {
         return new NetworkOnlyResource<Map<String,MemberAttributeBean>>() {
             @Override
             protected void createCall(@NonNull ResultCallBack<LiveData<Map<String,MemberAttributeBean>>> callBack) {
-                getGroupManager().asyncSetMemberAttribute(groupId, userId, "nickName", nickName, new EMCallBack() {
+                getGroupManager().asyncSetGroupMemberAttributes(groupId, userId, attributeMap, new EMCallBack() {
                     @Override
                     public void onSuccess() {
                         Map<String,MemberAttributeBean> result = new HashMap<>();
                         MemberAttributeBean bean = new MemberAttributeBean();
-                        bean.setNickName(nickName);
-                        result.put(userId,bean);
+
+                        for (Map.Entry<String, String> entry : attributeMap.entrySet()) {
+                            if(entry.getKey().equals("nickName")){
+                                bean.setNickName(entry.getValue());
+                                result.put(userId,bean);
+                                DemoHelper.getInstance().saveMemberAttribute(groupId,userId,bean);
+                            }
+                        }
                         callBack.onSuccess(createLiveData(result));
                     }
 
@@ -677,14 +683,16 @@ public class EMGroupManagerRepository extends BaseEMRepository{
         return new NetworkOnlyResource<Map<String,MemberAttributeBean>>() {
             @Override
             protected void createCall(@NonNull ResultCallBack<LiveData<Map<String,MemberAttributeBean>>> callBack) {
-                getGroupManager().asyncFetchMemberAllAttribute(groupId, userId, new EMValueCallBack<Map<String, Map<String, String>>>() {
+                getGroupManager().asyncFetchGroupMemberAllAttributes(groupId, userId, new EMValueCallBack<Map<String, Map<String, String>>>() {
                     @Override
                     public void onSuccess(Map<String, Map<String, String>> value) {
                         if (value != null){
                             Map<String,MemberAttributeBean> result = new HashMap<>();
                             Map<String, String> map = value.get(userId);
                             if (map != null){
-                                result.put(userId,GsonTools.changeGsonToBean(new JSONObject(map).toString(),MemberAttributeBean.class));
+                                MemberAttributeBean bean = GsonTools.changeGsonToBean(new JSONObject(map).toString(),MemberAttributeBean.class);
+                                DemoHelper.getInstance().saveMemberAttribute(groupId,userId,bean);
+                                result.put(userId,bean);
                                 callBack.onSuccess(createLiveData(result));
                             }
                         }
@@ -712,14 +720,17 @@ public class EMGroupManagerRepository extends BaseEMRepository{
                 List<String> keyList = new ArrayList<>();
                 keyList.add("nickName");
                 Map<String,MemberAttributeBean> result = new HashMap<>();
-                getGroupManager().asyncFetchMembersAttributes(groupId, userList,keyList, new EMValueCallBack<Map<String, Map<String, String>>>() {
+                getGroupManager().asyncFetchGroupMembersAttributes(groupId, userList,keyList, new EMValueCallBack<Map<String, Map<String, String>>>() {
                     @Override
                     public void onSuccess(Map<String, Map<String, String>> value) {
                         if (value != null){
+                            EMLog.d("apex-wt","fetchGroupMemberDetail : " + value);
                             for (String user : userList) {
                                 Map<String,String> map = value.get(user);
                                 if (map != null){
-                                    result.put(user,GsonTools.changeGsonToBean(new JSONObject(map).toString(),MemberAttributeBean.class));
+                                    MemberAttributeBean bean = GsonTools.changeGsonToBean(new JSONObject(map).toString(),MemberAttributeBean.class);
+                                    DemoHelper.getInstance().saveMemberAttribute(groupId,user,bean);
+                                    result.put(user,bean);
                                 }
                             }
                             callBack.onSuccess(createLiveData(result));
