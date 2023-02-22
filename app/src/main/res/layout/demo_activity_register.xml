@@ -25,14 +25,14 @@
         android:layout_height="wrap_content"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintBottom_toTopOf="@id/et_login_name"
+        app:layout_constraintBottom_toTopOf="@id/et_login_phone"
         android:layout_marginBottom="20dp"
         android:text="@string/em_login_tv_register"
         android:textSize="18sp"
         android:textColor="@color/em_login_color_text"/>
 
     <EditText
-        android:id="@+id/et_login_name"
+        android:id="@+id/et_login_phone"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent"
@@ -42,10 +42,10 @@
         style="@style/em_login_et_input" />
 
     <EditText
-        android:id="@+id/et_login_pwd"
+        android:id="@+id/ll_login_code"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/et_login_name"
+        app:layout_constraintTop_toBottomOf="@id/et_login_phone"
         app:layout_constraintBottom_toTopOf="@id/et_login_pwd_confirm"
         android:layout_marginTop="20dp"
         android:inputType="textPassword"
@@ -56,7 +56,7 @@
         android:id="@+id/et_login_pwd_confirm"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/et_login_pwd"
+        app:layout_constraintTop_toBottomOf="@id/ll_login_code"
         app:layout_constraintBottom_toTopOf="@id/btn_login"
         android:layout_marginTop="20dp"
         android:inputType="textPassword"

@@ -38,7 +38,26 @@
     <string name="em_login_tv_reset_password">重置密码</string>
     <string name="em_login_btn_info_incomplete">用户名或者密码不能为空</string>
     <string name="em_login_failed">登录失败</string>
-    <string name="em_login_agreement">请查看并确认《服务条款》和《隐私协议》</string>
+    <string name="em_login_agreement">请选择同意《环信服务条款》与《环信隐私协议》</string>
+    <string name="em_login_im">登录环信IM</string>
+    <string name="em_login_input_verification_code">请输入验证码</string>
+    <string name="em_login_get_verification_code">获取验证码</string>
+    <string name="em_login_phone_empty">请输入手机号</string>
+    <string name="em_login_code_empty">请输入验证码</string>
+    <string name="em_login_phone_illegal">请输入正确的手机号</string>
+    <string name="em_login_illegal_code">验证码错误</string>
+    <string name="em_login_post_code">验证码已发送</string>
+    <string name="em_login_get_code_again">重新获取</string>
+    <string name="em_login_get_code_again_time">重新获取(%1$ds)</string>
+    <string name="em_login_not_select_agreement">请选择服务条款和隐私协议</string>
+    <string name="em_login_error_send_code_later">请稍后再发</string>
+    <string name="em_login_error_send_code_limit">获取已达上限</string>
+    <string name="em_login_server_configure">服务器配置</string>
+    <string name="demo_login_dialog_content">环信非常重视保护您的隐私，请您仔细阅读下面的《环信服务条款》与《环信隐私协议》，如果您同意请点击"同意并继续"按钮，如果您不同意，请点击"不同意"退出应用。</string>
+    <string name="demo_login_dialog_content_privacy">阅读完整的《环信服务条款》与《环信隐私协议》了解详细内容。</string>
+    <string name="demo_login_dialog_cancel">不同意</string>
+    <string name="demo_login_dialog_confirm">同意并继续</string>
+    <string name="demo_login_dialog_title">用户协议与隐私政策</string>
 
     <string name="em_register_btn">注\u0020册</string>
     <string name="em_register_password_confirm_hint">确认密码</string>
@@ -89,12 +108,21 @@
     <string name="em_server_set_im_server_empty_hint">请设置IM服务器地址</string>
     <string name="em_server_set_im_port_empty_hint">请设置IM端口号</string>
     <string name="em_server_set_rest_server_empty_hint">请设置REST服务器地址</string>
+    <string name="em_server_open_develop_mode">开启开发者模式？</string>
+    <string name="em_server_close_develop_mode">关闭开发者模式？</string>
 
     <string name="em_empty_layout_content">寻找自我 保持本色</string>
 
     <string name="were_mentioned">[有人@我]</string>
     <string name="were_not_send_msg">[草稿]</string>
     <string name="em_chat_et_hint">输入了什么东西</string>
+    <string name="demo_chat_request_camera_permission">使用相机需要相机权限，请进行授权</string>
+    <string name="demo_chat_request_read_external_storage_permission">使用%1$s需要读取SD卡权限，请进行授权</string>
+    <string name="demo_chat_request_location_permission">使用定位功能需要定位权限，请进行授权</string>
+    <string name="demo_chat_request_audio_permission">发送语音消息需要使用麦克风权限，请进行授权</string>
+    <string name="demo_chat_file">文件</string>
+    <string name="demo_chat_photo">相册</string>
+    <string name="demo_chat_video">视频</string>
 
     <string name="em_search_text_hint">搜索</string>
 
@@ -635,4 +663,5 @@
     <string name="localLogin">账号密码登录</string>
 
     <string name="action_report_label">举报</string>
+    <string name="chat_temp_hint">该群仅供试用，72小时后将被删除</string>
 </resources>

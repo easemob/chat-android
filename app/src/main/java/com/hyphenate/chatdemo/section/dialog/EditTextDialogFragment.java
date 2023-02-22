@@ -34,9 +34,11 @@ public class EditTextDialogFragment extends DemoDialogFragment {
         super.initArgument();
         Bundle bundle = getArguments();
         if(bundle != null) {
-            title = bundle.getString("title");
             content = bundle.getString("content");
-            inputType = bundle.getInt("inputType", 0);
+            inputType = bundle.getInt("inputType", -1);
+            contentColor = bundle.getInt("contentColor", 0);
+            contentSize = bundle.getInt("contentSize", 0);
+            contentHint = bundle.getString("contentHint");
         }
     }
 
@@ -82,11 +84,6 @@ public class EditTextDialogFragment extends DemoDialogFragment {
     }
 
     public static class Builder extends DemoDialogFragment.Builder {
-        private String content;
-        private int contentColor;
-        private float contentSize;
-        private int inputType = -1;
-        private String hint;
         private ConfirmClickListener listener;
 
         public Builder(BaseActivity context) {
@@ -94,42 +91,42 @@ public class EditTextDialogFragment extends DemoDialogFragment {
         }
 
         public Builder setContent(@StringRes int title) {
-            this.content = context.getString(title);
+            bundle.putString("content", context.getString(title));
             return this;
         }
 
         public Builder setContent(String title) {
-            this.content = title;
+            bundle.putString("content", title);
             return this;
         }
 
         public Builder setContentColor(@ColorRes int color) {
-            this.contentColor = ContextCompat.getColor(context, color);
+            bundle.putInt("contentColor", ContextCompat.getColor(context, color));
             return this;
         }
 
         public Builder setContentColorInt(@ColorInt int color) {
-            this.contentColor = color;
+            bundle.putInt("contentColor", color);
             return this;
         }
 
         public Builder setContentSize(float size) {
-            this.contentSize = size;
+            bundle.putFloat("contentSize", size);
             return this;
         }
 
         public Builder setContentInputType(int inputType) {
-            this.inputType = inputType;
+            bundle.putInt("contentInputType", inputType);
             return this;
         }
 
         public Builder setContentHint(@StringRes int hint) {
-            this.hint = context.getString(hint);
+            bundle.putString("contentHint", context.getString(hint));
             return this;
         }
 
         public Builder setContentHint(String hint) {
-            this.hint = hint;
+            bundle.putString("contentHint", hint);
             return this;
         }
 
@@ -146,34 +143,8 @@ public class EditTextDialogFragment extends DemoDialogFragment {
         @Override
         public DemoDialogFragment build() {
             EditTextDialogFragment fragment = (EditTextDialogFragment) super.build();
-            fragment.setContent(content);
-            fragment.setContentColor(contentColor);
-            fragment.setContentSize(contentSize);
-            fragment.setInputType(inputType);
-            fragment.setContentHint(hint);
             fragment.setOnConfirmClickListener(listener);
             return fragment;
         }
-
-    }
-
-    private void setContent(String content) {
-        this.content = content;
-    }
-
-    private void setContentColor(int contentColor) {
-        this.contentColor = contentColor;
-    }
-
-    private void setContentSize(float contentSize) {
-        this.contentSize = contentSize;
-    }
-
-    private void setInputType(int inputType) {
-        this.inputType = inputType;
-    }
-
-    private void setContentHint(String hint) {
-        this.contentHint = hint;
     }
 }

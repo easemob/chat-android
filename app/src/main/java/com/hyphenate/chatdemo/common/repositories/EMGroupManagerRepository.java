@@ -1,28 +1,34 @@
 package com.hyphenate.chatdemo.common.repositories;
 
 import android.text.TextUtils;
+import android.util.Pair;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
 import com.hyphenate.EMCallBack;
+import com.hyphenate.EMError;
 import com.hyphenate.EMValueCallBack;
+import com.hyphenate.chat.EMClient;
 import com.hyphenate.chat.EMCursorResult;
 import com.hyphenate.chat.EMGroup;
 import com.hyphenate.chat.EMGroupInfo;
 import com.hyphenate.chat.EMGroupOptions;
 import com.hyphenate.chat.EMMucSharedFile;
+import com.hyphenate.chatdemo.BuildConfig;
 import com.hyphenate.chatdemo.DemoHelper;
 import com.hyphenate.chatdemo.R;
 import com.hyphenate.chatdemo.common.db.entity.EmUserEntity;
 import com.hyphenate.chatdemo.common.interfaceOrImplement.ResultCallBack;
 import com.hyphenate.chatdemo.common.net.ErrorCode;
 import com.hyphenate.chatdemo.common.net.Resource;
+import com.hyphenate.cloud.HttpClientManager;
 import com.hyphenate.easeui.manager.EaseThreadManager;
 import com.hyphenate.easeui.domain.EaseUser;
 import com.hyphenate.easeui.utils.EaseCommonUtils;
 import com.hyphenate.exceptions.HyphenateException;
+import com.hyphenate.util.EMLog;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -1183,4 +1189,38 @@ public class EMGroupManagerRepository extends BaseEMRepository{
             }
         }.asLiveData();
     }
+
+    /**
+     * 专用于本app上报群ID给App server使用
+     * @param group
+     * @return
+     */
+    public LiveData<Resource<EMGroup>> reportGroupIdToServer(EMGroup group) {
+        return new NetworkOnlyResource<EMGroup>() {
+            @Override
+            protected void createCall(@NonNull ResultCallBack<LiveData<EMGroup>> callBack) {
+                runOnIOThread(()-> {
+                    String url = BuildConfig.APP_SERVER_PROTOCOL + "://" + BuildConfig.APP_SERVER_DOMAIN + "/inside/app/group/" + group.getGroupId() + "?appkey=" + EMClient.getInstance().getOptions().getAppKey();
+                    EMLog.e("group", "reportGroupIdToServer url: "+url);
+                    try {
+                        Pair<Integer, String> result = HttpClientManager.sendPostRequest(url, null,null);
+                        if(result == null) {
+                            callBack.onError(EMError.NETWORK_ERROR);
+                        }else {
+                            int code = result.first;
+                            if(code >= 200 && code <= 299) {
+                                callBack.onSuccess(createLiveData(group));
+                            }else {
+                                callBack.onError(EMError.NETWORK_ERROR);
+                            }
+                        }
+                    } catch (HyphenateException e) {
+                        e.printStackTrace();
+                        callBack.onError(EMError.NETWORK_ERROR);
+                    }
+                });
+            }
+        }.asLiveData();
+    }
+
 }

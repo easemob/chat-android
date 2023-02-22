@@ -25,6 +25,7 @@ import com.hyphenate.chatdemo.section.group.fragment.GroupEditFragment;
 import com.hyphenate.easeui.model.EaseEvent;
 import com.hyphenate.easeui.widget.EaseTitleBar;
 import com.hyphenate.chat.EMGroupManager.EMGroupStyle;
+import com.hyphenate.util.EMLog;
 
 import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
@@ -122,6 +123,13 @@ public class NewGroupActivity extends BaseInitActivity implements EaseTitleBar.O
                 public void hideLoading() {
                     super.hideLoading();
                     dismissLoading();
+                }
+
+                @Override
+                public void onError(int code, String message) {
+                    super.onError(code, message);
+                    showToast(message);
+                    EMLog.e("group", message);
                 }
             });
         });
