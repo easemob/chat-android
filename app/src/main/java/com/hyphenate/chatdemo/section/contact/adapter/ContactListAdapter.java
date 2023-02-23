@@ -68,18 +68,12 @@ public class ContactListAdapter extends EaseBaseRecyclerViewAdapter<EaseUser> {
             if(username.contains("/") && username.contains(EMClient.getInstance().getCurrentUser())) {
                 username = EMClient.getInstance().getCurrentUser();
             }
-            EaseUserProfileProvider userProvider = EaseIM.getInstance().getUserProvider();
-            if(userProvider != null) {
-                EaseUser user = userProvider.getUser(username);
-                if(user != null) {
-                    nickname = user.getNickname();
-                    Glide.with(mAvatar)
-                            .load(user.getAvatar())
-                            .placeholder(R.drawable.ease_default_avatar)
-                            .error(R.drawable.ease_default_avatar)
-                            .into(mAvatar);
-                }
-            }
+            Glide.with(mAvatar)
+                    .load(item.getAvatar())
+                    .placeholder(R.drawable.ease_default_avatar)
+                    .error(R.drawable.ease_default_avatar)
+                    .into(mAvatar);
+
             String postfix = "";
             if(username.contains("/") && username.contains(EMClient.getInstance().getCurrentUser())) {
                 postfix = "/"+username.split("/")[1];

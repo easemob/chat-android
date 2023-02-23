@@ -243,7 +243,6 @@ public class GroupDetailActivity extends BaseInitActivity implements EaseTitleBa
                 public void onSuccess(@Nullable Map<String,MemberAttributeBean> data) {
                     if (data != null){
                         for (Map.Entry<String, MemberAttributeBean> entry : data.entrySet()) {
-                            EMLog.d("apex-wt","saveMemberAttribute4");
                             //此页面获取的也是单个userId的群成员属性
                             memberAttributeBean = DemoHelper.getInstance().getMemberAttribute(groupId,entry.getKey());
                         }
@@ -257,7 +256,6 @@ public class GroupDetailActivity extends BaseInitActivity implements EaseTitleBa
                 public void onSuccess(@Nullable Map<String,MemberAttributeBean> data) {
                     if (data != null){
                         for (Map.Entry<String, MemberAttributeBean> entry : data.entrySet()) {
-                            EMLog.d("apex-wt","saveMemberAttribute5");
                             // map中只有一条数据 此页面设置只提供设置单个id
                             memberAttributeBean = DemoHelper.getInstance().getMemberAttribute(groupId,entry.getKey());
                         }

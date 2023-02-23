@@ -191,15 +191,8 @@ public class ContactDetailActivity extends BaseInitActivity implements EaseTitle
                 @Override
                 public void onSuccess(@Nullable Map<String,MemberAttributeBean> data) {
                     if (data != null){
-                        for (Map.Entry<String, MemberAttributeBean> entry : data.entrySet()) {
-                            //此页面获取的也是单个userId的群成员属性
-                            MemberAttributeBean memberAttributeBean = DemoHelper.getInstance().getMemberAttribute(groupId,entry.getKey());
-                            if (!TextUtils.isEmpty(memberAttributeBean.getNickName())){
-                                mTvName.setText(memberAttributeBean.getNickName());
-                            }else {
-                                mTvName.setText(mUser.getNickname());
-                            }
-                        }
+                        mUser = DemoHelper.getInstance().getGroupUserInfo(groupId,mUser.getUsername());
+                        updateLayout();
                     }
                 }
             });
@@ -258,11 +251,11 @@ public class ContactDetailActivity extends BaseInitActivity implements EaseTitle
             });
         });
 
-        viewModel.getUserInfoById(mUser.getUsername(),mIsFriend);
-
         //低频操作 从聊天列表点击头像进入 获取该userId的群组成员属性
         if (!TextUtils.isEmpty(groupId)){
             groupDetailViewModel.fetchGroupMemberAttribute(groupId,mUser.getUsername());
+        }else {
+            viewModel.getUserInfoById(mUser.getUsername(),mIsFriend);
         }
 
     }
@@ -277,9 +270,7 @@ public class ContactDetailActivity extends BaseInitActivity implements EaseTitle
     }
 
     private void updateLayout() {
-        if (TextUtils.isEmpty(groupId)){
-            mTvName.setText(mUser.getNickname());
-        }
+        mTvName.setText(mUser.getNickname());
         Glide.with(mContext)
                 .load(mUser.getAvatar())
                 .placeholder(R.drawable.ease_default_avatar)
@@ -315,6 +306,9 @@ public class ContactDetailActivity extends BaseInitActivity implements EaseTitle
                 break;
             case R.id.btn_chat :
                 ChatActivity.actionStart(mContext, mUser.getUsername(), EaseConstant.CHATTYPE_SINGLE);
+                if (!TextUtils.isEmpty(groupId)){
+                    DemoHelper.getInstance().reLoadUserInfoFromDb();
+                }
                 break;
             case R.id.btn_voice :
                 EaseCallKit.getInstance().startSingleCall(EaseCallType.SINGLE_VOICE_CALL,mUser.getUsername(),null, VideoCallActivity.class);

@@ -316,7 +316,6 @@ public class ChatFragment extends EaseChatFragment implements OnRecallMessageRes
                 }else {
                     ContactDetailActivity.actionStart(mContext, user);
                 }
-
         }else{
             UserDetailActivity.actionStart(mContext,null,null);
         }
@@ -679,16 +678,8 @@ public class ChatFragment extends EaseChatFragment implements OnRecallMessageRes
         }
     }
 
-    @Override
-    public void onDefaultScreenRange(int start, int end) {
-        if (rangeListener != null){
-            rangeListener.onDefaultScreenRange(start,end);
-        }
-    }
-
     public interface OnRangeListener{
         void onCurrentScreenRange(int start, int end);
-        void onDefaultScreenRange(int start, int end);
     }
 
     public void setOnChatLayoutReadyListener(onChatLayoutLifeCycle listener){

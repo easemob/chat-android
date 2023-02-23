@@ -41,6 +41,7 @@ import com.hyphenate.chatdemo.common.manager.PushAndMessageHelper;
 import com.hyphenate.chatdemo.common.repositories.EMContactManagerRepository;
 import com.hyphenate.chatdemo.common.repositories.EMGroupManagerRepository;
 import com.hyphenate.chatdemo.common.repositories.EMPushManagerRepository;
+import com.hyphenate.chatdemo.common.utils.FetchUserInfoList;
 import com.hyphenate.chatdemo.common.utils.GsonTools;
 import com.hyphenate.chatdemo.section.chat.activity.ChatActivity;
 import com.hyphenate.chatdemo.section.group.GroupHelper;
@@ -329,6 +330,13 @@ public class ChatPresenter extends EaseChatPresenter {
                         if(userDao != null) {
                             userDao.clearUsers();
                             userDao.insert(EmUserEntity.parseList(value));
+                        }
+                        if (value.size() > 0){
+                            FetchUserInfoList fetchUserInfoList = FetchUserInfoList.getInstance();
+                            for (EaseUser user : value) {
+                                fetchUserInfoList.addUserId(user.getUsername());
+                            }
+                            DemoHelper.getInstance().startFetchUserRunnable();
                         }
                     }
 
@@ -681,7 +689,6 @@ public class ChatPresenter extends EaseChatPresenter {
                 EMLog.d(TAG,"onGroupMemberAttributeChanged: " + groupId +" - "+ attribute.toString());
                 MemberAttributeBean bean = GsonTools.changeGsonToBean(new JSONObject(attribute).toString(),MemberAttributeBean.class);
                 if (bean != null && bean.getNickName() != null){
-                    EMLog.d("apex-wt","saveMemberAttribute1");
                     DemoHelper.getInstance().saveMemberAttribute(groupId,from,bean);
                     LiveDataBus.get().with(DemoConstant.GROUP_MEMBER_ATTRIBUTE_CHANGE).postValue(EaseEvent.create(DemoConstant.GROUP_MEMBER_ATTRIBUTE_CHANGE, EaseEvent.TYPE.MESSAGE));
                 }

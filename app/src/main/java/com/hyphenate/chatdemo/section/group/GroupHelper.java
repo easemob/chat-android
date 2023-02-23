@@ -158,9 +158,6 @@ public class GroupHelper {
      */
     public static void saveMemberAttribute(String groupId,String userName,MemberAttributeBean bean){
         attributeMap.put(userName,bean);
-//        for (Map.Entry<String, MemberAttributeBean> entry : attributeMap.entrySet()) {
-//            EMLog.d("apex-wt","saveMap:  \n"+  "userId: " +entry.getKey() + " getNickName: " + entry.getValue().getNickName());
-//        }
         groupMemberAttribute.put(groupId,attributeMap);
     }
 
@@ -172,17 +169,7 @@ public class GroupHelper {
      */
     public static MemberAttributeBean getMemberAttribute(String groupId,String userId){
         MemberAttributeBean attributeBean = null;
-//        for (Map.Entry<String, Map<String, MemberAttributeBean>> entry : groupMemberAttribute.entrySet()) {
-//            Map<String, MemberAttributeBean> map = entry.getValue();
-//            String key = entry.getKey();
-//            for (Map.Entry<String, MemberAttributeBean> beanEntry : map.entrySet()) {
-//                EMLog.d("apex-wt", "groupMemberAttribute: " + "\n" + "groupId: " + key+ " userId: " + beanEntry.getKey() + " getNickName: " + beanEntry.getValue().getNickName());
-//            }
-//        }
         if (!TextUtils.isEmpty(groupId) && !TextUtils.isEmpty(userId)){
-//            for (Map.Entry<String, Map<String, MemberAttributeBean>> entry : groupMemberAttribute.entrySet()) {
-//                EMLog.d("apex-wt","groupMemberAttribute key: " + entry.getKey());
-//            }
             if (groupMemberAttribute.containsKey(groupId)){
                 Map<String,MemberAttributeBean> map = groupMemberAttribute.get(groupId);
                 if (map != null ){

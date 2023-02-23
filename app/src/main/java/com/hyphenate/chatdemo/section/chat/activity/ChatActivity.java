@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.view.KeyEvent;
 import android.view.View;
 import android.widget.TextView;
 
@@ -261,6 +262,19 @@ public class ChatActivity extends BaseInitActivity implements EaseTitleBar.OnBac
     @Override
     public void onBackPress(View view) {
         onBackPressed();
+        if (chatType == DemoConstant.CHATTYPE_GROUP){
+            DemoHelper.getInstance().reLoadUserInfoFromDb();
+        }
+    }
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if (keyCode == KeyEvent.KEYCODE_BACK && event.getRepeatCount() == 0){
+            if (chatType == DemoConstant.CHATTYPE_GROUP){
+                DemoHelper.getInstance().reLoadUserInfoFromDb();
+            }
+        }
+        return super.onKeyDown(keyCode, event);
     }
 
     @Override
@@ -313,16 +327,11 @@ public class ChatActivity extends BaseInitActivity implements EaseTitleBar.OnBac
         }
     }
 
-    @Override
-    public void onDefaultScreenRange(int start, int end) {
-        EMLog.d("apex-wt","onDefaultScreenRange: " + start + " - " +end);
-    }
-
     /**
      * 默认进入聊天页面 获取10条消息的id 先查本地缓存过滤后获取群组的成员属性
      */
     private void getDefaultMemberData(){
-        int count = 10;
+        int count = 15;
         if (conversation != null){
             List<EMMessage> messages = conversation.getAllMessages();
             if (messages != null && messages.size() > 0){
@@ -375,7 +384,6 @@ public class ChatActivity extends BaseInitActivity implements EaseTitleBar.OnBac
 
     @Override
     public void onFragmentReady() {
-        EMLog.d("ChatActivity","onFragmentReady");
         if (conversation != null && conversation.getType() == EMConversation.EMConversationType.GroupChat){
             getDefaultMemberData();
         }

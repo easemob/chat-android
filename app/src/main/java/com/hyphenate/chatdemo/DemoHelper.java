@@ -152,14 +152,15 @@ public class DemoHelper {
 
             //callKit初始化
             InitCallKit(context);
-
-            //启动获取用户信息线程
-            fetchUserInfoList = FetchUserInfoList.getInstance();
-            fetchUserRunnable = new FetchUserRunnable();
-            fetchUserTread = new Thread(fetchUserRunnable);
-            fetchUserTread.start();
         }
+    }
 
+    public void startFetchUserRunnable(){
+        //启动获取用户信息线程
+        fetchUserInfoList = FetchUserInfoList.getInstance();
+        fetchUserRunnable = new FetchUserRunnable();
+        fetchUserTread = new Thread(fetchUserRunnable);
+        fetchUserTread.start();
     }
 
 
@@ -202,8 +203,6 @@ public class DemoHelper {
         isSDKInit = EaseIM.getInstance().init(context, options);
         //设置删除用户属性数据超时时间
         demoModel.setUserInfoTimeOut(30 * 60 * 1000);
-        //更新过期用户属性列表
-        updateTimeoutUsers();
         mainContext = context;
         return isSDKInit();
     }
@@ -405,7 +404,9 @@ public class DemoHelper {
         MemberAttributeBean groupBean = DemoHelper.getInstance().getMemberAttribute(groupId,username);
         EaseUser user = getUserInfo(username);
         if (groupBean != null && !TextUtils.equals(groupBean.getNickName(),username)){
-            user.setNickname(groupBean.getNickName());
+            if (user != null){
+                user.setNickname(groupBean.getNickName());
+            }
         }
         return user;
     }
@@ -425,9 +426,6 @@ public class DemoHelper {
             user = getContactList().get(username);
             //如果还找不到从服务端异步拉取 然后通知UI刷新列表
             if(user == null){
-                if(fetchUserInfoList != null){
-                    fetchUserInfoList.addUserId(username);
-                }
                 user = new EaseUser(username);
             }
         }
@@ -720,6 +718,7 @@ public class DemoHelper {
                 for(int i = 0; i < userIds.size(); i++){
                     fetchUserInfoList.addUserId(userIds.get(i));
                 }
+                fetchUserRunnable.setStop(false);
             }
         }
     }
@@ -740,6 +739,10 @@ public class DemoHelper {
             return new Hashtable<String, EaseUser>();
         }
         return contactList;
+    }
+
+    public void reLoadUserInfoFromDb(){
+        contactList = demoModel.getAllUserList();
     }
 
     /**

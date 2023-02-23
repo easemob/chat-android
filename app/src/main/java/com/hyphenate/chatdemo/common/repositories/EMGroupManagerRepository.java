@@ -341,7 +341,7 @@ public class EMGroupManagerRepository extends BaseEMRepository{
                     List<EaseUser> users = new ArrayList<>();
                     if(members != null && !members.isEmpty()){
                         for(int i = 0; i < members.size(); i++){
-                            EaseUser user = DemoHelper.getInstance().getUserInfo(members.get(i));
+                            EaseUser user = DemoHelper.getInstance().getGroupUserInfo(groupId,members.get(i));
                             if(user != null){
                                 users.add(user);
                             }else{
@@ -724,7 +724,6 @@ public class EMGroupManagerRepository extends BaseEMRepository{
                     @Override
                     public void onSuccess(Map<String, Map<String, String>> value) {
                         if (value != null){
-                            EMLog.d("apex-wt","fetchGroupMemberDetail : " + value);
                             for (String user : userList) {
                                 Map<String,String> map = value.get(user);
                                 if (map != null){
