@@ -168,8 +168,6 @@ public class MainActivity extends BaseInitActivity implements BottomNavigationVi
         switchToHome();
         checkIfShowSavedFragment(savedInstanceState);
         addTabBadge();
-        //Translation Manager 初始化
-        DemoHelper.getInstance().initTranslationManager();
     }
 
     @Override

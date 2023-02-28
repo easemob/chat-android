@@ -380,13 +380,6 @@ public class DemoHelper {
                 });
     }
 
-    //Translation Manager 初始化
-    public void initTranslationManager() {
-        EMTranslateParams params = new EMTranslateParams("46c34219512d4f09ae6f8e04c083b7a3", "https://api.cognitive.microsofttranslator.com", 500);
-
-        EMClient.getInstance().translationManager().init(params);
-    }
-
     /**
      * 统一配置头像
      * @return
@@ -615,7 +608,6 @@ public class DemoHelper {
         setAutoLogin(false);
         DemoDbHelper.getInstance(DemoApplication.getInstance()).closeDb();
         getUserProfileManager().reset();
-        EMClient.getInstance().translationManager().logout();
     }
 
     public EaseAvatarOptions getEaseAvatarOptions() {
