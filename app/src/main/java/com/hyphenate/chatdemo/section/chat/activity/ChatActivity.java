@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.view.KeyEvent;
 import android.view.View;
 import android.widget.TextView;
 
@@ -44,6 +45,7 @@ public class ChatActivity extends BaseInitActivity implements EaseTitleBar.OnBac
     private GroupDetailViewModel groupDetailViewModel;
     private TextView tvTitle;
     private TextView subTitle;
+    private EMConversation conversation;
 
     public static void actionStart(Context context, String conversationId, int chatType) {
         Intent intent = new Intent(context, ChatActivity.class);
@@ -115,7 +117,7 @@ public class ChatActivity extends BaseInitActivity implements EaseTitleBar.OnBac
     @Override
     protected void initData() {
         super.initData();
-        EMConversation conversation = EMClient.getInstance().chatManager().getConversation(conversationId);
+        conversation = EMClient.getInstance().chatManager().getConversation(conversationId);
         MessageViewModel messageViewModel = new ViewModelProvider(this).get(MessageViewModel.class);
         groupDetailViewModel = new ViewModelProvider(this).get(GroupDetailViewModel.class);
         viewModel = new ViewModelProvider(this).get(ChatViewModel.class);
@@ -234,6 +236,19 @@ public class ChatActivity extends BaseInitActivity implements EaseTitleBar.OnBac
     @Override
     public void onBackPress(View view) {
         onBackPressed();
+        if (chatType == DemoConstant.CHATTYPE_GROUP){
+            DemoHelper.getInstance().reLoadUserInfoFromDb();
+        }
+    }
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if (keyCode == KeyEvent.KEYCODE_BACK && event.getRepeatCount() == 0){
+            if (chatType == DemoConstant.CHATTYPE_GROUP){
+                DemoHelper.getInstance().reLoadUserInfoFromDb();
+            }
+        }
+        return super.onKeyDown(keyCode, event);
     }
 
     @Override
