@@ -72,6 +72,7 @@ import com.hyphenate.util.EMLog;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -294,17 +295,27 @@ public class ChatFragment extends EaseChatFragment implements OnRecallMessageRes
         if(!(swipeView instanceof SwipeRefreshLayout)) {
             return;
         }
-        View child = ((SwipeRefreshLayout) swipeView).getChildAt(0);
-        if(!(child instanceof RecyclerView) || chatMessageListLayout.getMessageAdapter() == null) {
+        if(((SwipeRefreshLayout) swipeView).getChildCount() <= 0) {
+            return;
+        }
+        RecyclerView recyclerView = null;
+        for(int i = 0; i < ((SwipeRefreshLayout) swipeView).getChildCount(); i++) {
+            View child = ((SwipeRefreshLayout) swipeView).getChildAt(i);
+            if(child instanceof RecyclerView) {
+                recyclerView = (RecyclerView) child;
+                break;
+            }
+        }
+        if(recyclerView == null || chatMessageListLayout.getMessageAdapter() == null) {
             return;
         }
         EaseMessageAdapter messageAdapter = chatMessageListLayout.getMessageAdapter();
-        RecyclerView recyclerView = (RecyclerView) child;
+        RecyclerView finalRecyclerView = recyclerView;
         recyclerView.getViewTreeObserver().addOnGlobalLayoutListener(() -> {
-            if(isFirstMeasure && recyclerView.getLayoutManager() != null && messageAdapter.getData() != null
-                && ((LinearLayoutManager)recyclerView.getLayoutManager()).findLastVisibleItemPosition() == messageAdapter.getData().size() - 1) {
+            if(isFirstMeasure && finalRecyclerView.getLayoutManager() != null && messageAdapter.getData() != null
+                && ((LinearLayoutManager) finalRecyclerView.getLayoutManager()).findLastVisibleItemPosition() == messageAdapter.getData().size() - 1) {
                 isFirstMeasure = false;
-                int[] positionArray = RecyclerViewUtils.rangeMeasurement(recyclerView);
+                int[] positionArray = RecyclerViewUtils.rangeMeasurement(finalRecyclerView);
                 getGroupUserInfo(positionArray[0], positionArray[1]);
             }
         });
@@ -325,18 +336,25 @@ public class ChatFragment extends EaseChatFragment implements OnRecallMessageRes
             Set<String> nameSet = new HashSet<>();
             for (int i = start; i <= end; i++) {
                 EMMessage message = chatLayout.getChatMessageListLayout().getMessageAdapter().getItem(i);
-                if (message != null && TextUtils.isEmpty(message.getFrom())){
+                if (message != null && !TextUtils.isEmpty(message.getFrom())){
                     nameSet.add(message.getFrom());
                 }
             }
-            for (String userId : nameSet) {
+            Iterator<String> iterator = nameSet.iterator();
+            while (iterator.hasNext()) {
+                String userId = iterator.next();
                 MemberAttributeBean bean = DemoHelper.getInstance().getMemberAttribute(conversationId, userId);
                 if (bean == null){
                     //当从本地获取bean对象为空时 默认创建bean对象 并赋值nickName为userId
                     MemberAttributeBean emptyBean = new MemberAttributeBean();
                     emptyBean.setNickName(userId);
                     DemoHelper.getInstance().saveMemberAttribute(conversationId, userId, emptyBean);
+                }else {
+                    iterator.remove();
                 }
+            }
+            if(nameSet.isEmpty()) {
+                return;
             }
             List<String> userIds = new ArrayList<>(nameSet);
             groupDetailViewModel.fetchGroupMemberAttribute(conversationId, userIds);
