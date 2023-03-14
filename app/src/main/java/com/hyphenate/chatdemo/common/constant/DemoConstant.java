@@ -63,6 +63,7 @@ public interface DemoConstant extends EaseConstant {
     String GROUP_CHANGE = "group_change";
     String GROUP_OWNER_TRANSFER = "group_owner_transfer";
     String GROUP_SHARE_FILE_CHANGE = "group_share_file_change";
+    String GROUP_MEMBER_ATTRIBUTE_CHANGE = "group_member_attribute_change";
 
     String CHAT_ROOM_CHANGE = "chat_room_change";
     String CHAT_ROOM_DESTROY = "chat_room_destroy";
