@@ -30,9 +30,8 @@ public class FetchUserRunnable implements Runnable{
     private static final String TAG = FetchUserRunnable.class.getSimpleName();
 
     private FetchUserInfoList infoList;
+    private int size = 0;
 
-    // 轮询时间
-    private final int SLEEP_TIME = 1000;
     // 是否停止
     private volatile boolean isStop = false;
 
@@ -43,7 +42,7 @@ public class FetchUserRunnable implements Runnable{
     @Override
     public void run() {
         while (!isStop) {
-            int size = infoList.getUserSize();
+            size = infoList.getUserSize();
             if (size > 0) {
                 //判断长度是否大于100 最多能一次性获取100个用户属性
                 if (size > 100) {
@@ -53,36 +52,30 @@ public class FetchUserRunnable implements Runnable{
                 for (int i = 0; i < size; i++) {
                     userIds[i] = infoList.getUserId();
                 }
-                EMLog.i(TAG, "FetchUserRunnable exec  userId:" + userIds.toString());
                 EMClient.getInstance().userInfoManager().fetchUserInfoByUserId(userIds, new EMValueCallBack<Map<String, EMUserInfo>>() {
                     @Override
                     public void onSuccess(Map<String, EMUserInfo> userInfos) {
                         EMLog.i(TAG, "fetchUserInfoByUserId userInfo:" + userInfos.keySet().toString());
-                        if (userInfos != null && userInfos.size() > 0) {
+                        if (userInfos.size() > 0) {
                             //更新本地数据库 同时刷新UI列表
                             warpEMUserInfo(userInfos);
                         } else {
                             EMLog.e(TAG, "fetchUserInfoByUserId userInfo is null");
                         }
+                        size = infoList.getUserSize();
                     }
 
                     @Override
                     public void onError(int error, String errorMsg) {
                         EMLog.e(TAG, "fetchUserInfoByUserId  error" + error + "  errorMsg" + errorMsg);
+                        size = infoList.getUserSize();
                     }
                 });
             } else {
-                try {
-                    Thread.sleep(SLEEP_TIME);
-                } catch (InterruptedException e) {
-                    // TODO Auto-generated catch block
-                    e.printStackTrace();
-                }
+                isStop = true;
+                //清空列表缓存
+                infoList.init();
             }
-        }
-        if (isStop) {
-            //清空列表缓存
-            infoList.init();
         }
     }
 
@@ -92,10 +85,10 @@ public class FetchUserRunnable implements Runnable{
      */
     public void setStop(boolean isStop) {
         this.isStop = isStop;
-
     }
 
     private void warpEMUserInfo(Map<String, EMUserInfo> userInfos){
+        EaseUser userEntity;
         Iterator<String> it_user = userInfos.keySet().iterator();
         List<EaseUser> userEntities = new ArrayList<>();
         boolean refreshContact = false;
@@ -104,8 +97,8 @@ public class FetchUserRunnable implements Runnable{
             String userId = it_user.next();
             EMUserInfo userInfo = userInfos.get(userId);
             if (userInfo != null) {
+                userEntity = new EaseUser();
                 EMLog.e(TAG, "start warpEMUserInfo userId:" + userInfo.getUserId());
-                EaseUser userEntity = new EaseUser();
                 userEntity.setUsername(userInfo.getUserId());
                 userEntity.setNickname(userInfo.getNickName());
                 userEntity.setEmail(userInfo.getEmail());
@@ -114,7 +107,6 @@ public class FetchUserRunnable implements Runnable{
                 userEntity.setGender(userInfo.getGender());
                 userEntity.setExt(userInfo.getExt());
                 userEntity.setSign(userInfo.getSignature());
-                EaseCommonUtils.setUserInitialLetter(userEntity);
                 //判断当前更新的是否为好友关系
                 if(exitUsers.containsKey(userInfo.getUserId())) {
                     EaseUser user = exitUsers.get(userInfo.getUserId());
@@ -129,13 +121,17 @@ public class FetchUserRunnable implements Runnable{
                 }else {
                     userEntity.setContact(3);
                 }
-                userEntities.add(userEntity);
-
                 //通知callKit更新头像昵称
                 EaseCallUserInfo info = new EaseCallUserInfo(userInfo.getNickName(),userInfo.getAvatarUrl());
                 info.setUserId(userInfo.getUserId());
                 EaseLiveDataBus.get().with(EaseCallKitUtils.UPDATE_USERINFO).postValue(info);
+            }else {
+                //当获从服务端未获取到用户属性时 本地new一个EaseUser对象存默认值
+                userEntity = new EaseUser(userId);
+                refreshContact = true;
             }
+            EaseCommonUtils.setUserInitialLetter(userEntity);
+            userEntities.add(userEntity);
         }
 
         //更新本地数据库信息

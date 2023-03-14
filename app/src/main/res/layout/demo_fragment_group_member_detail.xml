@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@color/common_bg"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <com.hyphenate.easeui.widget.EaseTitleBar
+        app:layout_constraintTop_toTopOf="parent"
+        android:id="@+id/title_bar"
+        android:layout_width="match_parent"
+        android:background="@color/white"
+        android:layout_height="@dimen/em_common_title_bar_height"
+        app:titleBarRightTitle="@string/em_chat_group_save"
+        app:titleBarRightVisible="true"
+        app:titleBarLeftImage="@drawable/em_back"/>
+
+    <EditText
+        app:layout_constraintTop_toBottomOf="@+id/title_bar"
+        android:padding="23dp"
+        android:id="@+id/et_content"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/ease_seabar_input"
+        android:focusable="true"
+        android:focusableInTouchMode="true"
+        android:singleLine="true"
+        android:maxLength="32"
+        android:textColorHint="@color/em_color_common_text_black"
+        android:textSize="16sp" />
+
+    <ImageButton
+        android:id="@+id/clear"
+        app:layout_constraintTop_toTopOf="@+id/et_content"
+        app:layout_constraintBottom_toBottomOf="@+id/et_content"
+        app:layout_constraintRight_toRightOf="parent"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:layout_marginEnd="23dp"
+        android:background="@android:color/transparent"
+        android:src="@drawable/ease_search_clear"
+        android:visibility="visible" />
+
+    <TextView
+        app:layout_constraintTop_toBottomOf="@+id/et_content"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        android:paddingLeft="23dp"
+        android:paddingRight="23dp"
+        android:layout_marginTop="8dp"
+        android:text="@string/em_chat_group_detail_member_tips"
+        android:textColor="@color/em_color_common_text_gray"
+        android:textSize="@dimen/adaptive_14sp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"/>
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

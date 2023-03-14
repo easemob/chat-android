@@ -12,6 +12,7 @@ import androidx.annotation.StringRes;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
+import com.hyphenate.chatdemo.DemoHelper;
 import com.hyphenate.chatdemo.R;
 import com.hyphenate.chatdemo.common.constant.DemoConstant;
 import com.hyphenate.chatdemo.common.enums.SearchType;
@@ -130,6 +131,8 @@ public class ContactListFragment extends EaseContactListFragment implements View
 
     @Override
     public void initData() {
+        //更新过期用户属性列表
+        DemoHelper.getInstance().updateTimeoutUsers();
         mViewModel = new ViewModelProvider(this).get(ContactsViewModel.class);
         mViewModel.getContactObservable().observe(this, response -> {
             parseResource(response, new OnResourceParseCallback<List<EaseUser>>() {
