@@ -6,10 +6,16 @@ import com.hyphenate.chat.EMChatRoom;
 import com.hyphenate.chat.EMClient;
 import com.hyphenate.chat.EMGroup;
 import com.hyphenate.chatdemo.DemoHelper;
+import com.hyphenate.util.EMLog;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class GroupHelper {
+    private static final Map<String,Boolean> isFirstTab = new HashMap<>();
+    private static final Map<String,Map<String,MemberAttributeBean>> groupMemberAttribute = new HashMap<>();
+    private static final Map<String,MemberAttributeBean> attributeMap = new HashMap<>();
 
     /**
      * 是否是群主
@@ -142,5 +148,69 @@ public class GroupHelper {
             }
         }
         return false;
+    }
+
+    /**
+     * 存储群组成员属性
+     * @param groupId
+     * @param userName
+     * @param bean
+     */
+    public static void saveMemberAttribute(String groupId,String userName,MemberAttributeBean bean){
+        attributeMap.put(userName,bean);
+        groupMemberAttribute.put(groupId,attributeMap);
+    }
+
+    /**
+     * 获取群组成员属性
+     * @param groupId
+     * @param userId
+     * @return
+     */
+    public static MemberAttributeBean getMemberAttribute(String groupId,String userId){
+        MemberAttributeBean attributeBean = null;
+        if (!TextUtils.isEmpty(groupId) && !TextUtils.isEmpty(userId)){
+            if (groupMemberAttribute.containsKey(groupId)){
+                Map<String,MemberAttributeBean> map = groupMemberAttribute.get(groupId);
+                if (map != null ){
+                    if (map.containsKey(userId)){
+                        attributeBean = map.get(userId);
+                    }
+                }
+            }
+        }
+        return attributeBean;
+    }
+
+    /**
+     * 移除指定群组成员属性 用于自己退出群组
+     * @param groupId
+     */
+    public static void clearGroupMemberAttribute(String groupId){
+        groupMemberAttribute.remove(groupId);
+        attributeMap.clear();
+    }
+
+    /**
+     * 移除所有群组成员属性 用于退出登录
+     */
+    public static void clearAllGroupMemberAttribute(){
+        groupMemberAttribute.clear();
+        attributeMap.clear();
+    }
+
+    /**
+     * 移除指定群组指定成员的属性 用于成员被踢出群组或者有成员离开群组时
+     * @param groupId
+     * @param userId
+     */
+    public static void clearGroupMemberAttributeByUserId(String groupId,String userId){
+        if (groupMemberAttribute.containsKey(groupId)){
+           Map<String,MemberAttributeBean> map = groupMemberAttribute.get(groupId);
+           if (map != null){
+               map.remove(userId);
+               attributeMap.remove(userId);
+           }
+        }
     }
 }
