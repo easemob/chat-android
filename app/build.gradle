@@ -46,7 +46,7 @@ android {
         // If you use your own Agora Chat appkey, you should deploy your own App Server.
         // See:verification code
         buildConfigField ("String", "APP_SERVER_PROTOCOL", "\"https\"")
-        buildConfigField ("String", "APP_SERVER_DOMAIN", "\"a1.easemob.com\"")
+        buildConfigField ("String", "APP_SERVER_DOMAIN", "\"a41.easemob.com\"")
         buildConfigField ("String", "APP_BASE_USER", "\"/inside/app/user/\"")
         buildConfigField ("String", "APP_SERVER_LOGIN", "\"login/V2\"")
         buildConfigField ("String", "APP_SERVER_REGISTER", "\"register\"")
@@ -117,11 +117,11 @@ android {
     }
 
     //打开注释后，可以直接在studio里查看和编辑emclient-linux里的代码
-//    externalNativeBuild {
-//        ndkBuild {
-//            path file('jni/Android.mk')
-//        }
-//    }
+    externalNativeBuild {
+        ndkBuild {
+            path file('jni/Android.mk')
+        }
+    }
 }
 
 dependencies {
@@ -171,15 +171,15 @@ dependencies {
     implementation 'pub.devrel:easypermissions:3.0.0'
 
     // EaseIMKit
-//    api (project(path: ':ease-im-kit'))
-    implementation 'io.hyphenate:ease-im-kit:4.0.0'
+    api (project(path: ':ease-im-kit'))
+//    implementation 'io.hyphenate:ease-im-kit:4.0.0'
     // EaseIMKit依赖，必须添加环信IM SDK
-//    implementation project(path: ':hyphenatechatsdk')
-    implementation 'io.hyphenate:hyphenate-chat:4.0.0'
+    implementation project(path: ':hyphenatechatsdk')
+//    implementation 'io.hyphenate:hyphenate-chat:4.0.0'
 
     //EaseCallKit依赖，必须添加环信IM SDK
-//    api project(':ease-call-kit')
-    implementation 'io.hyphenate:ease-call-kit:4.0.0'
+    api project(':ease-call-kit')
+//    implementation 'io.hyphenate:ease-call-kit:4.0.0'
 
 }
 

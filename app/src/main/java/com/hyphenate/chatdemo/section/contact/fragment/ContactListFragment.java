@@ -2,6 +2,7 @@ package com.hyphenate.chatdemo.section.contact.fragment;
 
 import android.annotation.SuppressLint;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -36,6 +37,7 @@ import com.hyphenate.easeui.modules.contact.model.EaseContactCustomBean;
 import com.hyphenate.easeui.modules.menu.EasePopupMenuHelper;
 import com.hyphenate.easeui.widget.EaseSearchTextView;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class ContactListFragment extends EaseContactListFragment implements View.OnClickListener, SwipeRefreshLayout.OnRefreshListener {
@@ -138,6 +140,7 @@ public class ContactListFragment extends EaseContactListFragment implements View
             parseResource(response, new OnResourceParseCallback<List<EaseUser>>() {
                 @Override
                 public void onSuccess(List<EaseUser> data) {
+                    insertRobotToData(data);
                     contactLayout.getContactList().setData(data);
                 }
 
@@ -214,9 +217,24 @@ public class ContactListFragment extends EaseContactListFragment implements View
                 mViewModel.loadContactList(false);
             }
         });
-
-
         mViewModel.loadContactList(true);
+    }
+
+    private List<EaseUser> insertRobotToData(List<EaseUser> data) {
+        if(data==null) {
+            data=new ArrayList<>();
+        }
+        EaseUser robotUser = DemoHelper.getInstance().getRobotUser();
+        if(robotUser!=null) {
+            for (int i = 0; i < data.size(); i++) {
+                if(TextUtils.equals(data.get(i).getUsername(),robotUser.getUsername())) {
+                    data.remove(i);
+                    i--;
+                }
+            }
+            data.add(robotUser);
+        }
+        return data;
     }
 
     @Override

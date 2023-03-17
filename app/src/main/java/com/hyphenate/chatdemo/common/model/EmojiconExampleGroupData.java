@@ -2,6 +2,7 @@ package com.hyphenate.chatdemo.common.model;
 
 import com.hyphenate.chatdemo.DemoApplication;
 import com.hyphenate.chatdemo.R;
+import com.hyphenate.chatdemo.common.constant.DemoConstant;
 import com.hyphenate.easeui.domain.EaseEmojicon;
 import com.hyphenate.easeui.domain.EaseEmojicon.Type;
 import com.hyphenate.easeui.domain.EaseEmojiconGroupEntity;
@@ -9,6 +10,7 @@ import com.hyphenate.easeui.domain.EaseEmojiconGroupEntity;
 import java.util.Arrays;
 
 public class EmojiconExampleGroupData {
+    private static EaseEmojicon typingGifEmojicon;
     
     private static int[] icons = new int[]{
         R.drawable.icon_002_cover,
@@ -26,6 +28,7 @@ public class EmojiconExampleGroupData {
         R.drawable.icon_029_cover,
         R.drawable.icon_030_cover,
         R.drawable.icon_035_cover,
+        R.drawable.icon_040_cover,
         R.drawable.icon_040_cover,
     };
     
@@ -46,6 +49,7 @@ public class EmojiconExampleGroupData {
         R.drawable.icon_030,
         R.drawable.icon_035,
         R.drawable.icon_040,
+        R.drawable.robot_typing,
     };
     
     
@@ -70,5 +74,15 @@ public class EmojiconExampleGroupData {
     
     public static EaseEmojiconGroupEntity getData(){
         return DATA;
+    }
+
+    public static EaseEmojicon getTypingGifEmojicon(){
+        if(typingGifEmojicon==null) {
+            typingGifEmojicon=new EaseEmojicon();
+            typingGifEmojicon.setType(Type.BIG_EXPRESSION);
+            typingGifEmojicon.setIdentityCode(DemoConstant.EASEMOB_ROBOT);
+            typingGifEmojicon.setBigIcon(R.drawable.robot_typing);
+        }
+        return typingGifEmojicon;
     }
 }

@@ -1,5 +1,7 @@
 package com.hyphenate.chatdemo;
 
+import static android.content.Intent.FLAG_ACTIVITY_NEW_TASK;
+
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -12,6 +14,7 @@ import android.view.View;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.ViewModelProvider;
@@ -20,19 +23,22 @@ import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailabilityLight;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
-import com.google.firebase.analytics.FirebaseAnalytics;
-import com.google.firebase.messaging.FirebaseMessaging;
-import com.huawei.agconnect.config.AGConnectServicesConfig;
-import com.hyphenate.EMValueCallBack;
-import com.hyphenate.chat.EMClient;
-import com.hyphenate.chat.EMUserInfo;
-import com.hyphenate.easecallkit.base.EaseCallType;
-
 import com.google.android.material.bottomnavigation.BottomNavigationItemView;
 import com.google.android.material.bottomnavigation.BottomNavigationMenuView;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.firebase.analytics.FirebaseAnalytics;
+import com.google.firebase.messaging.FirebaseMessaging;
+import com.hyphenate.EMValueCallBack;
+import com.hyphenate.chat.EMClient;
+import com.hyphenate.chat.EMConversation;
+import com.hyphenate.chat.EMCustomMessageBody;
+import com.hyphenate.chat.EMMessage;
+import com.hyphenate.chat.EMTextMessageBody;
+import com.hyphenate.chat.EMUserInfo;
+import com.hyphenate.chat.EMUserInfo.EMUserInfoType;
 import com.hyphenate.chatdemo.common.constant.DemoConstant;
 import com.hyphenate.chatdemo.common.enums.SearchType;
+import com.hyphenate.chatdemo.common.interfaceOrImplement.OnResourceParseCallback;
 import com.hyphenate.chatdemo.common.livedatas.LiveDataBus;
 import com.hyphenate.chatdemo.common.utils.PreferenceManager;
 import com.hyphenate.chatdemo.common.utils.PushUtils;
@@ -41,25 +47,23 @@ import com.hyphenate.chatdemo.section.av.MultipleVideoActivity;
 import com.hyphenate.chatdemo.section.av.VideoCallActivity;
 import com.hyphenate.chatdemo.section.base.BaseInitActivity;
 import com.hyphenate.chatdemo.section.chat.ChatPresenter;
+import com.hyphenate.chatdemo.section.contact.activity.AddContactActivity;
 import com.hyphenate.chatdemo.section.contact.activity.GroupContactManageActivity;
 import com.hyphenate.chatdemo.section.contact.fragment.ContactListFragment;
+import com.hyphenate.chatdemo.section.contact.viewmodels.ContactsViewModel;
 import com.hyphenate.chatdemo.section.conversation.ConversationListFragment;
 import com.hyphenate.chatdemo.section.discover.DiscoverFragment;
-import com.hyphenate.chatdemo.section.contact.activity.AddContactActivity;
-import com.hyphenate.chatdemo.section.contact.viewmodels.ContactsViewModel;
 import com.hyphenate.chatdemo.section.group.activity.GroupPrePickActivity;
 import com.hyphenate.chatdemo.section.me.AboutMeFragment;
+import com.hyphenate.easecallkit.base.EaseCallType;
+import com.hyphenate.easeui.domain.EaseUser;
 import com.hyphenate.easeui.model.EaseEvent;
 import com.hyphenate.easeui.ui.base.EaseBaseFragment;
 import com.hyphenate.easeui.widget.EaseTitleBar;
 import com.hyphenate.util.EMLog;
-import com.hyphenate.chat.EMUserInfo.*;
 
 import java.lang.reflect.Method;
 import java.util.Map;
-
-
-import static android.content.Intent.FLAG_ACTIVITY_NEW_TASK;
 
 
 public class MainActivity extends BaseInitActivity implements BottomNavigationView.OnNavigationItemSelectedListener {
@@ -85,13 +89,13 @@ public class MainActivity extends BaseInitActivity implements BottomNavigationVi
 
     @Override
     public boolean onPrepareOptionsMenu(Menu menu) {
-        if(mCurrentFragment != null) {
-            if(mCurrentFragment instanceof ContactListFragment) {
+        if (mCurrentFragment != null) {
+            if (mCurrentFragment instanceof ContactListFragment) {
                 menu.findItem(R.id.action_group).setVisible(false);
                 menu.findItem(R.id.action_friend).setVisible(false);
                 menu.findItem(R.id.action_search_friend).setVisible(true);
                 menu.findItem(R.id.action_search_group).setVisible(true);
-            }else {
+            } else {
                 menu.findItem(R.id.action_group).setVisible(true);
                 menu.findItem(R.id.action_friend).setVisible(true);
                 menu.findItem(R.id.action_search_friend).setVisible(false);
@@ -110,19 +114,19 @@ public class MainActivity extends BaseInitActivity implements BottomNavigationVi
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         switch (item.getItemId()) {
-            case R.id.action_video :
+            case R.id.action_video:
                 break;
-            case R.id.action_group :
+            case R.id.action_group:
                 GroupPrePickActivity.actionStart(mContext);
                 break;
-            case R.id.action_friend :
-            case R.id.action_search_friend :
+            case R.id.action_friend:
+            case R.id.action_search_friend:
                 AddContactActivity.startAction(mContext, SearchType.CHAT);
                 break;
-            case R.id.action_search_group :
+            case R.id.action_search_group:
                 GroupContactManageActivity.actionStart(mContext, true);
                 break;
-            case R.id.action_scan :
+            case R.id.action_scan:
                 showToast(mContext.getString(R.string.em_conversation_menu_scan));
                 break;
         }
@@ -131,14 +135,15 @@ public class MainActivity extends BaseInitActivity implements BottomNavigationVi
 
     /**
      * 显示menu的icon，通过反射，设置menu的icon显示
+     *
      * @param featureId
      * @param menu
      * @return
      */
     @Override
     public boolean onMenuOpened(int featureId, Menu menu) {
-        if(menu != null) {
-            if(menu.getClass().getSimpleName().equalsIgnoreCase("MenuBuilder")) {
+        if (menu != null) {
+            if (menu.getClass().getSimpleName().equalsIgnoreCase("MenuBuilder")) {
                 try {
                     Method method = menu.getClass().getDeclaredMethod("setOptionalIconsVisible", Boolean.TYPE);
                     method.setAccessible(true);
@@ -184,22 +189,24 @@ public class MainActivity extends BaseInitActivity implements BottomNavigationVi
         ChatPresenter.getInstance().init();
         // 获取华为 HMS 推送 token
         HMSPushHelper.getInstance().getHMSToken(this);
+        //拉取聊天机器人id
+        viewModel.fetchRobotObservable();
 
         //判断是否为来电推送
-        if(PushUtils.isRtcCall){
+        if (PushUtils.isRtcCall) {
             if (EaseCallType.getfrom(PushUtils.type) != EaseCallType.CONFERENCE_CALL) {
-                    Intent intent = new Intent(getApplicationContext(), VideoCallActivity.class).addFlags(FLAG_ACTIVITY_NEW_TASK);
+                Intent intent = new Intent(getApplicationContext(), VideoCallActivity.class).addFlags(FLAG_ACTIVITY_NEW_TASK);
                 getApplicationContext().startActivity(intent);
-                } else {
-                    Intent intent = new Intent(getApplication().getApplicationContext(), MultipleVideoActivity.class).addFlags(FLAG_ACTIVITY_NEW_TASK);
+            } else {
+                Intent intent = new Intent(getApplication().getApplicationContext(), MultipleVideoActivity.class).addFlags(FLAG_ACTIVITY_NEW_TASK);
                 getApplicationContext().startActivity(intent);
             }
-            PushUtils.isRtcCall  = false;
+            PushUtils.isRtcCall = false;
         }
 
-        if(DemoHelper.getInstance().getModel().isUseFCM() && GoogleApiAvailabilityLight.getInstance().isGooglePlayServicesAvailable(this) == ConnectionResult.SUCCESS){
+        if (DemoHelper.getInstance().getModel().isUseFCM() && GoogleApiAvailabilityLight.getInstance().isGooglePlayServicesAvailable(this) == ConnectionResult.SUCCESS) {
             // 启用 FCM 自动初始化
-            if(!FirebaseMessaging.getInstance().isAutoInitEnabled()){
+            if (!FirebaseMessaging.getInstance().isAutoInitEnabled()) {
                 FirebaseMessaging.getInstance().setAutoInitEnabled(true);
                 FirebaseAnalytics.getInstance(this).setAnalyticsCollectionEnabled(true);
             }
@@ -208,7 +215,7 @@ public class MainActivity extends BaseInitActivity implements BottomNavigationVi
                 @Override
                 public void onComplete(@NonNull Task<String> task) {
                     if (!task.isSuccessful()) {
-                        EMLog.d("FCM", "Fetching FCM registration token failed:"+task.getException());
+                        EMLog.d("FCM", "Fetching FCM registration token failed:" + task.getException());
                         return;
                     }
                     // Get new FCM registration token
@@ -223,24 +230,35 @@ public class MainActivity extends BaseInitActivity implements BottomNavigationVi
     private void initViewModel() {
         viewModel = new ViewModelProvider(mContext).get(MainViewModel.class);
         viewModel.getSwitchObservable().observe(this, response -> {
-            if(response == null || response == 0) {
+            if (response == null || response == 0) {
                 return;
             }
-            if(response == R.string.em_main_title_me) {
+            if (response == R.string.em_main_title_me) {
                 mTitleBar.setVisibility(View.GONE);
-            }else {
+            } else {
                 mTitleBar.setVisibility(View.VISIBLE);
                 mTitleBar.setTitle(getResources().getString(response));
             }
         });
 
         viewModel.homeUnReadObservable().observe(this, readCount -> {
-            if(!TextUtils.isEmpty(readCount)) {
+            if (!TextUtils.isEmpty(readCount)) {
                 mTvMainHomeMsg.setVisibility(View.VISIBLE);
                 mTvMainHomeMsg.setText(readCount);
-            }else {
+            } else {
                 mTvMainHomeMsg.setVisibility(View.GONE);
             }
+        });
+        viewModel.getFetchRobotObservable().observeForever(response -> {
+            parseResource(response, new OnResourceParseCallback<String>() {
+                @Override
+                public void onSuccess(@Nullable String robotName) {
+                    //拉取聊天机器人id成功，本地联系人列表中插入一条机器人
+                    insertRobotUserToLocal(robotName);
+                    //拉取聊天机器人id成功，本地插入一条欢迎语message
+                    insertRobotWelcomeMessage(robotName);
+                }
+            });
         });
 
         //加载联系人
@@ -257,8 +275,52 @@ public class MainActivity extends BaseInitActivity implements BottomNavigationVi
 
     }
 
+    private void insertRobotUserToLocal(String robotName) {
+        EaseUser robotUser = new EaseUser(robotName);
+        robotUser.setAvatar(DemoConstant.CHAT_ROBOT_URL);
+        robotUser.setExt(DemoConstant.EASEMOB_ROBOT);
+        DemoHelper.getInstance().setRobotUser(robotUser);
+        //通知刷新UI
+        EaseEvent event = EaseEvent.create(DemoConstant.CONTACT_CHANGE, EaseEvent.TYPE.CONTACT);
+        LiveDataBus.get().withSticky(DemoConstant.CONTACT_CHANGE,EaseEvent.class).postValue(event);
+    }
+
+    private void insertRobotWelcomeMessage(String robotName) {
+        EMConversation conversation = EMClient.getInstance().chatManager().getConversation(robotName);
+        if (conversation == null) {
+            //插入免责声明
+            EMMessage message = EMMessage.createReceiveMessage(EMMessage.Type.CUSTOM);
+            EMCustomMessageBody body = new EMCustomMessageBody(DemoConstant.DISCLAIMER_EVENT);
+            message.setBody(body);
+            message.setDirection(EMMessage.Direct.RECEIVE);
+            message.setFrom(robotName);
+            message.setStatus(EMMessage.Status.SUCCESS);
+            message.setUnread(false);
+            EMClient.getInstance().chatManager().saveMessage(message);
+            //插入欢迎语
+            EMMessage welcomeMessage = EMMessage.createReceiveMessage(EMMessage.Type.TXT);
+            EMTextMessageBody txtBody = new EMTextMessageBody(getString(R.string.demo_robot_welcome));
+            welcomeMessage.addBody(txtBody);
+            welcomeMessage.setFrom(robotName);
+            welcomeMessage.setDirection(EMMessage.Direct.RECEIVE);
+            welcomeMessage.setStatus(EMMessage.Status.SUCCESS);
+            welcomeMessage.setUnread(true);
+            EMClient.getInstance().chatManager().saveMessage(welcomeMessage);
+
+            conversation = EMClient.getInstance().chatManager().getConversation(robotName);
+            conversation.setExtField(System.currentTimeMillis()+"");//设置这个是为了置顶
+
+            //通知刷新UI
+            EaseEvent event = EaseEvent.create(DemoConstant.MESSAGE_CHANGE_CHANGE, EaseEvent.TYPE.MESSAGE);
+            LiveDataBus.get().with(DemoConstant.MESSAGE_CHANGE_CHANGE).postValue(event);
+
+        }
+
+    }
+
+
     private void checkUnReadMsg(EaseEvent event) {
-        if(event == null) {
+        if (event == null) {
             return;
         }
         viewModel.checkUnreadMsg();
@@ -270,22 +332,22 @@ public class MainActivity extends BaseInitActivity implements BottomNavigationVi
     private void addTabBadge() {
         BottomNavigationMenuView menuView = (BottomNavigationMenuView) navView.getChildAt(0);
         int childCount = menuView.getChildCount();
-        Log.e("TAG", "bottom child count = "+childCount);
+        Log.e("TAG", "bottom child count = " + childCount);
         BottomNavigationItemView itemTab;
-        for(int i = 0; i < childCount; i++) {
+        for (int i = 0; i < childCount; i++) {
             itemTab = (BottomNavigationItemView) menuView.getChildAt(i);
             View badge = LayoutInflater.from(mContext).inflate(badgeIds[i], menuView, false);
             switch (i) {
-                case 0 :
+                case 0:
                     mTvMainHomeMsg = badge.findViewById(msgIds[0]);
                     break;
-                case 1 :
+                case 1:
                     mTvMainFriendsMsg = badge.findViewById(msgIds[1]);
                     break;
-                case 2 :
+                case 2:
                     mTvMainDiscoverMsg = badge.findViewById(msgIds[2]);
                     break;
-                case 3 :
+                case 3:
                     mTvMainAboutMeMsg = badge.findViewById(msgIds[3]);
                     break;
             }
@@ -295,14 +357,15 @@ public class MainActivity extends BaseInitActivity implements BottomNavigationVi
 
     /**
      * 用于展示是否已经存在的Fragment
+     *
      * @param savedInstanceState
      */
     private void checkIfShowSavedFragment(Bundle savedInstanceState) {
-        if(savedInstanceState != null) {
+        if (savedInstanceState != null) {
             String tag = savedInstanceState.getString("tag");
-            if(!TextUtils.isEmpty(tag)) {
+            if (!TextUtils.isEmpty(tag)) {
                 Fragment fragment = getSupportFragmentManager().findFragmentByTag(tag);
-                if(fragment instanceof EaseBaseFragment) {
+                if (fragment instanceof EaseBaseFragment) {
                     replace((EaseBaseFragment) fragment, tag);
                 }
             }
@@ -310,28 +373,28 @@ public class MainActivity extends BaseInitActivity implements BottomNavigationVi
     }
 
     private void switchToHome() {
-        if(mConversationListFragment == null) {
+        if (mConversationListFragment == null) {
             mConversationListFragment = new ConversationListFragment();
         }
         replace(mConversationListFragment, "conversation");
     }
 
     private void switchToFriends() {
-        if(mFriendsFragment == null) {
+        if (mFriendsFragment == null) {
             mFriendsFragment = new ContactListFragment();
         }
         replace(mFriendsFragment, "contact");
     }
 
     private void switchToDiscover() {
-        if(mDiscoverFragment == null) {
+        if (mDiscoverFragment == null) {
             mDiscoverFragment = new DiscoverFragment();
         }
         replace(mDiscoverFragment, "discover");
     }
 
     private void switchToAboutMe() {
-        if(mAboutMeFragment == null) {
+        if (mAboutMeFragment == null) {
             mAboutMeFragment = new AboutMeFragment();
         }
         //获取自己用户信息
@@ -340,42 +403,42 @@ public class MainActivity extends BaseInitActivity implements BottomNavigationVi
     }
 
     private void replace(EaseBaseFragment fragment, String tag) {
-        if(mCurrentFragment != fragment) {
+        if (mCurrentFragment != fragment) {
             FragmentTransaction t = getSupportFragmentManager().beginTransaction();
-            if(mCurrentFragment != null) {
+            if (mCurrentFragment != null) {
                 t.hide(mCurrentFragment);
             }
             mCurrentFragment = fragment;
-            if(!fragment.isAdded()) {
+            if (!fragment.isAdded()) {
                 t.add(R.id.fl_main_fragment, fragment, tag).show(fragment).commit();
-            }else {
+            } else {
                 t.show(fragment).commit();
             }
         }
     }
 
-    private void fetchSelfInfo(){
+    private void fetchSelfInfo() {
         String[] userId = new String[1];
         userId[0] = EMClient.getInstance().getCurrentUser();
         EMUserInfoType[] userInfoTypes = new EMUserInfoType[2];
         userInfoTypes[0] = EMUserInfoType.NICKNAME;
         userInfoTypes[1] = EMUserInfoType.AVATAR_URL;
-        EMClient.getInstance().userInfoManager().fetchUserInfoByAttribute(userId, userInfoTypes,new EMValueCallBack<Map<String, EMUserInfo>>() {
+        EMClient.getInstance().userInfoManager().fetchUserInfoByAttribute(userId, userInfoTypes, new EMValueCallBack<Map<String, EMUserInfo>>() {
             @Override
             public void onSuccess(Map<String, EMUserInfo> userInfos) {
                 runOnUiThread(new Runnable() {
                     public void run() {
-                       EMUserInfo userInfo = userInfos.get(EMClient.getInstance().getCurrentUser());
+                        EMUserInfo userInfo = userInfos.get(EMClient.getInstance().getCurrentUser());
                         //昵称
-                        if(userInfo != null && userInfo.getNickName() != null &&
-                                userInfo.getNickName().length() > 0){
+                        if (userInfo != null && userInfo.getNickName() != null &&
+                                userInfo.getNickName().length() > 0) {
                             EaseEvent event = EaseEvent.create(DemoConstant.NICK_NAME_CHANGE, EaseEvent.TYPE.CONTACT);
                             event.message = userInfo.getNickName();
                             LiveDataBus.get().with(DemoConstant.NICK_NAME_CHANGE).postValue(event);
                             PreferenceManager.getInstance().setCurrentUserNick(userInfo.getNickName());
                         }
                         //头像
-                        if(userInfo != null && userInfo.getAvatarUrl() != null && userInfo.getAvatarUrl().length() > 0){
+                        if (userInfo != null && userInfo.getAvatarUrl() != null && userInfo.getAvatarUrl().length() > 0) {
 
                             EaseEvent event = EaseEvent.create(DemoConstant.AVATAR_CHANGE, EaseEvent.TYPE.CONTACT);
                             event.message = userInfo.getAvatarUrl();
@@ -388,7 +451,7 @@ public class MainActivity extends BaseInitActivity implements BottomNavigationVi
 
             @Override
             public void onError(int error, String errorMsg) {
-                EMLog.e("MainActivity","fetchUserInfoByIds error:" + error + " errorMsg:" + errorMsg);
+                EMLog.e("MainActivity", "fetchUserInfoByIds error:" + error + " errorMsg:" + errorMsg);
             }
         });
     }
@@ -399,23 +462,23 @@ public class MainActivity extends BaseInitActivity implements BottomNavigationVi
         showMenu = true;
         boolean showNavigation = false;
         switch (menuItem.getItemId()) {
-            case R.id.em_main_nav_home :
+            case R.id.em_main_nav_home:
                 switchToHome();
                 mTitleBar.setTitle(getResources().getString(R.string.em_main_title_home));
                 showNavigation = true;
                 break;
-            case R.id.em_main_nav_friends :
+            case R.id.em_main_nav_friends:
                 switchToFriends();
                 mTitleBar.setTitle(getResources().getString(R.string.em_main_title_friends));
                 showNavigation = true;
                 invalidateOptionsMenu();
                 break;
-            case R.id.em_main_nav_discover :
+            case R.id.em_main_nav_discover:
                 switchToDiscover();
                 mTitleBar.setTitle(getResources().getString(R.string.em_main_title_discover));
                 showNavigation = true;
                 break;
-            case R.id.em_main_nav_me :
+            case R.id.em_main_nav_me:
                 switchToAboutMe();
                 mTitleBar.setTitle(getResources().getString(R.string.em_main_title_me));
                 showMenu = false;
@@ -439,7 +502,7 @@ public class MainActivity extends BaseInitActivity implements BottomNavigationVi
     @Override
     protected void onSaveInstanceState(@NonNull Bundle outState) {
         super.onSaveInstanceState(outState);
-        if(mCurrentFragment != null) {
+        if (mCurrentFragment != null) {
             outState.putString("tag", mCurrentFragment.getTag());
         }
     }

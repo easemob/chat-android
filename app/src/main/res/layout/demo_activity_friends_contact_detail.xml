@@ -79,7 +79,7 @@
         android:layout_marginTop="29dp"
         android:layout_marginRight="21dp"
         android:src="@drawable/em_arrow_right"
-        android:tint="@color/black" />
+        app:tint="@color/black" />
 
     <View
         android:layout_width="0dp"
@@ -142,5 +142,11 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         app:constraint_referenced_ids="iv_skip,btn_chat,btn_video,btn_voice"/>
+
+    <androidx.constraintlayout.widget.Group
+        android:id="@+id/group_robot"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:constraint_referenced_ids="iv_skip,btn_video,btn_voice"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

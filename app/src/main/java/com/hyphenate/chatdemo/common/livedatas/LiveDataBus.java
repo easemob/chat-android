@@ -31,9 +31,11 @@ import java.util.Map;
 public final class LiveDataBus {
 
     private final Map<String, BusMutableLiveData<Object>> bus;
+    private final Map<String, MutableLiveData<Object>> busSticky;
 
     private LiveDataBus() {
         bus = new HashMap<>();
+        busSticky=new HashMap<>();
     }
 
     private static class SingletonHolder {
@@ -49,6 +51,12 @@ public final class LiveDataBus {
             bus.put(key, new BusMutableLiveData<>());
         }
         return (MutableLiveData<T>) bus.get(key);
+    }
+    public <T> MutableLiveData<T> withSticky(String key, Class<T> type) {
+        if (!busSticky.containsKey(key)) {
+            busSticky.put(key, new MutableLiveData());
+        }
+        return (MutableLiveData<T>) busSticky.get(key);
     }
 
     public MutableLiveData<Object> with(String key) {

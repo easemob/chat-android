@@ -90,10 +90,17 @@ public class ChatActivity extends BaseInitActivity implements EaseTitleBar.OnBac
 
     private void setTitleBarRight() {
         if(chatType == DemoConstant.CHATTYPE_SINGLE) {
-            titleBarMessage.setRightImageResource(R.drawable.chat_user_info);
+            //检查是否聊天机器人，是的话隐藏右上角的三个点
+            EaseUser robotUser = DemoHelper.getInstance().getRobotUser();
+            if(robotUser!=null&&TextUtils.equals(conversationId,robotUser.getUsername())) {
+                titleBarMessage.setRightLayoutVisibility(View.GONE);
+            }else{
+                titleBarMessage.setRightImageResource(R.drawable.chat_user_info);
+            }
         }else {
             titleBarMessage.setRightImageResource(R.drawable.chat_group_info);
         }
+
     }
 
     @Override

@@ -26,19 +26,6 @@ import com.hyphenate.chat.EMGroupManager;
 import com.hyphenate.chat.EMMessage;
 import com.hyphenate.chat.EMOptions;
 import com.hyphenate.chat.EMPushManager;
-import com.hyphenate.chatdemo.section.group.GroupHelper;
-import com.hyphenate.chatdemo.section.group.MemberAttributeBean;
-import com.hyphenate.cloud.EMHttpClient;
-import com.hyphenate.easecallkit.EaseCallKit;
-import com.hyphenate.easecallkit.base.EaseCallEndReason;
-import com.hyphenate.easecallkit.base.EaseCallKitConfig;
-import com.hyphenate.easecallkit.base.EaseCallKitListener;
-import com.hyphenate.easecallkit.base.EaseCallKitTokenCallback;
-import com.hyphenate.easecallkit.base.EaseCallType;
-import com.hyphenate.easecallkit.base.EaseCallUserInfo;
-import com.hyphenate.easecallkit.base.EaseGetUserAccountCallback;
-import com.hyphenate.easecallkit.base.EaseUserAccount;
-import com.hyphenate.easecallkit.event.CallCancelEvent;
 import com.hyphenate.chatdemo.common.constant.DemoConstant;
 import com.hyphenate.chatdemo.common.db.DemoDbHelper;
 import com.hyphenate.chatdemo.common.livedatas.LiveDataBus;
@@ -53,12 +40,26 @@ import com.hyphenate.chatdemo.section.av.MultipleVideoActivity;
 import com.hyphenate.chatdemo.section.av.VideoCallActivity;
 import com.hyphenate.chatdemo.section.chat.ChatPresenter;
 import com.hyphenate.chatdemo.section.chat.delegates.ChatConferenceInviteAdapterDelegate;
+import com.hyphenate.chatdemo.section.chat.delegates.ChatDisclaimerAdapterDelegate;
 import com.hyphenate.chatdemo.section.chat.delegates.ChatNotificationAdapterDelegate;
 import com.hyphenate.chatdemo.section.chat.delegates.ChatRecallAdapterDelegate;
 import com.hyphenate.chatdemo.section.chat.delegates.ChatUserCardAdapterDelegate;
 import com.hyphenate.chatdemo.section.chat.delegates.ChatVideoCallAdapterDelegate;
 import com.hyphenate.chatdemo.section.chat.delegates.ChatVoiceCallAdapterDelegate;
 import com.hyphenate.chatdemo.section.conference.ConferenceInviteActivity;
+import com.hyphenate.chatdemo.section.group.GroupHelper;
+import com.hyphenate.chatdemo.section.group.MemberAttributeBean;
+import com.hyphenate.cloud.EMHttpClient;
+import com.hyphenate.easecallkit.EaseCallKit;
+import com.hyphenate.easecallkit.base.EaseCallEndReason;
+import com.hyphenate.easecallkit.base.EaseCallKitConfig;
+import com.hyphenate.easecallkit.base.EaseCallKitListener;
+import com.hyphenate.easecallkit.base.EaseCallKitTokenCallback;
+import com.hyphenate.easecallkit.base.EaseCallType;
+import com.hyphenate.easecallkit.base.EaseCallUserInfo;
+import com.hyphenate.easecallkit.base.EaseGetUserAccountCallback;
+import com.hyphenate.easecallkit.base.EaseUserAccount;
+import com.hyphenate.easecallkit.event.CallCancelEvent;
 import com.hyphenate.easeui.EaseIM;
 import com.hyphenate.easeui.delegate.EaseCustomAdapterDelegate;
 import com.hyphenate.easeui.delegate.EaseExpressionAdapterDelegate;
@@ -117,7 +118,7 @@ public class DemoHelper {
     private FetchUserRunnable fetchUserRunnable;
     private Thread fetchUserTread;
     private FetchUserInfoList fetchUserInfoList;
-
+    private EaseUser robotUser;//聊天机器人
 
     private DemoHelper() {}
 
@@ -214,6 +215,7 @@ public class DemoHelper {
      */
     private void registerConversationType() {
         EaseMessageTypeSetManager.getInstance()
+                .addMessageType(ChatDisclaimerAdapterDelegate.class)       //免责声明
                 .addMessageType(EaseExpressionAdapterDelegate.class)       //自定义表情
                 .addMessageType(EaseFileAdapterDelegate.class)             //文件
                 .addMessageType(EaseImageAdapterDelegate.class)            //图片
@@ -356,6 +358,10 @@ public class DemoHelper {
                 .setEmojiconInfoProvider(new EaseEmojiconInfoProvider() {
                     @Override
                     public EaseEmojicon getEmojiconInfo(String emojiconIdentityCode) {
+                        EaseEmojicon typingGifEmojicon = EmojiconExampleGroupData.getTypingGifEmojicon();
+                        if(typingGifEmojicon.getIdentityCode().equals(emojiconIdentityCode)) {
+                            return typingGifEmojicon;
+                        }
                         EaseEmojiconGroupEntity data = EmojiconExampleGroupData.getData();
                         for(EaseEmojicon emojicon : data.getEmojiconList()){
                             if(emojicon.getIdentityCode().equals(emojiconIdentityCode)){
@@ -412,6 +418,11 @@ public class DemoHelper {
         if(username.equals(EMClient.getInstance().getCurrentUser())){
             user = getUserProfileManager().getCurrentUserInfo();
             return user;
+        }
+        //查找是不是机器人
+        EaseUser robotUser = DemoHelper.getInstance().getRobotUser();
+        if(robotUser!=null&&TextUtils.equals(robotUser.getUsername(),username)) {
+            return robotUser;
         }
         user = getContactList().get(username);
         if(user == null){
@@ -1081,5 +1092,13 @@ public class DemoHelper {
     //清除userId 在指定群组内的群组成员属性缓存
     public void clearGroupMemberAttributeByUserId(String groupId,String userId){
         GroupHelper.clearGroupMemberAttributeByUserId(groupId,userId);
+    }
+
+    public EaseUser getRobotUser() {
+        return robotUser;
+    }
+
+    public void setRobotUser(EaseUser robotUser) {
+        this.robotUser = robotUser;
     }
 }

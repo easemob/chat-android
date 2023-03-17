@@ -127,7 +127,7 @@ public abstract class NetworkOnlyResource<ResultType> {
      * in the base class.
      * @return
      */
-    protected LiveData<Resource<ResultType>> asLiveData() {
+    public LiveData<Resource<ResultType>> asLiveData() {
         return result;
     }
 

@@ -669,6 +669,9 @@
     <string name="chat_temp_hint">For trial only, will be deleted after 72 hours</string>
 
     <string name="demo_chat_swindle">This application is only used for functional development and testing of Huanxin products, do not use for illegal purposes. Anything involving money transfer, remittance, naked chat, online love, online shopping refund, investment and financing are all fraud, please do not believe.</string>
+    <string name="demo_chat_disclaimer">This session is based on external API secondary\n development for trial AI use only</string>
+    <string name="demo_chat_disclaimer_link">View disclaimer</string>
+    <string name="demo_robot_welcome">Welcome to try out Chatbot and I will answer any questions you may have. Please note that the maximum number of questions is 10. If the limit is exceeded, I will no longer answer your questions. Please understand.</string>
 
 
 </resources>

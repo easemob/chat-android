@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:gravity="center_horizontal"
+    android:orientation="vertical"
+    android:paddingTop="13dp"
+    android:paddingBottom="5dp">
+
+    <TextView
+        android:id="@+id/timestamp"
+        style="@style/chat_text_date_style"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="12dp"
+        android:layout_marginTop="15dp"
+        android:layout_marginRight="12dp"
+        android:gravity="center"
+        android:text="@string/demo_chat_disclaimer"
+        android:textColor="@color/btn_gray_normal"
+        android:textSize="12sp" />
+
+    <TextView
+        android:id="@+id/tv_disclaimer_link"
+        android:layout_width="wrap_content"
+        android:layout_marginLeft="12dp"
+        android:layout_marginRight="12dp"
+        android:gravity="center"
+        android:layout_marginTop="2dp"
+        android:layout_height="wrap_content"
+        android:text="@string/demo_chat_disclaimer_link"
+        android:textColor="@color/blue_0091ff"
+        android:textSize="12sp" />
+
+
+</LinearLayout>

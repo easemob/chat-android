@@ -15,10 +15,6 @@ import androidx.constraintlayout.widget.Group;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.bumptech.glide.Glide;
-import com.hyphenate.chatdemo.section.group.MemberAttributeBean;
-import com.hyphenate.chatdemo.section.group.viewmodels.GroupDetailViewModel;
-import com.hyphenate.easecallkit.EaseCallKit;
-import com.hyphenate.easecallkit.base.EaseCallType;
 import com.hyphenate.chatdemo.DemoHelper;
 import com.hyphenate.chatdemo.R;
 import com.hyphenate.chatdemo.common.constant.DemoConstant;
@@ -33,6 +29,10 @@ import com.hyphenate.chatdemo.section.contact.viewmodels.ContactBlackViewModel;
 import com.hyphenate.chatdemo.section.contact.viewmodels.ContactDetailViewModel;
 import com.hyphenate.chatdemo.section.dialog.DemoDialogFragment;
 import com.hyphenate.chatdemo.section.dialog.SimpleDialogFragment;
+import com.hyphenate.chatdemo.section.group.MemberAttributeBean;
+import com.hyphenate.chatdemo.section.group.viewmodels.GroupDetailViewModel;
+import com.hyphenate.easecallkit.EaseCallKit;
+import com.hyphenate.easecallkit.base.EaseCallType;
 import com.hyphenate.easeui.constants.EaseConstant;
 import com.hyphenate.easeui.domain.EaseUser;
 import com.hyphenate.easeui.model.EaseEvent;
@@ -53,6 +53,7 @@ public class ContactDetailActivity extends BaseInitActivity implements EaseTitle
     private TextView mBtnAddContact;
     private TextView mBtnRemoveBlack;
     private Group mGroupFriend;
+    private Group mGroupRobot;
 
     private EaseUser mUser;
     private boolean mIsFriend;
@@ -96,7 +97,7 @@ public class ContactDetailActivity extends BaseInitActivity implements EaseTitle
 
     @Override
     public boolean onPrepareOptionsMenu(Menu menu) {
-        return mIsFriend && !mIsBlack;
+        return mIsFriend && !mIsBlack&&!TextUtils.equals(mUser.getExt(),DemoConstant.EASEMOB_ROBOT);
     }
 
     @Override
@@ -148,6 +149,7 @@ public class ContactDetailActivity extends BaseInitActivity implements EaseTitle
         mBtnAddContact = findViewById(R.id.btn_add_contact);
         mGroupFriend = findViewById(R.id.group_friend);
         mBtnRemoveBlack = findViewById(R.id.btn_remove_black);
+        mGroupRobot = findViewById(R.id.group_robot);
 
         if(mIsFriend) {
             mGroupFriend.setVisibility(View.VISIBLE);
@@ -255,7 +257,9 @@ public class ContactDetailActivity extends BaseInitActivity implements EaseTitle
         if (!TextUtils.isEmpty(groupId)){
             groupDetailViewModel.fetchGroupMemberAttribute(groupId,mUser.getUsername());
         }else {
-            viewModel.getUserInfoById(mUser.getUsername(),mIsFriend);
+            if(!TextUtils.equals(mUser.getExt(),DemoConstant.EASEMOB_ROBOT)) {
+                viewModel.getUserInfoById(mUser.getUsername(),mIsFriend);
+            }
         }
 
     }
@@ -276,6 +280,10 @@ public class ContactDetailActivity extends BaseInitActivity implements EaseTitle
                 .placeholder(R.drawable.ease_default_avatar)
                 .error(R.drawable.ease_default_avatar)
                 .into(mAvatarUser);
+        if(TextUtils.equals(mUser.getExt(),DemoConstant.EASEMOB_ROBOT)) {
+            mGroupRobot.setVisibility(View.GONE);
+            mEaseTitleBar.setToobarOverflowIcon(null);
+        }
     }
 
     private void showDeleteDialog(EaseUser user) {

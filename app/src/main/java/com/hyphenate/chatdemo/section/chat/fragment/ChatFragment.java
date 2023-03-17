@@ -22,16 +22,21 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.FragmentActivity;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
+import com.google.android.gms.common.util.CollectionUtils;
 import com.hyphenate.EMCallBack;
+import com.hyphenate.EMMessageListener;
 import com.hyphenate.chat.EMClient;
+import com.hyphenate.chat.EMConversation;
 import com.hyphenate.chat.EMCustomMessageBody;
 import com.hyphenate.chat.EMGroup;
 import com.hyphenate.chat.EMMessage;
+import com.hyphenate.chat.EMTextMessageBody;
 import com.hyphenate.chatdemo.DemoApplication;
 import com.hyphenate.chatdemo.DemoHelper;
 import com.hyphenate.chatdemo.R;
@@ -42,6 +47,7 @@ import com.hyphenate.chatdemo.common.model.EmojiconExampleGroupData;
 import com.hyphenate.chatdemo.common.utils.RecyclerViewUtils;
 import com.hyphenate.chatdemo.section.av.VideoCallActivity;
 import com.hyphenate.chatdemo.section.base.BaseActivity;
+import com.hyphenate.chatdemo.section.chat.activity.ChatActivity;
 import com.hyphenate.chatdemo.section.chat.activity.ForwardMessageActivity;
 import com.hyphenate.chatdemo.section.chat.activity.PickAtUserActivity;
 import com.hyphenate.chatdemo.section.chat.activity.SelectUserCardActivity;
@@ -64,8 +70,11 @@ import com.hyphenate.easeui.constants.EaseConstant;
 import com.hyphenate.easeui.domain.EaseUser;
 import com.hyphenate.easeui.model.EaseEvent;
 import com.hyphenate.easeui.modules.chat.EaseChatFragment;
+import com.hyphenate.easeui.modules.chat.EaseChatInputMenu;
 import com.hyphenate.easeui.modules.chat.EaseChatMessageListLayout;
+import com.hyphenate.easeui.modules.chat.EaseInputMenuStyle;
 import com.hyphenate.easeui.modules.chat.interfaces.IChatExtendMenu;
+import com.hyphenate.easeui.modules.chat.interfaces.IChatPrimaryMenu;
 import com.hyphenate.easeui.modules.chat.interfaces.OnRecallMessageResultListener;
 import com.hyphenate.easeui.modules.menu.EasePopupWindowHelper;
 import com.hyphenate.easeui.modules.menu.MenuItemBean;
@@ -82,7 +91,7 @@ import java.util.Set;
 import pub.devrel.easypermissions.EasyPermissions;
 
 
-public class ChatFragment extends EaseChatFragment implements OnRecallMessageResultListener, EasyPermissions.PermissionCallbacks{
+public class ChatFragment extends EaseChatFragment implements OnRecallMessageResultListener, EasyPermissions.PermissionCallbacks, EMMessageListener {
     private static final String TAG = ChatFragment.class.getSimpleName();
     private static final int REQUEST_CODE_SELECT_USER_CARD = 20;
     private static final int REQUEST_CODE_CAMERA = 110;
@@ -109,6 +118,7 @@ public class ChatFragment extends EaseChatFragment implements OnRecallMessageRes
     private Dialog dialog;
     private boolean isFirstMeasure = true;
     private GroupDetailViewModel groupDetailViewModel;
+    private IChatPrimaryMenu primaryMenu;
 
     @Override
     public void initView() {
@@ -140,13 +150,16 @@ public class ChatFragment extends EaseChatFragment implements OnRecallMessageRes
         //messageListLayout.setItemShowType(EaseChatMessageListLayout.ShowType.LEFT);
 
         //获取到菜单输入父控件
-        //EaseChatInputMenu chatInputMenu = chatLayout.getChatInputMenu();
+        EaseChatInputMenu chatInputMenu = chatLayout.getChatInputMenu();
         //获取到菜单输入控件
-        //IChatPrimaryMenu primaryMenu = chatInputMenu.getPrimaryMenu();
-        //if(primaryMenu != null) {
-            //设置菜单样式为不可用语音模式
-        //    primaryMenu.setMenuShowType(EaseInputMenuStyle.ONLY_TEXT);
-        //}
+        primaryMenu = chatInputMenu.getPrimaryMenu();
+        if(primaryMenu != null) {
+//            设置菜单样式为不可用语音模式
+            EaseUser robotUser = DemoHelper.getInstance().getRobotUser();
+            if(robotUser!=null&&TextUtils.equals(conversationId,robotUser.getUsername())) {
+                primaryMenu.setMenuShowType(EaseInputMenuStyle.ONLY_TEXT);
+            }
+        }
 
         chatLayout.setTargetLanguageCode(DemoHelper.getInstance().getModel().getTargetLanguage());
     }
@@ -210,6 +223,7 @@ public class ChatFragment extends EaseChatFragment implements OnRecallMessageRes
     public void initListener() {
         super.initListener();
         chatLayout.setOnRecallMessageResultListener(this);
+        EMClient.getInstance().chatManager().addMessageListener(this);
         listenerRecyclerViewItemFinishLayout();
     }
 
@@ -218,6 +232,7 @@ public class ChatFragment extends EaseChatFragment implements OnRecallMessageRes
         super.initData();
         resetChatExtendMenu();
         addItemMenuAction();
+        removeRobotTyping();
 
         chatLayout.getChatInputMenu().getPrimaryMenu().getEditText().setText(getUnSendMsg());
         chatLayout.turnOnTypingMonitor(DemoHelper.getInstance().getModel().isShowMsgTyping());
@@ -546,6 +561,40 @@ public class ChatFragment extends EaseChatFragment implements OnRecallMessageRes
     }
 
     @Override
+    public void onChatSuccess(EMMessage message) {
+        super.onChatSuccess(message);
+        EaseUser robotUser = DemoHelper.getInstance().getRobotUser();
+        if(robotUser!=null&&TextUtils.equals(message.getTo(),robotUser.getUsername())) {
+            //插入正在输入gif消息
+            insertRobotTypingMsg(robotUser,message);
+            //改变顶部正在输入的状态
+            ((ChatActivity)getActivity()).onOtherTyping("TypingBegin");
+            //通知刷新UI
+            chatLayout.getChatMessageListLayout().refreshMessages();
+//            hideKeyboard();
+            if(primaryMenu!=null) {
+                primaryMenu.getEditText().setEnabled(false);
+            }
+        }
+    }
+
+    private void insertRobotTypingMsg(EaseUser robotUser, EMMessage message) {
+        EMMessage typingMsg = EMMessage.createReceiveMessage(EMMessage.Type.TXT);
+        typingMsg.setAttribute(EaseConstant.MESSAGE_ATTR_EXPRESSION_ID, DemoConstant.EASEMOB_ROBOT);
+        typingMsg.setAttribute(EaseConstant.MESSAGE_ATTR_IS_BIG_EXPRESSION, true);
+        EMTextMessageBody txtBody = new EMTextMessageBody(DemoConstant.EASEMOB_ROBOT);
+        typingMsg.addBody(txtBody);
+        typingMsg.setDirection(EMMessage.Direct.RECEIVE);
+        typingMsg.setFrom(robotUser.getUsername());
+        typingMsg.setMsgTime(message.getMsgTime()+10);
+        typingMsg.setLocalTime(message.getMsgTime()+10);
+        typingMsg.setStatus(EMMessage.Status.SUCCESS);
+        typingMsg.setUnread(false);
+        typingMsg.setMsgId(DemoConstant.EASEMOB_ROBOT_TYPING_MSGID);
+        EMClient.getInstance().chatManager().saveMessage(typingMsg);
+    }
+
+    @Override
     public boolean onRecordTouch(View v, MotionEvent event) {
         if(!checkIfHasPermissions(Manifest.permission.RECORD_AUDIO, REQUEST_CODE_VOICE)) {
             return false;
@@ -823,6 +872,54 @@ public class ChatFragment extends EaseChatFragment implements OnRecallMessageRes
     @Override
     public void onPermissionsDenied(int requestCode, @NonNull List<String> perms) {
 
+    }
+
+
+    @Override
+    public void onMessageReceived(List<EMMessage> messages) {
+        EaseUser robotUser = DemoHelper.getInstance().getRobotUser();
+        if(!CollectionUtils.isEmpty(messages)&&robotUser!=null) {
+            for (EMMessage message : messages) {
+                if(TextUtils.equals(robotUser.getUsername(),message.getFrom())) {
+                    //机器人来消息就移除typing msg
+                    removeRobotTyping();
+                }
+            }
+        }
+    }
+
+    @Override
+    public void onDestroy() {
+        EMClient.getInstance().chatManager().removeMessageListener(this);
+        removeRobotTyping();
+        super.onDestroy();
+    }
+
+    private void removeRobotTyping() {
+
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                //重置顶部标题显示状态
+                FragmentActivity activity = getActivity();
+                if(activity!=null) {
+                    ((ChatActivity)activity).onOtherTyping("TypingEnd");
+                }
+                //恢复输入框可输入状态
+                if(primaryMenu!=null) {
+                    primaryMenu.getEditText().setEnabled(true);
+                }
+            }
+        });
+        //移除正在输入gif消息
+        EMConversation conversation = EMClient.getInstance().chatManager().getConversation(conversationId);
+        if(conversation!=null) {
+            conversation.removeMessage(DemoConstant.EASEMOB_ROBOT_TYPING_MSGID);
+        }
+        //通知刷新UI
+        if(chatLayout!=null) {
+            chatLayout.getChatMessageListLayout().refreshMessages();
+        }
     }
 
 }

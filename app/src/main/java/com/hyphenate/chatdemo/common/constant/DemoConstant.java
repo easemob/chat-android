@@ -87,4 +87,10 @@ public interface DemoConstant extends EaseConstant {
     String USER_CARD_NICK = "nickname";
     String USER_CARD_AVATAR = "avatar";
 
+    String DISCLAIMER_EVENT="disclaimer_event";
+
+    String FETCH_ROBOTINFO_URL = "https://a41.easemob.com/inside/chatGPT/robot/name";
+    String CHAT_ROBOT_URL = "https://download-sdk.oss-cn-beijing.aliyuncs.com/downloads/IMDemo/avatar/chatbot.png";
+    String EASEMOB_ROBOT="easemob_robot";//使用这个识别是环信机器人
+    String EASEMOB_ROBOT_TYPING_MSGID="easemob_robot_typing_msgid";//环信机器人正在输入messageId
 }
