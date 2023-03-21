@@ -71,6 +71,12 @@ public class ContactListFragment extends EaseContactListFragment implements View
     @Override
     public void onMenuPreShow(EasePopupMenuHelper menuHelper, int position) {
         super.onMenuPreShow(menuHelper, position);
+        //机器人屏蔽掉长按事件
+        EaseUser user = contactLayout.getContactList().getItem(position);
+        EaseUser robotUser = DemoHelper.getInstance().getRobotUser();
+        if (robotUser != null && TextUtils.equals(robotUser.getUsername(), user.getUsername())) {
+            return;
+        }
         menuHelper.addItemMenu(1, R.id.action_friend_block, 2, getString(R.string.em_friends_move_into_the_blacklist_new));
         menuHelper.addItemMenu(1, R.id.action_friend_delete, 1, getString(R.string.ease_friends_delete_the_contact));
     }
@@ -79,7 +85,7 @@ public class ContactListFragment extends EaseContactListFragment implements View
     public boolean onMenuItemClick(MenuItem item, int position) {
         EaseUser user = contactLayout.getContactList().getItem(position);
         switch (item.getItemId()) {
-            case R.id.action_friend_block :
+            case R.id.action_friend_block:
                 mViewModel.addUserToBlackList(user.getUsername(), false);
                 return true;
             case R.id.action_friend_delete:
@@ -117,13 +123,13 @@ public class ContactListFragment extends EaseContactListFragment implements View
             public void onItemClick(View view, int position) {
                 EaseContactCustomBean item = contactLayout.getContactList().getCustomAdapter().getItem(position);
                 switch (item.getId()) {
-                    case R.id.contact_header_item_new_chat :
+                    case R.id.contact_header_item_new_chat:
                         AddContactActivity.startAction(mContext, SearchType.CHAT);
                         break;
-                    case R.id.contact_header_item_group_list :
+                    case R.id.contact_header_item_group_list:
                         GroupContactManageActivity.actionStart(mContext);
                         break;
-                    case R.id.contact_header_item_chat_room_list :
+                    case R.id.contact_header_item_chat_room_list:
                         ChatRoomContactManageActivity.actionStart(mContext);
                         break;
                 }
@@ -172,48 +178,48 @@ public class ContactListFragment extends EaseContactListFragment implements View
         });
 
         mViewModel.messageChangeObservable().with(DemoConstant.CONTACT_CHANGE, EaseEvent.class).observe(this, event -> {
-            if(event == null) {
+            if (event == null) {
                 return;
             }
-            if(event.isContactChange()) {
+            if (event.isContactChange()) {
                 mViewModel.loadContactList(false);
             }
         });
 
         mViewModel.messageChangeObservable().with(DemoConstant.REMOVE_BLACK, EaseEvent.class).observe(this, event -> {
-            if(event == null) {
+            if (event == null) {
                 return;
             }
-            if(event.isContactChange()) {
+            if (event.isContactChange()) {
                 mViewModel.loadContactList(true);
             }
         });
 
 
         mViewModel.messageChangeObservable().with(DemoConstant.CONTACT_ADD, EaseEvent.class).observe(this, event -> {
-            if(event == null) {
+            if (event == null) {
                 return;
             }
-            if(event.isContactChange()) {
+            if (event.isContactChange()) {
                 mViewModel.loadContactList(false);
             }
         });
 
 
         mViewModel.messageChangeObservable().with(DemoConstant.CONTACT_DELETE, EaseEvent.class).observe(this, event -> {
-            if(event == null) {
+            if (event == null) {
                 return;
             }
-            if(event.isContactChange()) {
+            if (event.isContactChange()) {
                 mViewModel.loadContactList(false);
             }
         });
 
         mViewModel.messageChangeObservable().with(DemoConstant.CONTACT_UPDATE, EaseEvent.class).observe(this, event -> {
-            if(event == null) {
+            if (event == null) {
                 return;
             }
-            if(event.isContactChange()) {
+            if (event.isContactChange()) {
                 mViewModel.loadContactList(false);
             }
         });
@@ -221,13 +227,13 @@ public class ContactListFragment extends EaseContactListFragment implements View
     }
 
     private List<EaseUser> insertRobotToData(List<EaseUser> data) {
-        if(data==null) {
-            data=new ArrayList<>();
+        if (data == null) {
+            data = new ArrayList<>();
         }
         EaseUser robotUser = DemoHelper.getInstance().getRobotUser();
-        if(robotUser!=null) {
+        if (robotUser != null) {
             for (int i = 0; i < data.size(); i++) {
-                if(TextUtils.equals(data.get(i).getUsername(),robotUser.getUsername())) {
+                if (TextUtils.equals(data.get(i).getUsername(), robotUser.getUsername())) {
                     data.remove(i);
                     i--;
                 }
@@ -240,7 +246,7 @@ public class ContactListFragment extends EaseContactListFragment implements View
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
-            case R.id.tv_search :
+            case R.id.tv_search:
                 SearchFriendsActivity.actionStart(mContext);
                 break;
         }
@@ -268,18 +274,20 @@ public class ContactListFragment extends EaseContactListFragment implements View
 
     /**
      * 解析Resource<T>
+     *
      * @param response
      * @param callback
      * @param <T>
      */
     public <T> void parseResource(Resource<T> response, @NonNull OnResourceParseCallback<T> callback) {
-        if(mContext instanceof BaseActivity) {
+        if (mContext instanceof BaseActivity) {
             ((BaseActivity) mContext).parseResource(response, callback);
         }
     }
 
     /**
      * toast by string
+     *
      * @param message
      */
     private void showToast(String message) {
@@ -288,6 +296,7 @@ public class ContactListFragment extends EaseContactListFragment implements View
 
     /**
      * toast by string res
+     *
      * @param messageId
      */
     public void showToast(@StringRes int messageId) {
