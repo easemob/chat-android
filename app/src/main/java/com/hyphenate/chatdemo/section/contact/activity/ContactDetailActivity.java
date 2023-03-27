@@ -282,7 +282,7 @@ public class ContactDetailActivity extends BaseInitActivity implements EaseTitle
                 .into(mAvatarUser);
         if(TextUtils.equals(mUser.getExt(),DemoConstant.EASEMOB_ROBOT)) {
             mGroupRobot.setVisibility(View.GONE);
-            mEaseTitleBar.setToobarOverflowIcon(null);
+//            mEaseTitleBar.setToobarOverflowIcon(null);
         }
     }
 
