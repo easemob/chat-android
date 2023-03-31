@@ -144,10 +144,8 @@ public class GroupMemberDetailFragment extends BaseDialogFragment implements Eas
         String content = etContent.getText().toString();
         if (TextUtils.isEmpty(content)){
             cleanBtn.setVisibility(View.GONE);
-            titleBar.getRightText().setTextColor(getResources().getColor(R.color.em_color_common_text_gray));
         }else{
             cleanBtn.setVisibility(View.VISIBLE);
-            titleBar.getRightText().setTextColor(getResources().getColor(R.color.em_login_color_btn_enable_left));
         }
     }
 }
