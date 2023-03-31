@@ -82,6 +82,7 @@ public class GroupMemberDetailFragment extends BaseDialogFragment implements Eas
         }
 
         titleBar.setTitle(title);
+        titleBar.getRightText().setTextColor(getResources().getColor(R.color.em_login_color_btn_enable_left));
         checkEditContent();
 
     }
