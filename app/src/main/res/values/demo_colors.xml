@@ -70,6 +70,7 @@
     <color name="btn_logout_normal">#d33f3f</color>
     <color name="btn_logout_pressed">#DA5A4D</color>
     <color name="bg_chat_risk_statement">#2E000000</color>
-
     <color name="sub_title_color">#ADADAD</color>
+    <color name="demo_chat_swindle_bg">#Fdf4e7</color>
+    <color name="demo_chat_swindle_text_color">#F09957</color>
 </resources>
