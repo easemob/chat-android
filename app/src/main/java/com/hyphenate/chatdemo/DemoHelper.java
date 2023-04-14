@@ -191,14 +191,6 @@ public class DemoHelper {
     private boolean initSDK(Context context) {
         // 根据项目需求对SDK进行配置
         EMOptions options = initChatOptions(context);
-        //配置自定义的rest server和im server
-//        options.setRestServer("a1-hsb.easemob.com");
-//        options.setIMServer("106.75.100.247");
-//        options.setImPort(6717);
-
-//        options.setRestServer("a41.easemob.com");
-//        options.setIMServer("msync-im-41-tls-test.easemob.com");
-//        options.setImPort(6717);
 
         // 初始化SDK
         isSDKInit = EaseIM.getInstance().init(context, options);
