@@ -2,19 +2,19 @@ package com.hyphenate.chatdemo.section.contact.viewmodels;
 
 import android.app.Application;
 
-import com.hyphenate.chat.EMGroup;
-import com.hyphenate.chat.EMGroupOptions;
-import com.hyphenate.chatdemo.common.enums.Status;
-import com.hyphenate.chatdemo.common.livedatas.SingleSourceLiveData;
-import com.hyphenate.chatdemo.common.net.Resource;
-import com.hyphenate.chatdemo.common.repositories.EMGroupManagerRepository;
-
 import androidx.annotation.NonNull;
 import androidx.arch.core.util.Function;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.Transformations;
+
+import com.hyphenate.chat.EMGroup;
+import com.hyphenate.chat.EMGroupOptions;
+import com.hyphenate.chatdemo.common.enums.Status;
+import com.hyphenate.chatdemo.common.livedatas.SingleSourceLiveData;
+import com.hyphenate.chatdemo.common.net.Resource;
+import com.hyphenate.chatdemo.common.repositories.EMGroupManagerRepository;
 
 public class NewGroupViewModel extends AndroidViewModel {
     private EMGroupManagerRepository repository;
@@ -35,7 +35,8 @@ public class NewGroupViewModel extends AndroidViewModel {
             @Override
             public LiveData<Resource<EMGroup>> apply(Resource<EMGroup> input) {
                 if(input.status == Status.SUCCESS) {
-                    return repository.reportGroupIdToServer(input.data);
+                    repository.reportGroupIdToServer(input.data);
+                    return new MutableLiveData(Resource.success(input.data));
                 }else if(input.status == Status.LOADING) {
                     return new MutableLiveData<>(Resource.loading(null));
                 }else {
