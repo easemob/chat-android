@@ -373,7 +373,8 @@ public class ChatPresenter extends EaseChatPresenter {
                     || error == EMError.USER_DEVICE_CHANGED
                     || error == EMError.USER_LOGIN_TOO_MANY_DEVICES) {
                 event = DemoConstant.ACCOUNT_CONFLICT;
-            } else if (error == EMError.SERVER_SERVICE_RESTRICTED) {
+            } else if (error == EMError.SERVER_SERVICE_RESTRICTED
+                    ||error == EMError.APP_ACTIVE_NUMBER_REACH_LIMITATION) {
                 event = DemoConstant.ACCOUNT_FORBIDDEN;
             } else if (error == EMError.USER_KICKED_BY_CHANGE_PASSWORD) {
                 event = DemoConstant.ACCOUNT_KICKED_BY_CHANGE_PASSWORD;

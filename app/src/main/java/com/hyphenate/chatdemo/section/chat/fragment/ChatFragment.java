@@ -12,9 +12,11 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.text.TextUtils;
+import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -30,18 +32,14 @@ import com.hyphenate.chat.EMClient;
 import com.hyphenate.chat.EMCustomMessageBody;
 import com.hyphenate.chat.EMGroup;
 import com.hyphenate.chat.EMMessage;
-import com.hyphenate.chatdemo.common.enums.Status;
-import com.hyphenate.chatdemo.common.utils.RecyclerViewUtils;
-import com.hyphenate.chatdemo.section.group.MemberAttributeBean;
-import com.hyphenate.chatdemo.section.group.viewmodels.GroupDetailViewModel;
-import com.hyphenate.easecallkit.EaseCallKit;
-import com.hyphenate.easecallkit.base.EaseCallType;
 import com.hyphenate.chatdemo.DemoApplication;
 import com.hyphenate.chatdemo.DemoHelper;
 import com.hyphenate.chatdemo.R;
 import com.hyphenate.chatdemo.common.constant.DemoConstant;
+import com.hyphenate.chatdemo.common.enums.Status;
 import com.hyphenate.chatdemo.common.livedatas.LiveDataBus;
 import com.hyphenate.chatdemo.common.model.EmojiconExampleGroupData;
+import com.hyphenate.chatdemo.common.utils.RecyclerViewUtils;
 import com.hyphenate.chatdemo.section.av.VideoCallActivity;
 import com.hyphenate.chatdemo.section.base.BaseActivity;
 import com.hyphenate.chatdemo.section.chat.activity.ForwardMessageActivity;
@@ -56,7 +54,11 @@ import com.hyphenate.chatdemo.section.dialog.FullEditDialogFragment;
 import com.hyphenate.chatdemo.section.dialog.LabelEditDialogFragment;
 import com.hyphenate.chatdemo.section.dialog.SimpleDialogFragment;
 import com.hyphenate.chatdemo.section.group.GroupHelper;
+import com.hyphenate.chatdemo.section.group.MemberAttributeBean;
+import com.hyphenate.chatdemo.section.group.viewmodels.GroupDetailViewModel;
 import com.hyphenate.chatdemo.section.me.activity.UserDetailActivity;
+import com.hyphenate.easecallkit.EaseCallKit;
+import com.hyphenate.easecallkit.base.EaseCallType;
 import com.hyphenate.easeui.adapter.EaseMessageAdapter;
 import com.hyphenate.easeui.constants.EaseConstant;
 import com.hyphenate.easeui.domain.EaseUser;
@@ -117,7 +119,7 @@ public class ChatFragment extends EaseChatFragment implements OnRecallMessageRes
         EaseChatMessageListLayout messageListLayout = chatLayout.getChatMessageListLayout();
         //设置聊天列表背景
 //      messageListLayout.setBackground(new ColorDrawable(Color.parseColor("#DA5A4D")));
-        messageListLayout.setBackgroundResource(R.drawable.demo_caht_bitmap_bg);
+        setSwindleLayoutInChatFragemntHead();
         //设置是否显示昵称
         messageListLayout.showNickname(true);
         //设置默认头像
@@ -147,6 +149,19 @@ public class ChatFragment extends EaseChatFragment implements OnRecallMessageRes
         //}
 
         chatLayout.setTargetLanguageCode(DemoHelper.getInstance().getModel().getTargetLanguage());
+    }
+
+    private void setSwindleLayoutInChatFragemntHead() {
+        EaseChatMessageListLayout messageListLayout = chatLayout.getChatMessageListLayout();
+        RelativeLayout listLayoutParent = (RelativeLayout) (messageListLayout.getParent());
+        View view = LayoutInflater.from(mContext).inflate(R.layout.demo_chat_swindle, listLayoutParent, false);
+        listLayoutParent.addView(view);
+        listLayoutParent.post(new Runnable() {
+            @Override
+            public void run() {
+                messageListLayout.setPadding(0, view.getMeasuredHeight(),0,0);
+            }
+        });
     }
 
     private void addItemMenuAction() {
