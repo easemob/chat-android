@@ -120,6 +120,8 @@
     <string name="demo_chat_request_read_external_storage_permission">使用%1$s需要读取SD卡权限，请进行授权</string>
     <string name="demo_chat_request_location_permission">使用定位功能需要定位权限，请进行授权</string>
     <string name="demo_chat_request_audio_permission">发送语音消息需要使用麦克风权限，请进行授权</string>
+    <string name="demo_chat_request_notifications">使用通知功能需要通知权限，请进行授权</string>
+
     <string name="demo_chat_file">文件</string>
     <string name="demo_chat_photo">相册</string>
     <string name="demo_chat_video">视频</string>
