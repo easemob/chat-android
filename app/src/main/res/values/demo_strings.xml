@@ -668,4 +668,7 @@
     <string name="action_report_label">report</string>
     <string name="chat_temp_hint">For trial only, will be deleted after 72 hours</string>
 
+    <string name="demo_chat_swindle">This application is only used for functional development and testing of Huanxin products, do not use for illegal purposes. Anything involving money transfer, remittance, naked chat, online love, online shopping refund, investment and financing are all fraud, please do not believe.</string>
+
+
 </resources>
