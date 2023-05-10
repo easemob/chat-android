@@ -32,6 +32,7 @@ import com.hyphenate.chat.EMClient;
 import com.hyphenate.chat.EMCustomMessageBody;
 import com.hyphenate.chat.EMGroup;
 import com.hyphenate.chat.EMMessage;
+import com.hyphenate.chat.EMTextMessageBody;
 import com.hyphenate.chatdemo.DemoApplication;
 import com.hyphenate.chatdemo.DemoHelper;
 import com.hyphenate.chatdemo.R;
@@ -50,6 +51,7 @@ import com.hyphenate.chatdemo.section.conference.ConferenceInviteActivity;
 import com.hyphenate.chatdemo.section.contact.activity.ContactDetailActivity;
 import com.hyphenate.chatdemo.section.dialog.DemoDialogFragment;
 import com.hyphenate.chatdemo.section.dialog.DemoListDialogFragment;
+import com.hyphenate.chatdemo.section.dialog.EditTextDialogFragment;
 import com.hyphenate.chatdemo.section.dialog.FullEditDialogFragment;
 import com.hyphenate.chatdemo.section.dialog.LabelEditDialogFragment;
 import com.hyphenate.chatdemo.section.dialog.SimpleDialogFragment;
@@ -165,12 +167,15 @@ public class ChatFragment extends EaseChatFragment implements OnRecallMessageRes
     }
 
     private void addItemMenuAction() {
-        MenuItemBean itemMenu = new MenuItemBean(0, R.id.action_chat_forward, 11, getString(R.string.action_forward));
-        itemMenu.setResourceId(R.drawable.ease_chat_item_menu_forward);
-        chatLayout.addItemMenu(itemMenu );
-        MenuItemBean itemMenu1 = new MenuItemBean(0,R.id.action_chat_label,12,getString(R.string.action_report_label));
-        itemMenu1.setResourceId(R.drawable.d_exclamationmark_in_triangle);
-        chatLayout.addItemMenu(itemMenu1 );
+        MenuItemBean itemMenuForward = new MenuItemBean(0, R.id.action_chat_forward, 11, getString(R.string.action_forward));
+        itemMenuForward.setResourceId(R.drawable.ease_chat_item_menu_forward);
+        chatLayout.addItemMenu(itemMenuForward );
+        MenuItemBean itemMenuReport = new MenuItemBean(0,R.id.action_chat_label,12,getString(R.string.action_report_label));
+        itemMenuReport.setResourceId(R.drawable.d_exclamationmark_in_triangle);
+        chatLayout.addItemMenu(itemMenuReport );
+        MenuItemBean itemMenuMsgEdit = new MenuItemBean(0,R.id.action_msg_edit,13,getString(R.string.action_msg_edit));
+        itemMenuMsgEdit.setResourceId(R.drawable.ease_chat_item_menu_modify);
+        chatLayout.addItemMenu(itemMenuMsgEdit );
 //        chatLayout.setReportYourSelf(false);
     }
 
@@ -627,6 +632,7 @@ public class ChatFragment extends EaseChatFragment implements OnRecallMessageRes
         }
         EMMessage.Type type = message.getType();
         helper.findItemVisible(R.id.action_chat_forward, false);
+        helper.findItemVisible(R.id.action_msg_edit, false);
         switch (type) {
             case TXT:
                 if(!message.getBooleanAttribute(DemoConstant.MESSAGE_ATTR_IS_VIDEO_CALL, false)
@@ -636,6 +642,7 @@ public class ChatFragment extends EaseChatFragment implements OnRecallMessageRes
                 if(v.getId() == R.id.subBubble){
                     helper.findItemVisible(R.id.action_chat_forward, false);
                 }
+                helper.findItemVisible(R.id.action_msg_edit, true);
                 break;
             case IMAGE:
                 helper.findItemVisible(R.id.action_chat_forward, true);
@@ -673,8 +680,31 @@ public class ChatFragment extends EaseChatFragment implements OnRecallMessageRes
             case R.id.action_chat_label:
                 showLabelDialog(message);
                 return true;
+            case R.id.action_msg_edit:
+                showModifyDialog(message);
+                return true;
         }
         return false;
+    }
+
+    private void showModifyDialog(EMMessage message) {
+
+        if(message.getBody() instanceof EMTextMessageBody) {
+            new EditTextDialogFragment.Builder((BaseActivity) mContext)
+                    .setContent(((EMTextMessageBody) message.getBody()).getMessage())
+                    .setConfirmClickListener(new EditTextDialogFragment.ConfirmClickListener() {
+                        @Override
+                        public void onConfirmClick(View view, String content) {
+                            if(!TextUtils.isEmpty(content)) {
+                                ((EMTextMessageBody) message.getBody()).setMessage(content);
+                                chatLayout.modifyMessage(message);
+                            }
+                        }
+                    })
+                    .setTitle(R.string.em_chat_edit_message)
+                    .show();
+        }
+
     }
 
     private void showProgressBar() {
