@@ -73,4 +73,5 @@
     <color name="sub_title_color">#ADADAD</color>
     <color name="demo_chat_swindle_bg">#Fdf4e7</color>
     <color name="demo_chat_swindle_text_color">#F09957</color>
+    <color name="demo_chat_fragment_color">#F2F2F2</color>
 </resources>

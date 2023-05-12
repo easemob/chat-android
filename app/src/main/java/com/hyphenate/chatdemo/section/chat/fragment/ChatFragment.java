@@ -122,6 +122,7 @@ public class ChatFragment extends EaseChatFragment implements OnRecallMessageRes
         setSwindleLayoutInChatFragemntHead();
         //设置是否显示昵称
         messageListLayout.showNickname(true);
+        messageListLayout.setBackgroundResource(R.color.demo_chat_fragment_color);
         //设置默认头像
         //messageListLayout.setAvatarDefaultSrc(ContextCompat.getDrawable(mContext, R.drawable.ease_default_avatar));
         //设置头像形状
@@ -649,6 +650,7 @@ public class ChatFragment extends EaseChatFragment implements OnRecallMessageRes
 
     @Override
     public boolean onMenuItemClick(MenuItemBean item, EMMessage message) {
+        super.onMenuItemClick(item,message);
         switch (item.getItemId()) {
             case R.id.action_chat_forward :
                 ForwardMessageActivity.actionStart(mContext, message.getMsgId());
