@@ -696,8 +696,8 @@ public class ChatFragment extends EaseChatFragment implements OnRecallMessageRes
                         @Override
                         public void onConfirmClick(View view, String content) {
                             if(!TextUtils.isEmpty(content)) {
-                                ((EMTextMessageBody) message.getBody()).setMessage(content);
-                                chatLayout.modifyMessage(message);
+                                EMTextMessageBody textMessageBody = new EMTextMessageBody(content);
+                                chatLayout.modifyMessage(message.getMsgId(),textMessageBody);
                             }
                         }
                     })
