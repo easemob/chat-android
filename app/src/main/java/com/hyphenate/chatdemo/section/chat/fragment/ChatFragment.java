@@ -827,4 +827,34 @@ public class ChatFragment extends EaseChatFragment implements OnRecallMessageRes
 
     }
 
+    public void addCustomQuote(List<EMMessage> currentData, EMMessage.Type type, EMMessage message) {
+        if (type == EMMessage.Type.CUSTOM){
+            EMCustomMessageBody messageBody = (EMCustomMessageBody) message.getBody();
+            Map<String,String> params = messageBody.getParams();
+            if (params.size() > 0 && messageBody.event().equals(DemoConstant.USER_CARD_EVENT)){
+                String uId = params.get(DemoConstant.USER_CARD_ID);
+                String nickName = params.get(DemoConstant.USER_CARD_NICK);
+                String avatar = params.get(DemoConstant.USER_CARD_AVATAR);
+                if(uId != null && uId.length() > 0){
+                    if(uId.equals(EMClient.getInstance().getCurrentUser())){
+                        UserDetailActivity.actionStart(getContext(),nickName,avatar);
+                    }else{
+                        EaseUser user = DemoHelper.getInstance().getUserInfo(uId);
+                        if(user == null){
+                            user = new EaseUser(uId);
+                            user.setAvatar(avatar);
+                            user.setNickname(nickName);
+                        }
+                        boolean isFriend =  DemoHelper.getInstance().getModel().isContact(uId);
+                        if(isFriend){
+                            user.setContact(0);
+                        }else{
+                            user.setContact(3);
+                        }
+                        ContactDetailActivity.actionStart(getContext(),user);
+                    }
+                }
+            }
+        }
+    }
 }
