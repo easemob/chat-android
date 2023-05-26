@@ -13,7 +13,6 @@ import java.util.List;
 import java.util.Map;
 
 public class GroupHelper {
-    private static final Map<String,Boolean> isFirstTab = new HashMap<>();
     private static final Map<String,Map<String,MemberAttributeBean>> groupMemberAttribute = new HashMap<>();
     private static final Map<String,MemberAttributeBean> attributeMap = new HashMap<>();
 
