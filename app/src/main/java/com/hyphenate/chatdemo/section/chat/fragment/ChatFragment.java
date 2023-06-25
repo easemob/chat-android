@@ -650,7 +650,6 @@ public class ChatFragment extends EaseChatFragment implements OnRecallMessageRes
 
     @Override
     public boolean onMenuItemClick(MenuItemBean item, EMMessage message) {
-        super.onMenuItemClick(item,message);
         switch (item.getItemId()) {
             case R.id.action_chat_forward :
                 ForwardMessageActivity.actionStart(mContext, message.getMsgId());
@@ -674,6 +673,9 @@ public class ChatFragment extends EaseChatFragment implements OnRecallMessageRes
                 return true;
             case R.id.action_chat_label:
                 showLabelDialog(message);
+                return true;
+            case R.id.action_chat_quote:
+                onQuoteMenuItemClick(message);
                 return true;
         }
         return false;
@@ -827,7 +829,8 @@ public class ChatFragment extends EaseChatFragment implements OnRecallMessageRes
 
     }
 
-    public void addCustomQuote(List<EMMessage> currentData, EMMessage.Type type, EMMessage message) {
+    public void addCustomQuote(EMMessage message) {
+        EMMessage.Type type = message.getType();
         if (type == EMMessage.Type.CUSTOM){
             EMCustomMessageBody messageBody = (EMCustomMessageBody) message.getBody();
             Map<String,String> params = messageBody.getParams();
