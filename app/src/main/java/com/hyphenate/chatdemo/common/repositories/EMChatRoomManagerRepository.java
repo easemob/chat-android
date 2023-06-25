@@ -522,8 +522,18 @@ public class EMChatRoomManagerRepository extends BaseEMRepository{
         return new NetworkOnlyResource<Boolean>() {
             @Override
             protected void createCall(@NonNull ResultCallBack<LiveData<Boolean>> callBack) {
-                getChatRoomManager().leaveChatRoom(groupId);
-                callBack.onSuccess(createLiveData(true));
+                getChatRoomManager().leaveChatRoom(groupId, new EMCallBack() {
+                    @Override
+                    public void onSuccess() {
+                        callBack.onSuccess(createLiveData(true));
+                    }
+
+                    @Override
+                    public void onError(int code, String error) {
+                        callBack.onError(code,error);
+                    }
+                });
+
             }
         }.asLiveData();
     }
