@@ -458,7 +458,13 @@
             android:screenOrientation="portrait"/>
         <!--关于环信IM-->
         <activity android:name=".section.me.activity.AboutHxActivity"
-            android:screenOrientation="portrait"/>
+            android:screenOrientation="portrait"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="${applicationId}.section.me.activity.AboutHxActivity" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
         <!--开发者服务-->
         <activity android:name=".section.me.activity.DeveloperSetActivity"
             android:screenOrientation="portrait"/>
