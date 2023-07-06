@@ -8,7 +8,7 @@ import com.hyphenate.chat.EMCustomMessageBody;
 import com.hyphenate.chat.EMMessage;
 import com.hyphenate.chatdemo.DemoHelper;
 import com.hyphenate.chatdemo.common.constant.DemoConstant;
-import com.hyphenate.chatdemo.section.chat.views.chatRowUserCard;
+import com.hyphenate.chatdemo.section.chat.views.ChatRowUserCard;
 import com.hyphenate.chatdemo.section.contact.activity.ContactDetailActivity;
 import com.hyphenate.chatdemo.section.me.activity.UserDetailActivity;
 import com.hyphenate.easeui.domain.EaseUser;
@@ -28,7 +28,7 @@ public class ChatUserCardViewHolder extends EaseChatRowViewHolder {
 
     public static ChatUserCardViewHolder create(ViewGroup parent, boolean isSender,
                                                  MessageListItemClickListener itemClickListener) {
-        return new ChatUserCardViewHolder(new chatRowUserCard(parent.getContext(), isSender), itemClickListener);
+        return new ChatUserCardViewHolder(new ChatRowUserCard(parent.getContext(), isSender), itemClickListener);
     }
 
     @Override

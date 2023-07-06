@@ -26,34 +26,34 @@
             android:id="@+id/bubble"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_toRightOf="@id/iv_userhead"
             android:layout_below="@+id/tv_userid"
             android:layout_marginLeft="@dimen/margin_chat_activity"
-            android:padding="8dp"
-            android:minHeight="120dp"
             android:layout_marginTop="2dp"
             android:layout_marginRight="50dp"
-            android:background="@drawable/ease_chat_bubble_receive_bg" >
+            android:layout_toRightOf="@id/iv_userhead"
+            android:background="@drawable/ease_chat_bubble_receive_bg"
+            android:minHeight="120dp"
+            android:padding="8dp">
 
             <ImageView
-                android:layout_marginLeft="10dp"
-                android:layout_alignParentLeft="true"
                 android:id="@+id/head_Image_view"
-                android:layout_marginTop="14dp"
                 android:layout_width="48dp"
                 android:layout_height="48dp"
+                android:layout_alignParentLeft="true"
+                android:layout_marginLeft="10dp"
+                android:layout_marginTop="14dp"
                 android:src="@drawable/em_login_logo" />
 
             <TextView
                 android:id="@+id/user_nick_name"
                 android:layout_width="match_parent"
-                android:layout_marginLeft="77dp"
-                android:layout_alignParentLeft="true"
-                android:layout_marginTop="20dp"
                 android:layout_height="24dp"
+                android:layout_alignParentLeft="true"
+                android:layout_marginLeft="77dp"
+                android:layout_marginTop="20dp"
                 android:gravity="left|center_vertical"
-                android:textSize="20sp"
-                android:textColor="#333333"/>
+                android:textColor="#333333"
+                android:textSize="20sp" />
 
             <TextView
                 android:id="@+id/user_id"
@@ -66,6 +66,7 @@
                 android:gravity="left|center_vertical"
                 android:textColor="#999999"
                 android:textSize="12sp" />
+
             <TextView
                 android:id="@+id/show_line"
                 android:layout_width="220dp"
@@ -74,19 +75,20 @@
                 android:layout_centerHorizontal="true"
                 android:layout_marginLeft="13dp"
                 android:layout_marginTop="75dp"
-                android:gravity="left|center_vertical"
-                android:background="#1A000000" />
+                android:background="#1A000000"
+                android:gravity="left|center_vertical" />
+
             <TextView
                 android:id="@+id/user_card"
                 android:layout_width="186dp"
-                android:layout_marginLeft="15dp"
-                android:layout_alignParentLeft="true"
-                android:layout_marginTop="85dp"
                 android:layout_height="15dp"
-                android:textColor="#ff999999"
+                android:layout_alignParentLeft="true"
+                android:layout_marginLeft="15dp"
+                android:layout_marginTop="85dp"
                 android:gravity="left|center_vertical"
-                android:textSize="12sp"
-                android:text="@string/personal_card" />
+                android:text="@string/personal_card"
+                android:textColor="#ff999999"
+                android:textSize="12sp" />
         </RelativeLayout>
 
         <TextView

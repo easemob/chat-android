@@ -7,7 +7,7 @@ import com.hyphenate.chat.EMCustomMessageBody;
 import com.hyphenate.chat.EMMessage;
 import com.hyphenate.chatdemo.common.constant.DemoConstant;
 import com.hyphenate.chatdemo.section.chat.viewholder.ChatUserCardViewHolder;
-import com.hyphenate.chatdemo.section.chat.views.chatRowUserCard;
+import com.hyphenate.chatdemo.section.chat.views.ChatRowUserCard;
 import com.hyphenate.easeui.delegate.EaseMessageAdapterDelegate;
 import com.hyphenate.easeui.interfaces.MessageListItemClickListener;
 import com.hyphenate.easeui.viewholder.EaseChatRowViewHolder;
@@ -27,7 +27,7 @@ public class ChatUserCardAdapterDelegate extends EaseMessageAdapterDelegate<EMMe
 
     @Override
     protected EaseChatRow getEaseChatRow(ViewGroup parent, boolean isSender) {
-        return new chatRowUserCard(parent.getContext(), isSender);
+        return new ChatRowUserCard(parent.getContext(), isSender);
     }
 
     @Override

@@ -27,6 +27,8 @@ import com.hyphenate.chat.EMGroupManager;
 import com.hyphenate.chat.EMMessage;
 import com.hyphenate.chat.EMOptions;
 import com.hyphenate.chat.EMPushManager;
+import com.hyphenate.chatdemo.common.model.DemoUrlPreviewBean;
+import com.hyphenate.chatdemo.section.chat.delegates.ChatUrlPreviewAdapterDelegate;
 import com.hyphenate.chatdemo.section.group.GroupHelper;
 import com.hyphenate.chatdemo.section.group.MemberAttributeBean;
 import com.hyphenate.cloud.EMHttpClient;
@@ -91,6 +93,7 @@ import org.json.JSONObject;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.List;
@@ -102,6 +105,7 @@ import java.util.TimeZone;
  */
 public class DemoHelper {
     private static final String TAG = DemoHelper.class.getSimpleName();
+    private static final Map<String, DemoUrlPreviewBean> previewMap = new HashMap<>();
 
     public boolean isSDKInit;//SDK是否初始化
     private static DemoHelper mInstance;
@@ -220,7 +224,8 @@ public class DemoHelper {
                 .addMessageType(ChatUserCardAdapterDelegate.class)         //名片消息
                 .addMessageType(EaseCustomAdapterDelegate.class)           //自定义消息
                 .addMessageType(ChatNotificationAdapterDelegate.class)     //入群等通知消息
-                .setDefaultMessageType(EaseTextAdapterDelegate.class);       //文本
+                .addMessageType(ChatUrlPreviewAdapterDelegate.class)       //url 预览
+                .setDefaultMessageType(EaseTextAdapterDelegate.class);     //文本
     }
 
     /**
@@ -580,6 +585,7 @@ public class DemoHelper {
             public void onSuccess() {
                 DemoHelper.getInstance().getModel().setPhoneNumber("");
                 logoutSuccess();
+                DemoHelper.getInstance().clearPreviewInfo();
                 //reset();
                 if (callback != null) {
                     callback.onSuccess();
@@ -1087,5 +1093,24 @@ public class DemoHelper {
     //清除userId 在指定群组内的群组成员属性缓存
     public void clearGroupMemberAttributeByUserId(String groupId,String userId){
         GroupHelper.clearGroupMemberAttributeByUserId(groupId,userId);
+    }
+
+    public void saveUrlPreviewInfo(String msgId,DemoUrlPreviewBean bean){
+        if (!TextUtils.isEmpty(msgId)){
+            previewMap.put(msgId,bean);
+        }
+    }
+
+    public DemoUrlPreviewBean getUrlPreviewInfo(String msgId){
+        if (previewMap.size() > 0 && !TextUtils.isEmpty(msgId)){
+            if (previewMap.containsKey(msgId)){
+                return previewMap.get(msgId);
+            }
+        }
+        return null;
+    }
+
+    public void clearPreviewInfo(){
+        previewMap.clear();
     }
 }
