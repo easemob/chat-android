@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:gravity="center_horizontal"
+    android:orientation="vertical"
+    android:paddingTop="13dp">
+
+    <TextView
+        android:id="@+id/timestamp"
+        style="@style/chat_text_date_style"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/margin_chat_activity" >
+
+        <com.hyphenate.easeui.widget.EaseImageView
+            android:id="@+id/iv_userhead"
+            style="@style/ease_row_receive_iv_userhead_style"/>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/bubble"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/tv_userid"
+            android:layout_marginStart="@dimen/margin_chat_activity"
+            android:layout_alignParentEnd="true"
+            android:paddingHorizontal="12dp"
+            android:paddingVertical="9dp"
+            android:layout_marginTop="2dp"
+            android:layout_marginEnd="50dp"
+            android:layout_toEndOf="@id/iv_userhead"
+            android:background="@drawable/ease_chat_bubble_receive_bg">
+
+        <TextView
+            android:id="@+id/tv_content"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            android:textColor="@color/demo_chat_url_preview_content_color"
+            tools:text="http://www.easemob.com"
+            android:autoLink="web"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/quote_item"
+                app:layout_constraintTop_toBottomOf="@+id/tv_content"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                android:background="@drawable/demo_bg_url_preview"
+                android:layout_marginTop="10dp"
+                android:layout_width="0dp"
+                android:visibility="gone"
+                android:padding="12dp"
+                android:layout_height="wrap_content">
+
+            <TextView
+                android:id="@+id/title"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                android:gravity="left"
+                tools:text="title"
+                android:maxLines="1"
+                android:ellipsize="end"
+                android:textSize="15sp"
+                android:textStyle="bold"
+                android:textColor="@color/demo_chat_url_preview_title_color"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"/>
+
+            <TextView
+                android:id="@+id/description"
+                tools:text="description"
+                app:layout_constraintTop_toBottomOf="@+id/title"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toLeftOf="@+id/iv_icon"
+                app:layout_constraintBottom_toBottomOf="parent"
+                android:maxLines="3"
+                android:ellipsize="end"
+                android:textColor="@color/demo_chat_url_preview_description_color"
+                android:layout_marginEnd="8dp"
+                android:layout_width="0dp"
+                android:layout_height="0dp"/>
+
+            <com.google.android.material.imageview.ShapeableImageView
+                android:id="@+id/iv_icon"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintBottom_toBottomOf="@+id/description"
+                app:layout_constraintTop_toTopOf="@+id/description"
+                android:src="@drawable/em_icon_rectangle"
+                style="@style/roundStyle"
+                android:layout_width="52dp"
+                android:layout_height="52dp"/>
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <TextView
+            android:id="@+id/tv_userid"
+            style="@style/chat_text_name_style"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/chat_nick_margin_left"
+            android:textSize="@dimen/chat_nick_text_size"
+            android:layout_toEndOf="@id/iv_userhead"
+            android:visibility="gone" />
+
+    </RelativeLayout>
+
+</LinearLayout>
