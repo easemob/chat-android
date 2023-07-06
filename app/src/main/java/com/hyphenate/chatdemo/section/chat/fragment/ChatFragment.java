@@ -121,7 +121,7 @@ public class ChatFragment extends EaseChatFragment implements OnRecallMessageRes
 //      messageListLayout.setBackground(new ColorDrawable(Color.parseColor("#DA5A4D")));
         setSwindleLayoutInChatFragemntHead();
         //设置是否显示昵称
-        messageListLayout.showNickname(true);
+        //messageListLayout.showNickname(true);
         //设置默认头像
         //messageListLayout.setAvatarDefaultSrc(ContextCompat.getDrawable(mContext, R.drawable.ease_default_avatar));
         //设置头像形状
