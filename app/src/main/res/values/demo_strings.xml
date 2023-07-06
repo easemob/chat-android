@@ -119,6 +119,8 @@
     <string name="demo_chat_request_read_external_storage_permission">Read external storage permission is required to use %1$s, please authorize</string>
     <string name="demo_chat_request_location_permission">Location permission is required to send location message, please authorize</string>
     <string name="demo_chat_request_audio_permission">Audio permission is required to send voice message, please authorize</string>
+    <string name="demo_chat_request_notifications">Notification permission is requires to notification function, please authorize</string>
+
     <string name="demo_chat_file">file</string>
     <string name="demo_chat_photo">photo album</string>
     <string name="demo_chat_video">video</string>

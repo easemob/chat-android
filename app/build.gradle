@@ -1,5 +1,6 @@
 apply plugin: 'com.android.application'
 apply plugin: 'com.huawei.agconnect'
+apply plugin: 'com.hihonor.mcs.asplugin'
 
 android {
     //加载资源
@@ -27,8 +28,8 @@ android {
         applicationId "com.hyphenate.chatdemo"
         minSdkVersion 21
         targetSdkVersion 30
-        versionCode 102
-        versionName "4.0.2"
+        versionCode 103
+        versionName "4.0.3"
         multiDexEnabled true
         //为了兼容5.0以下使用vector图标
         vectorDrawables.useSupportLibrary = true
@@ -59,6 +60,7 @@ android {
         manifestPlaceholders = [EASEMOB_APPKEY: properties.getProperty("EASEMOB_APPKEY", "******"),
                                 VIVO_PUSH_APPKEY: properties.getProperty("VIVO_PUSH_APPKEY", "******"),
                                 VIVO_PUSH_APPID: properties.getProperty("VIVO_PUSH_APPID", "******"),
+                                HONOR_PUSH_APPID: properties.getProperty("HONOR_PUSH_APPID", "******"),
                                 BAIDU_LOCATION_APPKEY: properties.getProperty("BAIDU_LOCATION_APPKEY", "******")
         ]
         ndk {
@@ -140,6 +142,8 @@ dependencies {
     implementation 'com.android.support:multidex:1.0.3'
     // hms push
     implementation 'com.huawei.hms:push:6.3.0.302'
+    // hihonor push
+    implementation 'com.hihonor.mcs:push:7.0.41.301'
     // meizu push
     implementation 'com.meizu.flyme.internet:push-internal:4.0.4@aar'//配置集成sdk
     //oppo push
@@ -169,17 +173,18 @@ dependencies {
     implementation 'com.tencent.bugly:nativecrashreport:3.3.1'
 
     implementation 'pub.devrel:easypermissions:3.0.0'
+    implementation 'org.jsoup:jsoup:1.9.2'
 
     // EaseIMKit
 //    api (project(path: ':ease-im-kit'))
-    implementation 'io.hyphenate:ease-im-kit:4.0.2'
+    implementation 'io.hyphenate:ease-im-kit:4.0.3'
     // EaseIMKit依赖，必须添加环信IM SDK
 //    implementation project(path: ':hyphenatechatsdk')
-    implementation 'io.hyphenate:hyphenate-chat:4.0.2'
+    implementation 'io.hyphenate:hyphenate-chat:4.0.3'
 
     //EaseCallKit依赖，必须添加环信IM SDK
 //    api project(':ease-call-kit')
-    implementation 'io.hyphenate:ease-call-kit:4.0.2'
+    implementation 'io.hyphenate:ease-call-kit:4.0.3'
 
 }
 

@@ -16,6 +16,7 @@ import android.widget.Toast;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailabilityLight;
 import com.heytap.msp.push.HeytapPushManager;
+import com.hihonor.push.sdk.HonorPushClient;
 import com.hyphenate.EMCallBack;
 import com.hyphenate.chat.EMChatManager;
 import com.hyphenate.chat.EMChatRoomManager;
@@ -26,6 +27,8 @@ import com.hyphenate.chat.EMGroupManager;
 import com.hyphenate.chat.EMMessage;
 import com.hyphenate.chat.EMOptions;
 import com.hyphenate.chat.EMPushManager;
+import com.hyphenate.chatdemo.common.model.DemoUrlPreviewBean;
+import com.hyphenate.chatdemo.section.chat.delegates.ChatUrlPreviewAdapterDelegate;
 import com.hyphenate.chatdemo.section.group.GroupHelper;
 import com.hyphenate.chatdemo.section.group.MemberAttributeBean;
 import com.hyphenate.cloud.EMHttpClient;
@@ -90,6 +93,7 @@ import org.json.JSONObject;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.List;
@@ -101,6 +105,7 @@ import java.util.TimeZone;
  */
 public class DemoHelper {
     private static final String TAG = DemoHelper.class.getSimpleName();
+    private static final Map<String, DemoUrlPreviewBean> previewMap = new HashMap<>();
 
     public boolean isSDKInit;//SDK是否初始化
     private static DemoHelper mInstance;
@@ -191,14 +196,6 @@ public class DemoHelper {
     private boolean initSDK(Context context) {
         // 根据项目需求对SDK进行配置
         EMOptions options = initChatOptions(context);
-        //配置自定义的rest server和im server
-//        options.setRestServer("a1-hsb.easemob.com");
-//        options.setIMServer("106.75.100.247");
-//        options.setImPort(6717);
-
-//        options.setRestServer("a41.easemob.com");
-//        options.setIMServer("msync-im-41-tls-test.easemob.com");
-//        options.setImPort(6717);
 
         // 初始化SDK
         isSDKInit = EaseIM.getInstance().init(context, options);
@@ -227,7 +224,8 @@ public class DemoHelper {
                 .addMessageType(ChatUserCardAdapterDelegate.class)         //名片消息
                 .addMessageType(EaseCustomAdapterDelegate.class)           //自定义消息
                 .addMessageType(ChatNotificationAdapterDelegate.class)     //入群等通知消息
-                .setDefaultMessageType(EaseTextAdapterDelegate.class);       //文本
+                .addMessageType(ChatUrlPreviewAdapterDelegate.class)       //url 预览
+                .setDefaultMessageType(EaseTextAdapterDelegate.class);     //文本
     }
 
     /**
@@ -458,7 +456,9 @@ public class DemoHelper {
                 .enableOppoPush("7eac7f0e69a24dbda40b3a8e7aa93a7c",
                         "2b10d0d9e2004817888fe6ffd1a37688")
                 .enableHWPush() // 需要在AndroidManifest.xml中配置appId
-                .enableFCM("782795210914");
+                .enableFCM("782795210914")
+                .enableHonorPush(); // 需要在AndroidManifest.xml中配置appId
+
         options.setPushConfig(builder.build());
 
         //set custom servers, commonly used in private deployment
@@ -514,6 +514,15 @@ public class DemoHelper {
             //OPPO SDK升级到2.1.0后需要进行初始化
             HeytapPushManager.init(context, true);
             //HMSPushHelper.getInstance().initHMSAgent(DemoApplication.getInstance());
+
+            // 荣耀推送 7.0.41.301及以上版本
+            // 无需调用init初始化SDK即可调用
+            boolean isSupport = HonorPushClient.getInstance().checkSupportHonorPush(context);
+            if (isSupport) {
+                // true，调用初始化接口时SDK会同时进行异步请求PushToken。会触发HonorMessageService.onNewToken(String)回调。
+                // false，不会异步请求PushToken，需要应用主动请求获取PushToken。
+                HonorPushClient.getInstance().init(context, false);
+            }
             EMPushHelper.getInstance().setPushListener(new PushListener() {
                 @Override
                 public void onError(EMPushType pushType, long errorCode) {
@@ -527,6 +536,8 @@ public class DemoHelper {
                     if(pushType == EMPushType.FCM){
                         EMLog.d("FCM", "GooglePlayServiceCode:"+GoogleApiAvailabilityLight.getInstance().isGooglePlayServicesAvailable(context));
                         return demoModel.isUseFCM() && GoogleApiAvailabilityLight.getInstance().isGooglePlayServicesAvailable(context) == ConnectionResult.SUCCESS;
+                    }else if (pushType == EMPushType.HONORPUSH){
+                        return isSupport;
                     }
                     return super.isSupportPush(pushType, pushConfig);
                 }
@@ -574,6 +585,7 @@ public class DemoHelper {
             public void onSuccess() {
                 DemoHelper.getInstance().getModel().setPhoneNumber("");
                 logoutSuccess();
+                DemoHelper.getInstance().clearPreviewInfo();
                 //reset();
                 if (callback != null) {
                     callback.onSuccess();
@@ -1081,5 +1093,24 @@ public class DemoHelper {
     //清除userId 在指定群组内的群组成员属性缓存
     public void clearGroupMemberAttributeByUserId(String groupId,String userId){
         GroupHelper.clearGroupMemberAttributeByUserId(groupId,userId);
+    }
+
+    public void saveUrlPreviewInfo(String msgId,DemoUrlPreviewBean bean){
+        if (!TextUtils.isEmpty(msgId)){
+            previewMap.put(msgId,bean);
+        }
+    }
+
+    public DemoUrlPreviewBean getUrlPreviewInfo(String msgId){
+        if (previewMap.size() > 0 && !TextUtils.isEmpty(msgId)){
+            if (previewMap.containsKey(msgId)){
+                return previewMap.get(msgId);
+            }
+        }
+        return null;
+    }
+
+    public void clearPreviewInfo(){
+        previewMap.clear();
     }
 }
