@@ -211,7 +211,27 @@ public class ChatPresenter extends EaseChatPresenter {
         }
     }
 
+    @Override
+    public void onMessageContentChanged(EMMessage message, String operatorId, long operationTime) {
+        EaseEvent event = EaseEvent.create(DemoConstant.MESSAGE_CHANGE_RECEIVE, EaseEvent.TYPE.MESSAGE);
+        messageChangeLiveData.with(DemoConstant.MESSAGE_CHANGE_CHANGE).postValue(event);
+        EMLog.d(TAG, "onMessageContentChanged id : " + message.getMsgId());
+        EMLog.d(TAG, "onMessageContentChanged type: " + message.getType());
 
+        // todo 看产品需求再决定要不要通知
+
+//        // 如果设置群组离线消息免打扰，则不进行消息通知
+//        List<String> disabledIds = DemoHelper.getInstance().getPushManager().getNoPushGroups();
+//        if(disabledIds != null && disabledIds.contains(message.conversationId())) {
+//            return;
+//        }
+//        // in background, do not refresh UI, notify it in notification bar
+//        if(!DemoApplication.getInstance().getLifecycleCallbacks().isFront()){
+//            getNotifier().notify(message);
+//        }
+//        //notify new message
+//        getNotifier().vibrateAndPlayTone(message);
+    }
 
     /**
      * 判断是否已经启动了MainActivity
