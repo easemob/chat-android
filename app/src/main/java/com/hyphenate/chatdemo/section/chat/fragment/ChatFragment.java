@@ -684,6 +684,9 @@ public class ChatFragment extends EaseChatFragment implements OnRecallMessageRes
             case R.id.action_msg_edit:
                 showModifyDialog(message);
                 return true;
+            case R.id.action_chat_quote:
+                onQuoteMenuItemClick(message);
+                return true;
         }
         return false;
     }
