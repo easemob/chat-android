@@ -77,6 +77,9 @@ import com.hyphenate.easeui.utils.EaseUserUtils;
 import com.hyphenate.easeui.widget.CenterImageSpan;
 import com.hyphenate.util.EMLog;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -688,8 +691,31 @@ public class ChatFragment extends EaseChatFragment implements OnRecallMessageRes
             case R.id.action_msg_edit:
                 showModifyDialog(message);
                 return true;
+            case R.id.action_chat_quote:
+                if(message.getType() == EMMessage.Type.CUSTOM && TextUtils.equals(DemoConstant.USER_CARD_EVENT, ((EMCustomMessageBody)message.getBody()).event())) {
+                    AddCardQuote(message);
+                    return true;
+                }
+                return false;
         }
         return false;
+    }
+
+    private void AddCardQuote(EMMessage message) {
+        JSONObject quoteObject = null;
+        try {
+            quoteObject = new JSONObject();
+            quoteObject.put(EaseConstant.QUOTE_MSG_ID, message.getMsgId());
+            quoteObject.put(EaseConstant.QUOTE_MSG_PREVIEW, getResources().getString(R.string.custom));
+            quoteObject.put(EaseConstant.QUOTE_MSG_TYPE, message.getType().name().toLowerCase());
+            quoteObject.put(EaseConstant.QUOTE_MSG_SENDER, message.getFrom());
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        if(quoteObject != null) {
+            chatLayout.setMessageQuoteInfo(quoteObject);
+            chatLayout.getChatInputMenu().getPrimaryMenu().primaryStartQuote(message);
+        }
     }
 
     private void showModifyDialog(EMMessage message) {
