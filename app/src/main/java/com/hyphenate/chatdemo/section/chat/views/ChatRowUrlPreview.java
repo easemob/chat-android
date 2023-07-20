@@ -6,9 +6,7 @@ import android.text.Spanned;
 import android.text.style.URLSpan;
 import android.view.View;
 import android.widget.TextView;
-
 import androidx.constraintlayout.widget.ConstraintLayout;
-
 import com.bumptech.glide.Glide;
 import com.google.android.material.imageview.ShapeableImageView;
 import com.hyphenate.EMValueCallBack;
@@ -106,13 +104,12 @@ public class ChatRowUrlPreview extends EaseChatRow {
 
       DemoUrlPreviewBean urlPreviewInfo = DemoHelper.getInstance().getUrlPreviewInfo(message.getMsgId());
       if (urlPreviewInfo == null ){
-         parsingUrl(spans[0].getURL(), new EMValueCallBack<DemoUrlPreviewBean>() {
+         parsingUrl(spans[0].getURL(),message.getMsgId(),new EMValueCallBack<DemoUrlPreviewBean>() {
             @Override
             public void onSuccess(DemoUrlPreviewBean value) {
                EaseThreadManager.getInstance().runOnMainThread(new Runnable() {
                   @Override
                   public void run() {
-                     DemoHelper.getInstance().saveUrlPreviewInfo(message.getMsgId(),value);
                      itemActionCallback.refreshView();
                   }
                });
@@ -132,7 +129,19 @@ public class ChatRowUrlPreview extends EaseChatRow {
          quoteItem.setVisibility(VISIBLE);
          title.setText(urlPreviewInfo.getTitle());
          description.setText(urlPreviewInfo.getContent());
-         Glide.with(context).load(urlPreviewInfo.getPrimaryImg()).placeholder(R.drawable.em_icon_rectangle).into(icon);
+         if (urlPreviewInfo.getPrimaryImg().endsWith(".gif")){
+            Glide.with(context)
+                    .asGif().load(urlPreviewInfo.getPrimaryImg())
+                    .placeholder(R.drawable.em_icon_rectangle)
+                    .error(R.drawable.em_icon_rectangle)
+                    .into(icon);
+         }else {
+            Glide.with(context)
+                    .load(urlPreviewInfo.getPrimaryImg())
+                    .placeholder(R.drawable.em_icon_rectangle)
+                    .error(R.drawable.em_icon_rectangle)
+                    .into(icon);
+         }
       }
 
       if (index != -1) {
@@ -142,12 +151,13 @@ public class ChatRowUrlPreview extends EaseChatRow {
       }
    }
 
-   private void parsingUrl(String url, EMValueCallBack<DemoUrlPreviewBean> callBack){
+   private void parsingUrl(String url,String msgId, EMValueCallBack<DemoUrlPreviewBean> callBack){
       EaseThreadManager.getInstance().runOnIOThread(()->{
          try {
             DemoUrlPreviewBean demoUrlPreviewBean = new DemoUrlPreviewBean();
             String descriptionContent = "";
             String logoUrl = "";
+            String src = "";
             Document document = Jsoup.connect(url)
                     .header("content-type","text/html;charset=utf-8")
                     .timeout(5000).get();
@@ -155,7 +165,15 @@ public class ChatRowUrlPreview extends EaseChatRow {
 
             Element description = document.select("head meta[name=description]").first();
 
-            String src = document.getElementsByTag("img").first().attr("src");
+            Element logoElement = document.select("link[rel='icon']").first();
+            if (logoElement != null){
+               src = logoElement.attr("href");
+            }
+
+            Element imgElement = document.selectFirst("img");
+            if (imgElement != null){
+               src = imgElement.absUrl("src");
+            }
 
             if (!checkContainsUrl(src)){
                // 如果不是标准url路径 判断是否是 //开头或者 /开头做相应处理
@@ -188,6 +206,7 @@ public class ChatRowUrlPreview extends EaseChatRow {
                      + "description " + descriptionContent + "\n"
                      + "logo " + logoUrl + "\n");
 
+            DemoHelper.getInstance().saveUrlPreviewInfo(msgId,demoUrlPreviewBean);
             callBack.onSuccess(demoUrlPreviewBean);
          } catch (IOException e) {
             e.printStackTrace();
