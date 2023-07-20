@@ -3,6 +3,7 @@ package com.hyphenate.chatdemo.section.chat.views;
 import android.content.Context;
 import android.text.Spannable;
 import android.text.Spanned;
+import android.text.TextUtils;
 import android.text.style.URLSpan;
 import android.view.View;
 import android.widget.TextView;
@@ -126,21 +127,25 @@ public class ChatRowUrlPreview extends EaseChatRow {
             }
          });
       }else {
-         quoteItem.setVisibility(VISIBLE);
-         title.setText(urlPreviewInfo.getTitle());
-         description.setText(urlPreviewInfo.getContent());
-         if (urlPreviewInfo.getPrimaryImg().endsWith(".gif")){
-            Glide.with(context)
-                    .asGif().load(urlPreviewInfo.getPrimaryImg())
-                    .placeholder(R.drawable.em_icon_rectangle)
-                    .error(R.drawable.em_icon_rectangle)
-                    .into(icon);
+         if (TextUtils.isEmpty(urlPreviewInfo.getTitle())){
+            quoteItem.setVisibility(GONE);
          }else {
-            Glide.with(context)
-                    .load(urlPreviewInfo.getPrimaryImg())
-                    .placeholder(R.drawable.em_icon_rectangle)
-                    .error(R.drawable.em_icon_rectangle)
-                    .into(icon);
+            quoteItem.setVisibility(VISIBLE);
+            title.setText(urlPreviewInfo.getTitle());
+            description.setText(urlPreviewInfo.getContent());
+            if (urlPreviewInfo.getPrimaryImg().endsWith(".gif")){
+               Glide.with(context)
+                       .asGif().load(urlPreviewInfo.getPrimaryImg())
+                       .placeholder(R.drawable.em_icon_preview_error)
+                       .error(R.drawable.em_icon_preview_error)
+                       .into(icon);
+            }else {
+               Glide.with(context)
+                       .load(urlPreviewInfo.getPrimaryImg())
+                       .placeholder(R.drawable.em_icon_preview_error)
+                       .error(R.drawable.em_icon_preview_error)
+                       .into(icon);
+            }
          }
       }
 
