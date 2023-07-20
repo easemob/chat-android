@@ -11,6 +11,8 @@ import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.text.SpannableString;
+import android.text.Spanned;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -71,7 +73,12 @@ import com.hyphenate.easeui.modules.chat.interfaces.IChatExtendMenu;
 import com.hyphenate.easeui.modules.chat.interfaces.OnRecallMessageResultListener;
 import com.hyphenate.easeui.modules.menu.EasePopupWindowHelper;
 import com.hyphenate.easeui.modules.menu.MenuItemBean;
+import com.hyphenate.easeui.utils.EaseUserUtils;
+import com.hyphenate.easeui.widget.CenterImageSpan;
 import com.hyphenate.util.EMLog;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -685,10 +692,30 @@ public class ChatFragment extends EaseChatFragment implements OnRecallMessageRes
                 showModifyDialog(message);
                 return true;
             case R.id.action_chat_quote:
-                onQuoteMenuItemClick(message);
-                return true;
+                if(message.getType() == EMMessage.Type.CUSTOM && TextUtils.equals(DemoConstant.USER_CARD_EVENT, ((EMCustomMessageBody)message.getBody()).event())) {
+                    AddCardQuote(message);
+                    return true;
+                }
+                return false;
         }
         return false;
+    }
+
+    private void AddCardQuote(EMMessage message) {
+        JSONObject quoteObject = null;
+        try {
+            quoteObject = new JSONObject();
+            quoteObject.put(EaseConstant.QUOTE_MSG_ID, message.getMsgId());
+            quoteObject.put(EaseConstant.QUOTE_MSG_PREVIEW, getResources().getString(R.string.custom));
+            quoteObject.put(EaseConstant.QUOTE_MSG_TYPE, message.getType().name().toLowerCase());
+            quoteObject.put(EaseConstant.QUOTE_MSG_SENDER, message.getFrom());
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        if(quoteObject != null) {
+            chatLayout.setMessageQuoteInfo(quoteObject);
+            chatLayout.getChatInputMenu().getPrimaryMenu().primaryStartQuote(message);
+        }
     }
 
     private void showModifyDialog(EMMessage message) {
@@ -859,35 +886,50 @@ public class ChatFragment extends EaseChatFragment implements OnRecallMessageRes
 
     }
 
-    public void addCustomQuote(EMMessage message) {
-        EMMessage.Type type = message.getType();
-        if (type == EMMessage.Type.CUSTOM){
-            EMCustomMessageBody messageBody = (EMCustomMessageBody) message.getBody();
-            Map<String,String> params = messageBody.getParams();
-            if (params.size() > 0 && messageBody.event().equals(DemoConstant.USER_CARD_EVENT)){
-                String uId = params.get(DemoConstant.USER_CARD_ID);
-                String nickName = params.get(DemoConstant.USER_CARD_NICK);
-                String avatar = params.get(DemoConstant.USER_CARD_AVATAR);
-                if(uId != null && uId.length() > 0){
-                    if(uId.equals(EMClient.getInstance().getCurrentUser())){
-                        UserDetailActivity.actionStart(getContext(),nickName,avatar);
-                    }else{
-                        EaseUser user = DemoHelper.getInstance().getUserInfo(uId);
-                        if(user == null){
-                            user = new EaseUser(uId);
-                            user.setAvatar(avatar);
-                            user.setNickname(nickName);
-                        }
-                        boolean isFriend =  DemoHelper.getInstance().getModel().isContact(uId);
-                        if(isFriend){
-                            user.setContact(0);
-                        }else{
-                            user.setContact(3);
-                        }
-                        ContactDetailActivity.actionStart(getContext(),user);
-                    }
-                }
-            }
+    @Override
+    public SpannableString providerQuoteMessageContent(EMMessage quoteMessage, EMMessage.Type quoteMsgType, String quoteSender, String quoteContent) {
+        if(quoteMsgType == EMMessage.Type.CUSTOM) {
+            return customTypeDisplay(quoteMessage, quoteSender, quoteContent);
+        }else {
+            return new SpannableString(quoteSender+": "+quoteContent);
         }
     }
+
+    private SpannableString customTypeDisplay(EMMessage quoteMessage, String quoteSender, String content){
+        if (quoteMessage != null && quoteMessage.getBody() instanceof EMCustomMessageBody){
+            EMCustomMessageBody customMessageBody = (EMCustomMessageBody)quoteMessage.getBody();
+            Map<String, String> params = customMessageBody.getParams();
+            if (params.size() > 0 && customMessageBody.event().equals(EaseConstant.USER_CARD_EVENT)){
+                String uId = params.get(EaseConstant.USER_CARD_ID);
+                String nickName = params.get(EaseConstant.USER_CARD_NICK);
+                String customContent = "";
+                if(uId != null && uId.length() > 0){
+                    if(uId.equals(EMClient.getInstance().getCurrentUser())){
+                        customContent = quoteSender;
+                    }else{
+                        EaseUser user = EaseUserUtils.getUserInfo(uId);
+                        if(user == null){
+                            user = new EaseUser(uId);
+                            user.setNickname(nickName);
+                        }
+                        if (user.getNickname().isEmpty()){
+                            customContent = uId;
+                        }else {
+                            customContent = user.getNickname();
+                        }
+                    }
+                }
+                int cardIndex = quoteSender.length() + 1;
+                String cardTitle = quoteSender + ":  " + customContent;
+                SpannableString cardSb = new SpannableString(cardTitle);
+                CenterImageSpan cardSpan = new CenterImageSpan(mContext, R.drawable.ease_chat_item_menu_card);
+                if (cardSb.length() > 0){
+                    cardSb.setSpan(cardSpan, cardIndex, cardIndex + 2, Spanned.SPAN_INCLUSIVE_EXCLUSIVE);
+                }
+                return cardSb;
+            }
+        }
+        return new SpannableString(quoteSender + ": " + content);
+    }
+
 }

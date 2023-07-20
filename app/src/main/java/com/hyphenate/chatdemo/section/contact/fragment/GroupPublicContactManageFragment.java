@@ -1,6 +1,7 @@
 package com.hyphenate.chatdemo.section.contact.fragment;
 
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.View;
 
 import androidx.annotation.Nullable;
@@ -132,8 +133,10 @@ public class GroupPublicContactManageFragment extends BaseInitFragment implement
 
     @Override
     public void onLoadMore(RefreshLayout refreshLayout) {
-        if(cursor != null) {
+        if(!TextUtils.isEmpty(cursor)) {
             viewModel.getMorePublicGroups(page_size, cursor);
+        }else {
+            srlRefresh.finishLoadMore(1000);
         }
     }
 
