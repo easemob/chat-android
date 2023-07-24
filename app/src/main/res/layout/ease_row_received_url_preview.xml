@@ -88,12 +88,13 @@
                 android:layout_width="0dp"
                 android:layout_height="0dp"/>
 
-            <com.google.android.material.imageview.ShapeableImageView
+            <com.hyphenate.easeui.widget.EaseImageView
+                app:ease_radius="4dp"
+                app:ease_shape_type="rectangle"
                 android:id="@+id/iv_icon"
                 app:layout_constraintRight_toRightOf="parent"
                 app:layout_constraintBottom_toBottomOf="@+id/description"
                 app:layout_constraintTop_toTopOf="@+id/description"
-                android:src="@drawable/em_icon_rectangle"
                 style="@style/roundStyle"
                 android:layout_width="52dp"
                 android:layout_height="52dp"/>

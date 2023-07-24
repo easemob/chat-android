@@ -1,6 +1,6 @@
-package com.hyphenate.chatdemo.common.model;
+package com.hyphenate.chatdemo.section.chat.model;
 
-public class DemoUrlPreviewBean {
+public class UrlPreViewBean {
    private String title; // 标题
    private String content; // 内容
    private String primaryImg; // 主图
