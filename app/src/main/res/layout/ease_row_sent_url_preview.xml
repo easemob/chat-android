@@ -88,8 +88,10 @@
                     app:layout_constraintTop_toBottomOf="@+id/title"
                     tools:text="description" />
 
-                <com.google.android.material.imageview.ShapeableImageView
+                <com.hyphenate.easeui.widget.EaseImageView
                     android:id="@+id/iv_icon"
+                    app:ease_radius="4dp"
+                    app:ease_shape_type="rectangle"
                     style="@style/roundStyle"
                     android:layout_width="52dp"
                     android:layout_height="52dp"
