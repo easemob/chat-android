@@ -14,7 +14,8 @@ import com.hyphenate.EMValueCallBack;
 import com.hyphenate.chat.EMTextMessageBody;
 import com.hyphenate.chatdemo.DemoHelper;
 import com.hyphenate.chatdemo.R;
-import com.hyphenate.chatdemo.common.model.DemoUrlPreviewBean;
+import com.hyphenate.chatdemo.section.chat.model.UrlPreViewBean;
+import com.hyphenate.easecallkit.widget.EaseImageView;
 import com.hyphenate.easeui.manager.EaseThreadManager;
 import com.hyphenate.easeui.utils.EaseSmileUtils;
 import com.hyphenate.easeui.widget.chatrow.AutolinkSpan;
@@ -24,6 +25,7 @@ import com.hyphenate.util.EMLog;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
+import org.jsoup.select.Elements;
 
 import java.io.IOException;
 import java.util.regex.Matcher;
@@ -33,7 +35,7 @@ public class ChatRowUrlPreview extends EaseChatRow {
    private TextView contentView;
    private TextView title;
    private TextView description;
-   private ShapeableImageView icon;
+   private EaseImageView icon;
    private ConstraintLayout quoteItem;
    public static final String URL_REGEX = "(((https|http)?://)?([a-z0-9]+[.])|(www.))"
            + "\\w+[.|\\/]([a-z0-9]{0,})?[[.]([a-z0-9]{0,})]+((/[\\S&&[^,;\u4E00-\u9FA5]]+)+)?([.][a-z0-9]{0,}+|/?)";
@@ -103,27 +105,18 @@ public class ChatRowUrlPreview extends EaseChatRow {
          end = index + url.length();
       }
 
-      DemoUrlPreviewBean urlPreviewInfo = DemoHelper.getInstance().getUrlPreviewInfo(message.getMsgId());
+      UrlPreViewBean urlPreviewInfo = DemoHelper.getInstance().getUrlPreviewInfo(message.getMsgId());
       if (urlPreviewInfo == null ){
-         parsingUrl(spans[0].getURL(),message.getMsgId(),new EMValueCallBack<DemoUrlPreviewBean>() {
+         parsingUrl(spans[0].getURL(),message.getMsgId(),new EMValueCallBack<UrlPreViewBean>() {
             @Override
-            public void onSuccess(DemoUrlPreviewBean value) {
-               EaseThreadManager.getInstance().runOnMainThread(new Runnable() {
-                  @Override
-                  public void run() {
-                     itemActionCallback.refreshView();
-                  }
-               });
+            public void onSuccess(UrlPreViewBean value) {
+                itemActionCallback.refreshView();
             }
 
             @Override
             public void onError(int error, String errorMsg) {
-               EaseThreadManager.getInstance().runOnMainThread(new Runnable() {
-                  @Override
-                  public void run() {
-                     EMLog.e("ChatRowUrlPreview","parsingUrl onError" + errorMsg + error);
-                  }
-               });
+               quoteItem.setVisibility(GONE);
+               EMLog.e("ChatRowUrlPreview","parsingUrl onError" + errorMsg + error);
             }
          });
       }else {
@@ -156,10 +149,10 @@ public class ChatRowUrlPreview extends EaseChatRow {
       }
    }
 
-   private void parsingUrl(String url,String msgId, EMValueCallBack<DemoUrlPreviewBean> callBack){
+   private void parsingUrl(String url,String msgId, EMValueCallBack<UrlPreViewBean> callBack){
       EaseThreadManager.getInstance().runOnIOThread(()->{
          try {
-            DemoUrlPreviewBean demoUrlPreviewBean = new DemoUrlPreviewBean();
+            UrlPreViewBean urlPreViewBean = new UrlPreViewBean();
             String descriptionContent = "";
             String logoUrl = "";
             String src = "";
@@ -170,13 +163,32 @@ public class ChatRowUrlPreview extends EaseChatRow {
 
             Element description = document.select("head meta[name=description]").first();
 
+            Element metaTag = document.selectFirst("head meta[property=og:image]");
+            if (metaTag != null){
+               src = metaTag.attr("content");
+            }
+
+            Elements linkTags = document.select("head link");
+            if (linkTags != null){
+               // 遍历linkTags，解析相关属性值
+               for (Element linkTag : linkTags) {
+                  String href = linkTag.attr("href");
+                  String rel = linkTag.attr("rel");
+
+                  // 如果rel属性值为"apple-touch-icon-precomposed"，则输出href属性值
+                  if (rel.equals("apple-touch-icon-precomposed") && DemoHelper.getInstance().isPicture(href)) {
+                     src = href;
+                  }
+               }
+            }
+
             Element logoElement = document.select("link[rel='icon']").first();
-            if (logoElement != null){
+            if (logoElement != null && TextUtils.isEmpty(src)){
                src = logoElement.attr("href");
             }
 
             Element imgElement = document.selectFirst("img");
-            if (imgElement != null){
+            if (imgElement != null && TextUtils.isEmpty(src)){
                src = imgElement.absUrl("src");
             }
 
@@ -202,20 +214,24 @@ public class ChatRowUrlPreview extends EaseChatRow {
                descriptionContent = description.attr("content");
             }
 
-            demoUrlPreviewBean.setTitle(title);//标题
-            demoUrlPreviewBean.setPrimaryImg(logoUrl); // 首图
-            demoUrlPreviewBean.setContent(descriptionContent); // 内容
+            urlPreViewBean.setTitle(title);//标题
+            urlPreViewBean.setPrimaryImg(logoUrl); // 首图
+            urlPreViewBean.setContent(descriptionContent); // 内容
 
             EMLog.d("ChatRowUrlPreview",
                     "title:" + title +"\n"
                      + "description " + descriptionContent + "\n"
                      + "logo " + logoUrl + "\n");
 
-            DemoHelper.getInstance().saveUrlPreviewInfo(msgId,demoUrlPreviewBean);
-            callBack.onSuccess(demoUrlPreviewBean);
+            DemoHelper.getInstance().saveUrlPreviewInfo(msgId, urlPreViewBean);
+            post(()->{
+               callBack.onSuccess(urlPreViewBean);
+            });
          } catch (IOException e) {
             e.printStackTrace();
-            callBack.onError(1,e.getMessage());
+            post(()->{
+               callBack.onError(1,e.getMessage());
+            });
          }
       });
    }

@@ -27,7 +27,8 @@ import com.hyphenate.chat.EMGroupManager;
 import com.hyphenate.chat.EMMessage;
 import com.hyphenate.chat.EMOptions;
 import com.hyphenate.chat.EMPushManager;
-import com.hyphenate.chatdemo.common.model.DemoUrlPreviewBean;
+import com.hyphenate.chatdemo.section.chat.UrlPreViewHelper;
+import com.hyphenate.chatdemo.section.chat.model.UrlPreViewBean;
 import com.hyphenate.chatdemo.section.chat.delegates.ChatUrlPreviewAdapterDelegate;
 import com.hyphenate.chatdemo.section.group.GroupHelper;
 import com.hyphenate.chatdemo.section.group.MemberAttributeBean;
@@ -93,7 +94,6 @@ import org.json.JSONObject;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.List;
@@ -105,7 +105,6 @@ import java.util.TimeZone;
  */
 public class DemoHelper {
     private static final String TAG = DemoHelper.class.getSimpleName();
-    private static final Map<String, DemoUrlPreviewBean> previewMap = new HashMap<>();
 
     public boolean isSDKInit;//SDK是否初始化
     private static DemoHelper mInstance;
@@ -1095,22 +1094,22 @@ public class DemoHelper {
         GroupHelper.clearGroupMemberAttributeByUserId(groupId,userId);
     }
 
-    public void saveUrlPreviewInfo(String msgId,DemoUrlPreviewBean bean){
+    public void saveUrlPreviewInfo(String msgId, UrlPreViewBean bean){
         if (!TextUtils.isEmpty(msgId)){
-            previewMap.put(msgId,bean);
+            UrlPreViewHelper.saveUrlPreviewInfo(msgId,bean);
         }
     }
 
-    public DemoUrlPreviewBean getUrlPreviewInfo(String msgId){
-        if (previewMap.size() > 0 && !TextUtils.isEmpty(msgId)){
-            if (previewMap.containsKey(msgId)){
-                return previewMap.get(msgId);
-            }
-        }
-        return null;
+    public UrlPreViewBean getUrlPreviewInfo(String msgId){
+        return UrlPreViewHelper.getUrlPreviewInfo(msgId);
     }
 
     public void clearPreviewInfo(){
-        previewMap.clear();
+        UrlPreViewHelper.clearPreviewInfo();
+    }
+
+    public boolean isPicture(String url){
+        boolean isPicture = UrlPreViewHelper.isPicture(url);
+        return isPicture;
     }
 }
