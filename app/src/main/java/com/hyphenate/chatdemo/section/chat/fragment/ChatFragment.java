@@ -635,9 +635,7 @@ public class ChatFragment extends EaseChatFragment implements OnRecallMessageRes
     @Override
     public void onPreMenu(EasePopupWindowHelper helper, EMMessage message, View v) {
         //默认两分钟后，即不可撤回
-        if(System.currentTimeMillis() - message.getMsgTime() > 2 * 60 * 1000) {
-            helper.findItemVisible(R.id.action_chat_recall, false);
-        }
+        helper.findItemVisible(R.id.action_chat_recall, canRecall(message));
         EMMessage.Type type = message.getType();
         helper.findItemVisible(R.id.action_chat_forward, false);
         helper.findItemVisible(R.id.action_msg_edit, false);
@@ -655,11 +653,25 @@ public class ChatFragment extends EaseChatFragment implements OnRecallMessageRes
             case IMAGE:
                 helper.findItemVisible(R.id.action_chat_forward, true);
                 break;
+            case CUSTOM:
+                // Card message
+                if(((EMCustomMessageBody)message.getBody()).event().equals(EaseConstant.USER_CARD_EVENT) && canRecall(message)) {
+                    helper.findItemVisible(R.id.action_chat_recall, true);
+                }
+                break;
         }
 
         if(chatType == DemoConstant.CHATTYPE_CHATROOM) {
             helper.findItemVisible(R.id.action_chat_forward, true);
         }
+    }
+
+    // 默认两分钟后，即不可撤回
+    private boolean canRecall(EMMessage message) {
+        if(message == null) {
+            return false;
+        }
+        return System.currentTimeMillis() - message.getMsgTime() <= 2 * 60 * 1000;
     }
 
     @Override
