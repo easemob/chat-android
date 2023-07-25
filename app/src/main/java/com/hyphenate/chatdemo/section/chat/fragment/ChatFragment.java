@@ -648,7 +648,7 @@ public class ChatFragment extends EaseChatFragment implements OnRecallMessageRes
                 if(v.getId() == R.id.subBubble){
                     helper.findItemVisible(R.id.action_chat_forward, false);
                 }
-                helper.findItemVisible(R.id.action_msg_edit, true);
+                helper.findItemVisible(R.id.action_msg_edit, message.direct() == EMMessage.Direct.SEND);
                 break;
             case IMAGE:
                 helper.findItemVisible(R.id.action_chat_forward, true);
@@ -671,7 +671,7 @@ public class ChatFragment extends EaseChatFragment implements OnRecallMessageRes
         if(message == null) {
             return false;
         }
-        return System.currentTimeMillis() - message.getMsgTime() <= 2 * 60 * 1000;
+        return (System.currentTimeMillis() - message.getMsgTime() <= 2 * 60 * 1000) && message.direct() == EMMessage.Direct.SEND;
     }
 
     @Override
