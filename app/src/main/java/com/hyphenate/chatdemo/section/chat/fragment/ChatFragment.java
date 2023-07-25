@@ -706,7 +706,7 @@ public class ChatFragment extends EaseChatFragment implements OnRecallMessageRes
         try {
             quoteObject = new JSONObject();
             quoteObject.put(EaseConstant.QUOTE_MSG_ID, message.getMsgId());
-            quoteObject.put(EaseConstant.QUOTE_MSG_PREVIEW, getResources().getString(R.string.custom));
+            quoteObject.put(EaseConstant.QUOTE_MSG_PREVIEW, getResources().getString(R.string.quote_card));
             quoteObject.put(EaseConstant.QUOTE_MSG_TYPE, message.getType().name().toLowerCase());
             quoteObject.put(EaseConstant.QUOTE_MSG_SENDER, message.getFrom());
         } catch (JSONException e) {
@@ -900,34 +900,38 @@ public class ChatFragment extends EaseChatFragment implements OnRecallMessageRes
             EMCustomMessageBody customMessageBody = (EMCustomMessageBody)quoteMessage.getBody();
             Map<String, String> params = customMessageBody.getParams();
             if (params.size() > 0 && customMessageBody.event().equals(EaseConstant.USER_CARD_EVENT)){
-                String uId = params.get(EaseConstant.USER_CARD_ID);
-                String nickName = params.get(EaseConstant.USER_CARD_NICK);
-                String customContent = "";
-                if(uId != null && uId.length() > 0){
-                    if(uId.equals(EMClient.getInstance().getCurrentUser())){
-                        customContent = quoteSender;
-                    }else{
-                        EaseUser user = EaseUserUtils.getUserInfo(uId);
-                        if(user == null){
-                            user = new EaseUser(uId);
-                            user.setNickname(nickName);
-                        }
-                        if (user.getNickname().isEmpty()){
-                            customContent = uId;
-                        }else {
-                            customContent = user.getNickname();
-                        }
+                String userIdByCard = params.get(EaseConstant.USER_CARD_ID);
+                String nicknameByCard = params.get(EaseConstant.USER_CARD_NICK);
+                String customContent = content;
+                if(!TextUtils.isEmpty(userIdByCard)){
+                    EaseUser user = EaseUserUtils.getUserInfo(userIdByCard);
+                    if(user == null){
+                        user = new EaseUser(userIdByCard);
+                        user.setNickname(nicknameByCard);
+                    }
+                    if (TextUtils.isEmpty(user.getNickname())){
+                        customContent = userIdByCard;
+                    }else {
+                        customContent = user.getNickname();
                     }
                 }
-                int cardIndex = quoteSender.length() + 1;
-                String cardTitle = quoteSender + ":  " + customContent;
+                int cardIndex = quoteSender.length() + 2;
+                String cardTitle = quoteSender + ":   " + customContent;
                 SpannableString cardSb = new SpannableString(cardTitle);
                 CenterImageSpan cardSpan = new CenterImageSpan(mContext, R.drawable.ease_chat_item_menu_card);
                 if (cardSb.length() > 0){
-                    cardSb.setSpan(cardSpan, cardIndex, cardIndex + 2, Spanned.SPAN_INCLUSIVE_EXCLUSIVE);
+                    cardSb.setSpan(cardSpan, cardIndex, cardIndex + 1, Spanned.SPAN_INCLUSIVE_EXCLUSIVE);
                 }
                 return cardSb;
             }
+        }else if(content.contains(getString(R.string.card))) {
+            int cardIndex = quoteSender.length() + 2;
+            SpannableString cardSb = new SpannableString(quoteSender + ":   " + content);
+            CenterImageSpan cardSpan = new CenterImageSpan(mContext, R.drawable.ease_chat_item_menu_card);
+            if (cardSb.length() > 0){
+                cardSb.setSpan(cardSpan, cardIndex, cardIndex + 1, Spanned.SPAN_INCLUSIVE_EXCLUSIVE);
+            }
+            return cardSb;
         }
         return new SpannableString(quoteSender + ": " + content);
     }
