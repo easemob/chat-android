@@ -648,7 +648,7 @@ public class ChatFragment extends EaseChatFragment implements OnRecallMessageRes
                 if(v.getId() == R.id.subBubble){
                     helper.findItemVisible(R.id.action_chat_forward, false);
                 }
-                helper.findItemVisible(R.id.action_msg_edit, message.direct() == EMMessage.Direct.SEND);
+                helper.findItemVisible(R.id.action_msg_edit, canEdit(message));
                 break;
             case IMAGE:
                 helper.findItemVisible(R.id.action_chat_forward, true);
@@ -672,6 +672,22 @@ public class ChatFragment extends EaseChatFragment implements OnRecallMessageRes
             return false;
         }
         return (System.currentTimeMillis() - message.getMsgTime() <= 2 * 60 * 1000) && message.direct() == EMMessage.Direct.SEND;
+    }
+
+    private boolean canEdit(EMMessage message) {
+        return isGroupOwnerOrAdmin() || isSender(message);
+    }
+
+    private boolean isGroupOwnerOrAdmin() {
+        if(chatType != EaseConstant.CHATTYPE_GROUP) {
+            return false;
+        }
+        EMGroup group = EMClient.getInstance().groupManager().getGroup(conversationId);
+        return GroupHelper.isOwner(group) || GroupHelper.isAdmin(group);
+    }
+
+    private boolean isSender(EMMessage message) {
+        return message != null && message.direct() == EMMessage.Direct.SEND;
     }
 
     @Override
