@@ -674,5 +674,5 @@
     <string name="demo_chat_swindle">This application is only used for functional development and testing of Huanxin products, do not use for illegal purposes. Anything involving money transfer, remittance, naked chat, online love, online shopping refund, investment and financing are all fraud, please do not believe.</string>
 
     <string name="em_chat_edit_message">Edit Message</string>
-
+    <string name="card">Card</string>
 </resources>
