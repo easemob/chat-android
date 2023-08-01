@@ -63,7 +63,7 @@ public class GroupAdminAuthorityActivity extends GroupMemberAuthorityActivity {
                     List<EaseUser> users = new ArrayList<>();
                     if(adminList != null && !adminList.isEmpty()){
                         for(int i = 0; i < adminList.size(); i++){
-                            EaseUser user = DemoHelper.getInstance().getUserInfo(adminList.get(i));
+                            EaseUser user = DemoHelper.getInstance().getGroupUserInfo(groupId,adminList.get(i));
                             if(user != null){
                                 users.add(user);
                             }else{

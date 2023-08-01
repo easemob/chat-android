@@ -23,6 +23,8 @@ import com.hyphenate.chatdemo.common.db.entity.EmUserEntity;
 import com.hyphenate.chatdemo.common.interfaceOrImplement.ResultCallBack;
 import com.hyphenate.chatdemo.common.net.ErrorCode;
 import com.hyphenate.chatdemo.common.net.Resource;
+import com.hyphenate.chatdemo.common.utils.GsonTools;
+import com.hyphenate.chatdemo.section.group.MemberAttributeBean;
 import com.hyphenate.cloud.HttpClientManager;
 import com.hyphenate.easeui.manager.EaseThreadManager;
 import com.hyphenate.easeui.domain.EaseUser;
@@ -30,6 +32,7 @@ import com.hyphenate.easeui.utils.EaseCommonUtils;
 import com.hyphenate.exceptions.HyphenateException;
 import com.hyphenate.util.EMLog;
 
+import org.json.JSONObject;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -338,7 +341,7 @@ public class EMGroupManagerRepository extends BaseEMRepository{
                     List<EaseUser> users = new ArrayList<>();
                     if(members != null && !members.isEmpty()){
                         for(int i = 0; i < members.size(); i++){
-                            EaseUser user = DemoHelper.getInstance().getUserInfo(members.get(i));
+                            EaseUser user = DemoHelper.getInstance().getGroupUserInfo(groupId,members.get(i));
                             if(user != null){
                                 users.add(user);
                             }else{
@@ -628,6 +631,115 @@ public class EMGroupManagerRepository extends BaseEMRepository{
                     @Override
                     public void onProgress(int progress, String status) {
 
+                    }
+                });
+            }
+        }.asLiveData();
+    }
+
+    /**
+     * 设置我在群里的昵称
+     * @param groupId
+     * @param userId
+     * @param attributeMap
+     * @return
+     */
+    public LiveData<Resource<Map<String,MemberAttributeBean>>> setGroupMemberAttributes(String groupId,String userId,Map<String,String> attributeMap) {
+        return new NetworkOnlyResource<Map<String,MemberAttributeBean>>() {
+            @Override
+            protected void createCall(@NonNull ResultCallBack<LiveData<Map<String,MemberAttributeBean>>> callBack) {
+                getGroupManager().asyncSetGroupMemberAttributes(groupId, userId, attributeMap, new EMCallBack() {
+                    @Override
+                    public void onSuccess() {
+                        Map<String,MemberAttributeBean> result = new HashMap<>();
+                        MemberAttributeBean bean = new MemberAttributeBean();
+
+                        for (Map.Entry<String, String> entry : attributeMap.entrySet()) {
+                            if(entry.getKey().equals("nickName")){
+                                bean.setNickName(entry.getValue());
+                                result.put(userId,bean);
+                                DemoHelper.getInstance().saveMemberAttribute(groupId,userId,bean);
+                            }
+                        }
+                        callBack.onSuccess(createLiveData(result));
+                    }
+
+                    @Override
+                    public void onError(int code, String error) {
+                        callBack.onError(code, error);
+                    }
+                });
+            }
+        }.asLiveData();
+    }
+
+    /**
+     * 获取我在群里的属性
+     * @param groupId
+     * @param userId
+     * @return
+     */
+    public LiveData<Resource<Map<String,MemberAttributeBean>>> fetchGroupMemberDetail(String groupId, String userId) {
+        return new NetworkOnlyResource<Map<String,MemberAttributeBean>>() {
+            @Override
+            protected void createCall(@NonNull ResultCallBack<LiveData<Map<String,MemberAttributeBean>>> callBack) {
+                getGroupManager().asyncFetchGroupMemberAllAttributes(groupId, userId, new EMValueCallBack<Map<String, Map<String, String>>>() {
+                    @Override
+                    public void onSuccess(Map<String, Map<String, String>> value) {
+                        if (value != null){
+                            Map<String,MemberAttributeBean> result = new HashMap<>();
+                            Map<String, String> map = value.get(userId);
+                            if (map != null){
+                                MemberAttributeBean bean = GsonTools.changeGsonToBean(new JSONObject(map).toString(),MemberAttributeBean.class);
+                                DemoHelper.getInstance().saveMemberAttribute(groupId,userId,bean);
+                                result.put(userId,bean);
+                                callBack.onSuccess(createLiveData(result));
+                            }
+                        }
+                    }
+
+                    @Override
+                    public void onError(int code, String error) {
+                        callBack.onError(code, error);
+                    }
+                });
+            }
+        }.asLiveData();
+    }
+
+    /**
+     * 获取多个成员在群里的昵称属性
+     * @param groupId
+     * @param userList
+     * @return
+     */
+    public LiveData<Resource<Map<String,MemberAttributeBean>>> fetchGroupMemberDetail(String groupId,List<String> userList ) {
+        return new NetworkOnlyResource<Map<String,MemberAttributeBean>>() {
+            @Override
+            protected void createCall(@NonNull ResultCallBack<LiveData<Map<String,MemberAttributeBean>>> callBack) {
+
+                List<String> keyList = new ArrayList<>();
+                keyList.add("nickName");
+                Map<String,MemberAttributeBean> result = new HashMap<>();
+                getGroupManager().asyncFetchGroupMembersAttributes(groupId, userList, keyList, new EMValueCallBack<Map<String, Map<String, String>>>() {
+                    @Override
+                    public void onSuccess(Map<String, Map<String, String>> value) {
+                        if (value != null){
+                            for (String user : userList) {
+                                Map<String,String> map = value.get(user);
+                                if (map != null){
+                                    MemberAttributeBean bean = GsonTools.changeGsonToBean(new JSONObject(map).toString(),MemberAttributeBean.class);
+                                    DemoHelper.getInstance().saveMemberAttribute(groupId,user,bean);
+                                    result.put(user,bean);
+                                }
+                            }
+                            callBack.onSuccess(createLiveData(result));
+                        }
+                    }
+
+                    @Override
+                    public void onError(int code, String error) {
+                        callBack.onError(code, error);
                     }
                 });
             }

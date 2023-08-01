@@ -22,7 +22,8 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.analytics.FirebaseAnalytics;
 import com.google.firebase.messaging.FirebaseMessaging;
-import com.huawei.agconnect.config.AGConnectServicesConfig;
+import com.hihonor.push.sdk.HonorPushCallback;
+import com.hihonor.push.sdk.HonorPushClient;
 import com.hyphenate.EMValueCallBack;
 import com.hyphenate.chat.EMClient;
 import com.hyphenate.chat.EMUserInfo;
@@ -168,8 +169,6 @@ public class MainActivity extends BaseInitActivity implements BottomNavigationVi
         switchToHome();
         checkIfShowSavedFragment(savedInstanceState);
         addTabBadge();
-        //Translation Manager 初始化
-        DemoHelper.getInstance().initTranslationManager();
     }
 
     @Override
@@ -184,8 +183,25 @@ public class MainActivity extends BaseInitActivity implements BottomNavigationVi
         initViewModel();
         checkUnreadMsg();
         ChatPresenter.getInstance().init();
-        // 获取华为 HMS 推送 token
-        HMSPushHelper.getInstance().getHMSToken(this);
+        EMLog.d("HonorPushClient","checkSupportHonorPush: " + HonorPushClient.getInstance().checkSupportHonorPush(this));
+        if (HonorPushClient.getInstance().checkSupportHonorPush(this)){
+            // 获取荣耀 推送 token
+            HonorPushClient.getInstance().getPushToken(new HonorPushCallback<String>() {
+                @Override
+                public void onSuccess(String token) {
+                    EMLog.d("HonorPushClient","getPushToken onSuccess: " + token);
+                    EMClient.getInstance().sendHonorPushTokenToServer(token);
+                }
+
+                @Override
+                public void onFailure(int code, String error) {
+                    EMLog.e("HonorPushClient","getPushToken onFailure: " + code + " error:" + error);
+                }
+            });
+        }else {
+            // 获取华为 HMS 推送 token
+            HMSPushHelper.getInstance().getHMSToken(this);
+        }
 
         //判断是否为来电推送
         if(PushUtils.isRtcCall){

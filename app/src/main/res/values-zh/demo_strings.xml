@@ -120,6 +120,8 @@
     <string name="demo_chat_request_read_external_storage_permission">使用%1$s需要读取SD卡权限，请进行授权</string>
     <string name="demo_chat_request_location_permission">使用定位功能需要定位权限，请进行授权</string>
     <string name="demo_chat_request_audio_permission">发送语音消息需要使用麦克风权限，请进行授权</string>
+    <string name="demo_chat_request_notifications">使用通知功能需要通知权限，请进行授权</string>
+
     <string name="demo_chat_file">文件</string>
     <string name="demo_chat_photo">相册</string>
     <string name="demo_chat_video">视频</string>
@@ -205,6 +207,9 @@
     <string name="em_chat_group_detail_clear_history">清空聊天记录</string>
     <string name="em_chat_group_detail_clear_history_warning">您确认要清空所有聊天记录吗？</string>
     <string name="em_chat_group_detail_member_manage">群组管理</string>
+    <string name="em_chat_group_detail_member_attribute">我在群里的昵称</string>
+    <string name="em_chat_group_detail_member_input">请在这里输入内容</string>
+    <string name="em_chat_group_detail_member_tips">昵称修改后，只会在此群内显示，群内成员都可以看见。</string>
     <string name="em_chat_group_detail_introduction">群介绍</string>
     <string name="em_chat_group_detail_introduction_hint">请输入群介绍</string>
     <string name="em_chat_group_detail_not_disturb">消息免打扰</string>
@@ -664,4 +669,6 @@
 
     <string name="action_report_label">举报</string>
     <string name="chat_temp_hint">该群仅供试用，72小时后将被删除</string>
+
+    <string name="demo_chat_swindle">本应用仅用于环信产品功能开发测试，请勿用于非法用途。任何涉及转账、汇款、裸聊、网恋、网购退款、投资理财等统统都是诈骗，请勿相信。</string>
 </resources>

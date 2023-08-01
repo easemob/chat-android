@@ -67,7 +67,7 @@ public class EMChatManagerRepository extends BaseEMRepository{
                     if(!TextUtils.isEmpty(extField) && EaseCommonUtils.isTimestamp(extField)) {
                         topSortList.add(new Pair<>(Long.valueOf(extField), conversation));
                     }else {
-                        sortList.add(new Pair<Long, Object>(conversation.getLastMessage().getMsgTime(), conversation));
+                        sortList.add(new Pair<Long, Object>(conversation.getLastMessage() == null ? 0 : conversation.getLastMessage().getMsgTime(), conversation));
                     }
                 }
             }
@@ -186,7 +186,7 @@ public class EMChatManagerRepository extends BaseEMRepository{
                             for(EMConversation conversation : conversations) {
                                 info = new EaseConversationInfo();
                                 info.setInfo(conversation);
-                                info.setTimestamp(conversation.getLastMessage().getMsgTime());
+                                info.setTimestamp(conversation.getLastMessage() == null ? 0:conversation.getLastMessage().getMsgTime());
                                 infoList.add(info);
                             }
                         }

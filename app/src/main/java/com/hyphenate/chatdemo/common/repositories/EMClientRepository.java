@@ -61,6 +61,8 @@ public class EMClientRepository extends BaseEMRepository{
                 if(isAutoLogin()) {
                     runOnIOThread(() -> {
                         if(isLoggedIn()) {
+                            // 初始化数据库
+                            initDb();
                             loadAllConversationsAndGroups();
                             callBack.onSuccess(createLiveData(true));
                         }else {
@@ -80,8 +82,6 @@ public class EMClientRepository extends BaseEMRepository{
      * 从本地数据库加载所有的对话及群组
      */
     private void loadAllConversationsAndGroups() {
-        // 初始化数据库
-        initDb();
         // 从本地数据库加载所有的对话及群组
         getChatManager().loadAllConversations();
         getGroupManager().loadAllGroups();
@@ -213,16 +213,19 @@ public class EMClientRepository extends BaseEMRepository{
     }
 
     private void successForCallBack(@NonNull ResultCallBack<LiveData<EaseUser>> callBack) {
+        // 初始化数据库
+        initDb();
+        // get current user id
+        String currentUser = EMClient.getInstance().getCurrentUser();
+        EaseUser user = new EaseUser(currentUser);
+        callBack.onSuccess(new MutableLiveData<>(user));
+
         // ** manually load all local groups and conversation
         loadAllConversationsAndGroups();
         //从服务器拉取加入的群，防止进入会话页面只显示id
         getAllJoinGroup();
         // get contacts from server
         getContactsFromServer();
-        // get current user id
-        String currentUser = EMClient.getInstance().getCurrentUser();
-        EaseUser user = new EaseUser(currentUser);
-        callBack.onSuccess(new MutableLiveData<>(user));
     }
 
     private void getContactsFromServer() {

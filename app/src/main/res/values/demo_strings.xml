@@ -119,6 +119,8 @@
     <string name="demo_chat_request_read_external_storage_permission">Read external storage permission is required to use %1$s, please authorize</string>
     <string name="demo_chat_request_location_permission">Location permission is required to send location message, please authorize</string>
     <string name="demo_chat_request_audio_permission">Audio permission is required to send voice message, please authorize</string>
+    <string name="demo_chat_request_notifications">Notification permission is requires to notification function, please authorize</string>
+
     <string name="demo_chat_file">file</string>
     <string name="demo_chat_photo">photo album</string>
     <string name="demo_chat_video">video</string>
@@ -204,6 +206,9 @@
     <string name="em_chat_group_detail_clear_history">Clear chat history</string>
     <string name="em_chat_group_detail_clear_history_warning">Are you sure you want to clear all chat history?</string>
     <string name="em_chat_group_detail_member_manage">Group Management</string>
+    <string name="em_chat_group_detail_member_attribute">My nick name in group</string>
+    <string name="em_chat_group_detail_member_input">Please enter content here</string>
+    <string name="em_chat_group_detail_member_tips">After the nickname is modified, it will only be displayed in this group, and all members of the group can see it.</string>
     <string name="em_chat_group_detail_introduction">Group intro</string>
     <string name="em_chat_group_detail_introduction_hint">Enter the group introduction</string>
     <string name="em_chat_group_detail_not_disturb">Do not disturb</string>
@@ -664,5 +669,8 @@
 
     <string name="action_report_label">report</string>
     <string name="chat_temp_hint">For trial only, will be deleted after 72 hours</string>
+
+    <string name="demo_chat_swindle">This application is only used for functional development and testing of Huanxin products, do not use for illegal purposes. Anything involving money transfer, remittance, naked chat, online love, online shopping refund, investment and financing are all fraud, please do not believe.</string>
+
 
 </resources>

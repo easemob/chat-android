@@ -12,28 +12,34 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.text.TextUtils;
+import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.hyphenate.EMCallBack;
 import com.hyphenate.chat.EMClient;
 import com.hyphenate.chat.EMCustomMessageBody;
 import com.hyphenate.chat.EMGroup;
 import com.hyphenate.chat.EMMessage;
-import com.hyphenate.easecallkit.EaseCallKit;
-import com.hyphenate.easecallkit.base.EaseCallType;
 import com.hyphenate.chatdemo.DemoApplication;
 import com.hyphenate.chatdemo.DemoHelper;
 import com.hyphenate.chatdemo.R;
 import com.hyphenate.chatdemo.common.constant.DemoConstant;
+import com.hyphenate.chatdemo.common.enums.Status;
 import com.hyphenate.chatdemo.common.livedatas.LiveDataBus;
 import com.hyphenate.chatdemo.common.model.EmojiconExampleGroupData;
+import com.hyphenate.chatdemo.common.utils.RecyclerViewUtils;
 import com.hyphenate.chatdemo.section.av.VideoCallActivity;
 import com.hyphenate.chatdemo.section.base.BaseActivity;
 import com.hyphenate.chatdemo.section.chat.activity.ForwardMessageActivity;
@@ -48,7 +54,12 @@ import com.hyphenate.chatdemo.section.dialog.FullEditDialogFragment;
 import com.hyphenate.chatdemo.section.dialog.LabelEditDialogFragment;
 import com.hyphenate.chatdemo.section.dialog.SimpleDialogFragment;
 import com.hyphenate.chatdemo.section.group.GroupHelper;
+import com.hyphenate.chatdemo.section.group.MemberAttributeBean;
+import com.hyphenate.chatdemo.section.group.viewmodels.GroupDetailViewModel;
 import com.hyphenate.chatdemo.section.me.activity.UserDetailActivity;
+import com.hyphenate.easecallkit.EaseCallKit;
+import com.hyphenate.easecallkit.base.EaseCallType;
+import com.hyphenate.easeui.adapter.EaseMessageAdapter;
 import com.hyphenate.easeui.constants.EaseConstant;
 import com.hyphenate.easeui.domain.EaseUser;
 import com.hyphenate.easeui.model.EaseEvent;
@@ -60,14 +71,18 @@ import com.hyphenate.easeui.modules.menu.EasePopupWindowHelper;
 import com.hyphenate.easeui.modules.menu.MenuItemBean;
 import com.hyphenate.util.EMLog;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import pub.devrel.easypermissions.EasyPermissions;
 
 
-public class ChatFragment extends EaseChatFragment implements OnRecallMessageResultListener, EasyPermissions.PermissionCallbacks {
+public class ChatFragment extends EaseChatFragment implements OnRecallMessageResultListener, EasyPermissions.PermissionCallbacks{
     private static final String TAG = ChatFragment.class.getSimpleName();
     private static final int REQUEST_CODE_SELECT_USER_CARD = 20;
     private static final int REQUEST_CODE_CAMERA = 110;
@@ -92,6 +107,8 @@ public class ChatFragment extends EaseChatFragment implements OnRecallMessageRes
     };
     private OnFragmentInfoListener infoListener;
     private Dialog dialog;
+    private boolean isFirstMeasure = true;
+    private GroupDetailViewModel groupDetailViewModel;
 
     @Override
     public void initView() {
@@ -102,7 +119,9 @@ public class ChatFragment extends EaseChatFragment implements OnRecallMessageRes
         EaseChatMessageListLayout messageListLayout = chatLayout.getChatMessageListLayout();
         //设置聊天列表背景
 //      messageListLayout.setBackground(new ColorDrawable(Color.parseColor("#DA5A4D")));
-        messageListLayout.setBackgroundResource(R.drawable.demo_caht_bitmap_bg);
+        setSwindleLayoutInChatFragemntHead();
+        //设置是否显示昵称
+        messageListLayout.showNickname(true);
         //设置默认头像
         //messageListLayout.setAvatarDefaultSrc(ContextCompat.getDrawable(mContext, R.drawable.ease_default_avatar));
         //设置头像形状
@@ -130,6 +149,19 @@ public class ChatFragment extends EaseChatFragment implements OnRecallMessageRes
         //}
 
         chatLayout.setTargetLanguageCode(DemoHelper.getInstance().getModel().getTargetLanguage());
+    }
+
+    private void setSwindleLayoutInChatFragemntHead() {
+        EaseChatMessageListLayout messageListLayout = chatLayout.getChatMessageListLayout();
+        RelativeLayout listLayoutParent = (RelativeLayout) (messageListLayout.getParent());
+        View view = LayoutInflater.from(mContext).inflate(R.layout.demo_chat_swindle, listLayoutParent, false);
+        listLayoutParent.addView(view);
+        listLayoutParent.post(new Runnable() {
+            @Override
+            public void run() {
+                messageListLayout.setPadding(0, view.getMeasuredHeight(),0,0);
+            }
+        });
     }
 
     private void addItemMenuAction() {
@@ -178,6 +210,7 @@ public class ChatFragment extends EaseChatFragment implements OnRecallMessageRes
     public void initListener() {
         super.initListener();
         chatLayout.setOnRecallMessageResultListener(this);
+        listenerRecyclerViewItemFinishLayout();
     }
 
     @Override
@@ -188,6 +221,8 @@ public class ChatFragment extends EaseChatFragment implements OnRecallMessageRes
 
         chatLayout.getChatInputMenu().getPrimaryMenu().getEditText().setText(getUnSendMsg());
         chatLayout.turnOnTypingMonitor(DemoHelper.getInstance().getModel().isShowMsgTyping());
+
+        groupDetailViewModel = new ViewModelProvider((AppCompatActivity)mContext).get(GroupDetailViewModel.class);
 
         LiveDataBus.get().with(DemoConstant.MESSAGE_CHANGE_CHANGE).postValue(new EaseEvent(DemoConstant.MESSAGE_CHANGE_CHANGE, EaseEvent.TYPE.MESSAGE));
 
@@ -244,6 +279,101 @@ public class ChatFragment extends EaseChatFragment implements OnRecallMessageRes
                 chatLayout.getChatMessageListLayout().refreshMessages();
             }
         });
+
+        LiveDataBus.get().with(DemoConstant.GROUP_MEMBER_ATTRIBUTE_CHANGE, EaseEvent.class).observe(getViewLifecycleOwner(), event -> {
+            if(event == null) {
+                return;
+            }
+            if(event != null) {
+                chatLayout.getChatMessageListLayout().refreshMessages();
+            }
+        });
+        groupDetailViewModel.getFetchMemberAttributesObservable().observe(this,response ->{
+            if(response == null) {
+                return;
+            }
+            if(response.status == Status.SUCCESS) {
+                chatLayout.getChatMessageListLayout().refreshMessages();
+            }
+        });
+    }
+
+    private void listenerRecyclerViewItemFinishLayout() {
+        if(chatLayout == null || chatType != EaseConstant.CHATTYPE_GROUP) {
+            return;
+        }
+        EaseChatMessageListLayout chatMessageListLayout = chatLayout.getChatMessageListLayout();
+        if(chatMessageListLayout == null || chatMessageListLayout.getChildCount() <= 0) {
+            return;
+        }
+        View swipeView = chatMessageListLayout.getChildAt(0);
+        if(!(swipeView instanceof SwipeRefreshLayout)) {
+            return;
+        }
+        if(((SwipeRefreshLayout) swipeView).getChildCount() <= 0) {
+            return;
+        }
+        RecyclerView recyclerView = null;
+        for(int i = 0; i < ((SwipeRefreshLayout) swipeView).getChildCount(); i++) {
+            View child = ((SwipeRefreshLayout) swipeView).getChildAt(i);
+            if(child instanceof RecyclerView) {
+                recyclerView = (RecyclerView) child;
+                break;
+            }
+        }
+        if(recyclerView == null || chatMessageListLayout.getMessageAdapter() == null) {
+            return;
+        }
+        EaseMessageAdapter messageAdapter = chatMessageListLayout.getMessageAdapter();
+        RecyclerView finalRecyclerView = recyclerView;
+        recyclerView.getViewTreeObserver().addOnGlobalLayoutListener(() -> {
+            if(isFirstMeasure && finalRecyclerView.getLayoutManager() != null && messageAdapter.getData() != null
+                && ((LinearLayoutManager) finalRecyclerView.getLayoutManager()).findLastVisibleItemPosition() == messageAdapter.getData().size() - 1) {
+                isFirstMeasure = false;
+                int[] positionArray = RecyclerViewUtils.rangeMeasurement(finalRecyclerView);
+                getGroupUserInfo(positionArray[0], positionArray[1]);
+            }
+        });
+        recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
+                super.onScrollStateChanged(recyclerView, newState);
+                if(newState == RecyclerView.SCROLL_STATE_IDLE) {
+                    int[] positionArray = RecyclerViewUtils.rangeMeasurement(recyclerView);
+                    getGroupUserInfo(positionArray[0], positionArray[1]);
+                }
+            }
+        });
+    }
+
+    public void getGroupUserInfo(int start, int end) {
+        if (start < end && end > 0 && chatType == DemoConstant.CHATTYPE_GROUP){
+            Set<String> nameSet = new HashSet<>();
+            for (int i = start; i <= end; i++) {
+                EMMessage message = chatLayout.getChatMessageListLayout().getMessageAdapter().getItem(i);
+                if (message != null && !TextUtils.isEmpty(message.getFrom())){
+                    nameSet.add(message.getFrom());
+                }
+            }
+            Iterator<String> iterator = nameSet.iterator();
+            while (iterator.hasNext()) {
+                String userId = iterator.next();
+                MemberAttributeBean bean = DemoHelper.getInstance().getMemberAttribute(conversationId, userId);
+                if (bean == null){
+                    //当从本地获取bean对象为空时 默认创建bean对象 并赋值nickName为userId
+                    MemberAttributeBean emptyBean = new MemberAttributeBean();
+                    emptyBean.setNickName(userId);
+                    DemoHelper.getInstance().saveMemberAttribute(conversationId, userId, emptyBean);
+                }else {
+                    iterator.remove();
+                }
+            }
+            if(nameSet.isEmpty()) {
+                return;
+            }
+            List<String> userIds = new ArrayList<>(nameSet);
+            groupDetailViewModel.fetchGroupMemberAttribute(conversationId, userIds);
+        }
     }
 
     private void showDeliveryDialog() {
@@ -295,7 +425,11 @@ public class ChatFragment extends EaseChatFragment implements OnRecallMessageRes
                 }else{
                     user.setContact(3);
                 }
-                ContactDetailActivity.actionStart(mContext, user);
+                if (chatType == EaseConstant.CHATTYPE_GROUP){
+                    ContactDetailActivity.actionStart(mContext, user ,conversationId);
+                }else {
+                    ContactDetailActivity.actionStart(mContext, user);
+                }
         }else{
             UserDetailActivity.actionStart(mContext,null,null);
         }

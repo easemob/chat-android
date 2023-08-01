@@ -13,11 +13,10 @@ import android.util.Log;
 import android.util.Pair;
 import android.widget.Toast;
 
-import com.baidu.location.LocationClient;
-import com.baidu.mapapi.SDKInitializer;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailabilityLight;
 import com.heytap.msp.push.HeytapPushManager;
+import com.hihonor.push.sdk.HonorPushClient;
 import com.hyphenate.EMCallBack;
 import com.hyphenate.chat.EMChatManager;
 import com.hyphenate.chat.EMChatRoomManager;
@@ -28,7 +27,8 @@ import com.hyphenate.chat.EMGroupManager;
 import com.hyphenate.chat.EMMessage;
 import com.hyphenate.chat.EMOptions;
 import com.hyphenate.chat.EMPushManager;
-import com.hyphenate.chat.EMTranslateParams;
+import com.hyphenate.chatdemo.section.group.GroupHelper;
+import com.hyphenate.chatdemo.section.group.MemberAttributeBean;
 import com.hyphenate.cloud.EMHttpClient;
 import com.hyphenate.easecallkit.EaseCallKit;
 import com.hyphenate.easecallkit.base.EaseCallEndReason;
@@ -153,13 +153,16 @@ public class DemoHelper {
             //callKit初始化
             InitCallKit(context);
 
-            //启动获取用户信息线程
-            fetchUserInfoList = FetchUserInfoList.getInstance();
-            fetchUserRunnable = new FetchUserRunnable();
-            fetchUserTread = new Thread(fetchUserRunnable);
-            fetchUserTread.start();
+            startFetchUserRunnable();
         }
+    }
 
+    private void startFetchUserRunnable(){
+        //启动获取用户信息线程
+        fetchUserInfoList = FetchUserInfoList.getInstance();
+        fetchUserRunnable = new FetchUserRunnable();
+        fetchUserTread = new Thread(fetchUserRunnable);
+        fetchUserTread.start();
     }
 
 
@@ -189,21 +192,11 @@ public class DemoHelper {
     private boolean initSDK(Context context) {
         // 根据项目需求对SDK进行配置
         EMOptions options = initChatOptions(context);
-        //配置自定义的rest server和im server
-//        options.setRestServer("a1-hsb.easemob.com");
-//        options.setIMServer("106.75.100.247");
-//        options.setImPort(6717);
-
-//        options.setRestServer("a41.easemob.com");
-//        options.setIMServer("msync-im-41-tls-test.easemob.com");
-//        options.setImPort(6717);
 
         // 初始化SDK
         isSDKInit = EaseIM.getInstance().init(context, options);
         //设置删除用户属性数据超时时间
         demoModel.setUserInfoTimeOut(30 * 60 * 1000);
-        //更新过期用户属性列表
-        updateTimeoutUsers();
         mainContext = context;
         return isSDKInit();
     }
@@ -377,14 +370,11 @@ public class DemoHelper {
                         return getUserInfo(username);
                     }
 
+                    @Override
+                    public EaseUser getGroupUser(String groupId, String userId) {
+                        return getGroupUserInfo(groupId,userId);
+                    }
                 });
-    }
-
-    //Translation Manager 初始化
-    public void initTranslationManager() {
-        EMTranslateParams params = new EMTranslateParams("46c34219512d4f09ae6f8e04c083b7a3", "https://api.cognitive.microsofttranslator.com", 500);
-
-        EMClient.getInstance().translationManager().init(params);
     }
 
     /**
@@ -397,12 +387,25 @@ public class DemoHelper {
         return avatarOptions;
     }
 
+    public EaseUser getGroupUserInfo(String groupId,String username) {
+        MemberAttributeBean groupBean = DemoHelper.getInstance().getMemberAttribute(groupId,username);
+        EaseUser user = getUserInfo(username);
+        if (groupBean != null && !TextUtils.equals(groupBean.getNickName(),username)){
+            if (user != null){
+                user.setNickname(groupBean.getNickName());
+            }
+        }
+        return user;
+    }
+
     public EaseUser getUserInfo(String username) {
         // To get instance of EaseUser, here we get it from the user list in memory
         // You'd better cache it if you get it from your server
         EaseUser user = null;
-        if(username.equals(EMClient.getInstance().getCurrentUser()))
-            return getUserProfileManager().getCurrentUserInfo();
+        if(username.equals(EMClient.getInstance().getCurrentUser())){
+            user = getUserProfileManager().getCurrentUserInfo();
+            return user;
+        }
         user = getContactList().get(username);
         if(user == null){
             //找不到更新会话列表 继续查找
@@ -410,9 +413,7 @@ public class DemoHelper {
             user = getContactList().get(username);
             //如果还找不到从服务端异步拉取 然后通知UI刷新列表
             if(user == null){
-                if(fetchUserInfoList != null){
-                    fetchUserInfoList.addUserId(username);
-                }
+                user = new EaseUser(username);
             }
         }
         return user;
@@ -450,7 +451,9 @@ public class DemoHelper {
                 .enableOppoPush("7eac7f0e69a24dbda40b3a8e7aa93a7c",
                         "2b10d0d9e2004817888fe6ffd1a37688")
                 .enableHWPush() // 需要在AndroidManifest.xml中配置appId
-                .enableFCM("782795210914");
+                .enableFCM("782795210914")
+                .enableHonorPush(); // 需要在AndroidManifest.xml中配置appId
+
         options.setPushConfig(builder.build());
 
         //set custom servers, commonly used in private deployment
@@ -506,6 +509,15 @@ public class DemoHelper {
             //OPPO SDK升级到2.1.0后需要进行初始化
             HeytapPushManager.init(context, true);
             //HMSPushHelper.getInstance().initHMSAgent(DemoApplication.getInstance());
+
+            // 荣耀推送 7.0.41.301及以上版本
+            // 无需调用init初始化SDK即可调用
+            boolean isSupport = HonorPushClient.getInstance().checkSupportHonorPush(context);
+            if (isSupport) {
+                // true，调用初始化接口时SDK会同时进行异步请求PushToken。会触发HonorMessageService.onNewToken(String)回调。
+                // false，不会异步请求PushToken，需要应用主动请求获取PushToken。
+                HonorPushClient.getInstance().init(context, false);
+            }
             EMPushHelper.getInstance().setPushListener(new PushListener() {
                 @Override
                 public void onError(EMPushType pushType, long errorCode) {
@@ -519,6 +531,8 @@ public class DemoHelper {
                     if(pushType == EMPushType.FCM){
                         EMLog.d("FCM", "GooglePlayServiceCode:"+GoogleApiAvailabilityLight.getInstance().isGooglePlayServicesAvailable(context));
                         return demoModel.isUseFCM() && GoogleApiAvailabilityLight.getInstance().isGooglePlayServicesAvailable(context) == ConnectionResult.SUCCESS;
+                    }else if (pushType == EMPushType.HONORPUSH){
+                        return isSupport;
                     }
                     return super.isSupportPush(pushType, pushConfig);
                 }
@@ -615,7 +629,7 @@ public class DemoHelper {
         setAutoLogin(false);
         DemoDbHelper.getInstance(DemoApplication.getInstance()).closeDb();
         getUserProfileManager().reset();
-        EMClient.getInstance().translationManager().logout();
+        DemoHelper.getInstance().clearAllMemberAttribute();
     }
 
     public EaseAvatarOptions getEaseAvatarOptions() {
@@ -703,6 +717,7 @@ public class DemoHelper {
                 for(int i = 0; i < userIds.size(); i++){
                     fetchUserInfoList.addUserId(userIds.get(i));
                 }
+                fetchUserRunnable.setStop(false);
             }
         }
     }
@@ -723,6 +738,10 @@ public class DemoHelper {
             return new Hashtable<String, EaseUser>();
         }
         return contactList;
+    }
+
+    public void reLoadUserInfoFromDb(){
+        contactList = demoModel.getAllUserList();
     }
 
     /**
@@ -1045,5 +1064,28 @@ public class DemoHelper {
          * @param success true：data sync successful，false: failed to sync data
          */
         void onSyncComplete(boolean success);
+    }
+
+    public void saveMemberAttribute(String groupId,String userName,MemberAttributeBean bean){
+        GroupHelper.saveMemberAttribute(groupId,userName,bean);
+    }
+
+    public MemberAttributeBean getMemberAttribute(String groupId,String userName){
+        return GroupHelper.getMemberAttribute(groupId,userName);
+    }
+
+    //清除指定群组所有成员属性缓存
+    public void clearGroupMemberAttribute(String groupId){
+        GroupHelper.clearGroupMemberAttribute(groupId);
+    }
+
+    //清除当前登录userId 所有群组成员属性缓存
+    public void clearAllMemberAttribute(){
+        GroupHelper.clearAllGroupMemberAttribute();
+    }
+
+    //清除userId 在指定群组内的群组成员属性缓存
+    public void clearGroupMemberAttributeByUserId(String groupId,String userId){
+        GroupHelper.clearGroupMemberAttributeByUserId(groupId,userId);
     }
 }
