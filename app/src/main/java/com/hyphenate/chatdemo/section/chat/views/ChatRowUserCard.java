@@ -12,12 +12,12 @@ import com.hyphenate.easeui.widget.chatrow.EaseChatRow;
 
 import java.util.Map;
 
-public class chatRowUserCard extends EaseChatRow {
+public class ChatRowUserCard extends EaseChatRow {
     private TextView nickNameView;
     private TextView userIdView;
     private ImageView headImageView;
 
-    public chatRowUserCard(Context context, boolean isSender) {
+    public ChatRowUserCard(Context context, boolean isSender) {
         super(context, isSender);
     }
 
