@@ -28,8 +28,8 @@ android {
         applicationId "com.hyphenate.chatdemo"
         minSdkVersion 21
         targetSdkVersion 30
-        versionCode 110
-        versionName "4.1.0"
+        versionCode 111
+        versionName "4.1.1"
         multiDexEnabled true
         //为了兼容5.0以下使用vector图标
         vectorDrawables.useSupportLibrary = true
@@ -71,6 +71,7 @@ android {
             ndkBuild {
 //                arguments "NDK_LIBS_OUT=libs", "all"
                 abiFilters  "arm64-v8a","armeabi-v7a"
+                arguments '-j8'
             }
         }
     }
@@ -180,7 +181,7 @@ dependencies {
     implementation 'io.hyphenate:ease-im-kit:4.1.0'
     // EaseIMKit依赖，必须添加环信IM SDK
 //    implementation project(path: ':hyphenatechatsdk')
-    implementation 'io.hyphenate:hyphenate-chat:4.1.0'
+    implementation 'io.hyphenate:hyphenate-chat:4.1.1'
 
     //EaseCallKit依赖，必须添加环信IM SDK
 //    api project(':ease-call-kit')
