@@ -60,8 +60,6 @@ public class VideoCallActivity extends EaseVideoCallActivity {
 
     @Override
     public void makeMainTaskFront() {
-        //关闭自己
-        finish();
         //回到mainActivity所在的栈
         DemoApplication.getInstance().getLifecycleCallbacks().makeMainTaskToFront(this);
     }
