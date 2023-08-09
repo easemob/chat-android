@@ -708,7 +708,7 @@ public class ChatPresenter extends EaseChatPresenter {
                 EMLog.d(TAG,"onGroupMemberAttributeChanged: " + groupId +" - "+ attribute.toString());
                 MemberAttributeBean bean = GsonTools.changeGsonToBean(new JSONObject(attribute).toString(),MemberAttributeBean.class);
                 if (bean != null && bean.getNickName() != null){
-                    DemoHelper.getInstance().saveMemberAttribute(groupId,from,bean);
+                    DemoHelper.getInstance().saveMemberAttribute(groupId,userId,bean);
                     LiveDataBus.get().with(DemoConstant.GROUP_MEMBER_ATTRIBUTE_CHANGE).postValue(EaseEvent.create(DemoConstant.GROUP_MEMBER_ATTRIBUTE_CHANGE, EaseEvent.TYPE.MESSAGE));
                 }
             }
