@@ -133,9 +133,6 @@ dependencies {
     implementation 'androidx.constraintlayout:constraintlayout:2.1.0'
     //ViewModel and LiveData
     implementation 'androidx.lifecycle:lifecycle-extensions:2.2.0'
-    testImplementation 'junit:junit:4.12'
-    androidTestImplementation 'androidx.test.ext:junit:1.1.1'
-    androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
     // google bottom navigation bar
     implementation 'com.ashokvarma.android:bottom-navigation-bar:2.1.0'
     // resolve 64k limit
