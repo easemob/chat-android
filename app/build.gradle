@@ -22,12 +22,12 @@ android {
             keyPassword properties.getProperty('DEBUG_KEY_PASSWORD', '123456')
         }
     }
-    compileSdkVersion 30
-    buildToolsVersion "30.0.3"
+    compileSdkVersion 34
+    //buildToolsVersion "30.0.3"
     defaultConfig {
         applicationId "com.hyphenate.chatdemo"
         minSdkVersion 21
-        targetSdkVersion 30
+        targetSdkVersion 34
         versionCode 110
         versionName "4.1.0"
         multiDexEnabled true
