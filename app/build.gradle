@@ -71,6 +71,7 @@ android {
             ndkBuild {
 //                arguments "NDK_LIBS_OUT=libs", "all"
                 abiFilters  "arm64-v8a","armeabi-v7a"
+                arguments '-j8'
             }
         }
     }
