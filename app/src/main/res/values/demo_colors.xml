@@ -78,4 +78,8 @@
     <color name="demo_chat_url_preview_title_color">#212121</color>
     <color name="demo_chat_url_preview_description_color">#4D5C7B</color>
 
+    <color name="demo_color_blue_titlebar">#FF4EABEA</color>
+    <color name="demo_color_gray_titlebar">#FFA3A3A3</color>
+    <color name="color_light_gray_remark_hint">#C6C6C8</color>
+
 </resources>

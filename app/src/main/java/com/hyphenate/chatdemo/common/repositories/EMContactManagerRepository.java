@@ -9,15 +9,19 @@ import androidx.lifecycle.MutableLiveData;
 import com.hyphenate.EMCallBack;
 import com.hyphenate.EMValueCallBack;
 import com.hyphenate.chat.EMClient;
+import com.hyphenate.chat.EMContact;
 import com.hyphenate.chat.EMUserInfo;
 import com.hyphenate.chatdemo.DemoHelper;
+import com.hyphenate.chatdemo.common.constant.DemoConstant;
 import com.hyphenate.chatdemo.common.db.entity.EmUserEntity;
 import com.hyphenate.chatdemo.common.interfaceOrImplement.ResultCallBack;
+import com.hyphenate.chatdemo.common.livedatas.LiveDataBus;
 import com.hyphenate.chatdemo.common.model.DemoModel;
 import com.hyphenate.chatdemo.common.net.ErrorCode;
 import com.hyphenate.chatdemo.common.net.Resource;
 import com.hyphenate.easeui.domain.EaseUser;
 import com.hyphenate.easeui.manager.EaseThreadManager;
+import com.hyphenate.easeui.model.EaseEvent;
 import com.hyphenate.easeui.utils.EaseCommonUtils;
 import com.hyphenate.exceptions.HyphenateException;
 import com.hyphenate.util.EMLog;
@@ -267,18 +271,21 @@ public class EMContactManagerRepository extends BaseEMRepository{
      * 获取联系人列表
      * @param callBack
      */
-    public void getContactList(ResultCallBack<List<EaseUser>> callBack) {
+    public void getContactList(@NonNull ResultCallBack<List<EaseUser>> callBack) {
         if(!isLoggedIn()) {
             callBack.onError(ErrorCode.EM_NOT_LOGIN);
             return;
         }
-        runOnIOThread(()-> {
-            try {
-                List<String> usernames = getContactManager().getAllContactsFromServer();
-//                List<String> ids = getContactManager().getSelfIdsOnOtherPlatform();
+//        List<String> ids = getContactManager().getSelfIdsOnOtherPlatform();
 
-                if(usernames == null) {
-                    usernames = new ArrayList<>();
+        getContactManager().asyncFetchAllContactsFromServer(new EMValueCallBack<List<EMContact>>() {
+            @Override
+            public void onSuccess(List<EMContact> value) {
+                List<String> usernames = new ArrayList<>();
+                Map<String, String> contactsRemarks = DemoHelper.getInstance().getContactsRemarks();
+                for (EMContact emContact : value) {
+                    usernames.add(emContact.getUsername());
+                    contactsRemarks.put(emContact.getUsername(), emContact.getRemark());
                 }
 //                if(ids != null && !ids.isEmpty()) {
 //                    usernames.addAll(ids);
@@ -286,24 +293,34 @@ public class EMContactManagerRepository extends BaseEMRepository{
 //                }
                 List<EaseUser> easeUsers = EmUserEntity.parse(usernames);
                 if(usernames != null && !usernames.isEmpty()) {
-                    List<String> blackListFromServer = getContactManager().getBlackListFromServer();
-                    for (EaseUser user : easeUsers) {
-                        if(blackListFromServer != null && !blackListFromServer.isEmpty()) {
-                            if(blackListFromServer.contains(user.getUsername())) {
-                                user.setContact(1);
+                    getContactManager().asyncGetBlackListFromServer(new EMValueCallBack<List<String>>() {
+                        @Override
+                        public void onSuccess(List<String> blackListFromServer) {
+                            for (EaseUser user : easeUsers) {
+                                if(blackListFromServer != null && !blackListFromServer.isEmpty()) {
+                                    if(blackListFromServer.contains(user.getUsername())) {
+                                        user.setContact(1);
+                                    }
+                                }
                             }
+                            sortData(easeUsers);
+                            callBack.onSuccess(easeUsers);
                         }
-                    }
-                }
-                sortData(easeUsers);
-                if(callBack != null) {
+
+                        @Override
+                        public void onError(int error, String errorMsg) {
+                            callBack.onError(error, errorMsg);
+                        }
+                    });
+
+                }else{
                     callBack.onSuccess(easeUsers);
                 }
-            } catch (HyphenateException e) {
-                e.printStackTrace();
-                if(callBack != null) {
-                    callBack.onError(e.getErrorCode(), e.getDescription());
-                }
+            }
+
+            @Override
+            public void onError(int error, String errorMsg) {
+                callBack.onError(error, errorMsg);
             }
         });
     }
@@ -624,5 +641,64 @@ public class EMContactManagerRepository extends BaseEMRepository{
             return userEntity;
         }
         return null;
+    }
+
+    public LiveData<Resource<List<EMContact>>> fetchContactsFromServer() {
+            return  new NetworkOnlyResource<List<EMContact>>() {
+                @Override
+                protected void createCall(@NonNull ResultCallBack<LiveData<List<EMContact>>> callBack) {
+                    EMClient.getInstance().contactManager().asyncFetchAllContactsFromServer(new EMValueCallBack<List<EMContact>>() {
+                        @Override
+                        public void onSuccess(List<EMContact> value) {
+                            callBack.onSuccess(createLiveData(value));
+                        }
+
+                        @Override
+                        public void onError(int error, String errorMsg) {
+                            callBack.onError(error,errorMsg);
+                        }
+                    });
+                }
+            }.asLiveData();
+    }
+
+    public LiveData<Resource<Boolean>> setContactRemark(String username, String remark) {
+        return new NetworkOnlyResource<Boolean>() {
+            @Override
+            protected void createCall(@NonNull ResultCallBack<LiveData<Boolean>> callBack) {
+                EMClient.getInstance().contactManager().asyncSetContactRemark(username, remark, new EMCallBack() {
+                    @Override
+                    public void onSuccess() {
+                        //发出广播通知
+                        DemoHelper.getInstance().getContactsRemarks().put(username, remark);
+                        EaseEvent event = EaseEvent.create(DemoConstant.CONTACT_UPDATE, EaseEvent.TYPE.CONTACT);
+                        event.message = username;
+                        LiveDataBus.get().with(DemoConstant.CONTACT_UPDATE).postValue(event);
+                        callBack.onSuccess(createLiveData(true));
+                    }
+
+                    @Override
+                    public void onError(int code, String error) {
+                        callBack.onError(code, error);
+                    }
+                });
+            }
+        }.asLiveData();
+    }
+
+    public LiveData<Resource<EMContact>> fetchContact(String username) {
+
+        return new NetworkOnlyResource<EMContact>() {
+            @Override
+            protected void createCall(@NonNull ResultCallBack<LiveData<EMContact>> callBack) {
+                try {
+                    EMContact contact = EMClient.getInstance().contactManager().fetchContactFromLocal(username);
+                    callBack.onSuccess(createLiveData(contact));
+                } catch (HyphenateException e) {
+                    callBack.onError(e.getErrorCode(), e.getDescription());
+                }
+
+            }
+        }.asLiveData();
     }
 }
