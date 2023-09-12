@@ -11,9 +11,11 @@ import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.os.Build;
 import android.text.SpannableString;
 import android.text.Spanned;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -21,6 +23,8 @@ import android.view.ViewGroup;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
 
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
@@ -76,6 +80,7 @@ import com.hyphenate.easeui.modules.menu.MenuItemBean;
 import com.hyphenate.easeui.utils.EaseUserUtils;
 import com.hyphenate.easeui.widget.CenterImageSpan;
 import com.hyphenate.util.EMLog;
+import com.hyphenate.util.VersionUtils;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -118,6 +123,12 @@ public class ChatFragment extends EaseChatFragment implements OnRecallMessageRes
     private Dialog dialog;
     private boolean isFirstMeasure = true;
     private GroupDetailViewModel groupDetailViewModel;
+    private final ActivityResultLauncher<String[]> requestImagePermission = registerForActivityResult(new ActivityResultContracts.RequestMultiplePermissions()
+            , result -> onRequestResult(result, REQUEST_CODE_STORAGE_PICTURE));
+    private final ActivityResultLauncher<String[]> requestVideoPermission = registerForActivityResult(new ActivityResultContracts.RequestMultiplePermissions()
+            , result -> onRequestResult(result, REQUEST_CODE_STORAGE_VIDEO));
+    private final ActivityResultLauncher<String[]> requestFilePermission = registerForActivityResult(new ActivityResultContracts.RequestMultiplePermissions()
+            , result -> onRequestResult(result, REQUEST_CODE_STORAGE_FILE));
 
     @Override
     public void initView() {
@@ -473,6 +484,23 @@ public class ChatFragment extends EaseChatFragment implements OnRecallMessageRes
         return false;
     }
 
+    private void onRequestResult(Map<String, Boolean> result, int requestCode) {
+        if(result != null && result.size() > 0) {
+            for (Map.Entry<String, Boolean> entry : result.entrySet()) {
+                Log.e("TAG", "onRequestResult: " + entry.getKey() + "  " + entry.getValue());
+            }
+            if(getStorageAccess(mContext) != StorageAccess.Denied) {
+                if(requestCode == REQUEST_CODE_STORAGE_PICTURE) {
+                    selectPicFromLocal();
+                }else if(requestCode == REQUEST_CODE_STORAGE_VIDEO) {
+                    selectVideoFromLocal();
+                }else if(requestCode == REQUEST_CODE_STORAGE_FILE) {
+                    selectFileFromLocal();
+                }
+            }
+        }
+    }
+
     @SuppressLint("NonConstantResourceId")
     @Override
     public void onChatExtendMenuItemClick(View view, int itemId) {
@@ -483,7 +511,7 @@ public class ChatFragment extends EaseChatFragment implements OnRecallMessageRes
                 }
                 break;
             case R.id.extend_item_picture :
-                if(checkIfHasPermissions(Manifest.permission.READ_EXTERNAL_STORAGE, REQUEST_CODE_STORAGE_PICTURE)) {
+                if(checkPhotosPermission(mContext)) {
                     selectPicFromLocal();
                 }
                 break;
@@ -493,12 +521,12 @@ public class ChatFragment extends EaseChatFragment implements OnRecallMessageRes
                 }
                 break;
             case R.id.extend_item_video :
-                if(checkIfHasPermissions(Manifest.permission.READ_EXTERNAL_STORAGE, REQUEST_CODE_STORAGE_VIDEO)) {
+                if(checkVideosPermission(mContext)) {
                     selectVideoFromLocal();
                 }
                 break;
             case R.id.extend_item_file :
-                if(checkIfHasPermissions(Manifest.permission.READ_EXTERNAL_STORAGE, REQUEST_CODE_STORAGE_FILE)) {
+                if(checkFilesPermission(mContext)) {
                     selectFileFromLocal();
                 }
                 break;
@@ -962,6 +990,86 @@ public class ChatFragment extends EaseChatFragment implements OnRecallMessageRes
             return cardSb;
         }
         return new SpannableString(quoteSender + ": " + content);
+    }
+
+    private boolean checkPhotosPermission(Context context) {
+        if (Build.VERSION.SDK_INT > Build.VERSION_CODES.TIRAMISU) {
+            if(!EasyPermissions.hasPermissions(context, Manifest.permission.READ_MEDIA_IMAGES, Manifest.permission.READ_MEDIA_VISUAL_USER_SELECTED)) {
+                requestImagePermission.launch(new String[]{Manifest.permission.READ_MEDIA_IMAGES, Manifest.permission.READ_MEDIA_VISUAL_USER_SELECTED});
+                return false;
+            }
+        }else if(Build.VERSION.SDK_INT == Build.VERSION_CODES.TIRAMISU) {
+            if(!EasyPermissions.hasPermissions(context, Manifest.permission.READ_MEDIA_IMAGES)) {
+                requestImagePermission.launch(new String[]{Manifest.permission.READ_MEDIA_IMAGES});
+                return false;
+            }
+        }else {
+            if(!EasyPermissions.hasPermissions(context, Manifest.permission.READ_EXTERNAL_STORAGE)) {
+                requestImagePermission.launch(new String[]{Manifest.permission.READ_EXTERNAL_STORAGE});
+                return false;
+            }
+        }
+        return true;
+    }
+
+    private boolean checkVideosPermission(Context context) {
+        if (Build.VERSION.SDK_INT > Build.VERSION_CODES.TIRAMISU) {
+            if(!EasyPermissions.hasPermissions(context, Manifest.permission.READ_MEDIA_VIDEO, Manifest.permission.READ_MEDIA_VISUAL_USER_SELECTED)) {
+                requestVideoPermission.launch(new String[]{Manifest.permission.READ_MEDIA_VIDEO, Manifest.permission.READ_MEDIA_VISUAL_USER_SELECTED});
+                return false;
+            }
+        }else if(Build.VERSION.SDK_INT == Build.VERSION_CODES.TIRAMISU) {
+            if(!EasyPermissions.hasPermissions(context, Manifest.permission.READ_MEDIA_VIDEO)) {
+                requestVideoPermission.launch(new String[]{Manifest.permission.READ_MEDIA_VIDEO});
+                return false;
+            }
+        }else {
+            if(!EasyPermissions.hasPermissions(context, Manifest.permission.READ_EXTERNAL_STORAGE)) {
+                requestVideoPermission.launch(new String[]{Manifest.permission.READ_EXTERNAL_STORAGE});
+                return false;
+            }
+        }
+        return true;
+    }
+
+    private boolean checkFilesPermission(Context context) {
+        if (Build.VERSION.SDK_INT > Build.VERSION_CODES.TIRAMISU) {
+            if(!EasyPermissions.hasPermissions(context, Manifest.permission.READ_MEDIA_IMAGES, Manifest.permission.READ_MEDIA_VIDEO, Manifest.permission.READ_MEDIA_VISUAL_USER_SELECTED)) {
+                requestFilePermission.launch(new String[]{Manifest.permission.READ_MEDIA_IMAGES, Manifest.permission.READ_MEDIA_VIDEO, Manifest.permission.READ_MEDIA_VISUAL_USER_SELECTED});
+                return false;
+            }
+        }else if(Build.VERSION.SDK_INT == Build.VERSION_CODES.TIRAMISU) {
+            if(!EasyPermissions.hasPermissions(context, Manifest.permission.READ_MEDIA_IMAGES, Manifest.permission.READ_MEDIA_VIDEO)) {
+                requestFilePermission.launch(new String[]{Manifest.permission.READ_MEDIA_IMAGES, Manifest.permission.READ_MEDIA_VIDEO});
+                return false;
+            }
+        }else {
+            if(!EasyPermissions.hasPermissions(context, Manifest.permission.READ_EXTERNAL_STORAGE)) {
+                requestFilePermission.launch(new String[]{Manifest.permission.READ_EXTERNAL_STORAGE});
+                return false;
+            }
+        }
+        return true;
+    }
+
+    private StorageAccess getStorageAccess(Context context) {
+        if (EasyPermissions.hasPermissions(context, Manifest.permission.READ_MEDIA_IMAGES) ||
+                EasyPermissions.hasPermissions(context, Manifest.permission.READ_MEDIA_VIDEO)) {
+            // Full access on Android 13+
+            return StorageAccess.Full;
+        }else if(EasyPermissions.hasPermissions(context, Manifest.permission.READ_MEDIA_VISUAL_USER_SELECTED)) {
+            // Partial access on Android 13+
+            return StorageAccess.Partial;
+        }else if(EasyPermissions.hasPermissions(context, Manifest.permission.READ_EXTERNAL_STORAGE)) {
+            // Full access up to Android 12
+            return StorageAccess.Full;
+        }else {
+            return StorageAccess.Denied;
+        }
+    }
+
+    public enum StorageAccess {
+        Full, Partial, Denied
     }
 
 }
