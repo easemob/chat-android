@@ -105,7 +105,7 @@ public class ChatPresenter extends EaseChatPresenter {
             @Override
             public void onConnected() {
                 // join cached chatroom here
-                EMClient.getInstance().chatroomManager().joinChatRoom("190771647021057", new EMValueCallBack<EMChatRoom>() {
+                EMClient.getInstance().chatroomManager().joinChatRoom("191380240531457", new EMValueCallBack<EMChatRoom>() {
                     @Override
                     public void onSuccess(EMChatRoom value) {
                         EMLog.d(TAG, "join room success");
