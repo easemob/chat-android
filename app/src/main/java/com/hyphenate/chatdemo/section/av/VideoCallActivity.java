@@ -7,7 +7,7 @@ import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
 
-
+import com.hyphenate.chatdemo.DemoApplication;
 import com.hyphenate.easecallkit.base.EaseCallType;
 import com.hyphenate.easecallkit.ui.EaseVideoCallActivity;
 import com.hyphenate.easeui.utils.StatusBarCompat;
@@ -58,4 +58,9 @@ public class VideoCallActivity extends EaseVideoCallActivity {
         }
     }
 
+    @Override
+    public void makeMainTaskFront() {
+        //回到mainActivity所在的栈
+        DemoApplication.getInstance().getLifecycleCallbacks().makeMainTaskToFront(this);
+    }
 }
