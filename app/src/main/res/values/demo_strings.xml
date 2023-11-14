@@ -675,4 +675,6 @@
 
     <string name="em_chat_edit_message">Edit Message</string>
     <string name="card">Card</string>
+    <string name="demo_set_remark">Set Remark</string>
+    <string name="demo_add_remark">Add Remark</string>
 </resources>

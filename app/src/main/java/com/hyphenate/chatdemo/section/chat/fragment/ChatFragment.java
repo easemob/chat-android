@@ -371,7 +371,7 @@ public class ChatFragment extends EaseChatFragment implements OnRecallMessageRes
     }
 
     public void getGroupUserInfo(int start, int end) {
-        if (start < end && end > 0 && chatType == DemoConstant.CHATTYPE_GROUP){
+        if (start <= end && end >= 0 && chatType == DemoConstant.CHATTYPE_GROUP){
             Set<String> nameSet = new HashSet<>();
             for (int i = start; i <= end; i++) {
                 EMMessage message = chatLayout.getChatMessageListLayout().getMessageAdapter().getItem(i);

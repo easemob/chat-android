@@ -567,8 +567,9 @@ public class ChatPresenter extends EaseChatPresenter {
         @Override
         public void onRequestToJoinDeclined(String groupId, String groupName, String decliner, String reason) {
             super.onRequestToJoinDeclined(groupId, groupName, decliner, reason);
-            showToast(context.getString(R.string.demo_group_listener_onRequestToJoinDeclined, decliner, groupName));
-            EMLog.i(TAG, context.getString(R.string.demo_group_listener_onRequestToJoinDeclined, decliner, groupName));
+            String showName = TextUtils.isEmpty(groupName) ? groupId : groupName;
+            showToast(context.getString(R.string.demo_group_listener_onRequestToJoinDeclined, decliner,showName ));
+            EMLog.i(TAG, context.getString(R.string.demo_group_listener_onRequestToJoinDeclined, decliner,showName));
         }
 
         @Override
@@ -708,7 +709,7 @@ public class ChatPresenter extends EaseChatPresenter {
                 EMLog.d(TAG,"onGroupMemberAttributeChanged: " + groupId +" - "+ attribute.toString());
                 MemberAttributeBean bean = GsonTools.changeGsonToBean(new JSONObject(attribute).toString(),MemberAttributeBean.class);
                 if (bean != null && bean.getNickName() != null){
-                    DemoHelper.getInstance().saveMemberAttribute(groupId,from,bean);
+                    DemoHelper.getInstance().saveMemberAttribute(groupId,userId,bean);
                     LiveDataBus.get().with(DemoConstant.GROUP_MEMBER_ATTRIBUTE_CHANGE).postValue(EaseEvent.create(DemoConstant.GROUP_MEMBER_ATTRIBUTE_CHANGE, EaseEvent.TYPE.MESSAGE));
                 }
             }
