@@ -446,8 +446,6 @@ public class DemoHelper {
         options.setRequireAck(true);
         // 设置是否需要接受方送达确认,默认false
         options.setRequireDeliveryAck(false);
-        //设置fpa开关，默认false
-        options.setFpaEnable(true);
         // 开启本地消息流量统计
         options.setEnableStatistics(true);
 
