@@ -6,6 +6,7 @@ import android.text.TextUtils;
 
 import com.hyphenate.EMCallBack;
 import com.hyphenate.chat.EMClient;
+import com.hyphenate.chat.EMCombineMessageBody;
 import com.hyphenate.chat.EMImageMessageBody;
 import com.hyphenate.chat.EMMessage;
 import com.hyphenate.chat.EMTextMessageBody;
@@ -21,6 +22,7 @@ import com.hyphenate.easeui.model.EaseEvent;
 import com.hyphenate.easeui.utils.EaseCommonUtils;
 import com.hyphenate.easeui.utils.EaseFileUtils;
 import com.hyphenate.exceptions.HyphenateException;
+import com.hyphenate.util.EMLog;
 
 import java.util.Map;
 
@@ -43,44 +45,29 @@ public class PushAndMessageHelper {
         }
         EMMessage message = DemoHelper.getInstance().getChatManager().getMessage(msgId);
         EMMessage.Type type = message.getType();
+        EMMessage msgForForward = EMMessage.createSendMessage(type);
+        msgForForward.setTo(toChatUsername);
         switch (type) {
-            case TXT:
-                if(message.getBooleanAttribute(EaseConstant.MESSAGE_ATTR_IS_BIG_EXPRESSION, false)){
-                    sendBigExpressionMessage(toChatUsername, ((EMTextMessageBody) message.getBody()).getMessage(),
-                            message.getStringAttribute(EaseConstant.MESSAGE_ATTR_EXPRESSION_ID, null));
-                }else{
-                    // get the content and send it
-                    String content = ((EMTextMessageBody) message.getBody()).getMessage();
-                    sendTextMessage(toChatUsername, content);
-                }
+            case TXT: {
+                EMTextMessageBody body = (EMTextMessageBody) message.getBody();
+                msgForForward.setBody(body);
+            }
                 break;
-            case IMAGE:
+            case COMBINE: {
+                // send combine message
+                EMCombineMessageBody body = (EMCombineMessageBody) message.getBody();
+                msgForForward.setBody(body);
+            }
+                break;
+            case IMAGE: {
                 // send image
-                Uri uri = getImageForwardUri((EMImageMessageBody) message.getBody());
-                if(uri != null) {
-                    sendImageMessage(toChatUsername, uri);
-                }else {
-                    LiveDataBus.get().with(DemoConstant.MESSAGE_FORWARD)
-                            .postValue(new EaseEvent(DemoApplication.getInstance().getApplicationContext().getString(R.string.no_image_resource), EaseEvent.TYPE.MESSAGE));
-                }
+                EMImageMessageBody body = (EMImageMessageBody) message.getBody();
+                msgForForward.setBody(body);
+            }
                 break;
         }
-    }
 
-    public static Uri getImageForwardUri(EMImageMessageBody body) {
-        if(body == null) {
-            return null;
-        }
-        Uri localUri = body.getLocalUri();
-        Context context = DemoApplication.getInstance().getApplicationContext();
-        if(EaseFileUtils.isFileExistByUri(context, localUri)) {
-            return localUri;
-        }
-        localUri = body.thumbnailLocalUri();
-        if(EaseFileUtils.isFileExistByUri(context, localUri)) {
-            return localUri;
-        }
-        return null;
+        sendMessage(msgForForward);
     }
 
     /**
@@ -335,7 +322,7 @@ public class PushAndMessageHelper {
 
             @Override
             public void onError(int code, String error) {
-
+                EMLog.d("forward error", "code: " + code + " error: " + error);
             }
 
             @Override
