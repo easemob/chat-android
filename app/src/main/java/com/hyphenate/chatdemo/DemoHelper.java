@@ -27,22 +27,6 @@ import com.hyphenate.chat.EMGroupManager;
 import com.hyphenate.chat.EMMessage;
 import com.hyphenate.chat.EMOptions;
 import com.hyphenate.chat.EMPushManager;
-import com.hyphenate.chatdemo.section.chat.UrlPreViewHelper;
-import com.hyphenate.chatdemo.section.chat.model.UrlPreViewBean;
-import com.hyphenate.chatdemo.section.chat.delegates.ChatUrlPreviewAdapterDelegate;
-import com.hyphenate.chatdemo.section.group.GroupHelper;
-import com.hyphenate.chatdemo.section.group.MemberAttributeBean;
-import com.hyphenate.cloud.EMHttpClient;
-import com.hyphenate.easecallkit.EaseCallKit;
-import com.hyphenate.easecallkit.base.EaseCallEndReason;
-import com.hyphenate.easecallkit.base.EaseCallKitConfig;
-import com.hyphenate.easecallkit.base.EaseCallKitListener;
-import com.hyphenate.easecallkit.base.EaseCallKitTokenCallback;
-import com.hyphenate.easecallkit.base.EaseCallType;
-import com.hyphenate.easecallkit.base.EaseCallUserInfo;
-import com.hyphenate.easecallkit.base.EaseGetUserAccountCallback;
-import com.hyphenate.easecallkit.base.EaseUserAccount;
-import com.hyphenate.easecallkit.event.CallCancelEvent;
 import com.hyphenate.chatdemo.common.constant.DemoConstant;
 import com.hyphenate.chatdemo.common.db.DemoDbHelper;
 import com.hyphenate.chatdemo.common.livedatas.LiveDataBus;
@@ -56,13 +40,29 @@ import com.hyphenate.chatdemo.common.utils.PreferenceManager;
 import com.hyphenate.chatdemo.section.av.MultipleVideoActivity;
 import com.hyphenate.chatdemo.section.av.VideoCallActivity;
 import com.hyphenate.chatdemo.section.chat.ChatPresenter;
+import com.hyphenate.chatdemo.section.chat.UrlPreViewHelper;
 import com.hyphenate.chatdemo.section.chat.delegates.ChatConferenceInviteAdapterDelegate;
 import com.hyphenate.chatdemo.section.chat.delegates.ChatNotificationAdapterDelegate;
 import com.hyphenate.chatdemo.section.chat.delegates.ChatRecallAdapterDelegate;
+import com.hyphenate.chatdemo.section.chat.delegates.ChatUrlPreviewAdapterDelegate;
 import com.hyphenate.chatdemo.section.chat.delegates.ChatUserCardAdapterDelegate;
 import com.hyphenate.chatdemo.section.chat.delegates.ChatVideoCallAdapterDelegate;
 import com.hyphenate.chatdemo.section.chat.delegates.ChatVoiceCallAdapterDelegate;
+import com.hyphenate.chatdemo.section.chat.model.UrlPreViewBean;
 import com.hyphenate.chatdemo.section.conference.ConferenceInviteActivity;
+import com.hyphenate.chatdemo.section.group.GroupHelper;
+import com.hyphenate.chatdemo.section.group.MemberAttributeBean;
+import com.hyphenate.cloud.EMHttpClient;
+import com.hyphenate.easecallkit.EaseCallKit;
+import com.hyphenate.easecallkit.base.EaseCallEndReason;
+import com.hyphenate.easecallkit.base.EaseCallKitConfig;
+import com.hyphenate.easecallkit.base.EaseCallKitListener;
+import com.hyphenate.easecallkit.base.EaseCallKitTokenCallback;
+import com.hyphenate.easecallkit.base.EaseCallType;
+import com.hyphenate.easecallkit.base.EaseCallUserInfo;
+import com.hyphenate.easecallkit.base.EaseGetUserAccountCallback;
+import com.hyphenate.easecallkit.base.EaseUserAccount;
+import com.hyphenate.easecallkit.event.CallCancelEvent;
 import com.hyphenate.easeui.EaseIM;
 import com.hyphenate.easeui.delegate.EaseCustomAdapterDelegate;
 import com.hyphenate.easeui.delegate.EaseExpressionAdapterDelegate;
@@ -94,6 +94,7 @@ import org.json.JSONObject;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.List;
@@ -121,6 +122,7 @@ public class DemoHelper {
     private FetchUserRunnable fetchUserRunnable;
     private Thread fetchUserTread;
     private FetchUserInfoList fetchUserInfoList;
+    private Map<String,String> contactsRemarks=new HashMap<>();
 
 
     private DemoHelper() {}
@@ -378,6 +380,11 @@ public class DemoHelper {
                     public EaseUser getGroupUser(String groupId, String userId) {
                         return getGroupUserInfo(groupId,userId);
                     }
+
+                    @Override
+                    public String getContactRemark(String username) {
+                        return contactsRemarks.get(username);
+                    }
                 });
     }
 
@@ -439,8 +446,6 @@ public class DemoHelper {
         options.setRequireAck(true);
         // 设置是否需要接受方送达确认,默认false
         options.setRequireDeliveryAck(false);
-        //设置fpa开关，默认false
-        options.setFpaEnable(true);
         // 开启本地消息流量统计
         options.setEnableStatistics(true);
 
@@ -1059,7 +1064,6 @@ public class DemoHelper {
         EaseCallKit.getInstance().getCallKitConfig().setUserInfo(userName,userInfo);
     }
 
-
     /**
      * data sync listener
      */
@@ -1109,5 +1113,9 @@ public class DemoHelper {
     public boolean isPicture(String url){
         boolean isPicture = UrlPreViewHelper.isPicture(url);
         return isPicture;
+    }
+
+    public Map<String, String> getContactsRemarks() {
+        return contactsRemarks;
     }
 }

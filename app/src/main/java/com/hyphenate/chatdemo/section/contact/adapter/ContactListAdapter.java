@@ -16,6 +16,7 @@ import com.hyphenate.easeui.EaseIM;
 import com.hyphenate.easeui.adapter.EaseBaseRecyclerViewAdapter;
 import com.hyphenate.easeui.domain.EaseUser;
 import com.hyphenate.easeui.provider.EaseUserProfileProvider;
+import com.hyphenate.easeui.utils.EaseUserUtils;
 import com.hyphenate.easeui.widget.EaseImageView;
 
 public class ContactListAdapter extends EaseBaseRecyclerViewAdapter<EaseUser> {
@@ -64,15 +65,15 @@ public class ContactListAdapter extends EaseBaseRecyclerViewAdapter<EaseUser> {
             }
             //判断是否为自己账号多端登录
             String username = item.getUsername();
-            String nickname = item.getNickname();
+            String displayName = item.getNickname();
             if(username.contains("/") && username.contains(EMClient.getInstance().getCurrentUser())) {
                 username = EMClient.getInstance().getCurrentUser();
             }
+            displayName = EaseUserUtils.getDisplayName(username);
             EaseUserProfileProvider userProvider = EaseIM.getInstance().getUserProvider();
             if(userProvider != null) {
                 EaseUser user = userProvider.getUser(username);
                 if(user != null) {
-                    nickname = user.getNickname();
                     Glide.with(mAvatar)
                             .load(user.getAvatar())
                             .placeholder(R.drawable.ease_default_avatar)
@@ -83,9 +84,9 @@ public class ContactListAdapter extends EaseBaseRecyclerViewAdapter<EaseUser> {
             String postfix = "";
             if(username.contains("/") && username.contains(EMClient.getInstance().getCurrentUser())) {
                 postfix = "/"+username.split("/")[1];
-                nickname = nickname+postfix;
+                displayName = displayName+postfix;
             }
-            mName.setText(nickname);
+            mName.setText(displayName);
         }
     }
 }

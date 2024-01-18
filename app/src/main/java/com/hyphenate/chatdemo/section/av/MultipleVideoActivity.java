@@ -7,6 +7,7 @@ import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
 
+import com.hyphenate.chatdemo.DemoApplication;
 import com.hyphenate.easecallkit.ui.EaseMultipleVideoActivity;
 import com.hyphenate.easeui.utils.StatusBarCompat;
 
@@ -50,5 +51,11 @@ public class MultipleVideoActivity extends EaseMultipleVideoActivity {
             window.getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN | View.SYSTEM_UI_FLAG_LAYOUT_STABLE);
             window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
         }
+    }
+
+    @Override
+    public void makeMainTaskFront() {
+        //回到mainActivity所在的栈
+        DemoApplication.getInstance().getLifecycleCallbacks().makeMainTaskToFront(this);
     }
 }

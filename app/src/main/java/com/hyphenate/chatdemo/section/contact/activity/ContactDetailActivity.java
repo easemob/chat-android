@@ -11,14 +11,11 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.constraintlayout.widget.Group;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.bumptech.glide.Glide;
-import com.hyphenate.chatdemo.section.group.MemberAttributeBean;
-import com.hyphenate.chatdemo.section.group.viewmodels.GroupDetailViewModel;
-import com.hyphenate.easecallkit.EaseCallKit;
-import com.hyphenate.easecallkit.base.EaseCallType;
 import com.hyphenate.chatdemo.DemoHelper;
 import com.hyphenate.chatdemo.R;
 import com.hyphenate.chatdemo.common.constant.DemoConstant;
@@ -33,6 +30,10 @@ import com.hyphenate.chatdemo.section.contact.viewmodels.ContactBlackViewModel;
 import com.hyphenate.chatdemo.section.contact.viewmodels.ContactDetailViewModel;
 import com.hyphenate.chatdemo.section.dialog.DemoDialogFragment;
 import com.hyphenate.chatdemo.section.dialog.SimpleDialogFragment;
+import com.hyphenate.chatdemo.section.group.MemberAttributeBean;
+import com.hyphenate.chatdemo.section.group.viewmodels.GroupDetailViewModel;
+import com.hyphenate.easecallkit.EaseCallKit;
+import com.hyphenate.easecallkit.base.EaseCallType;
 import com.hyphenate.easeui.constants.EaseConstant;
 import com.hyphenate.easeui.domain.EaseUser;
 import com.hyphenate.easeui.model.EaseEvent;
@@ -46,7 +47,7 @@ public class ContactDetailActivity extends BaseInitActivity implements EaseTitle
     private EaseTitleBar mEaseTitleBar;
     private EaseImageView mAvatarUser;
     private TextView mTvName;
-    private TextView mTvNote;
+    private ConstraintLayout mCslRemark;
     private TextView mBtnChat;
     private TextView mBtnVoice;
     private TextView mBtnVideo;
@@ -62,6 +63,7 @@ public class ContactDetailActivity extends BaseInitActivity implements EaseTitle
     private ContactBlackViewModel blackViewModel;
     private LiveDataBus contactChangeLiveData;
     private String groupId;
+    private TextView mTvRemark;
 
     public static void actionStart(Context context, EaseUser user) {
         Intent intent = new Intent(context, ContactDetailActivity.class);
@@ -141,13 +143,14 @@ public class ContactDetailActivity extends BaseInitActivity implements EaseTitle
         mEaseTitleBar = findViewById(R.id.title_bar_contact_detail);
         mAvatarUser = findViewById(R.id.avatar_user);
         mTvName = findViewById(R.id.tv_name);
-        mTvNote = findViewById(R.id.tv_note);
+        mCslRemark = findViewById(R.id.csl_remark);
         mBtnChat = findViewById(R.id.btn_chat);
         mBtnVoice = findViewById(R.id.btn_voice);
         mBtnVideo = findViewById(R.id.btn_video);
         mBtnAddContact = findViewById(R.id.btn_add_contact);
         mGroupFriend = findViewById(R.id.group_friend);
         mBtnRemoveBlack = findViewById(R.id.btn_remove_black);
+        mTvRemark = findViewById(R.id.tv_remark);
 
         if(mIsFriend) {
             mGroupFriend.setVisibility(View.VISIBLE);
@@ -171,7 +174,7 @@ public class ContactDetailActivity extends BaseInitActivity implements EaseTitle
     protected void initListener() {
         super.initListener();
         mEaseTitleBar.setOnBackPressListener(this);
-        mTvNote.setOnClickListener(this);
+        mCslRemark.setOnClickListener(this);
         mBtnChat.setOnClickListener(this);
         mBtnVoice.setOnClickListener(this);
         mBtnVideo.setOnClickListener(this);
@@ -257,7 +260,25 @@ public class ContactDetailActivity extends BaseInitActivity implements EaseTitle
         }else {
             viewModel.getUserInfoById(mUser.getUsername(),mIsFriend);
         }
+        LiveDataBus.get().with(DemoConstant.CONTACT_UPDATE, EaseEvent.class).observe(this, event -> {
+            if(event == null) {
+                return;
+            }
+            updateRemark();
+        });
+        updateRemark();
 
+    }
+
+    private void updateRemark() {
+        if(mTvRemark.getVisibility()==View.VISIBLE){
+            String remark = DemoHelper.getInstance().getContactsRemarks().get(mUser.getUsername());
+            if(TextUtils.isEmpty(remark)) {
+                mTvRemark.setText(getString(R.string.Not_Set));
+            }else{
+                mTvRemark.setText(remark);
+            }
+        }
     }
 
     private void sendEvent() {
@@ -301,8 +322,8 @@ public class ContactDetailActivity extends BaseInitActivity implements EaseTitle
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
-            case R.id.tv_note :
-                showToast(mContext.getString(R.string.intent_to_setting));
+            case R.id.csl_remark :
+                SetRemarkActivity.actionStart(this, mUser.getUsername());
                 break;
             case R.id.btn_chat :
                 ChatActivity.actionStart(mContext, mUser.getUsername(), EaseConstant.CHATTYPE_SINGLE);
@@ -337,5 +358,4 @@ public class ContactDetailActivity extends BaseInitActivity implements EaseTitle
                 .showCancelButton(true)
                 .show();
     }
-    
 }

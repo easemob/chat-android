@@ -567,6 +567,9 @@
             android:windowSoftInputMode="stateHidden|adjustResize"
             android:screenOrientation="portrait"/>
         <activity android:name=".section.me.test.TestFunctionsActivity" />
+        <activity android:name=".section.contact.activity.SetRemarkActivity"
+            android:windowSoftInputMode="stateHidden|adjustResize"
+            android:screenOrientation="portrait"/>
     </application>
 
 </manifest>
