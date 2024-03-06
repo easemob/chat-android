@@ -46,3 +46,4 @@ obj/
 prod/
 release/
 schemas
+androidTest/
