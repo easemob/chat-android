@@ -529,6 +529,11 @@ public class DemoHelper {
             }
             EMPushHelper.getInstance().setPushListener(new PushListener() {
                 @Override
+                public void onBindTokenSuccess(EMPushType pushType, String pushToken) {
+                    EMLog.e("PushClient", "Push client onBindTokenSuccess: pushType=" + pushType + ", pushToken=" + pushToken);
+                }
+
+                @Override
                 public void onError(EMPushType pushType, long errorCode) {
                     // TODO: 返回的errorCode仅9xx为环信内部错误，可从EMError中查询，其他错误请根据pushType去相应第三方推送网站查询。
                     EMLog.e("PushClient", "Push client occur a error: " + pushType + " - " + errorCode);
