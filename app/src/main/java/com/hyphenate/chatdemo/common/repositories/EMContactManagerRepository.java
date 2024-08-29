@@ -31,6 +31,7 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.atomic.AtomicInteger;
 
 public class EMContactManagerRepository extends BaseEMRepository{
 
@@ -159,6 +160,7 @@ public class EMContactManagerRepository extends BaseEMRepository{
                             if(size > 0){
                                 int index = 0;
                                 int tagNumber = 100;
+                                Counter counter = new Counter();//线程计数器
                                 while(size > 100){
                                     List<String> userList = updateUsers.subList(index,index+tagNumber);
                                     String[] userArray = new String[userList.size()];
@@ -166,16 +168,16 @@ public class EMContactManagerRepository extends BaseEMRepository{
                                     size  -= tagNumber;
                                     index += tagNumber;
                                     if(size == 0){
-                                        fetchUserInfoByIds(userArray,blackListFromServer,easeUsers,notRequestUsers,callBack,true);
+                                        fetchUserInfoByIds(userArray,blackListFromServer,easeUsers,notRequestUsers,callBack,counter);
                                     }else{
-                                        fetchUserInfoByIds(userArray,blackListFromServer,easeUsers,null,callBack,false);
+                                        fetchUserInfoByIds(userArray,blackListFromServer,easeUsers,notRequestUsers,callBack,counter);
                                     }
                                 }
                                 if(size > 0){
                                     List<String> userList = updateUsers.subList(index,index+size);
                                     String[] userArray = new String[userList.size()];
                                     userList.toArray(userArray);
-                                    fetchUserInfoByIds(userArray,blackListFromServer,easeUsers,notRequestUsers,callBack,true);
+                                    fetchUserInfoByIds(userArray,blackListFromServer,easeUsers,notRequestUsers,callBack,counter);
                                 }
                             }else{
                                 if(exitUsers != null && exitUsers.size() >0){
@@ -207,11 +209,22 @@ public class EMContactManagerRepository extends BaseEMRepository{
         }.asLiveData();
     }
 
+    class Counter{
+        private AtomicInteger count = new AtomicInteger(0);
+        public int add(){
+          return  count.incrementAndGet();
+        }
+        public int sub(){
+            return count.decrementAndGet();
+        }
+    }
+
 
     /**
      * 从服务器批量获取用户信息
      */
-    private void fetchUserInfoByIds( String[] users, List<String> blackList,List<EaseUser> easeUsers,List<EaseUser> exitUsers,ResultCallBack<LiveData<List<EaseUser>>> callBack, boolean callback){
+    private void fetchUserInfoByIds( String[] users, List<String> blackList,List<EaseUser> easeUsers,List<EaseUser> exitUsers,ResultCallBack<LiveData<List<EaseUser>>> callBack,Counter counter){
+        counter.add();
         EMClient.getInstance().userInfoManager().fetchUserInfoByUserId(users, new EMValueCallBack<Map<String, EMUserInfo>>() {
             @Override
             public void onSuccess(Map<String, EMUserInfo> value) {
@@ -245,7 +258,8 @@ public class EMContactManagerRepository extends BaseEMRepository{
                 }
                 users.remove(EMClient.getInstance().getCurrentUser());
                 easeUsers.addAll(users);
-                if(callback){
+                int sub = counter.sub();
+                if(sub==0){
                     if(exitUsers != null){
                         easeUsers.addAll(exitUsers);
                     }
@@ -258,7 +272,8 @@ public class EMContactManagerRepository extends BaseEMRepository{
             public void onError(int error, String errorMsg) {
                 callBack.onError(error, errorMsg);
                 easeUsers.addAll(EmUserEntity.parse(users));
-                if(callback){
+                int sub = counter.sub();
+                if(sub==0){
                     easeUsers.addAll(exitUsers);
                     sortData(easeUsers);
                     callBack.onSuccess(createLiveData(easeUsers));
@@ -379,6 +394,7 @@ public class EMContactManagerRepository extends BaseEMRepository{
                             int size = value.size();
                             int index = 0;
                             int tagNumber = 100;
+                            Counter counter = new Counter();//线程计数器
                             while (size > 100) {
                                 List<String> userList = value.subList(index, index + tagNumber);
                                 String[] userArray = new String[userList.size()];
@@ -386,16 +402,16 @@ public class EMContactManagerRepository extends BaseEMRepository{
                                 size -= tagNumber;
                                 index += tagNumber;
                                 if (size == 0) {
-                                    fetchUserInfoByIds(userArray, null, easeUsers, null, callBack, true);
+                                    fetchUserInfoByIds(userArray, null, easeUsers, null, callBack, counter);
                                 } else {
-                                    fetchUserInfoByIds(userArray, null, easeUsers, null, callBack, false);
+                                    fetchUserInfoByIds(userArray, null, easeUsers, null, callBack, counter);
                                     }
                                 }
                                 if (size > 0) {
                                     List<String> userList = value.subList(index, index + size);
                                     String[] userArray = new String[userList.size()];
                                     userList.toArray(userArray);
-                                    fetchUserInfoByIds(userArray, value, easeUsers, null, callBack, true);
+                                    fetchUserInfoByIds(userArray, value, easeUsers, null, callBack, counter);
                                 }
                         }else{
                             EMLog.e("EMContactManagerRepository","getBlackContactList is null");
