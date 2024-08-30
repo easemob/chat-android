@@ -162,8 +162,8 @@ dependencies {
     api 'com.scwang.smartrefresh:SmartRefreshLayout:1.0.5.1'
     implementation 'androidx.swiperefreshlayout:swiperefreshlayout:1.1.0'
     // room
-    implementation "androidx.room:room-runtime:2.4.0-alpha04"
-    annotationProcessor "androidx.room:room-compiler:2.4.0-alpha04"
+    implementation "androidx.room:room-runtime:2.6.1"
+    annotationProcessor "androidx.room:room-compiler:2.6.1"
     // parse
     implementation 'com.parse:parse-android:1.13.1'
     // bugly
@@ -178,7 +178,7 @@ dependencies {
     implementation 'io.hyphenate:ease-im-kit:4.5.0'
     // EaseIMKit依赖，必须添加环信IM SDK
 //    implementation project(path: ':hyphenatechatsdk')
-    implementation 'io.hyphenate:hyphenate-chat:4.5.0'
+    implementation 'io.hyphenate:hyphenate-chat:4.6.1'
 
     //EaseCallKit依赖，必须添加环信IM SDK
 //    api project(':ease-call-kit')
