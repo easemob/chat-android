@@ -5,6 +5,7 @@ import androidx.room.Dao;
 import androidx.room.Insert;
 import androidx.room.OnConflictStrategy;
 import androidx.room.Query;
+import androidx.room.Upsert;
 
 import com.hyphenate.chatdemo.common.db.entity.EmUserEntity;
 import com.hyphenate.easeui.domain.EaseUser;
@@ -62,9 +63,12 @@ public interface EmUserDao {
     @Query("update em_users set contact = :arg0  where username = :arg1")
     int updateContact(int arg0,String arg1);
 
+    @Upsert
+    void updateUser(EmUserEntity user);
+
     @Query("select username from em_users where lastModifyTimestamp + :arg0  <= :arg1")
     List<String> loadTimeOutEaseUsers(long arg0,long arg1);
 
-    @Query("select username from em_users where lastModifyTimestamp + :arg0  <= :arg1 and contact = 1")
+    @Query("select username from em_users where lastModifyTimestamp + :arg0  <= :arg1 and contact <= 1")
     List<String> loadTimeOutFriendUser(long arg0,long arg1);
 }

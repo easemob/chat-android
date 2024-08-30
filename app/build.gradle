@@ -162,8 +162,8 @@ dependencies {
     api 'com.scwang.smartrefresh:SmartRefreshLayout:1.0.5.1'
     implementation 'androidx.swiperefreshlayout:swiperefreshlayout:1.1.0'
     // room
-    implementation "androidx.room:room-runtime:2.4.0-alpha04"
-    annotationProcessor "androidx.room:room-compiler:2.4.0-alpha04"
+    implementation "androidx.room:room-runtime:2.6.1"
+    annotationProcessor "androidx.room:room-compiler:2.6.1"
     // parse
     implementation 'com.parse:parse-android:1.13.1'
     // bugly

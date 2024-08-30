@@ -623,7 +623,7 @@ public class EMContactManagerRepository extends BaseEMRepository{
             @Override
             protected void saveCallResult(EaseUser item) {
                 if(mIsFriend) {
-                    getUserDao().insert(EmUserEntity.parseParent(item));
+                    getUserDao().updateUser(EmUserEntity.parseParent(item));
                 }
             }
         }.asLiveData();
