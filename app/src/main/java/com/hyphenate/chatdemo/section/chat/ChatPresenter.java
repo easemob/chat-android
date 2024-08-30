@@ -356,6 +356,10 @@ public class ChatPresenter extends EaseChatPresenter {
                                 fetchUserInfoList.addUserId(user.getUsername());
                             }
                         }
+                        //通知UI刷新列表
+                        EaseEvent event = EaseEvent.create(DemoConstant.CONTACT_UPDATE, EaseEvent.TYPE.CONTACT);
+                        //发送联系人更新事件
+                        LiveDataBus.get().with(DemoConstant.CONTACT_UPDATE).postValue(event);
                     }
 
                     @Override
