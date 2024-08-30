@@ -271,13 +271,6 @@ public class EMContactManagerRepository extends BaseEMRepository{
             @Override
             public void onError(int error, String errorMsg) {
                 callBack.onError(error, errorMsg);
-                easeUsers.addAll(EmUserEntity.parse(users));
-                int sub = counter.sub();
-                if(sub==0){
-                    easeUsers.addAll(exitUsers);
-                    sortData(easeUsers);
-                    callBack.onSuccess(createLiveData(easeUsers));
-                }
             }
         });
     }

@@ -530,7 +530,7 @@ public class DemoHelper {
             EMPushHelper.getInstance().setPushListener(new PushListener() {
                 @Override
                 public void onBindTokenSuccess(EMPushType pushType, String pushToken) {
-
+                    EMLog.e("PushClient", "Push client onBindTokenSuccess: pushType=" + pushType + ", pushToken=" + pushToken);
                 }
 
                 @Override
