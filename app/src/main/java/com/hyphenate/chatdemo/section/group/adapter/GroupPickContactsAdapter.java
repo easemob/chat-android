@@ -7,17 +7,17 @@ import android.view.ViewGroup;
 import android.widget.CheckBox;
 import android.widget.TextView;
 
-//import com.bumptech.glide.Glide;
+import androidx.annotation.NonNull;
+
 import com.hyphenate.chatdemo.DemoHelper;
 import com.hyphenate.chatdemo.R;
 import com.hyphenate.easeui.adapter.EaseBaseRecyclerViewAdapter;
 import com.hyphenate.easeui.domain.EaseUser;
+import com.hyphenate.easeui.utils.EaseUserUtils;
 import com.hyphenate.easeui.widget.EaseImageView;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import androidx.annotation.NonNull;
 
 public class GroupPickContactsAdapter extends EaseBaseRecyclerViewAdapter<EaseUser> {
     private List<String> existMembers;
@@ -84,7 +84,7 @@ public class GroupPickContactsAdapter extends EaseBaseRecyclerViewAdapter<EaseUs
         @Override
         public void setData(EaseUser item, int position) {
             String username = getRealUsername(item.getUsername());
-            name.setText(item.getNickname());
+            name.setText(EaseUserUtils.getDisplayName(item.getUsername()));
             //Glide.with(mContext).load(R.drawable.ease_default_avatar).into(avatar);
             avatar.setImageResource(R.drawable.ease_default_avatar);
             String header = item.getInitialLetter();
